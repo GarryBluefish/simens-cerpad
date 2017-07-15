@@ -1,0 +1,14 @@
+	menuDeliberation1 = [
+		{'D&eacute;lib&eacute;rer Formation':
+			{ 
+				onclick:function(menuItem,menu) 
+				{
+					delibererFormation(iIdJury);	
+				}, 
+				icon:imagesPath+'menu_icones/page_white_carte.png', 
+				disabled:false 
+			} 
+		},
+		
+		
+	]; 

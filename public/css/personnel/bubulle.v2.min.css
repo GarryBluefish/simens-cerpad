@@ -1,0 +1,57 @@
+
+#bubulle {
+	text-align: center;
+	
+	background-color: #fafafa; /*f9ffdd*/
+	
+	border: 1px solid #aaf; /*bbbb33*/
+
+    padding-top: 3px;
+
+    padding-bottom: 3px;
+
+    padding-left: 5px;
+
+    padding-right: 5px;
+
+    border-top-width: 3px;
+
+    border-right-width: 3px;
+
+    border-bottom-width: 3px;
+
+    border-left-width: 3px;
+
+    border-top-left-radius: 5px;
+
+    border-top-right-radius: 5px;
+
+    border-bottom-left-radius: 5px;
+
+    border-bottom-right-radius: 5px;
+
+    border-top-color: white;
+
+    border-right-color: white;
+
+    border-bottom-color: white;
+
+    border-left-color: white;
+
+    box-shadow: 0pt 0pt 12px rgba(0, 10, 0, 0.8);
+}
+
+.bulle1 {
+	background-color: #f9ffdd;
+	border: 1px solid #bbbb33;
+
+    width: 190px;
+
+	height: 175px;
+}
+.bulle2 {
+	color: #fff;
+	background-color: #000;
+	border: 1px solid #f00;
+}
+

@@ -1,0 +1,193 @@
+
+<!-- MES STYLES --> 
+<?php echo $this->headLink()->appendStylesheet($this->basepath().'/css/personnel/styleInterventionPersonnel.css');
+      echo $this->headLink()->appendStylesheet($this->basepath().'/css/facturation/DatePicker.css'); //DatePicker?>
+
+<!-- MES JS -->
+<?php echo $this->headScript()->appendFile($this->basepath().'/js/personnel/jsInterventionPersonnel.js');?>
+
+<?php 
+$formTypePersonnel = $this->formTypePersonnel;
+$formInterventionPersonnel = $this->formInterventionPersonnel;
+?>
+     <div id="titre" style='font-family: police2; text-decoration:NONE; color: green; font-size: 20px; font-weight: bold; padding-left: 35px;'><iS style='font-size: 25px;'>&curren;</iS> LE PERSONNEL</div>
+     <div id="contenu" >
+     
+     <div id="liste_personnel" style="float:right; margin-right: 35px; height:5px; margin-top: 5px; width: 150px;"> 
+          <?php echo $this->formrow($formTypePersonnel->get('type_personnel'));?> 
+        </div>
+     
+		<table style='width:95%; margin-left: 10px; align:center' class="table table-bordered tab_list_mini" id="personnel">
+			<thead>
+			   <tr style='width: 100%;'>
+				    <th id="idpatient_" style='width: 7%;'><input type="text" value="ID_Pat" class="search_init" /></th>
+					<th id="nom_" style='width: 15%;'><input type="text" name="search_browser" value=" Nom" class="search_init" /></th>
+					<th id="prenom_" style='width: 20%;'><input type="text" name="search_browser" value=" Pr&eacute;nom" class="search_init" /></th>
+					<th id="date_" style='width: 13%;'><input type="text" name="search_browser" value=" Date naissance" class="search_init" /></th>
+					<th id="adresse_" style='width: 40%;'><input type="text" name="search_browser" value=" Adresse" class="search_init" /></th>
+					<th id="effectuer_" style='width: 5%;'><input type="hidden" name="search_browser" value="" class="" />Options</th>
+				</tr>
+			</thead>
+
+			<tbody id="donnees" class="liste_patient">			
+			        <!-- AFFICHAGE DES DONNEES -->
+			</tbody>
+
+		</table>
+		
+<script type="text/javascript">
+initialisation();	
+</script>		
+</div>		 
+
+<!-- POP UP pour Information -->
+                            <div id="confirmation" title="Informations" style="display:none;">
+                              <div id="info" style="font-size: 16px;">
+                              
+                              </div>
+                            </div>
+<!-- LES BOUTONS "TERMINER" ou "VALIDER" -->
+
+
+
+<!-- PARTIE ENREGISTREMENT DE LA NAISSANCE -->
+    <?php 
+    $formInterventionPersonnel->setAttribute ( 'action', $this->url ( 'personnel', array ('action' => 'intervention') ) );
+    $formInterventionPersonnel->prepare();
+    echo $this->form()->openTag($formInterventionPersonnel);
+    ?>
+    <?php echo $this->formhidden($formInterventionPersonnel->get('id_personne'));?> 
+    <?php echo $this->formhidden($formInterventionPersonnel->get('id_verif'));?> 
+    
+    <div id="ajouter_naissance">
+          <a href="" id="precedent" style="font-family: police2; width:50px; margin-left:30px;">  
+	        <img style="display: inline; " src='<?php echo $this->basepath().'/images_icons/transfert_gauche.PNG'?>' alt='Constantes' title="Rechercher" />
+		    Pr&eacute;c&eacute;dent
+		  </a>
+		  
+		  <div id="info_personnel">     
+		  </div>
+		  
+		  <div id="barre_separateur">
+		  </div>
+		  
+		  <div id="info_bebe">
+              
+		       <table id="form_patient" style="float: left; margin-left: 30px;">  
+                    <tr class="comment-form-patient">
+                        <td style="width: 270px;"> <?php echo $this->formrow($formInterventionPersonnel->get('type_intervention'));?></td> 
+                    </tr>
+               </table>
+               
+               <div class="vider_formulaire" id="vider_champ_interne">
+                     <input title="Vider tout" name="vider" id="vider"> 
+               </div>
+               
+               <div class="vider_formulaire" id="vider_champ_externe">
+                     <input title="Vider tout" name="vider" id="vider"> 
+               </div>
+               <div id="barre_separateur2">
+		       </div>
+		       <!--  *************************************************************************
+		             =========================== INTERVENTION INTERNE =========================-->
+		       <table id="form_patient" class="intervention_interne" style=" float:left; margin-top:10px; margin-left: 30px;">
+		             
+		             <tr style="display: inline-block;  vertical-align: top;">
+		                 <td class="comment-form-patient"><?php echo $this->formrow($formInterventionPersonnel->get('service_origine'));?></td>
+		                 <td class="comment-form-patient"><?php echo $this->formrow($formInterventionPersonnel->get('id_service')); ?></td>
+		                 <td class="comment-form-patient"><?php echo $this->formrow($formInterventionPersonnel->get('date_debut')); ?></td>
+		                 <td class="comment-form-patient"><?php echo $this->formrow($formInterventionPersonnel->get('date_fin')); ?></td>
+		             </tr>
+		             
+		             <tr style="display: inline-block;  vertical-align: top;">
+		                 <td class="comment-form-patient"><?php echo $this->formrow($formInterventionPersonnel->get('motif_intervention')); ?></td>
+		                 <td class="comment-form-patient"><?php echo $this->formrow($formInterventionPersonnel->get('note')); ?></td>
+		             </tr>
+		             
+	           </table>	
+	           
+	           <!--  *************************************************************************
+		             =========================== INTERVENTION EXTERNE =========================-->
+		       <table id="form_patient" class="intervention_externe" style=" float:left; margin-top:10px; margin-left: 30px;">
+		             
+		             <tr style="display: inline-block;  vertical-align: top;">
+		                 <td class="comment-form-patient"><?php echo $this->formrow($formInterventionPersonnel->get('service_origine_externe'));?></td>
+		                 <td class="comment-form-patient"><?php echo $this->formrow($formInterventionPersonnel->get('hopital_accueil'));?></td>
+		                 <td class="comment-form-patient"><?php echo $this->formrow($formInterventionPersonnel->get('id_service_externe'));?></td>
+		                 <td class="comment-form-patient"><?php echo $this->formrow($formInterventionPersonnel->get('date_debut_externe'));?></td>
+		             </tr>
+		             
+		             <tr style="display: inline-block;  vertical-align: top;">
+		                 <td class="comment-form-patient"><?php echo $this->formrow($formInterventionPersonnel->get('date_fin_externe'));?></td>
+		                 <td class="comment-form-patient"><?php echo $this->formrow($formInterventionPersonnel->get('motif_intervention_externe'));?></td>
+		                 <td class="comment-form-patient"><?php echo $this->formrow($formInterventionPersonnel->get('note_externe')); ?></td>
+		             </tr>
+		             
+	           </table>	
+               
+               <div id="terminer_annuler" style="padding-top: 5px;">
+                    <div class="block" id="thoughtbot">
+                       <button type="submit" id="terminer" style=" height:35px; ">Terminer</button>
+                    </div>
+                    
+                    <div class="block" id="thoughtbot">
+                       <button id="annuler" style=" height:35px; ">Annuler</button>
+                    </div>
+               </div>
+		       
+		  </div>
+      
+    </div>
+    <?php echo $this->form()->closeTag(); ?>
+    
+<script>
+animation();
+/*****TRANSFERT INTERNE******/
+ $(".intervention_externe").toggle(false);
+ $("#vider_champ_externe").toggle(false);
+
+ $("#id_service").attr({'required': true});
+ $("#date_debut").attr({'required': true});
+ $("#date_fin").attr({'required' : true});
+ $("#motif_intervention").attr({'required': true});
+ 
+ $("#id_service_externe").attr({'required': false});
+ $("#date_debut_externe").attr({'required': false});
+ $("#date_fin_externe").attr({'required' : false});
+ $("#motif_intervention_externe").attr({'required': false});
+ 
+$("#vider_champ_interne").click(function(){
+	$('#id_service').val("");
+	$("#date_debut").val("");
+	$("#date_fin").val("");
+	$('#motif_intervention').val("");
+	$('#note').val("");
+	
+});
+
+$("#vider_champ_externe").click(function(){
+	$('#hopital_accueil').val("");
+	$('#id_service_externe').val("");
+	$("#date_debut_externe").val("");
+	$("#date_fin_externe").val("");
+	$('#motif_intervention_externe').val("");
+	$('#note_externe').val("");
+	
+});
+
+/**************************************************/
+/*************** INTERVENTION INTERNE ****************/
+  $('#service_origine').val("");
+  $('#id_service').val("");
+
+/**************************************************/
+/*************** INTERVENTION EXTERNE ****************/
+  $('#hopital_accueil').val("");
+  $('#id_service_externe').val("");
+
+//POUR LE MENU GAUCHE dans -elementgauche.phtml
+  $('#plus_operation').toggle(true); 
+  $("#operation").replaceWith("<li id='operation' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:18px; font-family:Times New Roman;'> <img style='display: inline;' src='/simens/public/images_icons/moins-vert.PNG' alt='Liste' /> Op&eacute;rations </span></a></li>");
+  dep1();
+  $('#intervention_style').css({'font-weight':'bold','color':'white','font-size':'22px'});
+</script>

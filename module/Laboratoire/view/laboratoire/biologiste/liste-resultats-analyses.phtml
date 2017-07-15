@@ -1,0 +1,262 @@
+<!-- MES STYLES -->
+<?php echo $this->headLink()->appendStylesheet($this->basePath().'/css/biologiste/styleListeResultatsAnalyses.css');?>
+
+<!-- MES JS -->
+<?php echo $this->headScript()->appendFile($this->basePath().'/js/biologiste/jsListeResultatsAnalyses.js');?>
+
+<style>
+#contenuInterface{ visibility: hidden; };
+</style>
+
+<script type="text/javascript">
+$(window).load(function () {
+	$('#wait').toggle(false);
+	$('#contenuInterface').fadeIn().css({'visibility':'visible'});
+});
+</script>
+
+<div id="titre" style='font-family: police2; text-decoration: none; color: green; font-size: 19px; font-weight: bold; padding-left:20px;'>
+	<iS style='font-size: 25px;'>&curren;</iS>
+	<span> LISTE DES RESULTATS PAR PATIENT </span>
+</div>
+<div id="wait" style="color: gray; font-size: 20px; text-align: center; margin-top: 80px;" > <span> Chargement ... </span> </div>
+
+<div id="contenuInterface" >
+<div id="contenu">
+		    <!-- div style='cursor: pointer; float:right; margin-top: 5px; margin-right: 15px; '> <a href='javascript:resultatsDesAnalysesParType()'> <img style='padding-left: 3px; ' src='../images_icons/resultat3.png' title='R&eacute;sultats' /> </a> </div-->
+			<table class="table table-bordered tab_list_mini" id="patient">
+				<thead>
+					<tr style="height: 45px; width:100%;">
+					    <th id="numero" style='cursor: pointer;'>N&deg;</th>
+						<th id="nom" style='cursor: pointer;'>Nom</th>
+						<th id="prenom" style='cursor: pointer;'>Pr&eacute;nom</th>
+						<th id="age" style='cursor: pointer;'>Age <minus style="font-size: x-small;">(ans)</minus></th>
+						<th id="adresse" style='cursor: pointer;'>Adresse</th>
+						<th id="date" style='cursor: pointer;'>Date</th>
+						<th id="effectuer">Options</th>
+					</tr>
+				</thead>
+
+				<tbody id="donnees" class="liste_patient">
+
+					<!-- ************ On affiche les patients en une liste ordonnï¿½e************ -->
+
+				</tbody>
+
+				<tfoot id="foot" class="foot_style">
+					<tr>
+					    <th id="numero_" style='width: 10%;'><input type="text" name="search_browser"
+							value=" N&deg;" class="search_init" /></th>
+						<th id="nom_" style='width: 15%;'><input type="text" name="search_browser"
+							value=" Nom" class="search_init" /></th>
+						<th id="prenom_" style='width: 17%;'><input type="text" name="search_browser"
+							value=" Pr&eacute;nom" class="search_init" /></th>
+						<th id="age_" style='width: 8%;'><input type="text" name="search_browser"
+							value=" Age" class="search_init" /></th>
+						<th id="adresse_" style='width: 25%;'><input type="text" name="search_browser"
+							value=" Adresse" class="search_init" /></th>
+						<th id="date_" style='width: 15%;'><input type="text" name="search_browser"
+							value=" Date" class="search_init" /></th>
+						<th id="effectuer_" style='width: 10%;'><input type="hidden" name="search_browser"
+							value="" class="" /></th>
+
+					</tr>
+				</tfoot>
+			</table>
+</div>
+
+
+<div id="vue_patient">
+
+</div>
+
+
+<div id="liste_demandes">
+
+   <div id="info_patient"> </div>
+   
+   <div id="listeDemandesAnalyses" align="center" >   
+   
+   <?php echo  $this->headScript()->appendFile($this->basePath().'/js/secretariat/ajoutDemandesAnalyses.js'); ?>
+   
+     <div style="width: 96%; margin-bottom: 30px; margin-top: 30px;">
+       <div id="accordions" align="left" > 
+        
+           <div style='font-family: police2; font-size: 18px; font-weight: bold; background: #efefef;'>Liste des analyses par demande</div>
+           <div id='listeAnalysesParDemande' style='min-height: 420px; border-top: 1px solid #cccccc;'>
+           
+           
+       
+           </div>
+       
+       </div>
+     </div>
+       
+     <table style="margin-top: 35px; margin-bottom: 30px; width: 100%;  height: 12px;">
+	   <tr>
+	     <td style="width: 52%;"> </td>
+	     <td style="width: 10%;" id="thoughtbot" class='boutonTerminer'> </td>
+	     <td style="width: 38%;"> </td>
+	   </tr>
+     </table>
+       
+   </div>
+
+
+</div>
+
+
+</div>
+
+<form id="FormulaireImprimerDemandesAnalyses" style="display: none;">
+    <button id="ImprimerDemandesAnalyses"></button>
+</form>
+
+
+<!-- POP UP pour Ajouter les résultats d'une analyse -->
+<div id="resultatsAnalyses" title="Entrez les r&eacute;sultats de l'analyse" style="display: none;"  align="center">
+    <div id="contenuResultatsAnalyses" style="width: 95%;"> 
+      <form id="formEnvoyerResultatsAnalyses" >
+        <div> </div>
+        <button id='envoyerResultatsAnalyses' style='display: none;'> le button </button> 
+      </form>
+    </div>
+</div>
+
+
+<!-- POP UP pour Ajouter les résultats des analyses d'une demande -->
+<div id="resultatsAnalysesDuneDemande" title="Entrez les r&eacute;sultats des analyses" style="display: none;"  align="center">
+    <div id="contenuResultatsAnalysesDuneDemande" style="width: 95%;"> 
+      <form id="formEnvoyerResultatsAnalysesDuneDemande" >
+        <div> </div>
+        <button id='envoyerResultatsAnalysesDuneDemande' style='display: none;'> le button </button> 
+      </form>
+    </div>
+</div>
+
+
+<!-- POP UP pour Ajouter les résultats des analyses de toutes les demandes par type -->
+<div id="resultatsAnalysesParType" title="Entrez les r&eacute;sultats des analyses" style="display: none;"  align="center">
+    
+    <!-- LISTE DES TYPES D'ANALYSES -->
+    <!-- LISTE DES TYPES D'ANALYSES -->
+    <div class='designEnTeteSelect' id="contenuResultatsAnalysesParTypeTitre" style="width: 95%; margin-bottom: 8px;"> 
+        <select  onchange='getListeAnalysesDemandees(this.value);' id='typeAnalyseDesign' >
+           <option value='1' >HEMATOLOGIE</option> 
+           <option value='2' >BIOCHIMIE</option> 
+           <option value='3' >PARASITOLOGIE</option> 
+           <option value='4' >BACTERIOLOGIE</option>
+           <option value='5' >DEPISTAGE </option>
+        </select>
+        
+        <div style='float: right;' id='infosNbPatientParType' > <img style='margin-right: 5px; margin-top: 5px; cursor: pointer;' src='../images_icons/infos.png' > </div>
+    </div>
+    <!-- ************************ -->
+    <!-- ************************ -->
+    
+    <!-- LISTE DES ANALYSES -->
+    <!-- LISTE DES ANALYSES -->
+    <div class='designEnTeteSelect' style="width: 95%; margin-bottom: 8px;"> 
+        <select  onchange='getListePatientsParAnalyse(this.value);' id='listeAnalyseParType' >
+        </select>
+        
+        <div style='float: right;' id='infosNbPatientParAnalyse' > <img style='margin-right: 5px; margin-top: 5px; cursor: pointer; opacity: 0;' src='../images_icons/infos.png' > </div>
+    </div>
+    <!-- ************************ -->
+    <!-- ************************ -->
+
+    <!-- LISTE LES DATES && LISTE DES CODES PATIENTS -->
+    <!-- LISTE LES DATES && LISTE DES CODES PATIENTS -->
+    <div style="width: 95%;">
+      
+      <table style="width: 100%;">
+        <tr style="width: 100%;"> 
+             
+             <!-- LISTE DES CODES PATIENTS -->
+             <!-- LISTE DES CODES PATIENTS -->
+             <td style="width: 50%;">
+             
+                 <div align="left">
+                     <div class='listeCodesDesPatients' style="width: 30%;  margin-bottom: 18px;" > 
+                         <select  onchange='getListeCodesDesPatients(this.value);' id='listeCodesDesPatients' >
+                         </select>
+        
+                         <!-- div style='float: right;' id='infosNbPatientParAnalyseParDate' > <img style='margin-right: 5px; margin-top: 2px; cursor: pointer; opacity: 0;' src='../images_icons/infos.png' > </div-->
+                     </div>
+                 </div>
+             
+             </td>
+        
+             <!-- LISTE LES DATES  -->
+             <!-- LISTE LES DATES  -->
+             <td style="width: 50%;">
+      
+                 <div align="right">
+                     <div class='listeAnalyseParTypeParDate' style="width: 50%;  margin-bottom: 18px;" > 
+                         <select  onchange='getListePatientsParAnalyseParDate(this.value);' id='listeAnalyseParTypeParDate' >
+                         </select>
+        
+                         <div style='float: right;' id='infosNbPatientParAnalyseParDate' > <img style='margin-right: 5px; margin-top: 2px; cursor: pointer; opacity: 0;' src='../images_icons/infos.png' > </div>
+                     </div>
+                 </div>
+                 
+             </td>
+             
+        </tr>
+      </table>
+      
+    
+    </div>
+    <!-- ************************ -->
+    <!-- ************************ -->
+    
+
+    <div id="contenuResultatsAnalysesParType" style="width: 95%;"> 
+      <form>
+        <div>  </div>
+        <button id='envoyerResulatsAnalysesParType' style='display: none;'> le button </button> 
+      </form>
+    </div>
+    
+    <input type='hidden' id='diagnostic_demande_text' >
+    
+</div>
+
+    <div id='scriptFormules'> </div>
+
+
+<div id="context-menu">
+    <ul class="dropdown-menu" >
+         <li><a style="cursor: pointer;" ><img id="visualiserCTX" style='margin-right: 10px; width: 19px; height: 16px;' src='../images_icons/voir2.png'>Visualiser</a></li>
+         <li class="divider2"></li>
+         <li><a style="cursor: pointer;"><img  id="analysesDemandeesCTX" style='margin-left: 3px; margin-right: 10px; width: 16px; height: 16px;' src='../images_icons/details.png'>Analyses demandÃ©es</a></li>
+         <li class="divider"></li>
+         <li><a id="quitterCTX"  style="cursor: pointer;">Quitter</a></li>
+    </ul>
+</div>
+
+<div style='display: none;' class='infos_parentales_tampon'> <!-- à ne pas supprimer *** pour les infos parentales --> </div>
+
+<input type='hidden' id='typeResultat' value='0'>
+
+<script type="text/javascript">
+
+$(function(){
+	initialisation();
+});
+
+$('#vue_patient, #liste_demandes').toggle(false);
+
+var base_url = window.location.toString();
+var tabUrl = base_url.split("public");
+//POUR LE MENU GAUCHE dans -menugauche.phtml
+$('#plus_analyses').toggle(true);
+$("#analyses").replaceWith("<li id='analyses' style='background:#4a5765;'><a href=''><span style='color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img  src='"+tabUrl[0]+"public/images_icons/moin-green2.png'  /> Analyses </span></a></li>");
+dep_analyses1();
+$('#liste_resultats_analyses_style').css({'font-weight':'bold','color':'white','font-size':'21px'});
+
+//Empêcher la touche entrée de répondre 
+$('#resultatsAnalyses, #contenuResultatsAnalysesParType, #resultatsAnalysesDuneDemande').keypress(function(event) {
+	if (event.keyCode == 13) { return false; }
+});
+</script>

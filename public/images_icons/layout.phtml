@@ -1,0 +1,163 @@
+<html>
+<?php echo $this->doctype("XHTML1_TRANSITIONAL"), PHP_EOL; ?>
+<head>
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="css/bootstrap.min.css" />
+<link rel="stylesheet" href="css/bootstrap-responsive.min.css" />
+<link rel="stylesheet" href="css/uniform.css" />
+<link rel="stylesheet" href="css/select2.css" />
+<link rel="stylesheet" href="css/matrix-style.css" />
+<link rel="stylesheet" href="css/matrix-media.css" />
+<link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+<?php
+$this->headLink()->prependStylesheet($this->basePath().'/css/jquery.contextMenu.css');
+ $this->headLink()->prependStylesheet($this->basePath().'/css/bootstrap.min.css');
+ $this->headLink()->prependStylesheet($this->basePath().'/css/bootstrap-responsive.min.css');
+ $this->headLink()->prependStylesheet($this->basePath().'/css/uniform.css');
+ $this->headLink()->prependStylesheet($this->basePath().'/css/select2.css');
+ $this->headLink()->prependStylesheet($this->basePath().'/css/matrix-style.css');
+ $this->headLink()->prependStylesheet($this->basePath().'/css/matrix-media.css');
+ $this->headLink()->appendStylesheet($this->basePath().'/css/simens_main.css');/*:* Fichier css ce tout le site ****/
+
+
+ echo $this->headLink()->prependStylesheet($this->basePath().'/font-awesome/css/font-awesome.css');
+
+$this->jQuery()->enable();
+$this->jQuery()->uiEnable();
+echo $this->jQuery();
+
+ $this->headScript()->appendFile($this->basePath().'/js/jquery/js/jquery.ui.datepicker-fr.js');
+ $this->headScript()->appendFile($this->basePath().'/js/jquery.min.js');
+ $this->headScript()->appendFile($this->basePath().'/js/jquery.ui.custom.js');
+ $this->headScript()->appendFile($this->basePath().'/js/bootstrap.min.js');
+ $this->headScript()->appendFile($this->basePath().'/js/jquery.uniform.js');
+$this->headScript()->appendFile($this->basePath().'/js/select2.min.js');
+$this->headScript()->appendFile($this->basePath().'/js/jquery.dataTables.min.js');
+//$this->headScript()->appendFile($this->basePath().'/js/jquery.contextMenu.js');
+ $this->headScript()->appendFile($this->basePath().'/js/matrix.js');
+echo $this->headScript()->appendFile($this->basePath().'/js/matrix.tables.js');
+
+
+echo $this->headTitle($this->pageTitle);
+//echo $this->headStyle()->appendStyle ('@import"css/simens.css";&apos;');?>
+		<?php $this->headLink()->appendStylesheet($this->basePath().'/css/search.css');?>
+		<?php $this->headLink()->appendStylesheet($this->basePath().'/css/niceforms-default.css');?>
+		<?php $this->headLink()->appendStylesheet($this->basePath().'/css/dossier.css');?>
+		<?php $this->headLink()->appendStylesheet($this->basePath().'/css/simplePopup.css');?>
+		<?php $this->headLink()->appendStylesheet($this->basePath().'/css/demo_table.css');?>
+		<?php $this->headLink()->appendStylesheet($this->basePath().'/css/demo_table_jui.css');?>
+		<?php $this->headLink()->appendStylesheet($this->basePath().'/css/tinyTips.css');?>
+		<?php $this->headLink()->appendStylesheet($this->basePath().'/css/jquery.contextMenu.css');?>
+		<?php $this->headLink()->appendStylesheet($this->basePath().'/js/jquery.modaldialog/css/jquery.modaldialog.css');?>
+		<?php $this->headLink()->appendStylesheet($this->basePath().'/css/custom.datatable.css');?>
+		<?php $this->headLink()->appendStylesheet($this->basePath().'/css/ui.selectmenu.css');?>
+		<?php $this->headLink()->appendStylesheet($this->basePath().'/css/jquery.autocomplete.css');?>
+
+
+ 		<?php $this->headScript()->appendFile($this->basePath().'/js/plugins/simplePopup.js', 'text/javascript');?>
+		<?php $this->headScript()->appendFile($this->basePath().'/js/plugins/jquery.ui.datepicker-fr.js', 'text/javascript');?>
+		<?php $this->headScript()->appendFile($this->basePath().'/js/plugins/niceforms.js', 'text/javascript');?>
+		<?php $this->headScript()->appendFile($this->basePath().'/js/plugins/jquery.dataTables.js', 'text/javascript');?>
+		<?php $this->headScript()->appendFile($this->basePath().'/js/plugins/jquery.contextMenu.js', 'text/javascript');?>
+		<?php $this->headScript()->appendFile($this->basePath().'/js/plugins/contextmenu.js', 'text/javascript');?>
+		<?php $this->headScript()->appendFile($this->basePath().'/js/jquery/js/jquery.validate.js', 'text/javascript');?>
+		<?php $this->headScript()->appendFile($this->basePath().'/js/plugins/jquery.tinyTips.js', 'text/javascript');?>
+		<?php $this->headScript()->appendFile($this->basePath().'/js/jquery/js/jquery.numeric.js', 'text/javascript');?>
+		<?php $this->headScript()->appendFile($this->basePath().'/js/jquery.modaldialog/js/jquery.modaldialog.js', 'text/javascript');?>
+		<?php $this->headScript()->appendFile($this->basePath().'/js/jquery/js/jquery.multiselects-0.3.pack.js', 'text/javascript');?>
+		<?php $this->headScript()->appendFile($this->basePath().'/js/jquery/js/jquery.multiselects-0.3.js', 'text/javascript');?>
+		<?php $this->headScript()->appendFile($this->basePath().'/js/jquery/js/jquery.form.js', 'text/javascript');?>
+		<?php $this->headScript()->appendFile($this->basePath().'/js/custom/ugbform.js', 'text/javascript');?>
+		<?php $this->headScript()->appendFile($this->basePath().'/js/custom/ugbtable.js', 'text/javascript');?>
+		<?php $this->headScript()->appendFile($this->basePath().'/js/jquery/js/jquery.jeditable.js', 'text/javascript');?>
+		<?php $this->headScript()->appendFile($this->basePath().'/js/plugins/ui.selectmenu.js', 'text/javascript');?>
+		<?php $this->headScript()->appendFile($this->basePath().'/js/plugins/jquery.alphanumeric.js', 'text/javascript');?>
+
+
+		<?php $this->headScript()->appendFile($this->basePath().'/js/plugins/ui.selectmenu.js', 'text/javascript');?>
+		<?php $this->headScript()->appendFile($this->basePath().'/js/plugins/jquery.alphanumeric.js', 'text/javascript');?>
+
+		<?php echo $this->headScript() ?>
+
+		<script>
+	$(function() {
+		$( "input:submit, button" ).button();
+       	});
+
+	</script>
+
+</head>
+
+
+<body id="bodbod">
+<!--Header-part-->
+<div id="header">
+  <h1><a href="">Simens admin panel</a></h1>
+</div>
+<!--close-Header-part-->
+
+<!--top Menu au dessus -->
+<div id="user-nav" class="navbar navbar-inverse">
+  <ul class="nav">
+    <li  class="dropdown" id="profile-messages" ><a title="" href="#"  class="dropdown-toggle">
+    <i class="icon icon-user"></i>  <span class="text">Bienvenue utilisateur</span><b class="caret"></b></a>
+
+    </li>
+
+    <li class=""><a title="" href="login.html">
+    <i class="icon icon-share-alt"></i> <span class="text">Deconnexion</span></a></li>
+
+  </ul>
+</div>
+
+<!--Menu de droite-->
+
+<div id="sidebar">
+
+  <?php echo $this->partial('common/menu-gauche.phtml'); ?>
+
+</div>
+
+<div id="content">
+
+  <div id="content-header">
+    <div align="center" class="titre_page"><h3><?php echo $this->titre_page; ?></h3></div>
+  <div class="container-fluid">
+  <div class="row-fluid">
+      <div class="span12">
+        <div class="widget-box">
+          <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
+
+          </div>
+          <div class="widget-content nopadding">
+
+          <?php echo $this->layout()->content; ?>
+
+    </div>
+    </div>
+    </div>
+
+
+
+
+
+    </div>
+  </div>
+</div></div>
+
+				<!--Pied de Page debut-->
+				<div class="row-fluid">
+				  <div id="footer" class="span12"> 2013 Simens </div>
+				</div>
+				<!--Fin de pied de page-->
+
+
+
+
+
+
+</body>
+</html>

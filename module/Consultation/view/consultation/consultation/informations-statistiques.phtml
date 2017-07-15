@@ -1,0 +1,201 @@
+<script>
+//POUR LE MENU GAUCHE dans -elementgauche.phtml
+$('#plus_menu_statistiques').toggle(true);
+$("#menu_statistiques").replaceWith("<li id='menu_statistiques' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='<?php echo $this->basePath().'/images_icons/moin-green2.PNG';?>'  /> Statistiques </span></a></li>");
+dep_menu_statistiques1();
+$('#menu_statistiques_style').css({'font-weight':'bold','color':'white','font-size':'21px'});
+</script>
+
+<!-- MES STYLES -->
+<?php echo $this->headLink()->appendStylesheet($this->basePath().'/css/consultation/styleListeConsultations.css');?>
+<!-- MES JS -->
+<?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/jqueryCharts/jquery.canvasjs.min.js');?>
+
+<?php use Facturation\View\Helper\DateHelper;
+$Control = new DateHelper();?>
+<style>
+#contenuInterface{ visibility: hidden; }
+</style>
+
+<script>
+$(window).load(function () {
+
+	$('#wait').toggle(false);
+	$('#contenuInterface').fadeIn().css({'visibility':'visible'});
+	 
+});
+</script>
+
+
+<div id="titre" style='font-family: police2; text-decoration:none; color: green; font-size: 18px; font-weight: bold; padding-left: 20px;'><iS style='font-size: 25px;'>&curren;</iS> <span> INFOS STATISTIQUES </span></div>
+<div id="wait" style="color: gray; font-size: 20px; text-align: center; margin-top: 80px;" > <span> Chargement ... </span> </div>
+<div id="contenuInterface" >
+<div id="contenu" >
+
+
+    <script type="text/javascript"> 
+     var ordonnees = [];
+     var abcisses  = [];
+     var i = 1;
+     var j = 1;
+
+     <?php 
+       $formeGraves = count($this->typagesPatientsInternes[0]);
+   	   for($i = 0 ; $i < count($this->typagesPatientsInternes[0]) ; $i++){
+   	     $typages = $this->typagesPatientsInternes[0][$i];
+   	 ?>
+   	     ordonnees [i++] = '<?php echo $typages; ?>';
+      	  abcisses [j++] = <?php echo $this->typagesPatientsInternes[1][$typages]; ?>; 
+
+     <?php
+   		  }
+   	 ?>
+
+    </script>
+    
+
+    <script >
+
+    var nbPatientD   = <?php echo $this->nbPatientD;   ?> //Nombre de patients depistes
+    var nbPatientDN  = <?php echo $this->nbPatientDN;  ?> //Nombre de patients depistes négatifs (externe)
+    var nbPatientDP  = <?php echo $this->nbPatientDP;  ?> //Nombre de patients depistes positifs (interne)
+    var nbPatientDPF = <?php echo $this->nbPatientDPF; ?> //Nombre de patients depistes positifs (interne) Feminin
+    var nbPatientDPM = <?php echo $this->nbPatientDPM; ?> //Nombre de patients depistes positifs (interne) Masculin
+
+    $(document).ready(function($) {
+
+    //Patients depistés
+    //Patients depistés
+	function patientsDepistes() {
+		var patientsDepistes = new CanvasJS.Chart("patientsDepistes", {
+			data: [{
+				type: "column",
+				dataPoints: [
+
+					{ y: nbPatientDP, label: "Interne" },
+					{ y: nbPatientDN, label: "Externe" },
+				]
+
+			}]
+
+		});
+		patientsDepistes.render();
+	}
+	
+	//Patients internes
+	//Patients internes
+	function patientsInternes() {
+		var patientsInternes = new CanvasJS.Chart("patientsInternes", {
+			data: [{
+				type: "pie",
+				dataPoints: [
+
+					{ y: nbPatientDPF, label: "Feminin" },
+					{ y: nbPatientDPM, label: "Masculin" },
+				]
+
+			}]
+
+		});
+		patientsInternes.render();
+	}
+
+
+	//Les typages des patients internes
+	//Les typages des patients internes
+	var Pile = [];
+
+	for(var k = 1 ; k < ordonnees.length ; k++){
+		var tabValeur = { y: abcisses[k], label: ordonnees[k] };
+		Pile.push(tabValeur);
+	}
+
+	function typagePatientsInternes() {
+		var typagePatientsInternes = new CanvasJS.Chart("typagePatientsInternes", {
+			data: [{
+				type: "bar",
+				dataPoints: Pile
+			}]
+
+		});
+		typagePatientsInternes.render();
+	}
+
+	//APPEL DES FONCTIONS
+	patientsDepistes();
+	patientsInternes();
+	typagePatientsInternes();
+
+    });
+
+    </script>
+	
+	
+	<table style="width: 100%; height: 20%;">
+	 <tr style="width: 100%; height: 20%;">
+	 
+	   <!-- PREMIERE COLONNE -->
+	   <!-- PREMIERE COLONNE -->
+	   <td style="width: 25%; height: 20%;" >
+	     <table style="width: 100%;">
+	       <tr style="width: 100%; ">
+	         <td style="width: 100%; height: 40px; font-family: Goudy Old Style; text-align: center;">
+	          
+	          <?php echo $this->nbPatientD; ?> patients dÃ©pistÃ©s
+	         
+	         </td>
+	       </tr>
+	       <tr style="width: 100%; vertical-align: top;">
+	         <td style="width: 100%; height: 400px;">
+	         <div id="patientsDepistes" style="height: 400px;"></div>
+	         </td>
+	       </tr>
+	     </table> 
+	   </td>
+	
+	
+       <!-- DEUXIEME COLONNE -->
+       <!-- DEUXIEME COLONNE -->
+	   <td style="width: 25%; height: 20%;">
+	     <table style="width: 100%; border-left: 2px solid #cccccc;">
+	       <tr style="width: 100%; ">
+	         <td style="width: 100%; height: 40px; font-family: Goudy Old Style; text-align: center;">
+	          
+	          <?php echo $this->nbPatientDP; ?> patients internes
+	         
+	         </td>
+	       </tr>
+	       <tr style="width: 100%; vertical-align: top;">
+	         <td style="width: 100%; height: 400px;">
+	         <div id="patientsInternes" style="height: 400px;"></div>
+	         </td>
+	       </tr>
+	     </table> 
+	   </td>
+	   
+	   
+   	   <!-- TROISIEME COLONNE -->
+   	   <!-- TROISIEME COLONNE -->
+	   <td style="width: 50%; height: 20%;">
+	     <table style="width: 100%; border-left: 2px solid #cccccc;">
+	       <tr style="width: 100%; ">
+	         <td style="width: 100%; height: 40px; font-family: Goudy Old Style; text-align: center;">
+	          
+	           <?php echo $formeGraves ?> profils de sympt&ocirc;me drÃ©panocitaire majeur
+	         
+	         </td>
+	       </tr>
+	       <tr style="width: 100%; vertical-align: top;">
+	         <td style="width: 100%; height: 400px;">
+	         <div id="typagePatientsInternes" style="height: 400px;"></div>
+	         </td>
+	       </tr>
+	     </table> 
+	   </td>
+	 </tr>
+	</table>
+	
+	
+
+</div>
+</div>

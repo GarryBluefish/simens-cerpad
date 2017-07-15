@@ -1,0 +1,189 @@
+<script>
+var base_url = window.location.toString();
+var tabUrl = base_url.split("public");
+
+//POUR LE MENU GAUCHE dans -elementgauche.phtml
+$('#plus_analyses').toggle(true);
+$("#analyses").replaceWith("<li id='analyses' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='"+tabUrl[0]+"public/images_icons/moin-green2.png' alt='Liste' /> Analyses </span></a></li>");
+dep_analyses1();
+$('#liste_bilans_tries').css({'font-weight':'bold','color':'white','font-size':'22px'});
+</script>
+
+<!-- MES STYLES -->
+<?php echo $this->headLink()->appendStylesheet($this->basePath().'/css/technicien/styleListeBilanTrie.css');?>
+
+<!-- MES JS -->
+<?php echo $this->headScript()->appendFile($this->basePath().'/js/technicien/jsListeBilanTrie.js');?>
+
+
+<?php use Facturation\View\Helper\DateHelper;
+$Control = new DateHelper();?>
+<style>
+#contenuInterface{ visibility: hidden; }
+</style>
+
+<script>
+$(window).load(function () {
+
+	$('#wait').toggle(false);
+	$('#contenuInterface').fadeIn().css({'visibility':'visible'});
+	 
+});
+</script>
+
+
+<div id="titre" style='font-family: police2; text-decoration:none; color: green; font-size: 18px; font-weight: bold; padding-left: 20px;'><iS style='font-size: 25px;'>&curren;</iS> <span> LISTE DES PATIENTS </span></div>
+<div id="wait" style="color: gray; font-size: 20px; text-align: center; margin-top: 80px;" > <span> Chargement ... </span> </div>
+<div id="contenuInterface" >
+<div id="contenu" >
+ 	    <div style='cursor: pointer; float:right; margin-top: 5px; margin-right: 15px; '> <a href='javascript:getChoixFeuillePaillasse()'> <img style='padding-left: 3px; width: 25px; height: 25px; ' src='../images_icons/pdf.png' title='Feuille de paillasse' /> </a> </div>
+		<table class="table table-bordered tab_list_mini" id="patientAdmis">
+			<thead>
+				<tr style="height:50px; width:100%;">
+					<th id="nom" align="center">Nom</th>
+					<th id="prenom" align="center">Prenom</th>
+					<th id="date" align="center" >D. naissance</th>
+					<th id="sexe" align="center" >Sexe</th>
+					<th id="adresse" align="center" >Adresse</th>
+					<th id="nationalite" align="center" >Date & heure</th>
+					<th id="effectuer" align="center">Options</th>
+				</tr>
+			</thead>
+
+			<tbody id="donnees" class="liste_patient">
+
+            <!-- ******* On affiche la liste des patients ****** -->
+
+			</tbody>
+
+			<tfoot id="foot" class="foot_style">
+				<tr>
+					<th id="nom_" style="width: 13%;"><input type="text" name="search_browser" value=" Nom" class="search_init" /></th>
+					<th id="prenom_" style="width: 15%;"><input type="text" name="search_browser" value=" Prenom" class="search_init" /></th>
+					<th id="date_" style="width: 12%;"><input type="text" name="search_browser" value=" Date naissance" class="search_init" /></th>
+					<th id="sexe_" style="width: 7%;"><input type="text" name="search_browser" value=" Sexe" class="search_init" /></th>
+					<th id="adresse_" style="width: 28%;"><input type="text" name="search_browser" value=" Adresse" class="search_init" /></th>
+					<th id="nationalite_" style="width: 15%;"><input type="text" name="search_browser" value=" Nationalite" class="search_init" /></th>
+					<th id="effectuer_" style="width: 10%;"><input type="hidden" name="search_browser" value="" class="" /></th>
+
+				</tr>
+			</tfoot>
+		</table>
+
+</div>
+
+<div id="interfaceListePrelevement">
+
+  <div id="vue_patient">
+    <!-- Ici on place les details des infos sur le patient, sur la liste des analyses demandées et le bilan du prélèvement  -->
+  </div>
+
+  <div id="boutonAnnulerTerminer">
+    <table style="margin-top: 15px; margin-bottom: 25px; width: 100%;  height: 32px;">
+      <tr>
+        <td style="width: 42%;"> </td>
+        <td style="width: 10%;" id="thoughtbot" class='boutonAnnuler'> </td>
+        <td style="width: 10%;" id="thoughtbot" class='boutonValider'> </td>
+	    <td style="width: 38%;"> </td>
+      </tr>
+    </table>
+  </div>
+
+
+  <div id="boutonTerminer" style="display:none;">
+    <table style="margin-top: 35px; margin-bottom: 25px; width: 100%;  height: 32px;">
+      <tr>
+        <td style="width: 52%;"> </td>
+        <td style="width: 10%;" id="thoughtbot" class='boutonTerminer'> </td>
+	    <td style="width: 38%;"> </td>
+      </tr>
+    </table>
+  </div>
+
+</div>
+
+</div>
+
+
+
+
+
+<!-- POP UP pour Confirmation Suppression -->
+<div id="confirmation" title="Confirmation de la suppression" style="display:none;">
+  <p style="font-size: 19px;">
+     <span style="float:left; margin:0 0px 20px 0; ">
+     <img src="<?php echo $this->basePath().'/images_icons/warning_16.png';?>" />
+     Etes-vous s&ucirc;r de vouloir annuler l'admission ?</span>
+  </p>
+</div>
+
+
+<!-- POP UP pour Choix de la feuille de paillase -->
+<div id="choixFeuillePaillasse" title="Choix de la feuille de paillasse" style="display:none;">
+  <table style="width: 100%; font-size: 16px; font-family: time new romans">
+     <tr style="">
+       <td style="width: 50%; font-style: italic; ">
+          <table style="width: 100%;">
+            <tr id="RechercheParPatient" style="width: 100%; cursor: pointer;">
+              <td style="width: 20%;">
+                <img style="width: 30px; height: 30px;" src='<?php echo $this->basePath().'/images_icons/patient.jpg'?>' title='Regroupement par patient' >
+              </td>
+              
+              <td style="width: 80%;">
+                Regr. par patient
+              </td>
+            </tr>
+          </table> 
+       </td>
+       <td style="width: 50%; padding-right: 10px; text-align: center; font-style: italic; border-left: 1px solid #cccccc;">
+          <table style="width: 100%;">
+            <tr id="RechercheParAnalyse"  style="width: 100%; cursor: pointer;">
+              <td style="width: 20%;">
+                <img style="width: 30px; height: 30px;" src='<?php echo $this->basePath().'/images_icons/microscope3.jpg'?>' title='Regroupement par analyse' >
+              </td>
+              
+              <td style="width: 80%;">
+                Regr. par analyse
+              </td>
+            </tr>
+          </table> 
+       </td>
+     </tr>
+  </table>
+</div>
+
+
+<div style='display: none;' class='infos_parentales_tampon'> <!-- à ne pas supprimer *** pour les infos parentales --> </div>
+
+
+<div id="context-menu">
+    <ul class="dropdown-menu" >
+         <li><a style="cursor: pointer;" ><img id="visualiserCTX" style='margin-right: 10px; width: 19px; height: 16px;' src='../images_icons/voir2.png'>Visualiser</a></li>
+         <li class="divider"></li>
+         <li><a id="quitterCTX"  style="cursor: pointer;">Quitter</a></li>
+    </ul>
+</div>
+
+
+<!-- POP UP AFFICHAGE Prelevement precedent -->
+<div id="prelevement_precedent" title="Pr&eacute;l&egrave;vements pr&eacute;c&eacute;dents" style="display:none;">
+
+     <div id="prelevement_precedent_popup" >
+     
+     </div>
+     
+</div>
+
+
+<form id="FormulaireImprimerFeuillePaillasse" style="display: none;">
+    <button id="ImprimerFeuillePaillasse"></button>
+</form>
+
+
+<script type="text/javascript">
+$(function(){
+	initialisation();
+});
+$("#interfaceListePrelevement").toggle(false);
+</script>
+

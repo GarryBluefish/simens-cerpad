@@ -1,0 +1,72 @@
+/* Generic context menu styles */
+.contextMenuJQ {
+	position: absolute;
+	width: auto;
+	z-index: 99999;
+	border: solid 1px #CCC;
+	background: #EEE;
+	padding: 0px;
+	margin: 0px;
+	display: none;
+}
+
+.contextMenuJQ LI {
+	list-style: none;
+	padding: 0px;
+	margin: 0px;
+}
+
+.contextMenuJQ A {
+	color: #333;
+	text-decoration: none;
+	display: block;
+	line-height: 20px;
+	height: 20px;
+	background-position: 6px center;
+	background-repeat: no-repeat;
+	outline: none;
+	padding: 1px 5px;
+	padding-left: 28px;
+}
+
+.contextMenuJQ LI.hover A {
+	color: #FFF;
+	background-color: #3399FF; text-decoration:none
+}
+
+.contextMenuJQ LI.disabled A {
+	color: #AAA;
+	cursor: default;
+}
+
+.contextMenuJQ LI.hover.disabled A {
+	background-color: transparent;
+}
+
+.contextMenuJQ LI.separator {
+	border-top: solid 1px #CCC;
+}
+
+/*
+	Adding Icons
+	
+	You can add icons to the context menu by adding
+	classes to the respective LI element(s)
+*/
+
+.contextMenuJQ LI.edit A { background-image: url(../images/menu_icones/page_white_edit.png); } 
+.contextMenuJQ LI.modifier A { background-image: url(../images/menu_icones/page_white_modifier.png); } 
+.contextMenuJQ LI.cut A { background-image: url(../images/menu_icones/page_white_cut.png); }
+.contextMenuJQ LI.copy A { background-image: url(../images/menu_icones/page_white_copy.png); }
+.contextMenuJQ LI.paste A { background-image: url(../images/menu_icones/page_white_paste.png); } 
+.contextMenuJQ LI.etudiants A { background-image: url(../images/menu_icones/page_white_etudiants.png); }
+.contextMenuJQ LI.lock A { background-image: url(../images/menu_icones/page_white_delete.png); } 
+.contextMenuJQ LI.delete A { background-image: url(../images/menu_icones/page_white_drop.png); } 
+.contextMenuJQ LI.archive A { background-image: url(../images/menu_icones/page_white_archive.png); } 
+.contextMenuJQ LI.quit A { background-image: url(../images/menu_icones/door.png); }
+.contextMenuJQ LI.carte A { background-image: url(../images/menu_icones/page_white_carte.png); } 
+.contextMenuJQ LI.imprimer A { background-image: url(../images/menu_icones/page_white_imprimer.png); } 
+.contextMenuJQ LI.config A { background-image: url(../images/menu_icones/page_white_config.png); } 
+.contextMenuJQ LI.emploi A { background-image: url(../images/menu_icones/page_white_planning.png); } 
+.contextMenuJQ LI.responsable A { background-image: url(../images/menu_icones/page_white_ok.png); } 
+.contextMenuJQ LI.fiche A { background-image: url(../images/menu_icones/page_white_fiche.png); }

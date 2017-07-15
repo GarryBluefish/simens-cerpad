@@ -1,0 +1,414 @@
+<!-- MES STYLES --> 
+<?php echo $this->headLink()->appendStylesheet($this->basepath().'/css/personnel/styleModifierPersonnel.css');
+      echo $this->headLink()->appendStylesheet($this->basepath().'/css/facturation/DatePicker.css');?>
+
+<!-- MES JS -->
+<?php echo $this->headScript()->appendFile($this->basepath().'/js/personnel/jsModifierPersonnel.js');?>
+
+<?php $today = new \DateTime ( 'now' );
+      $date_enregistrement = $today->format ( 'Y-m-d H:i:s' ); 
+?>
+<script type="text/javascript">
+controle_saisie();
+
+$(window).load(function () {
+	$('#wait').toggle(false);
+	$('#contenuInterface').fadeIn().css({'visibility':'visible'});
+});
+</script>
+
+<style>
+#contenuInterface{ visibility: hidden };
+</style>
+
+
+
+<?php
+$form = $this->form;
+$form->setAttribute ( 'action', $this->url ( 'personnel', array ('action' => 'modifier-dossier', 'val' => $this->id_personne) ));
+$form->setAttribute ('enctype','multipart/form-data');
+$form->setAttribute ('method','POST');
+$this->form->prepare ();
+echo $this->form ()->openTag ( $form );?>
+
+
+<?php echo $this->formhidden($this->form->get('id_personne')); ?>
+
+<div id="wait" style="color: gray; font-size: 20px; text-align: center; margin-top: 80px;" > <span> Chargement ... </span> </div>
+
+<div id="contenuInterface"> 
+
+<div id="accordions">
+<!--**************************************-->                              
+
+<!--========== PREMIER DEPLIANT ========-->                              
+                          
+<!--**************************************--> 
+     <div id='depliant1' style='width: 140px; font-family: police2; color: green; font-size: 20px; font-weight: bold;'>Etat civil</div>
+     <div>
+
+         <div class="photo_patient" id='photo'>
+                  <img id="modifier_photo" src="<?php echo '../../../img/photos_personnel/'.$this->photo; ?>" style=' margin-left:-10px; margin-top:-10px; width:105px; height:105px;'/>
+                  <input type='file' name="fichier" /> <!-- RECUPERER L'IMAGE -->
+                  <?php echo $this->formhidden($this->form->get('fichier_tmp'))?>
+         </div>
+           
+        <div style='width: 80%; float:left;'>
+		<table id="form_patient" style="float: left;">
+
+			<tr class="comment-form-patient">
+				<td style="width: 33%;"> <?php echo $this->formRow($this->form->get('sexe'))?></td>
+				<td style="width: 33%;"> <?php echo $this->formRow($this->form->get('lieu_naissance'));?></td>
+				<td style="width: 33%;"> <?php echo $this->formRow($this->form->get('email'));?></td>
+
+			</tr>
+
+			<tr class="comment-form-patient">
+				<td> <?php echo $this->formRow($this->form->get('nom'));?></td>
+				<td> <?php echo $this->formRow($this->form->get('telephone'));?></td>
+				<td> <?php echo $this->formRow($this->form->get('situation_matrimoniale'));?></td>
+			</tr>
+
+			<tr class="comment-form-patient">
+				<td> <?php echo $this->formRow($this->form->get('prenom'));?></td>
+				<td> <?php echo $this->formRow($this->form->get('profession'));?></td>
+				<td> <?php echo $this->formRow($this->form->get('nationalite'));?></td>
+			</tr>
+
+			<tr class="comment-form-patient">
+				<td> <?php echo $this->formRow($this->form->get('date_naissance'));?></td>
+				<td> <?php echo $this->formRow($this->form->get('adresse'));?></td>
+				<td> </td>
+			</tr>
+
+			<tr>
+			  <td>
+			    <div style="height: 10px; width: 100%; "></div>
+			  </td>
+			  
+			</tr>
+			
+		</table>
+	  </div>
+		
+	  <div style='width: 3%; height: 150px; float:left;'>
+		<div class="barre_vertical"></div>
+
+		<div class="vider_formulaire" id="vider_champ">
+			<hass> <input title="Vider tout" name="vider"
+				id="vider"> </hass>
+		</div>
+
+		<div class="supprimer_photo" id="div_supprimer_photo">
+			<hass> <input name="supprimer_photo"> </hass>
+			<!-- balise sans importance pour le moment -->
+		</div>
+
+		<div class="ajouter_photo" id="div_ajouter_photo">
+			<hass> <input alt="ajouter_photo"
+				title="Ajouter une photo" name="ajouter_photo" id="ajouter_photo"> </hass>
+		</div>
+
+		<div class="modifer_donnees" id="div_modifier_donnees">
+			<hass> <input alt="modifer_donnees" title="modifer les donnees"
+				name="modifer_donnees" id="modifer_donnees"> </hass>
+		</div>
+      </div>
+            
+     </div>	
+<!--**************************************-->                              
+
+<!--========== DEUXIEME DEPLIANT ========-->                              
+                          
+<!--**************************************--> 
+     <div id='depliant2' style='font-family: police2;  color: green; font-size: 20px; font-weight: bold;'>Compléments informations</div>
+     <div style="max-height:240px;">
+     <div style=" padding-bottom:0px; margin-bottom: 5px; border-bottom: 2px solid green; margin-left: 0px;"></div>
+         <table id="form_patient" style="float: left;">  
+            <tr class="comment-form-patient">
+                <td style="width: 270px;"> <?php echo $this->formRow($this->form->get('type_personnel')); ?></td> 
+            </tr>
+         </table>
+         
+         <!--========== MENU COMPLEMENT INFO MEDECIN ========-->
+         <div class="vider_formulaire2" id="vider_champ2">
+                 <input title="Vider tout" name="vider2" id="vider2"> 
+         </div>
+         
+         <div class="modifier_formulaire2" id="modifier_champ2">
+                 <input title="Modifier" name="modifier2" id="modifier2"> 
+         </div>
+         
+         <!--========== MENU COMPLEMENT INFO MEDICO-TECHNIQUE ========-->
+         <div class="vider_formulaire2" id="vider_champ_medico">
+                 <input  title="Vider tout" name="vider_medico" id="vider_medico"> 
+         </div>
+         
+         <div class="modifier_formulaire2" id="modifier_champ_medico">
+                 <input title="Modifier" name="modifier_medico" id="modifier_medico"> 
+         </div>
+        
+        <!--========== MENU COMPLEMENT INFO LOGISTIQUE ========-->
+         <div class="vider_formulaire2" id="vider_champ_logistique">
+                 <input title="Vider tout" name="vider_logistique" id="vider_logistique"> 
+         </div>
+         
+         <div class="modifier_formulaire2" id="modifier_champ_logistique">
+                 <input title="Modifier" name="modifier_logistique" id="modifier_logistique"> 
+         </div>
+        
+     <div style=" padding-bottom:80px; margin-bottom: 5px; border-bottom: 1px solid green; margin-left: 0px;"></div>
+         
+         <!--========== TABLEAU COMPLEMENT INFO MEDECIN ========-->
+         <table id="form_patient2" class="complement_medecin" style="width: 100%;">  
+            <tr class="comment-form-patient">
+                <td style="width: 25%;"> <?php echo $this->formRow($this->form->get('matricule'));?></td> 
+                <td style="width: 25%;"> <?php echo $this->formRow($this->form->get('grade'));?></td> 
+                <td style="width: 25%;"> <?php echo $this->formRow($this->form->get('specialite'));?></td> 
+                <td style="width: 25%;"> <?php echo $this->formRow($this->form->get('fonction'));?></td> 
+            </tr>
+         </table>
+                <!--========== BOUTON VALIDER ========-->
+                <div id="bouton_valider_donnees" style="height:20px; margin-bottom: 5px; margin-top: 25px; float:right;"> 
+                    <button id='bouton_donnees_valider'>Valider</button>  
+                </div>
+         
+         
+         <!--========== TABLEAU COMPLEMENT INFO MEDICO-TECHNIQUE ========-->
+         <table id="form_patient2" class="complement_medico-technique" style="width: 100%;">  
+            <tr class="comment-form-patient">
+                <td style="width: 25%;"> <?php echo $this->formRow($this->form->get('matricule_medico')); ?></td> 
+                <td style="width: 25%;"> <?php echo $this->formRow($this->form->get('grade_medico')); ?></td> 
+                <td style="width: 25%;"> <?php echo $this->formRow($this->form->get('domaine_medico')); ?></td> 
+                <td style="width: 25%;"> <?php echo $this->formRow($this->form->get('autres')); ?></td> 
+            </tr>
+         </table>
+                 <!--========== BOUTON VALIDER ========-->
+                 <div id="bouton_valider_donnees_medico" style="height:20px; margin-bottom: 5px; margin-top: 25px; float:right;"> 
+                    <button id='bouton_donnees_valider_medico'>Valider</button>  
+                 </div>
+         
+         
+         <!--========== TABLEAU COMPLEMENT INFO LOGISTIQUE ========-->
+         <table id="form_patient2" class="complement_logistique" style="width: 100%;">  
+            <tr class="comment-form-patient">
+                <td style="width: 25%;"> <?php echo $this->formRow($this->form->get('matricule_logistique'));?></td> 
+                <td style="width: 25%;"> <?php echo $this->formRow($this->form->get('grade_logistique'));?></td> 
+                <td style="width: 25%;"> <?php echo $this->formRow($this->form->get('domaine_logistique'));?></td> 
+                <td style="width: 25%;"> <?php //echo $this->formRow($this->form->get('autres_logistique'));?></td> 
+            </tr>
+         </table>
+                 <!--========== BOUTON VALIDER ========-->
+                 <div id="bouton_valider_donnees_logistique" style="height:20px; margin-bottom: 5px; margin-top: 25px; float:right;"> 
+                    <button id='bouton_donnees_valider_logistique'>Valider</button>  
+                 </div>
+                
+                
+                <!--========== TABLEAU COMPLEMENT INFO SECRETAIRE ========-->
+         <table id="form_patient2" class="complement_secretaire" style="width: 100%;">  
+            <tr class="comment-form-patient">
+                <td style="width: 25%;"> <?php echo $this->formRow($this->form->get('matricule_secretaire'));?></td> 
+                <td style="width: 25%;"> <?php echo $this->formRow($this->form->get('grade_secretaire'));?></td> 
+                <td style="width: 25%;"> <?php echo $this->formRow($this->form->get('domaine_secretaire'));?></td> 
+                <td style="width: 25%;"> <?php echo $this->formRow($this->form->get('autres_secretaire'));?></td> 
+            </tr>
+         </table>
+                 <!--========== BOUTON VALIDER ========-->
+                 <div id="bouton_valider_donnees_secretaire" style="height:20px; margin-bottom: 5px; margin-top: 25px; float:right;"> 
+                    <button id='bouton_donnees_valider_secretaire'>Valider</button>  
+                 </div>
+                 
+                 
+                 <!--========== TABLEAU COMPLEMENT INFO LABORANTIN ========-->
+         <table id="form_patient2" class="complement_laborantin" style="width: 100%;">  
+            <tr class="comment-form-patient">
+                <td style="width: 25%;"> <?php echo $this->formRow($this->form->get('matricule_laborantin'));?></td> 
+                <td style="width: 25%;"> <?php echo $this->formRow($this->form->get('grade_laborantin'));?></td> 
+                <td style="width: 25%;"> <?php echo $this->formRow($this->form->get('domaine_laborantin'));?></td> 
+                <td style="width: 25%;"> <?php echo $this->formRow($this->form->get('autres_laborantin'));?></td> 
+            </tr>
+         </table>
+                 <!--========== BOUTON VALIDER ========-->
+                 <div id="bouton_valider_donnees_laborantin" style="height:20px; margin-bottom: 5px; margin-top: 25px; float:right;"> 
+                    <button id='bouton_donnees_valider_laborantin'>Valider</button>  
+                 </div>
+                 
+                 
+         <!--========== TABLEAU COMPLEMENT INFO INFIRMIER ========-->
+         <table id="form_patient2" class="complement_infirmier" style="width: 100%;">  
+            <tr class="comment-form-patient">
+                <td style="width: 25%;"> <?php echo $this->formRow($this->form->get('matricule_infirmier'));?></td> 
+                <td style="width: 25%;"> <?php echo $this->formRow($this->form->get('grade_infirmier'));?></td> 
+                <td style="width: 25%;"> <?php echo $this->formRow($this->form->get('domaine_infirmier'));?></td> 
+                <td style="width: 25%;"> <?php echo $this->formRow($this->form->get('autres_infirmier'));?></td> 
+            </tr>
+         </table>        
+         
+         
+                       
+     </div>
+     
+<!--**************************************-->                              
+
+<!--========== TROISIEME DEPLIANT ========-->                              
+                          
+<!--**************************************--> 
+     <div id='depliant3' style='font-family: police2;  color: green; font-size: 20px; font-weight: bold;'>Affectation</div>
+     <div style="max-height:200px;">
+     <div style=" padding-bottom:0px; margin-bottom: 5px; border-bottom: 2px solid green; margin-left: 0px;"></div>
+        
+        <div class="vider_formulaire2" id="vider_champ_affectation" style="margin-top:5px;">
+          <input type="submit" title="Vider tout" name="vider_affectation" id="vider_affectation"> 
+        </div>
+        <div class="modifier_formulaire2" id="modifier_champ_affectation" style="margin-top:5px;">
+                 <input type="submit" title="Modifier" name="modifier_affectation" id="modifier_affectation"> 
+        </div>
+         
+     <div style=" padding-bottom:40px; margin-bottom: 5px; border-bottom: 1px dashed green; margin-left: 0px;"></div>
+         <table id="form_patient2" class="affectation" style="width: 100%;">  
+            <tr class="comment-form-patient"> 
+                <td style="width: 25%;"> <?php echo $this->formRow($this->form->get('service_accueil'));?></td> 
+                <td style="width: 25%;"> <?php echo $this->formRow($this->form->get('date_debut'));?></td> 
+                <td style="width: 25%;"> <?php echo $this->formRow($this->form->get('date_fin'));?></td>
+                <td style="width: 25%;"> <?php echo $this->formRow($this->form->get('numero_os'));?></td> 
+            </tr>
+         </table>
+                <!--========== BOUTON VALIDER ========-->
+                 <div id="bouton_valider_donnees_facturation" style="height:20px; margin-bottom: 5px; margin-top: 25px; float:right;"> 
+                    <button id='bouton_donnees_valider_affectation'>Valider</button>  
+                 </div>
+     </div>
+  </div>	
+</div>
+<!--***********************************************************************************************-->                              
+
+<!--========================== LES BOUTONS "TERMINER" ET "ANNULER" =================================-->                              
+                          
+<!--***********************************************************************************************--> 
+        <table style="width: 100%; ">
+         <tr style="width: 100%;">
+           <td style="background-color: #eeeeee; width: 50%;"> 
+              <div style="float: right; "> <button  id="annuler" style="margin-top: 20px; font-family: police2; font-size: 18px; font-weight: bold;"> Annuler </button> </div>
+           </td>
+           <td style="background-color: #eeeeee; width: 50%;">
+              <div style="float: left; ">  <button  id="terminer" style="margin-top: 20px; font-family: police2; font-size: 18px; font-weight: bold;"> Terminer </button> </div>
+           </td>
+         </tr>     
+       </table>
+
+<?php echo $this->form()->closeTag();?>
+
+
+<!--***********************************************************************************************-->                              
+
+<!--==========================POP UP pour Confirmation Suppression=================================-->                              
+                          
+<!--***********************************************************************************************-->  
+        <div id="confirmation" title="Confirmation de la suppression" style="display:none;">
+             <p style="font-size: 16px;">
+                 <span style="float:left; margin:0 0px 20px 0; font-size:17px; ">
+                 <img src="<?php echo $this->basepath().'/images_icons/warning_16.png';?>" />
+                                
+                 Etes-vous s&ucirc;r de vouloir supprimer la photo ?</span>
+             </p>
+         </div>
+
+<script>
+
+dialogue();
+debuter();
+
+//*****************************************************************************************************************************    
+/***COMPLEMENT MEDECIN*****/
+$('.complement_medecin').toggle(false);
+$('#vider_champ2').toggle(false);
+$('#modifier_champ2').toggle(false);
+$("#bouton_valider_donnees").toggle(false);
+
+
+/***COMPLEMENT MEDICO-TECHNIQUE***/
+$('.complement_medico-technique').toggle(false); 
+$("#bouton_valider_donnees_medico").toggle(false);
+$("#vider_champ_medico").toggle(false);
+$("#modifier_champ_medico").toggle(false);
+
+
+/***COMPLEMENT LOGISTIQUE***/
+$(".complement_logistique").toggle(false);
+$("#bouton_valider_donnees_logistique").toggle(false);
+$("#vider_champ_logistique").toggle(false);
+$("#modifier_champ_logistique").toggle(false);
+
+/***COMPLEMENT SECRETAIRE***/
+$('.complement_secretaire').toggle(false);
+$('#bouton_valider_donnees_secretaire').toggle(false);
+
+/***COMPLEMENT LABORANTIN***/
+$('.complement_laborantin').toggle(false);
+$('#bouton_valider_donnees_laborantin').toggle(false);
+
+/***AFFECTATION***/
+$("#modifier_champ_affectation").toggle(false);
+
+/****************************************************/
+
+/**=======AFFICHER LE COMPLEMENT CONCERNER========**/
+
+/***************************************************/
+/***COMPLEMENT MEDECIN*****/
+<?php if($this->type_personnel == 1){ ?>
+         $('.complement_medecin').toggle(true);
+         $('#vider_champ2').toggle(true);
+         $("#bouton_valider_donnees").toggle(true); 
+         $('#type_personnel').val(1);   
+         getChamps(1);
+         
+<?php } ?>
+/***COMPLEMENT MEDICO-TECHNIQUE***/
+<?php if($this->type_personnel == 2){ ?>
+         $('.complement_medico-technique').toggle(true); 
+         $("#bouton_valider_donnees_medico").toggle(true);
+         $("#vider_champ_medico").toggle(true);
+         $('#type_personnel').val(2);   
+         getChamps(2);
+<?php } else?>
+
+/***COMPLEMENT MEDICO-TECHNIQUE***/
+<?php if($this->type_personnel == 3){ ?>
+         $(".complement_logistique").toggle(true);
+         $("#bouton_valider_donnees_logistique").toggle(true);
+         $("#vider_champ_logistique").toggle(true);
+         $('#type_personnel').val(3);   
+         getChamps(3);
+<?php }?>
+
+/***COMPLEMENT SECRETAIRE***/
+<?php if($this->type_personnel == 4){ ?>
+         $(".complement_secretaire").toggle(true);
+         $("#bouton_valider_donnees_secretaire").toggle(true);
+         $("#vider_champ_secretaire").toggle(true);
+         $('#type_personnel').val(4);   
+         getChamps(4);
+<?php }?>
+
+/***COMPLEMENT LABORATOIRE***/
+<?php if($this->type_personnel == 5){ ?>
+         $(".complement_laborantin").toggle(true);
+         $("#bouton_valider_donnees_laborantin").toggle(true);
+         $("#vider_champ_laborantin").toggle(true);
+         $('#type_personnel').val(5);   
+         getChamps(5);
+<?php }?>
+
+/***COMPLEMENT INFIRMIER***/
+<?php if($this->type_personnel == 6){ ?>
+         $(".complement_infirmier").toggle(true);
+         $('#type_personnel').val(6);   
+         getChamps(6);
+<?php }?>         
+ /***POUR LE MENU GAUCHE dans -elementgauche.phtml***/
+$('#plus_dossier_personnel').toggle(true); 
+$("#dossier_personnel").replaceWith("<li id='dossier_personnel' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:18px; font-family:Times New Roman;'> <img style='display: inline;' src='../../../images_icons/moin-green2.png' /> Dossiers du personnel </span></a></li>");
+dep_dossier_personnel1();
+$('#liste_dossier_personnel_style').css({'font-weight':'bold','color':'white','font-size':'22px'});
+</script>

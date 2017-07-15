@@ -1,0 +1,209 @@
+<style>
+#sidebarMenu{ visibility: hidden }
+</style>
+
+<script>
+$(window).load(function () {
+
+	$('#waitMenuGauche').toggle(false);
+	$('#sidebarMenu').fadeIn().css({'visibility':'visible'});
+	 
+});
+</script>
+
+<div id="waitMenuGauche" style="color: #cccccc; font-size: 13px;  margin-top: 80px;  margin-left: 60px;" > <span> Chargement ... </span> </div>
+
+
+
+<ul id="sidebarMenu">
+	<!-- MENU ***DOSSIER PERSONNEL*** -->
+	<li id="dossier_personnel"><a href="">
+	    <span style="margin-left:0px; color: #48ce77; font-weight:bold; font-size:18px; font-family:Times New Roman;"> <img id="image" style="display: inline;" src='<?php echo $this->basePath().'/images_icons/plus-green1.png'?>' alt='Liste' /> Dossiers du personnel </span></a> </li>
+
+	<li id="plus_dossier_personnel" style="background: #4a5765;" >
+
+	   <div style="margin-left:30px; height:40px; padding-top:20px;"><a href="<?php echo $this->basePath().'/personnel/dossier-personnel';?>"  >
+	       <span id="nouveau_style" style="margin-left:5px; color: white; font-size:15px; font-family:Times New Roman;"><img style="display: inline;" src='<?php echo $this->basePath().'/images_icons/dossier.PNG'?>' alt='Liste' /> Nouveau</span></a>
+	   </div>
+
+	   <div style="margin-left:30px; height:40px;"><a href="<?php echo $this->basePath().'/personnel/liste-personnel';?>">
+	       <img style="margin-left:5px; display: inline;" src='<?php echo $this->basePath().'/images_icons/liste.PNG'?>' alt='Liste' />
+	       <span id="liste_dossier_personnel_style" style="font-size:15px; color: white; font-family:Times New Roman;">Liste</span></a>
+	   </div>
+	</li>
+
+
+
+
+	<?php /*?>
+	<!-- MENU ***OPERATIONS** -->
+	<li id="operation"><a href="">
+	    <span style="margin-left:0px; color: #48ce77; font-weight:bold; font-size:18px; font-family:Times New Roman;"> <img id="image" style="display: inline;" src='<?php echo $this->basePath().'/images_icons/plus-green1.png'?>' alt='Liste' /> Op&eacute;rations </span></a> </li>
+
+	<li id="plus_operation" style="background: #4a5765;" >
+	   <!-- PARTIE DES TRANSFERTS -->
+	   <div style="margin-left:30px; height:40px; padding-top:20px;"><a href="<?php echo $this->url('personnel', array('action'=> 'transfert'));?>"  >
+	       <span id="recherche_style" style="margin-left:5px; color: white; font-size:15px; font-family:Times New Roman;"><img style="display: inline;" src='<?php echo $this->basePath().'/images_icons/dossier.PNG'?>' alt='Liste' /> Tansfert </span></a>
+	   </div>
+	   <div id="liste_operation"style="margin-left:30px; height:40px;"><a href="<?php echo $this->basePath().'/personnel/liste-transfert';?>">
+	       <img style="margin-left:5px; display: inline;" src='<?php echo $this->basePath().'/images_icons/liste.PNG'?>' alt='Liste' />
+	       <span id="liste_style" style="font-size:15px; color: white; font-family:Times New Roman;">Liste transfert</span></a>
+	   </div>
+	   <!-- PARTIE DES INTERVENTIONS -->
+	   <div style="margin-left:30px; height:40px; padding-top:10px;"><a href="<?php echo $this->url('personnel', array('action'=> 'intervention'));?>"  >
+	       <span id="intervention_style" style="margin-left:5px; color: white; font-size:15px; font-family:Times New Roman;"><img style="display: inline;" src='<?php echo $this->basePath().'/images_icons/dossier.PNG'?>' alt='Liste' /> Intervention </span></a>
+	   </div>
+	   <div id="liste_operation"style="margin-left:30px; height:40px;"><a href="<?php echo $this->basePath().'/personnel/liste-intervention';?>">
+	       <img style="margin-left:5px; display: inline;" src='<?php echo $this->basePath().'/images_icons/liste.PNG'?>' alt='Liste' />
+	       <span id="liste_intervention_style" style="font-size:15px; color: white; font-family:Times New Roman;">Liste intervent..</span></a>
+	   </div>
+	   <?php */?>
+
+	</li>
+
+
+	</ul>
+
+<script>
+var base_url = window.location.toString();
+var tabUrl = base_url.split("public");
+
+//*******************************************************************************************************************************
+//operation
+function dep1(){
+	$('#operation').click(function(){
+		$("#operation").replaceWith("<li id='operation'><a href=''><span style='margin-left:0px; color: #48ce77; font-weight:bold; font-size:18px; font-family:Times New Roman;'> <img style='display: inline;' src='"+tabUrl[0]+"public/images_icons/plus-green1.png' alt='Liste' /> Op&eacute;rations </span></a></li>");
+		dep2();
+	    $('#plus_operation').animate({
+	        height : 'toggle'
+	    },1000);
+	 return false;
+	});
+}
+
+function dep2(){
+	$('#operation').click(function(){
+		$("#operation").replaceWith("<li id='operation' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:18px; font-family:Times New Roman;'> <img style='display: inline;' src='"+tabUrl[0]+"public/images_icons/moin-green2.png' alt='Liste' /> Op&eacute;rations </span></a></li>");
+		dep1();
+	    $('#plus_operation').animate({
+	        height : 'toggle'
+	    },1000);
+	 return false;
+	});
+}
+
+$('#plus_operation').toggle(false);
+$('#operation').click(function(){
+	$("#operation").replaceWith("<li id='operation' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:18px; font-family:Times New Roman;'> <img style='display: inline;' src='"+tabUrl[0]+"public/images_icons/moin-green2.png' alt='Liste' /> Op&eacute;rations </span></a></li>");
+	dep1();
+    $('#plus_operation').animate({
+        height : 'toggle'
+    },1000);
+ return false;
+});
+
+//*******************************************************************************************************************************
+//DECES
+function dep_deces1(){
+	$('#deces').click(function(){
+		$("#deces").replaceWith("<li id='deces'><a href=''><span style='margin-left:0px; color: #48ce77; font-weight:bold; font-size:18px; font-family:Times New Roman;'> <img style='display: inline;' src='"+tabUrl[0]+"public/images_icons/plus-green1.png' alt='Liste' /> D&eacute;c&egrave;s </span></a></li>");
+		dep_deces2();
+	    $('#plus_deces').animate({
+	        height : 'toggle'
+	    },1000);
+	 return false;
+	});
+}
+
+function dep_deces2(){
+	$('#deces').click(function(){
+		$("#deces").replaceWith("<li id='deces' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:18px; font-family:Times New Roman;'> <img style='display: inline;' src='"+tabUrl[0]+"public/images_icons/moin-green2.png' alt='Liste' /> D&eacute;c&egrave;s </span></a></li>");
+		dep_deces1();
+	    $('#plus_deces').animate({
+	        height : 'toggle'
+	    },1000);
+	 return false;
+	});
+}
+
+$('#plus_deces').toggle(false);
+$('#deces').click(function(){
+	$("#deces").replaceWith("<li id='deces' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:18px; font-family:Times New Roman;'> <img style='display: inline;' src='"+tabUrl[0]+"public/images_icons/moin-green2.png' alt='Liste' /> D&eacute;c&egrave;s </span></a></li>");
+	dep_deces1();
+    $('#plus_deces').animate({
+        height : 'toggle'
+    },1000);
+ return false;
+});
+
+
+//*******************************************************************************************************************************
+//ADMISSION
+function dep_admission1(){
+	$('#admission').click(function(){
+		$("#admission").replaceWith("<li id='admission'><a href=''><span style='margin-left:0px; color: #48ce77; font-weight:bold; font-size:18px; font-family:Times New Roman;'> <img style='display: inline;' src='"+tabUrl[0]+"public/images_icons/plus-green1.png' alt='Liste' /> Facturation </span></a></li>");
+		dep_admission2();
+	    $('#plus_admission').animate({
+	        height : 'toggle'
+	    },1000);
+	 return false;
+	});
+}
+
+function dep_admission2(){
+	$('#admission').click(function(){
+		$("#admission").replaceWith("<li id='admission' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:18px; font-family:Times New Roman;'> <img style='display: inline;' src='"+tabUrl[0]+"public/images_icons/moin-green2.png' alt='Liste' /> Facturation </span></a></li>");
+		dep_admission1();
+	    $('#plus_admission').animate({
+	        height : 'toggle'
+	    },1000);
+	 return false;
+	});
+}
+
+$('#plus_admission').toggle(false);
+$('#admission').click(function(){
+	$("#admission").replaceWith("<li id='admission' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:18px; font-family:Times New Roman;'> <img style='display: inline;' src='"+tabUrl[0]+"public/images_icons/moin-green2.png' alt='Liste' /> Facturation </span></a></li>");
+	dep_admission1();
+$('#plus_admission').animate({
+    height : 'toggle'
+},1000);
+return false;
+});
+
+
+//*******************************************************************************************************************************
+//DOSSIER PERSONNEL
+function dep_dossier_personnel1(){
+	$('#dossier_personnel').click(function(){
+		$("#dossier_personnel").replaceWith("<li id='dossier_personnel'><a href=''><span style='margin-left:0px; color: #48ce77; font-weight:bold; font-size:18px; font-family:Times New Roman;'> <img style='display: inline;' src='"+tabUrl[0]+"public/images_icons/plus-green1.png' alt='Liste' /> Dossiers du personnel </span></a></li>");
+		dep_dossier_personnel2();
+	    $('#plus_dossier_personnel').animate({
+	        height : 'toggle'
+	    },1000);
+	 return false;
+	});
+}
+
+function dep_dossier_personnel2(){
+	$('#dossier_personnel').click(function(){
+		$("#dossier_personnel").replaceWith("<li id='dossier_personnel' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:18px; font-family:Times New Roman;'> <img style='display: inline;' src='"+tabUrl[0]+"public/images_icons/moin-green2.png' alt='Liste' /> Dossiers du personnel </span></a></li>");
+		dep_dossier_personnel1();
+	    $('#plus_dossier_personnel').animate({
+	        height : 'toggle'
+	    },1000);
+	 return false;
+	});
+}
+
+$('#plus_dossier_personnel').toggle(false);
+$('#dossier_personnel').click(function(){
+	$("#dossier_personnel").replaceWith("<li id='dossier_personnel' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:18px; font-family:Times New Roman;'> <img style='display: inline;' src='"+tabUrl[0]+"public/images_icons/moin-green2.png' alt='Liste' /> Dossiers du personnel </span></a></li>");
+	dep_dossier_personnel1();
+$('#plus_dossier_personnel').animate({
+height : 'toggle'
+},1000);
+return false;
+});
+
+</script>

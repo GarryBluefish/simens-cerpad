@@ -1,0 +1,132 @@
+/*
+
+Feuille de style globale propre a l'application simens
+*/
+
+
+
+/* Entetes des tableaux */
+
+table tr  th {
+	text-align: right;
+	text-transform: uppercase;
+	font-weight:900px;
+/*:*font-size:10px;****/
+}
+
+input[type="submit"],input[type="reset"]{
+	background:url(../images_icons/button.gif);
+	color:#555555;
+	font-weight:bold;
+	height:30px;
+	line-height:29px;
+	margin-bottom:14px;
+	
+}
+
+input[type="text"]{
+	height:32px;
+	font-weight:bold;
+}
+
+/* -------------------- */
+/* CLASSES				*/
+/* -------------------- */
+.form_in_tab{
+	margin-top:10px;
+}
+
+.titre_page {
+	background-color:#27a9e3;
+	color:#fff;
+}
+
+a.buton_icon{
+	background:url(../images_icons/button.gif);
+	display:inline-block;
+	color:#555555;
+	font-weight:bold;
+	height:30px;
+	line-height:29px;
+	margin-bottom:14px;
+	text-decoration:none;
+	width:110px;
+	text-align: justify;
+}
+a:hover.buton_icon{
+	color:#0066CC;
+	background:url(../images_icons/bg.png) repeat-x;
+	background-position:left bottom;
+}
+.aj{
+		background:url(../images_icons/aj.gif) no-repeat 10px 8px;
+		text-indent:30px;
+		display:block;
+		border:#27a9e3;
+	}
+.sup{
+		background:url(../images_icons/sup.png) no-repeat 10px 8px;
+		text-indent:30px;
+		display:block;
+		border:#27a9e3;
+	}
+	
+.mod{
+		background:url(../images_icons/mod.png) no-repeat 10px 8px;
+		text-indent:30px;
+		display:block;
+		border:#27a9e3;
+	}
+	
+.alert{
+		background:url(img/alert.gif) no-repeat 10px 8px;
+		text-indent:30px;
+		display:block;
+	}
+.msg{
+		background:url(img/msg.gif) no-repeat 10px 8px;
+		text-indent:30px;
+		display:block;
+	}
+.tel{
+		background:url(img/download.gif) no-repeat 10px 8px;
+		background-position:top left;
+		text-indent:30px;
+		display:block;
+	}
+
+.info{
+		background:url(img/info.gif) no-repeat 10px 8px;
+		text-indent:30px;
+		display:block;
+	}
+	
+.attent_note{
+	width:540px;
+	clear:both;
+	background:url(../images_icons/avert.png) no-repeat left #fcfae9;
+	border:1px #e9e6c7 solid;background-position:15px 10px;
+	padding:20px 20px 15px 60px;
+	margin:0 0 10px 0;
+	font-size: large;
+}
+
+.valid_note{
+	width:540px;
+	clear:both;
+	background:url(../images_icons/valid.png) no-repeat left #edfce9;
+	border:1px #cceac4 solid;
+	background-position:15px 10px;
+	padding:20px 20px 15px 60px;
+	margin:0 0 10px 0;
+}
+
+.erreur_note{
+	width:540px;
+	clear:both;
+	background:url(../images_icons/erreur.png) no-repeat left #fce9e9;
+	border:1px #eac7c7 solid;
+	background-position:15px 10px;
+	padding:20px 20px 15px 60px;
+	margin:0 0 10px 0;
+}

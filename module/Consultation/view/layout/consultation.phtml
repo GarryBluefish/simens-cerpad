@@ -1,0 +1,188 @@
+<html>
+<?php echo $this->doctype("XHTML1_TRANSITIONAL"), PHP_EOL; ?>
+
+<meta name="viewport" charset="UTF-8" content="width=device-width, initial-scale=1.0" />
+        <?php echo $this->headTitle('SIMENS '. $this->translate('Systeme Information Medical'))->setSeparator(' - ')->setAutoEscape(false) ?>
+
+
+<?php
+
+ echo $this->headLink()->prependStylesheet($this->basePath().'/css/bootstrap.min.css');
+ echo $this->headLink()->prependStylesheet($this->basePath().'/css/uniform.css');
+ echo $this->headLink()->prependStylesheet($this->basePath().'/css/select2.css');
+ echo $this->headLink()->prependStylesheet($this->basePath().'/css/jquery.contextMenu.css');
+ echo $this->headLink()->prependStylesheet($this->basePath().'/css/matrix-style-cons.css');
+ echo $this->headLink()->prependStylesheet($this->basePath().'/css/matrix-media.css');
+ echo $this->headLink()->prependStylesheet($this->basePath().'/font-awesome/css/font-awesome.css');
+ echo $this->headLink()->prependStylesheet($this->basePath().'/css/tooltipster.css');
+ echo $this->headLink()->prependStylesheet($this->basePath().'/css/smoothness/jquery-ui.css');
+ echo $this->headLink()->prependStylesheet($this->basePath().'/js/w2ui/w2ui-1.4.3.min.css');
+ echo $this->headLink()->prependStylesheet($this->basePath().'/css/defiler.css');
+  
+ $this->headScript()->appendFile($this->basePath().'/js/jquery.min.js');
+ $this->headScript()->appendFile($this->basePath().'/js/jquery.tooltipster.min.js');
+ $this->headScript()->appendFile($this->basePath().'/js/bootstrap.min.js');
+ $this->headScript()->appendFile($this->basePath().'/js/jquery.uniform.js');
+ $this->headScript()->appendFile($this->basePath().'/js/select2.min.js');
+ $this->headScript()->appendFile($this->basePath().'/js/jquery.dataTables.min.js');
+ $this->headScript()->appendFile($this->basePath().'/js/jquery-ui.js');
+ $this->headScript()->appendFile($this->basePath().'/js/plugins/contextMenu/bootstrap-contextmenu.js');
+ $this->headScript()->appendFile($this->basePath().'/js/w2ui/w2ui-1.4.3.min.js');
+ $this->headScript()->appendFile($this->basePath().'/js/defiler.js');
+  
+ $this->headScript()->appendFile($this->basePath().'/js/jquery.maskedinput.js');
+ $this->headScript()->appendFile($this->basePath().'/js/controle_saisie/controle_saisie.js');
+
+ echo $this->headTitle($this->pageTitle);
+ echo $this->headScript();
+ 
+ ?>
+
+<head>
+</head>
+
+<?php
+//RECUPERER LES INFOS SUR LE MEDECIN
+
+$user = $this->layout()->user;
+$nom = $user['Nom'];
+$prenom = $user['Prenom'];
+$service = $this->layout()->service;
+if($user['role'] == 'superAdmin') { $service = "INFORMATIQUE";}
+
+$sexe = $user['Sexe'];
+$civilite =  'Mme';
+if($sexe == 'Masculin'){$civilite = 'M';}
+?>
+
+<body id = "bodbod">
+<!--Header-part-->
+<div id="logoSimens" style=" height: 70px; background: re;">
+
+    <div style="font-size: 28px; color: red; padding-top: 20px; padding-left: 35px;">+<div style="font-size: 27px; color: #48ce77; font-family: Bookman Old Style; float:left; ">SIMENS</div></div>
+	
+	    <!-- ul id="definitionSimens"> 
+	       <li> 
+	              &nbsp;Le Syst&egrave;me d'Information M&eacute;dical National pour le S&eacute;n&eacute;gal
+	       </li>
+	    </ul--> 
+
+</div>
+	
+	<!--close-Header-part-->
+	<!--top Menu au dessus -->
+<div id="user-nav" class="navbar navbar-inverse" style="padding-top: 0px; padding-left: 0px; width: 83%;">
+ <div style="width:100%;">
+  <ul class="nav" style="width:100%;">
+    <li  class="dropdown" style=" width: 30%;"><a title=""  class="dropdown-toggle">
+      <i> <span style="color: white; font-size: 13px;">Service: </span></i>
+      <b class="caret" ></b> <span style="font-size: 15px; color: white; font-family: Times  New Roman;"><?php echo $service;?></span></a>
+    </li>
+
+    <li  class="dropdown" style=" width: 50%;"><a title="" class="dropdown-toggle">
+      
+      <i><img id="modifierPassword" style="cursor:pointer; position:relative; top:-2px;" src="<?php echo $this->basePath().'/img/light/admin_user_2.png';?>"/>
+      </i><span style="color: white; font-size: 13px;"><i>Bienvenue: </i> <?php echo $civilite;?>.</span>
+      <b class="caret" ></b> <span style="font-size: 15px; color: white;font-family: Times  New Roman;"><?php echo $prenom.'  '.$nom;?></span></a>
+    </li>
+
+    <li style="width: 20%;">
+   
+      <div style='width: 30%; padding-top: 10px; float:left;'>
+       <?php /* if($user['role'] == 'medecin') { ?>
+         <a href="<?php echo $this->url('consultation', array('action'=> 'protocole-operatoire'));?>">
+           <img src="<?php echo $this->basePath().'/img/light/arrow_up_left.png';?>" title="Protocole op&eacute;ratoire" />
+         </a>
+       <?php } */ ?>
+      </div>
+
+      <div style='width: 70%; padding-top: 10px; float:right'>
+        <a href="<?php echo $this->url('admin', array('action'=>'logout'));?>">
+          <img src="<?php echo $this->basePath().'/img/light/bended_arrow_right.png';?>"/> <span style="color: white; font-size: 15px; font-family: New time romans;"><i>D&eacute;connexion</i></span>
+        </a>
+      </div>
+    </li>
+  </ul>
+ </div>
+</div>
+
+<!--Menu de gauche-->
+<div id="sidebar">
+  <?php echo $this->partial('layout/menugauche_consult'); ?>
+</div>
+<div id="content">
+  	<div id="content-header">
+    <div style="width: 96%; margin-left:25px; ">
+    	<hr>
+   		 <div class="row-fluid">
+	         <?php echo $this->content; ?>
+         </div>
+  	</div>
+	</div>
+</div>
+<!--Pied de Page debut-->
+<div class="row-fluid">
+	 <div id="footer" class="span12" style="color: white;"><?php echo $this->partial('layout/piedpage_consult'); ?> </div>
+</div>
+<!--Fin de pied de page-->
+</body>
+</html>
+
+
+<style>
+.ui-tooltip {
+	padding: 8px;
+	position: absolute;
+	z-index: 9999;
+	max-width: 300px;
+	-webkit-box-shadow: 0 0 5px #aaa;
+	box-shadow: 0 0 5px #aaa;
+}
+
+body .ui-tooltip {
+	border-width: 2px;
+}
+
+
+ #bodbod { 
+ 	min-width: 1345px;
+ 	overflow-x:scroll;  
+ } 
+
+ #user-nav { 
+ 	min-width: 1100px;
+ 	 
+ } 
+ 
+</style>
+
+
+
+<script>
+var base_url = window.location.toString();
+var tabUrl = base_url.split("public");
+
+$(document).ready(function() {
+	$('a,img,hass').tooltip({
+        animation: true,
+        html: true,
+        placement: 'bottom',
+        show: {
+            effect: "slideDown",
+            delay: 250
+          }
+    });
+
+	$('#modifierPassword').click(function(){
+        var role = "<?php echo $user['role'];?>";
+        var id = 0;
+        if(role == 'facturation'){id = 3;}
+        
+    	vart=tabUrl[0]+'public/admin/modifier-password/'+id;
+        $(location).attr("href",vart);
+    });
+
+});
+
+//$("#definitionSimens").liScroll();
+</script>

@@ -1,0 +1,123 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="en">
+    <head>
+    <meta charset="utf-8">
+    <?php echo $this->headTitle('SIMENS '. $this->translate('Systeme Information Medical'))->setSeparator(' - ')->setAutoEscape(false) ?>
+    </head>
+<?php
+ echo $this->headLink()->appendStylesheet($this->basePath().'/css/smoothness/jquery-ui.css');
+ echo $this->headLink()->prependStylesheet($this->basePath().'/css/bootstrap.min.css');
+ echo $this->headLink()->prependStylesheet($this->basePath().'/css/uniform.css');
+ echo $this->headLink()->prependStylesheet($this->basePath().'/css/select2.css');
+ echo $this->headLink()->prependStylesheet($this->basePath().'/css/jquery.contextMenu.css');
+ echo $this->headLink()->prependStylesheet($this->basePath().'/css/matrix-style-cons.css');
+ echo $this->headLink()->prependStylesheet($this->basePath().'/css/matrix-media.css');
+ echo $this->headLink()->prependStylesheet($this->basePath().'/font-awesome/css/font-awesome.css');
+ echo $this->headLink()->prependStylesheet($this->basePath().'/js/w2ui/w2ui-1.4.3.min.css');
+ 
+ echo $this->headTitle($this->pageTitle);
+ 
+ $this->headScript()->appendFile($this->basePath().'/js/jquery.min.js');
+ $this->headScript()->appendFile($this->basePath().'/js/jquery.ui.custom.js');
+ $this->headScript()->appendFile($this->basePath().'/js/bootstrap.min.js');
+ $this->headScript()->appendFile($this->basePath().'/js/jquery.uniform.js');
+ $this->headScript()->appendFile($this->basePath().'/js/select2.min.js');
+ $this->headScript()->appendFile($this->basePath().'/js/matrix.js');
+ $this->headScript()->appendFile($this->basePath().'/js/jquery-1.9.1.js');
+ $this->headScript()->appendFile($this->basePath().'/js/jquery-ui.js');
+ $this->headScript()->appendFile($this->basePath().'/js/jquery.dataTables.min.js');
+ $this->headScript()->appendFile($this->basePath().'/js/w2ui/w2ui-1.4.3.min.js');
+ echo $this->headScript();?>
+ 
+ 
+
+ <?php
+
+//RECUPERER LES INFOS SUR LE MEDECIN OU SUR LE SURVEILLANT
+  $user = $this->layout()->user;
+  $nom = $user['Nom'];
+  $prenom = $user['Prenom'];
+  $service = 'Informatique';
+?>
+    
+<body id="bodbod">
+	<!--Header-part-->
+		<div id="logoSimens" style=" height: 70px; width: 220px;">
+			<div style="font-size: 28px; color: red; padding-top: 30px; padding-left: 45px;">+<div style="font-size: 27px; color: #45ed0a; font-family: Bookman Old Style; float:left; ">SIMENS</div></div>
+		</div>
+		
+	<!--close-Header-part-->
+	<!--top Menu au dessus -->
+<div id="user-nav" class="navbar navbar-inverse" style="padding-top: 0px; padding-left: 0px; width: 83%;">
+ <div style="width:100%;">
+  <ul class="nav" style="width:100%;">
+    <li  class="dropdown" style=" width: 30%;"><a title=""  class="dropdown-toggle">
+      <i> <span style="color: white; font-size: 13px;">Service: </span></i>
+      <b class="caret" ></b> <span style="font-size: 15px; color: white; font-family: Times  New Roman;"><?php echo $service;?></span></a>
+    </li>
+
+    <li  class="dropdown" style=" width: 55%;"><a title="" class="dropdown-toggle">
+      
+      <i>
+        <?php if($user['Photo'] != 'identite.jpg'){ ?>
+          <img id="modifierPassword" style="position:relative; top:-2px; width: 30px; height: 30px; border-radius: 50%; background: gray;" src="<?php echo $this->basePath().'/img/photos_personnel/'.$user['Photo'];?>"/>
+        <?php }else{ ?>
+          <img id="modifierPassword" style="position:relative; top:-2px; width: 25px; height: 25px; border-radius: 50%; background: gray;" src="<?php echo $this->basePath().'/images_icons/User.png';?>"/>
+        <?php } ?>
+      </i>
+      
+      
+      <span style="color: white; font-size: 13px;"><i>Bienvenue: </i> M.</span>
+      <b class="caret" ></b> <span style="font-size: 15px; color: white;font-family: Times  New Roman;"><?php echo $prenom.'  '.$nom;?></span></a>
+    </li>
+
+    <li style="width: 15%;">
+      
+      <div style='width: 30%; padding-top: 10px; float:left;'>
+         <a href="<?php echo $this->url('admin', array('action'=>'bienvenue'));?>">
+           <img src="../img/light/house.png" title="Menu d'accueil" />
+         </a>
+      </div>
+      <div style='width: 70%; padding-top: 10px; float:left;'>
+        <a href="<?php echo $this->url('admin', array('action'=>'logout'));?>">
+          <img src="<?php echo $this->basePath().'/img/light/bended_arrow_right.png';?>"/> <span style="color: white; font-size: 13px; font-family: New time romans;"><i>D&eacute;connexion</i></span>
+        </a>
+      </div>
+    
+    </li>
+  </ul>
+ </div>
+</div>
+	
+<!--Menu de droite-->
+<div id="sidebar" >
+  <?php //echo $this->partial('layout/layoutGauche'); ?>
+</div>
+	<div id="content">
+		<div id="content-header">
+			<div style="width: 96%; margin-left: 25px;">
+				<hr>
+				<div class="row-fluid">
+	             <?php echo $this->content; ?>
+               </div>
+			</div>
+		</div>
+	</div>
+	<!--Pied de Page debut-->
+	<div class="row-fluid">
+		<div id="footer" class="span12" style="color: white"><?php echo $this->partial('layout/piedpageAdmin'); ?> </div>
+	</div>
+	<!--Fin de pied de page-->
+</body>
+</html>
+
+<style>
+#bodbod{
+	min-width: 1345px;
+	overflow-x:scroll;  
+}
+ #user-nav { 
+ 	min-width: 1100px;
+ } 
+</style>

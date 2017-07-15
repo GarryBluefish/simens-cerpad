@@ -1,0 +1,134 @@
+<style>
+#sideBareMenuGaucheinfirmerie{ visibility: hidden }
+
+#sideBareMenuGaucheinfirmerie{ min-width:200px; max-width: 430px;}
+</style>
+
+<script>
+$(window).load(function () {
+
+	$('#waitMenuGaucheinfirmerie').toggle(false);
+	$('#sideBareMenuGaucheinfirmerie').fadeIn().css({'visibility':'visible'});
+	 
+});
+</script>
+
+<div id="waitMenuGaucheinfirmerie" style="color: #cccccc; font-size: 13px;  margin-top: 80px;  margin-left: 60px;" > <span> Chargement ... </span> </div>
+
+
+<ul id="sideBareMenuGaucheinfirmerie">
+	
+	<!-- MENU *** CONSULTATIONS*** medecin -->
+	<li id="menu_consultations"><a href="">
+	    <span style="margin-left:0px; color: #48ce77; font-weight:bold; font-size:20px; font-family:Times New Roman;"> <img id="image" style="display: inline;" src='<?php echo $this->basePath().'/images_icons/plus-green1.png'?>' alt='Liste' /> Consultations</span></a> 
+	</li>
+
+	<li id="plus_menu_consultations" style="background: #4a5765;" >
+
+	   <div id="menuDesConsultations" style="margin-left:30px; height:40px; padding-top:20px;"><a href="<?php echo $this->basePath()."/consultation/liste-consultations";?>" >
+	       <img style="margin-left:5px; display: inline;" src='<?php echo $this->basePath().'/images_icons/liste.png'?>' />
+	       <span id="menu_consultations_style" style="font-size:15px; color: white; font-family:Times New Roman;">En cours </span></a>
+	   </div>
+	   
+	</li>
+	
+	
+	<!-- MENU *** STATISTIQUES*** medecin -->
+	<li id="menu_statistiques"><a href="">
+	    <span style="margin-left:0px; color: #48ce77; font-weight:bold; font-size:20px; font-family:Times New Roman;"> <img id="image" style="display: inline;" src='<?php echo $this->basePath().'/images_icons/plus-green1.png'?>' /> Statistiques</span></a> 
+	</li>
+	
+	<li id="plus_menu_statistiques" style="background: #4a5765;" >
+
+	   <div id="menuDesStatistiques" style="margin-left:30px; height:40px; padding-top:20px;"><a href="<?php echo $this->basePath()."/consultation/informations-statistiques";?>" >
+	       <img style="margin-left:5px; margin-top: -7px; width: 16px; height: 16px;" src='<?php echo $this->basePath().'/images_icons/statistics_16.png'?>' />
+	       <span id="menu_statistiques_style" style="font-size:15px; color: white; font-family:Times New Roman;">Informations</span></a>
+	   </div>
+	   
+	</li>
+	
+	
+</ul>
+
+
+<?php
+//CHOISIR LE MENU A AFFICHER SELON QUE C'EST LE MEDECIN OU LE SURVEILLANT
+$user = $this->layout()->user;
+$role = $user['role'];
+?>
+
+
+<script>
+
+//*******************************************************************************************************************************
+//*******************************************************************************************************************************
+//CONSULTATIONS -- CONSULTATIONS
+function dep_menu_consultation1(){
+	$('#menu_consultations').click(function(){
+		$("#menu_consultations").replaceWith("<li id='menu_consultations'><a style='cursor: pointer;'><span style='margin-left:0px; color: #48ce77; font-weight:bold; font-size:20px; font-family:Times New Roman; cursor: pointer;'> <img style='display: inline;' src='../images_icons/plus-green1.png' alt='Liste' /> Consultations </span></a></li>");
+		dep_menu_consultation2();
+	    $('#plus_menu_consultations').animate({
+	        height : 'toggle'
+	    },1000);
+	 return false;
+	});
+}
+
+function dep_menu_consultation2(){
+	$('#menu_consultations').click(function(){
+		$("#menu_consultations").replaceWith("<li id='menu_consultations' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='../images_icons/moin-green2.png' alt='Liste' /> Consultations </span></a></li>");
+		dep_menu_consultation1();
+	    $('#plus_menu_consultations').animate({
+	        height : 'toggle'
+	    },1000);
+	 return false;
+	});
+}
+
+$('#plus_menu_consultations').toggle(false);
+$('#menu_consultations').click(function(){
+	$("#menu_consultations").replaceWith("<li id='menu_consultations' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='../images_icons/moin-green2.png' alt='Liste' /> Consultations </span></a></li>");
+	dep_menu_consultation1();
+$('#plus_menu_consultations').animate({
+height : 'toggle'
+},1000);
+return false;
+});
+
+//*******************************************************************************************************************************
+//*******************************************************************************************************************************
+//STATISTIQUES -- STATISTIQUES
+function dep_menu_statistiques1(){
+	$('#menu_statistiques').click(function(){
+		$("#menu_statistiques").replaceWith("<li id='menu_statistiques'><a style='cursor: pointer;'><span style='margin-left:0px; color: #48ce77; font-weight:bold; font-size:20px; font-family:Times New Roman; cursor: pointer;'> <img style='display: inline;' src='../images_icons/plus-green1.png' alt='Liste' /> Statistiques </span></a></li>");
+		dep_menu_statistiques2();
+	    $('#plus_menu_statistiques').animate({
+	        height : 'toggle'
+	    },1000);
+	 return false;
+	});
+}
+
+function dep_menu_statistiques2(){
+	$('#menu_statistiques').click(function(){
+		$("#menu_statistiques").replaceWith("<li id='menu_statistiques' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='../images_icons/moin-green2.png' alt='Liste' /> Statistiques </span></a></li>");
+		dep_menu_statistiques1();
+	    $('#plus_menu_statistiques').animate({
+	        height : 'toggle'
+	    },1000);
+	 return false;
+	});
+}
+
+$('#plus_menu_statistiques').toggle(false);
+$('#menu_statistiques').click(function(){
+	$("#menu_statistiques").replaceWith("<li id='menu_statistiques' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='../images_icons/moin-green2.png' alt='Liste' /> Statistiques </span></a></li>");
+	dep_menu_statistiques1();
+$('#plus_menu_statistiques').animate({
+height : 'toggle'
+},1000);
+return false;
+});
+
+</script>
+

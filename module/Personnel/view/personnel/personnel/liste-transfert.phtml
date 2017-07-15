@@ -1,0 +1,114 @@
+<!-- MES STYLES --> 
+<?php echo $this->headLink()->appendStylesheet($this->basepath().'/css/personnel/styleListeTransfert.css');
+      echo $this->headLink()->appendStylesheet($this->basepath().'/css/facturation/DatePicker.css'); 
+?>
+<!-- MES JS -->
+<?php echo $this->headScript()->appendFile($this->basepath().'/js/personnel/jsListeTransfert.js');?>
+
+<?php $form = $this->form; ?>
+
+<script type="text/javascript">
+
+</script>
+
+<div id="titre" style='font-family: police2; text-decoration: none; color: green; font-size: 20px; font-weight: bold; padding-left:20px;'>
+	<iS style='font-size: 25px;'>&curren;</iS>
+	LE PERSONNEL
+</div>
+<div id="contenu"> 
+
+<div id="liste_personnel" style="float:right; margin-right: -7px; height:5px; margin-top: 0px; width: 150px;"> 
+          <?php echo $this->formRow($form->get('type_personnel'));?> 
+</div>
+
+            <table id="personnel" class="table table-bordered tab_list_mini" >
+				<thead>
+					<tr style="height: 50px; width:100%;">
+						<th id="nom" style='cursor: pointer;'>Nom</th>
+						<th id="prenom" style='cursor: pointer;'>Prenom</th>
+						<th id="date" style='cursor: pointer;'>Date. naiss</th>
+						<th id="sexe" style='cursor: pointer;'>Sexe</th>
+						<th id="adresse" style='cursor: pointer;'>Adresse</th>
+						<th id="nationalite" style='cursor: pointer;'>Nationalite</th>
+						<th id="effectuer">Options</th>
+					</tr>
+				</thead>
+
+				<tbody id="donnees" class="liste_patient">
+
+					<!-- ************ On affiche les patients en une liste ordonn�e************ -->
+
+				</tbody>
+
+				<tfoot id="foot" class="foot_style">
+					<tr>
+						<th id="nom_" style='width: 13%;'><input type="text" name="search_browser"
+							value=" Nom" class="search_init" /></th>
+						<th id="prenom_" style='width: 15%;'><input type="text" name="search_browser"
+							value=" Pr&eacute;nom" class="search_init" /></th>
+						<th id="date_" style='width: 12%;'><input type="text" name="search_browser"
+							value=" Date naissance" class="search_init" /></th>
+						<th id="sexe_" style='width: 7%;'><input type="text" name="search_browser"
+							value=" Sexe" class="search_init" /></th>
+						<th id="adresse_" style='width: 28%;'><input type="text" name="search_browser"
+							value=" Adresse" class="search_init" /></th>
+						<th id="nationalite_" style='width: 15%;'><input type="text" name="search_browser"
+							value=" Nationalite" class="search_init" /></th>
+						<th id="effectuer_" style='width: 10%;'><input type="hidden" name="search_browser"
+							value="" class="" /></th>
+
+					</tr>
+				</tfoot>
+			</table>
+</div>
+
+<div id="vue_patient">
+
+</div>
+
+
+<!-- PARTIE MODIFICATION DU TRANSFERT -->
+
+<div id="modification_transfert">
+
+   <div style="width:100%; height: 20px;">  
+   </div>
+		  
+   <div id="vue_agent_personnel_et_formulaire_modification">
+
+   </div>
+   
+</div>
+
+
+<!-- POP UP pour Confirmation Suppression -->
+<div id="confirmation" title="Confirmation de l'annulation"
+	style="display: none;">
+	<p style="font-size: 16px;">
+		<span style="float: left; margin: 0 0px 20px 0;"> <img
+			src="<?php echo $this->basePath().'/images_icons/warning_16.png';?>" />
+			Etes-vous s&ucirc;r de vouloir annuler le transfert ?
+		</span>
+
+	</p>
+</div>
+
+
+<script type="text/javascript">
+
+$(function(){
+initialisation();
+});
+$("#vue_patient").toggle(false);
+$("#modification_transfert").toggle(false);
+
+
+var base_url = window.location.toString();
+var tabUrl = base_url.split("public");
+
+//POUR LE MENU GAUCHE dans -elementgauche.phtml
+$('#plus_operation').toggle(true); 
+$("#operation").replaceWith("<li id='operation' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:18px; font-family:Times New Roman;'> <img style='display: inline;' src='"+tabUrl[0]+"public/images_icons/moins-vert.png' alt='Liste' /> Op&eacute;rations </span></a></li>");
+dep1();
+$('#liste_style').css({'font-weight':'bold','color':'white','font-size':'22px'});
+</script>

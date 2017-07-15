@@ -1,0 +1,193 @@
+<style>
+#sideBareMenuGaucheFacturation{ visibility: hidden }
+
+#sideBareMenuGaucheFacturation{ min-width:200px; max-width: 430px;}
+</style>
+
+<script>
+$(window).load(function () {
+
+	$('#waitMenuGaucheFacturation').toggle(false);
+	$('#sideBareMenuGaucheFacturation').fadeIn().css({'visibility':'visible'});
+	 
+});
+</script>
+
+<div id="waitMenuGaucheFacturation" style="color: #cccccc; font-size: 13px;  margin-top: 80px;  margin-left: 60px;" > <span> Chargement ... </span> </div>
+
+
+<ul id="sideBareMenuGaucheFacturation">
+	<!-- MENU *** FACTURATION *** admission_infirmerie -->
+	<li id="menu_facturation"><a href="">
+	    <span style="margin-left:0px; color: #48ce77; font-weight:bold; font-size:20px; font-family:Times New Roman;"> <img id="image" style="display: inline;" src='<?php echo $this->basePath().'/images_icons/plus-green1.png'?>' alt='Liste' /> Facturation </span></a> 
+	</li>
+
+	<li id="plus_menu_facturation" style="background: #4a5765;" >
+
+	   <div style="margin-left:30px; height:40px; padding-top:20px;"><a href="<?php echo $this->basePath()."/facturation/admission";?>"  >
+	       <span id="admission_style" style="margin-left:5px; color: white; font-size:15px; font-family:Times New Roman;"><img style="display: inline;" src='<?php echo $this->basePath().'/images_icons/dossier.PNG'?>' alt='Liste' /> Admission </span></a>
+	   </div>
+
+	   <div id="listeDesAdmis" style="margin-left:30px; height:40px;"><a href="<?php echo $this->basePath()."/facturation/liste-patients-admis";?>" >
+	       <img style="margin-left:5px; display: inline;" src='<?php echo $this->basePath().'/images_icons/liste.PNG'?>' alt='Liste' />
+	       <span id="liste_admis_style" style="font-size:15px; color: white; font-family:Times New Roman;">Liste des admis</span></a>
+	   </div>
+	   
+	</li>
+
+	
+	<!-- MENU *** HISTORIQUE *** admission_infirmerie -->
+	<li id="menu_historique"><a href="">
+	    <span style="margin-left:0px; color: #48ce77; font-weight:bold; font-size:20px; font-family:Times New Roman;"> <img id="image" style="display: inline;" src='<?php echo $this->basePath().'/images_icons/plus-green1.png'?>' alt='Liste' /> Historique </span></a> 
+	</li>
+
+	<li id="plus_menu_historique" style="background: #4a5765;" >
+
+	   <div id="historiquelisteDesAdmis" style="margin-left:30px; height:40px; padding-top:20px;"><a href="<?php echo $this->basePath()."/facturation/historique-liste-patients-admis";?>" >
+	       <img style="margin-left:5px; display: inline;" src='<?php echo $this->basePath().'/images_icons/liste.PNG'?>' alt='Liste' />
+	       <span id="historique_liste_admis_style" style="font-size:15px; color: white; font-family:Times New Roman;">Liste des admis</span></a>
+	   </div>
+	   
+	</li>
+	
+	
+	<!-- MENU *** CONSULTATION *** admission_infirmerie pour consultation -->
+	<li id="menu_consultation"><a href="">
+	    <span style="margin-left:0px; color: #48ce77; font-weight:bold; font-size:20px; font-family:Times New Roman;"> <img id="image" style="display: inline;" src='<?php echo $this->basePath().'/images_icons/plus-green1.png'?>' /> Consultation </span></a> 
+	</li>
+
+	<li id="plus_menu_consultation" style="background: #4a5765;" >
+
+	   <div style="margin-left:30px; height:40px; padding-top:20px;"><a href="<?php echo $this->basePath()."/facturation/admission-consultation";?>"  >
+	       <span id="consultation_style" style="margin-left:5px; color: white; font-size:15px; font-family:Times New Roman;"><img style="display: inline;" src='<?php echo $this->basePath().'/images_icons/dossier.png'?>' /> Admission </span></a>
+	   </div>
+
+	   <div id="consultationListeDesAdmis" style="margin-left:30px; height:40px;"><a href="<?php echo $this->basePath()."/facturation/liste-patients-admis-consultation";?>" >
+	       <img style="margin-left:5px; display: inline;" src='<?php echo $this->basePath().'/images_icons/liste.PNG'?>' alt='Liste' />
+	       <span id="consultation_liste_admis_style" style="font-size:15px; color: white; font-family:Times New Roman;">Liste des admis</span></a>
+	   </div>
+	   
+	</li>
+	
+</ul>
+
+
+<?php
+//CHOISIR LE MENU A AFFICHER SELON QUE C'EST LE MEDECIN OU LE SURVEILLANT
+$user = $this->layout()->user;
+$role = $user['role'];
+
+if($role == 'facturation'){ ?>
+<script> </script>
+<?php } ?>
+
+
+<script>
+//*******************************************************************************************************************************
+//*******************************************************************************************************************************
+//ADMISSION  --- ADMISSION
+function dep_menu_facturation1(){
+	$('#menu_facturation').click(function(){
+		$("#menu_facturation").replaceWith("<li id='menu_facturation'><a style='cursor: pointer;'><span style='margin-left:0px; color: #48ce77; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='../images_icons/plus-green1.png' alt='Liste' /> Facturation </span></a></li>");
+		dep_menu_facturation2();
+	    $('#plus_menu_facturation').animate({
+	        height : 'toggle'
+	    },1000);
+	 return false;
+	});
+}
+
+function dep_menu_facturation2(){
+	$('#menu_facturation').click(function(){
+		$("#menu_facturation").replaceWith("<li id='menu_facturation' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='../images_icons/moin-green2.png' alt='Liste' /> Facturation </span></a></li>");
+		dep_menu_facturation1();
+	    $('#plus_menu_facturation').animate({
+	        height : 'toggle'
+	    },1000);
+	 return false;
+	});
+}
+
+$('#plus_menu_facturation').toggle(false);
+$('#menu_facturation').click(function(){
+	$("#menu_facturation").replaceWith("<li id='menu_facturation' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='../images_icons/moin-green2.png' alt='Liste' /> Facturation </span></a></li>");
+	dep_menu_facturation1();
+$('#plus_menu_facturation').animate({
+height : 'toggle'
+},1000);
+return false;
+});
+
+
+//*******************************************************************************************************************************
+//*******************************************************************************************************************************
+//HISTORIQUE  ---  HISTORIQUE
+function dep_menu_historique1(){
+	$('#menu_historique').click(function(){
+		$("#menu_historique").replaceWith("<li id='menu_historique'><a style='cursor: pointer;'><span style='margin-left:0px; color: #48ce77; font-weight:bold; font-size:20px; font-family:Times New Roman; cursor: pointer;'> <img style='display: inline;' src='../images_icons/plus-green1.png' alt='Liste' /> Historique </span></a></li>");
+		dep_menu_historique2();
+	    $('#plus_menu_historique').animate({
+	        height : 'toggle'
+	    },1000);
+	 return false;
+	});
+}
+
+function dep_menu_historique2(){
+	$('#menu_historique').click(function(){
+		$("#menu_historique").replaceWith("<li id='menu_historique' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='../images_icons/moin-green2.png' alt='Liste' /> Historique </span></a></li>");
+		dep_menu_historique1();
+	    $('#plus_menu_historique').animate({
+	        height : 'toggle'
+	    },1000);
+	 return false;
+	});
+}
+
+$('#plus_menu_historique').toggle(false);
+$('#menu_historique').click(function(){
+	$("#menu_historique").replaceWith("<li id='menu_historique' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='../images_icons/moin-green2.png' alt='Liste' /> Historique </span></a></li>");
+	dep_menu_historique1();
+$('#plus_menu_historique').animate({
+height : 'toggle'
+},1000);
+return false;
+});
+
+
+//*******************************************************************************************************************************
+//*******************************************************************************************************************************
+//CONSULTATION  ---  CONSULTATION
+function dep_menu_consultation1(){
+	$('#menu_consultation').click(function(){
+		$("#menu_consultation").replaceWith("<li id='menu_consultation'><a style='cursor: pointer;'><span style='margin-left:0px; color: #48ce77; font-weight:bold; font-size:20px; font-family:Times New Roman; cursor: pointer;'> <img style='display: inline;' src='../images_icons/plus-green1.png' alt='Liste' /> Consultation </span></a></li>");
+		dep_menu_consultation2();
+	    $('#plus_menu_consultation').animate({
+	        height : 'toggle'
+	    },1000);
+	 return false;
+	});
+}
+
+function dep_menu_consultation2(){
+	$('#menu_consultation').click(function(){
+		$("#menu_consultation").replaceWith("<li id='menu_consultation' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='../images_icons/moin-green2.png' alt='Liste' /> Consultation </span></a></li>");
+		dep_menu_consultation1();
+	    $('#plus_menu_consultation').animate({
+	        height : 'toggle'
+	    },1000);
+	 return false;
+	});
+}
+
+$('#plus_menu_consultation').toggle(false);
+$('#menu_consultation').click(function(){
+	$("#menu_consultation").replaceWith("<li id='menu_consultation' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='../images_icons/moin-green2.png' alt='Liste' /> Consultation </span></a></li>");
+	dep_menu_consultation1();
+$('#plus_menu_consultation').animate({
+height : 'toggle'
+},1000);
+return false;
+});
+</script>
+

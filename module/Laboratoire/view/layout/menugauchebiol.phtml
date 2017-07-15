@@ -1,0 +1,86 @@
+<style>
+#sideBareMenuGaucheSecretariat{ visibility: hidden }
+
+#sideBareMenuGaucheSecretariat{ min-width:200px; max-width: 430px;}
+</style>
+
+<script>
+$(window).load(function () {
+
+	$('#waitMenuGaucheSecretariat').toggle(false);
+	$('#sideBareMenuGaucheSecretariat').fadeIn().css({'visibility':'visible'});
+	 
+});
+</script>
+
+<div id="waitMenuGaucheSecretariat" style="color: #cccccc; font-size: 13px;  margin-top: 80px;  margin-left: 60px;" > <span> Chargement ... </span> </div>
+
+
+<ul id="sideBareMenuGaucheSecretariat">
+
+	<!-- MENU ***ANALYSES*** -->
+	<li id="analyses"><a href="">
+	   <span style="margin-left:0px; color: #48ce77; font-weight:bold; font-size:20px; font-family:Times New Roman;"> <img src='<?php echo $this->basePath().'/images_icons/plus-green1.png'?>' /> Analyses </span></a> 
+	</li>
+
+	<li id="plus_analyses" style="background: #4a5765;" >
+
+	   <div style="margin-left:13px; height:40px; padding-top:20px;"><a href="<?php echo $this->basePath()."/biologiste/liste-resultats-analyses";?>"  >
+	      <span id="liste_resultats_analyses_style" style="margin-left:5px; color: white; font-size:14px; font-family:Times New Roman;">
+	      <img src='<?php echo $this->basePath().'/images_icons/liste.png'?>' /> Liste des R&eacute;sultats </span></a>
+	   </div>
+
+	   <div style="margin-left:13px; height:40px;"><a href="<?php echo $this->basePath()."/biologiste/liste-resultats-valides";?>">
+	      <img style="margin-left:5px; display: inline;" src='<?php echo $this->basePath().'/images_icons/liste.png'?>' />
+	      <span id="liste_resultats_analyses" style="font-size:14px; color: white; font-family:Times New Roman;">R&eacute;sultats valid&eacute;s</span></a>
+	   </div>
+	   
+	</li>
+
+</ul>
+
+
+<?php
+//CHOISIR LE MENU A AFFICHER SELON QUE C'EST LE MEDECIN OU LE SURVEILLANT
+$user = $this->layout()->user;
+$role = $user['role'];
+?>
+
+
+<script>
+//*******************************************************************************************************************************
+//ADMISSION
+function dep_analyses1(){
+	$('#analyses').click(function(){
+		$("#analyses").replaceWith("<li id='analyses'><a href=''><span style='margin-left:0px; color: #48ce77; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='/simens/public/images_icons/plus-green1.png' alt='Liste' /> Analyses </span></a></li>");
+		dep_analyses2();
+	    $('#plus_analyses').animate({
+	        height : 'toggle'
+	    },1000);
+	 return false;
+	});
+}
+
+function dep_analyses2(){
+	$('#analyses').click(function(){
+		$("#analyses").replaceWith("<li id='analyses' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='/simens/public/images_icons/moin-green2.png' alt='Liste' /> Analyses </span></a></li>");
+		dep_analyses1();
+	    $('#plus_analyses').animate({
+	        height : 'toggle'
+	    },1000);
+	 return false;
+	});
+}
+
+$('#plus_analyses').toggle(false);
+$('#analyses').click(function(){
+	$("#analyses").replaceWith("<li id='analyses' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='/simens/public/images_icons/moin-green2.png' alt='Liste' /> Analyses </span></a></li>");
+	dep_analyses1();
+$('#plus_analyses').animate({
+    height : 'toggle'
+},1000);
+return false;
+});
+
+</script>
+

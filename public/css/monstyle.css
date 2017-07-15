@@ -1,0 +1,4388 @@
+@CHARSET "ISO-8859-1";
+/*========== STYLE IMAGES EXAMENS MORPHOLOGIQUES ===========*/
+/*========== STYLE IMAGES EXAMENS MORPHOLOGIQUES ===========*/
+/*========== STYLE IMAGES EXAMENS MORPHOLOGIQUES ===========*/
+/*====== IMAGE RADIO ======*/
+/*====== IMAGE RADIO ======*/
+/*====== IMAGE RADIO ======*/
+#AjoutImage input {
+              position:absolute;
+	          bottom:0px;
+	          right:0px;
+              font-size:0px;
+              opacity:0;
+              -moz-opacity:0;
+              filter:alpha(opacity=0);
+              cursor:pointer;
+              text-align:right; 
+         }
+
+#AjoutImage {
+              position:relative;
+              width:14px;
+              height:15px;
+              overflow:hidden;
+              background:#fff url("../images_icons/aj.gif") no-repeat right top;
+        }
+        
+/*====== IMAGE ECHOGRAPHIE ======*/    
+/*====== IMAGE ECHOGRAPHIE ======*/  
+/*====== IMAGE ECHOGRAPHIE ======*/  
+#AjoutImageEchographie input {
+              position:absolute;
+	          bottom:0px;
+	          right:0px;
+              font-size:0px;
+              opacity:0;
+              -moz-opacity:0;
+              filter:alpha(opacity=0);
+              cursor:pointer;
+              text-align:right; 
+         }
+
+#AjoutImageEchographie {
+              position:relative;
+              width:14px;
+              height:15px;
+              overflow:hidden;
+              background:#fff url("../images_icons/aj.gif") no-repeat right top;
+        }
+        
+        
+/*====== IMAGE IRM ======*/    
+/*====== IMAGE IRM ======*/  
+/*====== IMAGE IRM ======*/  
+#AjoutImageIRM input {
+              position:absolute;
+	          bottom:0px;
+	          right:0px;
+              font-size:0px;
+              opacity:0;
+              -moz-opacity:0;
+              filter:alpha(opacity=0);
+              cursor:pointer;
+              text-align:right; 
+         }
+
+#AjoutImageIRM {
+              position:relative;
+              width:14px;
+              height:15px;
+              overflow:hidden;
+              background:#fff url("../images_icons/aj.gif") no-repeat right top;
+        }        
+        
+/*====== IMAGE SCANNER ======*/    
+/*====== IMAGE SCANNER ======*/  
+/*====== IMAGE SCANNER ======*/  
+#AjoutImageScanner input {
+              position:absolute;
+	          bottom:0px;
+	          right:0px;
+              font-size:0px;
+              opacity:0;
+              -moz-opacity:0;
+              filter:alpha(opacity=0);
+              cursor:pointer;
+              text-align:right; 
+         }
+
+#AjoutImageScanner {
+              position:relative;
+              width:14px;
+              height:15px;
+              overflow:hidden;
+              background:#fff url("../images_icons/aj.gif") no-repeat right top;
+        }        
+        
+        
+/*====== IMAGE FIBROSCOPIE ======*/    
+/*====== IMAGE FIBROSCOPIE ======*/  
+/*====== IMAGE FIBROSCOPIE ======*/  
+#AjoutImageFibroscopie input {
+              position:absolute;
+	          bottom:0px;
+	          right:0px;
+              font-size:0px;
+              opacity:0;
+              -moz-opacity:0;
+              filter:alpha(opacity=0);
+              cursor:pointer;
+              text-align:right; 
+         }
+
+#AjoutImageFibroscopie {
+              position:relative;
+              width:14px;
+              height:15px;
+              overflow:hidden;
+              background:#fff url("../images_icons/aj.gif") no-repeat right top;
+        }        
+/*========== FIN STYLE IMAGES EXAMENS MORPHOLOGIQUES ===========*/
+/*========== FIN STYLE IMAGES EXAMENS MORPHOLOGIQUES ===========*/
+/*========== FIN STYLE IMAGES EXAMENS MORPHOLOGIQUES ===========*/
+        
+#faces  /*photo*/
+{
+
+width: 100px;
+
+float: left;
+
+border-top-width: 10px;
+
+border-right-width: 10px;
+
+border-right-width-ltr-source: physical;
+
+border-right-width-rtl-source: physical;
+
+border-bottom-width: 10px;
+
+border-left-width: 10px;
+
+border-left-width-ltr-source: physical;
+
+border-left-width-rtl-source: physical;
+
+border-top-style: solid;
+
+border-right-style: solid;
+
+border-right-style-ltr-source: physical;
+
+border-right-style-rtl-source: physical;
+
+border-bottom-style: solid;
+
+border-left-style: solid;
+
+border-left-style-ltr-source: physical;
+
+border-left-style-rtl-source: physical;
+
+border-top-color: white;
+
+border-right-color: white;
+
+border-right-color-ltr-source: physical;
+
+border-right-color-rtl-source: physical;
+
+border-bottom-color: white;
+
+border-left-color: white;
+
+border-left-color-ltr-source: physical;
+
+border-left-color-rtl-source: physical;
+
+box-shadow: 0pt 0pt 12px rgba(0, 0, 0, 0.2);
+
+}
+
+
+/*-----Début style-----*/
+
+#respond label 
+
+{
+
+line-height: 1.7em;
+
+}
+
+#respond .comment-form-author label, #respond .comment-form-email label, #respond .comment-form-url label, #respond .comment-form-comment label 
+
+{/* le label*/
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+border-top-right-radius: 15px;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+color: black;
+
+display: inline-block;
+
+font-size: 13px;
+
+left: 0px; /*déplacer le label*/
+
+min-width: 60px;
+
+padding-top: 4px;
+
+padding-right: 10px;
+
+padding-bottom: 4px;
+
+padding-left: 10px;
+
+position: relative;
+
+top: 5px;
+
+z-index: 1;
+
+}
+
+
+#respond input[type="text"], #respond textarea 
+
+{ /*le input ou le textarea*/
+
+/*background-color: #fffffa; /*la couleur du champ*/
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+/*border-top-width: 4px;*/
+
+border-right-width-value: 4px;
+
+border-right-width-ltr-source: physical;
+
+border-right-width-rtl-source: physical;
+
+/*border-bottom-width: 4px;*/
+
+border-left-width-value: 4px;
+
+border-left-width-ltr-source: physical;
+
+border-left-width-rtl-source: physical;
+
+border-top-style: solid;
+
+border-right-style-value: solid;
+
+border-right-style-ltr-source: physical;
+
+border-right-style-rtl-source: physical;
+
+border-bottom-style: solid;
+
+border-left-style-value: solid;
+
+border-left-style-ltr-source: physical;
+
+border-left-style-rtl-source: physical;
+
+/*border-top-color: #eeeeee;*/
+
+border-right-color-value: #eeeeee;
+
+border-right-color-ltr-source: physical;
+
+border-right-color-rtl-source: physical;
+
+/*border-bottom-color: #eeeeee;*/
+
+border-left-color-value: #eeeeee;
+
+border-left-color-ltr-source: physical;
+
+border-left-color-rtl-source: physical;
+
+border-top-left-radius: 5px;
+
+border-top-right-radius: 5px;
+
+border-bottom-right-radius: 5px;
+
+border-bottom-left-radius: 5px;
+
+box-shadow: 0pt 1px 3px rgba(204, 204, 204, 0.95) inset;
+
+position: relative;
+
+/* les cotés des champs */
+
+border-right-width: 2px;
+
+border-left-width: 2px;
+
+border-top-width: 2px;
+
+border-bottom-width: 2px;
+
+/* le texte des champs*/
+padding-top: 5px;
+
+padding-right: 10px;
+
+padding-bottom: 5px;
+
+padding-left: 10px; /* padding du text dans le champ*/
+
+text-indent: 0px; /* alignement du text dans le champ input*/
+
+}
+
+#respond input[type="text"] 
+
+{
+
+display: block;
+
+height: 30px; /*la hauteur du champ input*/
+
+width: 95%; /* la largeur du champ input*/
+
+}
+
+#respond .tmax_tmin input[type="text"]
+
+{
+	width: 95%;
+}
+
+#respond input[type="text"]:focus, #respond textarea:focus 
+
+{
+
+text-indent: 0pt;
+
+z-index: 5;
+
+}
+
+#respond input#submit
+{
+
+color: #444444;
+
+text-shadow: none;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+position: static;
+
+padding-top: 5px;
+
+padding-right: 22px;
+
+padding-bottom: 5px;
+
+padding-left: 22px;
+	
+float: right; 	
+
+}
+
+tr:hover /* Apparence au survol des liens */
+{
+   /*text-decoration: underline;*/
+   background-color: white;
+   
+}
+
+#aa:hover /* Apparence au survol des liens */
+{
+   /*text-decoration: underline;*/
+    color: blue;
+	font-size: 17px;
+}
+
+#barre
+{
+  /*background-color: #a8a8a8;*/
+  padding-bottom:20px; /*Pour séparer le contenu de la bordure du bas du bloc*/
+  magin-bottom:15px; /*Pour séparer la bordure du prochain élément*/
+  border-bottom: 3px solid gray;/*Pour faire un trait rouge horizontal*/
+  margin-left: 165px;
+}
+
+#numero
+{
+	/*background-color: #a8a8a8;*/
+	width: 400px;
+	margin-left: 165px;
+	font-family: police4;
+	font-size: 19px;
+	color: green;
+}
+
+/************************************ style du tableau N°1 ****************************************/
+
+#responde input[type="text"], #respond textarea , #respondeMotif input[type="text"]
+
+{ /*le input ou le textarea*/
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+/*border-top-width: 4px;*/
+
+border-right-width-value: 4px;
+
+border-right-width-ltr-source: physical;
+
+border-right-width-rtl-source: physical;
+
+/*border-bottom-width: 4px;*/
+
+border-left-width-value: 4px;
+
+border-left-width-ltr-source: physical;
+
+border-left-width-rtl-source: physical;
+
+border-top-style: solid;
+
+border-right-style-value: solid;
+
+border-right-style-ltr-source: physical;
+
+border-right-style-rtl-source: physical;
+
+border-bottom-style: solid;
+
+border-left-style-value: solid;
+
+border-left-style-ltr-source: physical;
+
+border-left-style-rtl-source: physical;
+
+border-top-color: #eeeeee;
+
+border-right-color-value: #eeeeee;
+
+border-right-color-ltr-source: physical;
+
+border-right-color-rtl-source: physical;
+
+border-bottom-color: #eeeeee;
+
+border-left-color-value: #eeeeee;
+
+border-left-color-ltr-source: physical;
+
+border-left-color-rtl-source: physical;
+
+/* Arrondir les bordures des input */
+border-top-left-radius: 5px; 
+
+border-top-right-radius: 5px;
+
+border-bottom-right-radius: 5px;
+
+border-bottom-left-radius: 5px;
+
+border-left-color: #eeeeee;
+
+border-right-color: #eeeeee;
+
+box-shadow: 0pt 1px 3px rgba(204, 204, 204, 0.95) inset;
+
+position: relative;
+
+/* les cotés des champs */
+
+border-right-width: 2px;
+
+border-left-width: 2px;
+
+border-top-width: 2px;
+
+border-bottom-width: 2px;
+
+
+/* le texte des champs*/
+padding-top: 10px;
+
+padding-right: 10px;
+
+padding-bottom: 10px;
+
+padding-left: 15px; /* padding du text dans le champ*/
+
+text-indent: 75px; /* alignement du text dans le champ input après saisie*/
+
+margin-bottom: 1px;
+
+margin-top: -40px;
+
+float: left;
+
+}
+
+#respond input[type="text"]
+{
+	margin-bottom: 20px;
+}
+
+#responde .form-author label , #respondeMotif .form-author label
+{/* le label*/
+line-height: 2.0em;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+color: black;
+
+display: inline-block;
+
+font-size: 13px;
+
+min-width: 60px;
+
+padding-top: 8px;
+
+padding-right: 10px;
+
+padding-bottom: 4px;
+
+padding-left: 5px;
+
+position: relative;
+
+top: 6px;
+
+z-index: 1;
+
+border-top-left-radius: 5px; /*arrondir le bord du label*/ 
+
+float: left;
+
+margin-left: 2px;
+
+text-transform: lowercase;
+}
+
+#respondeMotif .form-author #labelSupMotif  
+{/* le label*/
+line-height: 2.0em;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+font-size: 13px;
+
+/*left: 150px; /*déplacer le label*/
+
+/* min-width: 60px; */
+
+/* padding-top: 8px; */
+
+padding: 2px;
+
+position: relative;
+
+width: 16px;
+
+height: 16px;
+
+display: inline-block;
+
+float:right;
+
+top: -47px;
+
+right: 5px;
+
+margin-bottom: -30px;
+
+border-bottom-left-radius: 5px; /*arrondir le bord du label*/ 
+
+}
+
+#responde .form-author #labelSupDonnee  
+{/* le label*/
+line-height: 2.0em;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+font-size: 13px;
+
+/*left: 150px; /*déplacer le label*/
+
+/* min-width: 60px; */
+
+/* padding-top: 8px; */
+
+padding: 2px;
+
+position: relative;
+
+width: 16px;
+
+height: 16px;
+
+display: inline-block;
+
+float:right;
+
+top: -49px;
+
+right: 3px;
+
+margin-bottom: -30px;
+
+border-bottom-left-radius: 5px; /*arrondir le bord du label*/ 
+
+}
+
+#responde input[type="text"]
+{
+
+display: block;
+
+height: 50px; /*la hauteur du champ input*/
+
+width: 100%; /* la largeur du champ input*/
+
+}
+
+#respondeMotif input[type="text"]
+{
+
+display: block;
+
+height: 50px; /*la hauteur du champ input*/
+
+width: 100%; /* la largeur du champ input*/
+
+}
+
+#responde input[type="text"]:focus, #responde textarea:focus, #respondeMotif input[type="text"]:focus
+{
+
+text-indent: 0pt;
+
+z-index: 5;
+
+} 
+
+
+/*----fin style--------*/
+
+
+
+/************************************ STYLE ANALYSE BIOLOGIQUE ****************************************/
+/************************************ STYLE ANALYSE BIOLOGIQUE ****************************************/
+
+#respondee input[type="text"], #respondee textarea 
+
+{ /*le input ou le textarea*/
+
+/*background-color: #fffffa; /*la couleur du champ*/
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+border-top-width: 4px;
+
+border-right-width-value: 4px;
+
+border-right-width-ltr-source: physical;
+
+border-right-width-rtl-source: physical;
+
+border-bottom-width: 4px;
+
+border-left-width-value: 4px;
+
+border-left-width-ltr-source: physical;
+
+border-left-width-rtl-source: physical;
+
+border-top-style: solid;
+
+border-right-style-value: solid;
+
+border-right-style-ltr-source: physical;
+
+border-right-style-rtl-source: physical;
+
+border-bottom-style: solid;
+
+border-left-style-value: solid;
+
+border-left-style-ltr-source: physical;
+
+border-left-style-rtl-source: physical;
+
+/*border-top-color: #eeeeee;*/
+
+border-right-color-value: #eeeeee;
+
+border-right-color-ltr-source: physical;
+
+border-right-color-rtl-source: physical;
+
+/*border-bottom-color: #eeeeee;*/
+
+border-left-color-value: #eeeeee;
+
+border-left-color-ltr-source: physical;
+
+border-left-color-rtl-source: physical;
+
+/* Arrondir les bordures des input*/
+border-top-left-radius: 5px; 
+
+border-top-right-radius: 5px;
+
+border-bottom-right-radius: 5px;
+
+border-bottom-left-radius: 5px;
+
+box-shadow: 0pt 1px 3px rgba(204, 204, 204, 0.95) inset;
+
+position: relative;
+
+/* les cotés des champs */
+
+border-right-width: 2px;
+
+border-left-width: 2px;
+
+border-top-width: 2px;
+
+border-bottom-width: 2px;
+
+
+/* le texte des champs*/
+padding-top: 10px;
+
+padding-right: 10px;
+
+padding-bottom: 10px;
+
+padding-left: 10px; /* padding du text dans le champ*/
+
+text-indent: 0px; /* alignement du text dans le champ input après saisie*/
+
+margin-bottom: 1px;
+
+margin-top: -40px;
+
+float: left;
+
+margin-left: 170px
+
+}
+
+
+#ActeResponde input[type="text"], #ActeResponde textarea 
+
+{ /*le input ou le textarea*/
+
+/*background-color: #fffffa; /*la couleur du champ*/
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+border-top-width: 4px;
+
+border-right-width-value: 4px;
+
+border-right-width-ltr-source: physical;
+
+border-right-width-rtl-source: physical;
+
+border-bottom-width: 4px;
+
+border-left-width-value: 4px;
+
+border-left-width-ltr-source: physical;
+
+border-left-width-rtl-source: physical;
+
+border-top-style: solid;
+
+border-right-style-value: solid;
+
+border-right-style-ltr-source: physical;
+
+border-right-style-rtl-source: physical;
+
+border-bottom-style: solid;
+
+border-left-style-value: solid;
+
+border-left-style-ltr-source: physical;
+
+border-left-style-rtl-source: physical;
+
+/*border-top-color: #eeeeee;*/
+
+border-right-color-value: #eeeeee;
+
+border-right-color-ltr-source: physical;
+
+border-right-color-rtl-source: physical;
+
+/*border-bottom-color: #eeeeee;*/
+
+border-left-color-value: #eeeeee;
+
+border-left-color-ltr-source: physical;
+
+border-left-color-rtl-source: physical;
+
+/* Arrondir les bordures des input*/
+border-top-left-radius: 5px; 
+
+border-top-right-radius: 5px;
+
+border-bottom-right-radius: 5px;
+
+border-bottom-left-radius: 5px;
+
+box-shadow: 0pt 1px 3px rgba(204, 204, 204, 0.95) inset;
+
+position: relative;
+
+/* les cotés des champs */
+
+border-right-width: 2px;
+
+border-left-width: 2px;
+
+border-top-width: 2px;
+
+border-bottom-width: 2px;
+
+
+/* le texte des champs*/
+padding-top: 10px;
+
+padding-right: 10px;
+
+padding-bottom: 10px;
+
+padding-left: 10px; /* padding du text dans le champ*/
+
+text-indent: 0px; /* alignement du text dans le champ input après saisie*/
+
+margin-bottom: 1px;
+
+top: -10px;
+
+float: left;
+}
+
+#respondee select
+{
+	background-image: none;
+
+    background-repeat: repeat;
+
+    background-attachment: scroll;
+
+    background-position: 0% 0%;
+
+    background-clip: border-box;
+
+    background-origin: padding-box;
+
+    background-size: auto auto;
+
+    border-top-width: 4px;
+
+    border-right-width-value: 4px;
+
+    border-right-width-ltr-source: physical;
+
+    border-right-width-rtl-source: physical;
+
+    border-bottom-width: 4px;
+
+    border-left-width-value: 4px;
+
+    border-left-width-ltr-source: physical;
+
+    border-left-width-rtl-source: physical;
+
+    border-top-style: solid;
+
+    border-right-style-value: solid;
+
+    border-right-style-ltr-source: physical;
+
+    border-right-style-rtl-source: physical;
+
+    border-bottom-style: solid;
+
+    border-left-style-value: solid;
+
+    border-left-style-ltr-source: physical;
+
+    border-left-style-rtl-source: physical;
+
+    border-top-color: #cccccc;
+
+    border-right-color-value: #eeeeee;
+
+    border-right-color-ltr-source: physical;
+
+    border-right-color-rtl-source: physical;
+
+    border-bottom-color: #cccccc;
+
+    border-left-color-value: #eeeeee;
+
+    border-left-color-ltr-source: physical;
+
+    border-left-color-rtl-source: physical;
+	
+	border-top-left-radius: 5px; 
+
+    border-top-right-radius: 5px;
+
+    border-bottom-right-radius: 5px;
+
+    border-bottom-left-radius: 5px;
+
+    box-shadow: 0pt 1px 3px rgba(204, 204, 204, 0.95) inset;
+
+    position: relative;
+	
+	/* les cotés des champs */
+
+    border-right-width: 2px;
+
+    border-left-width: 2px;
+
+    border-top-width: 2px;
+
+    border-bottom-width: 2px;
+	
+	border-left-color: #cccccc;
+	
+	border-right-color: #cccccc;
+	
+	float: left;
+
+    margin-left: 50px
+}
+
+#respondee .form-groupe label  
+{line-height: 2.0em;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+color: black;
+
+display: inline-block;
+
+font-size: 13px;
+
+/*left: -170px; /*déplacer le label*/
+
+float: left;
+
+min-width: 60px;
+
+padding-top: 7px;
+
+padding-right: 10px;
+
+padding-bottom: 4px;
+
+padding-left: 10px;
+
+position: relative;
+
+top: -1px;
+
+z-index: 1;
+}
+
+#respondee .form-analyse-biologique label  
+{/* le label*/
+line-height: 2.0em;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+color: black;
+
+display: inline-block;
+
+font-size: 13px;
+
+/*left: -170px; /*déplacer le label*/
+
+float: left;
+
+min-width: 60px;
+
+padding-top: 7px;
+
+padding-right: 8px;
+
+padding-bottom: 4px;
+
+padding-left: 10px;
+
+position: relative;
+
+top: 6px;
+
+z-index: 1;
+
+}
+
+#respondee input[type="text"] 
+{
+
+display: block;
+
+height: 45px; /*la hauteur du champ input*/
+
+width: 72%; /* la largeur du champ input*/
+
+}
+
+#ActeResponde input[type="text"] 
+{
+
+display: block;
+
+height: 45px; /*la hauteur du champ input*/
+
+width: 97%; /* la largeur du champ input*/
+
+}
+
+
+#ActeResponde label  
+{line-height: 2.0em;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+color: black;
+
+display: inline-block;
+
+font-size: 13px;
+
+/*left: -170px; /*déplacer le label*/
+
+float: left;
+
+min-width: 60px;
+
+padding-top: 7px;
+
+padding-right: 10px;
+
+padding-bottom: 4px;
+
+padding-left: 10px;
+
+position: relative;
+
+top: -5px;
+
+z-index: 1;
+}
+
+#respondee select
+{
+
+    display: block;
+
+    height: 38px; /*la hauteur du champ input*/
+
+    width: 50px; /* la largeur du champ input*/
+
+}
+
+#groupe input[type="text"] 
+{
+
+height: 45px; /*la hauteur du champ input*/
+
+width: 60px; /* la largeur du champ input*/
+
+margin-top: -5px;
+
+margin-left: 40px;
+	
+margin-bottom: 1px;
+	
+}
+
+#respondee input[type="text"]:focus
+{
+
+   text-indent: 0pt;
+
+   z-index: 5;
+	
+} 
+
+/*----fin style ANALYSE BIOLOGIQUE--------*/
+/*----fin style ANALYSE BIOLOGIQUE--------*/
+
+
+/************************************ STYLE EXAMEN MORPHOLOGIQUE ****************************************/
+/************************************ STYLE EXAMEN MORPHOLOGIQUE ****************************************/
+
+#respondeee input[type="text"], #respondeee textarea 
+
+{ /*le input ou le textarea*/
+
+/*background-color: #fffffa; /*la couleur du champ*/
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+border-top-width: 3px;
+
+border-left-width: 3px;
+
+border-right-width: 3px;
+
+border-bottom-width: 3px;
+
+border-right-width-value: 4px;
+
+border-right-width-ltr-source: physical;
+
+border-right-width-rtl-source: physical;
+
+border-left-width-value: 4px;
+
+border-left-width-ltr-source: physical;
+
+border-left-width-rtl-source: physical;
+
+border-top-style: solid;
+
+border-right-style-value: solid;
+
+border-right-style-ltr-source: physical;
+
+border-right-style-rtl-source: physical;
+
+border-bottom-style: solid;
+
+border-left-style-value: solid;
+
+border-left-style-ltr-source: physical;
+
+border-left-style-rtl-source: physical;
+
+border-right-color-ltr-source: physical;
+
+border-right-color-rtl-source: physical;
+
+border-left-color-ltr-source: physical;
+
+border-left-color-rtl-source: physical;
+
+/* Arrondir les bordures des input*/
+border-top-left-radius: 5px; 
+
+border-top-right-radius: 5px;
+
+border-bottom-right-radius: 5px;
+
+border-bottom-left-radius: 5px;
+
+box-shadow: 0pt 1px 3px rgba(204, 204, 204, 0.95) inset;
+
+position: relative;
+
+/* le texte des champs*/
+padding-top: 5px;
+
+padding-right: 10px;
+
+padding-bottom: 5px;
+
+padding-left: 10px; /* padding du text dans le champ*/
+
+text-indent: 0px; /* alignement du text dans le champ input après saisie*/
+
+margin-bottom: 1px;
+
+float: left;
+
+}
+
+#respondeee .form-examen-morphologique label  
+{/* le label*/
+line-height: 1.8em;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+color: black;
+
+display: inline-block;
+
+font-size: 13px;
+
+float: left;
+
+color: green;
+
+font-weight: bold;
+
+/*text-align: right;*/
+
+min-width: 80px;
+
+padding-top: 7px;
+
+padding-right: 10px;
+
+padding-bottom: 4px;
+
+padding-left: 10px;
+
+margin-left: 0px;
+
+position: relative;
+
+top: 5px;
+
+z-index: 1;
+
+}
+
+#respondeee input[type="text"], #respondeee textarea 
+{
+
+height: 90px; /*la hauteur du champ input*/
+
+width: 100%; /* la largeur du champ input*/
+
+}
+
+
+
+#respondeee input[type="text"]:focus
+{
+
+   text-indent: 0pt;
+
+   z-index: 5;
+	
+} 
+
+/* AFFICHAGE D'UNE IMAGE*/
+#respondeee image
+{
+	height: 350px;
+	
+	width: 400px;
+}
+
+/*----fin style EXAMEN MORPHOLOGIQUE--------*/
+/*----fin style EXAMEN MORPHOLOGIQUE--------*/
+
+
+/*----DEBUT style DUREE TRAITEMENT--------*/
+/*----DEBUT style DUREE TRAITEMENT--------*/
+
+#duree_traitement input[type="text"]
+
+{ /*le input ou le textarea*/
+
+/*background-color: #ffffff; /*la couleur du champ*/
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+border-top-width: 6px;
+
+border-right-width-value: 4px;
+
+border-right-width-ltr-source: physical;
+
+border-right-width-rtl-source: physical;
+
+border-bottom-width: 5px;
+
+border-left-width-value: 4px;
+
+border-left-width-ltr-source: physical;
+
+border-left-width-rtl-source: physical;
+
+border-top-style: solid;
+
+border-right-style-value: solid;
+
+border-right-style-ltr-source: physical;
+
+border-right-style-rtl-source: physical;
+
+border-bottom-style: solid;
+
+border-left-style-value: solid;
+
+border-left-style-ltr-source: physical;
+
+border-left-style-rtl-source: physical;
+
+/*border-top-color: #eeeeee;
+
+/*border-right-color: #eeeeee;
+*/
+/*border-left-color: #eeeeee;
+*/
+border-right-color-value: #eeeeee;
+
+border-right-color-ltr-source: physical;
+
+border-right-color-rtl-source: physical;
+
+/*border-bottom-color: #eeeeee;
+*/
+border-left-color-value: #eeeeee;
+
+border-left-color-ltr-source: physical;
+
+border-left-color-rtl-source: physical;
+
+/* Arrondir les bordures des input */
+border-top-left-radius: 5px; 
+
+border-top-right-radius: 5px;
+
+border-bottom-right-radius: 5px;
+
+border-bottom-left-radius: 5px;
+
+box-shadow: 0pt 1px 3px rgba(204, 204, 204, 0.95) inset;
+
+position: relative;
+
+/* les bords des champs */
+
+border-right-width: 2px;
+
+border-left-width: 2px;
+
+border-top-width: 2px;
+
+border-bottom-width: 2px;
+
+
+/* le texte des champs*/
+padding-top: 5px;
+
+padding-right: 5px;
+
+padding-bottom: 5px;
+
+padding-left: 0px; /* padding du text dans le champ*/
+
+text-indent: 5px; /* alignement du text dans le champ input après saisie*/
+
+margin-bottom: 1px;
+
+margin-top: -20px;
+
+float: left;
+
+margin-left: -10px;
+
+}
+
+#duree_traitement .form-duree_ label  
+{/* le label*/
+line-height: 1.4em;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+display: inline-block;
+
+font-size: 13px;
+
+left: -12px; /*déplacer le label*/
+
+min-width: 60px;
+
+padding-top: 8px;
+
+padding-right: 10px;
+
+padding-bottom: 4px;
+
+padding-left: 5px;
+
+position: relative;
+
+top: 0px;
+
+z-index: 1;
+
+border-top-left-radius: 8px; /*arrondir le bord du label*/ 
+
+float: left;
+
+margin-left: 12px;
+
+margin-top: 2px;
+
+margin-bottom: 19px;
+
+margin-right: 5px;
+}
+
+#duree_traitement input[type="text"] 
+{
+
+display: block;
+
+height: 32px; /*la hauteur du champ input*/
+
+width: 50px; /* la largeur du champ input*/
+
+}
+
+/*----fin style DUREE TRAITEMENT--------*/
+/*----fin style DUREE TRAITEMENT--------*/
+
+
+
+
+
+/************************************ STYLE TRANSFERT ****************************************/
+/************************************ STYLE TRANSFERT ****************************************/
+
+#transfert textarea 
+{
+ background-image: none;
+
+    background-repeat: repeat;
+
+    background-attachment: scroll;
+
+    background-position: 0% 0%;
+
+    background-clip: border-box;
+
+    background-origin: padding-box;
+
+    background-size: auto auto;
+
+    border-top-width: 4px;
+
+    border-right-width-value: 4px;
+
+    border-right-width-ltr-source: physical;
+
+    border-right-width-rtl-source: physical;
+
+    border-bottom-width: 4px;
+
+    border-left-width-value: 4px;
+
+    border-left-width-ltr-source: physical;
+
+    border-left-width-rtl-source: physical;
+
+    border-top-style: solid;
+
+    border-right-style-value: solid;
+
+    border-right-style-ltr-source: physical;
+
+    border-right-style-rtl-source: physical;
+
+    border-bottom-style: solid;
+
+    border-left-style-value: solid;
+
+    border-left-style-ltr-source: physical;
+
+    border-left-style-rtl-source: physical;
+
+    /*border-top-color: #cccccc;*/
+
+    border-right-color-value: #eeeeee;
+
+    border-right-color-ltr-source: physical;
+
+    border-right-color-rtl-source: physical;
+
+    /*border-bottom-color: #cccccc;*/
+
+    border-left-color-value: #eeeeee;
+
+    border-left-color-ltr-source: physical;
+
+    border-left-color-rtl-source: physical;
+	
+	border-top-left-radius: 5px; 
+
+    border-top-right-radius: 5px;
+
+    border-bottom-right-radius: 5px;
+
+    border-bottom-left-radius: 5px;
+
+    box-shadow: 0pt 1px 3px rgba(204, 204, 204, 0.95) inset;
+
+    position: relative;
+	
+	/* les cotés des champs */
+
+    border-right-width: 2px;
+
+    border-left-width: 2px;
+
+    border-top-width: 2px;
+
+    border-bottom-width: 2px;
+	
+	/*border-left-color: #cccccc;
+	
+	border-right-color: #cccccc;*/
+	
+	float: left;
+
+    margin-left: 0px;
+	
+	margin-right: 25px;
+
+}
+
+#transfert select
+{
+	background-image: none;
+
+    background-repeat: repeat;
+
+    background-attachment: scroll;
+
+    background-position: 0% 0%;
+
+    background-clip: border-box;
+
+    background-origin: padding-box;
+
+    background-size: auto auto;
+
+    border-top-width: 4px;
+
+    border-right-width-value: 4px;
+
+    border-right-width-ltr-source: physical;
+
+    border-right-width-rtl-source: physical;
+
+    border-bottom-width: 4px;
+
+    border-left-width-value: 4px;
+
+    border-left-width-ltr-source: physical;
+
+    border-left-width-rtl-source: physical;
+
+    border-top-style: solid;
+
+    border-right-style-value: solid;
+
+    border-right-style-ltr-source: physical;
+
+    border-right-style-rtl-source: physical;
+
+    border-bottom-style: solid;
+
+    border-left-style-value: solid;
+
+    border-left-style-ltr-source: physical;
+
+    border-left-style-rtl-source: physical;
+
+    border-top-color: #cccccc;
+
+    border-right-color-value: #eeeeee;
+
+    border-right-color-ltr-source: physical;
+
+    border-right-color-rtl-source: physical;
+
+    border-bottom-color: #cccccc;
+
+    border-left-color-value: #eeeeee;
+
+    border-left-color-ltr-source: physical;
+
+    border-left-color-rtl-source: physical;
+	
+	border-top-left-radius: 5px; 
+
+    border-top-right-radius: 5px;
+
+    border-bottom-right-radius: 5px;
+
+    border-bottom-left-radius: 5px;
+
+    box-shadow: 0pt 1px 3px rgba(204, 204, 204, 0.95) inset;
+
+    position: relative;
+	
+	/* les cotés des champs */
+
+    border-right-width: 2px;
+
+    border-left-width: 2px;
+
+    border-top-width: 2px;
+
+    border-bottom-width: 2px;
+	
+	border-left-color: #cccccc;
+	
+	border-right-color: #cccccc;
+	
+	float: left;
+
+	margin-right: 25px;
+}
+
+
+#transfert .form-transfert label  
+{/* le label*/
+line-height: 2.0em;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+color: black;
+
+display: inline-block;
+
+font-size: 13px;
+
+float: left;
+
+min-width: 60px;
+
+padding-top: 7px;
+
+padding-right: 10px;
+
+padding-bottom: 4px;
+
+padding-left: 10px;
+
+position: relative;
+
+top: 6px;
+
+z-index: 1;
+
+}
+
+#transfert .form-transfert2 label  
+{/* le label*/
+line-height: 1.2em;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+color: black;
+
+display: inline-block;
+
+font-size: 13px;
+
+float: left;
+
+min-width: 60px;
+
+padding-top: 7px;
+
+padding-right: 10px;
+
+padding-bottom: 4px;
+
+padding-left: 10px;
+
+position: relative;
+
+top: 3px;
+
+z-index: 7;
+}
+
+
+#transfert input[type="text"], #transfert textarea 
+{
+
+display: block;
+
+height: 120px; /*la hauteur du champ input*/
+
+width: 90%;/*395px; /* la largeur du champ input*/
+	
+padding-left: 5px;
+
+}
+
+#transfert select
+{
+display: block;
+
+height: 30px; /*la hauteur du champ input*/
+
+width: 97%;/*225px; /* la largeur du champ input*/
+
+}
+
+#transfert input[type="text"]:focus, #transfert textarea:focus
+{
+
+   text-indent: 0pt;
+
+   z-index: 5;
+	
+} 
+
+/*----fin style TRANSFERT--------*/
+/*----fin style TRANSFERT--------*/
+
+/************************************ STYLE TRAITEMENT CHIRURGICAL ****************************************/
+/************************************ STYLE TRAITEMENT CHIRURGICAL ****************************************/
+
+#chirurgical textarea , #chirurgical input[type="text"]
+{
+    background-image: none;
+
+    background-repeat: repeat;
+
+    background-attachment: scroll;
+
+    background-position: 0% 0%;
+
+    background-clip: border-box;
+
+    background-origin: padding-box;
+
+    background-size: auto auto;
+
+    border-top-width: 4px;
+
+    border-right-width-value: 4px;
+
+    border-right-width-ltr-source: physical;
+
+    border-right-width-rtl-source: physical;
+
+    border-bottom-width: 4px;
+
+    border-left-width-value: 4px;
+
+    border-left-width-ltr-source: physical;
+
+    border-left-width-rtl-source: physical;
+
+    border-top-style: solid;
+
+    border-right-style-value: solid;
+
+    border-right-style-ltr-source: physical;
+
+    border-right-style-rtl-source: physical;
+
+    border-bottom-style: solid;
+
+    border-left-style-value: solid;
+
+    border-left-style-ltr-source: physical;
+
+    border-left-style-rtl-source: physical;
+
+    /*border-top-color: #cccccc;*/
+
+    border-right-color-value: #eeeeee;
+
+    border-right-color-ltr-source: physical;
+
+    border-right-color-rtl-source: physical;
+
+    /*border-bottom-color: #cccccc;*/
+
+    border-left-color-value: #eeeeee;
+
+    border-left-color-ltr-source: physical;
+
+    border-left-color-rtl-source: physical;
+	
+	border-top-left-radius: 5px; 
+
+    border-top-right-radius: 5px;
+
+    border-bottom-right-radius: 5px;
+
+    border-bottom-left-radius: 5px;
+
+    box-shadow: 0pt 1px 3px rgba(204, 204, 204, 0.95) inset;
+
+    position: relative;
+	
+	/* les cotés des champs */
+
+    border-right-width: 2px;
+
+    border-left-width: 2px;
+
+    border-top-width: 2px;
+
+    border-bottom-width: 2px;
+	
+	/*border-left-color: #cccccc;
+	
+	border-right-color: #cccccc;*/
+	
+	float: left;
+
+	margin-right: 25px;
+	
+	padding-left: 5px;
+}
+
+#chirurgical select
+{
+	background-image: none;
+
+    background-repeat: repeat;
+
+    background-attachment: scroll;
+
+    background-position: 0% 0%;
+
+    background-clip: border-box;
+
+    background-origin: padding-box;
+
+    background-size: auto auto;
+
+    border-top-width: 4px;
+
+    border-right-width-value: 4px;
+
+    border-right-width-ltr-source: physical;
+
+    border-right-width-rtl-source: physical;
+
+    border-bottom-width: 4px;
+
+    border-left-width-value: 4px;
+
+    border-left-width-ltr-source: physical;
+
+    border-left-width-rtl-source: physical;
+
+    border-top-style: solid;
+
+    border-right-style-value: solid;
+
+    border-right-style-ltr-source: physical;
+
+    border-right-style-rtl-source: physical;
+
+    border-bottom-style: solid;
+
+    border-left-style-value: solid;
+
+    border-left-style-ltr-source: physical;
+
+    border-left-style-rtl-source: physical;
+
+    border-top-color: #cccccc;
+
+    border-right-color-value: #eeeeee;
+
+    border-right-color-ltr-source: physical;
+
+    border-right-color-rtl-source: physical;
+
+    border-bottom-color: #cccccc;
+
+    border-left-color-value: #eeeeee;
+
+    border-left-color-ltr-source: physical;
+
+    border-left-color-rtl-source: physical;
+	
+	border-top-left-radius: 5px; 
+
+    border-top-right-radius: 5px;
+
+    border-bottom-right-radius: 5px;
+
+    border-bottom-left-radius: 5px;
+
+    box-shadow: 0pt 1px 3px rgba(204, 204, 204, 0.95) inset;
+
+    position: relative;
+	
+	/* les cotés des champs */
+
+    border-right-width: 2px;
+
+    border-left-width: 2px;
+
+    border-top-width: 2px;
+
+    border-bottom-width: 2px;
+	
+	border-left-color: #cccccc;
+	
+	border-right-color: #cccccc;
+	
+	float: left;
+
+	margin-right: 25px;
+	
+	padding-left: 5px;
+}
+
+
+#chirurgical .form-chirurgical label  
+{/* le label*/
+line-height: 1.5em;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+color: black;
+
+display: inline-block;
+
+font-size: 13px;
+
+float: left;
+
+min-width: 60px;
+
+padding-top: 7px;
+
+padding-right: 10px;
+
+padding-bottom: 4px;
+
+padding-left: 10px;
+
+position: relative;
+
+top: 6px;
+
+}
+
+
+#chirurgical textarea 
+{
+
+display: block;
+
+height: 80px; /*la hauteur du champ input*/
+
+width: 90%;/*250px; /* la largeur du champ input*/
+
+}
+
+#chirurgical input[type="text"] 
+{
+
+display: block;
+
+height: 35px; /*la hauteur du champ input*/
+
+width: 90%;/*250px; /* la largeur du champ input*/
+
+}
+
+#chirurgical select
+{
+display: block;
+
+height: 35px; /*la hauteur du champ input*/
+
+width: 90%;/*250px; /* la largeur du champ input*/
+
+}
+
+#chirurgical input[type="text"]:focus, #chirurgical textarea:focus
+{
+
+   text-indent: 0pt;
+
+   z-index: 5;
+	
+} 
+
+/************************************ STYLE HOSPITALISATION ****************************************/
+/************************************ STYLE HOSPITALISATION ****************************************/
+
+#hospitalisation input[type="text"], #hospitalisation textarea 
+
+{ /*le input ou le textarea*/
+/*background-color: #fffffa; /*la couleur du champ*/
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+border-top-width: 4px;
+
+border-right-width-value: 4px;
+
+border-right-width-ltr-source: physical;
+
+border-right-width-rtl-source: physical;
+
+border-bottom-width: 4px;
+
+border-left-width-value: 4px;
+
+border-left-width-ltr-source: physical;
+
+border-left-width-rtl-source: physical;
+
+border-top-style: solid;
+
+border-right-style-value: solid;
+
+border-right-style-ltr-source: physical;
+
+border-right-style-rtl-source: physical;
+
+border-bottom-style: solid;
+
+border-left-style-value: solid;
+
+border-left-style-ltr-source: physical;
+
+border-left-style-rtl-source: physical;
+
+/*border-top-color: #eeeeee;*/
+
+border-right-color-value: #eeeeee;
+
+border-right-color-ltr-source: physical;
+
+border-right-color-rtl-source: physical;
+
+/*border-bottom-color: #eeeeee;*/
+
+border-left-color-value: #eeeeee;
+
+border-left-color-ltr-source: physical;
+
+border-left-color-rtl-source: physical;
+
+/* Arrondir les bordures des input*/
+border-top-left-radius: 5px; 
+
+border-top-right-radius: 5px;
+
+border-bottom-right-radius: 5px;
+
+border-bottom-left-radius: 5px;
+
+box-shadow: 0pt 1px 3px rgba(204, 204, 204, 0.95) inset;
+
+position: relative;
+
+/* les cotés des champs */
+
+border-right-width: 2px;
+
+border-left-width: 2px;
+
+border-top-width: 2px;
+
+border-bottom-width: 2px;
+
+
+/* le texte des champs*/
+padding-top: 10px;
+
+padding-right: 10px;
+
+padding-bottom: 10px;
+
+padding-left: 10px; /* padding du text dans le champ*/
+
+text-indent: 0px; /* alignement du text dans le champ input après saisie*/
+
+margin-bottom: 1px;
+
+margin-top: 0px;
+
+float: left;
+
+margin-right: 15px;
+
+}
+
+#hospitalisation select
+{
+	background-image: none;
+
+    background-repeat: repeat;
+
+    background-attachment: scroll;
+
+    background-position: 0% 0%;
+
+    background-clip: border-box;
+
+    background-origin: padding-box;
+
+    background-size: auto auto;
+
+    border-top-width: 4px;
+
+    border-right-width-value: 4px;
+
+    border-right-width-ltr-source: physical;
+
+    border-right-width-rtl-source: physical;
+
+    border-bottom-width: 4px;
+
+    border-left-width-value: 4px;
+
+    border-left-width-ltr-source: physical;
+
+    border-left-width-rtl-source: physical;
+
+    border-top-style: solid;
+
+    border-right-style-value: solid;
+
+    border-right-style-ltr-source: physical;
+
+    border-right-style-rtl-source: physical;
+
+    border-bottom-style: solid;
+
+    border-left-style-value: solid;
+
+    border-left-style-ltr-source: physical;
+
+    border-left-style-rtl-source: physical;
+
+    border-top-color: #cccccc;
+
+    border-right-color-value: #eeeeee;
+
+    border-right-color-ltr-source: physical;
+
+    border-right-color-rtl-source: physical;
+
+    border-bottom-color: #cccccc;
+
+    border-left-color-value: #eeeeee;
+
+    border-left-color-ltr-source: physical;
+
+    border-left-color-rtl-source: physical;
+	
+	border-top-left-radius: 5px; 
+
+    border-top-right-radius: 5px;
+
+    border-bottom-right-radius: 5px;
+
+    border-bottom-left-radius: 5px;
+
+    box-shadow: 0pt 1px 3px rgba(204, 204, 204, 0.95) inset;
+
+    position: relative;
+	
+	/* les cotés des champs */
+
+    border-right-width: 2px;
+
+    border-left-width: 2px;
+
+    border-top-width: 2px;
+
+    border-bottom-width: 2px;
+	
+	border-left-color: #cccccc;
+	
+	border-right-color: #cccccc;
+	
+	float: left;
+
+    margin-left: 135px;
+	
+	margin-right: 25px;
+}
+
+
+#hospitalisation .form-hospitalisation label  
+{/* le label*/
+line-height: 2.0em;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+color: black;
+
+display: inline-block;
+
+font-size: 13px;
+
+float: left;
+
+min-width: 60px;
+
+padding-top: 7px;
+
+padding-right: 10px;
+
+padding-bottom: 4px;
+
+padding-left: 10px;
+
+position: relative;
+
+top: 6px;
+
+z-index: 1;
+
+margin-right: 4px;
+}
+
+#hospitalisation .form-hospitalisation_date_fin_prevue_hospi label  
+{/* le label*/
+line-height: 1.4em;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+color: black;
+
+display: inline-block;
+
+font-size: 13px;
+
+float: left;
+
+min-width: 60px;
+
+padding-top: 7px;
+
+padding-right: 10px;
+
+padding-bottom: 4px;
+
+padding-left: 10px;
+
+position: relative;
+
+top: 6px;
+
+z-index: 1;
+
+margin-right: 4px;
+}
+
+#hospitalisation .form-hospitalisation2 label  
+{/* le label*/
+line-height: 1.2em;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+color: black;
+
+display: inline-block;
+
+font-size: 13px;
+
+float: left;
+
+min-width: 60px;
+
+padding-top: 7px;
+
+padding-right: 10px;
+
+padding-bottom: 4px;
+
+padding-left: 10px;
+
+position: relative;
+
+top: 30px;
+
+z-index: 7;
+
+}
+
+
+#hospitalisation textarea 
+{
+
+display: block;
+
+height: 135px;
+
+width: 93%;
+
+}
+
+#hospitalisation input[type="text"]
+{
+
+display: block;
+
+height: 35px;
+
+width: 80%;
+
+}
+
+#hospitalisation select
+{
+	display: block;
+	height: 30px;
+	width: 150px;
+}
+
+#hospitalisation input[type="text"]:focus, #hospitalisation textarea:focus
+{
+
+   text-indent: 0pt;
+
+   z-index: 5;
+	
+} 
+
+/*----fin style HOSPITALISATION--------*/
+/*----fin style HOSPITALISATION--------*/
+
+
+/************************************ STYLE Rendez-vous ****************************************/
+/************************************ STYLE Rendez-vous ****************************************/
+
+#rendezvous input[type="text"], #rendezvous select
+
+{ /*le input ou le textarea*/
+/*background-color: #fffffa; /*la couleur du champ*/
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+border-top-width: 4px;
+
+border-right-width-value: 4px;
+
+border-right-width-ltr-source: physical;
+
+border-right-width-rtl-source: physical;
+
+border-bottom-width: 4px;
+
+border-left-width-value: 4px;
+
+border-left-width-ltr-source: physical;
+
+border-left-width-rtl-source: physical;
+
+border-top-style: solid;
+
+border-right-style-value: solid;
+
+border-right-style-ltr-source: physical;
+
+border-right-style-rtl-source: physical;
+
+border-bottom-style: solid;
+
+border-left-style-value: solid;
+
+border-left-style-ltr-source: physical;
+
+border-left-style-rtl-source: physical;
+
+/*border-top-color: #eeeeee;*/
+
+border-right-color-value: #eeeeee;
+
+border-right-color-ltr-source: physical;
+
+border-right-color-rtl-source: physical;
+
+/*border-bottom-color: #eeeeee;*/
+
+border-left-color-value: #eeeeee;
+
+border-left-color-ltr-source: physical;
+
+border-left-color-rtl-source: physical;
+
+/* Arrondir les bordures des input*/
+border-top-left-radius: 5px; 
+
+border-top-right-radius: 5px;
+
+border-bottom-right-radius: 5px;
+
+border-bottom-left-radius: 5px;
+
+box-shadow: 0pt 1px 3px rgba(204, 204, 204, 0.95) inset;
+
+position: relative;
+
+/* les cotés des champs */
+
+border-right-width: 2px;
+
+border-left-width: 2px;
+
+border-top-width: 2px;
+
+border-bottom-width: 2px;
+
+float: left;
+
+margin-right: 15px;
+
+}
+
+#rendezvous input[type="text"]
+{
+	/* le texte des champs*/
+    padding-top: 5px;
+
+    padding-right: 10px;
+
+    padding-bottom: 5px;
+
+    padding-left: 10px; /* padding du text dans le champ*/
+
+}
+
+#rendezvous select
+{
+	border-top-color: #cccccc;
+	border-bottom-color: #cccccc;
+	border-left-color: #cccccc;
+	border-right-color: #cccccc;
+	
+	height: 30px;
+	width: 100px;	
+}
+
+#rendezvous textarea 
+{
+	background-image: none;
+
+    background-repeat: repeat;
+
+    background-attachment: scroll;
+
+    background-position: 0% 0%;
+
+    background-clip: border-box;
+
+    background-origin: padding-box;
+
+    background-size: auto auto;
+
+    border-top-width: 4px;
+
+    border-right-width-value: 4px;
+
+    border-right-width-ltr-source: physical;
+
+    border-right-width-rtl-source: physical;
+
+    border-bottom-width: 4px;
+
+    border-left-width-value: 4px;
+
+    border-left-width-ltr-source: physical;
+
+    border-left-width-rtl-source: physical;
+
+    border-top-style: solid;
+
+    border-right-style-value: solid;
+
+    border-right-style-ltr-source: physical;
+
+    border-right-style-rtl-source: physical;
+
+    border-bottom-style: solid;
+
+    border-left-style-value: solid;
+
+    border-left-style-ltr-source: physical;
+
+    border-left-style-rtl-source: physical;
+
+    /*border-top-color: #cccccc;*/
+
+    border-right-color-value: #eeeeee;
+
+    border-right-color-ltr-source: physical;
+
+    border-right-color-rtl-source: physical;
+
+    /*border-bottom-color: #cccccc;*/
+
+    border-left-color-value: #eeeeee;
+
+    border-left-color-ltr-source: physical;
+
+    border-left-color-rtl-source: physical;
+	
+	border-top-left-radius: 5px; 
+
+    border-top-right-radius: 5px;
+
+    border-bottom-right-radius: 5px;
+
+    border-bottom-left-radius: 5px;
+
+    box-shadow: 0pt 1px 3px rgba(204, 204, 204, 0.95) inset;
+
+    position: relative;
+	
+	/* les cotés des champs */
+
+    border-right-width: 2px;
+
+    border-left-width: 2px;
+
+    border-top-width: 2px;
+
+    border-bottom-width: 2px;
+	
+	/*border-left-color: #cccccc;
+	
+	border-right-color: #cccccc;*/
+	
+	float: left;
+
+	margin-right: 25px;
+	
+}
+
+#rendezvous .form-rendezvous label  
+{/* le label*/
+line-height: 2.0em;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+color: black;
+
+display: inline-block;
+
+font-size: 13px;
+
+float: left;
+
+min-width: 60px;
+
+padding-top: 7px;
+
+padding-right: 10px;
+
+padding-bottom: 4px;
+
+padding-left: 10px;
+
+position: relative;
+
+top: 6px;
+
+z-index: 1;
+
+margin-right: 4px;
+}
+
+#rendezvous .form-rendezvous2 label  
+{/* le label*/
+line-height: 1.2em;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+color: black;
+
+display: inline-block;
+
+font-size: 13px;
+
+float: left;
+
+min-width: 60px;
+
+padding-top: 7px;
+
+padding-right: 10px;
+
+padding-bottom: 4px;
+
+padding-left: 10px;
+
+position: relative;
+
+top: 3px;
+
+z-index: 7;
+
+}
+
+
+#rendezvous input[type="text"]
+{
+
+display: block;
+
+height: 30px; /*la hauteur du champ input*/
+
+width: 90%;/*225px; /* la largeur du champ input*/
+
+}
+
+#rendezvous textarea 
+{
+
+display: block;
+
+height: 120px; /*la hauteur du champ input*/
+
+width: 90%/*395px; /* la largeur du champ input*/
+
+}
+
+#rendezvous input[type="text"]:focus, #rendezvous textarea:focus, #rendezvous select:focus
+{
+
+   text-indent: 0pt;
+
+   z-index: 5;
+	
+} 
+
+/*----fin style Rendez-vous--------*/
+/*----fin style Rendez-vous--------*/
+
+
+/*------ Traitement médical (Ordonnance)-------*/
+/*------ Traitement médical (Ordonnance)-------*/
+/*------ Traitement médical (Ordonnance)-------*/
+
+
+#medicament select
+{
+	background-image: none;
+
+    background-repeat: repeat;
+
+    background-attachment: scroll;
+
+    background-position: 0% 0%;
+
+    background-clip: border-box;
+
+    background-origin: padding-box;
+
+    background-size: auto auto;
+
+    border-top-width: 4px;
+
+    border-right-width-value: 4px;
+
+    border-right-width-ltr-source: physical;
+
+    border-right-width-rtl-source: physical;
+
+    border-bottom-width: 4px;
+
+    border-left-width-value: 4px;
+
+    border-left-width-ltr-source: physical;
+
+    border-left-width-rtl-source: physical;
+
+    border-top-style: solid;
+
+    border-right-style-value: solid;
+
+    border-right-style-ltr-source: physical;
+
+    border-right-style-rtl-source: physical;
+
+    border-bottom-style: solid;
+
+    border-left-style-value: solid;
+
+    border-left-style-ltr-source: physical;
+
+    border-left-style-rtl-source: physical;
+
+    border-top-color: #cccccc;
+
+    border-right-color-value: #eeeeee;
+
+    border-right-color-ltr-source: physical;
+
+    border-right-color-rtl-source: physical;
+
+    border-bottom-color: #cccccc;
+
+    border-left-color-value: #eeeeee;
+
+    border-left-color-ltr-source: physical;
+
+    border-left-color-rtl-source: physical;
+	
+	border-top-left-radius: 5px; 
+
+    border-top-right-radius: 5px;
+
+    border-bottom-right-radius: 5px;
+
+    border-bottom-left-radius: 5px;
+
+    box-shadow: 0pt 1px 3px rgba(204, 204, 204, 0.95) inset;
+
+    position: relative;
+	
+	/* les cotés des champs */
+
+    border-right-width: 1px;
+
+    border-left-width: 1px;
+
+    border-top-width: 1px;
+
+    border-bottom-width: 1px;
+	
+	border-left-color: #cccccc;
+	
+	border-right-color: #cccccc;
+	
+	float: left;
+
+	width: 100%;/*190px;*/
+	
+	height: 28px;
+	
+	font-size: 14px; /* La taille des écriture dans le select*/
+}
+
+#posologie input[type="text"], #quantite input[type="text"], #duree input[type="text"]
+{
+	background-image: none;
+
+    background-repeat: repeat;
+
+    background-attachment: scroll;
+
+    background-position: 0% 0%;
+
+    background-clip: border-box;
+
+    background-origin: padding-box;
+
+    background-size: auto auto;
+
+    border-top-width: 4px;
+
+    border-right-width-value: 4px;
+
+    border-right-width-ltr-source: physical;
+
+    border-right-width-rtl-source: physical;
+
+    border-bottom-width: 4px;
+
+    border-left-width-value: 4px;
+
+    border-left-width-ltr-source: physical;
+
+    border-left-width-rtl-source: physical;
+
+    border-top-style: solid;
+
+    border-right-style-value: solid;
+
+    border-right-style-ltr-source: physical;
+
+    border-right-style-rtl-source: physical;
+
+    border-bottom-style: solid;
+
+    border-left-style-value: solid;
+
+    border-left-style-ltr-source: physical;
+
+    border-left-style-rtl-source: physical;
+
+   /* border-top-color: #cccccc;*/
+
+    border-right-color-value: #eeeeee;
+
+    border-right-color-ltr-source: physical;
+
+    border-right-color-rtl-source: physical;
+
+    /*border-bottom-color: #cccccc;*/
+
+    border-left-color-value: #eeeeee;
+
+    border-left-color-ltr-source: physical;
+
+    border-left-color-rtl-source: physical;
+	
+	border-top-left-radius: 5px; 
+
+    border-top-right-radius: 5px;
+
+    border-bottom-right-radius: 5px;
+
+    border-bottom-left-radius: 5px;
+
+    box-shadow: 0pt 1px 3px rgba(204, 204, 204, 0.95) inset;
+
+    position: relative;
+	
+	/* les cotés des champs */
+
+    border-right-width: 1px;
+
+    border-left-width: 1px;
+
+    border-top-width: 1px;
+
+    border-bottom-width: 1px;
+	
+	/*border-left-color: #cccccc;
+	
+	border-right-color: #cccccc;*/
+	
+	/* le texte dans le champ*/
+	padding-left: 10px;
+	
+	
+	float: left;
+
+	width: 100%;/*190px;*/
+	
+	height: 28px;
+	
+	font-size: 14px; /* La taille des écriture dans le select*/
+}
+
+/*------ FIN Traitement médical (Ordonnance)-------*/
+/*------ FIN Traitement médical (Ordonnance)-------*/
+
+
+
+
+/************************************ DIAGNOSTIC ****************************************/
+
+#responded input[type="text"], #responded textarea 
+
+{ /*le input ou le textarea*/
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+/*border-top-width: 4px;*/
+
+border-right-width-value: 4px;
+
+border-right-width-ltr-source: physical;
+
+border-right-width-rtl-source: physical;
+
+/*border-bottom-width: 4px;*/
+
+border-left-width-value: 4px;
+
+border-left-width-ltr-source: physical;
+
+border-left-width-rtl-source: physical;
+
+border-top-style: solid;
+
+border-right-style-value: solid;
+
+border-right-style-ltr-source: physical;
+
+border-right-style-rtl-source: physical;
+
+border-bottom-style: solid;
+
+border-left-style-value: solid;
+
+border-left-style-ltr-source: physical;
+
+border-left-style-rtl-source: physical;
+
+border-top-color: #eeeeee;
+
+border-right-color-value: #eeeeee;
+
+border-right-color-ltr-source: physical;
+
+border-right-color-rtl-source: physical;
+
+border-bottom-color: #eeeeee;
+
+border-left-color-value: #eeeeee;
+
+border-left-color-ltr-source: physical;
+
+border-left-color-rtl-source: physical;
+
+/* Arrondir les bordures des input */
+border-top-left-radius: 5px; 
+
+border-top-right-radius: 5px;
+
+border-bottom-right-radius: 5px;
+
+border-bottom-left-radius: 5px;
+
+border-left-color: #eeeeee;
+
+border-right-color: #eeeeee;
+
+box-shadow: 0pt 1px 3px rgba(204, 204, 204, 0.95) inset;
+
+position: relative;
+
+/* les cotés des champs */
+
+border-right-width: 2px;
+
+border-left-width: 2px;
+
+border-top-width: 2px;
+
+border-bottom-width: 2px;
+
+
+/* le texte des champs*/
+padding-top: 5px;
+
+padding-right: 10px;
+
+padding-bottom: 5px;
+
+padding-left: 10px; /* padding du text dans le champ*/
+
+text-indent: 100px; /* alignement du text dans le champ input après saisie*/
+
+margin-bottom: 1px;
+
+margin-top: -40px;
+
+float: left;
+
+}
+
+#responded .form-diag label  
+{/* le label*/
+line-height: 2.0em;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+/*color: black;*/
+
+display: inline-block;
+
+font-size: 13px;
+
+/*left: -270px; /*déplacer le label*/
+
+min-width: 60px;
+
+padding-top: 8px;
+
+padding-right: 10px;
+
+padding-bottom: 4px;
+
+padding-left: 5px;
+
+position: relative;
+
+top: 6px;
+
+z-index: 1;
+
+border-top-left-radius: 5px; /*arrondir le bord du label*/ 
+
+float: left;
+
+}
+
+#responded .form-diag #label  
+{/* le label*/
+line-height: 2.0em;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+font-size: 13px;
+
+/*left: 150px; /*déplacer le label*/
+
+/* min-width: 60px; */
+
+/* padding-top: 8px; */
+
+padding: 2px;
+
+position: relative;
+
+width: 16px;
+
+height: 16px;
+
+display: inline-block;
+
+float:right;
+
+top: -49px;
+
+right: 3px;
+
+margin-bottom: -30px;
+
+border-bottom-left-radius: 5px; /*arrondir le bord du label*/ 
+
+}
+
+#responded input[type="text"] 
+{
+
+display: block;
+
+height: 50px; /*la hauteur du champ input*/
+
+width: 100%; /* la largeur du champ input*/
+
+}
+
+#responded input[type="text"]:focus, #responded textarea:focus 
+{
+
+text-indent: 0pt;
+
+z-index: 5;
+
+} 
+
+
+/*----fin style--------*/
+
+
+/***Style de la demande d'analyse et d'examen morphologique***/
+
+#demande input[type="text"], #demande textarea 
+
+{ /*le input ou le textarea*/
+
+/*background-color: #fffffa; /*la couleur du champ*/
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+/*border-top-width: 4px;*/
+
+border-right-width-value: 4px;
+
+border-right-width-ltr-source: physical;
+
+border-right-width-rtl-source: physical;
+
+/*border-bottom-width: 4px;*/
+
+border-left-width-value: 4px;
+
+border-left-width-ltr-source: physical;
+
+border-left-width-rtl-source: physical;
+
+border-top-style: solid;
+
+border-right-style-value: solid;
+
+border-right-style-ltr-source: physical;
+
+border-right-style-rtl-source: physical;
+
+border-bottom-style: solid;
+
+border-left-style-value: solid;
+
+border-left-style-ltr-source: physical;
+
+border-left-style-rtl-source: physical;
+
+/*border-top-color: #eeeeee;*/
+
+border-right-color-value: #eeeeee;
+
+border-right-color-ltr-source: physical;
+
+border-right-color-rtl-source: physical;
+
+/*border-bottom-color: #eeeeee;*/
+
+border-left-color-value: #eeeeee;
+
+border-left-color-ltr-source: physical;
+
+border-left-color-rtl-source: physical;
+
+/* Arrondir les bordures des input */
+border-top-left-radius: 5px; 
+
+border-top-right-radius: 5px;
+
+border-bottom-right-radius: 5px;
+
+border-bottom-left-radius: 5px;
+
+/*border-left-color: #eeeeee;
+
+border-right-color: #eeeeee;*/
+
+box-shadow: 0pt 1px 3px rgba(204, 204, 204, 0.95) inset;
+
+position: relative;
+
+/* les cotés des champs */
+
+border-right-width: 2px;
+
+border-left-width: 2px;
+
+border-top-width: 2px;
+
+border-bottom-width: 2px;
+
+/* le texte des champs*/
+padding-top: 5px;
+
+padding-right: 10px;
+
+padding-bottom: 5px;
+
+padding-left: 3px; /* padding du text dans le champ*/
+
+text-indent: 3px; /* alignement du text dans le champ input après saisie*/
+
+margin-bottom: 1px;
+
+
+margin-left: 5px;
+
+float: left;
+
+top: 7px;
+
+width: 100%;
+
+height: 30px;
+
+}
+
+
+#demande .form-demande p  
+{/* le label*/
+line-height: 1.5em;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+/*color: black;*/
+
+display: inline-block;
+
+font-size: 10px;
+
+/*left: -270px; /*déplacer le label*/
+
+padding-top: 5px;
+
+padding-right: 10px;
+
+padding-bottom: 4px;
+
+padding-left: 5px;
+
+position: relative;
+
+width: 110px;
+
+text-align: right;
+
+top: 9px;
+
+z-index: 1;
+
+border-top-left-radius: 5px; /*arrondir le bord du label*/ 
+
+float: left;
+
+margin-left: 0px;
+
+}
+
+
+
+/************************************ ANTECEDENTS PERSONNELS ET FAMILIAUX ****************************************/
+
+#antecedent input[type="text"], #antecedent textarea , #antecedent2 input[type="text"]
+
+{ /*le input ou le textarea*/
+
+/*background-color: #fffffa; /*la couleur du champ*/
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+/*border-top-width: 4px;*/
+
+border-right-width-value: 4px;
+
+border-right-width-ltr-source: physical;
+
+border-right-width-rtl-source: physical;
+
+/*border-bottom-width: 4px;*/
+
+border-left-width-value: 4px;
+
+border-left-width-ltr-source: physical;
+
+border-left-width-rtl-source: physical;
+
+border-top-style: solid;
+
+border-right-style-value: solid;
+
+border-right-style-ltr-source: physical;
+
+border-right-style-rtl-source: physical;
+
+border-bottom-style: solid;
+
+border-left-style-value: solid;
+
+border-left-style-ltr-source: physical;
+
+border-left-style-rtl-source: physical;
+
+border-top-color: #eeeeee;
+
+border-right-color-value: #eeeeee;
+
+border-right-color-ltr-source: physical;
+
+border-right-color-rtl-source: physical;
+
+border-bottom-color: #eeeeee;
+
+border-left-color-value: #eeeeee;
+
+border-left-color-ltr-source: physical;
+
+border-left-color-rtl-source: physical;
+
+/* Arrondir les bordures des input */
+border-top-left-radius: 5px; 
+
+border-top-right-radius: 5px;
+
+border-bottom-right-radius: 5px;
+
+border-bottom-left-radius: 5px;
+
+border-left-color: #eeeeee;
+
+border-right-color: #eeeeee;
+
+box-shadow: 0pt 1px 3px rgba(204, 204, 204, 0.95) inset;
+
+position: relative;
+
+/* les cotés des champs */
+
+border-right-width: 2px;
+
+border-left-width: 2px;
+
+border-top-width: 2px;
+
+border-bottom-width: 2px;
+
+
+/* le texte des champs*/
+padding-top: 10px;
+
+padding-right: 10px;
+
+padding-bottom: 10px;
+
+padding-left: 10px; /* padding du text dans le champ*/
+
+text-indent: 100px; /* alignement du text dans le champ input après saisie*/
+
+margin-bottom: 1px;
+
+margin-top: -40px;
+
+float: left;
+
+}
+
+#antecedent2 input[type="text"]
+{
+	text-indent: 130px;
+}
+
+#antecedent .form-diag label, #antecedent2 .form-diag label
+{/* le label*/
+line-height: 2.0em;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+display: inline-block;
+
+font-size: 13px;
+
+min-width: 60px;
+
+padding-top: 8px;
+
+padding-right: 10px;
+
+padding-bottom: 4px;
+
+padding-left: 5px;
+
+position: relative;
+
+top: 6px;
+
+z-index: 1;
+
+border-top-left-radius: 5px; /*arrondir le bord du label*/ 
+
+float: left;
+
+margin-left: 2px;
+
+}
+
+
+#antecedent input[type="text"] , #antecedent2 input[type="text"]
+{
+
+height: 50px; /*la hauteur du champ input*/
+
+width: 95%; /* la largeur du champ input*/
+
+}
+
+#antecedent input[type="text"]:focus, #antecedent textarea:focus , #antecedent2 input[type="text"]:focus
+{
+
+text-indent: 0pt;
+
+z-index: 5;
+
+}
+
+.form-diag{
+	width: 100%;
+}
+
+#anteced .form-titre label
+{/* le label*/
+line-height: 1.5em;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+border-top-right-radius: 100px;
+
+border-bottom-right-radius: 15px;
+
+border-top-left-radius: 15px;
+
+font-size: 17px;
+
+min-width: 60px;
+
+padding-top: 8px;
+
+padding-right: 10px;
+
+padding-bottom: 4px;
+
+padding-left: 5px;
+
+position: relative;
+
+top: 6px;
+
+z-index: 1;
+
+border-top-left-radius: 5px; /*arrondir le bord du label*/ 
+
+margin-left: 2px;
+
+}
+
+/*----fin style--------*/
+
+#BUcheckbox label 
+{/* le label*/
+line-height: 1.7em;
+
+background-color: #f3f3f3;
+
+background-size: auto auto;
+
+box-shadow: 1px 1px 2px rgba(204, 204, 204, 0.8);
+
+color: black;
+
+display: inline-block;
+
+font-size: 16px;
+
+padding-top: 4px;
+
+padding-right: 10px;
+
+padding-bottom: 4px;
+
+padding-left: 10px;
+
+position: relative;
+
+font-family: time new romans;
+
+}
+
+/*LES HABITUDES DE VIE DU PATIENTS*/
+#dateDebAlcoolique input, #dateFinAlcoolique input, #dateDebFumeur input, #dateFinFumeur input, #dateDebDroguer input, #dateFinDroguer input
+{
+	width:130px; margin-top:5px; padding-left: 10px; font-family: time new romans; font-size: 18px;
+}
+#nbPaquetJour input
+{
+	width:40px; margin-top:5px; padding-left: 10px; font-family: time new romans; font-size: 18px;
+}
+
+#autresAM
+{
+	width:220px; margin-top:5px; padding-left: 10px; font-family: time new romans; font-size: 18px;
+}
+
+#NoteMenarcheGO, #NoteGestiteGO, #NotePariteGO, #NoteAutresGO
+{
+	width:200px; margin-top:5px; padding-left: 10px; font-family: time new romans; font-size: 18px;
+}
+#DureeCycleGO
+{
+	width:60px; margin-top:5px; height:25px; padding-left: 10px; font-family: time new romans; font-size: 18px;
+}
+#RegulariteCycleGO, #DysmenorrheeCycleGO
+{
+	width:60px; margin-top:5px; height: 25px;
+}
+#NoteDiabeteAF, #NoteDrepanocytoseAF, #NoteHtaAF, #NoteAutresAF
+{
+	width:200px; margin-top:5px; padding-left: 10px; font-family: time new romans; font-size: 18px;
+}
+#NoteAutresHV
+{
+	width:288px; margin-top:5px; padding-left: 10px; font-family: time new romans; font-size: 18px;
+}
+
+/*POUR LES RESULTATS DES VISITES PRE-ANESTHESISTES*/
+.resultatVisistePreanesthesique label  
+{
+line-height: 1.5em;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+color: black;
+
+display: inline-block;
+
+font-size: 17px;
+
+float: left;
+
+min-width: 60px;
+
+padding-top: 10px;
+
+padding-right: 10px;
+
+padding-bottom: 4px;
+
+padding-left: 10px;
+
+position: relative;
+
+top: 6px;
+	
+font-family: time new romans;
+
+}
+
+/*POUR LES TRAITEMENTS CHIRURGICAUX*/
+/*POUR LES TRAITEMENTS CHIRURGICAUX*/
+#Traitementinstrumental input[type="text"], #Traitementinstrumental textarea 
+
+{ /*le input ou le textarea*/
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+/*border-top-width: 4px;*/
+
+border-right-width-value: 4px;
+
+border-right-width-ltr-source: physical;
+
+border-right-width-rtl-source: physical;
+
+/*border-bottom-width: 4px;*/
+
+border-left-width-value: 4px;
+
+border-left-width-ltr-source: physical;
+
+border-left-width-rtl-source: physical;
+
+border-top-style: solid;
+
+border-right-style-value: solid;
+
+border-right-style-ltr-source: physical;
+
+border-right-style-rtl-source: physical;
+
+border-bottom-style: solid;
+
+border-left-style-value: solid;
+
+border-left-style-ltr-source: physical;
+
+border-left-style-rtl-source: physical;
+
+border-top-color: #eeeeee;
+
+border-right-color-value: #eeeeee;
+
+border-right-color-ltr-source: physical;
+
+border-right-color-rtl-source: physical;
+
+border-bottom-color: #eeeeee;
+
+border-left-color-value: #eeeeee;
+
+border-left-color-ltr-source: physical;
+
+border-left-color-rtl-source: physical;
+
+/* Arrondir les bordures des input */
+border-top-left-radius: 5px; 
+
+border-top-right-radius: 5px;
+
+border-bottom-right-radius: 5px;
+
+border-bottom-left-radius: 5px;
+
+border-left-color: #eeeeee;
+
+border-right-color: #eeeeee;
+
+box-shadow: 0pt 1px 3px rgba(204, 204, 204, 0.95) inset;
+
+position: relative;
+
+/* les cotés des champs */
+
+border-right-width: 2px;
+
+border-left-width: 2px;
+
+border-top-width: 2px;
+
+border-bottom-width: 2px;
+
+
+/* le texte des champs*/
+padding-top: 5px;
+
+padding-right: 10px;
+
+padding-bottom: 5px;
+
+padding-left: 10px; /* padding du text dans le champ*/
+
+text-indent: 220px; /* alignement du text dans le champ input après saisie*/
+
+margin-bottom: 1px;
+
+margin-top: -40px;
+
+float: left;
+
+}
+
+#Traitementinstrumental .form-instrumental label  
+{/* le label*/
+line-height: 2.0em;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+display: inline-block;
+
+font-size: 13px;
+
+width: 210px;
+
+padding-top: 8px;
+
+padding-right: 10px;
+
+padding-bottom: 4px;
+
+padding-left: 5px;
+
+position: relative;
+
+top: 6px;
+
+z-index: 1;
+
+border-top-left-radius: 5px;  
+
+float: left;
+
+}
+
+#Traitementinstrumental input[type="text"] 
+{
+
+display: block;
+
+height: 50px; /*la hauteur du champ input*/
+
+width: 100%; /* la largeur du champ input*/
+
+}
+
+#Traitementinstrumental input[type="text"]:focus, #Traitementinstrumental textarea:focus 
+{
+
+text-indent: 0pt;
+
+z-index: 5;
+
+}
+
+
+/* DataTable */ /* DataTable */ /* DataTable */ /* DataTable */ /* DataTable */ /* DataTable */ /* DataTable */
+
+#ListeHospitalisation tr {
+	background: #fbfbfb;
+}
+  
+#ListeHospitalisation tr:hover {
+	background: #f5f5f5;
+}
+                
+#listeDataTable{
+   visibility: hidden;  
+   margin-bottom: -30px; 
+}
+             
+.dataTables_paginate *
+{
+	background: #e9e8e8;
+	padding-top: 6px;
+	padding-bottom: 6px;
+	padding-left: 6px;
+	padding-right: 6px;
+    color: black;	
+	margin-top: -120px;
+	cursor: pointer;
+   
+}
+
+div .dataTables_paginate
+{
+	margin-bottom: 20px;
+}
+
+.dataTables_paginate .first
+{
+	margin-right: 0px;
+}
+
+.dataTables_paginate .last
+{
+	margin-left: 0px;
+}
+
+.dataTables_paginate .previous
+{
+	margin-right: 2px;
+	border-left: 1px solid #bdb9b9;
+}
+
+.dataTables_paginate .next
+{
+	margin-left: 3px;
+	border-right: 1px solid #bdb9b9;
+}
+
+.dataTables_paginate a:hover
+{
+	text-decoration: none;
+	background-color: #c1c1c1;
+	color: white;
+}
+
+.dataTables_paginate .paginate_active
+{
+	text-decoration: none;
+	background-color: #b5b2b2;
+	color: white;
+}
+
+#contenu{ visibility: hidden }
+/*CODE POUR LE STYLE DU LECTEUR AUDIO (MP3)*/
+
+.designHistoireMaladie label 
+{
+	line-height: 1.7em;
+
+	background-color: #f3f3f3;
+
+	background-size: auto auto;
+
+	box-shadow: 1px 1px 2px rgba(204, 204, 204, 0.9);
+
+	color: black;
+
+	/* display: inline-block; */
+
+	font-size: 18px;
+
+	padding-top: 4px;
+
+	padding-right: 10px;
+
+	padding-bottom: 4px;
+
+	padding-left: 10px;
+
+	/* position: relative; */
+
+	font-family: time new romans;
+	
+}
+
+
+.designHistoireMaladie label input[type='text'], .designHistoireMaladie label input[type='number']
+{
+	padding-left: 5px;
+	font-size: 18px;
+	height: 30px;
+}
+
+.designHistoireMaladie #dureeHM
+{
+	width: 40%;
+}
+
+.designHistoireMaladie #intensiteHM
+{
+	width: 40%;
+}
+
+.designHistoireMaladie #nombre_criseHM
+{
+	width: 40%;
+}
+
+.designHistoireMaladie #facteur_declenchantHM
+{
+	width: 75%;
+	font-size: 14px;
+}
+
+.designHistoireMaladie #motif_autresHM
+{
+	width: 80%;
+	min-width: 80%;
+	max-width: 230px;
+	padding-left: 5px;
+	height: 80px;
+	max-height: 80px;
+	min-height: 80px;
+	font-size: 14px;
+}
+
+.designHistoireMaladie #prise_en_chargeHM
+{
+	width: 68%;
+	min-width: 68%;
+	max-width: 220px;
+	padding-left: 5px;
+	height: 80px;
+	max-height: 80px;
+	min-height: 80px;
+	font-size: 14px;
+}
+
+#rendezvousPreciserVSS tr:hover
+{
+	background: #eeeeee;
+}
+
+#motif_rv
+{
+	padding-left: 10px;
+	padding-top: 10px;
+}

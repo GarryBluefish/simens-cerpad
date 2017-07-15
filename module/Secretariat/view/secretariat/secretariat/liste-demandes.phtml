@@ -1,0 +1,276 @@
+<!-- MES STYLES -->
+<?php echo $this->headLink()->appendStylesheet($this->basePath().'/css/secretariat/styleListeDemandes.css');?>
+
+<!-- MES JS -->
+<?php echo $this->headScript()->appendFile($this->basePath().'/js/secretariat/jsListeDemandes.js');?>
+
+<style>
+#contenuInterface{ visibility: hidden; };
+</style>
+
+<script type="text/javascript">
+$(window).load(function () {
+	$('#wait').toggle(false);
+	$('#contenuInterface').fadeIn().css({'visibility':'visible'});
+});
+</script>
+
+<div id="titre" style='font-family: police2; text-decoration: none; color: green; font-size: 19px; font-weight: bold; padding-left:20px;'>
+	<iS style='font-size: 25px;'>&curren;</iS>
+	<span> LISTE DES DEMANDES PAR PATIENT </span>
+</div>
+<div id="wait" style="color: gray; font-size: 20px; text-align: center; margin-top: 80px;" > <span> Chargement ... </span> </div>
+
+<div id="contenuInterface" >
+<div id="contenu">
+
+            <div style="margin-right: 20px; float:right; font-size: 15px; margin-top:5px; font-family: Times New Roman; font-size: 15px; color: green;">  <span style='cursor:pointer;' id='afficherAujourdhui'> Aujourd'hui </span> | <span style='cursor:pointer;' id='afficherTous'> Tout </span> </div>
+
+            <!-- LISTE DES PATIENTS POUR LES DEMANDES D'AUJOURD'HUI -->
+			<!-- LISTE DES PATIENTS POUR LES DEMANDES D'AUJOURD'HUI -->
+			<div class="patientAujourdhui">
+			  <table class="table table-bordered tab_list_mini" id="patientAujourdhui">
+				<thead>
+					<tr style="height: 45px; width:100%;">
+					    <th id="sexe" style='cursor: pointer;'>N&deg; dossier</th>
+						<th id="nom" style='cursor: pointer;'>Nom</th>
+						<th id="prenom" style='cursor: pointer;'>Pr&eacute;nom</th>
+						<th id="date" style='cursor: pointer;'>Date. naiss</th>
+						<th id="adresse" style='cursor: pointer;'>Adresse</th>
+						<th id="nationalite" style='cursor: pointer;'>Date demande</th>
+						<th id="effectuer">Options</th>
+					</tr>
+				</thead>
+
+				<tbody id="donnees" class="liste_patient" style="font-family: times new roman; font-size: 19px;">
+
+					<!-- ************ On affiche les patients en une liste ordonnï¿½e************ -->
+
+				</tbody>
+
+				<tfoot id="foot" class="foot_style">
+					<tr>
+					    <th id="sexe_" style='width: 14%;'><input type="text" name="search_browser"
+							value=" N&deg; dossier" class="search_init" /></th>
+						<th id="nom_" style='width: 13%;'><input type="text" name="search_browser"
+							value=" Nom" class="search_init" /></th>
+						<th id="prenom_" style='width: 15%;'><input type="text" name="search_browser"
+							value=" Pr&eacute;nom" class="search_init" /></th>
+						<th id="date_" style='width: 10%;'><input type="text" name="search_browser"
+							value=" Date naissance" class="search_init" /></th>
+						<th id="adresse_" style='width: 23%;'><input type="text" name="search_browser"
+							value=" Adresse" class="search_init" /></th>
+						<th id="nationalite_" style='width: 15%;'><input type="text" name="search_browser"
+							value=" Nationalit&eacute;" class="search_init" /></th>
+						<th id="effectuer_" style='width: 10%;'><input type="hidden" name="search_browser"
+							value="" class="" /></th>
+
+					</tr>
+				</tfoot>
+			  </table>
+			</div>
+			
+			
+			<!-- LISTE DE TOUS LES PATIENTS POUR TOUTES LES DEMANDES EFFECTUEES -->
+            <!-- LISTE DE TOUS LES PATIENTS POUR TOUTES LES DEMANDES EFFECTUEES -->
+			<div class="patientTous">
+			  <table class="table table-bordered tab_list_mini" id="patientTous">
+				<thead>
+					<tr style="height: 45px; width:100%;">
+    					<th id="sexe" style='cursor: pointer;'>N&deg; dossier</th>
+						<th id="nom" style='cursor: pointer;'>Nom</th>
+						<th id="prenom" style='cursor: pointer;'>Pr&eacute;nom</th>
+						<th id="date" style='cursor: pointer;'>Date. naiss</th>
+						<th id="adresse" style='cursor: pointer;'>Adresse</th>
+						<th id="nationalite" style='cursor: pointer;'>Date demande</th>
+						<th id="effectuer">Options</th>
+					</tr>
+				</thead>
+
+				<tbody id="donnees" class="liste_patient"  style="font-family: times new roman; font-size: 19px;">
+
+					<!-- ************ On affiche les patients en une liste ordonnï¿½e************ -->
+
+				</tbody>
+
+				<tfoot id="foot" class="foot_style">
+					<tr>
+					    <th id="sexe_" style='width: 14%;'><input type="text" name="search_browser"
+							value=" N&deg; dossier" class="search_init" /></th>
+						<th id="nom_" style='width: 13%;'><input type="text" name="search_browser"
+							value=" Nom" class="search_init" /></th>
+						<th id="prenom_" style='width: 15%;'><input type="text" name="search_browser"
+							value=" Pr&eacute;nom" class="search_init" /></th>
+						<th id="date_" style='width: 10%;'><input type="text" name="search_browser"
+							value=" Date naissance" class="search_init" /></th>
+						<th id="adresse_" style='width: 23%;'><input type="text" name="search_browser"
+							value=" Adresse" class="search_init" /></th>
+						<th id="nationalite_" style='width: 15%;'><input type="text" name="search_browser"
+							value=" Nationalit&eacute;" class="search_init" /></th>
+						<th id="effectuer_" style='width: 10%;'><input type="hidden" name="search_browser"
+							value="" class="" /></th>
+
+					</tr>
+				</tfoot>
+			  </table>
+			</div>
+			
+			
+</div>
+
+
+<div id="vue_patient">
+
+</div>
+
+<div id="liste_demandes">
+
+   <div id="info_patient"> </div>
+   
+   <div id="listeDemandesAnalyses" align="center" >   
+   
+   <?php echo  $this->headScript()->appendFile($this->basePath().'/js/secretariat/ajoutDemandesAnalyses.js'); ?>
+   
+     <div style="width: 96%; margin-bottom: 30px; margin-top: 30px;">
+       <div id="accordions" align="left" > 
+        
+           <div style='font-family: police2; font-size: 18px; font-weight: bold; background: #efefef;'>Liste des analyses par demande</div>
+           <div id='listeAnalysesParDemande' style='min-height: 360px; border-top: 1px solid #cccccc;'>
+           
+           
+       
+           </div>
+       
+           <input type='hidden' id='diagnostic_demande_text' >
+           <?php /*?>div style='font-family: police2; font-size: 18px; font-weight: bold; '>Liste des analyses</div>
+           <div style='max-height: 350px; border-top: 1px solid #cccccc;'>
+           
+                <hass><img style="margin-top: -10px; float: right; cursor: pointer;" src="../images_icons/pdf.png"  title="Imprimer" /> </hass>
+                <div style="border-bottom: 1px solid gray; margin-top: 25px; margin-bottom: 10px;"></div>
+                
+           
+           
+                 <div id="lesDemandesAnalyses" style="width: 100%; height:260px;">
+				                  
+				    <table class="table table-bordered" style="width: 100%; margin-bottom: 0px; margin-left: 0px; ">
+			             <thead style="width: 100%;">
+				            <tr style="width: 100%; height: 40px; font-family: police2;">
+				              <th style="width:  4%; font-weight: bold; font-size: 15px; ">N&ordm;</th>
+				              <th style="width: 25%; font-weight: bold; font-size: 15px; text-align: left;">Type d'analyse</th>
+				              <th style="width: 47%; font-weight: bold; font-size: 15px; text-align: left;">Analyse</th>
+				              <th style="width: 15%; font-weight: bold; font-size: 15px; text-align: left;">Tarif (frs) </th>
+				              <th style="width:  9%; font-weight: bold; font-size: 15px; ">Options</th>
+				            </tr>
+				          </thead>
+			        </table>
+			                         
+				    <div id="Acte_0">
+					 <!-- A ne pas enlever -->
+					</div>
+					
+					<!--********************* BOUTON AJOUTER-SUPPRIMER ************************-->
+					<!--********************* BOUTON AJOUTER-SUPPRIMER ************************-->
+					<div id="controls_acte" style="margin-top: 20px; width: 100%;">
+					     <div style="width: 100%;">
+					         <div style="width: 3%; float: left; cursor: pointer; " id="supprimer_acte">
+					            <img style='margin-left: 5px;' src='../images_icons/moin-green.png' title='supprimer' />
+					         </div>
+					         <div style="width: 3%; float: left; cursor: pointer; " id="ajouter_acte">
+					            <img style='margin-left: 5px;' src='../images_icons/plus-green.png' title='ajouter' />
+					         </div>
+					     </div>
+				    </div>
+				                
+                    <!--********************* BOUTON VALIDER OU MODIFIER ************************-->
+                    <!--********************* BOUTON VALIDER OU MODIFIER ************************-->
+                    <table style="width: 90%; float:right; position: relative; right: 0;">
+                         <tr style="width: 100%;">
+                             <th style="height:15px;">
+                                <div id='bouton_Acte_valider_demande' style="float:right;">
+                                     <button >Valider</button>
+                                </div>
+                                <div id='bouton_Acte_modifier_demande' style="float:right;">
+                                     <button >Modifier</button>
+                                </div>
+                              </th>
+                         </tr>
+                     </table>
+				                
+     		      </div>
+           
+                            <!--********************* CHARGEMENT DES DONNEES  ************************-->
+                            <!--********************* CHARGEMENT DES DONNEES  ************************-->
+                            <!--********************* CHARGEMENT DES DONNEES  ************************-->
+                            <script> 
+                               ValiderDemandeActe();
+                               var myArrayActe = [''];
+                               partDefautActe(myArrayActe, 1);
+                            </script>
+           
+           </div */?>
+       </div>
+       
+       
+     </div>
+       
+     <table style="margin-top: 35px; margin-bottom: 30px; width: 100%;  height: 12px;">
+	   <tr>
+	     <td style="width: 52%;"> </td>
+	     <td style="width: 10%;" id="thoughtbot" class='boutonTerminer'> </td>
+	     <td style="width: 38%;"> </td>
+	   </tr>
+     </table>
+       
+   </div>
+
+
+</div>
+
+
+</div>
+
+<form id="FormulaireImprimerDemandesAnalyses" style="display: none;">
+    <button id="ImprimerDemandesAnalyses"></button>
+</form>
+
+<!-- POP UP pour Confirmation Suppression -->
+<div id="confirmation" title="Confirmation de la suppression"
+	style="display: none;">
+	<p style="font-size: 16px;">
+		<span style="float: left; margin: 0 0px 20px 0;"> <img
+			src="<?php echo $this->basePath().'/images_icons/warning_16.png';?>" />
+			Etes-vous s&ucirc;r de vouloir supprimer le patient ?
+		</span>
+
+	</p>
+</div>
+
+<div id="context-menu">
+    <ul class="dropdown-menu" >
+         <li><a style="cursor: pointer;" ><img id="visualiserCTX" style='margin-right: 10px; width: 19px; height: 16px;' src='../images_icons/voir2.png'>D&eacute;tails</a></li>
+         <li class="divider2"></li>
+         <li><a style="cursor: pointer;"><img  id="modifierCTX" style='margin-right: 10px; margin-left: 3px; width: 16px; height: 16px;' src='../images_icons/details.png'>Liste demandes</a></li>
+         <li class="divider"></li>
+         <li><a id="quitterCTX"  style="cursor: pointer;">Quitter</a></li>
+    </ul>
+</div>
+
+<div style='display: none;' class='infos_parentales_tampon'> <!-- à ne pas supprimer *** pour les infos parentales --> </div>
+
+<script type="text/javascript">
+
+$(function(){
+	initialisationListe1();
+	initialisationListe2();
+});
+
+$('#vue_patient, #liste_demandes').toggle(false);
+
+var base_url = window.location.toString();
+var tabUrl = base_url.split("public");
+
+$('#plus_analyses').toggle(true);
+$("#analyses").replaceWith("<li id='analyses' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='"+tabUrl[0]+"public/images_icons/moin-green2.png' alt='Liste' /> Analyses </span></a></li>");
+dep_analyses1();
+$('#liste_analyses_style').css({'font-weight':'bold','color':'white','font-size':'18px'});
+</script>

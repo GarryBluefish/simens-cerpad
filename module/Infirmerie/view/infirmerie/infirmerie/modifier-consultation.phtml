@@ -1,0 +1,715 @@
+<script>
+var base_url = window.location.toString();
+var tabUrl = base_url.split("public");
+//POUR LE MENU GAUCHE dans -elementgauche.phtml
+//POUR LE MENU GAUCHE dans -elementgauche.phtml
+$('#plus_menu_consultations').toggle(true);
+$("#menu_consultations").replaceWith("<li id='menu_consultations' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='"+tabUrl[0]+"public/images_icons/moin-green2.png' /> Consultations </span></a></li>");
+dep_menu_consultation1();
+$('#menu_consultations_style').css({'font-weight':'bold','color':'white','font-size':'22px'});
+</script>
+
+<?php use Facturation\View\Helper\DateHelper;?>
+<?php echo $this->headScript()->appendFile($this->basePath().'/js/mesjs/accordeon_controle_validation.js');?>
+
+<!-- Mes CSS -->
+<?php echo $this->headLink()->appendStylesheet($this->basePath().'/css/infirmier/styleMotifsConstantes.css');?>
+<?php echo $this->headLink()->appendStylesheet($this->basePath().'/css/monstyle.css');?>
+
+<script>
+$(window).load(function () {
+
+	$('#wait').toggle(false);
+	$('#contenu').fadeIn().css({'visibility':'visible'});
+	 
+});
+</script>
+
+<div id="wait" style="color: gray; font-size: 20px; text-align: center; margin-top: 80px;" > <span> Chargement ... </span> </div>
+
+<div id="contenu" >
+<?php $Control = new DateHelper();?>
+<?php
+$form = $this->form;
+$form->prepare();
+$form->setAttribute('action', $this->url('infirmerie', array('action'=>'enregistrer-modification')));
+$form->setAttribute('method','post');
+echo $this->form()->openTag($form); ?>
+
+<div id="accordions">  
+
+    <!--*1*-->
+     <div style='width:160px; font-family: police2;font-size: 17px; font-weight: bold;'>Etat Civil</div>
+      <div style=' max-height: 350px;'>
+
+       <img id="faces" src='<?php echo $this->basePath().'/img/photos_patients/identite.jpg'?>'  alt="Jonathan Verrecchia" style='float:left; margin-right:40px; width:105px; height:105px;'/>
+
+       <div style=' left: 50px; top: 160px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> <?php echo $this->age; ?> </span></div>
+       
+       <p style='color: white; opacity: 0.09;'>
+         <img id="faces" src='<?php echo $this->basePath().'/img/photos_patients/identite.jpg'?>'  alt="Jonathan Verrecchia" style='float:right; margin-right:15px; width:95px; height:95px;'/>
+       </p>
+       
+         <span style="position: absolute; right: 63px; top: 150px; color: green; font-family: time new roman; font-size: 19px; "> <?php echo $this->patient->codepatient; ?> </span>
+
+         <table id="etat_civil">
+             <tr>
+			   	<td style='width:27%; font-family: police1;font-size: 12px;'>
+			   		<div id="aa"><a style="text-decoration: underline;">Pr&eacute;nom</a><br><p style='font-weight: bold;font-size: 19px;'><?php echo $this->lesdetails->prenom;?></p></div>
+			   	</td>
+
+			   	<td style='width:35%; font-family: police1;font-size: 12px;'>
+			   		<div id="aa"><a style="text-decoration: underline;">Lieu de naissance</a><br><p style='font-weight: bold;font-size: 19px;'><?php echo $this->lesdetails->lieu_naissance;?></p></div>
+			   	</td>
+
+			    <td style='width:38%; font-family: police1;font-size: 12px;'>
+			   		<div id="aa"><a style="text-decoration: underline;">T&eacute;l&eacute;phone</a><br><p style='font-weight: bold;font-size: 19px;'><?php echo $this->lesdetails->telephone;?></p></div>
+			   	</td>
+
+			 </tr>
+
+			 <tr>
+			    <td style=' font-family: police1;font-size: 12px;'>
+			   		<div id="aa"><a style="text-decoration: underline;">Nom</a><br><p style='font-weight: bold;font-size: 19px;'><?php echo $this->lesdetails->nom;?></p></div>
+			   	</td>
+
+			   	<td style=' font-family: police1;font-size: 12px;'>
+			   		<div id="aa"><a style="text-decoration: underline;">Nationalit&eacute; origine</a><br><p style='font-weight: bold;font-size: 19px;'><?php echo $this->lesdetails->nationalite_origine;?></p></div>
+			   	</td>
+
+			   	<td style=' font-family: police1;font-size: 12px;'>
+			   		<div id="aa"><a style="text-decoration: underline;">Email</a><br><p style='font-weight: bold;font-size: 19px;'><?php echo $this->lesdetails->email;?></p></div>
+			   	</td>
+
+			 </tr>
+
+			 <tr>
+			    <td style=' font-family: police1;font-size: 12px;'>
+			   		<div id="aa"><a style="text-decoration: underline;">Sexe</a><br><p style='font-weight: bold;font-size: 19px;'><?php echo $this->lesdetails->sexe;?></p></div>
+			   	</td>
+
+			    <td style=' font-family: police1;font-size: 12px;'>
+			   		<div id="aa"><a style="text-decoration: underline;">Nationalit&eacute; actuelle</a><br><p style='font-weight: bold;font-size: 19px;'><?php echo $this->lesdetails->nationalite_actuelle;?></p></div>
+			   	</td>
+
+			   	<td style=' font-family: police1;font-size: 12px;'>
+			   		<div id="aa"><a style="text-decoration: underline;">Profession</a><br><p style='font-weight: bold;font-size: 19px;'><?php echo $this->lesdetails->profession;?></p></div>
+			   	</td>
+
+			 </tr>
+
+			 <tr>
+			   	<td style='width: 27%; font-family: police1;font-size: 12px; vertical-align: top;'>
+			   	
+			   		<div id="aa"><a style="text-decoration: underline; ">Date de naissance</a><br>
+			   		  <p style='font-weight: bold;font-size: 19px;'>
+			   		    <?php 
+			   		    $date_naissance = $this->lesdetails->date_naissance;
+			   		    if($date_naissance){ echo $Control->convertDate($this->lesdetails->date_naissance); }else{ echo "";}
+			   		    ?> 
+			   		  </p>
+			   		</div>
+			   		
+			   	</td>
+
+			    <td style='display:"block"; font-family: police1;font-size: 12px;'>
+			   		<div id="aa"><a style="text-decoration: underline;">Adresse</a><br><p style='font-weight: bold;font-size: 19px;'><?php echo $this->lesdetails->adresse;?></p></div>
+			   	</td>
+			   	
+			   	<td style='display:"block";  font-family: police1;font-size: 12px;'>
+			   		<div id="aa"><a style="text-decoration: underline;">Type</a><br><p style='font-weight: bold;font-size: 19px;'><?php echo $this->typage;?></p></div>
+			   	</td>
+			   	
+			 </tr>
+			  
+         </table>
+           <div id="barre"></div>
+           <div style='color: white; opacity: 1; width:95px; height:40px; float:right'>
+             <img  src='<?php echo $this->basePath().'/images_icons/fleur1.jpg'?>'  alt="fleur1" />
+           </div>
+
+	       <table id="numero" style=" padding-top:5px; width: 550px;">
+           <tr style="width: 550px;">
+             <td style="padding-top:5px; width: 70px; font-size: 12px;"> Consultation: </td>
+             <td style="font-weight: bold;"> <?php echo $this->consultation['idcons'];?></td>
+             <td style="font-weight: bold; width:10px;">|</td>
+             <td style="padding-top:5px; width: 80px; font-size: 12px; "> Date & Heure: </td>
+             <td style="font-weight: bold;"> <?php echo $Control->convertDate($this->consultation['date']);?>  -  <?php echo $this->consultation['heure'];?></td>
+           </tr>
+          </table>
+
+      </div>
+
+   <!-- ************** Accordeon NOUVELLES CONSTANTES ******************-->
+   <!-- ************** Accordeon NOUVELLES CONSTANTES ******************-->
+   <!-- ************** Accordeon NOUVELLES CONSTANTES ******************-->
+   
+      <!--*2*-->
+     <div id='motifsAdmissionConstanteClick' style='font-family: police2;font-size: 17px; font-weight: bold;'>Motifs de consultation et Constantes</div>
+        <div style='max-height: 600px;'>
+
+
+           <?php echo $this->formHidden($form->get('idpatient'));?>
+           <?php echo $this->formHidden($form->get('idinfirmier'));?>
+           <?php echo $this->formHidden($form->get('idmedecin'));?>
+           <?php echo $this->formHidden($form->get('idcons'));?>
+
+           <!-- SOUS ACCORDEON MOTIF D'ADMISSION ET CONSTANTES -->
+           <div id="accordionss" style='margin-bottom: 30px;'>
+           <!--**************** sous accordeon LES MOTIFS D'ADMISSIONS ************************-->
+           <!--**************** sous accordeon LES MOTIFS D'ADMISSIONS ************************-->
+           <!-- **1** -->
+              <div style='font-family: police2;font-size: 17px; font-weight: bold;'> Motifs de consultation </div>
+               <div style=''>
+                <?php echo  $this->headScript()->appendFile($this->basePath().'/js/infirmerie/ajouterMotifs.js');?>
+                
+                <div style='width: 100%; height: 340px;'>
+                
+                
+               <table style="width: 100%;" >
+                 <tr style="width: 100%;"> 
+                    <td style="width: 35%; vertical-align: top;"> 
+                    <!-- PREMIERE COLONNE -->
+                    <div style='width: 100%; '>
+                       <table id="respondeMotif" style='width: 100%;'>
+                          <tr class="form-author" id="motif1">
+                              <th><?php echo $this->formRow($form->get('motif_admission1'));?> <span id="labelSupMotif"> <img class='supprimerMotif1' style='cursor: pointer;' src='../images/images/sup.png' title='supprimer' /> </span> </th>
+                          </tr>
+                          <tr class="form-author" id="motif2">
+                              <th><?php echo $this->formRow($form->get('motif_admission2'));?> <span id="labelSupMotif"> <img class='supprimerMotif2' style='cursor: pointer;' src='../images/images/sup.png' title='supprimer' /> </span> </th>
+                          </tr>
+                          <tr class="form-author" id="motif3">
+                              <th><?php echo $this->formRow($form->get('motif_admission3'));?> <span id="labelSupMotif"> <img class='supprimerMotif3' style='cursor: pointer;' src='../images/images/sup.png' title='supprimer' /> </span> </th>
+                          </tr>
+                          <tr class="form-author" id="motif4">
+                              <th><?php echo $this->formRow($form->get('motif_admission4'));?> <span id="labelSupMotif"> <img class='supprimerMotif4' style='cursor: pointer;' src='../images/images/sup.png' title='supprimer' /> </span> </th>
+                          </tr>
+                          <tr class="form-author" id="motif5">
+                              <th><?php echo $this->formRow($form->get('motif_admission5'));?> <span id="labelSupMotif"> <img class='supprimerMotif5' style='cursor: pointer;' src='../images/images/sup.png' title='supprimer' /> </span> </th>
+                          </tr>
+                       </table>
+                       
+                       
+                       <!--********************* BOUTON AJOUTER-SUPPRIMER ************************-->
+                       <!--********************* BOUTON AJOUTER-SUPPRIMER ************************-->
+		               <div id="controls_motifs" style="margin-top: 10px; width: 100%;">
+		                  <div style="width: 100%; ">
+		                     <div style="width: 10%; height: 1px; float: left; " id="supprimer_donnee">
+			                     <img id="supprimer_motif_img" style='margin-left: 5px; cursor: pointer;' src='../images_icons/moin-green.png' title='supprimer' />
+			                 </div>
+			                 <div style="width: 10%; height: 1px; float: left; " id="ajouter_donnee">
+				                 <img id="ajouter_motif_img" style='margin-left: 5px; cursor: pointer;' src='../images_icons/plus-green.png' title='ajouter' />
+			                 </div>
+		                  </div>
+		               </div>
+
+		               <!--********************* BOUTON VALIDER-MODIFIER ************************-->
+                       <!--********************* BOUTON VALIDER-MODIFIER ************************-->		            
+                       <table style="width: 70%; position: relative; top: 0px; float: right;">
+                          <tr style="width: 100%;">
+                             <th style="width:65%;">
+                                <div style="float:right;">
+                                     <button id='bouton_motif_valider'>Valider</button>
+                                </div>
+                                <div style="float:right;">
+                                     <button id='bouton_motif_modifier'>Modifier</button>
+                                </div>
+                             </th>
+                          </tr>
+                       </table>
+                       
+                       <script>
+                         var nbMotif = "<?php echo $this->nbMotifs;?>";
+                         if(nbMotif == 0){ nbMotif = 1;}
+                         cacherToutMotif();
+                         afficherMotif(nbMotif);
+                         supprimerUnMotif();
+
+                       </script>
+                       
+                       
+                       <script> 
+                         var myArrayListeMotifCons = [''];
+                         var i = 0;
+                       </script>
+                         <?php foreach ($this->listeMotifConsultation as $listeMotifCons){ ?>
+                           <script> myArrayListeMotifCons[i++] =  "<?php echo $listeMotifCons['libelle']; ?>" </script>
+                         <?php } ?>
+                       <script> 
+                           listeMotifsConsultation(myArrayListeMotifCons);
+                       </script>
+                       
+                       <script> 
+                         var myArrayListeSiege = [''];
+                         var j = 0;
+                       </script>
+                         <?php foreach ($this->listeSiege as $listeSiege){ ?>
+                           <script> myArrayListeSiege[j++] =  "<?php echo $listeSiege['libelle']; ?>" </script>
+                         <?php } ?>
+                       <script> 
+                           //setTimeout(function(){ listeSiege(myArrayListeSiege); }, 2000);
+                       </script>
+                       
+                   </div>
+                    
+                    </td>
+
+                    <!-- DEUXIEME COLONNE -->
+                    <td id="deuxiemeColonne" style="width: 33%; vertical-align: top;"> 
+                    
+                      <table style="width: 100%;">
+                        <tr style="width: 100%; vertical-align: top;">
+                          
+                          <td id="deuxiemeColonneIndicateur" style="width: 100%;">
+                          </td>
+                          
+                        </tr>
+                      </table>
+                    
+                    </td>
+                    
+                    <!-- TROISIEME COLONNE -->
+                    <td style="width: 32%;"> 
+                      <div style='width: 90%; float: right; '>
+                        <p style='color: white; opacity: 0.5;'>
+                          <img id="faces" src='<?php echo $this->basePath().'/images_icons/consult-motif.jpg'?>'  alt="consult-motif" style='margin-right:5px; width: 100%; height:315px;'/>
+                        </p>
+                      </div>
+                    
+                    </td>
+                    
+                 </tr> 
+               </table>
+                
+              </div>
+                
+                
+             </div>
+          <!--**************** sous accordeon LES CONSTANTES ************************-->
+          <!--**************** sous accordeon LES CONSTANTES ************************-->
+           <!-- **2** -->
+              <div  id='constantesClick' style='font-family: police2; font-size: 17px; font-weight: bold;'> Constantes </div>
+                 <div style="max-height: 200px;">
+                  <table  id="respond" style="width: 100%;">
+                  
+                    <tr class="comment-form-author">
+                        <td style="width: 25%;" class="poidsChamp" ><?php echo $this->formRow($form->get('poids'));?></td>
+                        <td style="width: 25%;"><?php echo $this->formRow($form->get('taille'));?></td>
+                        <td style="width: 25%;"><?php echo $this->formRow($form->get('temperature'));?></td>
+                        <td style="width: 25%;"><?php echo $this->formRow($form->get('perimetre_cranien'));?></td>
+                    </tr>
+                       
+                    <tr class="comment-form-author" >
+                      <td colspan="3" ></td>
+                      <td>
+                       <div style="height: 5px; margin-top: 55px; margin-right: 10px;">
+                         <div style="float:right;">
+                            <button id='bouton_constantes_valider'  class='bouton_constantes_valider'>Valider</button>
+                         </div>
+                         <div style="float:right;">
+                            <button id='bouton_constantes_modifier'>Modifier</button>
+                         </div>
+                       </div>
+                      </td>
+                    </tr>
+                    
+                 </table>
+                </div>
+            </div>
+            
+            <?php echo $this->formHidden($form->get('voie_med_1'));?>
+            <?php echo $this->formHidden($form->get('voie_med_2'));?>
+            <?php echo $this->formHidden($form->get('voie_med_3'));?>
+            <?php echo $this->formHidden($form->get('voie_med_4'));?>
+            <?php echo $this->formHidden($form->get('voie_med_5'));?>
+            <?php echo $this->formHidden($form->get('voie_med_6'));?>
+     <!-- **************************************************************************************************************** -->
+
+     
+      
+     </div>
+             
+
+</div>
+      <table>
+         <tr>
+           <td style="background-color:#eeeeee;">
+              <div> <button  type="submit" id="annuler" style=" margin-left:400px; margin-top: 20px; font-family: police2;font-size: 18px; font-weight: bold;"> Annuler </button> </div>
+           </td>
+           <td style="background-color:#eeeeee;">
+              <div> <button type="submit" id="terminer" style=" margin-right:340px; margin-top: 20px; font-family: police2;font-size: 18px; font-weight: bold;"> Terminer </button> </div>
+           </td>
+         </tr>
+       </table>
+
+                   <!-- POP UP pour Confirmation Annulation -->
+                            <div id="confirmation" title="Confirmation de la suppression" style="display:none;">
+                              <p style="font-size: 16px;">
+                                 <span style="float:left; margin:0 0px 20px 0; ">
+                                 <img src="<?php echo $this->basePath().'/images_icons/warning_16.png';?>" />
+
+                                 Etes-vous s&ucirc;r de vouloir annuler les modifications ?</span>
+                              </p>
+                            </div>
+
+<?php echo $this->form()->closeTag();?>
+</div>
+
+
+
+<!-- A ne pas supprimer --> <!-- A ne pas supprimer -->
+<!-- A ne pas supprimer --> <!-- A ne pas supprimer -->
+<div id="tableauMotifDouleur" style="display: none;">
+ <div style="width: 100%; height: 100%; background: #fEfEfE;" align="center">
+   <table id="SiegeDouleur" style='width: 95%;'>
+        <tr class="form-author-douleur" >
+          <td><?php echo $this->formRow($form->get('siege'));?> </td>
+        </tr>
+        
+        <tr class="form-author-douleur" >
+          <td><?php echo $this->formRow($form->get('intensite'));?> </td>
+        </tr>
+   </table>
+ </div> 
+</div>
+
+
+<!-- POP UP pour Liste des médicaments DOULEUR -->
+<div id="listeDesMedicaments" title="Liste des M&eacute;dicaments" style="display:none;">
+   <form>
+   <!-- EMPLACEMENT DES MEDICAMENTS -->
+   <table class="table table-bordered tab_list_mini" style="width: 100%;">
+     <thead >
+	   <tr style="height:35px; width:100%;">
+	     <th style='width:  7%; font-size: 12px;'>N&deg;</th>
+		 <th style='width: 43%; font-size: 12px;'>M<minus>&eacute;dicament</minus></th>
+		 <th style='width: 25%; font-size: 12px;'>V<minus>oie d'administration</minus></th>
+		 <th style='width: 12%; font-size: 12px;'>P<minus>oids</minus></th>
+		 <th style='width: 13%; font-size: 12px;'>P<minus>osologie</minus></th>
+       </tr>
+	 </thead>
+	 
+	 <tbody style="font-size: 16px; font-family: times new roman;" id="champsPoids">
+       <tr style="height: 35px; width:100%;">
+	     <td style='width: 7%;'>P1</td>
+		 <td style='width: 43%; '>Parac&eacute;tamol (15mg/Kg)</td>
+		 <td style='width: 25%; max-height: 25px;'><select id="voieAdminM1" style="max-height: 25px; width: 95%;"> <option value="0"></option> <option value="1">Orale</option> <option value="2">Injectable</option> <option value="3">Suppositoire</option> </select></td>
+		 <td style='width: 12%;' id="poidsP1"><input id="poidsP1Alerte" style="font-size: 16px;" type="number" min="1" max="100"></td>
+		 <td style='width: 13%; padding-left: 10px; font-size: 19px; font-family: times new roman;'><span class="poidsP1"> </span></td>
+       </tr>
+       <tr style="height: 35px; width:100%;">
+	     <td rowspan="3" style='width: 7%;'>P2</td>
+		 <td style='width: 43%;'>AINS - Ibuprof&egrave;ne (30mg/Kg)</td>
+		 <td style='width: 25%; max-height: 25px;'><select id="voieAdminM2" style="max-height: 25px; width: 95%;"><option value="0"></option> <option value="1">Orale</option> <option value="2">Injectable</option> <option value="3">Suppositoire</option></select></td>
+		 <td style='width: 12%;' id="poidsP2"><input style="font-size: 16px;" type="number" readonly></td>
+		 <td style='width: 13%; padding-left: 10px; font-size: 19px; font-family: times new roman;'><span class="poidsP2"> </span></td>
+       </tr>
+       <tr style="height: 35px; width:100%;">
+	     <!--td style='width: 7%;'>P2</td-->
+		 <td style='width: 43%;'>AINS - Diclofenac (0,5 &agrave; 1mg/Kg)</td>
+		 <td style='width: 25%; max-height: 25px;'><select id="voieAdminM3" style="max-height: 25px; width: 95%;"><option value="0"></option> <option value="1">Orale</option> <option value="2">Injectable</option> <option value="3">Suppositoire</option></select></td>
+		 <td style='width: 12%;' id="poidsP2a"><input style="font-size: 16px;" type="number" readonly></td>
+		 <td style='width: 13%; padding-left: 10px; font-size: 19px; font-family: times new roman;'><span class="poidsP2a"> </span></td>
+       </tr>
+       <tr style="height: 35px; width:100%;">
+	     <!--td style='width: 7%;'>P2</td-->
+		 <td style='width: 43%;'>D&eacute;riv&eacute;e morphine</td>
+		 <td style='width: 25%; max-height: 25px;'><select id="voieAdminM4" style="max-height: 25px; width: 95%;"><option value="0"></option> <option value="1">Orale</option> <option value="2">Injectable</option> <option value="3">Suppositoire</option></select></td>
+		 <td style='width: 12%;' id="poidsP2b"><input style="font-size: 16px;" type="number" readonly></td>
+		 <td style='width: 13%; padding-left: 10px; font-size: 19px; font-family: times new roman;'><span class="poidsP2b"> </span></td>
+       </tr>
+       <tr style="height: 35px; width:100%;">
+	     <td style='width: 7%;'>P3</td>
+		 <td style='width: 43%;'>Morphine</td>
+		 <td style='width: 25%; max-height: 25px;'><select id="voieAdminM5" style="max-height: 25px; width: 95%;"><option value="0"></option> <option value="1">Orale</option> <option value="2">Injectable</option> <option value="3">Suppositoire</option></select></td>
+		 <td style='width: 12%;' id="poidsP3"><input style="font-size: 16px;" type="number" readonly></td>
+		 <td style='width: 13%; padding-left: 10px; font-size: 19px; font-family: times new roman;'><span class="poidsP3"> </span></td>
+       </tr>
+	 </tbody>
+	 
+   </table>
+   <button id="ValiderInfosPriseEnCharge" style="display:none;"> </button>
+   </form>
+   
+   <table style="width: 100%; height: 20px;">
+    <tr  style="width: 100%;">
+      <td id="infoPriseEnCharge" style="width: 50%; font-family: times new roman; text-align: right; font-size: 22px;"> 
+         <span id="blink" style="color: red;">Alerte prise en charge</span>
+      </td>
+      
+      <td  style="width: 50%; padding-left: 10px;">
+         <table style="width: 30%; ">
+           <tr>
+             <td> <div id="alertePriseEnCharge" > <input type="checkbox" name="priseEnChargeEffectuee"> </div> </td>
+             <td> <div id="imgPriseEnChargeEffectuee" >  </div> </td>
+           </tr>
+         </table>
+         
+      </td>
+    </tr>
+   </table>
+</div>
+
+
+
+
+<!-- POP UP pour Liste des médicaments FIEVRE -->
+<div id="listeDesMedicamentsFievre" title="Liste des M&eacute;dicaments" style="display:none;">
+   
+   <table style="width: 100%; height: 20px;">
+    <tr  style="width: 100%;">
+      <td id="infoTemperatureFievre" style="width: 50%; font-family: times new roman; text-align: right; font-size: 22px;"> 
+        <label style="background: #f1f1f1; border-radius: 10px; text-align: left; font-size: 17px; width: 35%; padding-left: 10px;" >  Temp&eacute;rature (&deg;C)  <input type="number" min=34 max=45 step='any' style="padding-left: 5px; margin-left: 10px; width: 70px; margin-top: 5px; margin-bottom: 5px; font-size: 19px;"  name="temperatureFievre"  id="temperatureFievre"> </label>
+      </td>
+    </tr>
+   </table>
+
+   <form>
+   <!-- EMPLACEMENT DES MEDICAMENTS -->
+   <table class="table table-bordered tab_list_mini" style="width: 100%;">
+     <thead style="width:100%;">
+	   <tr style="height: 35px; width:100%;">
+	     <th style='width:  7%; font-size: 12px;'>N&deg;</th>
+		 <th style='width: 40%; font-size: 12px;'>M<minus>&eacute;dicament</minus></th>
+		 <th style='width: 25%; font-size: 12px;'>V<minus>oie d'administration</minus></th>
+		 <th style='width: 12%; font-size: 12px;'>P<minus>oids</minus></th>
+		 <th style='width: 16%; font-size: 12px;'>P<minus>osologie</minus></th>
+       </tr>
+	 </thead>
+	 <tbody style="width:100%; font-size: 16px; font-family: times new roman;" id="champsPoidsFievre">
+       <tr style="height: 35px; width:100%;">
+	     <td style='width:  7%;'>P1</td>
+		 <td style='width: 40%; '>Parac&eacute;tamol (15mg/Kg)</td>
+		 <td style='width: 25%; max-height: 25px;'><select id="voieAdminM6" style="max-height: 25px; width: 95%;"> <option value="0"></option> <option value="1">Orale</option> <option value="2">Injectable</option> <option value="3">Suppositoire</option> </select></td>
+		 <td style='width: 12%;' id="poidsP1Fievre"><input id="poidsP1AlerteFievre" style="font-size: 16px; width: 80px; padding-left: 10px;" type="number" min="1" max="100"></td>
+		 <td style='width: 16%; padding-left: 10px; font-size: 19px; font-family: times new roman;'><span class="poidsP1Fievre"> </span></td>
+       </tr>
+     </tbody>
+   </table>
+   
+   <button id="ValiderInfosPriseEnChargeFievre" style="display:none;"> </button>
+   </form>
+   
+   <table style="width: 100%; height: 20px;">
+    <tr id="infoPriseEnChargeFievre" style="width: 100%;">
+      <td class="infoPriseEnChargeFievre" style="width: 50%; font-family: times new roman; text-align: right; font-size: 22px;"> 
+         <span id="blinkFievre" style="color: red;">Alerte prise en charge</span>
+      </td>
+      
+      <td  style="width: 50%; padding-left: 10px;">
+         <table style="width: 30%; ">
+           <tr>
+             <td> <div id="alertePriseEnChargeFievre" > <input type="checkbox" name="priseEnChargeEffectueeFievre"> </div> </td>
+             <td> <div id="imgPriseEnChargeEffectueeFievre" >  </div> </td>
+           </tr>
+         </table>
+      </td>
+    </tr>
+   </table>
+   
+</div>
+
+
+
+
+
+
+<script>
+var agePatient = 5;
+initialisationScript(agePatient);
+
+var mDouleurI = '<?php echo $this->mDouleur[1]; ?>';
+var mDouleurP = '<?php echo $this->mDouleur[2]; ?>';
+var mDouleurV = '<?php echo $this->mDouleur[3]; ?>';
+var mDouleurT = '<?php echo $this->mDouleur[4]; ?>';
+var temoinEntre = 0;
+
+$('#motifsAdmissionConstanteClick').click(function(){ 
+	if(temoinEntre == 0){ setTimeout(function(){ placeSiegeDouleur(mDouleurI, mDouleurP, mDouleurV, mDouleurT); }); temoinEntre = 1;}
+});
+
+
+$(function(){
+	$('#responde input, #respond input').attr('autocomplete','off');
+});
+
+
+//*********************************************************************
+//*********************************************************************
+//*********************************************************************
+
+$('#infoPriseEnChargeFievre').toggle(false);
+
+//***********************************
+//***********************************
+function clignoterAlerte(){
+	$('#blink').fadeOut(function(){
+		$('#blink').fadeIn();
+		setTimeout(function(){
+			clignoterAlerte();
+		}, 2000);
+	});
+}
+
+clignoterAlerte();
+
+function clignoterAlerteFievre(){
+	$('#blinkFievre').fadeOut(function(){
+		$('#blinkFievre').fadeIn();
+		setTimeout(function(){
+			clignoterAlerteFievre();
+		}, 2000);
+	});
+}
+
+clignoterAlerteFievre();
+
+//***********************************
+//***GESTION DE LA PRISE EN CHARGE***
+//***********************************
+//***POUR LA SELECTION DE "DOULEUR"**
+var entrePriseEnCharge = 0;
+var boutonPriseEnCharge = $('#alertePriseEnCharge input[name="priseEnChargeEffectuee"]');
+$(boutonPriseEnCharge).click(function(){
+	
+	if(boutonPriseEnCharge[0].checked){ 
+
+		if($('#poidsP1Alerte').val()){ 
+			$('#imgPriseEnChargeEffectuee').html("<img src='../images_icons/applik.png'>");
+			$('#infoPriseEnCharge').html("<span style='color: green;'>Prise en charge effectu&eacute;e</span>");
+			$('#poidsP1Alerte').attr('required', false);
+			entrePriseEnCharge = 1;
+		}else{
+			$('#poidsP1Alerte').attr('required', true);
+			$('#ValiderInfosPriseEnCharge').trigger('click');
+			entrePriseEnCharge = 0;
+			$(this).removeAttr("checked");
+			}
+		
+	}else{
+
+		$('#imgPriseEnChargeEffectuee').html("");
+		$('#infoPriseEnCharge').html("<span id='blink' style='color: red;'>Alerte prise en charge</span>");
+		clignoterAlerte();
+		entrePriseEnCharge = 0;
+
+		}
+});
+
+//*************************************
+//*** GESTION DE LA PRISE EN CHARGE ***
+//*************************************
+//* POUR LA SELECTION DU MOTIF FIEVRE *
+//*************************************
+var entrePriseEnChargeFievre = 0;
+var boutonPriseEnChargeFievre = $('#alertePriseEnChargeFievre input[name="priseEnChargeEffectueeFievre"]');
+$(boutonPriseEnChargeFievre).click(function(){
+	
+	if(boutonPriseEnChargeFievre[0].checked){ 
+
+		if($('#poidsP1AlerteFievre').val()){
+			$('#imgPriseEnChargeEffectueeFievre').html("<img src='../images_icons/applik.png'>");
+			$('.infoPriseEnChargeFievre').html("<span style='color: green;'>Prise en charge effectu&eacute;e</span>");
+			$('#poidsP1AlerteFievre').attr('required', false);
+			entrePriseEnChargeFievre = 1;
+		}else{ 
+			$('#poidsP1AlerteFievre').attr('required', true);
+			$('#ValiderInfosPriseEnChargeFievre').trigger('click');
+			entrePriseEnChargeFievre = 0;
+			$(this).removeAttr("checked");
+			}
+		
+	}else{ 
+
+		$('#imgPriseEnChargeEffectueeFievre').html("");
+		$('.infoPriseEnChargeFievre').html("<span id='blinkFievre' style='color: red;'>Alerte prise en charge</span>");
+		clignoterAlerteFievre();
+		entrePriseEnChargeFievre = 0;
+
+		}
+});
+
+
+//*************************************
+//***** Au click sur "Constantes" *****
+//*************************************
+$('#constantesClick').click(function(){
+
+	//*** Pour la prise en charge lors d'une Douleur ***
+	//*** Pour la prise en charge lors d'une Douleur ***
+	if( $('#intensite').val() > 3 && !$('#poidsP1Alerte').val() ){ 
+		popListeMedicaments();
+		$('#poidsP1Alerte').attr('required', true);
+		$('#ValiderInfosPriseEnCharge').trigger('click');
+		stopPropagation();
+	}
+	else
+		if( $('#intensite').val() < 4 ){
+			$('#poidsP1Alerte').attr('required', false);
+		}
+		else
+			if( entrePriseEnCharge == 0 ){ 
+				popListeMedicaments();
+				stopPropagation();
+			}
+
+	//*** Pour la prise en charge lors d'une Fièvre ou temperature élevée ***
+	//*** Pour la prise en charge lors d'une Fièvre ou temperature élevée ***
+	if($('#motif_admission1').val() == 'FiÃ¨vre' || 
+	   $('#motif_admission2').val() == 'FiÃ¨vre' ||
+	   $('#motif_admission3').val() == 'FiÃ¨vre' ||
+	   $('#motif_admission4').val() == 'FiÃ¨vre' ||
+	   $('#motif_admission5').val() == 'FiÃ¨vre'
+	  ){
+
+		  if($('#temperatureFievre').val() >= 37.5 || $('#temperature').val() >= 37.5){
+
+				if(entrePriseEnChargeFievre == 0){
+					popListeMedicamentsFievre();
+					stopPropagation();
+				}
+
+		  }
+
+	  }
+	
+});
+
+//*******************************************************************************
+//*********************** MISE A JOUR DES DONNEES *******************************
+//*******************************************************************************
+
+if(mDouleurT > 3){
+	setTimeout(function(){
+		$("#poidsP1Alerte").val($('#poids').val()).trigger('change');
+		$("#alertePriseEnCharge input").trigger('click');
+	},100);
+}
+var temperatureFievre = $('#temperature').val();
+$("#poidsP1AlerteFievre").val($('#poids').val());
+$("#temperatureFievre").val(temperatureFievre);
+if(temperatureFievre >= 37.5){
+	$("#temperatureFievre").trigger('change');
+	$("#alertePriseEnChargeFievre input").trigger('click');
+}
+
+</script>
+
+<?php 
+//Affichage des voies d'administration
+//Affichage des voies d'administration
+$listeVoieAdmin = $this->listeVoieAdministration;
+if($listeVoieAdmin){ ?>
+	<script> 
+	  $('#voieAdminM1, #voie_med_1').val(<?php echo $listeVoieAdmin['m1']; ?>); 
+	  $('#voieAdminM2, #voie_med_2').val(<?php echo $listeVoieAdmin['m2']; ?>); 
+	  $('#voieAdminM3, #voie_med_3').val(<?php echo $listeVoieAdmin['m3']; ?>); 
+	  $('#voieAdminM4, #voie_med_4').val(<?php echo $listeVoieAdmin['m4']; ?>); 
+	  $('#voieAdminM5, #voie_med_5').val(<?php echo $listeVoieAdmin['m5']; ?>); 
+	  $('#voieAdminM6, #voie_med_6').val(<?php echo $listeVoieAdmin['m6']; ?>); 
+	</script>
+<?php } ?>
+
+
+
+<?php  echo $this->headScript()->appendFile($this->basePath().'/js/jquery.maskedinput.cons.js');?>

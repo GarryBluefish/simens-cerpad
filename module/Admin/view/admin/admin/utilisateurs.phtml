@@ -1,0 +1,312 @@
+<!-- MES STYLES --> 
+<?php echo $this->headLink()->appendStylesheet($this->basepath().'/css/admin/styleListeUtilisateurs.css');?>
+<!-- MES JS -->
+<?php echo $this->headScript()->appendFile($this->basepath().'/js/admin/jsListeUtilisateurs.js');?>
+
+<script type="text/javascript">
+$(window).load(function () {
+	$('#wait').toggle(false);
+	$('#contenuInterface').fadeIn().css({'visibility':'visible'});
+});
+</script>
+
+<style>
+#contenuInterface{ visibility: hidden };
+</style>
+
+<div id="titre" style='font-family: police2; text-decoration: none; color: green; font-size: 20px; font-weight: bold; padding-left:20px;'>
+	<iS style='font-size: 25px;'>&curren;</iS>
+	LISTE DES UTILISATEURS
+</div>
+
+
+<div id="wait" style="color: gray; font-size: 20px; text-align: center; margin-top: 80px;" > <span> Chargement ... </span> </div>
+
+<div id="contenuInterface"> 
+
+<div id="contenu"> 
+        <div style="margin-right: 20px; float:right; font-size: 15px; color: gray; margin-top:5px;"><a style="text-decoration: none; cursor:pointer;" href="javascript:ajouterUtilisateur()" ><img src='../images_icons/right_16.png' title="suivant" /><i style="font-family: Times New Roman; font-size: 15px; color: green;"> nouvel utilisateur</i></a></div>
+            <table id="utilisateurs" class="table table-bordered tab_list_mini" >
+				<thead>
+					<tr style="height: 50px; width:100%; ">
+						<th id="nom" style='cursor: pointer;'>Nom d'utilisateur</th>
+						<th id="prenom" style='cursor: pointer;'>Nom</th>
+						<th id="date" style='cursor: pointer;'>Pr&eacute;nom</th>
+						<th id="sexe" style='cursor: pointer;'>Service</th>
+						<th id="adresse" style='cursor: pointer;'>Fonction</th>
+						<th id="nationalite" style='cursor: pointer;'>Role</th>
+						<th id="effectuer">Options</th>
+					</tr>
+				</thead>
+
+				<tbody id="donnees" class="liste_patient">
+
+					<!-- ************ On affiche les patients en une liste ordonn�e************ -->
+
+				</tbody>
+
+				<tfoot id="foot" class="foot_style">
+					<tr>
+						<th id="nom_" style='width: 16%;'><input type="text" name="search_browser"
+							value=" Nom d'utilisateur" class="search_init" /></th>
+						<th id="prenom_" style='width: 14%;'><input type="text" name="search_browser"
+							value=" Nom" class="search_init" /></th>
+						<th id="date_" style='width: 19%;'><input type="text" name="search_browser"
+							value=" Pr&eacute;nom" class="search_init" /></th>
+						<th id="sexe_" style='width: 20%;'><input type="text" name="search_browser"
+							value=" Service" class="search_init" /></th>
+						<th id="adresse_" style='width: 12%;'><input type="text" name="search_browser"
+							value=" Fonction" class="search_init" /></th>
+						<th id="nationalite_" style='width: 12%;'><input type="text" name="search_browser"
+							value=" Role" class="search_init" /></th>
+						<th id="effectuer_" style='width: 7%;'><input type="hidden" name="search_browser"
+							value="" class="" /></th>
+
+					</tr>
+				</tfoot>
+			</table>
+</div>
+
+<div id="vue_patient">
+
+</div>
+
+<div id="FormUtilisateur">
+
+    <div id="previous" style="margin-left: 30px; float:left; font-size: 15px; color: gray; margin-top:-10px;"><a style="text-decoration: none; cursor:pointer;" href="javascript:listePrecedent()" ><img src='../images_icons/transfert_gauche.png' title="precedent" /><i style="font-family: Times New Roman; font-size: 15px; color: green;"> Pr&eacute;c&eacute;dent</i></a></div>
+    
+    <?php
+    $form = $this->formUtilisateur;
+    $form->setAttribute ( 'action', $this->url ( 'admin', array ('action' => 'utilisateurs') ));
+    $form->prepare ();
+    echo $this->form ()->openTag ( $form );
+    ?>
+    <?php echo $this->formhidden($form->get('id')); ?>
+    <?php echo $this->formhidden($form->get('RoleSelect')); ?>
+    <?php echo $this->formRow($form->get('prenomUtilisateur'));?>
+    <?php echo $this->formRow($form->get('nomUtilisateur'));?>
+    <?php echo $this->formRow($form->get('idService'));?>
+    <?php echo $this->formRow($form->get('idPersonne'));?>
+
+    <table id="form_patient" style="margin-left: 30px; width: 95%;">  
+      
+      <tr  style="width: 100%; ">
+        
+         <td style="width: 10%; padding-left: 20px; vertical-align: top;" rowspan="6"> 
+           <div style='left: 70px; height: 180px; padding-right: 40px;'>
+	         <div id='photo' style='float:left; margin-left:4px; margin-top:10px; margin-right:0px;'> </div>
+	       </div>
+         </td> 
+         
+         <td style='width: 31%; padding-top: 10px; padding-right:10px;'><span id='labelHeureLABEL' style='font-weight:bold; font-size:16px; padding-left: 5px; color: #065d10; font-family: Times  New Roman;'>Pr&eacute;nom</span><br><p id='zoneChampInfo1' class='prenom' style='background:#f8faf8; font-size:17px; padding-left: 10px;'> Nom d'utilisateur </p>
+         </td>
+         <td style='width: 31%; padding-top: 10px; padding-right:10px;'><span id='labelHeureLABEL' style='font-weight:bold; font-size:16px; padding-left: 5px; color: #065d10; font-family: Times  New Roman;'>Nom</span><br><p id='zoneChampInfo1' class='nom' style='background:#f8faf8; font-size:17px; padding-left: 10px;'> Nom d'utilisateur </p>
+         </td>
+         
+         <td style="width: 28%; padding-left: 20px; vertical-align: top;" rowspan="6"> 
+             <div style="width: 75%;">
+               <a href="javascript:viderChamp()" style="display: inline; padding-right: 5px;" >
+				   <img  src='<?php echo $this->basePath().'/images_icons/9.png'?>' title="Vider les champs" />
+			   </a>
+               <a href="javascript:modifierChamp()" style="display: inline;" >
+				   <img  src='<?php echo $this->basePath().'/images_icons/2.png'?>' title="modifier les champs" />
+			   </a>
+			   <div style="width:100%; background: #cccccc; height:2px; margin-top: 5px; margin-bottom: 15px;"></div>
+			 </div>
+             <div class="comment-form-patient" ><label style='top: 5px;'> Role </label></div> 
+             
+             <div style='width: 90%;'>
+               <div id="LesChoixRadioCerpad" style="float: left; border-top-right-radius: 15px; width: 50%; height: 100%; background: #f5f5f5; padding-left: 10px;"> 
+                  <?php echo $this->formradio($form->get('rolecerpad'));?>
+               </div>
+             </div>
+         </td> 
+      </tr>
+      
+      <tr class="comment-form-patient"  style="width: 100%; ">
+         <td style='width: 31%; padding-top: 10px; padding-right:10px; vertical-align:top; '><span id='labelHeureLABEL' style='font-weight:bold; font-size:16px; padding-left: 5px; color: #065d10; font-family: Times  New Roman;'>Date de naissance </span><br><p id='zoneChampInfo1' class='date_naissance' style='background:#f8faf8; font-size:17px; padding-left: 10px;'> Nom d'utilisateur </p>
+         </td>
+         
+         <td rowspan='2' style='width: 31%; padding-top: 10px; padding-right:10px; vertical-align:top;'><span id='labelHeureLABEL' style='font-weight:bold; font-size:16px; padding-left: 5px; color: #065d10; font-family: Times  New Roman;'>Adresse</span><br><p id='zoneChampInfo1' class='adresse' style='background:#f8faf8; font-size:17px; padding-left: 10px; height: 110px;'> Nom d'utilisateur </p>
+         </td>
+          
+      </tr>
+      
+      <tr class="comment-form-patient"  style="width: 100%;">
+         <td style="width: 31%; vertical-align:top; "> 
+            <?php  echo $this->formRow($form->get('username'));?>
+            <span id="nom_utilisateur" style="font-family: times new roman; position: relative; top: -10px; color:red; font-size: 18px;"> ... </span>
+         </td> 
+         
+      </tr>
+      
+      <tr class="comment-form-patient"  style="width: 100%;">
+         <td style="width: 31%; vertical-align:top; "> 
+            <?php echo $this->formRow($form->get('password'));?>
+         </td>
+         
+         <td style="width: 31%; vertical-align:top; "> 
+            <?php echo $this->formRow($form->get('confirmerpassword'));?>
+            <span id="confirm_message_password" style="font-family: times new roman; position: relative; top: -10px; color:red; font-size: 18px;"><i> mot de passe incorrect...</i> </span>
+         </td>
+          
+      </tr>
+      
+      <tr class="comment-form-patient" style="width: 100%;">
+         <td style='width: 31%; padding-top: 10px; padding-right:10px; vertical-align:top;'>
+            <span id='labelHeureLABEL' style='font-weight:bold; font-size:16px; padding-left: 5px; color: #065d10; font-family: Times  New Roman;'>Service</span><br>
+            <p id='zoneChampInfo1' class='service' style='background:#f8faf8; font-size:17px; padding-left: 10px;'> Nom d'utilisateur </p>
+         </td>
+         <td style="width: 31%; vertical-align:top;"> 
+           <?php echo $this->formRow($form->get('fonction'));?>
+         </td> 
+      </tr>
+      
+      
+   
+      <tr class="comment-form-patient" style="width: 100%; height: 50px; vertical-align: bottom;">
+         <td style="width: 31%;"></td>
+         <td style="width: 31%; padding-left: 30px;"> 
+            <?php echo $this->formSubmit($form->get('annuler')); ?>
+            <?php echo $this->formSubmit($form->get('enregistrer')); ?>
+         </td> 
+      </tr>
+      
+    </table>
+
+    <?php echo $this->form()->closeTag();?>
+    
+    <div id="scriptFormUtilisation">
+    </div>
+    
+    <div id="scriptFormUtilisationPopulate">
+    </div>
+</div>
+
+<!-- LISTE DE TOUS LE PERSONNEL POUR L'AJOUT D'UN NOUVEL UTILISATEUR -->
+<!-- LISTE DE TOUS LE PERSONNEL POUR L'AJOUT D'UN NOUVEL UTILISATEUR -->
+<!-- LISTE DE TOUS LE PERSONNEL POUR L'AJOUT D'UN NOUVEL UTILISATEUR -->
+
+<div id="listeRecherche" >
+        <div style="margin-right: 50px; float:right; font-size: 15px; color: gray; margin-top:5px;"><a style="text-decoration: none; cursor:pointer;" href="javascript:listeUtilisateurs()" ><img src='../images_icons/left_16.png' title="precedent" /><i style="font-family: Times New Roman; font-size: 15px; color: green;"> Liste des utilisateurs</i></a></div>
+		<table style='width:95%; margin-left: 10px; align:center' class="table table-bordered tab_list_mini" id="personnel">
+			<thead id="enTeteRecherche">
+			   <tr style='width: 100%; '>
+				    <th id="_idpatient" style='width: 10%;'> <div style='width: 90px;'> <input style='width: 100%;' type="text" value=" ID_Patient" class="search_init" /> </div> </th>
+					<th id="_nom" style='width: 15%;'> <div style='width: 150px;'> <input style='width: 100%;' type="text" value=" Nom" class="search_init" /> </div></th>
+					<th id="_prenom" style='width: 17%;'><input style='width: 190px;' type="text" value=" Pr&eacute;nom" class="search_init" /></th>
+					<th id="_date" style='width: 13%;'><input style='width: 110px;' type="text" value=" Date naissance" class="search_init" /></th>
+					<th id="_adresse" style='width: 40%;'><input style='width: 210px;' type="text" value=" Service" class="search_init" /></th>
+					<th id="_effectuer" style='width: 5%;'><input style='width: 60px;' type="hidden" value="" class="" />Options</th>
+				</tr>
+			</thead>
+
+			<tbody id="donnees" class="liste_patient">
+
+
+			</tbody>
+
+		</table>
+</div>
+
+
+
+<!-- Visualisation de l'agent -->
+<div id="visualisation" title="Informations" style="display:none;">
+      <div id="info" style="font-size: 16px;">
+
+      </div>
+</div>
+
+</div>
+
+<script type="text/javascript">
+$("#vue_patient").toggle(false);
+$("#FormUtilisateur").toggle(false);
+$("#listeRecherche").toggle(false);
+
+$(function(){
+	initialisationListePersonnel();
+});
+
+$("#nom_utilisateur").toggle(false);
+$("#confirm_message_password").toggle(false);
+
+$('#username').blur(function(){
+	
+	var username = $("#username").val(); 
+	var chemin = tabUrl[0]+'public/admin/verifier-username';
+	$.ajax({
+		 type: 'POST',
+         url: chemin ,
+         data:{'username': username},
+         success: function(data) {    
+         	    var result = jQuery.parseJSON(data);
+         	    if(result == 1){
+         	    	$("#username").css("border-color","#FF0000");
+         	    	$("#nom_utilisateur").html("<i> '"+username+"' existe d&eacute;j&agrave;...</i>").toggle(true);
+         	    	$("#username").val(""); 
+             	} else 
+             		if(result == 0){
+             	    	$("#username").css("border-color","#CCCCCC");
+             	    	$("#nom_utilisateur").toggle(false);
+                 	}
+         	   return false;    
+         },
+         error:function(e){console.log(e);alert("Une erreur interne est survenue!");},
+         dataType: "html"
+	});
+	
+});
+
+
+$('#confirmerpassword').blur(function(){
+	var password = $('#password').val();
+	var confirmerpassword = $('#confirmerpassword').val();
+
+	if(password == confirmerpassword){
+		$("#confirm_message_password").toggle(false);
+	}else{
+		$("#confirm_message_password").toggle(true);
+		$('#confirmerpassword').val("");
+	}
+
+});
+
+
+    $('#fonction').attr('readonly', true).css('background', '#f8faf8');
+
+    var boutonsCerpad = $('#LesChoixRadioCerpad input[name=rolecerpad]');
+    
+	$(boutonsCerpad).click(function(){ 
+		
+		$('#rolecerpad').attr('required', true);
+
+		if(boutonsCerpad[0].checked){ 
+			$('#fonction').val('Administrateur');
+		}else
+			if(boutonsCerpad[1].checked){
+				$('#fonction').val('Médecin');
+			}else
+				if(boutonsCerpad[2].checked){
+					$('#fonction').val('Secrétaire');
+				}else
+					if(boutonsCerpad[3].checked){
+						$('#fonction').val('Caissier');
+					}else
+						if(boutonsCerpad[4].checked){
+							$('#fonction').val('Infirmier(ére)');
+						}else
+							if(boutonsCerpad[5].checked){
+								$('#fonction').val('Technicien');
+							}else
+								if(boutonsCerpad[6].checked){
+									$('#fonction').val('Biologiste');
+								}
+	});
+
+	$('#username, #password, #confirmerpassword').keypress(function(event) {
+		if (event.keyCode == 13) { return false; }
+	});
+	
+</script>

@@ -1,0 +1,799 @@
+
+#faces  /*photo*/
+{
+
+width: 100%;
+
+border-top-width: 10px;
+
+border-right-width: 10px;
+
+border-right-width-ltr-source: physical;
+
+border-right-width-rtl-source: physical;
+
+border-bottom-width: 10px;
+
+border-left-width: 10px;
+
+border-left-width-ltr-source: physical;
+
+border-left-width-rtl-source: physical;
+
+border-top-style: solid;
+
+border-right-style: solid;
+
+border-right-style-ltr-source: physical;
+
+border-right-style-rtl-source: physical;
+
+border-bottom-style: solid;
+
+border-left-style: solid;
+
+border-left-style-ltr-source: physical;
+
+border-left-style-rtl-source: physical;
+
+border-top-color: white;
+
+border-right-color: white;
+
+border-right-color-ltr-source: physical;
+
+border-right-color-rtl-source: physical;
+
+border-bottom-color: white;
+
+border-left-color: white;
+
+border-left-color-ltr-source: physical;
+
+border-left-color-rtl-source: physical;
+
+box-shadow: 0pt 0pt 12px rgba(0, 0, 0, 0.1);
+
+}
+
+
+/*-----Dï¿½but style-----*/
+
+#respond label
+
+{
+
+line-height: 2.0em;
+
+}
+
+#respond .comment-form-author label, #respond .comment-form-email label, #respond .comment-form-url label, #respond .comment-form-comment label
+
+{/* le label*/
+line-height: 1.7em;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+border-top-right-radius: 15px;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+color: #555555;
+
+display: inline-block;
+
+font-size: 13px;
+
+left: 0px; /*dï¿½placer le label*/
+
+min-width: 60px;
+
+padding-top: 4px;
+
+padding-right: 10px;
+
+padding-bottom: 4px;
+
+padding-left: 10px;
+
+position: relative;
+
+top: 5px;
+
+z-index: 1;
+
+}
+
+
+#respond input[type="text"], #respond input[type="number"], #respond textarea
+
+{ /*le input ou le textarea*/
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+border-top-width: 2px;
+
+border-right-width-value: 2px;
+
+border-right-width-ltr-source: physical;
+
+border-right-width-rtl-source: physical;
+
+border-bottom-width: 2px;
+
+border-left-width-value: 2px;
+
+border-left-width-ltr-source: physical;
+
+border-left-width-rtl-source: physical;
+
+border-top-style: solid;
+
+border-right-style-value: solid;
+
+border-right-style-ltr-source: physical;
+
+border-right-style-rtl-source: physical;
+
+border-bottom-style: solid;
+
+border-left-style-value: solid;
+
+border-left-style-ltr-source: physical;
+
+border-left-style-rtl-source: physical;
+
+border-right-color-value: #eeeeee;
+
+border-right-color-ltr-source: physical;
+
+border-right-color-rtl-source: physical;
+
+border-left-color-value: #eeeeee;
+
+border-left-color-ltr-source: physical;
+
+border-left-color-rtl-source: physical;
+
+border-top-left-radius: 5px;
+
+border-top-right-radius: 5px;
+
+border-bottom-right-radius: 5px;
+
+border-bottom-left-radius: 5px;
+
+box-shadow: 0pt 1px 3px rgba(204, 204, 204, 0.95) inset;
+
+position: relative;
+
+/* le texte des champs*/
+padding-top: 5px;
+
+padding-right: 10px;
+
+padding-bottom: 5px;
+
+margin-bottom : 15px;
+
+padding-left: 10px; /* padding du text dans le champ*/
+
+text-indent: 0px; /* alignement du text dans le champ input*/
+
+/* balise input text*/
+display: block;
+
+height: 30px; /*la hauteur du champ input*/
+
+width: 92%; /*225px; /* la largeur du champ input*/
+
+}
+
+#respond input[type="number"]
+{
+	padding-right: 0px;
+	
+	font-size: 20px;
+	
+	font-weight: bold;
+	
+	padding-top: 0px;
+	
+	padding-bottom: 0px;
+}
+
+
+#respond input[type="text"]:focus, #respond textarea:focus
+
+{
+
+	
+text-indent: 0pt;
+
+z-index: 5;
+
+}
+
+#respond input#submit
+{
+
+color: #444444;
+
+text-shadow: none;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+position: static;
+
+padding-top: 5px;
+
+padding-right: 22px;
+
+padding-bottom: 5px;
+
+padding-left: 22px;
+
+float: right;
+
+}
+
+tr:hover /* Apparence au survol des liens */
+{
+   /*text-decoration: underline;*/
+   background-color: white;
+
+}
+
+#aa:hover /* Apparence au survol des liens */
+{
+   /*text-decoration: underline;*/
+    color: blue;
+	font-size: 17px;
+}
+
+#barre
+{
+  /*background-color: #a8a8a8;*/
+  /*padding-top:10px;*/
+  padding-bottom:20px; /*Pour sï¿½parer le contenu de la bordure du bas du bloc*/
+  magin-bottom:15px; /*Pour sï¿½parer la bordure du prochain ï¿½lï¿½ment*/
+  border-bottom: 3px solid gray;/*Pour faire un trait rouge horizontal*/
+  margin-left: 165px;
+}
+
+#numero
+{
+	/*background-color: #a8a8a8;*/
+	width: 400px;
+	margin-left: 165px;
+	font-family: police4;
+	font-size: 19px;
+	color: green;
+}
+
+/************************************ style du tableau Nï¿½1 ****************************************/
+
+#responde input[type="text"], #respond textarea
+
+{ /*le input ou le textarea*/
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+border-top-width: 2px;
+
+border-right-width-value: 2px;
+
+border-right-width-ltr-source: physical;
+
+border-right-width-rtl-source: physical;
+
+border-bottom-width: 2px;
+
+border-left-width-value: 2px;
+
+border-left-width-ltr-source: physical;
+
+border-left-width-rtl-source: physical;
+
+border-top-style: solid;
+
+border-right-style-value: solid;
+
+border-right-style-ltr-source: physical;
+
+border-right-style-rtl-source: physical;
+
+border-bottom-style: solid;
+
+border-left-style-value: solid;
+
+border-left-style-ltr-source: physical;
+
+border-left-style-rtl-source: physical;
+
+border-top-color: #eeeeee;
+
+border-right-color-value: #eeeeee;
+
+border-right-color-ltr-source: physical;
+
+border-right-color-rtl-source: physical;
+
+border-bottom-color: #eeeeee;
+
+border-left-color: #eeeeee;
+
+border-right-color: #eeeeee;
+
+border-left-color-value: #eeeeee;
+
+border-left-color-ltr-source: physical;
+
+border-left-color-rtl-source: physical;
+
+/* Arrondir les bordures des input*/
+border-top-left-radius: 15px;
+
+border-top-right-radius: 5px;
+
+border-bottom-right-radius: 5px;
+
+border-bottom-left-radius: 5px;
+
+box-shadow: 0pt 1px 3px rgba(204, 204, 204, 0.95) inset;
+
+position: relative;
+
+/* le texte des champs*/
+padding-top: 10px;
+
+padding-right: 10px;
+
+padding-bottom: 10px;
+
+padding-left: 10px; /* padding du text dans le champ*/
+
+text-indent: 70px; /* alignement du text dans le champ input aprï¿½s saisie*/
+
+margin-bottom: 1px;
+
+margin-top: -40px;
+
+float: left; /* aligner le INPUT ï¿½ gauche*/
+
+}
+
+#responde .form-author label
+{/* le label*/
+line-height: 2.0em;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+color: #555555;
+
+display: inline-block;
+
+font-size: 13px;
+
+/*left: -270px; /*dï¿½placer le label*/
+
+min-width: 60px;
+
+padding-top: 7px;
+
+padding-right: 10px;
+
+padding-bottom: 4px;
+
+padding-left: 0px;
+
+position: relative;
+
+top: 6px;
+
+z-index: 1;
+
+float: left;  /* aligner le LABEL ï¿½ gauche*/
+
+margin-left: 5px; /* dï¿½finir la marge dans le champ*/
+
+}
+
+#responde .form-author #labelSupMotif  
+{/* le label*/
+line-height: 2.0em;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+font-size: 13px;
+
+/*left: 150px; /*déplacer le label*/
+
+/* min-width: 60px; */
+
+/* padding-top: 8px; */
+
+padding: 2px;
+
+position: relative;
+
+width: 16px;
+
+height: 16px;
+
+display: inline-block;
+
+float:right;
+
+top: -47px;
+
+right: 5px;
+
+margin-bottom: -30px;
+
+border-bottom-left-radius: 5px; /*arrondir le bord du label*/ 
+
+}
+
+#responde input[type="text"]
+{
+
+height: 50px; /*la hauteur du champ input*/
+
+width: 95%;/*635px; /* la largeur du champ input*/
+
+}
+
+#responde input[type="text"]:focus, #responde textarea:focus
+{	
+text-indent: 0pt;
+
+z-index: 5;
+
+}
+
+
+/*----fin style--------*/
+
+tr th span {
+	cursor: pointer;
+}
+
+#BUcheckbox label 
+{/* le label*/
+line-height: 1.7em;
+
+background-color: #f3f3f3;
+
+background-size: auto auto;
+
+box-shadow: 1px 1px 2px rgba(204, 204, 204, 0.8);
+
+color: #555555;
+
+display: inline-block;
+
+font-size: 16px;
+
+padding-top: 4px;
+
+padding-right: 10px;
+
+padding-bottom: 4px;
+
+padding-left: 10px;
+
+position: relative;
+
+font-family: time new romans;
+
+}
+
+#contenu{ visibility: hidden; } 
+
+#etat_civil
+{
+	color: green;
+	width: 70%;
+}
+
+#etat_civil td 
+{
+	vertical-align: top;
+}
+
+#etat_civil td p
+{
+	margin-right: 15px;
+	max-height: 46px;
+	max-width: 95%;
+	overflow: auto;
+}
+
+
+#etat_civil tr{
+	width: 70%;
+}
+
+
+#indiceDeuxiemeCol{
+	background: none repeat scroll 0% 0%; 
+	border-color: #ffffff #cccccc #ffffff #655552;
+	border-style: solid;
+	border-width: 20px 20px 20px 0px;
+	width: 0px; 
+	height: 0px;  
+}
+
+#artistiqueDesign{
+	background: none repeat scroll 0% 0%; 
+	border-color: #f1f1f1 #cccccc #eeeeee #cccccc;
+	border-style: solid;
+	border-width: 135px 135px 135px 135px;
+	width: 0px; 
+	height: 0px;  
+}
+
+#SiegeDouleur input[type="text"], #SiegeDouleur input[type="number"]
+{ /*le input ou le textarea*/
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+border-right-width-value: 4px;
+
+border-right-width-ltr-source: physical;
+
+border-right-width-rtl-source: physical;
+
+border-left-width-value: 4px;
+
+border-left-width-ltr-source: physical;
+
+border-left-width-rtl-source: physical;
+
+border-top-style: solid;
+
+border-right-style-value: solid;
+
+border-right-style-ltr-source: physical;
+
+border-right-style-rtl-source: physical;
+
+border-bottom-style: solid;
+
+border-left-style-value: solid;
+
+border-left-style-ltr-source: physical;
+
+border-left-style-rtl-source: physical;
+
+border-top-color: #eeeeee;
+
+border-right-color-value: #eeeeee;
+
+border-right-color-ltr-source: physical;
+
+border-right-color-rtl-source: physical;
+
+border-bottom-color: #eeeeee;
+
+border-left-color-value: #eeeeee;
+
+border-left-color-ltr-source: physical;
+
+border-left-color-rtl-source: physical;
+
+border-top-left-radius: 5px; 
+
+border-top-right-radius: 5px;
+
+border-bottom-right-radius: 5px;
+
+border-bottom-left-radius: 5px;
+
+border-left-color: #eeeeee;
+
+border-right-color: #eeeeee;
+
+box-shadow: 0pt 1px 3px rgba(204, 204, 204, 0.95) inset;
+
+position: relative;
+
+border-right-width: 2px;
+
+border-left-width: 2px;
+
+border-top-width: 2px;
+
+border-bottom-width: 2px;
+
+padding-top: 10px;
+
+padding-right: 10px;
+
+padding-bottom: 10px;
+
+padding-left: 15px; 
+
+text-indent: 75px; 
+
+margin-bottom: 1px;
+
+margin-top: -40px;
+
+float: left;
+
+height: 50px;
+
+width: 100%;
+
+}
+
+#SiegeDouleur .form-author-douleur label
+{/* le label*/
+line-height: 2.0em;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+color: black;
+
+display: inline-block;
+
+font-size: 13px;
+
+min-width: 60px;
+
+padding-top: 8px;
+
+padding-right: 10px;
+
+padding-bottom: 4px;
+
+padding-left: 5px;
+
+position: relative;
+
+top: 6px;
+
+z-index: 1;
+
+border-top-left-radius: 5px; 
+
+float: left;
+
+margin-left: 2px;
+
+text-transform: lowercase;
+
+}
+
+#SiegeDouleur input[type="number"]
+{
+	font-size: 22px;
+}
+
+minus
+{
+	text-transform: lowercase;
+}
+
+#champsPoids input[type='number']
+{
+	width: 100%;
+	margin-bottom: 0px;
+	padding-left:5px;
+	font-size: 14px;
+	font-weight: bold;
+}

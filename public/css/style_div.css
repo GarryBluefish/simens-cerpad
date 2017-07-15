@@ -1,0 +1,213 @@
+
+div {
+  /*color: white; /* Ici on modifie la couleur du texte de tous les éléments DIV. */
+}
+.code {
+	border: 1px solid #CCCCCC;
+	background-color: #F2F2F2;
+	padding: 8px;
+}
+
+.post-it {
+margin-top:5px;	
+padding:5px 5px 5px 5px;
+	/*background-image:url(images/post-it.png);*/
+	background-position:bottom right;
+	background-repeat:no-repeat;
+	border-left:1px solid #666666;
+    border-right:1px solid #666666;
+	border-top:1px solid #666666;
+    
+}
+
+div#bandeau_logo{
+float:left;
+width:13%;
+height:150px;
+background-color:#1122FF;
+}
+div#entete{
+width:100%;
+height:150px;
+background-color:#00CCFF;
+}
+div#date{
+float:left;
+width:13%;
+height:50px;
+background-color:#000;
+border-radius:5px;-moz-border-radius:10px;-webkit-border-radius:10px;
+
+}
+div#menu{
+width:100%;
+height:74px;
+background-color:#999999/*#668899*/;
+}
+div#rech{
+float:right;
+width:25%;
+height:50px;
+background-color:#345678;
+}
+div#contenu {
+width:100%;
+background-color:FFCC00;
+}
+div#piedpage {
+width:100%;
+height:50px;
+background-color:#33FF99;
+}
+div#menulateral {
+text-align:center;
+float:left;
+width:15%;
+height:400px;
+background-color:#fff/*#FF6699*/;
+}
+div#menu_droite{
+float:right;
+width:15%;
+height:400px;
+background-color:#FF6699;
+}
+#zoneSearch{overflow:hidden;text-align:right}
+/*#zoneRecherche{width:500px;overflow:hidden;margin:100 auto}
+*/
+/*-----------------------------------------------*/
+/*debut menu droite*/
+
+.infobox{background-color:/*#F8FAFD */#AA2200; border:2px solid/*#E3E7EC #123*/ margin:10px;padding:0px;
+border-radius:5px;-moz-border-radius:10px;-webkit-border-radius:10px;margin-bottom:15px;}
+.infobox dd,.infobox dt{margin:0;padding:0;}
+.infobox dl{padding:10px 5px 5px 45px;background:url("/images/bg-menu.gif") repeat-x transparent;margin:0 0 5px 0;border:2px solid #fff;position:relative;}
+.icomenu{position:absolute;top:10px;left:5px;}
+.infobox .conteneur_infobox{padding:3px 6px;}
+.infobox h3{background:#000     /*#808080 url("../../images/designs/2/homepage/bg_infobox_titre.png")*/
+ repeat-x top;font-size:1em;height:25px;margin:0;padding:5px 14px;color:#FFF;
+ border-radius:5px;-moz-border-radius:10px;-webkit-border-radius:10px;margin-bottom:15px;}
+ 
+border-top-left-radius:5px;border-top-right-radius:0px;-moz-border-radius-topleft:105px;-moz-border-radius-topright:5px;-webkit-border-top-left-radius:5px;-webkit-border-top-right-radius:0px;display:block;border:none;}
+/*fin menu droite*/
+
+
+
+
+#myform {
+    font-size: 1em;
+    margin: 0 auto;
+    width: 560px;
+} 
+
+#myform fieldset {
+    background-color: #F2F9FE;
+    border: 1px solid #AEDCF5;
+    margin: 10px 0 20px;
+    padding: 20px 15px 10px;
+    position: relative;
+} 
+
+#myform fieldset:hover {
+    background-color: #FFFCCD;
+    border: 1px solid #FFDB60;
+} 
+
+#myform fieldset:hover input, #myform fieldset:hover textarea {
+    background-color: #FFFFFF;
+    border: 1px solid #FFDB60;
+} 
+
+#myform fieldset:hover select {
+    background-color: #FFFFFF;
+    border: 1px solid #FFDB60;
+}
+#myform legend {
+    color: #FF5A00;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 16px;
+    font-style: italic;
+    left: 10px;
+    position: absolute;
+    top: -8px;
+} 
+
+#myform fieldset:hover legend, .designField:hover legend {
+    color: #3F87E9;
+} 
+
+#myform label {
+    color: #000000;
+    display: block;
+    float: left;
+    font-weight: bold;
+    margin: 0 10px 0px 0;
+    padding: 0;
+    text-align: right;
+    width: 190px;
+	font-size: 12px;
+}
+#myform input {
+    border: 1px solid #AEDCF5;
+    color: #3F87E9;
+    font-size: 12px;
+	line-height: 24px;
+    height: 24px;
+    margin: 0 0 13px;
+    padding: 7px 3px 3px 3px;
+    width: 180px;
+}
+#myform span {
+	margin-right: 20px;
+	display:block;
+	float: left;
+	width: 190px;
+	text-align: left;
+}
+#myform input:hover {
+    border: 1px solid #41A9D8;
+}
+#myform textarea {
+    border: 1px solid #AEDCF5;
+    color: #3F87E9;
+    font-size: 1em;
+    width: 180px;
+}
+#myform select {
+    border: 1px solid #AEDCF5;
+    color: #3F87E9;
+    font-size: 12px;
+    height: 24px;
+    margin: 0 0 13px;
+    padding: 4px 3px 2px;
+    width: 180px;
+}
+#myform select option {
+	padding-left: 10px;
+}
+#myform select:hover {
+    border: 1px solid #41A9D8;
+} 
+
+#myform p {
+	text-align: center;
+}
+#myform #submit {
+    border: 1px solid #000;
+    height: 35px;
+	padding: 5px;
+    width: 92px;
+	font-weight: bold;
+	color: #000;
+	background: #c0c0c0;
+	line-height: 35px;
+	font-variant: small-caps;
+	margin: 0; 
+	float: right;
+}
+#myform #submit:hover {
+    border: 0 none;
+    cursor: pointer;
+}
+
+

@@ -1,0 +1,198 @@
+<!-- MES STYLES -->
+<?php echo $this->headLink()->appendStylesheet($this->basePath().'/css/facturation/styleAdmission.css');?>
+
+<!-- MES JS -->
+<?php echo $this->headScript()->appendFile($this->basePath().'/js/facturation/jsAdmission.js');?>
+
+<?php use  Facturation\View\Helper\DateHelper;
+$Control = new DateHelper();?>
+
+<script type="text/javascript">
+var base_url = window.location.toString();
+var tabUrl = base_url.split("public");
+
+$("#plus_menu_facturation").toggle(true);
+$("#menu_facturation").replaceWith("<li id='menu_facturation' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='"+tabUrl[0]+"public/images_icons/moin-green2.png'  /> Facturation </span></a></li>");
+dep_menu_facturation1();
+$("#admission_style").css({'font-weight':'bold','color':'white','font-size':'22px'});
+
+
+$(window).load(function () {
+	$('#wait').toggle(false);
+	$('#contenuDesInterfaces').fadeIn().css({'visibility':'visible'});
+});
+</script>
+
+<style>
+#contenuDesInterfaces{ visibility: hidden; };
+</style>
+
+
+<div id="titre" style='font-family: police2; text-decoration:none; color: green; font-size: 18px; font-weight: bold; padding-left: 35px;'><iS style='font-size: 25px;'>&curren;</iS> LISTE DES DEMANDES D'ANALYSES PAR PATIENT </div>
+     
+<div id="wait" style="color: gray; font-size: 20px; text-align: center; margin-top: 80px;" > <span> Chargement ... </span> </div>
+     
+<div id="contenuDesInterfaces" >
+     <div id="contenu" >
+
+		<table style='width:95%; margin-left: 10px; align:center' class="table table-bordered tab_list_mini" id="patient">
+			<thead >
+			    <tr >
+				    <th id="idpatient_" style='width: 10%;'><input type="text" name="search_browser" value=" ID_Patient" class="search_init" /></th>
+					<th id="nom_" style='width: 15%;'><input type="text" name="search_browser" value=" Nom" class="search_init" /></th>
+					<th id="prenom_" style='width: 17%;'><input type="text" name="search_browser" value=" Pr&eacute;nom" class="search_init" /></th>
+					<th id="date_" style='width: 13%;'><input type="text" name="search_browser" value=" Date naissance" class="search_init" /></th>
+					<th id="adresse_" style='width: 40%;'><input type="text" name="search_browser" value=" Adresse" class="search_init" /></th>
+					<th id="effectuer_" style='width: 5%;'><input type="hidden" value="" class="" />Options</th>
+
+				</tr>
+
+			</thead>
+
+			<tbody id="donnees" class="liste_patient">
+
+	            <?php /* AFFICHAGE DE LA LISTE DES PATIENTS */?>
+
+			</tbody>
+
+		</table>
+
+<script type="text/javascript">
+initialisation();
+</script>
+</div>
+
+<!-- POP UP pour Confirmation Suppression -->
+                            <div id="confirmation" title="Informations" style="display:none;">
+                              <div id="info" style="font-size: 16px;">
+
+                              </div>
+                            </div>
+
+
+<!-- LES BOUTONS "TERMINER" ou "VALIDER" -->
+
+
+
+<!-- PARTIE ENREGISTREMENT DU DECES -->
+
+    <div id="info_facturation">
+          <a href="" id="precedent" style="text-decoration: none; font-family: police2; width:50px; margin-left:30px;">
+	        <img style=" display: inline; " src='<?php echo $this->basePath().'/images_icons/transfert_gauche.png'?>' title="Precedent" />
+		    Pr&eacute;c&eacute;dent
+		  </a>
+
+		  <?php $today = new \DateTime('now');
+		  $date = $today->format ( 'd/m/Y H:i' );?>
+		  
+		  <?php $form = $this->form ;
+		        $form->setAttribute ( 'action', $this->url ( 'facturation', array ('action' => 'enregistrer-admission') ) );
+		        $form->setAttribute ( 'id' , 'formulairePrincipal');
+		        $form->prepare();
+		        echo $this->form()->openTag($form);
+		       ?>
+		  <div id="info_patient">
+		  </div>
+
+		  <div id="titre_info_facturation">Facturation    <div style='float:right; margin-right:15px; font-size:14px;'> Saint-Louis le, <?php echo $date;?></div></div>
+		  <div id="barre_separateur">
+		  </div>
+
+		  
+		  <?php echo $this->formhidden($form->get('idpatient')); ?>    
+		  <?php echo $this->formhidden($form->get('montant')); ?>  
+		  <?php echo $this->formhidden($form->get('listeanalysesselectionnees')); ?>    
+		  <div id="info_bebe" style='width: 100%; margin-top:10px; height:185px;'>
+               <div style="float:left; width:18%; height:5%;">
+		       </div>
+		       
+		       <div style='width: 77%; float:left;'>
+		         <table id="form_patient" style="width:100%;">
+		             <tr id="form_patient_radio" style='width: 100%;'>
+		                 <td style='width: 33%;'>
+		                   <div class="comment-form-patient" ><label style='top: 5px;'> Type de facturation </label></div> 
+		                   <div class="comment-form-patient_radio" ><?php echo $this->formRow($form->get('type_facturation'));?></div>
+		                 </td>
+		                 
+		                 <td class="comment-form-patient organisme" style='width: 33%;'><?php echo $this->formRow($form->get('organisme'));?></td>
+		                 <td class="comment-form-patient taux" style='width: 33%;'><?php echo $this->formRow($form->get('taux'));?></td>
+		             </tr>
+		         
+		             <tr style='width: 100%;'>
+		                 <td class="comment-form-patient" style='width: 33%;'><?php echo $this->formRow($form->get('numero'));?></td>
+		                 <td class="comment-form-patient" style='width: 33%;'><?php echo $this->formRow($form->get('service'));?></td>
+		                 <td class="comment-form-patient" style='width: 33%;'><?php echo $this->formRow($form->get('montant_avec_majoration'));?></td>
+		             </tr>
+		         </table>
+		       </div>
+		       <div style="float:left; width:5%;">
+		       </div>
+		  </div>
+
+		  <div style='width: 90%; height: 60px; margin-bottom: 30px;'>
+		       <div style='width: 40%;'></div>
+		       <div style='width: 20%;'>
+                  <div id="terminer_annuler">
+                    <div class="block" id="thoughtbot">
+                       <button name="annuler" id="annuler" style=" height:35px; ">Annuler</button>
+                    </div>
+                    
+                    <div class="block termineradmission" id="thoughtbot">
+                       <button id="termineradmission" style=" height:35px; ">Terminer</button>
+                    </div>
+                  </div>
+                </div>
+                <div style='width: 40%;'></div>
+          </div>
+          <?php echo $this->form()->closeTag(); ?>
+		  
+    </div>
+    
+</div>
+
+    <form id="FormulaireImprimerFacture" style="display: none;">
+    
+    <button id="ImprimerFacture"></button>
+    </form>
+
+    
+    
+    
+    
+<!--***********************************************************************************************-->                              
+
+<!--=========== POP UP pour Afficher la liste des analyses pour le choix des analyses =============-->                              
+                          
+<!--***********************************************************************************************-->  
+<div id="ChoixDesAnalyses" title="Choisir la liste des analyses" style="display:none;">
+             
+     <!-- ****** LISTE DES ANALYSES ****** -->
+     <!-- ****** LISTE DES ANALYSES ****** -->
+             
+</div>
+
+<div style='display: none;' class='infos_parentales_tampon'> <!-- à ne pas supprimer *** pour les infos parentales --> </div>
+        
+    
+    
+    
+<div id="context-menu">
+    <ul class="dropdown-menu" >
+         <li><a style="cursor: pointer;" ><img id="visualiserCTX" style='margin-right: 10px; width: 19px; height: 16px;' src='/simens/public/images_icons/voir2.png'>Visualiser</a></li>
+         <li class="divider2"></li>
+         <li><a style="cursor: pointer;"><img  id="suivantCTX" style='margin-right: 10px; width: 19px; height: 16px;' src='/simens/public/images_icons/transfert_droite.png'>Suivant</a></li>
+         <li class="divider"></li>
+         <li><a id="quitterCTX"  style="cursor: pointer;">Quitter</a></li>
+    </ul>
+</div>
+		
+
+
+<script>
+animation();
+$('#service').val("");
+
+scriptMajorationFacturation();
+</script>
+
+

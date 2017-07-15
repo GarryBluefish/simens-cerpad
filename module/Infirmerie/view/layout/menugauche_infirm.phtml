@@ -1,0 +1,203 @@
+<style>
+#sideBareMenuGaucheinfirmerie{ visibility: hidden }
+
+#sideBareMenuGaucheinfirmerie{ min-width:200px; max-width: 430px;}
+</style>
+
+<script>
+$(window).load(function () {
+
+	$('#waitMenuGaucheinfirmerie').toggle(false);
+	$('#sideBareMenuGaucheinfirmerie').fadeIn().css({'visibility':'visible'});
+	 
+});
+</script>
+
+<div id="waitMenuGaucheinfirmerie" style="color: #cccccc; font-size: 13px;  margin-top: 80px;  margin-left: 60px;" > <span> Chargement ... </span> </div>
+
+
+<ul id="sideBareMenuGaucheinfirmerie">
+	<!-- MENU *** infirmerie *** dossier_patient-->
+	<li id="menu_infirmerie"><a href="">
+	    <span style="margin-left:0px; color: #48ce77; font-weight:bold; font-size:20px; font-family:Times New Roman;"> <img id="image" style="display: inline;" src='<?php echo $this->basePath().'/images_icons/plus-green1.png'?>' /> Pr&eacute;l&egrave;vements </span></a> 
+	</li>
+
+	<li id="plus_menu_infirmerie" style="background: #4a5765;" >
+
+	   <div style="margin-left:30px; height:40px; padding-top:20px;"><a href="<?php echo $this->basePath()."/infirmerie/liste-patient";?>"  >
+	       <span id="admission_style_infirm" style="margin-left:5px; color: white; font-size:15px; font-family:Times New Roman;">
+	       <img  src='<?php echo $this->basePath().'/images_icons/dossier.png'?>' /> Liste des admis </span></a>
+	   </div>
+
+	   <div style="margin-left:30px; height:40px;"><a href="<?php echo $this->basePath()."/infirmerie/liste-bilan";?>" >
+	       <img style="margin-left:5px; display: inline;" src='<?php echo $this->basePath().'/images_icons/liste.png'?>' />
+	       <span id="liste_bilan_style_infirm" style="font-size:15px; color: white; font-family:Times New Roman;">Liste des bilans</span></a>
+	   </div>
+	   
+	   <div id="listeAnalysesNonConformes" style="margin-left:30px; height:40px;"><a href="<?php echo $this->basePath()."/infirmerie/liste-non-conforme";?>" >
+	       <img style="margin-left:5px; display: inline;" src='<?php echo $this->basePath().'/images_icons/warning_16.png'?>' />
+	       <span id="liste_bilan_nonconforme_style_infirm" style="font-size:15px; color: white; font-family:Times New Roman;">Non conformit&eacute;</span></a>
+	   </div>
+	   
+	</li>
+
+	
+	<!-- MENU *** HISTORIQUE BILAN*** infirmerie -->
+	<li id="menu_historique"><a href="">
+	    <span style="margin-left:0px; color: #48ce77; font-weight:bold; font-size:20px; font-family:Times New Roman;"> <img id="image" style="display: inline;" src='<?php echo $this->basePath().'/images_icons/plus-green1.png'?>' alt='Liste' /> Historiques bilans</span></a> 
+	</li>
+
+	<li id="plus_menu_historique" style="background: #4a5765;" >
+
+	   <div id="historiquelisteDesBilans" style="margin-left:30px; height:40px; padding-top:20px;"><a href="<?php echo $this->basePath()."/infirmerie/historique-liste-bilans";?>" >
+	       <img style="margin-left:5px; display: inline;" src='<?php echo $this->basePath().'/images_icons/liste.png'?>' />
+	       <span id="historique_liste_bilan_style" style="font-size:15px; color: white; font-family:Times New Roman;">Liste des bilans</span></a>
+	   </div>
+	   
+	</li>
+	
+	
+	<!-- MENU *** CONSULTATIONS*** infirmerie -->
+	<li id="menu_consultations"><a href="">
+	    <span style="margin-left:0px; color: #48ce77; font-weight:bold; font-size:20px; font-family:Times New Roman;"> <img id="image" style="display: inline;" src='<?php echo $this->basePath().'/images_icons/plus-green1.png'?>' alt='Liste' /> Consultations</span></a> 
+	</li>
+
+	<li id="plus_menu_consultations" style="background: #4a5765;" >
+
+	   <div id="menuDesConsultations" style="margin-left:30px; height:40px; padding-top:20px;"><a href="<?php echo $this->basePath()."/infirmerie/liste-consultations";?>" >
+	       <img style="margin-left:5px; display: inline;" src='<?php echo $this->basePath().'/images_icons/liste.png'?>' />
+	       <span id="menu_consultations_style" style="font-size:15px; color: white; font-family:Times New Roman;">Liste </span></a>
+	   </div>
+	   
+	</li>
+	
+	
+</ul>
+
+
+<?php
+//CHOISIR LE MENU A AFFICHER SELON QUE C'EST LE MEDECIN OU LE SURVEILLANT
+$user = $this->layout()->user;
+$role = $user['role'];
+
+$nonConformite = $this->layout()->nonConformite;
+
+if(!$nonConformite){ ?>
+<script> $('#listeAnalysesNonConformes').toggle(false); </script>
+<?php }
+
+if($role == 'infirmerie'){ ?>
+<script> </script>
+<?php } ?>
+
+
+<script>
+//*******************************************************************************************************************************
+//*******************************************************************************************************************************
+//PRELEVEMENT -- PRELEVEMENT
+function dep_menu_infirmerie1(){
+	$('#menu_infirmerie').click(function(){
+		$("#menu_infirmerie").replaceWith("<li id='menu_infirmerie'><a style='cursor: pointer;'><span style='margin-left:0px; color: #48ce77; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='../images_icons/plus-green1.png' alt='Liste' /> Pr&eacute;l&egrave;vements </span></a></li>");
+		dep_menu_infirmerie2();
+	    $('#plus_menu_infirmerie').animate({
+	        height : 'toggle'
+	    },1000);
+	 return false;
+	});
+}
+
+function dep_menu_infirmerie2(){
+	$('#menu_infirmerie').click(function(){
+		$("#menu_infirmerie").replaceWith("<li id='menu_infirmerie' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='../images_icons/moin-green2.png' alt='Liste' /> Pr&eacute;l&egrave;vements </span></a></li>");
+		dep_menu_infirmerie1();
+	    $('#plus_menu_infirmerie').animate({
+	        height : 'toggle'
+	    },1000);
+	 return false;
+	});
+}
+
+$('#plus_menu_infirmerie').toggle(false);
+$('#menu_infirmerie').click(function(){
+	$("#menu_infirmerie").replaceWith("<li id='menu_infirmerie' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='../images_icons/moin-green2.png' alt='Liste' /> Pr&eacute;l&egrave;vements </span></a></li>");
+	dep_menu_infirmerie1();
+$('#plus_menu_infirmerie').animate({
+height : 'toggle'
+},1000);
+return false;
+});
+
+
+//*******************************************************************************************************************************
+//*******************************************************************************************************************************
+//HISTORIQUE BILAN PRELEVEMENT -- HISTORIQUE BILAN PRELEVEMENT
+function dep_menu_historique1(){
+	$('#menu_historique').click(function(){
+		$("#menu_historique").replaceWith("<li id='menu_historique'><a style='cursor: pointer;'><span style='margin-left:0px; color: #48ce77; font-weight:bold; font-size:20px; font-family:Times New Roman; cursor: pointer;'> <img style='display: inline;' src='../images_icons/plus-green1.png' alt='Liste' /> Historiques bilans </span></a></li>");
+		dep_menu_historique2();
+	    $('#plus_menu_historique').animate({
+	        height : 'toggle'
+	    },1000);
+	 return false;
+	});
+}
+
+function dep_menu_historique2(){
+	$('#menu_historique').click(function(){
+		$("#menu_historique").replaceWith("<li id='menu_historique' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='../images_icons/moin-green2.png' alt='Liste' /> Historiques bilans </span></a></li>");
+		dep_menu_historique1();
+	    $('#plus_menu_historique').animate({
+	        height : 'toggle'
+	    },1000);
+	 return false;
+	});
+}
+
+$('#plus_menu_historique').toggle(false);
+$('#menu_historique').click(function(){
+	$("#menu_historique").replaceWith("<li id='menu_historique' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='../images_icons/moin-green2.png' alt='Liste' /> Historiques bilans </span></a></li>");
+	dep_menu_historique1();
+$('#plus_menu_historique').animate({
+height : 'toggle'
+},1000);
+return false;
+});
+
+
+//*******************************************************************************************************************************
+//*******************************************************************************************************************************
+//CONSULTATIONS -- CONSULTATIONS
+function dep_menu_consultation1(){
+	$('#menu_consultations').click(function(){
+		$("#menu_consultations").replaceWith("<li id='menu_consultations'><a style='cursor: pointer;'><span style='margin-left:0px; color: #48ce77; font-weight:bold; font-size:20px; font-family:Times New Roman; cursor: pointer;'> <img style='display: inline;' src='../images_icons/plus-green1.png' alt='Liste' /> Consultations </span></a></li>");
+		dep_menu_consultation2();
+	    $('#plus_menu_consultations').animate({
+	        height : 'toggle'
+	    },1000);
+	 return false;
+	});
+}
+
+function dep_menu_consultation2(){
+	$('#menu_consultations').click(function(){
+		$("#menu_consultations").replaceWith("<li id='menu_consultations' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='../images_icons/moin-green2.png' alt='Liste' /> Consultations </span></a></li>");
+		dep_menu_consultation1();
+	    $('#plus_menu_consultations').animate({
+	        height : 'toggle'
+	    },1000);
+	 return false;
+	});
+}
+
+$('#plus_menu_consultations').toggle(false);
+$('#menu_consultations').click(function(){
+	$("#menu_consultations").replaceWith("<li id='menu_consultations' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='../images_icons/moin-green2.png' alt='Liste' /> Consultations </span></a></li>");
+	dep_menu_consultation1();
+$('#plus_menu_consultations').animate({
+height : 'toggle'
+},1000);
+return false;
+});
+
+</script>
+

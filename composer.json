@@ -1,0 +1,6 @@
+{
+  "description" : "Skeleton Application for ZF2",
+  "keywords" : [ "framework", "zf2" ],
+  "license" : "BSD-3-Clause",
+  "homepage" : "http://framework.zend.com/"
+}

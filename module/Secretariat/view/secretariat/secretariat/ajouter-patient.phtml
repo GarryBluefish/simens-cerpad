@@ -1,0 +1,373 @@
+<!-- MES STYLES -->
+<?php echo $this->headLink()->appendStylesheet($this->basePath().'/css/secretariat/styleSecretariat.css');?>
+
+<!-- MES JS -->
+<?php
+echo $this->headScript ()->appendFile ( $this->basePath () . '/js/secretariat/jsSecretariatAjouterPatient.js' );
+echo $this->headLink ()->appendStylesheet ( $this->basePath () . '/css/Facturation/DatePicker.css' );
+?>
+
+<script>
+controle_saisie();
+
+var base_url = window.location.toString();
+var tabUrl = base_url.split("public");
+//POUR LE MENU GAUCHE dans -elementgauche.phtml
+
+
+//POUR LE MENU GAUCHE dans -elementgauche.phtml
+$('#plus_dossier_patient').toggle(true);
+$("#dossier_patient").replaceWith("<li id='dossier_patient' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='"+tabUrl[0]+"public/images_icons/moin-green2.png' alt='Liste' /> Dossier patient </span></a></li>");
+dep_dossier_patient1();
+$('#nouveau_style').css({'font-weight':'bold','color':'white','font-size':'22px'});
+
+</script>
+
+
+<script type="text/javascript">
+$(window).load(function () {
+	$('#wait').toggle(false);
+	$('#contenu').fadeIn().css({'visibility':'visible'});
+});
+
+</script>
+
+<style>
+#contenu{ visibility: hidden; }
+/* #nom, #nom_mere, #nom_pere{ text-transform: uppercase; }*/
+</style>
+
+
+
+<?php
+$form = $this->form;
+$formParent = $this->formParent;
+$form->setAttribute ( 'action', $this->url ( 'secretariat', array ('action' => 'ajouter-patient') ) );
+$form->setAttribute ('enctype','multipart/form-data');
+$this->form->prepare ();
+echo $this->form ()->openTag ( $form );
+?>
+
+<div id="titre" style='font-family: police2; text-decoration:none; color: green; font-size: 19px; font-weight: bold; padding-left: 30px;'><iS style='font-size: 25px;'>&curren;</iS> ETAT CIVIL DU PATIENT <span style='float: right; margin-right: 50px; margin-top: 5px; font-size: 12px; font-weight: normal;'> <span style='cursor:pointer;' id='patientDepistage'> D&eacute;pistage </span> <span style='font-size: 22px;'> | </span> <span style='cursor:pointer; font-weight: bold; font-size: 18px;' id='patientClassique'> Externe </span>  </span> </div>
+<div id="wait" style="color: gray; font-size: 20px; text-align: center; margin-top: 80px;" > <span> Chargement ... </span> </div>
+<div id="contenu" >
+
+    <?php echo $this->formRow($form->get('idpersonne'));?>
+    <?php echo $this->formRow($form->get('depistage'));?>
+	
+	<div style='width: 100%;'>
+    
+	 <div style='width: 15%; height: 250px; float:left;'>
+		<div class="photo_patient" id='photo'>
+			<input type='file' name="fichier" />
+			<!-- RECUPERER L'IMAGE -->
+		</div>
+		<input type='hidden' id="fichier_tmp" name="fichier_tmp" />
+		
+		<div id='form_radio' style='width: 90px; heigth: 20px; margin-top: 170px; margin-left: 10px; display: none;' > 
+		  <?php echo $this->formRow($this->form->get('typepatient')); ?>
+		</div >
+     </div>
+     
+	 <div style='width: 80%; float:left;'>
+		<table style='width: 100%;' id="form_patient" style="float: left;">
+
+			      <tr class="comment-form-patient">
+			         <td > <?php echo $this->formRow($this->form->get('prenom'));?></td>
+                     <td style="width: 33%; "> <?php echo $this->formRow($this->form->get('lieu_naissance'));?></td>
+                     <td style="width: 33%; "> <?php echo $this->formRow($this->form->get('email'));?></td>
+
+                  </tr>
+
+                  <tr class="comment-form-patient">
+                     <td > <?php echo $this->formRow($this->form->get('nom'));?></td>
+                     <td > <?php echo $this->formRow($this->form->get('telephone'));?></td>
+                     <td > <?php echo $this->formRow($this->form->get('situation_matrimoniale'));?></td>
+                     <td style='display: none;'> <?php echo $this->formRow($this->form->get('ethnie'));?></td>
+                  </tr>
+
+                  <tr class="comment-form-patient">
+                     <td style="width: 33%;"> 
+                       <div class="age" style="float: left; width: 33%;"> <?php echo $this->formRow($this->form->get('age'));?> </div>
+                       <div class="date_naiss" style="float: left; width: 60%;"> <?php echo $this->formRow($this->form->get('date_naissance'));?> </div>
+                     </td>
+                     <td > <?php echo $this->formRow($this->form->get('profession'));?></td>
+                     <td > <?php echo $this->formRow($this->form->get('nationalite_actuelle'));?></td>
+                  </tr>
+
+                  <tr class="comment-form-patient">
+                     <td style="width: 33%; "> <?php echo $this->formRow($this->form->get('sexe'));?></td>
+                     <td > <?php echo $this->formRow($this->form->get('adresse'));?></td>
+                     <td > <?php echo $this->formRow($this->form->get('nationalite_origine'));?>  </td>
+                  </tr>
+
+		</table>
+		
+		<div id="accordions" align="left" style="margin-bottom: 20px;">  
+           <div id="amontrer" style='font-family: police2; font-size: 18px; font-weight: bold; background: #eeeeee; '>Informations parentales <span style="float: right;" id="clicPlier">clic </span> </div>
+           <div style="border-top: 2px solid #cccccc;"> 
+           
+               <table style='width: 100%;' id="form_patient" style="float: left;">
+
+                  <tr class="comment-form-patient">
+			         <td colspan="3" style="width: 99%; "> <div style="font-family: times new roman; border-bottom: 3px solid #cccccc; margin-top: -10px; background: #f5f5f5; border-top-left-radius: 50px; border-top-right-radius: 50px;"> <div class='titreParents' > </div> INFOS MATERNELLES </div> </td>
+                  </tr>
+			      <tr class="comment-form-patient">
+			         <td style="width: 33%; "> <?php echo $this->formRow($formParent->get('prenom_mere'));?></td>
+                     <td style="width: 33%; "> <?php echo $this->formRow($formParent->get('nom_mere'));?></td>
+                     <td style="width: 33%; "> <?php echo $this->formRow($formParent->get('profession_mere'));?></td>
+                  </tr>
+                  
+                  <tr class="comment-form-patient">
+			         <td style="width: 33%; "> <?php echo $this->formRow($formParent->get('telephone_mere'));?></td>
+                     <td style="width: 33%; "> <?php echo $this->formRow($formParent->get('fax_mere'));?></td>
+                     <td style="width: 33%; "> <?php echo $this->formRow($formParent->get('email_mere'));?></td>
+                  </tr>
+                  
+                  
+                  
+                  <tr class="comment-form-patient">
+			         <td colspan="3" style="width: 99%; "> <div style="font-family: times new roman; border-bottom: 3px solid #cccccc; background: #f5f5f5; border-top-left-radius: 50px; border-top-right-radius: 50px;"> <div class='titreParents' > </div> INFOS PATERNELLES </div> </td>
+                  </tr>
+                  <tr class="comment-form-patient">
+			         <td style="width: 33%; "> <?php echo $this->formRow($formParent->get('prenom_pere'));?></td>
+                     <td style="width: 33%; "> <?php echo $this->formRow($formParent->get('nom_pere'));?></td>
+                     <td style="width: 33%; "> <?php echo $this->formRow($formParent->get('profession_pere'));?></td>
+                  </tr>
+                  
+                  <tr class="comment-form-patient">
+			         <td style="width: 33%; "> <?php echo $this->formRow($formParent->get('telephone_pere'));?></td>
+                     <td style="width: 33%; "> <?php echo $this->formRow($formParent->get('fax_pere'));?></td>
+                     <td style="width: 33%; "> <?php echo $this->formRow($formParent->get('email_pere'));?></td>
+                  </tr>
+                  
+               </table>
+           
+           </div>
+           
+           <div id="acacher" style='font-family: police2; font-size: 18px; font-weight: bold; '></div>
+        </div>
+        
+	  </div>
+		
+	  <div style='width: 3%; float:left;'>
+		<div class="barre_vertical"></div>
+
+		<div class="vider_formulaire" id="vider_champ">
+			<hass> <input type="submit" title="Vider tout" name="vider"
+				id="vider"> </hass>
+		</div>
+
+		<div class="supprimer_photo" id="div_supprimer_photo">
+			<hass> <input name="supprimer_photo"> </hass>
+			<!-- balise sans importance pour le moment -->
+		</div>
+
+		<div class="modifer_donnees" id="div_modifier_donnees">
+			<hass> <input alt="modifer_donnees" title="modifer les donnees"
+				name="modifer_donnees" id="modifer_donnees"> </hass>
+		</div>
+      </div>
+    </div>
+	
+	<button id="envoyerDonneesForm" style="display:none;"  name="terminer"></button>
+	<table style="width: 100%;  height: 12px; margin-bottom: 20px; ">
+	  
+	  <tr style="">
+	  <td style="width: 42%;"></td>
+	  
+	  <td style="width: 10%;" id="thoughtbot" >
+		<button id="annuler"
+			style="font-family: police2; font-size: 17px; font-weight: bold;">
+			Annuler
+		</button>
+	  </td>
+	  
+	  <td style="width: 10%;" id="thoughtbot">
+		<button type="submit" name="terminer" id="terminer"
+			style=" font-family: police2; font-size: 17px; font-weight: bold;">
+			Terminer
+		</button>
+	  </td>
+	  
+	  <td style="width: 38%;"></td>
+	  
+	  </tr>
+    </table>
+
+</div>
+
+<!-- POP UP pour Confirmation Suppression -->
+<div id="confirmation" title="Confirmation de la suppression"
+	style="display: none;">
+	<p style="font-size: 16px;">
+		<span style="float: left; margin: 0 0px 20px 0;"> <img
+			src="<?php echo $this->basePath().'/images_icons/warning_16.png';?>" />
+
+			Etes-vous s&ucirc;r de vouloir supprimer la photo ?
+		</span>
+	</p>
+</div>
+
+
+<!-- LES BOUTONS "TERMINER" ou "VALIDER" -->
+
+<?php echo $this->form()->closeTag();?>
+
+
+<script> 
+
+    gestionDonneesParentales();
+    gestionTypesPatients();
+
+    $(document).keypress(function(e){
+	  if(e.keyCode == 13){
+		 e.preventDefault();
+	  }
+    });
+
+    $('#annuler').click(function(){ 
+		 vart=tabUrl[0]+'public/secretariat/liste-patient';
+	     $(location).attr("href",vart);
+	     return false;
+	});
+
+    //Envoyer le formulaire
+    //Envoyer le formulaire
+    $('#terminer').click(function(){ 
+
+    	if($('#sexe').val() != "" && $('#nom').val() != "" && $('#prenom').val() != "" && $('#age').val() != "" ){
+
+    		if(entrerDepCla == 1){
+    			if($('#age').val() <= 18){
+        			if( $('#prenom_mere').val() != "" && $('#nom_mere').val() != "" && $('#profession_mere').val() != "" && $('#telephone_mere').val() != "" &&
+        				$('#prenom_pere').val() != "" && $('#nom_pere').val() != "" && $('#profession_pere').val() != ""
+            		  ){
+                		  
+            			$(this).attr('disabled', true); 
+                        $('#envoyerDonneesForm').trigger('click');
+
+            		}else{
+                		
+            			return true;
+
+                		}
+
+    			}else{
+
+        			$(this).attr('disabled', true);
+                    $('#envoyerDonneesForm').trigger('click');
+    			}
+    		}else 
+        		if(entrerDepCla == 2){
+        			
+        			$(this).attr('disabled', true);
+                    $('#envoyerDonneesForm').trigger('click');
+            	}
+    		
+        }else{
+
+            return true;
+
+            }
+        
+
+    });
+
+
+    //Mettre le nom en Majuscule
+    //Mettre le nom en Majuscule
+    $("#nom").blur(function(){
+ 	   $("#nom").val($("#nom").val().toUpperCase());
+    });
+
+    $("#nom_mere").blur(function(){
+       	$("#nom_mere").val($("#nom_mere").val().toUpperCase());
+    });
+
+    $("#nom_pere").blur(function(){
+       	$("#nom_pere").val($("#nom_pere").val().toUpperCase());
+    });
+
+    //Mettre la premiere lettre du prenom en Majuscule
+    //Mettre la premiere lettre du prenom en Majuscule
+    $("#prenom").blur(function(){
+ 	   var str = $("#prenom").val();
+ 	   var tab = str.split(" ");
+ 	   var chaine = "";
+ 	    
+ 	   for(var i=0; i<tab.length;i++)
+ 	   {
+ 		   chaine+=tab[i].substring(0,1).toUpperCase()+tab[i].substring(1,tab[i].length).toLowerCase()+" ";
+ 	   }
+
+ 	   $("#prenom").val(chaine);
+    });
+
+
+    $("#prenom_mere").blur(function(){
+   	   var str = $("#prenom_mere").val();
+   	   var tab = str.split(" ");
+   	   var chaine = "";
+   	    
+   	   for(var i=0; i<tab.length;i++)
+   	   {
+   		   chaine+=tab[i].substring(0,1).toUpperCase()+tab[i].substring(1,tab[i].length).toLowerCase()+" ";
+   	   }
+
+   	   $("#prenom_mere").val(chaine);
+
+    });
+
+    $("#prenom_pere").blur(function(){
+   	   var str = $("#prenom_pere").val();
+   	   var tab = str.split(" ");
+   	   var chaine = "";
+   	    
+   	   for(var i=0; i<tab.length;i++)
+   	   {
+   		   chaine+=tab[i].substring(0,1).toUpperCase()+tab[i].substring(1,tab[i].length).toLowerCase()+" ";
+   	   }
+
+   	   $("#prenom_pere").val(chaine);
+
+    });
+
+      
+
+    
+    //GESTION DES BOUTONS RADIO
+    //GESTION DES BOUTONS RADIO
+    //GESTION DES BOUTONS RADIO
+    /*var boutonsTypePatient = $('#form_radio input[name="typepatient"]');
+	$(boutonsTypePatient).click(function(){
+
+		if(boutonsTypePatient[0].checked){
+			$('#interne_patient').parent().css({'font-weight' : 'normal',  'font-size' : '13px', 'color' : 'black', 'font-family' : 'times new roman'});
+			$('#interne_patient_img').remove();
+			
+			$('#externe_patient').parent().css({'font-weight' : 'bold',  'font-size' : '15px', 'color' : 'green', 'font-family' : 'Iskoola Pota'});
+			$('#externe_patient_img').remove();
+			$('#externe_patient').parent().append('<img id="externe_patient_img" style="padding-left: 10px;" src="../images_icons/tick-icon1.png">');
+
+		}else
+			if(boutonsTypePatient[1].checked){
+				$('#externe_patient').parent().css({'font-weight' : 'normal',  'font-size' : '13px', 'color' : 'black', 'font-family' : 'times new roman'});
+				$('#externe_patient_img').remove();
+				
+				$('#interne_patient').parent().css({'font-weight' : 'bold',  'font-size' : '15px', 'color' : 'green', 'font-family' : 'Iskoola Pota'});
+				$('#interne_patient_img').remove();
+				$('#interne_patient').parent().append('<img id="interne_patient_img" style="padding-left: 10px;" src="../images_icons/tick-icon1.png">');
+				
+			}
+	});
+	setTimeout(function(){ 
+        $('#externe_patient').parent().trigger('click'); 
+        $('#externe_patient').parent().css({'font-weight' : 'bold',  'font-size' : '15px', 'color' : 'green', 'font-family' : 'Iskoola Pota'});
+		$('#externe_patient').parent().append('<img id="externe_patient_img" style="padding-left: 10px;" src="../images_icons/tick-icon1.png">');
+    });*/
+    //-------------------------
+    //-------------------------
+    //-------------------------
+    
+</script>
