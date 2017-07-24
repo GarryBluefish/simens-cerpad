@@ -351,6 +351,10 @@ nationalite_actuelle.attr( 'readonly', false );
 	        $('#profession_pere, #profession_mere').attr({'required': false});
 	        $('#clicPlier').toggle(false);
 	        $('#acacher').trigger('click'); 
+	        var age = $('#age').val();
+	    	if(age <= 18){
+	    		$('#amontrer').trigger('click'); 
+	    	}
 	        
 	        //Gestion du test de l'age pour rendre les informations parentales obligatoires
 	        if(entrer == 0){

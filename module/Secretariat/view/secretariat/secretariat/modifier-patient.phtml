@@ -260,8 +260,25 @@ echo $this->form ()->openTag ( $form );
    		}else 
        		if(entrerDepCla == 2){
        			
-       			$(this).attr('disabled', true);
-                   $('#envoyerDonneesForm').trigger('click');
+       			if($('#age').val() <= 18){
+        			if( $('#prenom_mere').val() != "" && $('#nom_mere').val() != "" && $('#profession_mere').val() != "" && $('#telephone_mere').val() != "" &&
+        				$('#prenom_pere').val() != "" && $('#nom_pere').val() != "" && $('#profession_pere').val() != ""
+            		  ){
+                		  
+            			$(this).attr('disabled', true); 
+                        $('#envoyerDonneesForm').trigger('click');
+
+            		}else{
+                		
+            			return true;
+
+                		}
+
+    			}else{
+
+        			$(this).attr('disabled', true);
+                    $('#envoyerDonneesForm').trigger('click');
+    			}
            	}
    		
        }else{
@@ -291,46 +308,53 @@ echo $this->form ()->openTag ( $form );
    //Mettre la premiere lettre du prenom en Majuscule
    //Mettre la premiere lettre du prenom en Majuscule
    $("#prenom").blur(function(){
-	   var str = $("#prenom").val();
-	   var tab = str.split(" ");
-	   var chaine = "";
-	    
-	   for(var i=0; i<tab.length;i++)
-	   {
-		   chaine+=tab[i].substring(0,1).toUpperCase()+tab[i].substring(1,tab[i].length).toLowerCase()+" ";
-	   }
+ 	   var str = $("#prenom").val();
+ 	   var tab = str.split(" ");
+ 	   var chaine = "";
 
-	   $("#prenom").val(chaine);
-   });
+	   if(str){
+	 	   for(var i=0; i<tab.length;i++)
+	 	   {
+	 		   chaine+=tab[i].substring(0,1).toUpperCase()+tab[i].substring(1,tab[i].length).toLowerCase()+" ";
+	 	   }
+	   } 
+
+ 	   $("#prenom").val(chaine);
+    });
 
 
-   $("#prenom_mere").blur(function(){
-  	   var str = $("#prenom_mere").val();
-  	   var tab = str.split(" ");
-  	   var chaine = "";
-  	    
-  	   for(var i=0; i<tab.length;i++)
-  	   {
-  		   chaine+=tab[i].substring(0,1).toUpperCase()+tab[i].substring(1,tab[i].length).toLowerCase()+" ";
-  	   }
+    $("#prenom_mere").blur(function(){
+   	   var str = $("#prenom_mere").val();
+   	   var tab = str.split(" ");
+   	   var chaine = "";
 
-  	   $("#prenom_mere").val(chaine);
+       if(str){
+       	   for(var i=0; i<tab.length;i++)
+       	   {
+       		   chaine+=tab[i].substring(0,1).toUpperCase()+tab[i].substring(1,tab[i].length).toLowerCase()+" ";
+       	   }
+       }   	
 
-   });
+   	   $("#prenom_mere").val(chaine);
 
-   $("#prenom_pere").blur(function(){
-  	   var str = $("#prenom_pere").val();
-  	   var tab = str.split(" ");
-  	   var chaine = "";
-  	    
-  	   for(var i=0; i<tab.length;i++)
-  	   {
-  		   chaine+=tab[i].substring(0,1).toUpperCase()+tab[i].substring(1,tab[i].length).toLowerCase()+" ";
-  	   }
+    });
 
-  	   $("#prenom_pere").val(chaine);
+    $("#prenom_pere").blur(function(){
+   	   var str = $("#prenom_pere").val();
+   	   var tab = str.split(" ");
+   	   var chaine = "";
 
-   });
+       if(str){
+       	   for(var i=0; i<tab.length;i++)
+       	   {
+         		chaine+=tab[i].substring(0,1).toUpperCase()+tab[i].substring(1,tab[i].length).toLowerCase()+" ";
+       	   }
+       }
+
+   	   $("#prenom_pere").val(chaine);
+
+    });
+   
   
 </script>
     
