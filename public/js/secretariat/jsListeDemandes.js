@@ -174,6 +174,7 @@
      		    id2 = aData[7];
      	});
      	
+    	$('a,img,hass').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });
      }
     
 // LISTE DE TOUS LES PATIENTS POUR TOUTES LES DEMANDES EFFECTUEES
@@ -270,6 +271,7 @@ function clickRowHandler2()
 		id = aData[7];
 	});
     
+	$('a,img,hass').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });
 }
 
     
@@ -422,6 +424,11 @@ function clickRowHandler2()
         		},
         		
         	},
+        	
+        	"fnDrawCallback": function() 
+        	{
+        		clickRowHandlerListeAnalysesDemandes();
+        	}
 
         } );
         
@@ -463,6 +470,12 @@ function clickRowHandler2()
     	} );
     	
     }
+    
+    
+    function clickRowHandlerListeAnalysesDemandes(){
+    	$('a,img,hass').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });
+    }
+    
     
     function vueListeAnalyses(iddemande){
     	var chemin = tabUrl[0]+'public/secretariat/get-liste-analyses-demandees';
@@ -513,3 +526,45 @@ function clickRowHandler2()
     	});
     	
     }
+    
+    
+    function annulerAnalyseDemandee(iddemande1, iddemande2, idpatient){
+    	
+    	$('#AnalyseDemandeePopupCofirmAnnulation_'+iddemande2).w2overlay({ html: "" +
+    		"" +
+    		"<div style='border-bottom:1px solid green; height: 30px; background: #f9f9f9; width: 180px; text-align:center; padding-top: 10px; font-size: 13px; color: green; font-weight: bold;'>Confirmer l'annulation</div>" +
+  			"<div style='height: 50px; width: 180px; padding-top:10px; text-align:center;'>" +
+  			"<button class='btn' style='cursor:pointer;' onclick='popupFermer(); return false;'>Non</button>" +
+  			"<button class='btn' style='cursor:pointer;' onclick='annulationAnalyseDemandee("+iddemande1+","+iddemande2+","+idpatient+"); return false;'>Oui</button>" +
+  			"</div>"
+    	});
+
+    }
+    
+    
+    function annulationAnalyseDemandee(iddemande1, iddemande2, idpatient){
+    	
+    	if(iddemande1 != iddemande2){
+    		$('#AnalyseLigneDemande_'+iddemande2).fadeOut();
+            $.ajax({
+                type: 'POST',
+                url: tabUrl[0]+'public/secretariat/annuler-analyse-demandee' ,
+                data:'iddemande='+iddemande2,
+                success: function(data) {
+                	$('.visualiser'+iddemande1+' img').trigger('click');
+                }
+            });
+            
+    	}else{
+    		$('#AnalyseLigneDemande_'+iddemande2).fadeOut();
+    		$.ajax({
+                type: 'POST',
+                url: tabUrl[0]+'public/secretariat/annuler-analyse-demandee' ,
+                data:'iddemande='+iddemande2,
+                success: function(data) {
+            		listeDemandes(idpatient);
+                }
+            });
+    	}
+    }
+    

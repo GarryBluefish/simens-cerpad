@@ -435,12 +435,12 @@ class PatientTable {
 	//********** RECUPERER LA LISTE DES PATIENTS DEJA ADMIS *********
 	//********** RECUPERER LA LISTE DES PATIENTS DEJA ADMIS *********
 	
-	// Cette liste c'est l'ensemble des patients admis pour lesquels leurs analyses n'ont pas encore de résultats
+	// Cette liste c'est l'ensemble des patients admis pour lesquels leurs analyses n'ont pas encore un bilan
 	public function getListePatientsAdmis(){
 
 	    $db = $this->tableGateway->getAdapter();
 	    
-	    $aColumns = array('Nom','Prenom','Datenaissance','Sexe', 'Adresse', 'Date', 'id', 'Idfacturation');
+	    $aColumns = array('numero_dossier','Nom','Prenom','Datenaissance','Adresse', 'Date', 'id', 'Idfacturation');
 	    
 	    /* Indexed column (used for fast and accurate table cardinality) */
 	    $sIndexColumn = "id";
@@ -579,7 +579,7 @@ class PatientTable {
 	                }
 	    
 	                else if ($aColumns[$i] == 'Date') {
-	                	$row[] = $Control->convertDate($aRow[ $aColumns[$i] ]).' - '.$Control->decouperTimeHm($aRow[ 'Heure' ]); 
+	                	$row[] = "<div>".$Control->convertDate($aRow[ $aColumns[$i] ]).' - '.$Control->decouperTimeHm($aRow[ 'Heure' ])."</div>"; 
 	                }
 	                
 	                else if ($aColumns[$i] == 'id') {
@@ -1094,7 +1094,7 @@ class PatientTable {
 	
 		$db = $this->tableGateway->getAdapter();
 		 
-		$aColumns = array('Nom','Prenom','Datenaissance','Sexe', 'Adresse', 'Date', 'id', 'Idfacturation');
+		$aColumns = array('numero_dossier','Nom','Prenom','Datenaissance', 'Adresse', 'Date', 'id', 'Idfacturation');
 		 
 		/* Indexed column (used for fast and accurate table cardinality) */
 		$sIndexColumn = "id";
@@ -1244,7 +1244,7 @@ class PatientTable {
 	
 		$db = $this->tableGateway->getAdapter();
 			
-		$aColumns = array('Nom','Prenom','Datenaissance','Sexe', 'Adresse', 'Date', 'id', 'Idfacturation');
+		$aColumns = array('numero_dossier','Nom','Prenom','Datenaissance','Adresse', 'Date', 'id', 'Idfacturation');
 			
 		/* Indexed column (used for fast and accurate table cardinality) */
 		$sIndexColumn = "id";

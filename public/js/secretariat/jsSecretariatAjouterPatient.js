@@ -393,8 +393,8 @@ nationalite_actuelle.attr( 'readonly', false );
 	    					changeYear: true,
 	    					
 	    					changeMonth: true,
-	    					changeMonth: true,
 	    					maxDate: 0,
+	    					minDate: -40, //Afficher uniquement que le dernier mois
 	    			}
 	    	);
 	        
@@ -454,7 +454,7 @@ nationalite_actuelle.attr( 'readonly', false );
 	    					
 	    					changeMonth: true,
 	    					maxDate: 0,
-	    					minDate: -30, //Afficher uniquement que le dernier mois
+	    					minDate: -40, //Afficher uniquement que le dernier mois
 	    			}
 	    	);
 	    	
@@ -464,3 +464,78 @@ nationalite_actuelle.attr( 'readonly', false );
 	    
 	    $( "#accordions" ).accordion();
 	}
+	
+
+	function verifierExistancePatient(){
+		var tabInfos = new Array();
+	    tabInfos[0] = $('#nom').val();
+	    tabInfos[1] = $('#date_naissance').val();
+	    tabInfos[2] = $('#sexe').val();  
+	
+	    tabInfos[3] = $('#nom_mere').val(); 
+	    tabInfos[4] = $('#prenom_mere').val(); 
+	
+	    tabInfos[5] = $('#nom_pere').val();  
+	    tabInfos[6] = $('#prenom_pere').val();
+	
+	    if(tabInfos[0] && tabInfos[1] && tabInfos[2] && tabInfos[3] && 
+	       tabInfos[4] && tabInfos[5] && tabInfos[6]
+	    ){
+	    	$.ajax({
+				type: 'POST',
+				url: tabUrl[0]+'public/secretariat/verifier-patient-existant',
+				data:{'tabInfos':tabInfos},
+				success: function(data) {  
+					var result = jQuery.parseJSON(data); 
+					if(result[0] == 1){
+						$("#scriptAlertExistePatient").html(result[1]); 
+						$('#clickOuvrirPopup').trigger('click'); 
+					}else{
+						$('#volet').trigger('dblclick'); 
+					}
+				}
+			});
+	    }
+	}
+	
+	
+	function gestionAlertePatientExistant(){
+		
+		$('#volet').dblclick(function(){
+		   $(this).animate({'top': -120}, 'slow');
+		   setTimeout(function(){ $('#volet').hide(); }, 1500);
+		});
+
+		$('#clickOuvrirPopup').click(function(){
+			$('#volet').show('slow');
+			//Lors d'un scroll
+			$(window).scroll(function(){
+				var top = ($(window).scrollTop());  
+				if(top > 52){
+					$('#volet').css({'top': top-52});
+				}else{
+					$('#volet').css({'top': 0});
+				}
+			});
+			
+			//Au click
+			var top = ($(window).scrollTop()); 
+			if(top > 52){
+				$('#volet').css({'top': top-52});
+			}else{
+				$('#volet').css({'top': 0});
+			}
+		});
+
+		//ON CACHE AU DEBUT
+		$('#volet').hide();
+	
+		$('#nom, #date_naissance, #sexe, #nom_mere, #prenom_mere, #nom_pere, #prenom_pere').change(function(){
+			verifierExistancePatient();
+		}).keyup(function(){
+			verifierExistancePatient();			
+		});
+		
+	}
+	
+	

@@ -945,3 +945,29 @@ z-index: 1;
 {
 	min-width: 100%;
 }
+
+#volet {
+	width: 300px;
+	padding: 6px;
+	background: #f1f1f1; 
+	color: #black;	
+	position: absolute;
+	right: 38%; top: 365px;
+	-webkit-transition: all .5s ease-in;
+	-moz-transition: all .5s ease-in;
+	transition: all .5s ease-in;
+			
+	border-bottom-left-radius: 20%;
+	border-bottom-right-radius: 20%;
+	border-top: 0.1px solid #bdb9b9;
+	border-left: 2px solid #bdb9b9;
+	border-right: 2px solid #bdb9b9;
+	border-bottom: 2px solid #bdb9b9;
+	
+	box-shadow: 1px 6px 12px rgba(204, 204, 204, 1.5);
+	z-index: 2;
+}
+
+#volet table tr:hover{
+	background-color: #f1f1f1;
+}

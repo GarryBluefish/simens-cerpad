@@ -139,7 +139,7 @@ class UtilisateursTable
 						$html .="<img style='display: inline; margin-right: 30%;' src='".$tabURI[0]."public/images_icons/pencil_16.png' title='détails'></a>";
 		
 						$html  .="<a href='javascript:supprimer(".$aRow[ $aColumns[$i] ].")'>";
-						$html .="<img style='display: inline; margin-right: 5%;' src='".$tabURI[0]."public/images_icons/delete_16.png' title='Hospitaliser'></a>";
+						$html .="<img style='display: inline; margin-right: 5%;' src='".$tabURI[0]."public/images_icons/delete_16.png' title=''></a>";
 		
 						$html .="<input id='".$aRow[ $aColumns[$i] ]."'   type='hidden' value='".$aRow[ 'Id' ]."'>";
 		

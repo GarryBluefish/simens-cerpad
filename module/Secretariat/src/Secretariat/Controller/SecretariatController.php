@@ -84,6 +84,9 @@ class SecretariatController extends AbstractActionController {
 	public function ajouterPatientAction() {
 		$this->layout ()->setTemplate ( 'layout/secretariat' );
 		
+		//$verifPatientExiste = $this->getPersonneTable()->verifPatientExiste();
+		//var_dump($verifPatientExiste[1][0]); exit();
+		
 		$form = new PatientForm();
 		$formParent = new ParentPatientForm();
 		
@@ -529,11 +532,8 @@ class SecretariatController extends AbstractActionController {
 		//$idemploye = $this->layout()->user['idemploye'];
 		//var_dump($idemploye); exit();
 
-		//$listeAnalysesDemandees = $this->getAnalyseTable()->getListeAnalysesDemandeesDP(129);
+		//$listeAnalysesDemandees = $this->getAnalyseTable()->getAnalyseTypageHemoglobineDemande(23109);
 		//var_dump($listeAnalysesDemandees); exit();
-		
-// 		$test = $this->getAnalyseTable()->deleteDemandeAnalyseNonFacturees(129);
-// 		var_dump($test); exit();
 		
 		return new ViewModel ( array () );
 	}
@@ -886,10 +886,13 @@ class SecretariatController extends AbstractActionController {
 		}
 		
 		/*----------------------------------------------------*/
+		$verifTypageHemo = $this->getAnalyseTable()->getAnalyseTypageHemoglobineDemande($id);
+		
+		/*----------------------------------------------------*/
 		/*----------------------------------------------------*/
 		/*----------------------------------------------------*/
 		
-		$donnees = array($vuePatient, $existeADA, $listeAnalysesDemandees, $tabTypesAnalyses, $tabListeAnalysesParType);
+		$donnees = array($vuePatient, $existeADA, $listeAnalysesDemandees, $tabTypesAnalyses, $tabListeAnalysesParType, $verifTypageHemo);
 		
 		$this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );
 		return $this->getResponse ()->setContent ( Json::encode ( $donnees ) );
@@ -989,6 +992,16 @@ class SecretariatController extends AbstractActionController {
 	public function listeDemandesAction() {
 		$this->layout ()->setTemplate ( 'layout/secretariat' );
 
+		//$liste = $this->getAnalyseTable()->getListeAnalysesDemandeesNonFacturees(2328);
+		//$liste = $this->getPatientTable ()->getFactureDelaDemande(8021);
+// 		if($liste){
+// 			//var_dump('cest pas vide'); exit();
+// 			var_dump($liste); exit();
+// 		}else{
+// 			//var_dump('cest vide'); exit();
+// 			var_dump($liste); exit();
+// 		}
+		
 		return new ViewModel ( );
 	}
 	
@@ -1304,7 +1317,7 @@ class SecretariatController extends AbstractActionController {
 
 		      $diagnostic_demande = $this->getAnalyseTable()->getDiagnosticAnalyse($demande['idpatient'], $demande['date']);
 		      
-		      $html .="<div id='imprimerAnalyses' style='cursor: pointer; float:right; margin-top: -5px;'><span style='padding-right: 20px; margin-top: 20px; color: green; font-size: 17px; font-family: times new roman;'> ".$date." </span> | <span style='padding-right: 20px; padding-left: 20px; color: green; font-size: 17px; font-family: times new roman;'> Total &agrave; payer: ".$this->prixMill("$total")." FCFA</span>";
+		      $html .="<div id='imprimerAnalyses' style='cursor: pointer; float:right; margin-top: -5px;'><span style='padding-right: 20px; margin-top: 20px; color: green; font-size: 17px; font-family: times new roman;'> ".$date." </span> | <span style='padding-right: 20px; padding-left: 20px; color: green; font-size: 17px; font-family: times new roman;'> Total &agrave; payer : ".$this->prixMill("$total")." FCFA</span>";
 		      
 		      if($diagnostic_demande){
 		          $text = str_replace("'", "\'", $diagnostic_demande['diagnostic_demande']);
@@ -1320,7 +1333,8 @@ class SecretariatController extends AbstractActionController {
 				         <tr style='height:25px; width:100%; cursor:pointer;'>
 					        <th id='typeA' style='cursor: pointer;'>Type</th>
 					        <th id='analyseA' style='cursor: pointer;'>Analyse</th>
-				            <th id='optionA' style='font-size: 12px;' >Tarif(FCFA)</th>
+				            <th id='optionA' style='font-size: 12px;' >Tarif<span style='font-size: 8px;'>(FCFA)</span> </th>
+		      		        <th id='optA' style='font-size: 12px;' >Opt.</th>
 				         </tr>
 			           </thead>";
 		
@@ -1328,10 +1342,21 @@ class SecretariatController extends AbstractActionController {
 
 		      foreach ($listeAnalysesDemandees as $listeAnalyses){
 		      	
-		      	$html .="<tr style='height:25px; width:100%; font-family: times new roman;'>
+		      	$html .="<tr id='AnalyseLigneDemande_".$listeAnalyses['iddemande']."' style='height:25px; width:100%; font-family: times new roman;'>
 					       <td id='typeA' style='font-size: 14px;'> ".$listeAnalyses['Libelle']." </td>
 					       <td id='analyseA' style='font-size: 14px;'> ".$listeAnalyses['Designation']." </td>
 				           <td id='optionA' style='font-size: 17px;'> <div style='float: right;'> ".$this->prixMill($listeAnalyses['Tarif'])." </div>  </td>
+				           <td id='optA' style='font-size: 17px;'>";  
+		      	
+		      	           $facture = $this->getPatientTable ()->getFactureDelaDemande($listeAnalyses['iddemande']);
+				           if(!$facture){
+				           	  $html .="<a id='AnalyseDemandeePopupCofirmAnnulation_".$listeAnalyses['iddemande']."'  href='javascript:annulerAnalyseDemandee(".$iddemande.",".$listeAnalyses['iddemande'].",".$listeAnalyses['idpatient'].")' >";
+				           	  $html .="<img style='margin-left: 20%;' src='../images_icons/non_applik.gif' title='Annuler'></a>";
+				           }else{
+				           	  $html .="<img style='margin-left: 20%;' src='../images_icons/tick_16.png' title='D&eacute;j&agrave; factur&eacute;e'>";
+				           }
+				           
+				$html .=" </td>
 				         </tr>";
 		      
 		      }
@@ -1344,6 +1369,7 @@ class SecretariatController extends AbstractActionController {
 					       <th id='typeA_'> <input type='text' name='search_browser' value=' Type' class='search_init' /></th>
 				           <th id='analyseA_'> <input type='text' name='search_browser' value=' Analyse' class='search_init' /></th>
 				           <th id='optionA_'> <input type='hidden' /></th>
+		      		       <th id='optA_'> <input type='hidden' /></th>
 				         </tr>
 		      
 		               </tfoot>";
@@ -1405,7 +1431,9 @@ class SecretariatController extends AbstractActionController {
 		
 		$diagnostic_demande = $this->getAnalyseTable()->getDiagnosticAnalyse($demande['idpatient'], $demande['date']);
 		
-		$html ="<div id='imprimerAnalyses' style='cursor: pointer; float:right; margin-top: -5px;'><span style='padding-right: 20px; margin-top: 20px; color: green; font-size: 17px; font-family: times new roman;'> ".$date." </span> | <span style='padding-right: 20px; padding-left: 20px; color: green; font-size: 17px; font-family: times new roman;'> Total pay&eacute;: ".$this->prixMill("$total")." FCFA</span>";
+		$html ="";
+				
+		$html .="<div id='imprimerAnalyses' style='cursor: pointer; float:right; margin-top: -5px;'><span style='padding-right: 20px; margin-top: 20px; color: green; font-size: 17px; font-family: times new roman;'> ".$date." </span> | <span style='padding-right: 20px; padding-left: 20px; color: green; font-size: 17px; font-family: times new roman;'> Total &agrave; payer : ".$this->prixMill("$total")." FCFA</span>";
 		
 		if($diagnostic_demande){
 		    $text = str_replace("'", "\'", $diagnostic_demande['diagnostic_demande']);
@@ -1422,19 +1450,31 @@ class SecretariatController extends AbstractActionController {
 				         <tr style='height:25px; width:100%; cursor:pointer;'>
 					        <th id='typeA' style='cursor: pointer;'>Type</th>
 					        <th id='analyseA' style='cursor: pointer;'>Analyse</th>
-				            <th id='optionA' style='font-size: 12px;' >Tarif(FCFA)</th>
+				            <th id='optionA' style='font-size: 12px;' >Tarif<span style='font-size: 8px;'>(FCFA)</span> </th>
+		      		        <th id='optA' style='font-size: 12px;' >Opt.</th>
 				         </tr>
-			     </thead>";
+			           </thead>";
 		
-		$html .="<tbody id='liste_analyses_demandes' class='liste_patient liste_analyses_demandes' style='width: 100%;'>";
+		$html .="<tbody  class='liste_patient liste_analyses_demandes' style='width: 100%;'>";
 		
 		foreach ($listeAnalysesDemandees as $listeAnalyses){
 			 
-			$html .="<tr style='height:25px; width:100%; font-family: times new roman;'>
+			$html .="<tr id='AnalyseLigneDemande_".$listeAnalyses['iddemande']."' style='height:25px; width:100%; font-family: times new roman;'>
 					       <td id='typeA' style='font-size: 14px;'> ".$listeAnalyses['Libelle']." </td>
 					       <td id='analyseA' style='font-size: 14px;'> ".$listeAnalyses['Designation']." </td>
-				           <td id='optionA' style='font-size: 17px;'> <div style='float: right;'> ".$this->prixMill($listeAnalyses['Tarif'])." </div> </td>
-				         </tr>";
+				           <td id='optionA' style='font-size: 17px;'> <div style='float: right;'> ".$this->prixMill($listeAnalyses['Tarif'])." </div>  </td>
+				           <td id='optA' style='font-size: 17px;'>";
+			 
+			$facture = $this->getPatientTable ()->getFactureDelaDemande($listeAnalyses['iddemande']);
+			if(!$facture){
+				$html .="<a id='AnalyseDemandeePopupCofirmAnnulation_".$listeAnalyses['iddemande']."'  href='javascript:annulerAnalyseDemandee(".$iddemande.",".$listeAnalyses['iddemande'].",".$listeAnalyses['idpatient'].")' >";
+				$html .="<img style='margin-left: 20%;' src='../images_icons/non_applik.gif' title='Annuler'></a>";
+			}else{
+				$html .="<img style='margin-left: 20%;' src='../images_icons/tick_16.png' title='D&eacute;j&agrave; factur&eacute;e'>";
+			}
+			 
+			$html .="      </td>
+				     </tr>";
 		
 		}
 		 
@@ -1446,14 +1486,25 @@ class SecretariatController extends AbstractActionController {
 					       <th id='typeA_'> <input type='text' name='search_browser' value=' Type' class='search_init' /></th>
 				           <th id='analyseA_'> <input type='text' name='search_browser' value=' Analyse' class='search_init' /></th>
 				           <th id='optionA_'> <input type='hidden' /></th>
+		      		       <th id='optA_'> <input type='hidden' /></th>
 				         </tr>
 		
-		         </tfoot>";
+		               </tfoot>";
 		
 		$html .="</table>";
 		
 		$this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );
 		return $this->getResponse ()->setContent ( Json::encode ( $html ) );
+	}
+	
+	public function annulerAnalyseDemandeeAction()
+	{
+		$iddemande = ( int ) $this->params ()->fromPost ( 'iddemande', 0 );
+		
+		$this->getAnalyseTable()->annulerAnalyseDemandee($iddemande);
+		
+		$this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );
+		return $this->getResponse ()->setContent ( Json::encode ( ) );
 	}
 	
 	public function impressionDemandesAnalysesAction()
@@ -2252,5 +2303,28 @@ class SecretariatController extends AbstractActionController {
 	}
 	
 	
+	public function verifierPatientExistantAction() {
+		$tabInfos = $this->params ()->fromPost ( 'tabInfos', 0 );
+	
+		$verifPatientExiste = $this->getPersonneTable()->verifPatientExiste($tabInfos);
+		
+		$html = "";
+		if($verifPatientExiste[0] == 1){
+			$html .= "<script>
+					   $('#patientInfosSupp').html('". str_replace("'", "\'", "<img style='cursor: pointer; margin-top: 10px;' src='../images_icons/voir2.png' title='".$verifPatientExiste[1][0]['patientPrenom']." ".$verifPatientExiste[1][0]['patientNom']." est né a ".$verifPatientExiste[1][0]['patientLieuNaissance']." et habite a ".$verifPatientExiste[1][0]['patientAdresse']."' />")."');
+					   $('#patientModifierInfos').html('". str_replace("'", "\'", "<a target='_blank' href=' ".'modifier-patient/id_patient/'.$verifPatientExiste[1][0]['patientIdPersonne']."' style='cursor: pointer;'><img style='margin-top: 10px;' src='../images_icons/2.png' /> </a>")."');
+				       
+					   $('#mereNomPrenom').html('".preg_replace("/(\r\n|\n|\r)/", " ",str_replace("'", "\'", $verifPatientExiste[1][0]['merePrenom'].' '.$verifPatientExiste[1][0]['mereNom'] ))."');
+				       $('#mereTelephone').html('".preg_replace("/(\r\n|\n|\r)/", " ",str_replace("'", "\'", $verifPatientExiste[1][0]['mereTelephone'] ))."');
+				       $('#pereNomPrenom').html('".preg_replace("/(\r\n|\n|\r)/", " ",str_replace("'", "\'", $verifPatientExiste[1][0]['perePrenom'].' '.$verifPatientExiste[1][0]['pereNom'] ))."');
+				       $('#pereTelephone').html('".preg_replace("/(\r\n|\n|\r)/", " ",str_replace("'", "\'", $verifPatientExiste[1][0]['pereTelephone'] ))."');
+				       		
+				       $('img').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });		
+				      </script>";
+		}
+		
+		$this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );
+		return $this->getResponse ()->setContent ( Json::encode ( array($verifPatientExiste[0], $html) ) );
+	}
 	
 }

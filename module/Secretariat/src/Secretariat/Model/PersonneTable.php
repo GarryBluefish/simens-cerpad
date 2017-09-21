@@ -200,10 +200,55 @@ class PersonneTable {
 
 	
 	}
+	
+	public function verifPatientExiste($tabInfos){
+		$control = new DateHelper();
+		
+		$nomPatient = $tabInfos[0]; //'DIALLO';
+		$dateNaissancePatient = $control->convertDateInAnglais( $tabInfos[1] );  /*'14/05/2017'*/
+		$sexePatient = $tabInfos[2]; //'Féminin';
+		
+		$nomMere = $tabInfos[3]; //'SOW';
+		$prenomMere = $tabInfos[4]; //'Aissatou';
+		
+		$nomPere = $tabInfos[5]; //'DIALLO';
+		$prenomPere = $tabInfos[6]; //'Bouba';
+
+		
+		$adapter = $this->tableGateway->getAdapter ();
+		$sql = new Sql ( $adapter );
+		$select = $sql->select ();
+		$select->from(array('pers' => 'personne'))->columns( array( 'patientIdPersonne' => 'idpersonne', 'patientNom' => 'nom', 'patientPrenom' => 'prenom', 'patientSexe' => 'sexe', 'patientDateNaissance' => 'date_naissance', 'patientTelephone' => 'telephone', 'patientLieuNaissance' => 'lieu_naissance', 'patientAdresse' => 'adresse' ));
+		$select->join(array('p1' => 'parent'), 'p1.idpatient = pers.idpersonne' , array());
+		$select->join(array('pers1' => 'personne'), 'pers1.idpersonne = p1.idpersonne' , array( 'mereNom' => 'nom', 'merePrenom' => 'prenom', 'mereDateNaissance' => 'date_naissance', 'mereTelephone' => 'telephone' ));
+		$select->join(array('p2' => 'parent'), 'p2.idpatient = pers.idpersonne' , array());
+		$select->join(array('pers2' => 'personne'), 'pers2.idpersonne = p2.idpersonne' , array( 'pereNom' => 'nom', 'perePrenom' => 'prenom', 'pereDateNaissance' => 'date_naissance', 'pereTelephone' => 'telephone' ));
+		$select->where(array('p1.parent' => 'mere', 'p2.parent' => 'pere', 
+				             'pers.nom'  => $nomPatient, 'pers.sexe' => $sexePatient, 'pers.date_naissance' => $dateNaissancePatient, 
+				             'pers1.nom' => $nomMere, 'pers1.prenom' => $prenomMere,
+				             'pers2.nom' => $nomPere, 'pers2.prenom' => $prenomPere,
+		                    )
+		              );
+	
+		$result = $sql->prepareStatementForSqlObject($select)->execute();
+			
+		$allResult = array(0 => 0);
+		
+		$donnees = array();
+		foreach ($result as $res){
+			$donnees[] = $res;
+			$allResult[0] = 1;
+		}
+		$allResult[1] = $donnees;
+		
+		return $allResult;
+	}
+	
 	/******************************************************************************/
 	/******************************************************************************/
 	/******************************************************************************/
 	/******************************************************************************/
+	
 	
 	
 	/******************************************************************************/

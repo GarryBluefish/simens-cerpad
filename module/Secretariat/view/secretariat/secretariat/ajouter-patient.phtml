@@ -194,6 +194,76 @@ echo $this->form ()->openTag ( $form );
 	  
 	  </tr>
     </table>
+    
+    
+    
+    
+    
+     <!-- GESTION DES ALERTES DE PATIENT DEJA EXISTANT -->
+     <!-- GESTION DES ALERTES DE PATIENT DEJA EXISTANT -->
+     <!-- GESTION DES ALERTES DE PATIENT DEJA EXISTANT -->
+     <div id="volet_clos">
+		 <div id="volet">
+			<table style="width: 100%; font-family: time new romans; ">
+			  <tr style="width: 100%; height: 30px; ">
+			     <td style="width:10%; border-bottom-left-radius: 50%;"> 
+			       <div style="float: left; padding-right: 4px; padding-left: 2px; height: 50px;" > 
+			        <img src='../images_icons/avert.png' /> 
+			       </div>
+			     </td>
+			     <td style="width:80%;"> 
+			       <div class="messageAlertVoletPopup" style="width: 100%; float: left; padding-right: 2px; padding-left: 2px; text-align: justify;" > 
+			           <table style="width:100%;">
+			              <tr style="width:100%; vertical-align: top;">
+			                 <td colspan="2" style="width:100%; line-height: 15px; font-weight: bold; font-family: Bradley Hand ITC; font-size: 14px; color: red;">
+			                    Attention il existe d&eacute;j&agrave; un tel patient de :
+			                 </td>
+			              </tr>
+			              <tr style="width:100%; vertical-align: top;">
+			                 <td style="width:20%; height: 20px; font-weight: bold; font-family: Bell MT; background: re;"> M&egrave;re : </td>
+			                 <td style="width:80%; height: 20px; background: yello;" id="mereNomPrenom">
+			                    Seynabou Tambour NDIAYE
+			                 </td>
+			              </tr>
+			              <tr style="width:100%; vertical-align: top;">
+			                 <td style="width:20%; height: 20px; font-weight: bold; font-family: Bell MT; background: re;"> T&eacute;l : </td>
+			                 <td style="width:80%; height: 20px; background: yello;" id="mereTelephone">
+			                    77 313 93 52
+			                 </td>
+			              </tr>
+			              <tr style="width:100%; vertical-align: top;">
+			                 <td style="width:20%; height: 20px; font-weight: bold; font-family: Bell MT; background: re;"> P&egrave;re : </td>
+			                 <td style="width:80%; height: 20px; background: yello;" id="pereNomPrenom">
+			                    Ouseynou Thiandoum
+			                 </td>
+			              </tr>
+			              <tr style="width:100%; vertical-align: top; ">
+			                 <td style="width:20%; height: 20px; font-weight: bold; font-family: Bell MT; background: re;"> T&eacute;l : </td>
+			                 <td style="width:80%; height: 20px; " id="pereTelephone">
+			                    77 313 93 52
+			                 </td>
+			              </tr>
+			           </table>
+			       </div>
+			     </td>
+			     <td style="width:10%; background: gree; border-left: 2px solid #ccc; border-bottom-right-radius: 50%; vertical-align: top; padding-left: 5px;"> 
+			       <div style="float: left; padding-right: 4px; padding-left: 2px;" id="patientInfosSupp"> 
+			         <!-- a style="cursor: pointer;"><img style="margin-top: 10px;" src='../images_icons/voir2.png' /> </a-->
+			       </div>
+			       <div style="float: left; padding-right: 4px; padding-left: 2px;" id="patientModifierInfos" > 
+			         <!-- a style="cursor: pointer;"><img style="margin-top: 10px;" src='../images_icons/2.png' /> </a-->
+			       </div>
+			     </td>
+			  </tr>
+			</table>
+		 </div>
+   	 </div>
+	 <div id="clickOuvrirPopup">  </div>
+     <div id="scriptAlertExistePatient">  </div>
+     <!-- FIN FIN GESTION DES ALERTES DE PATIENT DEJA EXISTANT -->
+     <!-- FIN FIN GESTION DES ALERTES DE PATIENT DEJA EXISTANT --> 
+     <!-- FIN FIN GESTION DES ALERTES DE PATIENT DEJA EXISTANT -->
+    
 
 </div>
 
@@ -219,6 +289,7 @@ echo $this->form ()->openTag ( $form );
 
     gestionDonneesParentales();
     gestionTypesPatients();
+    gestionAlertePatientExistant();
 
     $(document).keypress(function(e){
 	  if(e.keyCode == 13){
@@ -348,49 +419,12 @@ echo $this->form ()->openTag ( $form );
        if(str){
        	   for(var i=0; i<tab.length;i++)
        	   {
-         		chaine+=tab[i].substring(0,1).toUpperCase()+tab[i].substring(1,tab[i].length).toLowerCase()+" ";
+       		   chaine+=tab[i].substring(0,1).toUpperCase()+tab[i].substring(1,tab[i].length).toLowerCase()+" ";
        	   }
        }
 
    	   $("#prenom_pere").val(chaine);
 
     });
-
-      
-
-    
-    //GESTION DES BOUTONS RADIO
-    //GESTION DES BOUTONS RADIO
-    //GESTION DES BOUTONS RADIO
-    /*var boutonsTypePatient = $('#form_radio input[name="typepatient"]');
-	$(boutonsTypePatient).click(function(){
-
-		if(boutonsTypePatient[0].checked){
-			$('#interne_patient').parent().css({'font-weight' : 'normal',  'font-size' : '13px', 'color' : 'black', 'font-family' : 'times new roman'});
-			$('#interne_patient_img').remove();
-			
-			$('#externe_patient').parent().css({'font-weight' : 'bold',  'font-size' : '15px', 'color' : 'green', 'font-family' : 'Iskoola Pota'});
-			$('#externe_patient_img').remove();
-			$('#externe_patient').parent().append('<img id="externe_patient_img" style="padding-left: 10px;" src="../images_icons/tick-icon1.png">');
-
-		}else
-			if(boutonsTypePatient[1].checked){
-				$('#externe_patient').parent().css({'font-weight' : 'normal',  'font-size' : '13px', 'color' : 'black', 'font-family' : 'times new roman'});
-				$('#externe_patient_img').remove();
-				
-				$('#interne_patient').parent().css({'font-weight' : 'bold',  'font-size' : '15px', 'color' : 'green', 'font-family' : 'Iskoola Pota'});
-				$('#interne_patient_img').remove();
-				$('#interne_patient').parent().append('<img id="interne_patient_img" style="padding-left: 10px;" src="../images_icons/tick-icon1.png">');
-				
-			}
-	});
-	setTimeout(function(){ 
-        $('#externe_patient').parent().trigger('click'); 
-        $('#externe_patient').parent().css({'font-weight' : 'bold',  'font-size' : '15px', 'color' : 'green', 'font-family' : 'Iskoola Pota'});
-		$('#externe_patient').parent().append('<img id="externe_patient_img" style="padding-left: 10px;" src="../images_icons/tick-icon1.png">');
-    });*/
-    //-------------------------
-    //-------------------------
-    //-------------------------
     
 </script>

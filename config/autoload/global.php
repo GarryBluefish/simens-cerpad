@@ -13,7 +13,7 @@
 return array (
 		'db' => array (
 				'driver' => 'Pdo',
-				'dsn' => 'mysql:dbname=simens-cerpad-03-07-17;host=localhost',
+				'dsn' => 'mysql:dbname=simens-cerpad-020817;host=localhost',
 				'driver_options' => array (
 						PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
 				)

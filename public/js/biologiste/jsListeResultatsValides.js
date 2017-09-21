@@ -116,17 +116,18 @@
     	
     	}).bind('mousedown', function (e) {
     			var aData = oTable.fnGetData( this );
-    		    id = aData[0];
+    		    id = aData[8];
     	});
     	
     	
     	
     	$("#patient tbody tr").bind('dblclick', function (event) {
     		var aData = oTable.fnGetData( this );
-    		var id = aData[0];
+    		var id = aData[8];
     		visualiser(id);
     	});
     	
+    	$('a,img,hass').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });
     }
     
     function visualiser(id)
@@ -540,7 +541,7 @@
         });
     }
     
- function gestionFormuleLeucocytaire(){
+    function gestionFormuleLeucocytaire(){
     	
     	//Polynucléaires neutrophiles
     	//Polynucléaires neutrophiles

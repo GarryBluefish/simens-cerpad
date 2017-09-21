@@ -483,6 +483,37 @@ class PatientTable {
 		return $sql->prepareStatementForSqlObject($select)->execute()->current()['tarif'];
 	}
 	
+	/**
+	 * Recuperer la liste des analyses demandees qui ne sont 
+	 * pas encore facturées pour le patient en paramètre
+	 */
+	public function getListeAnalysesDemandeesNonFacturees($idpatient){
+		$db = $this->tableGateway->getAdapter();
+		 
+		$sql2 = new Sql ($db );
+		$subselect = $sql2->select ();
+		$subselect->from ( array ( 'fact' => 'facturation_demande_analyse' ) );
+		$subselect->columns (array ( 'iddemande_analyse' ) );
+		 
+		 
+		$sql = new Sql($db);
+		$sQuery = $sql->select()
+		->from(array('d' => 'demande_analyse'))->columns(array('*'))
+		->join(array('a' => 'analyse'), 'a.idanalyse = d.idanalyse', array('*'))
+		->join(array('t' => 'type_analyse'), 't.idtype = a.idtype_analyse', array('*'))
+		->where(array('d.idpatient' => $idpatient,  new NotIn ( 'd.iddemande', $subselect ) ) )
+		->order(array('t.idtype' => 'ASC', 'd.idanalyse' => 'ASC'));
+	
+		$resultat = $sql->prepareStatementForSqlObject($sQuery)->execute();
+	
+		$donnees = array();
+		foreach ($resultat as $result){
+			$donnees[] = $result;
+		}
+	
+		return $donnees;
+	}
+	
 	//<!-- LISTE DES PATIENTS POUR LES DEMANDES D'AUJOURD'HUI -->
 	//<!-- LISTE DES PATIENTS POUR LES DEMANDES D'AUJOURD'HUI -->
 	public function listeDemandesAujourdhuiAjax()
@@ -599,6 +630,11 @@ class PatientTable {
 						$html .= "<infoBulleVue> <a href='javascript:listeDemandes(".$aRow[ $aColumns[$i] ].")' >";
 						$html .="<img style='display: inline; margin-right: 5%;' src='".$tabURI[0]."public/images_icons/details.png' title='liste des demandes'></a> </infoBulleVue>";
 	
+						$demandesNonFacturees = $this->getListeAnalysesDemandeesNonFacturees($aRow[ $aColumns[$i] ]);
+						if($demandesNonFacturees){
+							$html .='<img style="margin-left: 10%; width: 7px; height: 10px;" src="'.$tabURI[0].'public/images_icons/desactiver.png" title="Existance d\'analyses demand&eacute;es non encore factur&eacute;es">';
+						}
+						
 						$row[] = $html;
 					}
 	
@@ -728,6 +764,11 @@ class PatientTable {
 						$html .= "<infoBulleVue> <a href='javascript:listeDemandes(".$aRow[ $aColumns[$i] ].")' >";
 						$html .="<img style='display: inline; margin-right: 5%;' src='".$tabURI[0]."public/images_icons/details.png' title='liste des demandes'></a> </infoBulleVue>";
 	
+						$demandesNonFacturees = $this->getListeAnalysesDemandeesNonFacturees($aRow[ $aColumns[$i] ]);
+						if($demandesNonFacturees){
+							$html .='<img style="margin-left: 10%; width: 7px; height: 10px;" src="'.$tabURI[0].'public/images_icons/desactiver.png" title="Existance d\'analyses demand&eacute;es non encore factur&eacute;es">';
+						}
+						
 						$row[] = $html;
 					}
 						
@@ -969,6 +1010,18 @@ class PatientTable {
 		return $sql->prepareStatementForSqlObject($select)->execute();
 	}
 	
+	//Recuperer la facture de la demande (iddemande)
+	public function getFactureDelaDemande($iddemande){
+		$db = $this->tableGateway->getAdapter();
+			
+		$sql = new Sql ($db );
+		$subselect = $sql->select ();
+		$subselect->from ( array ( 'fact' => 'facturation_demande_analyse' ) );
+		$subselect->columns (array ( '*' ) );
+		$subselect->where(array('iddemande_analyse' => $iddemande ) );
+	
+		return $sql->prepareStatementForSqlObject($subselect)->execute()->current();
+	}
 	
 	//Recuperer les analyses de la dernière demande du patient $id
 	public function getAnalysesDemandees($id){
@@ -1390,7 +1443,35 @@ class PatientTable {
 	
 	//FONCTION UTILISER DANS LE MODULE DU BIOLOGISTE
 	//FONCTION UTILISER DANS LE MODULE DU BIOLOGISTE
+	protected function nbJours($debut, $fin) {
+		//60 secondes X 60 minutes X 24 heures dans une journee
+		$nbSecondes = 60*60*24;
 	
+		$debut_ts = strtotime($debut);
+		$fin_ts = strtotime($fin);
+		$diff = $fin_ts - $debut_ts;
+		return ($diff / $nbSecondes);
+	}
+	
+	public function gestionAges($age, $date_naissance) {
+		//Gestion des AGE
+		if($age){
+			return $age." ans";
+		}else{
+			$aujourdhui = (new \DateTime() ) ->format('Y-m-d');
+			$age_jours = $this->nbJours($date_naissance, $aujourdhui);
+			if($age_jours < 31){
+				return $age_jours." jours";
+	
+			}else if($age_jours >= 31) {
+					
+				$nb_mois = (int)($age_jours/30);
+				$nb_jours = $age_jours - ($nb_mois*30);
+					
+				return $nb_mois."m ".$nb_jours."j";
+			}
+		}
+	}
 	//********** RECUPERER LA LISTE DES PATIENTS POUR LESQUELS LEURS ANALYSES ONT DEJA DES RESULTATS   *********
 	//********** RECUPERER LA LISTE DES PATIENTS POUR LESQUELS LEURS ANALYSES ONT DEJA DES RESULTATS   *********
 	
@@ -1398,7 +1479,7 @@ class PatientTable {
 	
 		$db = $this->tableGateway->getAdapter();
 	
-		$aColumns = array('id2', 'Nom' ,'Prenom' ,'Age' ,'Adresse' ,'DateEnregistrementRda', 'id', 'Idfacturation');
+		$aColumns = array('numero_dossier', 'Nom' ,'Prenom' ,'Age' ,'Adresse' ,'DateEnregistrementRda', 'id', 'Idfacturation', 'id2');
 	
 		/* Indexed column (used for fast and accurate table cardinality) */
 		$sIndexColumn = "id";
@@ -1498,7 +1579,8 @@ class PatientTable {
 					}
 	
 					else if ($aColumns[$i] == 'Age') {
-						$row[] = "<div style='text-align: center;' >".$aRow[ $aColumns[$i] ]."</div>";
+						$age = $this->gestionAges($aRow[ 'Age' ], $aRow[ 'Datenaissance' ]);
+						$row[] = "<div>".$age."</div>";
 					}
 	
 					else if ($aColumns[$i] == 'DateEnregistrementRda') {
@@ -1546,7 +1628,7 @@ class PatientTable {
 	
 		$db = $this->tableGateway->getAdapter();
 	
-		$aColumns = array('id2', 'Nom' ,'Prenom' ,'Age' ,'Adresse' ,'DateValidationRda', 'id', 'Idfacturation');
+		$aColumns = array('numero_dossier', 'Nom' ,'Prenom' ,'Age' ,'Adresse' ,'DateValidationRda', 'id', 'Idfacturation', 'id2');
 	
 		/* Indexed column (used for fast and accurate table cardinality) */
 		$sIndexColumn = "id";
@@ -1646,7 +1728,8 @@ class PatientTable {
 					}
 	
 					else if ($aColumns[$i] == 'Age') {
-						$row[] = "<div style='text-align: center;' >".$aRow[ $aColumns[$i] ]."</div>";
+						$age = $this->gestionAges($aRow[ 'Age' ], $aRow[ 'Datenaissance' ]);
+						$row[] = "<div>".$age."</div>";
 					}
 	
 					else if ($aColumns[$i] == 'DateValidationRda') {

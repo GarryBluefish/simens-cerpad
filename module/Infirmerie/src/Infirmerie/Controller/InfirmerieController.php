@@ -1354,7 +1354,7 @@ class InfirmerieController extends AbstractActionController {
 				     formulaire.submit();
 	              });
 	 
-				  $('a,img,hass').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', delay: 250 } });
+				  $('a,img,hass,span').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', delay: 250 } });
 	 
 				 </script>";
 			

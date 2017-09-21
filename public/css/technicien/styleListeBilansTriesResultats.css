@@ -257,7 +257,7 @@ width: 100%; /* la largeur du champ input*/
 }
 
 /* PIED DE PAGE*/
-#numero_ input[type="text"]
+#numero_dossier_ input[type="text"]
 {
 background-color: #fffffa; /*la couleur du champ*/
 
@@ -327,9 +327,9 @@ width: 100%; /* la largeur du champ input*/
 }
 
 /* EN TETE*/
-#numero
+#numero_dossier
 {
-	width: 10%;
+	width: 12%;
 }
 
 #nom
@@ -349,12 +349,12 @@ width: 100%; /* la largeur du champ input*/
 
 #adresse
 {
-	width: 25%;
+	width: 24%;
 }
 
 #date
 {
-	width: 15%;
+	width: 14%;
 }
 
 #effectuer
@@ -425,13 +425,12 @@ tr:hover /* Apparence au survol des lignes */
 
 #numero
 {
-	/*background-color: #a8a8a8;*/
 	width: 480px;
 	margin-left: 140px;
 	font-family: police4;
 	font-size: 19px;
 	color: green;
-}
+} 
 
 table td 
 {

@@ -428,8 +428,7 @@ class AnalyseTable {
 	//Recuperer la liste des analyses demandees avec 'D'=date, 'P'=idpatient
 	/**
 	 * Recuperer la liste des analyses du patient du jour j
-	 * @param unknown $idpatient
-	 * @return multitype:unknown
+	 * @param $idpatient
 	 */
 	public function getListeAnalysesDemandeesDP($idpatient){
 	    $aujourdhui = (new \DateTime() ) ->format('Y-m-d');
@@ -451,6 +450,23 @@ class AnalyseTable {
 	    }
 	    
 	    return $donnees;
+	}
+	
+	//Recuperer la demande d'analyse sur le typage de l'hémoglobine s'il y en a
+	/**
+	 * @param $idpatient
+	 */
+	public function getAnalyseTypageHemoglobineDemande($idpatient){
+		$aujourdhui = (new \DateTime() ) ->format('Y-m-d');
+		 
+		$db = $this->tableGateway->getAdapter();
+		$sql = new Sql($db);
+		$sQuery = $sql->select()
+		->from(array('d' => 'demande_analyse'))->columns(array('*'))
+		->where(array('idanalyse' => 68, 'idpatient' => $idpatient, 'date != ?' => $aujourdhui));
+		 
+		$result = $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
+		if($result){ return 1; }else{ return 0; }
 	}
 	
 	
@@ -939,6 +955,33 @@ class AnalyseTable {
 		
 		return $sql->prepareStatementForSqlObject($select)->execute();
 	}
+	
+	//Recuperer la facture de la demande (iddemande)
+	public function getFactureDelaDemande($iddemande){
+		$db = $this->tableGateway->getAdapter();
+			
+		$sql = new Sql ($db );
+		$subselect = $sql->select ();
+		$subselect->from ( array ( 'fact' => 'facturation_demande_analyse' ) );
+		$subselect->columns (array ( '*' ) );
+		$subselect->where(array('iddemande_analyse' => $iddemande ) );
+	
+		return $sql->prepareStatementForSqlObject($subselect)->execute()->current();
+	}
+	
+	//Annuler la demande s'il n'est pas encore facturée
+	public function annulerAnalyseDemandee($iddemande){
+		
+		if(!$this->getFactureDelaDemande($iddemande)){
+			$db = $this->tableGateway->getAdapter();
+			$sql = new Sql($db);
+			$sQuery = $sql->delete()->from('demande_analyse')
+			->where(array( 'iddemande' => $iddemande ));
+			$sql->prepareStatementForSqlObject($sQuery) ->execute();
+		}
+		
+	}
+	
 	
 }
 

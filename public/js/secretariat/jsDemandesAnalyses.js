@@ -79,6 +79,8 @@ function demandesAnalyses(id){
         	    var listeAnalysesDemandees = result[2];
         	    var tabTypesAnalyses = result[3];
         	    var tabListeAnalysesParType = result[4];
+        	        
+        	    $('#temoinTypageHemo').val(result[5]);
         	    
         	    var myArrayTypeAnalyse = [''];
         	    for(var i=1 ; i<=tabTypesAnalyses.length ; i++){
@@ -153,6 +155,7 @@ function initialisation(){
 	$( "#accordions" ).accordion();
 	$( "button" ).button();
 	$( "#demandesAnalyses" ).toggle(false);
+    $('#volet').toggle(false);
     
 	var asInitVals = new Array();
         oTable = $('#patient').dataTable
@@ -248,6 +251,8 @@ function clickRowHandler()
 		visualiser(id);
 	});
 	
+	$('a,img,hass').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });
+
 }
 
 

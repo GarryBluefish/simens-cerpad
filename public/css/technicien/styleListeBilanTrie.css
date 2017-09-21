@@ -30,7 +30,7 @@ height: 25px; /*la hauteur du champ input*/
 width: 100%; /* la largeur du champ input*/
 }
 
-#sexe_ input[type="text"]
+#sexe_ input[type="text"], #numero_dossier_ input[type="text"]
 { /*le input ou le textarea*/
 
 background-color: #fffffa; /*la couleur du champ*/
@@ -83,16 +83,21 @@ width: 100%; /* la largeur du champ input*/
 
 #date
 {
-	width: 12%;
+	width: 10%;
 }
 #sexe
 {
 	width: 7%;
 }
 
+#numero_dossier
+{
+	width: 12%;
+}
+
 #adresse
 {
-	width: 28%;
+	width: 25%;
 }
 
 #nationalite

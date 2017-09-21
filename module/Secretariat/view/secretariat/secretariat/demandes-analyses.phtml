@@ -17,11 +17,12 @@ $('#analyses_style').css({'font-weight':'bold','color':'white','font-size':'21px
 $(window).load(function () {
 	$('#wait').toggle(false);
 	$('#toutLeContenu').fadeIn().css({'visibility':'visible'});
+	$('#volet_clos').css({'visibility':'visible'});
 });
 </script>
 
 <style>
- #toutLeContenu{ visibility: hidden; };
+ #toutLeContenu, #volet_clos{ visibility: hidden; };
 </style>
 
 
@@ -175,10 +176,41 @@ $(window).load(function () {
     </ul>
 </div>
 		
-		
 <div style='display: none;' class='infos_parentales_tampon'> <!-- à ne pas supprimer *** pour les infos parentales --> </div>
 
 		
+
+
+<input type="hidden" id="temoinTypageHemo">	
+<!-- GESTION DES ALERTES DEPISTAGE -->
+<!-- GESTION DES ALERTES DEPISTAGE -->
+<!-- GESTION DES ALERTES DEPISTAGE -->
+     <div id="volet_clos">
+		 <div id="volet">
+			<table style="width: 100%; font-family: time new romans; ">
+			  <tr style="width: 100%; height: 30px; ">
+			     <td style="width:10%; background: yello; padding-top: 5px;"> 
+			       <div style="float: left; padding-right: 4px; padding-left: 2px;" > 
+			        <img src='../images_icons/avert.png' /> 
+			       </div>
+			     </td>
+			     <td style="width:90%; background: re;"> 
+			       <div class="messageAlertVoletPopup" style="float: left; padding-right: 2px; padding-left: 2px; text-align: justify;" > 
+			         <!-- Emplacement des messages d'alerte  -->
+			       </div>
+			     </td>
+			  </tr>
+			</table>
+		 </div>
+   	 </div>
+	 <div id="clickOuvrirPopup"> </div>	
+     
+<!-- FIN FIN GESTION DES ALERTES DEPISTAGE -->
+<!-- FIN FIN GESTION DES ALERTES DEPISTAGE -->
+<!-- FIN FIN GESTION DES ALERTES DEPISTAGE -->
+
+	 
 <script type="text/javascript">
   initialisation(); 
 </script>
+

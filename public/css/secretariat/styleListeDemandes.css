@@ -1,30 +1,35 @@
 /* EN TETE*/
-#numerof
+#numerof, #numerof_
 {
 	width: 15%;
 }
 
-#datef
+#datef, #datef_
+{
+	width: 70%;
+}
+
+#optionf, #optionf_
+{
+	width: 15%;
+}
+
+#typeA, #typeA_
+{
+	width: 25%;
+}
+
+#analyseA, #analyseA_
 {
 	width: 60%;
 }
 
-#optionf
+#optA, #optA_
 {
-	width: 25%;
+	width: 5%;
 }
 
-#typeA
-{
-	width: 25%;
-}
-
-#analyseA
-{
-	width: 65%;
-}
-
-#optionA
+#optionA, #optionA_
 {
 	width: 10%;
 }
@@ -40,7 +45,7 @@ height: 25px; /*la hauteur du champ input*/
 width: 100%; /* la largeur du champ input*/
 }
 
-#typeA_ input[type="text"], #analyseA_ input[type="text"], #optionA_ input[type="hidden"]
+#typeA_ input[type="text"], #analyseA_ input[type="text"], #optionA_ input[type="hidden"], #optA_ input[type="hidden"]
 { 
 
 background-color: #fffffa; /*la couleur du champ*/
@@ -149,12 +154,12 @@ width: 100%; /* la largeur du champ input*/
 
 #adresse
 {
-	width: 23%;
+	width: 22%;
 }
 
 #nationalite
 {
-	width: 15%;
+	width: 16%;
 }
 
 #effectuer

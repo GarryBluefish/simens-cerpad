@@ -116,7 +116,7 @@ class BilanPrelevementTable {
  	
  		$db = $this->tableGateway->getAdapter();
  			
- 		$aColumns = array('Nom','Prenom','Datenaissance','Sexe', 'Adresse', 'DateEnregistrementBp', 'id', 'Idfacturation');
+ 		$aColumns = array('numero_dossier', 'Nom','Prenom','Datenaissance', 'Adresse', 'DateEnregistrementBp', 'id', 'Idfacturation');
  			
  		/* Indexed column (used for fast and accurate table cardinality) */
  		$sIndexColumn = "id";
@@ -227,7 +227,7 @@ class BilanPrelevementTable {
  					}
  		
  					else if ($aColumns[$i] == 'Adresse') {
- 						$row[] = "<div class='adresseText' >".$aRow[ $aColumns[$i] ]."</div>";
+ 						$row[] = "<div>".$aRow[ $aColumns[$i] ]."</div>";
  					}
  		
  					else if ($aColumns[$i] == 'DateEnregistrementBp') {
@@ -368,7 +368,7 @@ class BilanPrelevementTable {
  					}
  	
  					else if ($aColumns[$i] == 'Adresse') {
- 						$row[] = "<div class='adresseText' >".$aRow[ $aColumns[$i] ]."</div>";
+ 						$row[] = "<div>".$aRow[ $aColumns[$i] ]."</div>";
  					}
  	
  					else if ($aColumns[$i] == 'DateEnregistrementBp') {
@@ -467,7 +467,7 @@ class BilanPrelevementTable {
  	
  		$db = $this->tableGateway->getAdapter();
  	
- 		$aColumns = array('Nom','Prenom','Datenaissance','Sexe', 'Adresse', 'DateEnregistrementTri', 'id', 'Idfacturation');
+ 		$aColumns = array('numero_dossier', 'Nom', 'Prenom', 'Datenaissance', 'Adresse', 'DateEnregistrementTri', 'id', 'Idfacturation');
  	
  		/* Indexed column (used for fast and accurate table cardinality) */
  		$sIndexColumn = "id";
@@ -567,7 +567,7 @@ class BilanPrelevementTable {
  					}
  						
  					else if ($aColumns[$i] == 'Adresse') {
- 						$row[] = "<div class='adresseText' >".$aRow[ $aColumns[$i] ]."</div>";
+ 						$row[] = "<div>".$aRow[ $aColumns[$i] ]."</div>";
  					}
  						
  					else if ($aColumns[$i] == 'DateEnregistrementTri') {
@@ -698,6 +698,35 @@ class BilanPrelevementTable {
  	
  	//FONCTION UTILISER DANS LE MODULE DU TECHNICIEN
  	//FONCTION UTILISER DANS LE MODULE DU TECHNICIEN
+ 	protected function nbJours($debut, $fin) {
+ 		//60 secondes X 60 minutes X 24 heures dans une journee
+ 		$nbSecondes = 60*60*24;
+ 	
+ 		$debut_ts = strtotime($debut);
+ 		$fin_ts = strtotime($fin);
+ 		$diff = $fin_ts - $debut_ts;
+ 		return ($diff / $nbSecondes);
+ 	}
+ 	
+ 	public function gestionAges($age, $date_naissance) {
+ 		//Gestion des AGE
+ 		if($age){
+ 			return $age." ans";
+ 		}else{
+ 			$aujourdhui = (new \DateTime() ) ->format('Y-m-d');
+ 			$age_jours = $this->nbJours($date_naissance, $aujourdhui);
+ 			if($age_jours < 31){
+ 				return $age_jours." jours";
+ 			
+ 			}else if($age_jours >= 31) {
+ 		
+ 				$nb_mois = (int)($age_jours/30);
+ 				$nb_jours = $age_jours - ($nb_mois*30);
+ 		
+ 				return $nb_mois."m ".$nb_jours."j";
+ 			}
+ 		}
+ 	}
  	
  	//********** RECUPERER LA LISTE DES PATIENTS AYANT DES BILANS DE PRELEVEMENTS DEJA TRIES *********
  	//********** RECUPERER LA LISTE DES PATIENTS AYANT DES BILANS DE PRELEVEMENTS DEJA TRIES *********
@@ -706,7 +735,7 @@ class BilanPrelevementTable {
  	
  		$db = $this->tableGateway->getAdapter();
  	
- 		$aColumns = array('id2', 'Nom' ,'Prenom' ,'Age' ,'Adresse' ,'DateEnregistrementTri', 'id', 'Idfacturation', 'id3');
+ 		$aColumns = array('numero_dossier', 'Nom' ,'Prenom' ,'Age' ,'Adresse' ,'DateEnregistrementTri', 'id', 'Idfacturation', 'id3');
  	
  		/* Indexed column (used for fast and accurate table cardinality) */
  		$sIndexColumn = "id";
@@ -812,7 +841,8 @@ class BilanPrelevementTable {
  					}
  	
  					else if ($aColumns[$i] == 'Age') {
- 						$row[] = "<div style='text-align: center;' >".$aRow[ $aColumns[$i] ]."</div>";
+ 						$age = $this->gestionAges($aRow[ 'Age' ], $aRow[ 'Datenaissance' ]);
+ 						$row[] = "<div>".$age."</div>";
  					}
  	
  					else if ($aColumns[$i] == 'DateEnregistrementTri') {

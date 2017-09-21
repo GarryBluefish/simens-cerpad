@@ -279,6 +279,8 @@ $(function(){
 	$("#terminer").click(function(){
 		
 		var diagnostic_demande = $("#diagnostic_demande_text").val();
+		var temoinTypageHemo = $("#temoinTypageHemo").val();
+		var TypageHemoSelect = 0;
 		
 		var typesAnalyses = [];
 		var analyses = [];
@@ -286,25 +288,39 @@ $(function(){
 			if($('#type_analyse_name_'+i).val()) {
 				typesAnalyses[j] = $('#type_analyse_name_'+i).val();
 				analyses[j] = $('#analyse_name_'+i).val();
+				if(analyses[j] == 68){ TypageHemoSelect = 1; }
 				j++;
 			}
 		}
 		
+		
 		if(analyses[1]){
-			imprimerAnalyse();
-			$.ajax({
-		        type: 'POST',
-		        url: tabUrl[0]+'public/secretariat/envoyer-demandes-analyses',
-		        data: {'analyses':analyses, 'idpatient':$("#idpatient").val(), 'diagnostic_demande':diagnostic_demande , 'verifModifier':$('#verifModifier').val()},
-		        success: function() {
-		        	vart = tabUrl[0]+'public/secretariat/demandes-analyses';
-		    	    $(location).attr("href",vart);
-		        },
-		        error:function(e){console.log(e);alert("Une erreur interne est survenue!");},
-		        dataType: "html"
-			});
+			
+			if(temoinTypageHemo == 1 && TypageHemoSelect == 1){
+				$('.messageAlertVoletPopup').html('<span style="font-size: 16px; color: red;"> La demande de d&eacute;pistage &agrave; d&eacute;j&agrave; &eacute;t&eacute; faite pour ce patient. Veuillez annuler celle s&eacute;lectionner pour pouvoir continuer. ! </span>');
+				$('#volet').fadeIn(1000);
+				setTimeout(function(){ $('#volet').fadeOut(1000); }, 15000);
+				
+			}else{
+				$('#volet').fadeOut(1000);
+				imprimerAnalyse();
+				$.ajax({
+			        type: 'POST',
+			        url: tabUrl[0]+'public/secretariat/envoyer-demandes-analyses',
+			        data: {'analyses':analyses, 'idpatient':$("#idpatient").val(), 'diagnostic_demande':diagnostic_demande , 'verifModifier':$('#verifModifier').val()},
+			        success: function() {
+			        	vart = tabUrl[0]+'public/secretariat/demandes-analyses';
+			    	    $(location).attr("href",vart);
+			        },
+			        error:function(e){console.log(e);alert("Une erreur interne est survenue!");},
+			        dataType: "html"
+				});
+			}
+			
 		}else{
-			alert('veuillez choisir une analyse');
+			$('.messageAlertVoletPopup').html('<span style="font-size: 22px; color: red;"> Veuillez choisir une analyse ! </span>');
+			$('#volet').fadeIn(1000);
+			setTimeout(function(){ $('#volet').fadeOut(1000); }, 10000);
 		}
 		
 		return false;

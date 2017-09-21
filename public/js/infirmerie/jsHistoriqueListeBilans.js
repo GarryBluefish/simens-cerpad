@@ -128,6 +128,7 @@
     		if(id){ listeAnalysesFacturees(id); }
     	});
     	
+    	$('a,img,hass').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });
     }
     
     

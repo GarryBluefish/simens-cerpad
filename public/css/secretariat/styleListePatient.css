@@ -82,7 +82,7 @@ width: 100%; /* la largeur du champ input*/
 /* EN TETE*/
 #numero_dossier
 {
-	width: 13%;
+	width: 14%;
 }
 
 #nom
@@ -106,7 +106,7 @@ width: 100%; /* la largeur du champ input*/
 
 #adresse
 {
-	width: 20%;
+	width: 19%;
 }
 
 #nationalite

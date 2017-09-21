@@ -134,6 +134,9 @@ return array(
 
                 	'patient-rappeler' => 'secretariat',	
                		'patient-non-rappeler' => 'secretariat',
+                		
+                	'verifier-patient-existant' => 'secretariat',
+                	'annuler-analyse-demandee' => 'secretariat',
     								
                 ),
     						

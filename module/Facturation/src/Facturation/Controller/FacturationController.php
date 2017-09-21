@@ -1073,10 +1073,10 @@ class FacturationController extends AbstractActionController {
 		$html .="<thead style='width: 100%;'>
 				   <tr style='height:25px; width:100%; cursor:pointer;'>
 				      <th id='numeroF' style='cursor: pointer;'>N<minus>um&eacute;ro</minus></th>
-					  <th id='dateF' style='cursor: pointer;'>D<minus>ate de la facturation</minus></th>
+					  <th id='dateF' style='cursor: pointer; width: 150px;'>D<minus>ate de la facturation</minus></th>
 	                  <th id='factureF' style='cursor: pointer;'>F<minus>actur&eacute;e par</minus></th>      
-    				  <th id='tarifF' style='cursor: pointer; ' >T<minus>arif total</minus> (FCFA)</th>
-				      <th id='afficherF' style='cursor: pointer;'>A<minus>fficher</minus></th>
+    				  <th id='tarifF' style='cursor: pointer; width: 120px;' >T<minus>arif total</minus> (FCFA)</th>
+				      <th id='afficherF' style='cursor: pointer; width: 80px;'>A<minus>fficher</minus></th>
 				   </tr>
 			     </thead>";
 		
@@ -1090,10 +1090,10 @@ class FacturationController extends AbstractActionController {
 			
 			$html .="<tr style='height:20px; width:100%; font-family: times new roman;'>
  					    <td id='zoneChampInfo1' > ".$liste['numero']." </td>
-  					    <td id='zoneChampInfo1' > ".(new DateHelper())->convertDateTime($liste['date_enregistrement'])." </td>
+  					    <td id='zoneChampInfo1' style='width: 150px;'> ".(new DateHelper())->convertDateTime($liste['date_enregistrement'])." </td>
   				        <td id='zoneChampInfo1' > ".$liste['Prenom']." ".$liste['Nom']." </td>
-  				        <td id='zoneChampInfo1' style='font-weight:bold; font-size:20px;'> <div style='float: right; margin-right: 15px;'> ".$this->prixMill($liste['montant'])." </div></td>
-  				        <td id='zoneChampInfo1' > <a href='javascript:afficherListeAnalysesDeLaFacture(".$liste['idfacturation'].",".(int)$liste['numero'].")'><img  style='width:15px; height:15px; float: right; margin-right: 35px;' src='".$this->baseUrl()."public/images_icons/right_16.png' ></a> </td>
+  				        <td id='zoneChampInfo1' style='font-weight:bold; font-size:20px; width: 120px;'> <div style='float: right; margin-right: 15px;'> ".$this->prixMill($liste['montant'])." </div></td>
+  				        <td id='zoneChampInfo1' style='width: 80px;'> <a href='javascript:afficherListeAnalysesDeLaFacture(".$liste['idfacturation'].",".(int)$liste['numero'].")'><img  style='width:15px; height:15px; float: right; margin-right: 35px;' src='".$this->baseUrl()."public/images_icons/right_16.png' ></a> </td>
   				     </tr>";
 		
 		}

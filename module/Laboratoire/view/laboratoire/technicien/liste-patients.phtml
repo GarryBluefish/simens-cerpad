@@ -27,17 +27,17 @@ $(window).load(function () {
 			<table class="table table-bordered tab_list_mini" id="patient">
 				<thead>
 					<tr style="height: 45px; width:100%;">
-					    <th id="numero" style='cursor: pointer;'>N&deg;</th>
+					    <th id="numero_dossier" style='cursor: pointer;'>N&deg; dossier</th>
 						<th id="nom" style='cursor: pointer;'>Nom</th>
 						<th id="prenom" style='cursor: pointer;'>Pr&eacute;nom</th>
-						<th id="age" style='cursor: pointer;'>Age <minus style="font-size: x-small;">(ans)</minus></th>
+						<th id="age" style='cursor: pointer;'>Age</th>
 						<th id="adresse" style='cursor: pointer;'>Adresse</th>
 						<th id="date" style='cursor: pointer;'>Date</th>
 						<th id="effectuer">Options</th>
 					</tr>
 				</thead>
 
-				<tbody id="donnees" class="liste_patient">
+				<tbody id="donnees" class="liste_patient" style="font-family: time new romans; font-size: 17px;" >
 
 					<!-- ************ On affiche les patients en une liste ordonn�e************ -->
 
@@ -45,17 +45,17 @@ $(window).load(function () {
 
 				<tfoot id="foot" class="foot_style">
 					<tr>
-					    <th id="numero_" style='width: 10%;'><input type="text" name="search_browser"
-							value=" N&deg;" class="search_init" /></th>
+					    <th id="numero_dossier_" style='width: 12%;'><input type="text" name="search_browser"
+							value=" N&deg; dossier" class="search_init" /></th>
 						<th id="nom_" style='width: 15%;'><input type="text" name="search_browser"
 							value=" Nom" class="search_init" /></th>
 						<th id="prenom_" style='width: 17%;'><input type="text" name="search_browser"
 							value=" Pr&eacute;nom" class="search_init" /></th>
 						<th id="age_" style='width: 8%;'><input type="text" name="search_browser"
 							value=" Age" class="search_init" /></th>
-						<th id="adresse_" style='width: 25%;'><input type="text" name="search_browser"
+						<th id="adresse_" style='width: 24%;'><input type="text" name="search_browser"
 							value=" Adresse" class="search_init" /></th>
-						<th id="date_" style='width: 15%;'><input type="text" name="search_browser"
+						<th id="date_" style='width: 14%;'><input type="text" name="search_browser"
 							value=" Date" class="search_init" /></th>
 						<th id="effectuer_" style='width: 10%;'><input type="hidden" name="search_browser"
 							value="" class="" /></th>
