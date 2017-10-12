@@ -533,7 +533,7 @@ class ResultatsTypageHemoglobinePdf
 	    $resultats = $this->_resultatsAnalysesDemandees;
 	     
 	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 8);
-	    $this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', 'Enregistre le: '),
+	    $this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', 'Enregistré le : '),
 	        $this->_leftMargin+5,
 	        $this->_yPosition+10);
 	     
@@ -543,13 +543,13 @@ class ResultatsTypageHemoglobinePdf
 	        $this->_yPosition+10);
 	     
 	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 8);
-	    $this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', 'validé par: '),
+	    $this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', ' par : '),
 	        $this->_leftMargin+135,
 	        $this->_yPosition+10);
 	     
 	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 9);
-	    $this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', ''. $infosAnalyseDemande[68]['Prenom'] .' '.$infosAnalyseDemande[68]['Nom']),
-	        $this->_leftMargin+173,
+	    $this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', ''. $infosAnalyseDemande[68]['Prenom'] .' '.$infosAnalyseDemande[68]['Nom'].'  -  validé par : '.$infosAnalyseDemande[68]['PrenomValidateur'] .' '.$infosAnalyseDemande[68]['NomValidateur']),
+	        $this->_leftMargin+155,
 	        $this->_yPosition+10);
 	     
 	    $this->_yPosition -= $noteLineHeight-20; //Allez à la ligne

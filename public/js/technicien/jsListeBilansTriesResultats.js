@@ -569,11 +569,11 @@
     	return tab;
     }
     
-    function getTestCombsDirect(val){
+    function getTestCombsDirect(val, iddemande){ 
     	if(val == 'Positif'){
-    		$('.titre_combs_direct').toggle(true);
+    		$('.ER_'+iddemande+' .titre_combs_direct').toggle(true);
     	}else{
-    		$('.titre_combs_direct').toggle(false).val(null);
+    		$('.ER_'+iddemande+' .titre_combs_direct').toggle(false).val(null);
     	}
     }
     
@@ -586,11 +586,11 @@
     	return tab;
     }
     
-    function getTestCombsIndirect(val){
+    function getTestCombsIndirect(val, iddemande){
     	if(val == 'Positif'){
-    		$('.titre_combs_indirect').toggle(true);
+    		$('.ER_'+iddemande+' .titre_combs_indirect').toggle(true);
     	}else{
-    		$('.titre_combs_indirect').toggle(false).val(null);
+    		$('.ER_'+iddemande+' .titre_combs_indirect').toggle(false).val(null);
     	}
     }
     
@@ -603,11 +603,11 @@
     	return tab;
     }
     
-    function getTestCompatibilite(val){
+    function getTestCompatibilite(val, iddemande){
     	if(val == 'Compatible'){
-    		$('.titre_test_compatibilite').toggle(true);
+    		$('.ER_'+iddemande+' .titre_test_compatibilite').toggle(true);
     	}else{
-    		$('.titre_test_compatibilite').toggle(false).val(null);
+    		$('.ER_'+iddemande+' .titre_test_compatibilite').toggle(false).val(null);
     	}
     }
     
@@ -736,9 +736,6 @@
     				     
     				else if(idanalyse == 68) { tab = getTypageHemoglobine(); }
     				     
-    				     
-    				     //alert(tab); return false;
-    				     
     				$( this ).dialog( "close" );
 
     				$.ajax({
@@ -782,16 +779,13 @@
             	     rapportCHOL_HDL();
             	     getCreatininemie_umol();
             	     getTcaRatio();
-            	     getCholesterolHDL();
-            	     getCholesterolLDL();
-            	     getCholesterolTotal();
-            	     getTriglycerides();
+            	     getCholesterolHDLFormule();
+            	     getCholesterolLDLFormule();
+            	     getFormuleCholesterolTotal();
+            	     getTriglyceridesFormule();
             	     getGlycemieFormule();
             	     getElectrophoreseProteinesFormule();
             	     getElectroHemo();
-            	     getTestCombsDirect();
-            	     getTestCombsIndirect();
-            	     getTestCompatibilite();
             	     getAsatAlatAuto();
             	     
             	     $("#resultatsAnalyses").dialog('open');
@@ -859,6 +853,7 @@
     	var tab = [];
     	tab[1] = $('#cholesterol_total_1').val(); 
     	tab[2] = $('#cholesterol_total_2').val();
+    	tab[3] = $('#type_materiel_cholesterol_total').val();
     	
     	return tab;
     }
@@ -867,6 +862,7 @@
     	var tab = [];
     	tab[1] = $('#triglycerides_1').val(); 
     	tab[2] = $('#triglycerides_2').val();
+    	tab[3] = $('#type_materiel_triglycerides').val();
     	
     	return tab;
     }
@@ -875,6 +871,7 @@
     	var tab = [];
     	tab[1] = $('#cholesterol_HDL_1').val(); 
     	tab[2] = $('#cholesterol_HDL_2').val();
+    	tab[3] = $('#type_materiel_cholesterol_HDL').val();
     	
     	return tab;
     }
@@ -883,6 +880,7 @@
     	var tab = [];
     	tab[1] = $('#cholesterol_LDL_1').val(); 
     	tab[2] = $('#cholesterol_LDL_2').val();
+    	tab[3] = $('#type_materiel_cholesterol_LDL').val();
     	
     	return tab;
     }
@@ -897,12 +895,12 @@
     	return tab;
     }
     
-    function getChol_Total_HDL_LDL_Trigly(){
+    function getChol_Total_HDL_LDL_Trigly(iddemande){
     	var tab = [];
-	    tab[1] = $('#cholesterol_total_1').val(); tab[2] = $('#cholesterol_total_2').val(); tab[9]  = $('#type_materiel_cholesterol_total').val(); 
-	    tab[3] = $('#cholesterol_HDL_1').val();   tab[4] = $('#cholesterol_HDL_2').val();   tab[10] = $('#type_materiel_cholesterol_HDL').val(); 
-	    tab[5] = $('#cholesterol_LDL_1').val();   tab[6] = $('#cholesterol_LDL_2').val();   tab[11] = $('#type_materiel_cholesterol_LDL').val(); 
-	    tab[7] = $('#triglycerides_1').val();     tab[8] = $('#triglycerides_2').val();     tab[12] = $('#type_materiel_triglycerides').val(); 
+	    tab[1] = $('.ER_'+iddemande+' #cholesterol_total_1').val(); tab[2] = $('.ER_'+iddemande+' #cholesterol_total_2').val(); tab[9]  = $('.ER_'+iddemande+' #type_materiel_cholesterol_total').val(); 
+	    tab[3] = $('.ER_'+iddemande+' #cholesterol_HDL_1').val();   tab[4] = $('.ER_'+iddemande+' #cholesterol_HDL_2').val();   tab[10] = $('.ER_'+iddemande+' #type_materiel_cholesterol_HDL').val(); 
+	    tab[5] = $('.ER_'+iddemande+' #cholesterol_LDL_1').val();   tab[6] = $('.ER_'+iddemande+' #cholesterol_LDL_2').val();   tab[11] = $('.ER_'+iddemande+' #type_materiel_cholesterol_LDL').val(); 
+	    tab[7] = $('.ER_'+iddemande+' #triglycerides_1').val();     tab[8] = $('.ER_'+iddemande+' #triglycerides_2').val();     tab[12] = $('.ER_'+iddemande+' #type_materiel_triglycerides').val(); 
 		
 	    return tab;
     }
@@ -1212,6 +1210,16 @@
 	    return tab;
     }
     
+    function getDensiteGoutteEpaisse(valeur, iddemande){
+    	
+    	if(valeur == 'Positif'){ 
+    		$('.ER_'+iddemande+' #goutte_epaisse_positif').toggle(true); 
+    	}else{ 
+    		$('.ER_'+iddemande+' #goutte_epaisse_positif').toggle(false); 
+    	} 
+    };
+    
+    
     //Automatisation des champs calculables  -----  Automatisation des champs calculables
     //Automatisation des champs calculables  -----  Automatisation des champs calculables
     //Automatisation des champs calculables  -----  Automatisation des champs calculables
@@ -1368,7 +1376,7 @@
     	
     }
     
-    function getCholesterolTotal(){
+    function getFormuleCholesterolTotal(){
     	var cholesterol_total_1 = $('#cholesterol_total_1').val();
     	var valeur_mmol = null;
     	
@@ -1392,7 +1400,7 @@
     	
     }
     
-    function getCholesterolHDL(){
+    function getCholesterolHDLFormule(){
     	var cholesterol_HDL_1 = $('#cholesterol_HDL_1').val();
     	var valeur_mmol = null;
     	
@@ -1416,7 +1424,7 @@
     	
     }
     
-    function getCholesterolLDL(){
+    function getCholesterolLDLFormule(){
     	var cholesterol_LDL_1 = $('#cholesterol_LDL_1').val();
     	var valeur_mmol = null;
     	
@@ -1441,7 +1449,7 @@
     }
     
 
-    function getTriglycerides(){
+    function getTriglyceridesFormule(){
     	var triglycerides_1 = $('#triglycerides_1').val();
     	var valeur_mmol = null;
     	
@@ -1641,32 +1649,32 @@
     	});
     }
     
-    function getAlbumineUrinaireVal(resultat){
+    function getAlbumineUrinaireVal(resultat, iddemande){
     	
     	if(resultat == 'positif'){
-    		$('#albumine_urinaire_degres').fadeIn(500);
+    		$('.ER_'+iddemande+' #albumine_urinaire_degres').fadeIn(500);
     	}else{
-    		$('#albumine_urinaire_degres').toggle(false);
+    		$('.ER_'+iddemande+' #albumine_urinaire_degres').toggle(false);
     	}
     	
     }
     
-    function getSucreUrinaireVal(resultat){
+    function getSucreUrinaireVal(resultat, iddemande){
     	
     	if(resultat == 'positif'){
-    		$('#sucre_urinaire_degres').fadeIn(500);
+    		$('.ER_'+iddemande+' #sucre_urinaire_degres').fadeIn(500);
     	}else{
-    		$('#sucre_urinaire_degres').toggle(false);
+    		$('.ER_'+iddemande+' #sucre_urinaire_degres').toggle(false);
     	}
     	
     }
     
-    function getCorpsCetoniqueUrinaireVal(resultat){
+    function getCorpsCetoniqueUrinaireVal(resultat, iddemande){
     	
     	if(resultat == 'positif'){
-    		$('#corps_cetonique_urinaire_degres').fadeIn(500);
+    		$('.ER_'+iddemande+' #corps_cetonique_urinaire_degres').fadeIn(500);
     	}else{
-    		$('#corps_cetonique_urinaire_degres').toggle(false);
+    		$('.ER_'+iddemande+' #corps_cetonique_urinaire_degres').toggle(false);
     	}
     	
     }
@@ -1692,8 +1700,10 @@
   	    	"Enregistrer": function() {
   	          
   	    		var tab = []; 
+  	    		var tabIdDemande = [];
   	    		for(var i = 0 ;  i<tabAnalyses.length ; i++){
   	    			var idanalyse = tabAnalyses[i];
+  	    			    tabIdDemande[idanalyse] = tabDemandes[i];
   	    			
   	    			     if(idanalyse ==  1) { tab  [1] = getChampsNfs(); }
     				else if(idanalyse ==  2) { tab  [2] = groupageRhesus(); }
@@ -1719,7 +1729,7 @@
     				else if(idanalyse == 26) { tab [26] = new Array("", $('#triglycerides_1').val(), $('#triglycerides_2').val(), $('#type_materiel_triglycerides').val()); }
     				else if(idanalyse == 27) { tab [27] = new Array("", $('#cholesterol_HDL_1').val(), $('#cholesterol_HDL_2').val(), $('#type_materiel_cholesterol_HDL').val()); }
     				else if(idanalyse == 28) { tab [28] = new Array("", $('#cholesterol_LDL_1').val(), $('#cholesterol_LDL_2').val(), $('#type_materiel_cholesterol_LDL').val()); }
-    				else if(idanalyse == 29) { tab [29] = getChol_Total_HDL_LDL_Trigly(); }
+    				else if(idanalyse == 29) { tab [29] = getChol_Total_HDL_LDL_Trigly(tabIdDemande[29]); }
     				else if(idanalyse == 30) { tab [30] = getLipidesTotaux(); } 
     			    else if(idanalyse == 31) { tab [31] = getIonogramme(); }
     				else if(idanalyse == 32) { tab [32] = new Array("", $('#calcemie').val(), $('#type_materiel_calcemie').val()); } 
@@ -1759,7 +1769,6 @@
   	    			     
     				else if(idanalyse == 68) { tab [68] = getTypageHemoglobine(); }
   	    		}
-  	    		
   	    		
   	        	$( this ).dialog( "close" );
   	            
@@ -1801,20 +1810,25 @@
             	     $('#contenuResultatsAnalyses div').empty();
                	     $('#contenuResultatsAnalysesDuneDemande div').empty();
             	     $('#contenuResultatsAnalysesDuneDemande div').html(html);
-            	     gestionFormuleLeucocytaire();
+            	     
             	     rapportCHOL_HDL();
-            	     getCreatininemie_umol();
-            	     getTcaRatio();
-            	     getCholesterolHDL();
-            	     getCholesterolLDL();
-            	     getCholesterolTotal();
-            	     getTriglycerides();
-            	     getGlycemieFormule();
+            	     
+            	     var scriptFormule;
+            	     scriptFormule  = gestionFormuleLeucocytaire_TAD(listeDesDemandesSelect);
+            	     scriptFormule += gestionFormuleGlycemie_TAD(listeDesDemandesSelect);
+            	     scriptFormule += gestionFormuleTCA_TAD(listeDesDemandesSelect);
+            	     scriptFormule += gestionFormuleCreatininemie_TAD(listeDesDemandesSelect);
+            	     scriptFormule += gestionFormuleCholesterolTotal_TAD(listeDesDemandesSelect);
+            	     scriptFormule += gestionFormuleTriglycerides_TAD(listeDesDemandesSelect);
+            	     scriptFormule += gestionFormuleCholesterolHDL_TAD(listeDesDemandesSelect);
+            	     scriptFormule += gestionFormuleCholesterolLDL_TAD(listeDesDemandesSelect);
+            	     scriptFormule += gestionFormuleRapportCholHdl_TAD(listeDesDemandesSelect);
+                 	
+            	     $('#scriptFormules').html(scriptFormule);
+            	     
+            	     
             	     getElectrophoreseProteinesFormule();
             	     getElectroHemo();
-            	     getTestCombsDirect();
-            	     getTestCombsIndirect();
-            	     getTestCompatibilite();
             	     getAsatAlatAuto();
             	     $("#resultatsAnalysesDuneDemande").dialog('open');
             }
@@ -1840,21 +1854,110 @@
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /**GESTION DE L'INTERFACE D'ENREGISTREMENT MULTIPLE DES RESULTATS D'ANALYSES **/
+    /**GESTION DE L'INTERFACE D'ENREGISTREMENT MULTIPLE DES RESULTATS D'ANALYSES **/
+    /**GESTION DE L'INTERFACE D'ENREGISTREMENT MULTIPLE DES RESULTATS D'ANALYSES **/
+    /**GESTION DE L'INTERFACE D'ENREGISTREMENT MULTIPLE DES RESULTATS D'ANALYSES **/
+    /**GESTION DE L'INTERFACE D'ENREGISTREMENT MULTIPLE DES RESULTATS D'ANALYSES **/
+    
+    function enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab){
+
+    	$(".examenSaveTick_"+iddemande).html('<img style="margin-left: 10px; width: 16px; height: 16px;" src="../images/loading/Chargement_1.gif">');
+    	$.ajax({
+			type: 'POST',
+			url: tabUrl[0]+'public/technicien/enregistrer-resultat',
+			data: {'idanalyse':idanalyse, 'iddemande':iddemande, 'tab':tab},
+			success: function(data) {
+				var result = jQuery.parseJSON(data);  
+				var resultatExiste = result[1];
+				
+				if(resultatExiste == 1){
+					$(".examenSaveTick_"+iddemande).html("<img style='margin-left: 10px;'  src='../images_icons/tick_16.png'>");
+				}else{
+					$(".examenSaveTick_"+iddemande).html("");
+				}
+				
+			}
+		});
+    	
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    var listeDemandesSelectionnees;
+    var listeAnalysesSelectionnees;
     /**
-     * RECUPERER LES DONNEES POUR L'ENREGISTREMENT PAR TYPE ET PAR ANALYSE ET PAR DATE --TAD
-     * id = idpatient
+     * RECUPERER LES DONNEES POUR L'ENREGISTREMENT 
+     * id = iddemande
      */
     function getChampsNfs_TAD(id){
     	var tab = new Array();
     	var i;
-    	for(i = 1 ; i <= 23 ; i++){
-    		if($('.entrezResult_'+id+' #champ'+i).val()){ tab[i] = $('.entrezResult_'+id+' #champ'+i).val(); }
+    	for(i = 1 ; i <= 25 ; i++){
+    		if($('.ER_'+id+' #champ'+i).val()){ tab[i] = $('.ER_'+id+' #champ'+i).val(); }
     		else { tab[i] = null; }
     	}
-    	tab[i] = $('.entrezResult_'+id+' #type_materiel_nfs').val();
+    	tab[i] = $('.ER_'+id+' #type_materiel_nfs').val();
+    	tab[i+1] = $('#commentaire_hemogramme').val();
+    	
     	return tab;
     }
     
+    /*
+     * tamponGroupageRhesus
+     */
+    var tamponGroupageRhesusTab = new Array();
+    
+
+    function getGroupageRhesus_TAD(id){
+    	var tab = new Array();
+    	tab[1] = $('.ER_'+id+' #groupe').val(); 
+		tab[2] = $('.ER_'+id+' #rhesus').val();
+		tab[3] = $('.ER_'+id+' #type_materiel_gsrh_groupage').val();
+    	
+    	return tab;
+    }
 
     
     
@@ -1872,36 +1975,48 @@
     	    modal: true,
     	    buttons: {
     	        "Enregistrer": function() {
-    	            //$( this ).dialog( "close" );
     	            
-    	        	//alert(getChampsNfs_TAD(listeDesPatientsSelect[1]));
-    	            
+    	        	for(var i=0 ; i<listeAnalysesSelectionnees.length ; i++){
+    	        		var idanalyse = listeAnalysesSelectionnees[i];
+    	        		var iddemande = listeDemandesSelectionnees[i];
+    	        		
+    	        		if(idanalyse == 1){
+        	        		
+    	        			var tab = getChampsNfs_TAD(iddemande);
+    	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+        	        		
+    	        		}else
+    	        			if(idanalyse == 2){
+    	        				
+    	        				var tab = getGroupageRhesus_TAD(iddemande);
+    	        				if(JSON.stringify(tamponGroupageRhesusTab[iddemande]) === JSON.stringify(tab)){
+    	        					//alert("on ne fait rien");
+    	        				}else{
+    	        					tamponGroupageRhesusTab[iddemande] = tab;
+    	        					/*
+    	        					alert("on fait quelque chose");
+    	        					alert(tamponGroupageRhesusTab[iddemande]);
+    	        					alert(tab);
+    	        					*/
+        	        				enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+    	        				}
+    	        				
+    	        			}
+    	        	}
+    	        	
     	            
     	            return false;
     	            
-    	            var chemin = ""; //tabUrl[0]+'public/facturation/supprimer';
-    	            $.ajax({
-    	                type: 'POST',
-    	                url: chemin ,
-    	                data: $(this).serialize(),  
-    	                data:'id=',
-    	                success: function(data) {
-    	                	     var result = jQuery.parseJSON(data);  
-    	                	     nb = result;
-    	                	     $("#"+cle).parent().parent().fadeOut(function(){
-    		                	 	 $("#"+cle).empty();
-    		                	 });
-    	                }
-    	            });
-    	            
     	        },
-    	        "Annuler": function() {
+    	        
+    	        "Fermer": function() {
                     $(this).dialog( "close" );
                 }
     	   }
     	  });
         
     }
+    
     
     //RecupÃ©rer la liste des analyses Ã  l'entrÃ©e pour initialisation
     //RecupÃ©rer la liste des analyses Ã  l'entrÃ©e pour initialisation
@@ -1921,16 +2036,25 @@
             success: function(data) {
             	var result = jQuery.parseJSON(data);  
             	$('#contenuResultatsAnalysesParType div').html(result);
+            	listeDemandesSelectionnees = listeDesDemandesSelect;
+            	listeAnalysesSelectionnees = listeDesAnalysesSelect;
             	
-            	gestionFormuleLeucocytaire_TAD(listeDesDemandesSelect);
-            	rapportCHOL_HDL();
-            	getCreatininemie_umol();
-            	getTcaRatio();
-            	getCholesterolHDL();
-            	getCholesterolLDL();
-            	getCholesterolTotal();
-            	getTriglycerides();
-            	getGlycemieFormule();
+            	var scriptFormule;
+            	
+            	scriptFormule  = gestionFormuleLeucocytaire_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleGlycemie_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleTCA_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleCreatininemie_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleCholesterolTotal_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleTriglycerides_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleCholesterolHDL_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleCholesterolLDL_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleRapportCholHdl_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleElectrophoreseProteines_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleElectrophoreseHemoglobine(listeDesDemandesSelect);
+            	
+            	$('#scriptFormules').html(scriptFormule);
+            	
             }
         });
     	
@@ -1954,15 +2078,21 @@
              	var result = jQuery.parseJSON(data);  
             	$('#contenuResultatsAnalysesParType div').html(result);
             	
-            	gestionFormuleLeucocytaire_TAD(listeDesDemandesSelect);
-            	rapportCHOL_HDL();
-            	getCreatininemie_umol();
-            	getTcaRatio();
-            	getCholesterolHDL();
-            	getCholesterolLDL();
-            	getCholesterolTotal();
-            	getTriglycerides();
-            	getGlycemieFormule();
+            	var scriptFormule;
+            	
+            	scriptFormule  = gestionFormuleLeucocytaire_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleGlycemie_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleTCA_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleCreatininemie_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleCholesterolTotal_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleTriglycerides_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleCholesterolHDL_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleCholesterolLDL_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleRapportCholHdl_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleElectrophoreseProteines_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleElectrophoreseHemoglobine(listeDesDemandesSelect);
+            	
+            	$('#scriptFormules').html(scriptFormule);
              }
     	});
     }
@@ -1985,19 +2115,25 @@
              	var result = jQuery.parseJSON(data);
             	$('#contenuResultatsAnalysesParType div').html(result);
             	
-            	gestionFormuleLeucocytaire_TAD(listeDesDemandesSelect);
-            	rapportCHOL_HDL();
-            	getCreatininemie_umol();
-            	getTcaRatio();
-            	getCholesterolHDL();
-            	getCholesterolLDL();
-            	getCholesterolTotal();
-            	getTriglycerides();
-            	getGlycemieFormule();
+            	var scriptFormule;
+            	
+            	scriptFormule  = gestionFormuleLeucocytaire_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleGlycemie_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleTCA_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleCreatininemie_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleCholesterolTotal_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleTriglycerides_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleCholesterolHDL_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleCholesterolLDL_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleRapportCholHdl_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleElectrophoreseProteines_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleElectrophoreseHemoglobine(listeDesDemandesSelect);
+            	
+            	
+            	$('#scriptFormules').html(scriptFormule);
             	
              }
     	});
-    	
     	
     }
     
@@ -2020,15 +2156,21 @@
              	var result = jQuery.parseJSON(data);
             	$('#contenuResultatsAnalysesParType div').html(result);
             	
-            	gestionFormuleLeucocytaire_TAD(listeDesDemandesSelect);
-            	rapportCHOL_HDL();
-            	getCreatininemie_umol();
-            	getTcaRatio();
-            	getCholesterolHDL();
-            	getCholesterolLDL();
-            	getCholesterolTotal();
-            	getTriglycerides();
-            	getGlycemieFormule();
+            	var scriptFormule;
+            	
+            	scriptFormule  = gestionFormuleLeucocytaire_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleGlycemie_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleTCA_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleCreatininemie_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleCholesterolTotal_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleTriglycerides_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleCholesterolHDL_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleCholesterolLDL_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleRapportCholHdl_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleElectrophoreseProteines_TAD(listeDesDemandesSelect);
+            	scriptFormule += gestionFormuleElectrophoreseHemoglobine(listeDesDemandesSelect);
+            	
+            	$('#scriptFormules').html(scriptFormule);
              }
     	});
     }
@@ -2189,16 +2331,548 @@
                                    "}else{ champ6.val(null); }"+
 
                                 "});";
+        	
+        	
+        	//Taux de réticulocytes -- Taux de réticulocytes
+        	//Taux de réticulocytes -- Taux de réticulocytes
+        	
+        	scriptFormule += "$('.ER_"+iddemande+" #champ12, .ER_"+iddemande+" #champ25').keyup( function () {"+
+            
+                                "var champ12 = $('.ER_"+iddemande+" #champ12').val();"+
+                                "var champ25 = $('.ER_"+iddemande+" #champ25').val();"+
+                                "if( champ12 && champ25 ){"+
+                                    "var resultatChamp24 = champ12*10000*champ25;"+
+                                    "$('#champ24').val(resultatChamp24);"+
+                                "}else{ $('#champ24').val(null); }"+
+
+                                "}).change( function () {"+
+
+                                   "var champ12 = $('.ER_"+iddemande+" #champ12').val();"+
+                                   "var champ25 = $('.ER_"+iddemande+" #champ25').val();"+
+                                   "if( champ12 && champ25 ){"+
+                                       "var resultatChamp24 = champ12*10000*champ25;"+
+                                       "$('#champ24').val(resultatChamp24);"+
+                                   "}else{ $('#champ24').val(null); }"+
+
+                                "});";
+        	
+    	}
+    	scriptFormule += "</script>";
+    	
+    	return scriptFormule;
+    }
+    
+    function gestionFormuleGlycemie_TAD(demande){
+    	
+    	var scriptFormule = "<script>";
+    	for(var i=0 ; i<demande.length ; i++){
+        	var iddemande = demande[i];
+        	
+        	scriptFormule += "$('.ER_"+iddemande+" #glycemie_1').keyup( function () {"+
+        	                    
+        	                    "var glycemie_1 = $('.ER_"+iddemande+" #glycemie_1').val();"+
+        	                    "if(glycemie_1){"+
+        	                        "var valeur_mmol = glycemie_1 * 5.551;"+
+        	         			    "$('.ER_"+iddemande+" #glycemie_2').val(valeur_mmol.toFixed(3));"+
+        	         		    "}else{ $('.ER_"+iddemande+" #glycemie_2').val(null); }"+
+        	                 
+        	                 "}).change( function () {"+
+        	                 
+        	                    "var glycemie_1 = $('.ER_"+iddemande+" #glycemie_1').val();"+
+     	                        "if(glycemie_1){"+
+     	                            "var valeur_mmol = glycemie_1 * 5.551;"+
+     	         			        "$('.ER_"+iddemande+" #glycemie_2').val(valeur_mmol.toFixed(3));"+
+     	         		        "}else{ $('.ER_"+iddemande+" #glycemie_2').val(null); }"+
+        	                 
+        	                 "});";
+        	
+    	}
+    	scriptFormule += "</script>";
+        
+    	return scriptFormule;
+    }
+    
+    function gestionFormuleTCA_TAD(demande){
+    	
+    	var scriptFormule = "<script>";
+    	for(var i=0 ; i<demande.length ; i++){
+        	var iddemande = demande[i];
+        	
+        	scriptFormule += "$('.ER_"+iddemande+" #tca_patient, .ER_"+iddemande+" #temoin_patient').keyup( function () {"+
+        	                    
+        	                    "var tca_patient = $('.ER_"+iddemande+" #tca_patient').val();"+
+        	                    "var temoin_patient = $('.ER_"+iddemande+" #temoin_patient').val();"+
+        	                    
+        	                    "if(tca_patient && temoin_patient){"+
+        		                    "var tca_ratio = tca_patient/temoin_patient;"+
+        	                  	    "$('.ER_"+iddemande+" #tca_ratio').val(tca_ratio.toFixed(2));"+
+        	                    "}else{ $('.ER_"+iddemande+" #tca_ratio').val(null); }"+
+        	                 
+        	                 "}).change( function () {"+
+        	                 
+        	                    "var tca_patient = $('.ER_"+iddemande+" #tca_patient').val();"+
+     	                        "var temoin_patient = $('.ER_"+iddemande+" #temoin_patient').val();"+
+     	                    
+     	                        "if(tca_patient && temoin_patient){"+
+     		                        "var tca_ratio = tca_patient/temoin_patient;"+
+     	                  	        "$('.ER_"+iddemande+" #tca_ratio').val(tca_ratio.toFixed(2));"+
+     	                        "}else{ $('.ER_"+iddemande+" #tca_ratio').val(null); }"+
+        	                    
+        	                 "});";
+        	
+    	}
+    	scriptFormule += "</script>";
+        
+    	return scriptFormule;
+    }
+    
+    function gestionFormuleCreatininemie_TAD(demande){
+    	
+    	var scriptFormule = "<script>";
+    	for(var i=0 ; i<demande.length ; i++){
+        	var iddemande = demande[i];
+        	
+        	scriptFormule += "$('.ER_"+iddemande+" #creatininemie').keyup( function () {"+
+        	                    
+        	                    "var creatininemie = $('.ER_"+iddemande+" #creatininemie').val();"+
+    	   	                    "if(creatininemie){"+
+        		                    "var valeur_umol = creatininemie * 8.84;"+
+        		                    "$('.ER_"+iddemande+" #creatininemie_umol').val(valeur_umol.toFixed(2));"+
+        	                    "}else{	$('.ER_"+iddemande+" #creatininemie_umol').val(null); }"+
+        	                 
+        	                 "}).change( function () {"+
+        	                 
+        	                    "var creatininemie = $('.ER_"+iddemande+" #creatininemie').val();"+
+ 	   	                        "if(creatininemie){"+
+     		                        "var valeur_umol = creatininemie * 8.84;"+
+     		                        "$('.ER_"+iddemande+" #creatininemie_umol').val(valeur_umol.toFixed(2));"+
+     	                        "}else{	$('.ER_"+iddemande+" #creatininemie_umol').val(null); }"+
+        	                    
+        	                 "});";
+        	
+    	}
+    	scriptFormule += "</script>";
+        
+    	return scriptFormule;
+    }
+    
+    function gestionFormuleCholesterolTotal_TAD(demande){
+    	
+    	var scriptFormule = "<script>";
+    	for(var i=0 ; i<demande.length ; i++){
+        	var iddemande = demande[i];
+        	
+        	scriptFormule += "$('.ER_"+iddemande+" #cholesterol_total_1').keyup( function () {"+
+        	                    
+        	                    "var cholesterol_total_1 = $('.ER_"+iddemande+" #cholesterol_total_1').val();"+
+    	   	                    "if(cholesterol_total_1){"+
+        		                    "var valeur_mmol = cholesterol_total_1 * 2.587;"+
+        		                    "$('.ER_"+iddemande+" #cholesterol_total_2').val(valeur_mmol.toFixed(2));"+
+        	                    "}else{	$('.ER_"+iddemande+" #cholesterol_total_2').val(null); }"+
+        	                 
+        	                 "}).change( function () {"+
+        	                 
+        	                    "var cholesterol_total_1 = $('.ER_"+iddemande+" #cholesterol_total_1').val();"+
+ 	   	                        "if(cholesterol_total_1){"+
+     		                        "var valeur_mmol = cholesterol_total_1 * 2.587;"+
+     		                        "$('.ER_"+iddemande+" #cholesterol_total_2').val(valeur_mmol.toFixed(2));"+
+     	                        "}else{	$('.ER_"+iddemande+" #cholesterol_total_2').val(null); }"+
+     	                 
+        	                 "});";
+        	
+    	}
+    	scriptFormule += "</script>";
+        
+    	return scriptFormule;
+    	
+    }
+    
+    function gestionFormuleTriglycerides_TAD(demande){
+
+    	var scriptFormule = "<script>";
+    	for(var i=0 ; i<demande.length ; i++){
+        	var iddemande = demande[i];
+        	
+        	scriptFormule += "$('.ER_"+iddemande+" #triglycerides_1').keyup( function () {"+
+        	                    
+        	                    "var triglycerides_1 = $('.ER_"+iddemande+" #triglycerides_1').val();"+
+    	   	                    "if(triglycerides_1){"+
+        		                    "var valeur_mmol = triglycerides_1 * 1.143;"+
+        		                    "$('.ER_"+iddemande+" #triglycerides_2').val(valeur_mmol.toFixed(3));"+
+        	                    "}else{	$('.ER_"+iddemande+" #triglycerides_2').val(null); }"+
+        	                 
+        	                 "}).change( function () {"+
+        	                 
+        	                    "var triglycerides_1 = $('.ER_"+iddemande+" #triglycerides_1').val();"+
+ 	   	                        "if(triglycerides_1){"+
+     		                        "var valeur_mmol = triglycerides_1 * 1.143;"+
+     		                        "$('.ER_"+iddemande+" #triglycerides_2').val(valeur_mmol.toFixed(3));"+
+     	                        "}else{	$('.ER_"+iddemande+" #triglycerides_2').val(null); }"+
+     	                 
+        	                 "});";
+        	
+    	}
+    	scriptFormule += "</script>";
+        
+    	return scriptFormule;
+    	
+    }
+    
+    function gestionFormuleCholesterolHDL_TAD(demande){
+    	
+    	var scriptFormule = "<script>";
+    	for(var i=0 ; i<demande.length ; i++){
+        	var iddemande = demande[i];
+        	
+        	scriptFormule += "$('.ER_"+iddemande+" #cholesterol_HDL_1').keyup( function () {"+
+        	                    
+        	                    "var cholesterol_HDL_1 = $('.ER_"+iddemande+" #cholesterol_HDL_1').val();"+
+    	   	                    "if(cholesterol_HDL_1){"+
+        		                    "var valeur_mmol = cholesterol_HDL_1 * 2.587;"+
+        		                    "$('.ER_"+iddemande+" #cholesterol_HDL_2').val(valeur_mmol.toFixed(2));"+
+        	                    "}else{	$('.ER_"+iddemande+" #cholesterol_HDL_2').val(null); }"+
+        	                 
+        	                 "}).change( function () {"+
+        	                 
+        	                    "var cholesterol_HDL_1 = $('.ER_"+iddemande+" #cholesterol_HDL_1').val();"+
+ 	   	                        "if(cholesterol_HDL_1){"+
+     		                        "var valeur_mmol = cholesterol_HDL_1 * 2.587;"+
+     		                        "$('.ER_"+iddemande+" #cholesterol_HDL_2').val(valeur_mmol.toFixed(2));"+
+     	                        "}else{	$('.ER_"+iddemande+" #cholesterol_HDL_2').val(null); }"+
+     	                 
+        	                 "});";
+        	
+    	}
+    	scriptFormule += "</script>";
+        
+    	return scriptFormule;
+    }
+    
+    function gestionFormuleCholesterolLDL_TAD(demande){
+    	
+    	var scriptFormule = "<script>";
+    	for(var i=0 ; i<demande.length ; i++){
+        	var iddemande = demande[i];
+        	
+        	scriptFormule += "$('.ER_"+iddemande+" #cholesterol_LDL_1').keyup( function () {"+
+        	                    
+        	                    "var cholesterol_LDL_1 = $('.ER_"+iddemande+" #cholesterol_LDL_1').val();"+
+    	   	                    "if(cholesterol_LDL_1){"+
+        		                    "var valeur_mmol = cholesterol_LDL_1 * 2.587;"+
+        		                    "$('.ER_"+iddemande+" #cholesterol_LDL_2').val(valeur_mmol.toFixed(2));"+
+        	                    "}else{	$('.ER_"+iddemande+" #cholesterol_LDL_2').val(null); }"+
+        	                 
+        	                 "}).change( function () {"+
+        	                 
+        	                    "var cholesterol_LDL_1 = $('.ER_"+iddemande+" #cholesterol_LDL_1').val();"+
+ 	   	                        "if(cholesterol_LDL_1){"+
+     		                        "var valeur_mmol = cholesterol_LDL_1 * 2.587;"+
+     		                        "$('.ER_"+iddemande+" #cholesterol_LDL_2').val(valeur_mmol.toFixed(2));"+
+     	                        "}else{	$('.ER_"+iddemande+" #cholesterol_LDL_2').val(null); }"+
+     	                 
+        	                 "});";
+        	
+    	}
+    	scriptFormule += "</script>";
+        
+    	return scriptFormule;
+    
+    }
+    
+    function gestionFormuleRapportCholHdl_TAD(demande){
+    	
+    	var scriptFormule = "<script> ";
+    	for(var i=0 ; i<demande.length ; i++){
+        	var iddemande = demande[i];
+        	
+        	scriptFormule += "$('.ER_"+iddemande+" #cholesterol_total_1, .ER_"+iddemande+" #cholesterol_HDL_1').keyup( function () {"+
+        	                    
+        	                    "var cholesterol_total_1 = $('.ER_"+iddemande+" #cholesterol_total_1').val();"+
+    		                    "var cholesterol_HDL_1 = $('.ER_"+iddemande+" #cholesterol_HDL_1').val();"+
+        	
+    		                    "if( cholesterol_total_1 == '' || cholesterol_total_1 == 0 || cholesterol_HDL_1 == '' || cholesterol_HDL_1 == 0 ){"+   
+    		            			"$('.ER_"+iddemande+" .rapport_chol_hdl table').toggle(false);"+
+    		            		"}"+
+    		                	"else if( cholesterol_total_1 && cholesterol_HDL_1 ){"+
+    		                	
+    		                		"var rapport = cholesterol_total_1/cholesterol_HDL_1;"+
+    		                		"$('.ER_"+iddemande+" .rapport_chol_hdl').toggle(true);"+
+    		                		"$('.ER_"+iddemande+" #rapport_chol_hdl').val(rapport.toFixed(2));"+
+    		                		"$('.ER_"+iddemande+" .rapport_chol_hdl table').toggle(true);"+
+    		                		
+    		                		//Affichage de la conclusion du rapport
+    		                		"if(rapport >= 3.5 && rapport <= 5){"+
+    		                			"$('.ER_"+iddemande+" #conclusion_rapport_chol_hdl').html('<span style=\"color: orange; float: left;\"> Risque dath&eacute;rog&egrave;ne faible </span>');"+
+    		                		"}else if(rapport > 5 && rapport <= 6.5){"+
+    		                			"$('.ER_"+iddemande+" #conclusion_rapport_chol_hdl').html('<span style=\"color: orange; float: left;\"> Risque dath&eacute;rog&egrave;ne mod&eacute;r&eacute; </span>');"+
+    		                		"}else if(rapport > 6.5){"+
+    		                			"$('.ER_"+iddemande+" #conclusion_rapport_chol_hdl').html('<span style=\"color: red; float: left;\"> Risque dath&eacute;rog&egrave;ne &eacute;lev&eacute; </span>');"+
+    		                		"}else{"+
+    		                			"$('.ER_"+iddemande+" #conclusion_rapport_chol_hdl').html('<span style=\"color: green; float: left;\"> RAS </span>');"+
+    		                		"}"+
+    		                		
+    	                        "}"+
+    		                    
+    		                    
+        	                 "}).change( function() { "+
+
+        	                    "var cholesterol_total_1 = $('.ER_"+iddemande+" #cholesterol_total_1').val();"+
+ 		                        "var cholesterol_HDL_1 = $('.ER_"+iddemande+" #cholesterol_HDL_1').val();"+
+     	
+ 		                        "if( cholesterol_total_1 == '' || cholesterol_total_1 == 0 || cholesterol_HDL_1 == '' || cholesterol_HDL_1 == 0 ){"+   
+ 		            			    "$('.ER_"+iddemande+" .rapport_chol_hdl table').toggle(false);"+
+ 		            		    "}"+
+ 		                	    "else if( cholesterol_total_1 && cholesterol_HDL_1 ){"+
+ 		                	
+ 		                		    "var rapport = cholesterol_total_1/cholesterol_HDL_1;"+
+ 		                		    "$('.ER_"+iddemande+" .rapport_chol_hdl').toggle(true);"+
+ 		                		    "$('.ER_"+iddemande+" #rapport_chol_hdl').val(rapport.toFixed(2));"+
+ 		                		    "$('.ER_"+iddemande+" .rapport_chol_hdl table').toggle(true);"+
+ 		                		
+ 		                		    //Affichage de la conclusion du rapport
+ 		                		    "if(rapport >= 3.5 && rapport <= 5){"+
+ 		                			    "$('.ER_"+iddemande+" #conclusion_rapport_chol_hdl').html('<span style=\"color: orange; float: left;\"> Risque dath&eacute;rog&egrave;ne faible </span>');"+
+ 		                		    "}else if(rapport > 5 && rapport <= 6.5){"+
+ 		                			    "$('.ER_"+iddemande+" #conclusion_rapport_chol_hdl').html('<span style=\"color: orange; float: left;\"> Risque dath&eacute;rog&egrave;ne mod&eacute;r&eacute; </span>');"+
+ 		                		    "}else if(rapport > 6.5){"+
+ 		                			    "$('.ER_"+iddemande+" #conclusion_rapport_chol_hdl').html('<span style=\"color: red; float: left;\"> Risque dath&eacute;rog&egrave;ne &eacute;lev&eacute; </span>');"+
+ 		                		    "}else{"+
+ 		                			    "$('.ER_"+iddemande+" #conclusion_rapport_chol_hdl').html('<span style=\"color: green; float: left;\"> RAS </span>');"+
+ 		                		    "}"+
+ 		                		
+ 	                            "}"+
+        	                 
+        	                 "}).trigger('keyup');";
+        	
     	}
     	
     	scriptFormule += "</script>";
-    	$('#scriptFormules').html(scriptFormule);
+        
+    	return scriptFormule;
     
     }
     
     
+    function gestionFormuleElectrophoreseProteines_TAD(demande){
+    	
+    	var scriptFormule = "<script>";
+    	for(var i=0 ; i<demande.length ; i++){
+        	var iddemande = demande[i];
+        	
+        	//Albumine
+        	scriptFormule += "$('.ER_"+iddemande+" #albumine, .ER_"+iddemande+" #proteine_totale').keyup( function () { "+
+        
+        	                     "var albumine = $('.ER_"+iddemande+" #albumine').val();"+
+    		                     "var proteine_totale = $('.ER_"+iddemande+" #proteine_totale').val();"+
+    		                     "if(albumine && proteine_totale){"+ 
+    		                         "var albumine_abs = (albumine * proteine_totale)/100;"+
+    		                         "$('.ER_"+iddemande+" #albumine_abs').val(albumine_abs.toFixed(1));"+
+    	                         "}else{"+
+    		                         "$('.ER_"+iddemande+" #albumine_abs').val(null);"+
+    		                     "}"+
+    				
+        	                 "}).change( function() { "+
+        	                 
+        	                     "var albumine = $('.ER_"+iddemande+" #albumine').val();"+
+		                         "var proteine_totale = $('.ER_"+iddemande+" #proteine_totale').val();"+
+		                         "if(albumine && proteine_totale){"+ 
+		                             "var albumine_abs = (albumine * proteine_totale)/100;"+
+		                             "$('.ER_"+iddemande+" #albumine_abs').val(albumine_abs.toFixed(1));"+
+	                             "}else{"+
+		                             "$('.ER_"+iddemande+" #albumine_abs').val(null);"+
+		                         "}"+
+		                     
+        	                 "});";
+        	
+        	//Alpha 1
+        	scriptFormule += "$('.ER_"+iddemande+" #alpha_1, .ER_"+iddemande+" #proteine_totale').keyup( function () { "+
+            
+                                 "var alpha_1 = $('.ER_"+iddemande+" #alpha_1').val();"+
+                                 "var proteine_totale = $('.ER_"+iddemande+" #proteine_totale').val();"+
+                                 "if(alpha_1 && proteine_totale){"+ 
+                                     "var alpha_1_abs = (alpha_1 * proteine_totale)/100;"+
+                                     "$('.ER_"+iddemande+" #alpha_1_abs').val(alpha_1_abs.toFixed(1));"+
+                                 "}else{"+
+                                     "$('.ER_"+iddemande+" #alpha_1_abs').val(null);"+
+                                 "}"+
+
+                             "}).change( function() { "+
+        
+                                 "var alpha_1 = $('.ER_"+iddemande+" #alpha_1').val();"+
+                                 "var proteine_totale = $('.ER_"+iddemande+" #proteine_totale').val();"+
+                                 "if(alpha_1 && proteine_totale){"+ 
+                                     "var alpha_1_abs = (alpha_1 * proteine_totale)/100;"+
+                                     "$('.ER_"+iddemande+" #alpha_1_abs').val(alpha_1_abs.toFixed(1));"+
+                                 "}else{"+
+                                     "$('.ER_"+iddemande+" #alpha_1_abs').val(null);"+
+                                 "}"+
+        
+                             "});";
+        	
+        	//Alpha 2
+        	scriptFormule += "$('.ER_"+iddemande+" #alpha_2, .ER_"+iddemande+" #proteine_totale').keyup( function () { "+
+            
+                                 "var alpha_2 = $('.ER_"+iddemande+" #alpha_2').val();"+
+                                 "var proteine_totale = $('.ER_"+iddemande+" #proteine_totale').val();"+
+                                 "if(alpha_2 && proteine_totale){"+ 
+                                     "var alpha_2_abs = (alpha_2 * proteine_totale)/100;"+
+                                     "$('.ER_"+iddemande+" #alpha_2_abs').val(alpha_2_abs.toFixed(1));"+
+                                 "}else{"+
+                                     "$('.ER_"+iddemande+" #alpha_2_abs').val(null);"+
+                                 "}"+
+
+                             "}).change( function() { "+
+        
+                                 "var alpha_2 = $('.ER_"+iddemande+" #alpha_2').val();"+
+                                 "var proteine_totale = $('.ER_"+iddemande+" #proteine_totale').val();"+
+                                 "if(alpha_2 && proteine_totale){"+ 
+                                     "var alpha_2_abs = (alpha_2 * proteine_totale)/100;"+
+                                     "$('.ER_"+iddemande+" #alpha_2_abs').val(alpha_2_abs.toFixed(1));"+
+                                 "}else{"+
+                                     "$('.ER_"+iddemande+" #alpha_2_abs').val(null);"+
+                                 "}"+
+        
+                             "});";
+        	
+        	//Beta 1
+        	scriptFormule += "$('.ER_"+iddemande+" #beta_1, .ER_"+iddemande+" #proteine_totale').keyup( function () { "+
+            
+                                 "var beta_1 = $('.ER_"+iddemande+" #beta_1').val();"+
+                                 "var proteine_totale = $('.ER_"+iddemande+" #proteine_totale').val();"+
+                                 "if(beta_1 && proteine_totale){"+ 
+                                     "var beta_1_abs = (beta_1 * proteine_totale)/100;"+
+                                     "$('.ER_"+iddemande+" #beta_1_abs').val(beta_1_abs.toFixed(1));"+
+                                 "}else{"+
+                                     "$('.ER_"+iddemande+" #beta_1_abs').val(null);"+
+                                 "}"+
+
+                             "}).change( function() { "+
+        
+                                 "var beta_1 = $('.ER_"+iddemande+" #beta_1').val();"+
+                                 "var proteine_totale = $('.ER_"+iddemande+" #proteine_totale').val();"+
+                                 "if(beta_1 && proteine_totale){"+ 
+                                     "var beta_1_abs = (beta_1 * proteine_totale)/100;"+
+                                     "$('.ER_"+iddemande+" #beta_1_abs').val(beta_1_abs.toFixed(1));"+
+                                 "}else{"+
+                                     "$('.ER_"+iddemande+" #beta_1_abs').val(null);"+
+                                 "}"+
+        
+                             "});";
+        	
+        	//Beta 2
+        	scriptFormule += "$('.ER_"+iddemande+" #beta_2, .ER_"+iddemande+" #proteine_totale').keyup( function () { "+
+            
+                                 "var beta_2 = $('.ER_"+iddemande+" #beta_2').val();"+
+                                 "var proteine_totale = $('.ER_"+iddemande+" #proteine_totale').val();"+
+                                 "if(beta_2 && proteine_totale){"+ 
+                                     "var beta_2_abs = (beta_2 * proteine_totale)/100;"+
+                                     "$('.ER_"+iddemande+" #beta_2_abs').val(beta_2_abs.toFixed(1));"+
+                                 "}else{"+
+                                     "$('.ER_"+iddemande+" #beta_2_abs').val(null);"+
+                                 "}"+
+
+                             "}).change( function() { "+
+        
+                                 "var beta_2 = $('.ER_"+iddemande+" #beta_2').val();"+
+                                 "var proteine_totale = $('.ER_"+iddemande+" #proteine_totale').val();"+
+                                 "if(beta_2 && proteine_totale){"+ 
+                                     "var beta_2_abs = (beta_2 * proteine_totale)/100;"+
+                                     "$('.ER_"+iddemande+" #beta_2_abs').val(beta_2_abs.toFixed(1));"+
+                                 "}else{"+
+                                     "$('.ER_"+iddemande+" #beta_2_abs').val(null);"+
+                                 "}"+
+        
+                             "});";
+    	
+        	//Gamma
+        	scriptFormule += "$('.ER_"+iddemande+" #gamma, .ER_"+iddemande+" #proteine_totale').keyup( function () { "+
+            
+                                 "var gamma = $('.ER_"+iddemande+" #gamma').val();"+
+                                 "var proteine_totale = $('.ER_"+iddemande+" #proteine_totale').val();"+
+                                 "if(gamma && proteine_totale){"+ 
+                                     "var gamma_abs = (gamma * proteine_totale)/100;"+
+                                     "$('.ER_"+iddemande+" #gamma_abs').val(gamma_abs.toFixed(1));"+
+                                 "}else{"+
+                                     "$('.ER_"+iddemande+" #gamma_abs').val(null);"+
+                                 "}"+
+
+                             "}).change( function() { "+
+        
+                                 "var gamma = $('.ER_"+iddemande+" #gamma').val();"+
+                                 "var proteine_totale = $('.ER_"+iddemande+" #proteine_totale').val();"+
+                                 "if(gamma && proteine_totale){"+ 
+                                     "var gamma_abs = (gamma * proteine_totale)/100;"+
+                                     "$('.ER_"+iddemande+" #gamma_abs').val(gamma_abs.toFixed(1));"+
+                                 "}else{"+
+                                     "$('.ER_"+iddemande+" #gamma_abs').val(null);"+
+                                 "}"+
+        
+                             "});";
+    	   
+    	}
+    	
+    	scriptFormule += "</script>";
+        
+    	return scriptFormule;
+    }
     
     
+    function gestionFormuleElectrophoreseHemoglobine(demande){
+    	
+    	var scriptFormule = "<script>";
+    	for(var i=0 ; i<demande.length ; i++){
+        	var iddemande = demande[i];
+
+        	scriptFormule += "$('.ER_"+iddemande+" #electro_hemo_moins').toggle(false);";
+        	
+        	scriptFormule += "$('.ER_"+iddemande+" #electro_hemo_plus').click( function (){ "+
+        	
+        	                     "var nbLigne = $('.ER_"+iddemande+" #electro_hemo tr').length;"+
+	    	                     "$('.ER_"+iddemande+" #electro_hemo_moins').toggle(true);"+
+	    	                     "if(nbLigne < 10){"+
+	    	                        "var html ='<tr id=electro_hemo_\'+nbLigne+\' class=ligneAnanlyse style=width: 100%; >"+
+	    	                        
+	                                           "<td style=\"width: 45%;\"><label class=\"lab1\"><span style=\"font-weight: bold;\" >  <input id=\"electro_hemo_label_\'+nbLigne+\'\" type=\"text\" style=\"font-weight: bold; padding-right: 5px; margin-right: 30px;\"> </span></label></td>"+
+	                                           "<td style=\"width: 35%;\"><label class=\"lab2\" style=\"padding-top: 5px;\"> <input id=\"electro_hemo_valeur_\'+nbLigne+\'\" type=\"number\" step=\"any\"> % </label></td>"+
+	                                           "<td style=\"width: 20%;\"><label class=\"lab3\" style=\"padding-top: 5px; width: 80%;\"> </label></td>"+
+	                                           
+	    	                                   "</tr>';"+
+	    	                     
+	                                 "$('.ER_"+iddemande+" #electro_hemo_'+(nbLigne-1)).after(html);"+
+	    	         		    	
+	    	         		    	"if(nbLigne == 9){"+
+	    	         		    		"$('.ER_"+iddemande+" #electro_hemo_plus').toggle(false);"+
+	    	         		    	"}"+
+	    	         	    	 "}"+
+	    	         	    	
+	    	         	     "});";
+        	
+        	scriptFormule += "$('.ER_"+iddemande+" #electro_hemo_moins').click( function (){ "+
+        	                      
+        	                     "var nbLigne = $('.ER_"+iddemande+" #electro_hemo tr').length;"+
+        	                     
+        	                     "if(nbLigne > 2){"+
+        	         		    	"$('.ER_"+iddemande+" #electro_hemo_'+(nbLigne-1)).remove();"+
+        	         		    	"if(nbLigne == 3){"+ 
+        	         		    		"$('.ER_"+iddemande+" #electro_hemo_moins').toggle(false);"+
+        	         		    	"}"+
+        	         		    	
+        	         		    	"if(nbLigne == 10){"+
+        	         		    		"$('.ER_"+iddemande+" #electro_hemo_plus').toggle(true);"+
+        	         		    	"}"+
+        	         	    	 "}"+
+        	
+        	
+        	
+        	                 "});";
+        	
+
+    	}
+    	
+    	scriptFormule += "</script>";
+        
+    	return scriptFormule;
+    }
     
     
     

@@ -369,7 +369,7 @@ function montantTotal(){
 		}
 	}
 	if(somme != 0){
-		$("#montantTotal span").html("<div style='float: left; margin-top: -5px; margin-right: 10px;'> Montant total: </div> <div style='margin-top: -8px; margin-right: 50px; font-size: 20px; font-weight: bold; width: 120px; float: left;'>"+prixMill(somme)+" FCFA </div> ");
+		$("#montantTotal span").html("<div style='float: left; margin-top: -5px; margin-right: 10px;'> Montant total: </div> <div style='margin-top: -8px; margin-right: 50px; font-size: 20px; font-weight: bold; width: 120px; float: left;'>"+prixMill(somme)+" <span style='font-size: 15px;'> FCFA </span></div> ");
 	}else {
 		$("#montantTotal span").html("");
 	}

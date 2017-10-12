@@ -252,20 +252,25 @@ class AnalyseTable {
 	public function getListeAnalysesDemandeesParType($idtype){
 		
 		$adapter1 = $this->tableGateway->getAdapter ();
-		$sql1 = new Sql($adapter1);
-		$select1 = $sql1->select()->from(array('r'=>'resultat_demande_analyse'))->columns(array('iddemande' => 'iddemande_analyse'));
+		$sql1 = new Sql ($adapter1);
+		$subselect = $sql1->select ();
+		$subselect->from ( array ( 'rda' => 'resultat_demande_analyse' ) );
+		//$subselect->where( array ( 'rda.valide' => 1 ) );
+		$subselect->columns (array ( 'iddemande_analyse' ) );
+		
 		
 		$adapter2 = $this->tableGateway->getAdapter ();
 		$sql2 = new Sql($adapter2);
 		$select2 = $sql2->select();
 		$select2->from(array('d'=>'demande_analyse'));
 		$select2->columns(array('*'));
+		$select2->join(array('tp' => 'tri_prelevement'), 'tp.iddemande = d.iddemande', array('*') );
 		$select2->join(array('a'=>'analyse') ,'d.idanalyse = a.idanalyse', array('Idanalyse'=>'idanalyse', 'Designation'=>'designation', 'Tarif'=>'tarif'));
 		$select2->join(array('t'=>'type_analyse') ,'t.idtype = a.idtype_analyse', array('Libelle'=>'libelle'));
 		$select2->join(array('p'=>'personne') ,'p.idpersonne = d.idpatient', array('*'));
 		$select2->join(array('pat'=>'patient') ,'pat.idpersonne = p.idpersonne', array('*'));
-		$select2->where(array('t.idtype' => $idtype, new NotIn ( 'd.iddemande', $select1 )));
-		$select2->order(array('iddemande' => 'ASC', 'a.Idanalyse' => 'ASC'));
+		$select2->where(array('t.idtype' => $idtype, new NotIn ( 'd.iddemande', $subselect )));
+		$select2->order(array('d.iddemande' => 'ASC', 'a.Idanalyse' => 'ASC'));
 		return $sql2->prepareStatementForSqlObject($select2)->execute();
 	}
 	
@@ -275,20 +280,24 @@ class AnalyseTable {
 	public function getListeAnalysesDemandeesParTypeEtAnalyse($idtype, $idanalyse){
 	
 	    $adapter1 = $this->tableGateway->getAdapter ();
-	    $sql1 = new Sql($adapter1);
-	    $select1 = $sql1->select()->from(array('r'=>'resultat_demande_analyse'))->columns(array('iddemande' => 'iddemande_analyse'));
-	
+	    $sql1 = new Sql ($adapter1);
+	    $subselect = $sql1->select ();
+	    $subselect->from ( array ( 'rda' => 'resultat_demande_analyse' ) );
+	    //$subselect->where( array ( 'rda.valide' => 1 ) );
+	    $subselect->columns (array ( 'iddemande_analyse' ) );
+	    
 	    $adapter2 = $this->tableGateway->getAdapter ();
 	    $sql2 = new Sql($adapter2);
 	    $select2 = $sql2->select();
 	    $select2->from(array('d'=>'demande_analyse'));
 	    $select2->columns(array('*'));
+	    $select2->join(array('tp' => 'tri_prelevement'), 'tp.iddemande = d.iddemande', array('*') );
 	    $select2->join(array('a'=>'analyse') ,'d.idanalyse = a.idanalyse', array('Idanalyse'=>'idanalyse', 'Designation'=>'designation', 'Tarif'=>'tarif'));
 	    $select2->join(array('t'=>'type_analyse') ,'t.idtype = a.idtype_analyse', array('Libelle'=>'libelle'));
 	    $select2->join(array('p'=>'personne') ,'p.idpersonne = d.idpatient', array('*'));
 	    $select2->join(array('pat'=>'patient') ,'pat.idpersonne = p.idpersonne', array('*'));
-	    $select2->where(array('t.idtype' => $idtype, 'a.idanalyse' => $idanalyse, new NotIn ( 'd.iddemande', $select1 )));
-	    $select2->order(array('iddemande' => 'ASC', 'a.Idanalyse' => 'ASC'));
+	    $select2->where(array('t.idtype' => $idtype, 'a.idanalyse' => $idanalyse, new NotIn ( 'd.iddemande', $subselect )));
+	    $select2->order(array('d.iddemande' => 'ASC', 'a.Idanalyse' => 'ASC'));
 	    return $sql2->prepareStatementForSqlObject($select2)->execute();
 	
 	}
@@ -299,20 +308,24 @@ class AnalyseTable {
 	public function getListeAnalysesDemandeesParTypeEtDate($idtype, $date){
 	
 	    $adapter1 = $this->tableGateway->getAdapter ();
-	    $sql1 = new Sql($adapter1);
-	    $select1 = $sql1->select()->from(array('r'=>'resultat_demande_analyse'))->columns(array('iddemande' => 'iddemande_analyse'));
-	
+	    $sql1 = new Sql ($adapter1);
+	    $subselect = $sql1->select ();
+	    $subselect->from ( array ( 'rda' => 'resultat_demande_analyse' ) );
+	    //$subselect->where( array ( 'rda.valide' => 1 ) );
+	    $subselect->columns (array ( 'iddemande_analyse' ) );
+	    
 	    $adapter2 = $this->tableGateway->getAdapter ();
 	    $sql2 = new Sql($adapter2);
 	    $select2 = $sql2->select();
 	    $select2->from(array('d'=>'demande_analyse'));
 	    $select2->columns(array('*'));
+	    $select2->join(array('tp' => 'tri_prelevement'), 'tp.iddemande = d.iddemande', array('*') );
 	    $select2->join(array('a'=>'analyse') ,'d.idanalyse = a.idanalyse', array('Idanalyse'=>'idanalyse', 'Designation'=>'designation', 'Tarif'=>'tarif'));
 	    $select2->join(array('t'=>'type_analyse') ,'t.idtype = a.idtype_analyse', array('Libelle'=>'libelle'));
 	    $select2->join(array('p'=>'personne') ,'p.idpersonne = d.idpatient', array('*'));
 	    $select2->join(array('pat'=>'patient') ,'pat.idpersonne = p.idpersonne', array('*'));
-	    $select2->where(array('t.idtype' => $idtype, 'd.date' => $date, new NotIn ( 'd.iddemande', $select1 )));
-	    $select2->order(array('iddemande' => 'ASC', 'a.Idanalyse' => 'ASC'));
+	    $select2->where(array('t.idtype' => $idtype, 'd.date' => $date, new NotIn ( 'd.iddemande', $subselect )));
+	    $select2->order(array('d.iddemande' => 'ASC', 'a.Idanalyse' => 'ASC'));
 	    return $sql2->prepareStatementForSqlObject($select2)->execute();
 	
 	}
@@ -323,20 +336,24 @@ class AnalyseTable {
 	public function getListeAnalysesDemandeesParTypeEtAnalyseEtDate($idtype, $idanalyse, $date){
 	
 	    $adapter1 = $this->tableGateway->getAdapter ();
-	    $sql1 = new Sql($adapter1);
-	    $select1 = $sql1->select()->from(array('r'=>'resultat_demande_analyse'))->columns(array('iddemande' => 'iddemande_analyse'));
-	
+	    $sql1 = new Sql ($adapter1);
+	    $subselect = $sql1->select ();
+	    $subselect->from ( array ( 'rda' => 'resultat_demande_analyse' ) );
+	    //$subselect->where( array ( 'rda.valide' => 1 ) );
+	    $subselect->columns (array ( 'iddemande' => 'iddemande_analyse' ) );
+	    
 	    $adapter2 = $this->tableGateway->getAdapter ();
 	    $sql2 = new Sql($adapter2);
 	    $select2 = $sql2->select();
 	    $select2->from(array('d'=>'demande_analyse'));
 	    $select2->columns(array('*'));
+	    $select2->join(array('tp' => 'tri_prelevement'), 'tp.iddemande = d.iddemande', array('*') );
 	    $select2->join(array('a'=>'analyse') ,'d.idanalyse = a.idanalyse', array('Idanalyse'=>'idanalyse', 'Designation'=>'designation', 'Tarif'=>'tarif'));
 	    $select2->join(array('t'=>'type_analyse') ,'t.idtype = a.idtype_analyse', array('Libelle'=>'libelle'));
 	    $select2->join(array('p'=>'personne') ,'p.idpersonne = d.idpatient', array('*'));
 	    $select2->join(array('pat'=>'patient') ,'pat.idpersonne = p.idpersonne', array('*'));
-	    $select2->where(array('t.idtype' => $idtype, 'a.idanalyse' => $idanalyse, 'd.date' => $date, new NotIn ( 'd.iddemande', $select1 )));
-	    $select2->order(array('iddemande' => 'ASC', 'a.Idanalyse' => 'ASC'));
+	    $select2->where(array('t.idtype' => $idtype, 'a.idanalyse' => $idanalyse, 'd.date' => $date, new NotIn ( 'd.iddemande', $subselect )));
+	    $select2->order(array('d.iddemande' => 'ASC', 'a.Idanalyse' => 'ASC'));
 	    return $sql2->prepareStatementForSqlObject($select2)->execute();
 	
 	}
@@ -344,7 +361,7 @@ class AnalyseTable {
 	
 	
 	
-	
+
 	
 	
 	
@@ -354,20 +371,25 @@ class AnalyseTable {
 	public function getListeAnalysesDemandeesParTypeGroupeAnalyse($idtype){
 	
 	    $adapter1 = $this->tableGateway->getAdapter ();
-	    $sql1 = new Sql($adapter1);
-	    $select1 = $sql1->select()->from(array('r'=>'resultat_demande_analyse'))->columns(array('iddemande' => 'iddemande_analyse'));
-	
+	    $sql1 = new Sql ($adapter1);
+	    $subselect = $sql1->select ();
+	    $subselect->from ( array ( 'rda' => 'resultat_demande_analyse' ) );
+	    //$subselect->where( array ( 'rda.valide' => 1 ) );
+	    $subselect->columns (array ( 'iddemande' => 'iddemande_analyse' ) );
+	    
+	    
 	    $adapter2 = $this->tableGateway->getAdapter ();
 	    $sql2 = new Sql($adapter2);
 	    $select2 = $sql2->select();
 	    $select2->from(array('d'=>'demande_analyse'));
 	    $select2->columns(array('*'));
+	    $select2->join(array('tp' => 'tri_prelevement'), 'tp.iddemande = d.iddemande', array('*') );
 	    $select2->join(array('a'=>'analyse') ,'d.idanalyse = a.idanalyse', array('Idanalyse'=>'idanalyse', 'Designation'=>'designation', 'Tarif'=>'tarif'));
 	    $select2->join(array('t'=>'type_analyse') ,'t.idtype = a.idtype_analyse', array('Libelle'=>'libelle'));
 	    $select2->join(array('p'=>'personne') ,'p.idpersonne = d.idpatient', array('*'));
 	    $select2->join(array('pat'=>'patient') ,'pat.idpersonne = p.idpersonne', array('*'));
-	    $select2->where(array('t.idtype' => $idtype, new NotIn ( 'd.iddemande', $select1 )));
-	    $select2->order(array('iddemande' => 'ASC', 'a.Idanalyse' => 'ASC'));
+	    $select2->where(array('t.idtype' => $idtype, new NotIn ( 'd.iddemande', $subselect )));
+	    $select2->order(array('d.iddemande' => 'ASC', 'a.Idanalyse' => 'ASC'));
 	    $select2->group('a.Idanalyse');
 	    return $sql2->prepareStatementForSqlObject($select2)->execute();
 	
@@ -380,19 +402,24 @@ class AnalyseTable {
 	public function getListeAnalysesDemandeesParTypeGroupeDate($idtype){
 	
 	    $adapter1 = $this->tableGateway->getAdapter ();
-	    $sql1 = new Sql($adapter1);
-	    $select1 = $sql1->select()->from(array('r'=>'resultat_demande_analyse'))->columns(array('iddemande' => 'iddemande_analyse'));
-	
+	    $sql1 = new Sql ($adapter1);
+	    $subselect = $sql1->select ();
+	    $subselect->from ( array ( 'rda' => 'resultat_demande_analyse' ) );
+	    //$subselect->where( array ( 'rda.valide' => 1 ) );
+	    $subselect->columns (array ( 'iddemande' => 'iddemande_analyse' ) );
+	    
+	    
 	    $adapter2 = $this->tableGateway->getAdapter ();
 	    $sql2 = new Sql($adapter2);
 	    $select2 = $sql2->select();
 	    $select2->from(array('d'=>'demande_analyse'));
 	    $select2->columns(array('*'));
+	    $select2->join(array('tp' => 'tri_prelevement'), 'tp.iddemande = d.iddemande', array('*') );
 	    $select2->join(array('a'=>'analyse') ,'d.idanalyse = a.idanalyse', array('Idanalyse'=>'idanalyse', 'Designation'=>'designation', 'Tarif'=>'tarif'));
 	    $select2->join(array('t'=>'type_analyse') ,'t.idtype = a.idtype_analyse', array('Libelle'=>'libelle'));
 	    $select2->join(array('p'=>'personne') ,'p.idpersonne = d.idpatient', array('*'));
 	    $select2->join(array('pat'=>'patient') ,'pat.idpersonne = p.idpersonne', array('*'));
-	    $select2->where(array('t.idtype' => $idtype, new NotIn ( 'd.iddemande', $select1 )));
+	    $select2->where(array('t.idtype' => $idtype, new NotIn ( 'd.iddemande', $subselect )));
 	    $select2->order(array('d.date' => 'DESC'));
 	    $select2->group('d.date');
 	    return $sql2->prepareStatementForSqlObject($select2)->execute();
@@ -406,19 +433,23 @@ class AnalyseTable {
 	public function getListeAnalysesDemandeesParTypeEtParAnalyseGroupeDate($idtype, $idanalyse){
 	
 	    $adapter1 = $this->tableGateway->getAdapter ();
-	    $sql1 = new Sql($adapter1);
-	    $select1 = $sql1->select()->from(array('r'=>'resultat_demande_analyse'))->columns(array('iddemande' => 'iddemande_analyse'));
-	
+	    $sql1 = new Sql ($adapter1);
+	    $subselect = $sql1->select ();
+	    $subselect->from ( array ( 'rda' => 'resultat_demande_analyse' ) );
+	    //$subselect->where( array ( 'rda.valide' => 1 ) );
+	    $subselect->columns (array ( 'iddemande' => 'iddemande_analyse' ) );
+	    
 	    $adapter2 = $this->tableGateway->getAdapter ();
 	    $sql2 = new Sql($adapter2);
 	    $select2 = $sql2->select();
 	    $select2->from(array('d'=>'demande_analyse'));
 	    $select2->columns(array('*'));
+	    $select2->join(array('tp' => 'tri_prelevement'), 'tp.iddemande = d.iddemande', array('*') );
 	    $select2->join(array('a'=>'analyse') ,'d.idanalyse = a.idanalyse', array('Idanalyse'=>'idanalyse', 'Designation'=>'designation', 'Tarif'=>'tarif'));
 	    $select2->join(array('t'=>'type_analyse') ,'t.idtype = a.idtype_analyse', array('Libelle'=>'libelle'));
 	    $select2->join(array('p'=>'personne') ,'p.idpersonne = d.idpatient', array('*'));
 	    $select2->join(array('pat'=>'patient') ,'pat.idpersonne = p.idpersonne', array('*'));
-	    $select2->where(array('t.idtype' => $idtype, 'd.idanalyse' => $idanalyse, new NotIn ( 'd.iddemande', $select1 )));
+	    $select2->where(array('t.idtype' => $idtype, 'd.idanalyse' => $idanalyse, new NotIn ( 'd.iddemande', $subselect )));
 	    $select2->order(array('d.date' => 'DESC'));
 	    $select2->group('d.date');
 	    return $sql2->prepareStatementForSqlObject($select2)->execute();
