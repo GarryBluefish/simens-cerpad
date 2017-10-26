@@ -1721,6 +1721,9 @@
     				else if(idanalyse == 16) { tab [16] = new Array("", $('#fibrinemie').val(), $('#type_materiel_fibrinemie').val());  }
     				else if(idanalyse == 17) { tab [17] = new Array("", $('#temps_saignement').val(), $('#type_materiel_temps_saignement').val());  }
   	    			    
+    				else if(idanalyse == 18) { tab [18] = getFacteur8();  }
+    				else if(idanalyse == 19) { tab [19] = getFacteur9();  }
+  	    			     
     				else if(idanalyse == 21) { tab [21] = getGlycemie(); }
     				else if(idanalyse == 22) { tab [22] = new Array("", $('#creatininemie').val(), $('#type_materiel_creatininemie').val()); }
     				else if(idanalyse == 23) { tab [23] = azotemie(); }
@@ -1931,6 +1934,11 @@
      * RECUPERER LES DONNEES POUR L'ENREGISTREMENT 
      * id = iddemande
      */
+    /* Analyse_1
+     * tamponChampsNfs
+     */
+    var tamponChampsNfsTab = new Array();
+    
     function getChampsNfs_TAD(id){
     	var tab = new Array();
     	var i;
@@ -1939,17 +1947,16 @@
     		else { tab[i] = null; }
     	}
     	tab[i] = $('.ER_'+id+' #type_materiel_nfs').val();
-    	tab[i+1] = $('#commentaire_hemogramme').val();
+    	tab[i+1] = $('.ER_'+id+' #commentaire_hemogramme').val();
     	
     	return tab;
     }
     
-    /*
+    /* Analyse_2
      * tamponGroupageRhesus
      */
     var tamponGroupageRhesusTab = new Array();
     
-
     function getGroupageRhesus_TAD(id){
     	var tab = new Array();
     	tab[1] = $('.ER_'+id+' #groupe').val(); 
@@ -1959,6 +1966,973 @@
     	return tab;
     }
 
+    /*
+     * Analyse_3
+     * tamponAntigeneDFaible
+     */
+    var tamponAntigeneDFaible = new Array();
+    
+    function getAntigeneDFaible_TAD(id){
+    	var tab = new Array();
+    	tab[1] = $('.ER_'+id+' #antigene_d_faible').val(); 
+		tab[2] = $('.ER_'+id+' #type_materiel_recherche_antigene').val();
+    	
+    	return tab;
+    }
+    
+    /*
+     * Analyse_4
+     * tamponTestCombsDirect
+     */
+    var tamponTestCombsDirect = new Array();
+    
+    function getTestCombsDirect_TAD(id){
+    	var tab = [];
+    	tab[1] = $('.ER_'+id+' #test_combs_direct').val(); 
+		tab[2] = $('.ER_'+id+' #titre_combs_direct').val();
+		tab[3] = $('.ER_'+id+' #type_materiel_test_combs_direct').val();
+    	
+    	return tab;
+    }
+    
+    /*
+     * Analyse_5
+     * tamponTestCombsIndirect
+     */
+    var tamponTestCombsIndirect = new Array();
+    
+    function getTestCombsIndirect_TAD(id){
+    	var tab = [];
+    	tab[1] = $('.ER_'+id+' #test_combs_indirect').val(); 
+		tab[2] = $('.ER_'+id+' #titre_combs_indirect').val();
+		tab[3] = $('.ER_'+id+' #type_materiel_test_combs_indirect').val();
+    	
+    	return tab;
+    }
+    
+    /*
+     * Analyse_6
+     * tamponTestCompatibilite
+     */
+    var tamponTestCompatibilite = new Array();
+    
+    function getTestCompatibilite_TAD(id){
+    	var tab = new Array();
+    	tab[1] = $('.ER_'+id+' #test_compatibilite').val(); 
+		tab[2] = $('.ER_'+id+' #titre_test_compatibilite').val();
+		tab[3] = $('.ER_'+id+' #type_materiel_test_compatibilite').val();
+    	
+    	return tab;
+    }
+    
+    /*
+     * Analyse_7
+     * tamponVitesseSedimentation
+     */
+    var tamponVitesseSedimentation = new Array();
+    
+    function getVitesseSedimentation_TAD(id){
+    	var tab = [];
+    	tab[1] = $('.ER_'+id+' #vitesse_sedimentation').val(); 
+		tab[2] = $('.ER_'+id+' #type_materiel_vitesse_sedimentation').val();
+    	
+    	return tab;
+    }
+    
+    /*
+     * Analyse_8
+     * tamponTestDemmel
+     */
+    var tamponTestDemmel = new Array();
+    
+    function getTestDemmel_TAD(id){
+    	var tab = [];
+    	tab[1] = $('.ER_'+id+' #test_demmel').val(); 
+		tab[2] = $('.ER_'+id+' #type_materiel_test_demmel').val();
+    	
+    	return tab;
+    }
+    
+    /*
+     * Analyse_9
+     * tamponTauxReticulocytes
+     */
+    var tamponTauxReticulocytes = new Array();
+    
+    function getTauxReticulocytes_TAD(id){
+    	var tab = new Array();
+    	tab[1] = $('.ER_'+id+' #taux_reticulocyte').val(); 
+    	tab[2] = $('.ER_'+id+' #type_materiel_taux_reticulocytes').val(); 
+
+    	return tab;
+    }
+    
+    /*
+     * Analyse_10
+     * tamponGoutteEpaisse
+     */
+    var tamponGoutteEpaisse = new Array();
+    
+    function getGoutteEpaisse_TAD(id){
+    	var tab = new Array();
+    	tab[1] = $('.ER_'+id+' #goutte_epaisse').val();
+    	tab[2] = $('.ER_'+id+' #densite_parasitaire').val();
+    	tab[3] = $('.ER_'+id+' #type_materiel_goutte_epaisse').val();
+    	
+    	return tab;
+    }
+    
+    
+    /*
+     * Analyse_14
+     * tamponTpInr
+     */
+    var tamponTpInr = new Array();
+    
+    function getTpInr_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #temps_quick_temoin').val(); 
+    	tab[2] = $('.ER_'+id+' #temps_quick_patient').val(); 
+    	tab[3] = $('.ER_'+id+' #taux_prothrombine_patient').val(); 
+    	tab[4] = $('.ER_'+id+' #inr_patient').val();
+    	tab[5] = $('.ER_'+id+' #type_materiel_tp_inr').val();
+    	
+    	return tab;
+    }
+    
+    /*
+     * Analyse_15
+     * tamponTca
+     */
+    var tamponTca = new Array();
+    
+    function getTca_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #tca_patient').val(); 
+    	tab[2] = $('.ER_'+id+' #temoin_patient').val();
+    	tab[3] = $('.ER_'+id+' #type_materiel_tca').val();
+    	
+    	return tab;
+    }
+    
+    /*
+     * Analyse_16
+     * tamponFibrinemie
+     */
+    var tamponFibrinemie = new Array();
+    
+    function getFibrinemie_TAD(id){
+    	var tab = new Array();
+
+    	tab[1] = $('.ER_'+id+' #fibrinemie').val(); 
+    	tab[2] = $('.ER_'+id+' #type_materiel_fibrinemie').val(); 
+    	
+    	return tab;
+    }
+    
+    /*
+     * Analyse_17
+     * tamponTempsSaignement
+     */
+    var tamponTempsSaignement = new Array();
+    
+    function getTempsSaignement_TAD(id){
+    	var tab = new Array();
+
+    	tab[1] = $('.ER_'+id+' #temps_saignement').val(); 
+    	tab[2] = $('.ER_'+id+' #type_materiel_temps_saignement').val();  
+    	
+    	return tab;
+    }
+    
+    /*
+     * Analyse_18
+     * tamponFacteur8
+     */
+    var tamponFacteur8 = new Array();
+    
+    function getFacteur8_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #facteur_8').val(); 
+    	tab[2] = $('.ER_'+id+' #type_materiel_facteur_8').val(); 
+    	
+    	return tab;
+    }
+    
+    /*
+     * Analyse_19
+     * tamponFacteur9
+     */
+    var tamponFacteur9 =  new Array();
+    
+    function getFacteur9_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #facteur_9').val(); 
+    	tab[2] = $('.ER_'+id+' #type_materiel_facteur_9').val(); 
+    	
+    	return tab;
+    }
+    
+    /*
+     * Analyse_20
+     * tamponDDimeres
+     */
+    var tamponDDimeres = new Array();
+    
+    
+    /*
+     * Analyse_21
+     * tamponGlycemie 
+     */
+    var tamponGlycemie = new Array();
+    
+    function getGlycemie_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #glycemie_1').val(); 
+    	tab[2] = $('.ER_'+id+' #glycemie_2').val();
+    	tab[3] = $('.ER_'+id+' #type_materiel_glycemie').val();
+    	
+    	return tab;
+    }
+    
+    /*
+     * Analyse_22
+     * tamponCreatininemie
+     */
+    var tamponCreatininemie = new Array();
+    
+    function getCreatininemie_TAD(id){
+    	var tab = new Array();
+
+    	tab[1] = $('.ER_'+id+' #creatininemie').val(); 
+    	tab[2] = $('.ER_'+id+' #type_materiel_creatininemie').val(); 
+    	
+    	return tab;
+    }
+    
+    /*
+     * Analyse_23
+     * tamponAzotemie
+     */
+    var tamponAzotemie = new Array();
+    
+    function getAzotemie_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #uree_sanguine').val(); 
+		tab[2] = $('.ER_'+id+' #type_materiel_azotemie').val();
+    	
+    	return tab;
+    }
+    
+    /*
+     * Analyse_24
+     * tamponAcideUrique
+     */
+    var tamponAcideUrique = new Array();
+    
+    function getAcideUrique_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #acide_urique').val(); 
+    	tab[2] = $('.ER_'+id+' #type_materiel_acide_urique').val(); 
+    	
+    	return tab;
+    }
+    
+    /*
+     * Analyse_25
+     * tamponCholesterolTotal
+     */
+    var tamponCholesterolTotal = new Array();
+    
+    function getCholesterolTotal_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #cholesterol_total_1').val(); 
+    	tab[2] = $('.ER_'+id+' #cholesterol_total_2').val();
+    	tab[3] = $('.ER_'+id+' #type_materiel_cholesterol_total').val();
+    	
+    	return tab;
+    }
+    
+    /*
+     * Analyse_26
+     * tamponTriglycerides
+     */
+    var tamponTriglycerides = new Array();
+    
+    function getTriglycerides_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #triglycerides_1').val(); 
+    	tab[2] = $('.ER_'+id+' #triglycerides_2').val();
+    	tab[3] = $('.ER_'+id+' #type_materiel_triglycerides').val();
+    	
+    	return tab;
+    }
+    
+    /*
+     * Analyse_27
+     * tamponCholesterolHDL
+     */
+    var tamponCholesterolHDL = new Array();
+    
+    function getCholesterolHDL_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #cholesterol_HDL_1').val(); 
+    	tab[2] = $('.ER_'+id+' #cholesterol_HDL_2').val();
+    	tab[3] = $('.ER_'+id+' #type_materiel_cholesterol_HDL').val();
+    	
+    	return tab;
+    }
+    
+    /*
+     * Analyse_28
+     * tamponCholesterolLDL
+     */
+    var tamponCholesterolLDL = new Array();
+    
+    function getCholesterolLDL_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #cholesterol_LDL_1').val(); 
+    	tab[2] = $('.ER_'+id+' #cholesterol_LDL_2').val();
+    	tab[3] = $('.ER_'+id+' #type_materiel_cholesterol_LDL').val();
+    	
+    	return tab;
+    }
+    
+    /*
+     * Analyse_29
+     * tamponChol_Total_HDL_LDL_Trigly
+     */
+    var tamponChol_Total_HDL_LDL_Trigly = new Array();
+    
+    function getChol_Total_HDL_LDL_Trigly_TAD(id){
+    	var tab = new Array();
+    	
+	    tab[1] = $('.ER_'+id+' #cholesterol_total_1').val(); tab[2] = $('.ER_'+id+' #cholesterol_total_2').val(); tab[9]  = $('.ER_'+id+' #type_materiel_cholesterol_total').val(); 
+	    tab[3] = $('.ER_'+id+' #cholesterol_HDL_1').val();   tab[4] = $('.ER_'+id+' #cholesterol_HDL_2').val();   tab[10] = $('.ER_'+id+' #type_materiel_cholesterol_HDL').val(); 
+	    tab[5] = $('.ER_'+id+' #cholesterol_LDL_1').val();   tab[6] = $('.ER_'+id+' #cholesterol_LDL_2').val();   tab[11] = $('.ER_'+id+' #type_materiel_cholesterol_LDL').val(); 
+	    tab[7] = $('.ER_'+id+' #triglycerides_1').val();     tab[8] = $('.ER_'+id+' #triglycerides_2').val();     tab[12] = $('.ER_'+id+' #type_materiel_triglycerides').val(); 
+		
+	    return tab;
+    }
+    
+    /*
+     * Analyse_30
+     * tamponLipidesTotaux
+     */
+    var tamponLipidesTotaux = new Array();
+    
+
+    function getLipidesTotaux_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #type_materiel_lipides_totaux').val();
+    	tab[2] = $('.ER_'+id+' #lipides_totaux').val();
+    	
+    	return tab;
+    }
+    
+    /*
+     * Analyse_31
+     * tamponIonogramme
+     */
+    var tamponIonogramme = new Array();
+    
+    function getIonogramme_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #sodium_sanguin').val(); 
+		tab[2] = $('.ER_'+id+' #potassium_sanguin').val();
+		tab[3] = $('.ER_'+id+' #chlore_sanguin').val();
+		tab[4] = $('.ER_'+id+' #type_materiel_ionogramme').val();
+    	
+    	return tab;
+    }
+    
+    /*
+     * Analyse_32
+     * tamponCalcemie
+     */
+    var tamponCalcemie = new Array();
+    
+    function getCalcemie_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #calcemie').val();
+    	tab[2] = $('.ER_'+id+' #type_materiel_calcemie').val();
+    	
+    	return tab;
+    }
+    
+    /*
+     * Analyse_33
+     * tamponMagnesemie
+     */
+    var tamponMagnesemie = new Array();
+    
+    function getMagnesemie_TAD(id){
+    	var tab = new Array();
+    	
+    	 tab[1] = $('.ER_'+id+' #magnesemie').val();
+    	 tab[2] = $('.ER_'+id+' #type_materiel_magnesemie').val(); 
+    	 
+    	 return tab;
+    }
+    
+    /*
+     * Analyse_34
+     * tamponPhosphoremie
+     */
+    var tamponPhosphoremie = new Array();
+    
+    function getPhosphoremie_TAD(id){
+    	var tab = new Array();
+    	 
+    	tab[1] = $('.ER_'+id+' #phosphoremie').val();
+    	tab[2] = $('.ER_'+id+' #type_materiel_phosphoremie').val(); 
+
+    	return tab;
+    }
+    
+    /*
+     * Analyse_35
+     * tamponTgoAsat
+     */
+    var tamponTgoAsat = new Array();
+    
+    function getTgoAsat_TAD(id){
+    	var tab = new Array();
+    	
+	    tab[1] = $('.ER_'+id+' #type_materiel_tgo_asat').val();
+	    tab[2] = $('.ER_'+id+' #tgo_asat').val();
+	    
+	    return tab;
+    }
+    
+    /*
+     * Analyse_36
+     * tamponTgpAlat
+     */
+    var tamponTgpAlat = new Array();
+    
+    function getTgpAlat_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #type_materiel_tgp_alat').val();
+    	tab[2] = $('.ER_'+id+' #tgp_alat').val();
+	    
+	    return tab;
+    }
+    
+    /*
+     * Analyse_37
+     * tamponAsatAlat
+     */
+    var tamponAsatAlat = new Array();
+    
+    function getAsatAlat_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #type_materiel_tgp_alat').val();
+    	tab[2] = $('.ER_'+id+' #tgp_alat').val();
+	    tab[3] = $('.ER_'+id+' #type_materiel_tgo_asat').val();
+	    tab[4] = $('.ER_'+id+' #tgo_asat').val();
+	    
+	    return tab;
+    }
+    
+    /*
+     * Analyse_38
+     * tamponPhosphatageAlcaline
+     */
+    var tamponPhosphatageAlcaline = new Array();
+    
+    function getPhosphatageAlcaline_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #phosphatage_alcaline').val(); 
+    	tab[2] = $('.ER_'+id+' #type_materiel_phosphatage_alcaline').val();
+	    
+    	return tab;
+    }
+    
+    /*
+     * Analyse_39
+     * tamponGamaGT
+     */
+    var tamponGamaGT = new Array();
+    
+    function getGamaGT_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #gama_gt').val(); 
+    	tab[2] = $('.ER_'+id+' #type_materiel_gama_gt_ygt').val();
+	    
+    	return tab;
+    }
+    
+    /*
+     * Analyse_40
+     * tamponFerserique
+     */
+    var tamponFerSerique = new Array();
+    
+    function getFerSerique_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #fer_serique_ug').val();
+    	tab[2] = $('.ER_'+id+' #fer_serique_umol').val();
+    	tab[3] = $('.ER_'+id+' #type_materiel_fer_serique').val();
+    	
+    	return tab;
+    }
+    
+    /*
+     * Analyse_41
+     * tamponFerritinine
+     */
+    var tamponFerritinine = new Array();
+    
+    function getFerritinine_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #type_materiel_ferritinine').val();
+    	tab[2] = $('.ER_'+id+' #ferritinine').val();
+	    
+	    return tab;
+    }
+   
+    /*
+     * Analyse_42
+     * tamponBilirubineTotaleDirecte
+     */
+    var tamponBilirubineTotalDirecte = new Array();
+    
+    function getBilirubineTotaleDirecte_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #type_materiel_bilirubine_totale_directe').val();
+    	tab[2] = $('.ER_'+id+' #bilirubine_totale_mg').val();
+    	tab[3] = $('.ER_'+id+' #bilirubine_totale_umol').val();
+    	tab[4] = $('.ER_'+id+' #bilirubine_directe').val();
+	    
+	    return tab;
+    }
+    
+    /*
+     * Analyse_43
+     * tamponHemoglobineGlyqueeHBAC
+     */
+    var tamponHemoglobineGlyqueeHBAC = new Array();
+    
+    function getHemoglobineGlyqueeHBAC_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #type_materiel_hemo_gly_hbac').val();
+    	tab[2] = $('.ER_'+id+' #hemoglobine_glyquee_hbac').val();
+    	tab[3] = $('.ER_'+id+' #hemoglobine_glyquee_hbac_mmol').val();
+	    
+	    return tab;
+    }
+    
+    /*
+     * Analyse_44
+     * tamponElectrophoreseHemoglobine
+     */
+    var tamponElectrophoreseHemoglobine = new Array();
+    
+    function getElectrophoreseHemoglobine_TAD(id){
+    	var tab = new Array();
+    	
+    	var nbLigne = $('.ER_'+id+' #electro_hemo tr').length;
+    	var j = 1;
+    	
+    	tab[0] = $('.ER_'+id+' #type_materiel_electro_hemo').val();
+    	tab[1] = new Array(); 
+    	tab[2] = new Array(); 
+    	for(var i=1 ; i<nbLigne ; i++){
+    		var label  = $('.ER_'+id+' #electro_hemo_label_'+i ).val();
+    		var valeur = $('.ER_'+id+' #electro_hemo_valeur_'+i).val();
+    		if(label && valeur){
+        		tab[1][j]   = label;
+        		tab[2][j++] = valeur;
+    		}
+    	}
+	    
+	    return tab;
+    }
+    
+    /*
+     * Analyse_45
+     * tamponElectrophoreseProteine
+     */
+    var tamponElectrophoreseProteine = new Array();
+    
+    function getElectrophoreseProteine_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1]   = $('.ER_'+id+' #type_materiel_electro_proteine').val();
+    	tab[2]   = $('.ER_'+id+' #albumine').val();
+    	tab[3]   = $('.ER_'+id+' #albumine_abs').val();
+    	tab[4]   = $('.ER_'+id+' #alpha_1').val();
+    	tab[5]   = $('.ER_'+id+' #alpha_1_abs').val();
+    	tab[6]   = $('.ER_'+id+' #alpha_2').val();
+    	tab[7]   = $('.ER_'+id+' #alpha_2_abs').val();
+    	tab[8]   = $('.ER_'+id+' #beta_1').val();
+    	tab[9]   = $('.ER_'+id+' #beta_1_abs').val();
+    	tab[10]  = $('.ER_'+id+' #beta_2').val();
+    	tab[11]  = $('.ER_'+id+' #beta_2_abs').val();
+    	tab[12]  = $('.ER_'+id+' #gamma').val();
+    	tab[13]  = $('.ER_'+id+' #gamma_abs').val();
+    	tab[14]  = $('.ER_'+id+' #proteine_totale').val();
+    	tab[15]  = $('.ER_'+id+' #commentaire_electrophorese_proteine').val();
+    	
+    	return tab;
+    }
+    
+    /*
+     * Analyse_46
+     * tamponAlbuminemie
+     */
+    var tamponAlbuminemie = new Array();
+    
+    function getAlbuminemie_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #type_materiel_albuminemie').val();
+    	tab[2] = $('.ER_'+id+' #albuminemie').val();
+	    
+	    return tab;
+    }
+    
+    /*
+     * Analyse_47
+     * tamponAlbumineUrinaire
+     */
+    var tamponAlbumineUrinaire = new Array();
+
+    function getAlbumineUrinaire_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #type_materiel_albumine_urinaire').val();
+    	
+    	var albumine_urinaire = $('.ER_'+id+' #albumine_urinaire').val();
+    	tab[2] = albumine_urinaire;
+    	tab[3] = null;
+    	if(albumine_urinaire == 'positif'){ tab[3] = $('.ER_'+id+' #albumine_urinaire_degres').val(); }
+    	
+    	var sucre_urinaire = $('.ER_'+id+' #sucre_urinaire').val();
+    	tab[4] = sucre_urinaire;
+    	tab[5] = null;
+    	if(sucre_urinaire == 'positif'){ tab[5] = $('.ER_'+id+' #sucre_urinaire_degres').val(); }
+    	
+    	var corps_cetonique_urinaire = $('.ER_'+id+' #corps_cetonique_urinaire').val();
+    	tab[6] = corps_cetonique_urinaire;
+    	tab[7] = null;
+    	if(corps_cetonique_urinaire == 'positif'){ tab[7] = $('.ER_'+id+' #corps_cetonique_urinaire_degres').val(); }
+	    
+	    return tab;
+    }
+    
+    /*
+     * Analyse_48
+     * tamponProtidemie
+     */
+    var tamponProtidemie = new Array();
+    
+    function getProtidemie_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #type_materiel_protidemie').val();
+    	tab[2] = $('.ER_'+id+' #protidemie').val();
+	    
+	    return tab;
+    }
+    
+    /*
+     * Analyse_49
+     * tamponProteinurie
+     */
+    var tamponProteinurie = new Array();
+    
+    function getProteinurie_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #type_materiel_proteinurie').val();
+    	tab[2] = $('.ER_'+id+' #proteinurie').val();
+	    
+	    return tab;
+    }
+    
+    /*
+     * Analyse_50
+     * tamponHlmCompteDaddis
+     */
+    var tamponHlmCompteDaddis = new Array();
+    
+    function getHlmCompteDaddis_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #type_materiel_hlm_compte_daddis').val();
+    	tab[2] = $('.ER_'+id+' #hematies_hlm').val();
+    	tab[3] = $('.ER_'+id+' #leucocytes_hlm').val();
+	    
+	    return tab;
+    }
+    
+    /*
+     * Analyse_51
+     * tamponBetaHcgPlasmatique
+     */
+    var tamponBetaHcgPlasmatique = new Array();
+    
+    function getBetaHcgPlasmatique_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #type_materiel_beta_hcg').val();
+    	tab[2] = $('.ER_'+id+' #beta_hcg_plasmatique').val();
+	    
+	    return tab;
+    }
+    
+    /*
+     * Analyse_52
+     * tamponPsa
+     */
+    var tamponPsa = new Array();
+
+    function getPsa_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #type_materiel_psa').val();
+    	tab[2] = $('.ER_'+id+' #psa').val();
+	    
+	    return tab;
+    }
+    
+    /*
+     * Analyse_53
+     * tamponCrp
+     */
+    var tamponCrp = new Array();
+
+    function getCrp_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #type_materiel_crp').val();
+    	tab[2] = $('.ER_'+id+' #crp').val();
+	    
+	    return tab;
+    }
+    
+    /*
+     * Analyse_54
+     * tamponFacteursRhumatoides
+     */
+    var tamponFacteurRhumatoides = new Array();
+
+    function getFacteursRhumatoides_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #type_materiel_facteurs_rhumatoides').val();
+    	tab[2] = $('.ER_'+id+' #facteurs_rhumatoides').val();
+	    
+	    return tab;
+    }
+    
+    /*
+     * Analyse_55
+     * tamponRfWaalerRose
+     */
+    var tamponRfWaalerRose = new Array();
+
+    function getRfWaalerRose_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #type_materiel_rf_waaler_rose').val();
+    	tab[2] = $('.ER_'+id+' #rf_waaler_rose').val();
+	    
+	    return tab;
+    }
+    
+    /*
+     * Analyse_56
+     * tamponToxoplasmose
+     */
+    var tamponToxoplasmose = new Array();
+    
+    function getToxoplasmose_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #type_materiel_toxoplasmose').val();
+    	tab[2] = $('.ER_'+id+' #toxoplasmose_1').val();
+    	tab[3] = $('.ER_'+id+' #toxoplasmose_2').val();
+	    
+	    return tab;
+    }
+    
+    /*
+     * Analyse_57
+     * tamponRubeole
+     */
+    var tamponRubeole = new Array();
+
+    function getRubeole_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #type_materiel_rubeole').val();
+    	tab[2] = $('.ER_'+id+' #rubeole_1').val();
+    	tab[3] = $('.ER_'+id+' #rubeole_2').val();
+	    
+	    return tab;
+    }
+    
+    /*
+     * Analyse_58
+     * tamponCulotUrinaire
+     */
+    var tamponCulotUrinaire = new Array();
+
+    function getCulotUrinaire_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #type_materiel_culot_urinaire').val();
+    	tab[2] = $('.ER_'+id+' #culot_urinaire_1').val();
+    	tab[3] = $('.ER_'+id+' #culot_urinaire_2').val();
+	    
+	    return tab;
+    }
+    
+    /*
+     * Analyse_59
+     * tamponSerologieChlamydiae
+     */
+    var tamponSerologieChlamydiae = new Array();
+    
+    function getSerologieChlamydiae_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #type_materiel_serologie_chlamydiae').val();
+    	tab[2] = $('.ER_'+id+' #serologie_chlamydiae').val();
+	    
+	    return tab;
+    }
+    
+    /*
+     * Analyse_60
+     * tamponSerologieSyphilitique
+     */
+    var tamponSerologieSyphilitique = new Array();
+
+    function getSerologieSyphilitique_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #type_materiel_serologie_syphilitique').val();
+    	tab[2] = $('.ER_'+id+' #serologie_syphilitique').val();
+	    
+	    return tab;
+    }
+    
+    /*
+     * Analyse_61
+     * tamponAslo
+     */
+    var tamponAslo = new Array();
+
+    function getAslo_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #type_materiel_aslo').val();
+    	tab[2] = $('.ER_'+id+' #aslo').val();
+	    
+	    return tab;
+    }
+    
+    /*
+     * Analyse_62
+     * tamponWidal
+     */
+    var tamponWidal = new Array();
+
+    function getWidal_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1]  = $('.ER_'+id+' #type_materiel_widal').val();
+    	
+    	tab[2]  = $('.ER_'+id+' #widal_to').val();
+    	tab[3]  = $('.ER_'+id+' #widal_titre_to').val();
+    	
+    	tab[4]  = $('.ER_'+id+' #widal_th').val();
+    	tab[5]  = $('.ER_'+id+' #widal_titre_th').val();
+    	
+    	tab[6]  = $('.ER_'+id+' #widal_ao').val();
+    	tab[7]  = $('.ER_'+id+' #widal_titre_ao').val();
+    	
+    	tab[8]  = $('.ER_'+id+' #widal_ah').val();
+    	tab[9]  = $('.ER_'+id+' #widal_titre_ah').val();
+    	
+    	tab[10] = $('.ER_'+id+' #widal_bo').val();
+    	tab[11] = $('.ER_'+id+' #widal_titre_bo').val();
+	    
+    	tab[12] = $('.ER_'+id+' #widal_bh').val();
+    	tab[13] = $('.ER_'+id+' #widal_titre_bh').val();
+    	
+    	tab[14] = $('.ER_'+id+' #widal_co').val();
+    	tab[15] = $('.ER_'+id+' #widal_titre_co').val();
+    	
+    	tab[16] = $('.ER_'+id+' #widal_ch').val();
+    	tab[17] = $('.ER_'+id+' #widal_titre_ch').val();
+    	
+	    return tab;
+    }
+    
+    /*
+     * Analyse_63
+     * tamponAgHbs
+     */
+    var tamponAgHbs = new Array();
+
+    function getAgHbs_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #type_materiel_ag_hbs').val();
+    	tab[2] = $('.ER_'+id+' #ag_hbs').val();
+	    
+	    return tab;
+    }
+    
+    /*
+     * Analyse_64
+     * tampon
+     */
+    
+    
+    
+    
+    
+    /*
+     * Analyse_68
+     */
+    var tamponTypageHemoglobine = new Array();
+    
+    function getTypageHemoglobine_TAD(id){
+    	var tab = new Array();
+    	tab[1] = $('.ER_'+id+' #type_materiel_typage_hemoglobine').val();
+    	tab[2] = $('.ER_'+id+' #typage_hemoglobine').val();
+    	tab[3] = $('.ER_'+id+' #autre_typage_hemoglobine').val();
+    	
+    	return tab;
+    }
     
     
     //Resultats des analyses demandées pour un type et/ou une date donnée
@@ -1983,25 +2957,619 @@
     	        		if(idanalyse == 1){
         	        		
     	        			var tab = getChampsNfs_TAD(iddemande);
-    	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
-        	        		
+    	        			if(JSON.stringify(tamponChampsNfsTab[iddemande]) === JSON.stringify(tab)){}
+	        				else{
+	        					tamponChampsNfsTab[iddemande] = tab;
+	        					enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+	        				}
+    	        			
     	        		}else
-    	        			if(idanalyse == 2){
-    	        				
-    	        				var tab = getGroupageRhesus_TAD(iddemande);
-    	        				if(JSON.stringify(tamponGroupageRhesusTab[iddemande]) === JSON.stringify(tab)){
-    	        					//alert("on ne fait rien");
-    	        				}else{
-    	        					tamponGroupageRhesusTab[iddemande] = tab;
-    	        					/*
-    	        					alert("on fait quelque chose");
-    	        					alert(tamponGroupageRhesusTab[iddemande]);
-    	        					alert(tab);
-    	        					*/
-        	        				enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
-    	        				}
-    	        				
+    	        		if(idanalyse == 2){
+    	        			
+    	        			var tab = getGroupageRhesus_TAD(iddemande);
+    	        			if(JSON.stringify(tamponGroupageRhesusTab[iddemande]) === JSON.stringify(tab)){}
+    	        			else{
+    	        				tamponGroupageRhesusTab[iddemande] = tab;
+        	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
     	        			}
+    	        				
+    	        		}else
+        				if(idanalyse == 3){
+        	        				
+   	        				var tab = getAntigeneDFaible_TAD(iddemande);
+   	        				if(JSON.stringify(tamponAntigeneDFaible[iddemande]) === JSON.stringify(tab)){}
+   	        				else{
+   	        					tamponAntigeneDFaible[iddemande] = tab;
+       	        				enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+   	        				}
+        	        				
+   	        			}else
+   	        			if(idanalyse == 4){
+            	        				
+       	        			var tab = getTestCombsDirect_TAD(iddemande);
+       	        			if(JSON.stringify(tamponTestCombsDirect[iddemande]) === JSON.stringify(tab)){}
+       	        			else{
+       	        				tamponTestCombsDirect[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+            	        				
+   	        			}else
+   	        			if(idanalyse == 5){
+                	        				
+       	        			var tab = getTestCombsIndirect_TAD(iddemande);
+      	        			if(JSON.stringify(tamponTestCombsIndirect[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+       	        				tamponTestCombsIndirect[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+                	        				
+   	        			}else
+   	        			if(idanalyse == 6){
+    	        				
+       	        			var tab = getTestCompatibilite_TAD(iddemande);
+      	        			if(JSON.stringify(tamponTestCompatibilite[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponTestCompatibilite[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+                	        				
+   	        			}else
+                        if(idanalyse == 7){
+    	        				
+       	        			var tab = getVitesseSedimentation_TAD(iddemande);
+      	        			if(JSON.stringify(tamponVitesseSedimentation[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponVitesseSedimentation[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+                	        				
+   	        			}else
+   	        			if(idanalyse == 8){
+    	        				
+       	        			var tab = getTestDemmel_TAD(iddemande);
+      	        			if(JSON.stringify(tamponTestDemmel[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponTestDemmel[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+                	        				
+   	        			}else
+   	        			if(idanalyse == 9){
+    	        				
+       	        			var tab = getTauxReticulocytes_TAD(iddemande);
+      	        			if(JSON.stringify(tamponTauxReticulocytes[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponTauxReticulocytes[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+                	        				
+   	        			}else
+   	        			if(idanalyse == 10){
+    	        				
+       	        			var tab = getGoutteEpaisse_TAD(iddemande);
+      	        			if(JSON.stringify(tamponGoutteEpaisse[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponGoutteEpaisse[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        				
+   	        				
+   	        			if(idanalyse == 14){
+    	        				
+       	        			var tab = getTpInr_TAD(iddemande);
+      	        			if(JSON.stringify(tamponTpInr[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponTpInr[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 15){
+    	        				
+       	        			var tab = getTca_TAD(iddemande);
+      	        			if(JSON.stringify(tamponTca[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponTca[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 16){
+    	        				
+       	        			var tab = getFibrinemie_TAD(iddemande);
+      	        			if(JSON.stringify(tamponFibrinemie[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponFibrinemie[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 17){
+    	        				
+       	        			var tab = getTempsSaignement_TAD(iddemande);
+      	        			if(JSON.stringify(tamponTempsSaignement[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponTempsSaignement[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 18){
+    	        				
+       	        			var tab = getFacteur8_TAD(iddemande);
+      	        			if(JSON.stringify(tamponFacteur8[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponFacteur8[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 19){
+    	        				
+       	        			var tab = getFacteur9_TAD(iddemande);
+      	        			if(JSON.stringify(tamponFacteur9[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponFacteur9[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        				
+   	        			if(idanalyse == 21){
+    	        				
+       	        			var tab = getGlycemie_TAD(iddemande);
+      	        			if(JSON.stringify(tamponGlycemie[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponGlycemie[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 22){
+    	        				
+       	        			var tab = getCreatininemie_TAD(iddemande);
+      	        			if(JSON.stringify(tamponCreatininemie[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponCreatininemie[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 23){
+    	        				
+       	        			var tab = getAzotemie_TAD(iddemande);
+      	        			if(JSON.stringify(tamponAzotemie[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponAzotemie[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 24){
+    	        				
+       	        			var tab = getAcideUrique_TAD(iddemande);
+      	        			if(JSON.stringify(tamponAcideUrique[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponAcideUrique[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 25){
+    	        				
+       	        			var tab = getCholesterolTotal_TAD(iddemande);
+      	        			if(JSON.stringify(tamponCholesterolTotal[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponCholesterolTotal[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 26){
+    	        				
+       	        			var tab = getTriglycerides_TAD(iddemande);
+      	        			if(JSON.stringify(tamponTriglycerides[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponTriglycerides[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 27){
+    	        				
+       	        			var tab = getCholesterolHDL_TAD(iddemande);
+      	        			if(JSON.stringify(tamponCholesterolHDL[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponCholesterolHDL[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 28){
+    	        				
+       	        			var tab = getCholesterolLDL_TAD(iddemande);
+      	        			if(JSON.stringify(tamponCholesterolLDL[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponCholesterolLDL[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 29){
+    	        				
+       	        			var tab = getChol_Total_HDL_LDL_Trigly_TAD(iddemande);
+      	        			if(JSON.stringify(tamponChol_Total_HDL_LDL_Trigly[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponChol_Total_HDL_LDL_Trigly[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 30){
+    	        				
+       	        			var tab = getLipidesTotaux_TAD(iddemande);
+      	        			if(JSON.stringify(tamponLipidesTotaux[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponLipidesTotaux[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 31){
+    	        				
+       	        			var tab = getIonogramme_TAD(iddemande);
+      	        			if(JSON.stringify(tamponIonogramme[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponIonogramme[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        		    if(idanalyse == 32){
+    	        				
+       	        			var tab = getCalcemie_TAD(iddemande);
+      	        			if(JSON.stringify(tamponCalcemie[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponCalcemie[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 33){
+    	        				
+       	        			var tab = getMagnesemie_TAD(iddemande);
+      	        			if(JSON.stringify(tamponMagnesemie[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponMagnesemie[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 34){
+    	        				
+       	        			var tab = getPhosphoremie_TAD(iddemande);
+      	        			if(JSON.stringify(tamponPhosphoremie[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponPhosphoremie[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 35){
+    	        				
+       	        			var tab = getTgoAsat_TAD(iddemande);
+      	        			if(JSON.stringify(tamponTgoAsat[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponTgoAsat[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 36){
+    	        				
+       	        			var tab = getTgpAlat_TAD(iddemande);
+      	        			if(JSON.stringify(tamponTgpAlat[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponTgpAlat[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 37){
+    	        				
+       	        			var tab = getAsatAlat_TAD(iddemande);
+      	        			if(JSON.stringify(tamponAsatAlat[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponAsatAlat[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 38){
+    	        				
+       	        			var tab = getPhosphatageAlcaline_TAD(iddemande);
+      	        			if(JSON.stringify(tamponPhosphatageAlcaline[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponPhosphatageAlcaline[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 39){
+    	        				
+       	        			var tab = getGamaGT_TAD(iddemande);
+      	        			if(JSON.stringify(tamponGamaGT[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponGamaGT[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 40){
+    	        				
+       	        			var tab = getFerSerique_TAD(iddemande);
+      	        			if(JSON.stringify(tamponFerSerique[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponFerSerique[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 41){
+    	        				
+       	        			var tab = getFerritinine_TAD(iddemande);
+      	        			if(JSON.stringify(tamponFerritinine[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponFerritinine[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 42){
+    	        				
+       	        			var tab = getBilirubineTotaleDirecte_TAD(iddemande);
+      	        			if(JSON.stringify(tamponBilirubineTotalDirecte[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponBilirubineTotalDirecte[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 43){
+    	        				
+       	        			var tab = getHemoglobineGlyqueeHBAC_TAD(iddemande);
+      	        			if(JSON.stringify(tamponHemoglobineGlyqueeHBAC[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponHemoglobineGlyqueeHBAC[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 44){
+    	        				
+       	        			var tab = getElectrophoreseHemoglobine_TAD(iddemande);
+      	        			if(JSON.stringify(tamponElectrophoreseHemoglobine[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponElectrophoreseHemoglobine[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 45){
+    	        				
+       	        			var tab = getElectrophoreseProteine_TAD(iddemande);
+      	        			if(JSON.stringify(tamponElectrophoreseProteine[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponElectrophoreseProteine[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 46){
+    	        				
+       	        			var tab = getAlbuminemie_TAD(iddemande);
+      	        			if(JSON.stringify(tamponAlbuminemie[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponAlbuminemie[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 47){
+    	        				
+       	        			var tab = getAlbumineUrinaire_TAD(iddemande);
+      	        			if(JSON.stringify(tamponAlbumineUrinaire[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponAlbumineUrinaire[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 48){
+    	        				
+       	        			var tab = getProtidemie_TAD(iddemande);
+      	        			if(JSON.stringify(tamponProtidemie[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponProtidemie[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 49){
+    	        				
+       	        			var tab = getProteinurie_TAD(iddemande);
+      	        			if(JSON.stringify(tamponProteinurie[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponProteinurie[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 50){
+    	        				
+       	        			var tab = getHlmCompteDaddis_TAD(iddemande);
+      	        			if(JSON.stringify(tamponHlmCompteDaddis[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponHlmCompteDaddis[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 51){
+    	        				
+       	        			var tab = getBetaHcgPlasmatique_TAD(iddemande);
+      	        			if(JSON.stringify(tamponBetaHcgPlasmatique[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponBetaHcgPlasmatique[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 52){
+    	        				
+       	        			var tab = getPsa_TAD(iddemande);
+      	        			if(JSON.stringify(tamponPsa[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponPsa[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 53){
+    	        				
+       	        			var tab = getCrp_TAD(iddemande);
+      	        			if(JSON.stringify(tamponCrp[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponCrp[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 54){
+    	        				
+       	        			var tab = getFacteursRhumatoides_TAD(iddemande);
+      	        			if(JSON.stringify(tamponFacteurRhumatoides[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponFacteurRhumatoides[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 55){
+    	        				
+       	        			var tab = getRfWaalerRose_TAD(iddemande);
+      	        			if(JSON.stringify(tamponRfWaalerRose[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponRfWaalerRose[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 56){
+    	        				
+       	        			var tab = getToxoplasmose_TAD(iddemande);
+      	        			if(JSON.stringify(tamponToxoplasmose[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponToxoplasmose[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 57){
+    	        				
+       	        			var tab = getRubeole_TAD(iddemande);
+      	        			if(JSON.stringify(tamponRubeole[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponRubeole[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 58){
+    	        				
+       	        			var tab = getCulotUrinaire_TAD(iddemande);
+      	        			if(JSON.stringify(tamponCulotUrinaire[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponCulotUrinaire[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 59){
+    	        				
+       	        			var tab = getSerologieChlamydiae_TAD(iddemande);
+      	        			if(JSON.stringify(tamponSerologieChlamydiae[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponSerologieChlamydiae[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 60){
+    	        				
+       	        			var tab = getSerologieSyphilitique_TAD(iddemande);
+      	        			if(JSON.stringify(tamponSerologieSyphilitique[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponSerologieSyphilitique[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 61){
+    	        				
+       	        			var tab = getAslo_TAD(iddemande);
+      	        			if(JSON.stringify(tamponAslo[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponAslo[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 62){
+    	        				
+       	        			var tab = getWidal_TAD(iddemande);
+      	        			if(JSON.stringify(tamponWidal[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponWidal[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        			if(idanalyse == 63){
+    	        				
+       	        			var tab = getWidal_TAD(iddemande);
+      	        			if(JSON.stringify(tamponAgHbs[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponAgHbs[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
+   	        				
+   	        				
+
+   	        				
+   	        				
+
+   	        				
+   	        	
+   	        				
+   	        				
+
+    	        				
+             			if(idanalyse == 68){
+    	        					
+   	        				var tab = getTypageHemoglobine_TAD(iddemande);
+       	        			if(JSON.stringify(tamponTypageHemoglobine[iddemande]) === JSON.stringify(tab)){}
+       	        			else{
+       	        				tamponTypageHemoglobine[iddemande] = tab;
+          	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+        	        				
+         				}
+    	        				
     	        	}
     	        	
     	            
@@ -2077,6 +3645,8 @@
              success: function(data) {
              	var result = jQuery.parseJSON(data);  
             	$('#contenuResultatsAnalysesParType div').html(result);
+            	listeDemandesSelectionnees = listeDesDemandesSelect;
+            	listeAnalysesSelectionnees = listeDesAnalysesSelect;
             	
             	var scriptFormule;
             	
@@ -2114,6 +3684,8 @@
              success: function(data) {
              	var result = jQuery.parseJSON(data);
             	$('#contenuResultatsAnalysesParType div').html(result);
+            	listeDemandesSelectionnees = listeDesDemandesSelect;
+            	listeAnalysesSelectionnees = listeDesAnalysesSelect;
             	
             	var scriptFormule;
             	
@@ -2155,6 +3727,8 @@
              success: function(data) {
              	var result = jQuery.parseJSON(data);
             	$('#contenuResultatsAnalysesParType div').html(result);
+            	listeDemandesSelectionnees = listeDesDemandesSelect;
+            	listeAnalysesSelectionnees = listeDesAnalysesSelect;
             	
             	var scriptFormule;
             	

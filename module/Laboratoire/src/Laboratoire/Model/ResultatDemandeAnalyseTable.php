@@ -2583,23 +2583,23 @@ class ResultatDemandeAnalyseTable {
 	
 	    $donnees = array();
 	
-	    if($tab[1]){  $donnees['type_materiel']  = $tab[1];  }else{ $donnees['type_materiel']  = null;       }
-	    if($tab[2]){  $donnees['albumine']       = $tab[2];  }else{ $donnees['albumine']       = null; $k++; }
-	    if($tab[3]){  $donnees['albumine_abs']   = $tab[3];  }else{ $donnees['albumine_abs']   = null; $k++; }
-	    if($tab[4]){  $donnees['alpha_1']        = $tab[4];  }else{ $donnees['alpha_1']        = null; $k++; }
-	    if($tab[5]){  $donnees['alpha_1_abs']    = $tab[5];  }else{ $donnees['alpha_1_abs']    = null; $k++; }
-	    if($tab[6]){  $donnees['alpha_2']        = $tab[6];  }else{ $donnees['alpha_2']        = null; $k++; }
-	    if($tab[7]){  $donnees['alpha_2_abs']    = $tab[7];  }else{ $donnees['alpha_2_abs']    = null; $k++; }
-	    if($tab[8]){  $donnees['beta_1']         = $tab[8];  }else{ $donnees['beta_1']         = null; $k++; }
-	    if($tab[9]){  $donnees['beta_1_abs']     = $tab[9];  }else{ $donnees['beta_1_abs']     = null; $k++; }
-	    if($tab[10]){ $donnees['beta_2']         = $tab[10]; }else{ $donnees['beta_2']         = null; $k++; }
-	    if($tab[11]){ $donnees['beta_2_abs']     = $tab[11]; }else{ $donnees['beta_2_abs']     = null; $k++; }
-	    if($tab[12]){ $donnees['gamma']          = $tab[12]; }else{ $donnees['gamma']          = null; $k++; }
-	    if($tab[13]){ $donnees['gamma_abs']      = $tab[13]; }else{ $donnees['gamma_abs']      = null; $k++; }
-	    if($tab[14]){ $donnees['proteine_totale']= $tab[14]; }else{ $donnees['proteine_totale']= null; $k++; }
-	    if($tab[15]){ $donnees['commentaire']    = $tab[15]; }else{ $donnees['commentaire']    = null; $k++; }
+	    if($tab[1]){  $donnees['type_materiel']  = $tab[1];        }else{ $donnees['type_materiel']  = null; }
+	    if($tab[2]){  $donnees['albumine']       = $tab[2];  $k++; }else{ $donnees['albumine']       = null; }
+	    if($tab[3]){  $donnees['albumine_abs']   = $tab[3];  $k++; }else{ $donnees['albumine_abs']   = null; }
+	    if($tab[4]){  $donnees['alpha_1']        = $tab[4];  $k++; }else{ $donnees['alpha_1']        = null; }
+	    if($tab[5]){  $donnees['alpha_1_abs']    = $tab[5];  $k++; }else{ $donnees['alpha_1_abs']    = null; }
+	    if($tab[6]){  $donnees['alpha_2']        = $tab[6];  $k++; }else{ $donnees['alpha_2']        = null; }
+	    if($tab[7]){  $donnees['alpha_2_abs']    = $tab[7];  $k++; }else{ $donnees['alpha_2_abs']    = null; }
+	    if($tab[8]){  $donnees['beta_1']         = $tab[8];  $k++; }else{ $donnees['beta_1']         = null; }
+	    if($tab[9]){  $donnees['beta_1_abs']     = $tab[9];  $k++; }else{ $donnees['beta_1_abs']     = null; }
+	    if($tab[10]){ $donnees['beta_2']         = $tab[10]; $k++; }else{ $donnees['beta_2']         = null; }
+	    if($tab[11]){ $donnees['beta_2_abs']     = $tab[11]; $k++; }else{ $donnees['beta_2_abs']     = null; }
+	    if($tab[12]){ $donnees['gamma']          = $tab[12]; $k++; }else{ $donnees['gamma']          = null; }
+	    if($tab[13]){ $donnees['gamma_abs']      = $tab[13]; $k++; }else{ $donnees['gamma_abs']      = null; }
+	    if($tab[14]){ $donnees['proteine_totale']= $tab[14]; $k++; }else{ $donnees['proteine_totale']= null; }
+ 	    if($tab[15]){ $donnees['commentaire']    = $tab[15];       }else{ $donnees['commentaire']    = null; }
 	
-	    if($k<14){ $donneesExiste = 1; }
+	    if($k != 0){ $donneesExiste = 1; }
 	
 	    //Si les resultats n y sont pas on les ajoute
 	    if(!$this->getValeursElectrophoreseProteines($iddemande)){

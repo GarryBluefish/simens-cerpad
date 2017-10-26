@@ -4275,8 +4275,8 @@ class TechnicienController extends AbstractActionController {
 			if($liste['Idanalyse'] == 16){ $html .= $this->fibrinemie_16(); $html .= $this->getResultatsFibrinemie($liste['iddemande']); }
 			if($liste['Idanalyse'] == 17){ $html .= $this->temps_saignement_17(); $html .= $this->getResultatsTempsSaignement($liste['iddemande']); }
 			
-			   if($liste['Idanalyse'] == 18){ $html .= $this->facteur_viii_18(); }
-			   if($liste['Idanalyse'] == 19){ $html .= $this->facteur_ix_19();   }
+			if($liste['Idanalyse'] == 18){ $html .= $this->facteur_viii_18();  $html .= $this->getResultatsFacteur8($liste['iddemande']); }
+			if($liste['Idanalyse'] == 19){ $html .= $this->facteur_ix_19(); $html .= $this->getResultatsFacteur9($liste['iddemande']);  }
 			   if($liste['Idanalyse'] == 20){ $html .= $this->dimeres_20();      }
 			
 			if($liste['Idanalyse'] == 21){ $html .= $this->glycemie_21(); $html .= $this->getResultatsGlycemie($liste['iddemande']); }
@@ -4460,6 +4460,19 @@ class TechnicienController extends AbstractActionController {
 	                $this->getResultatDemandeAnalyseTable()->addResultatDemandeAnalyse($iddemande, $idemploye);
 	                $donneesExiste = $this->getResultatDemandeAnalyseTable()->addValeursTempsSaignement($tab, $iddemande);
 	        }
+	        else
+	            if($idanalyse == 18){
+	            	$tab = $tableau[$idanalyse];
+	            	$this->getResultatDemandeAnalyseTable()->addResultatDemandeAnalyse($iddemande, $idemploye);
+	            	$donneesExiste = $this->getResultatDemandeAnalyseTable()->addValeursFacteur8($tab, $iddemande);
+	        }
+	        else
+	            if($idanalyse == 19){
+	            	$tab = $tableau[$idanalyse];
+	            	$this->getResultatDemandeAnalyseTable()->addResultatDemandeAnalyse($iddemande, $idemploye);
+	            	$donneesExiste = $this->getResultatDemandeAnalyseTable()->addValeursFacteur9($tab, $iddemande);
+	        }
+	        
 	        
 	        
 	        else
@@ -5106,6 +5119,23 @@ class TechnicienController extends AbstractActionController {
 	    }else{
 	        $html .="<script> $('#infosNbPatientParAnalyse img').attr('title', '').css({'opacity' : '0'}); </script>";
 	    }
+	    
+	    
+	    //Liste des analyses demandées dans la liste des analyses existantes
+	    //Liste des analyses demandées dans la liste des analyses existantes
+	    $listeAnalysesTypeGroup = $this->getAnalyseTable() ->getListeAnalysesDemandeesParTypeGroupeAnalyse($idtype);
+	    $listeAnalysesTab = array();
+	    foreach ($listeAnalysesTypeGroup as $liste){ $listeAnalysesTab[] = $liste['Idanalyse']; }
+	    
+	    $liste_select = "<option>  </option>";
+	    foreach($this->getPatientTable()->getListeDesAnalyses($idtype) as $listeAnalyses){
+	    	if(in_array($listeAnalyses['idanalyse'], $listeAnalysesTab)){
+	    		$liste_select.= "<option style=\'color: red;\' value=".$listeAnalyses['idanalyse']." > ".str_replace("'", "\'", $listeAnalyses['designation'])." </option>";
+	    	}else {
+	    		$liste_select.= "<option value=".$listeAnalyses['idanalyse']." > ".str_replace("'", "\'", $listeAnalyses['designation'])." </option>";
+	    	}
+	    }
+	    $html .="<script> $('#listeAnalyseParType').html('".$liste_select."'); $('#listeAnalyseParType').val('".$idanalyse."'); </script>";
 	    
 	    //Liste des dates de demandes d'analyses
 	    //Liste des dates de demandes d'analyses
