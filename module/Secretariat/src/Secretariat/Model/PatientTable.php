@@ -1455,22 +1455,75 @@ class PatientTable {
 	
 	public function gestionAges($age, $date_naissance) {
 		//Gestion des AGE
-		if($age){
+		if($age && !$date_naissance){
 			return $age." ans";
 		}else{
 			$aujourdhui = (new \DateTime() ) ->format('Y-m-d');
 			$age_jours = $this->nbJours($date_naissance, $aujourdhui);
-			if($age_jours < 31){
-				return $age_jours." jours";
-	
-			}else if($age_jours >= 31) {
-					
-				$nb_mois = (int)($age_jours/30);
-				$nb_jours = $age_jours - ($nb_mois*30);
-					
-				return $nb_mois."m ".$nb_jours."j";
+		
+			$age_annees = (int)($age_jours/365);
+		
+			if($age_annees == 0){
+		
+				if($age_jours < 31){
+					return $age_jours." jours";
+				}else if($age_jours >= 31) {
+		
+					$nb_mois = (int)($age_jours/31);
+					$nb_jours = $age_jours - ($nb_mois*31);
+					if($nb_jours == 0){
+						return $nb_mois."m";
+					}else{
+						return $nb_mois."m ".$nb_jours."j";
+					}
+		
+				}
+		
+			}else{
+				$age_jours = $age_jours - ($age_annees*365);
+		
+				if($age_jours < 31){
+		
+					if($age_annees == 1){
+						if($age_jours == 0){
+							return $age_annees."an";
+						}else{
+							return $age_annees."an ".$age_jours."j";
+						}
+					}else{
+						if($age_jours == 0){
+							return $age_annees."ans";
+						}else{
+							return $age_annees."ans ".$age_jours."j";
+						}
+					}
+		
+				}else if($age_jours >= 31) {
+		
+					$nb_mois = (int)($age_jours/31);
+					$nb_jours = $age_jours - ($nb_mois*31);
+		
+					if($age_annees == 1){
+						if($nb_jours == 0){
+							return $age_annees."an ".$nb_mois."m";
+						}else{
+							return $age_annees."an ".$nb_mois."m ";
+						}
+		
+					}else{
+						if($nb_jours == 0){
+							return $age_annees."ans ".$nb_mois."m";
+						}else{
+							return $age_annees."ans ".$nb_mois."m";
+						}
+					}
+		
+				}
+		
 			}
+		
 		}
+		
 	}
 	//********** RECUPERER LA LISTE DES PATIENTS POUR LESQUELS LEURS ANALYSES ONT DEJA DES RESULTATS   *********
 	//********** RECUPERER LA LISTE DES PATIENTS POUR LESQUELS LEURS ANALYSES ONT DEJA DES RESULTATS   *********
@@ -1972,7 +2025,9 @@ class PatientTable {
 	
 	public function validerDepistagePatient($idpatient, $idemploye)
 	{
-		$data = array( 'valide' => 1 , 'validation_id_employe' => $idemploye);
+		$date_validation = (new \DateTime() ) ->format('Y-m-d H:i:s');
+		
+		$data = array( 'valide' => 1 , 'validation_date' => $date_validation, 'validation_id_employe' => $idemploye);
 	
 		$db = $this->tableGateway->getAdapter();
 		$sql = new Sql($db);
@@ -1983,7 +2038,7 @@ class PatientTable {
 	
 	public function retrirerValidationDepistagePatient($idpatient, $idemploye)
 	{
-		$data = array( 'valide' => 0 , 'validation_id_employe' => $idemploye);
+		$data = array( 'valide' => 0 , 'validation_date' => null, 'validation_id_employe' => $idemploye);
 	
 		$db = $this->tableGateway->getAdapter();
 		$sql = new Sql($db);

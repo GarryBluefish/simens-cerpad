@@ -184,7 +184,7 @@
     }
     
     
-    function listeAnalyses(idfacturation){ 
+    function listeAnalyses(idfacturation){
         var chemin = tabUrl[0]+'public/infirmerie/liste-analyses-facturees';
         $.ajax({
             type: 'POST',
@@ -206,11 +206,17 @@
             	     });
             	     
                      $('.boutonTerminer').click(function(){
-            	    	 
-            	    	 //Validation du formulaire
-            	    	 $('#validerForm').trigger('click');
-            	    	 
-            	     });
+
+                    	 if($('#formEnregistrementBilan')[0].checkValidity() == true){
+                  			//formulaire valide et envoi des données
+                  			  $('.boutonTerminer button').attr('disabled', true);
+                      		  $('#validerForm').trigger('click');
+            	    	 }else{
+              				$('#validerForm').trigger('click');
+            	    	 }
+            	    
+                     });
+                     
             },
             error:function(e){console.log(e);alert("Une erreur interne est survenue!");},
             dataType: "html"

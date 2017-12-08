@@ -130,6 +130,7 @@ function demandesAnalyses(id){
         	     
         	     //PRECEDENT --- PRECEDENT --- PRECEDENT --- PRECEDENT
         	     $('#precedent').click(function(){
+        	    	$('#volet').toggle(false);
         	    	$("#titre span").html("RECHERCHER LE PATIENT");	
         	    	$('#contenu').animate({
         	            height : 'toggle'

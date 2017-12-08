@@ -652,6 +652,14 @@
     	return tab;
     }
     
+    function getDDimeres(){
+    	var tab = [];
+    	tab[1] = $('#d_dimeres').val();
+    	tab[2] = $('#type_materiel_dimeres').val();
+    	
+    	return tab;
+    }
+    
     //Resultats d'une seule analyse
     //Resultats d'une seule analyse
     //Resultats d'une seule analyse
@@ -682,7 +690,7 @@
     				else if(idanalyse == 17) { tab[1] = $('#temps_saignement').val(); tab[2] = $('#type_materiel_temps_saignement').val();  }
     				else if(idanalyse == 18) { tab    = getFacteur8();  }
     				else if(idanalyse == 19) { tab    = getFacteur9();  }
-    				     
+    				else if(idanalyse == 20) { tab    = getDDimeres();  }
     				else if(idanalyse == 21) { tab[1] = $('#glycemie_1').val(); tab[2] = $('#glycemie_2').val(); tab[3] = $('#type_materiel_glycemie').val();}
     				else if(idanalyse == 22) { tab[1] = $('#creatininemie').val(); tab[2] = $('#type_materiel_creatininemie').val(); }
     				else if(idanalyse == 23) { tab    = azotemie(); }
@@ -1721,9 +1729,9 @@
     				else if(idanalyse == 16) { tab [16] = new Array("", $('#fibrinemie').val(), $('#type_materiel_fibrinemie').val());  }
     				else if(idanalyse == 17) { tab [17] = new Array("", $('#temps_saignement').val(), $('#type_materiel_temps_saignement').val());  }
   	    			    
-    				else if(idanalyse == 18) { tab [18] = getFacteur8();  }
-    				else if(idanalyse == 19) { tab [19] = getFacteur9();  }
-  	    			     
+    				else if(idanalyse == 18) { tab [18] = getFacteur8(); }
+    				else if(idanalyse == 19) { tab [19] = getFacteur9(); }
+    				else if(idanalyse == 20) { tab [20] = getDDimeres(); }
     				else if(idanalyse == 21) { tab [21] = getGlycemie(); }
     				else if(idanalyse == 22) { tab [22] = new Array("", $('#creatininemie').val(), $('#type_materiel_creatininemie').val()); }
     				else if(idanalyse == 23) { tab [23] = azotemie(); }
@@ -1828,8 +1836,7 @@
             	     scriptFormule += gestionFormuleRapportCholHdl_TAD(listeDesDemandesSelect);
                  	
             	     $('#scriptFormules').html(scriptFormule);
-            	     
-            	     
+            	    
             	     getElectrophoreseProteinesFormule();
             	     getElectroHemo();
             	     getAsatAlatAuto();
@@ -2183,6 +2190,14 @@
      */
     var tamponDDimeres = new Array();
     
+    function getDDimeres_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #d_dimeres').val();
+    	tab[2] = $('.ER_'+id+' #type_materiel_dimeres').val();
+    	
+    	return tab;
+    }
     
     /*
      * Analyse_21
@@ -3116,7 +3131,16 @@
        	        			}
 
    	        			}else
-   	        				
+   	        			if(idanalyse == 20){
+    	        				
+       	        			var tab = getDDimeres_TAD(iddemande);
+      	        			if(JSON.stringify(tamponDDimeres[iddemande]) === JSON.stringify(tab)){}
+      	        			else{
+      	        				tamponDDimeres[iddemande] = tab;
+           	        			enregistrementResultatsAnalyses_TAD(idanalyse, iddemande, tab);
+       	        			}
+
+   	        			}else
    	        			if(idanalyse == 21){
     	        				
        	        			var tab = getGlycemie_TAD(iddemande);
@@ -3804,7 +3828,7 @@
      	         			        "champ2.val(resultatChamp2);"+
      	         		        "}else{ champ2.val(null); }"+
         	                 
-        	                 "});";
+        	                 "}).trigger('keyup');";
         		
         	
         	//PolynuclÃ©aires eosinophiles
@@ -3829,7 +3853,7 @@
 			                           "champ3.val(resultatChamp3);"+
 		                           "}else{ champ3.val(null); }"+
          
-                                "});";
+                                "}).trigger('keyup');";
         	
         	
         	//PolynuclÃ©aires basophiles
@@ -3854,7 +3878,7 @@
                                        "champ4.val(resultatChamp4);"+
                                    "}else{ champ4.val(null); }"+
 
-                                "});";
+                                "}).trigger('keyup');";
         	
         	
         	//Lymphocytes Lymphocytes
@@ -3879,7 +3903,7 @@
                                        "champ5.val(resultatChamp5);"+
                                    "}else{ champ5.val(null); }"+
 
-                                "});";
+                                "}).trigger('keyup');";
         	
         	
         	//Monocytes Monocytes
@@ -3904,7 +3928,7 @@
                                        "champ6.val(resultatChamp6);"+
                                    "}else{ champ6.val(null); }"+
 
-                                "});";
+                                "}).trigger('keyup');";
         	
         	
         	//Taux de réticulocytes -- Taux de réticulocytes
@@ -3928,7 +3952,7 @@
                                        "$('#champ24').val(resultatChamp24);"+
                                    "}else{ $('#champ24').val(null); }"+
 
-                                "});";
+                                "}).trigger('keyup');";
         	
     	}
     	scriptFormule += "</script>";
@@ -3958,7 +3982,7 @@
      	         			        "$('.ER_"+iddemande+" #glycemie_2').val(valeur_mmol.toFixed(3));"+
      	         		        "}else{ $('.ER_"+iddemande+" #glycemie_2').val(null); }"+
         	                 
-        	                 "});";
+        	                 "}).trigger('keyup');";
         	
     	}
     	scriptFormule += "</script>";
@@ -3992,7 +4016,7 @@
      	                  	        "$('.ER_"+iddemande+" #tca_ratio').val(tca_ratio.toFixed(2));"+
      	                        "}else{ $('.ER_"+iddemande+" #tca_ratio').val(null); }"+
         	                    
-        	                 "});";
+        	                 "}).trigger('keyup');";
         	
     	}
     	scriptFormule += "</script>";
@@ -4022,7 +4046,7 @@
      		                        "$('.ER_"+iddemande+" #creatininemie_umol').val(valeur_umol.toFixed(2));"+
      	                        "}else{	$('.ER_"+iddemande+" #creatininemie_umol').val(null); }"+
         	                    
-        	                 "});";
+        	                 "}).trigger('keyup');";
         	
     	}
     	scriptFormule += "</script>";
@@ -4052,7 +4076,7 @@
      		                        "$('.ER_"+iddemande+" #cholesterol_total_2').val(valeur_mmol.toFixed(2));"+
      	                        "}else{	$('.ER_"+iddemande+" #cholesterol_total_2').val(null); }"+
      	                 
-        	                 "});";
+        	                 "}).trigger('keyup');";
         	
     	}
     	scriptFormule += "</script>";
@@ -4083,7 +4107,7 @@
      		                        "$('.ER_"+iddemande+" #triglycerides_2').val(valeur_mmol.toFixed(3));"+
      	                        "}else{	$('.ER_"+iddemande+" #triglycerides_2').val(null); }"+
      	                 
-        	                 "});";
+        	                 "}).trigger('keyup');";
         	
     	}
     	scriptFormule += "</script>";
@@ -4114,7 +4138,7 @@
      		                        "$('.ER_"+iddemande+" #cholesterol_HDL_2').val(valeur_mmol.toFixed(2));"+
      	                        "}else{	$('.ER_"+iddemande+" #cholesterol_HDL_2').val(null); }"+
      	                 
-        	                 "});";
+        	                 "}).trigger('keyup');";
         	
     	}
     	scriptFormule += "</script>";
@@ -4144,7 +4168,7 @@
      		                        "$('.ER_"+iddemande+" #cholesterol_LDL_2').val(valeur_mmol.toFixed(2));"+
      	                        "}else{	$('.ER_"+iddemande+" #cholesterol_LDL_2').val(null); }"+
      	                 
-        	                 "});";
+        	                 "}).trigger('keyup');";
         	
     	}
     	scriptFormule += "</script>";
@@ -4256,7 +4280,7 @@
 		                             "$('.ER_"+iddemande+" #albumine_abs').val(null);"+
 		                         "}"+
 		                     
-        	                 "});";
+        	                 "}).trigger('keyup');";
         	
         	//Alpha 1
         	scriptFormule += "$('.ER_"+iddemande+" #alpha_1, .ER_"+iddemande+" #proteine_totale').keyup( function () { "+
@@ -4281,7 +4305,7 @@
                                      "$('.ER_"+iddemande+" #alpha_1_abs').val(null);"+
                                  "}"+
         
-                             "});";
+                             "}).trigger('keyup');";
         	
         	//Alpha 2
         	scriptFormule += "$('.ER_"+iddemande+" #alpha_2, .ER_"+iddemande+" #proteine_totale').keyup( function () { "+
@@ -4306,7 +4330,7 @@
                                      "$('.ER_"+iddemande+" #alpha_2_abs').val(null);"+
                                  "}"+
         
-                             "});";
+                             "}).trigger('keyup');";
         	
         	//Beta 1
         	scriptFormule += "$('.ER_"+iddemande+" #beta_1, .ER_"+iddemande+" #proteine_totale').keyup( function () { "+
@@ -4331,7 +4355,7 @@
                                      "$('.ER_"+iddemande+" #beta_1_abs').val(null);"+
                                  "}"+
         
-                             "});";
+                             "}).trigger('keyup');";
         	
         	//Beta 2
         	scriptFormule += "$('.ER_"+iddemande+" #beta_2, .ER_"+iddemande+" #proteine_totale').keyup( function () { "+
@@ -4356,7 +4380,7 @@
                                      "$('.ER_"+iddemande+" #beta_2_abs').val(null);"+
                                  "}"+
         
-                             "});";
+                             "}).trigger('keyup');";
     	
         	//Gamma
         	scriptFormule += "$('.ER_"+iddemande+" #gamma, .ER_"+iddemande+" #proteine_totale').keyup( function () { "+
@@ -4381,7 +4405,7 @@
                                      "$('.ER_"+iddemande+" #gamma_abs').val(null);"+
                                  "}"+
         
-                             "});";
+                             "}).trigger('keyup');";
     	   
     	}
     	

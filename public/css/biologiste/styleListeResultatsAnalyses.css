@@ -329,7 +329,7 @@ width: 100%; /* la largeur du champ input*/
 /* EN TETE*/
 #numero_dossier
 {
-	width: 12%;
+	width: 13%;
 }
 
 #nom
@@ -349,12 +349,12 @@ width: 100%; /* la largeur du champ input*/
 
 #adresse
 {
-	width: 24%;
+	width: 22%;
 }
 
 #date
 {
-	width: 14%;
+	width: 15%;
 }
 
 #effectuer

@@ -992,6 +992,65 @@ class ResultatDemandeAnalyseTable {
 		return $donneesExiste;
 	}
 	
+
+	//****************************************************************************************************
+	//****************************************************************************************************
+	public function getValeursDDimeres($iddemande){
+		$db = $this->tableGateway->getAdapter();
+		$sql = new Sql($db);
+		$sQuery = $sql->select()
+		->from(array('vt' => 'valeurs_ddimeres'))->columns(array('*'))
+		->where(array('idresultat_demande_analyse' => $iddemande));
+	
+		return $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
+	}
+	
+	public function addValeursDDimeres($tab, $iddemande){
+
+		$db = $this->tableGateway->getAdapter();
+		$sql = new Sql($db);
+		$donneesExiste = 0;
+		
+		$donnees = array();
+		
+		if($tab[1]){ $donnees['d_dimeres'] = $tab[1]; } else { $donnees['d_dimeres'] = null; }
+		if($tab[2]){ $donnees['type_materiel'] = $tab[2]; }else{ $donnees['type_materiel'] = null; }
+		
+		if( $tab[1] ){ $donneesExiste = 1; }
+		
+		//Si les resultats n y sont pas on les ajoute
+		if(!$this->getValeursDDimeres($iddemande)){
+		
+			if($donneesExiste == 0){
+				$this->tableGateway->delete ( array ( 'iddemande_analyse' => $iddemande ) );
+				$this->setResultDemandeNonEffectuee($iddemande);
+			}else{
+				$donnees['idresultat_demande_analyse'] = $iddemande;
+				$sQuery = $sql->insert() ->into('valeurs_ddimeres') ->values( $donnees );
+				$sql->prepareStatementForSqlObject($sQuery)->execute();
+				$this->setResultDemandeEffectuee($iddemande);
+			}
+		
+		}
+		//Sinon on effectue des mises a jours
+		else {
+		
+			if($donneesExiste == 0){
+				$this->tableGateway->delete ( array ( 'iddemande_analyse' => $iddemande ) );
+				$this->setResultDemandeNonEffectuee($iddemande);
+			}else{
+				$sQuery = $sql->update() ->table('valeurs_ddimeres') ->set( $donnees )
+				->where(array('idresultat_demande_analyse' => $iddemande ));
+				$sql->prepareStatementForSqlObject($sQuery)->execute();
+				$this->setResultDemandeEffectuee($iddemande);
+			}
+		
+		}
+		
+		return $donneesExiste;
+		
+	}
+	
 	//****************************************************************************************************
 	//****************************************************************************************************
 	public function getValeursGlycemie($iddemande){
@@ -2234,11 +2293,11 @@ class ResultatDemandeAnalyseTable {
 		return $donnee;
 	}
 	
-	public function addTypagePatientDepister($idpatient, $typage, $typepatient){
+	public function addTypagePatientDepister($idpatient, $typage, $typepatient, $iddemande=null){
 	    $db = $this->tableGateway->getAdapter();
 	    $sql = new Sql($db);
 	    
-	    $sQuery = $sql->update() ->table('depistage') ->set( array('typage' => $typage, 'typepatient' => $typepatient ) ) 
+	    $sQuery = $sql->update() ->table('depistage') ->set( array('typage' => $typage, 'typepatient' => $typepatient, 'iddemande_analyse' => $iddemande ) ) 
 	    ->where(array('idpatient' => $idpatient));
 	    $sql->prepareStatementForSqlObject($sQuery)->execute();
 	}
@@ -2302,7 +2361,7 @@ class ResultatDemandeAnalyseTable {
 	            $this->setResultDemandeEffectuee($iddemande);
 	            
 	            //Ajout des résultats dans la table dépistage lorsqu'il s'agit d'un patient dépisté
-	            $this->addTypagePatientDepister($demande['idpatient'], $tab[2], $typepatient);
+	            $this->addTypagePatientDepister($demande['idpatient'], $tab[2], $typepatient, $iddemande);
 	        }
 	
 	    }
@@ -2324,7 +2383,7 @@ class ResultatDemandeAnalyseTable {
 	            $this->setResultDemandeEffectuee($iddemande);
 	            
 	            //Ajout des résultats dans la table dépistage lorsqu'il s'agit d'un patient dépisté
-	            $this->addTypagePatientDepister($demande['idpatient'], $tab[2], $typepatient);
+	            $this->addTypagePatientDepister($demande['idpatient'], $tab[2], $typepatient, $iddemande);
 	        }
 	
 	    }

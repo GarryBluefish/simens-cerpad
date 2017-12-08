@@ -15,6 +15,8 @@ use Secretariat\Model\PersonneTable;
 use Secretariat\Model\Personne;
 use Secretariat\Model\AnalyseTable;
 use Secretariat\Model\Analyse;
+use Secretariat\Model\listeRecherche;
+use Secretariat\Model\listeRechercheTable;
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface, ViewHelperProviderInterface {
 
@@ -78,8 +80,19 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 							$resultSetPrototype = new ResultSet ();
 							$resultSetPrototype->setArrayObjectPrototype ( new Analyse () );
 							return new TableGateway ( 'analyse', $dbAdapter, null, $resultSetPrototype );
-						}
+						},
 						
+						'Secretariat\Model\listeRechercheTable' => function ($sm) {
+							$tableGateway = $sm->get ( 'ListeRechercheTableGateway' );
+							$table = new listeRechercheTable ( $tableGateway );
+							return $table;
+						},
+						'ListeRechercheTableGateway' => function ($sm) {
+							$dbAdapter = $sm->get ( 'Zend\Db\Adapter\Adapter' );
+							$resultSetPrototype = new ResultSet ();
+							$resultSetPrototype->setArrayObjectPrototype ( new listeRecherche() );
+							return new TableGateway ( 'personne', $dbAdapter, null, $resultSetPrototype );
+						}
 
 				)
 		);

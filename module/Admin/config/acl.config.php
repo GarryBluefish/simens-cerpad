@@ -15,7 +15,7 @@ return array(
                 'facturation' => 'guest',
         		'infirmier'   => 'guest',
         		'technicien'  => 'guest',
-        		'biologiste'  => 'guest',
+        		'biologiste'  => 'technicien',
         		'medecin'     => 'guest',
         		//***************
         		//***************
@@ -285,6 +285,9 @@ return array(
             		'reprise-prelevement' => 'infirmier', 	
             		'enregistrer-bilan-repris' => 'infirmier',
             		'enregistrer-modification' => 'infirmier',	
+            		'infos-statistiques-depistage-mensuel' => 'infirmier',
+            		'infos-statistiques-optionnelles-depistage-mensuel' => 'infirmier',	
+            		'imprimer-informations-statistiques-depistages' => 'infirmier',
             	),
                 
                 

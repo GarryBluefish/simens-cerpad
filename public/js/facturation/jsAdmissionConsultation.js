@@ -138,14 +138,14 @@ function clickRowHandler()
 	
 	}).bind('mousedown', function (e) {
 			var aData = oTable.fnGetData( this );
-		    id = aData[0];
+		    id = aData[6];
 	});
 	
 	
 	
 	$("#patient tbody tr").bind('dblclick', function (event) {
 		var aData = oTable.fnGetData( this );
-		var id = aData[0];
+		var id = aData[6];
 		if(id){ visualiser(id); }
 	});
 	

@@ -1,0 +1,136 @@
+@CHARSET "ISO-8859-1";
+
+#affichageInfosStatistiques .optionsPeriode{
+	width: 100%;
+	height: 40px;
+	margin-bottom: 20px;
+}
+
+.optionsPeriodePath .champOP1, .optionsPeriodePath .champOP2{
+	float: left;
+	width: 50%;
+	height: 40px;
+	margin-top: 5px;
+}
+
+.optionsPeriodePath .champOP1 input[type='date'], .optionsPeriodePath .champOP2 input[type='date']{
+	border: 2px solid #cccccc;
+    box-shadow: 0pt 2pt 6px rgba(0, 0, 0, 0.5);
+	height: 35px;
+	width: 95%;
+	padding-left: 10px;
+	font-size: 18px;
+}
+
+.optionsPeriodePath{
+	width: 55%;
+	height: 30px;
+}
+
+.champOP2 button{
+	position: absolute;
+	right: 70px;
+	box-shadow: 0pt 2pt 6px rgba(0, 0, 0, 0.5);
+	border-radius: 50%;
+	top: 10px;
+}
+
+.champOP1 img{
+	position: absolute;
+	left: 25px;
+	box-shadow: 0pt 2pt 6px rgba(0, 0, 0, 0.5);
+	border-radius: 20%;
+	cursor: pointer;
+}
+
+.champOP1 .infosDiagramme{
+	left: 75px;
+}
+
+
+.LTPE2 .imgLTPE2{
+	height: 16px; 
+	width: 16px;
+	float: right;
+	visibility: hidden;
+}
+
+#ajouterPathologies .listeTypePathologiesExistantes table tr:hover .imgLTPE2{
+	float: right; 
+	height: 18px; 
+	width: 18px;
+	visibility: visible;
+}
+
+#affichageInfosStatistiques .titreTableauInfosStatistiques{
+	padding-bottom: 5px;
+    padding-top : 13px;
+	width: 100%;
+	background: #f1f1f1;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+}
+
+
+#affichageInfosStatistiques .ligneTitreTableauInfos:hover{
+	background: #f1f1f1;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+}
+
+#affichageInfosStatistiques .ligneTitreTableauInfos{
+	width: 100%;
+	border-bottom: 2px solid #cccccc;
+	font-size: 14px;
+	font-style: times new roman;
+	font-weight: bold;
+}
+
+#affichageInfosStatistiques .ligneTitreTableauInfos td{
+	padding-left: 10px;
+}
+
+#affichageInfosStatistiques .tableauInfosStatistiques{
+    padding-bottom: 5px;
+    padding-top : 13px;
+	width: 100%;
+}
+
+#affichageInfosStatistiques .tableauInfosStatistiques td{
+	border-top: 1px solid #cccccc;
+	border-left: 1px solid #cccccc;
+}
+
+#affichageInfosStatistiques .zoneResultatsInfosStatiquesDepistage{
+	width: 99%;
+	min-height: 10px;
+	border: 2px solid #cccccc;
+    box-shadow: 0pt 2pt 6px rgba(0, 0, 0, 0.5);
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+}
+
+#listeTableauInfosStatistiques{
+	max-height: 400px; 
+	overflow-y: auto;
+}
+
+.affichageInfosTotalDepistage{
+	width: 99%;
+	min-height: 10px;
+    border-top: 1px solid #cccccc; 
+	border-left: 2px solid #cccccc;
+	border-bottom: 2px solid #cccccc;
+	border-right: 2px solid #cccccc;
+    box-shadow: 0pt 2pt 6px rgba(0, 0, 0, 0.5);
+	margin-top: 8px;
+	
+}
+
+.tableauInfosTotalDepistage td{
+	border-left: 1px solid #cccccc;
+}
+
+.optionsPeriodePath{
+	margin-top: -10px:
+}

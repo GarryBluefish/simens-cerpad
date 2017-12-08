@@ -1,6 +1,8 @@
+<?php echo $this->headScript()->appendFile($this->basePath().'/js/infirmerie/jsInfosStatistiquesDepistage.js'); ?>
+<?php echo $this->headLink()->appendStylesheet($this->basePath().'/css/infirmier/styleInfosStatistiquesDepistage.css');?>
+
 <style>
 #sideBareMenuGaucheinfirmerie{ visibility: hidden }
-
 #sideBareMenuGaucheinfirmerie{ min-width:200px; max-width: 430px;}
 </style>
 
@@ -43,6 +45,7 @@ $(window).load(function () {
 
 	
 	<!-- MENU *** HISTORIQUE BILAN*** infirmerie -->
+	<?php /*?>
 	<li id="menu_historique"><a href="">
 	    <span style="margin-left:0px; color: #48ce77; font-weight:bold; font-size:20px; font-family:Times New Roman;"> <img id="image" style="display: inline;" src='<?php echo $this->basePath().'/images_icons/plus-green1.png'?>' alt='Liste' /> Historiques bilans</span></a> 
 	</li>
@@ -55,6 +58,7 @@ $(window).load(function () {
 	   </div>
 	   
 	</li>
+	<?php */?>
 	
 	
 	<!-- MENU *** CONSULTATIONS*** infirmerie -->
@@ -71,6 +75,12 @@ $(window).load(function () {
 	   
 	</li>
 	
+	
+	<!-- MENU *** AFFICHAGE - TABLEAU STATISTIQUE *** infirmerie -->
+	<li>
+	   <div style="margin-left: 15px; border: 0.5px dashed gray; width: 80%; margin-top: 25px;"> </div>
+	   <img onclick="affichageInfosDepistageMensuel();" style="margin-left: 15px; margin-top: 5px; margin-bottom: 5px; display: inline; cursor: pointer;" src='<?php echo $this->basePath().'/img/light/information.png'?>' />
+	</li>
 	
 </ul>
 
@@ -201,3 +211,61 @@ return false;
 
 </script>
 
+
+
+
+
+
+<!--  
+*******************************************************************************************************************************
+*******************************************************************************************************************************
+-->
+
+<!-- GESTION DE L'INTERFACE D'AFFICHAGE DES RESULTATS STATISTIQUES -->
+<!-- GESTION DE L'INTERFACE D'AFFICHAGE DES RESULTATS STATISTIQUES -->
+<!-- GESTION DE L'INTERFACE D'AFFICHAGE DES RESULTATS STATISTIQUES -->
+
+
+<div id="affichageInfosStatistiques" title="Afficher des informations statistiques" style="display: none;" >
+
+<div class="optionsPeriode" align="center" style="margin-bottom: 10px;">
+    <div class="optionsPeriodePath" align="center" >
+       <form id="formOtionsPeriodePath" style="margin-top: -25px;">
+          <div class="champOP1">
+            <img onclick='imprimerInformationsStatistiques();' src='../images_icons/Apps-Pdf-B-icon-2.png' title='imprimer'>
+            <img onclick='afficherInformationsStatistiquesDiagramme();' class='infosDiagramme' src='../images_icons/Apps-Pdf-B-icon-2.png' title='imprimer'>
+            <input type="date" required>
+          </div> 
+          <div class="champOP2"><input type="date" required><button onclick="getInfosStatistiquesDepistageParPeriode(); return false;">Afficher</button></div>
+       </form>
+    </div>    
+</div>
+
+<div class="zoneResultatsInfosStatiquesDepistage"></div>
+
+<div style='width: 100%;'>
+  <div class='affichageInfosTotalDepistage' style='width: 60%; height: 40px; float: right;'>
+    <table class='tableauInfosTotalDepistage' style="width: 100%;">
+	  <tr style="width: 100%;">
+		<td class="infosPath infosPathTotalDepiste" style="width: 50%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: bold;"><div style="float: left; padding-left: 5px; font-size: 18px;">Total :</div><span></span></td>
+		<td class="infosPath " style="width: 50%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 12px; font-weight: bold;"></td>
+	  </tr>
+    </table>
+  </div>
+</div>
+
+
+</div>
+
+<div  style="display: none;">
+<form id="imprimerInformationsStatistiques"> <button></button> </form>
+</div>
+
+
+<!-- FIN FIN GESTION DE L'INTERFACE D'AFFICHAGE DES RESULTATS STATISTIQUES -->
+<!-- FIN FIN GESTION DE L'INTERFACE D'AFFICHAGE DES RESULTATS STATISTIQUES -->
+<!-- FIN FIN GESTION DE L'INTERFACE D'AFFICHAGE DES RESULTATS STATISTIQUES -->
+
+<script>
+getInfosStatistiquesParDefaut();
+</script>

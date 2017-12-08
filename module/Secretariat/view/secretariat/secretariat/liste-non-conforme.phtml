@@ -43,18 +43,17 @@ $(window).load(function () {
 		<table class="table table-bordered tab_list_mini" id="patientAdmis">
 			<thead>
 				<tr style="height:50px; width:100%;">
-				    <th id="numero_patient" align="center">N&deg;</th>
+				    <th id="numero_patient" align="center">N&deg; dossier</th>
 					<th id="nom" align="center">Nom</th>
 					<th id="prenom" align="center">Prenom</th>
-					<th id="date" align="center" >D. naissance</th>
-					<th id="sexe" align="center" >Sexe</th>
+					<th id="date" align="center" style="font-size: 13px;">Date naiss.</th>
 					<th id="telephone" align="center" >T&eacute;l&eacute;phone</th>
 					<th id="nationalite" align="center" >Date & heure</th>
 					<th id="effectuer" align="center">Options</th>
 				</tr>
 			</thead>
 
-			<tbody id="donnees" class="liste_patient">
+			<tbody id="donnees" class="liste_patient" style="font-size: 19px; font-family: times new roman;">
 
             <!-- ******* On affiche la liste des patients ****** -->
 
@@ -62,13 +61,12 @@ $(window).load(function () {
 
 			<tfoot id="foot" class="foot_style">
 				<tr>
-					<th id="numero_patient_" style="width: 11%;"><input type="text" name="search_browser" value=" Nom" class="search_init" /></th>
+					<th id="numero_patient_" style="width: 14%;"><input type="text" name="search_browser" value=" N&deg; dossier" class="search_init" /></th>
 					<th id="nom_" style="width: 14%;"><input type="text" name="search_browser" value=" Nom" class="search_init" /></th>
 					<th id="prenom_" style="width: 18%;"><input type="text" name="search_browser" value=" Prenom" class="search_init" /></th>
 					<th id="date_" style="width: 12%;"><input type="text" name="search_browser" value=" Date naissance" class="search_init" /></th>
-					<th id="sexe_" style="width: 7%;"><input type="text" name="search_browser" value=" Sexe" class="search_init" /></th>
-					<th id="telephone_" style="width: 13%;"><input type="text" name="search_browser" value=" T&eacute;l&eacute;phone" class="search_init" /></th>
-					<th id="nationalite_" style="width: 15%;"><input type="text" name="search_browser" value=" Nationalite" class="search_init" /></th>
+					<th id="telephone_" style="width: 16%;"><input type="text" name="search_browser" value=" T&eacute;l&eacute;phone" class="search_init" /></th>
+					<th id="nationalite_" style="width: 16%;"><input type="text" name="search_browser" value=" Date et heure" class="search_init" /></th>
 					<th id="effectuer_" style="width: 10%;"><input type="hidden" name="search_browser" value="" class="" /></th>
 
 				</tr>

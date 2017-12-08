@@ -245,11 +245,18 @@
             	     });
             	     
                      $('.boutonValider').click(function(){
-            	    	 
-            	    	 //Validation du formulaire
-            	    	 $('#validerForm').trigger('click');
-            	    	 
-            	     });
+
+                    	 if($('#formEnregistrementModificationBilan')[0].checkValidity() == true){
+                  			
+                    		 //formulaire valide et envoi des données
+                    		 $('.boutonValider button').attr('disabled', true);
+                    		 $('#validerForm').trigger('click');
+                  			  
+            	    	 }else{
+              				$('#validerForm').trigger('click');
+            	    	 }
+            	    
+                     });
             },
             error:function(e){console.log(e);alert("Une erreur interne est survenue!");},
             dataType: "html"

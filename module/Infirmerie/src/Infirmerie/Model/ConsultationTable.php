@@ -91,7 +91,7 @@ class ConsultationTable {
 	
 		$db = $this->tableGateway->getAdapter();
 			
-		$aColumns = array('id2', 'Nom', 'Prenom', 'Datenaissance', 'Sexe', 'Adresse', 'id');
+		$aColumns = array('numero_dossier', 'Nom', 'Prenom', 'Datenaissance', 'Sexe', 'Adresse', 'id');
 			
 		/* Indexed column (used for fast and accurate table cardinality) */
 		$sIndexColumn = "id";

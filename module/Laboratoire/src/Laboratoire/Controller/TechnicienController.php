@@ -168,23 +168,75 @@ class TechnicienController extends AbstractActionController {
 			<tr style='width: 100%;' >
 	 
 			    <td style='width: 15%;' >
-				  <img id='photo' src='".$this->baseUrl()."public/img/photos_patients/".$personne->photo."' style='width:105px; height:105px; margin-bottom: 10px; margin-top: -20px;'/>";
+				  <img id='photo' src='".$this->baseUrl()."public/img/photos_patients/".$personne->photo."' style='width:105px; height:105px; margin-bottom: 10px; margin-top: 0px;'/>";
 	
 		//Gestion des AGE
-		if($personne->age){
-			$html .="<div style=' margin-left: 15px; margin-top: 125px; font-family: time new romans; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$personne->age." ans </span></div>";
+		if($personne->age && !$personne->date_naissance){
+			$html .="<div style=' margin-left: 15px; margin-top: 135px; font-family: time new romans;'> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'>".$personne->age." ans </span></div>";
 		}else{
 			$aujourdhui = (new \DateTime() ) ->format('Y-m-d');
 			$age_jours = $this->nbJours($personne->date_naissance, $aujourdhui);
-			if($age_jours < 31){
-				$html .="<div style=' margin-left: 15px; margin-top: 125px; font-family: time new romans; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_jours." jours </span></div>";
-			}else if($age_jours >= 31) {
-	
-				$nb_mois = (int)($age_jours/30);
-				$nb_jours = $age_jours - ($nb_mois*30);
-	
-				$html .="<div style=' margin-left: 15px; margin-top: 125px; font-family: time new romans; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$nb_mois."m ".$nb_jours."j </span></div>";
+			$age_annees = (int)($age_jours/365);
+			 
+			if($age_annees == 0){
+				 
+				if($age_jours < 31){
+					$html .="<div style='margin-left: 20px; margin-top: 145px; font-family: time new romans; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_jours." jours </span></div>";
+				}else if($age_jours >= 31) {
+		
+					$nb_mois = (int)($age_jours/31);
+					$nb_jours = $age_jours - ($nb_mois*31);
+					if($nb_jours == 0){
+						$html .="<div style='margin-left: 20px; margin-top: 145px; font-family: time new romans; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$nb_mois."m </span></div>";
+					}else{
+						$html .="<div style='margin-left: 20px; margin-top: 145px; font-family: time new romans; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$nb_mois."m ".$nb_jours."j </span></div>";
+					}
+					 
+				}
+				 
+			}else{
+				$age_jours = $age_jours - ($age_annees*365);
+				 
+				if($age_jours < 31){
+					 
+					if($age_annees == 1){
+						if($age_jours == 0){
+							$html .="<div style='margin-left: 15px; margin-top: 145px; font-family: time new romans; '> <span style='font-size: 14px;'> Age: </span> <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an </span></div>";
+						}else{
+							$html .="<div style='margin-left: 10px; margin-top: 145px; font-family: time new romans; '> <span style='font-size: 14px;'> Age: </span> <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$age_jours." j </span></div>";
+						}
+					}else{
+						if($age_jours == 0){
+							$html .="<div style='margin-left: 15px; margin-top: 145px; font-family: time new romans; '> <span style='font-size: 14px;'> Age: </span> <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans </span></div>";
+						}else{
+							$html .="<div style='margin-left: 10px; margin-top: 145px; font-family: time new romans; '> <span style='font-size: 14px;'> Age: </span> <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans ".$age_jours."j </span></div>";
+						}
+					}
+		
+				}else if($age_jours >= 31) {
+		
+					$nb_mois = (int)($age_jours/31);
+					$nb_jours = $age_jours - ($nb_mois*31);
+					 
+					if($age_annees == 1){
+						if($nb_jours == 0){
+							$html .="<div style='margin-left: 5px; margin-top: 145px; font-family: time new romans; '> <span style='font-size: 13px;'> Age: </span> <span style='font-size:18px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$nb_mois."m </span></div>";
+						}else{
+							$html .="<div style='margin-left: 2px; margin-top: 145px; font-family: time new romans; '> <span style='font-size: 13px;'> Age: </span> <span style='font-size:17px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$nb_mois."m ".$nb_jours."j </span></div>";
+						}
+			    
+					}else{
+						if($nb_jours == 0){
+							$html .="<div style='margin-left: 5px; margin-top: 145px; font-family: time new romans; '> <span style='font-size: 13px;'> Age: </span> <span style='font-size:18px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans ".$nb_mois."m </span></div>";
+						}else{
+							$html .="<div style='margin-left: 2px; margin-top: 145px; font-family: time new romans; '> <span style='font-size: 13px;'> Age: </span> <span style='font-size:17px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans ".$nb_mois."m ".$nb_jours."j </span></div>";
+						}
+					}
+					 
+				}
+				 
 			}
+			 
 		}
 	
 		$html .="</td>
@@ -469,9 +521,9 @@ class TechnicienController extends AbstractActionController {
 	    	$html .="<table id='form_patient' style='margin-top:10px; margin-left:17.5%; width: 80%; margin-bottom: 10px;'>";
 	    		
 	    	$html .="<tr style='width: 80%; '>";
-	    	$html .="<td style='width: 25%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Nombre de pr&eacute;l&egrave;vement</span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 15px; padding-top: 5px; font-size:19px;'> ".$bilanPrelevement->nb_tube." </p></td>";
-	    	$html .="<td style='width: 25%; vertical-align:top; margin-right:30px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Date & heure </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-size:19px;'> ".$bilanPrelevement->date_heure." </p></td>";
-	    	$html .="<td style='width: 15%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>A jeun </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 15px; padding-top: 5px; font-size:19px; width: 70px;'> ".$a_jeun." </p></td>";
+	    	$html .="<td style='width: 25%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Nombre de pr&eacute;l&egrave;vement</span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 15px; padding-top: 5px; font-size:19px;  width: 70%;'> ".$bilanPrelevement->nb_tube." </p></td>";
+	    	$html .="<td style='width: 25%; vertical-align:top; margin-right:30px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Date & heure </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-size:19px;  width: 80%;'> ".$bilanPrelevement->date_heure." </p></td>";
+	    	$html .="<td style='width: 15%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>A jeun </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 15px; padding-top: 5px; font-size:19px; width: 60%;'> ".$a_jeun." </p></td>";
 	    	$html .="<td style='width: 35%; vertical-align:top; margin-right:10px;'>";
 	    		
 
@@ -508,13 +560,13 @@ class TechnicienController extends AbstractActionController {
 	    	$html .="<table id='form_patient' style='margin-top:10px; margin-left:17.5%; width: 80%; margin-bottom: 10px;'>";
 	    
 	    	$html .="<tr style='width: 80%; '>";
-	    	$html .="<td style='width: 15%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Difficult&eacute;s</span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 15px; padding-top: 5px; font-size:19px; width: 80px;'> ".$difficultes." </p></td>";
-	    	$html .="<td style='width: 35%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Difficult&eacute;s rencontr&eacute;es </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-size:17px; max-height: 120px;'> ".$difficultesRencontrees." </p></td>";
-	    	$html .="<td style='width: 15%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Transfuser </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 15px; padding-top: 5px; font-size:19px; width: 80px;'> ".$transfuser." </p></td>";
+	    	$html .="<td style='width: 15%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Difficult&eacute;s</span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 15px; padding-top: 5px; font-size:19px; width: 60%;'> ".$difficultes." </p></td>";
+	    	$html .="<td style='width: 35%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Difficult&eacute;s rencontr&eacute;es </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-size:17px; max-height: 120px;  width: 85%;'> ".$difficultesRencontrees." </p></td>";
+	    	$html .="<td style='width: 15%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Transfuser </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 15px; padding-top: 5px; font-size:19px;  width: 60%;'> ".$transfuser." </p></td>";
 	    	$html .="<td style='width: 35%; vertical-align:top; margin-right:10px;'>";
 	    		
 	    	if($moment_transfusion){
-	    		$html .="<span id='labelHeureLABEL' style='padding-left: 5px;'>Dans les 3 derniers mois </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 15px; padding-top: 5px; font-size:19px; width: 160px;'> ".$moment_transfusion." </p>";
+	    		$html .="<span id='labelHeureLABEL' style='padding-left: 5px;'>Dans les 3 derniers mois </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 15px; padding-top: 5px; font-size:19px;  width: 60%;'> ".$moment_transfusion." </p>";
 	    	}
 	    		
 	    	$html .="</td>";
@@ -526,8 +578,8 @@ class TechnicienController extends AbstractActionController {
 	    	$traitement = $bilanPrelevement->traitement;
 	    	if($diagnostic){
 	    		$html .="<table id='form_patient' style='margin-top:10px; margin-left:17.5%; width: 80%; margin-bottom: 10px;'>";
-	    		$html .="<td style='width: 35%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Diagnostic </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-size:17px; max-height: 90px;'> ".$diagnostic." </p></td>";
-	    		$html .="<td style='width: 35%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Traitement </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-size:17px; max-height: 90px;'> ".$traitement." </p></td>";
+	    		$html .="<td style='width: 35%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Diagnostic </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-size:17px; max-height: 90px;  width: 95%;'> ".$diagnostic." </p></td>";
+	    		$html .="<td style='width: 35%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Traitement </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-size:17px; max-height: 90px;  width: 95%;'> ".$traitement." </p></td>";
 	    		$html .="</table>";
 	    	}
 	    }
@@ -662,7 +714,6 @@ class TechnicienController extends AbstractActionController {
 			//insertion dans la base de données
 			//insertion dans la base de données
 			$this->getTriPrelevementTable() ->addTriPrelevement($infoTri);
-			
 		}
 		
 		return $this->redirect()->toRoute('technicien', array('action' =>'liste-bilans'));
@@ -681,7 +732,6 @@ class TechnicienController extends AbstractActionController {
 	public function listeBilansTriesAction(){
 
 		$this->layout ()->setTemplate ( 'layout/technicien' );
-		
 		return new ViewModel ( );
 	}
 	
@@ -728,9 +778,9 @@ class TechnicienController extends AbstractActionController {
 			$html .="<table id='form_patient' style='margin-top:10px; margin-left:17.5%; width: 80%; margin-bottom: 10px;'>";
 			 
 			$html .="<tr style='width: 80%; '>";
-			$html .="<td style='width: 25%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Nombre de pr&eacute;l&egrave;vement</span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 15px; padding-top: 5px; font-size:19px;'> ".$bilanPrelevement->nb_tube." </p></td>";
-			$html .="<td style='width: 25%; vertical-align:top; margin-right:30px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Date & heure </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-size:19px;'> ".$bilanPrelevement->date_heure." </p></td>";
-			$html .="<td style='width: 15%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>A jeun </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 15px; padding-top: 5px; font-size:19px; width: 70px;'> ".$a_jeun." </p></td>";
+			$html .="<td style='width: 25%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Nombre de pr&eacute;l&egrave;vement</span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 15px; padding-top: 5px; font-size:19px; width: 70%;'> ".$bilanPrelevement->nb_tube." </p></td>";
+			$html .="<td style='width: 25%; vertical-align:top; margin-right:30px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Date & heure </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-size:19px; width: 80%;'> ".$bilanPrelevement->date_heure." </p></td>";
+			$html .="<td style='width: 15%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>A jeun </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 15px; padding-top: 5px; font-size:19px; width: 60%;'> ".$a_jeun." </p></td>";
 			$html .="<td style='width: 35%; vertical-align:top; margin-right:10px;'>";
 			 
 	
@@ -767,13 +817,13 @@ class TechnicienController extends AbstractActionController {
 			$html .="<table id='form_patient' style='margin-top:10px; margin-left:17.5%; width: 80%; margin-bottom: 10px;'>";
 		  
 			$html .="<tr style='width: 80%; '>";
-			$html .="<td style='width: 15%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Difficult&eacute;s</span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 15px; padding-top: 5px; font-size:19px; width: 80px;'> ".$difficultes." </p></td>";
-			$html .="<td style='width: 35%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Difficult&eacute;s rencontr&eacute;es </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-size:17px; max-height: 120px;'> ".$difficultesRencontrees." </p></td>";
-			$html .="<td style='width: 15%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Transfuser </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 15px; padding-top: 5px; font-size:19px; width: 80px;'> ".$transfuser." </p></td>";
+			$html .="<td style='width: 15%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Difficult&eacute;s</span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 15px; padding-top: 5px; font-size:19px; width: 60%;'> ".$difficultes." </p></td>";
+			$html .="<td style='width: 35%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Difficult&eacute;s rencontr&eacute;es </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-size:17px; max-height: 120px; width: 85%;'> ".$difficultesRencontrees." </p></td>";
+			$html .="<td style='width: 15%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Transfuser </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 15px; padding-top: 5px; font-size:19px; width: 60%;'> ".$transfuser." </p></td>";
 			$html .="<td style='width: 35%; vertical-align:top; margin-right:10px;'>";
 			 
 			if($moment_transfusion){
-				$html .="<span id='labelHeureLABEL' style='padding-left: 5px;'>Dans les 3 derniers mois </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 15px; padding-top: 5px; font-size:19px; width: 160px;'> ".$moment_transfusion." </p>";
+				$html .="<span id='labelHeureLABEL' style='padding-left: 5px;'>Dans les 3 derniers mois </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 15px; padding-top: 5px; font-size:19px; width: 60%;'> ".$moment_transfusion." </p>";
 			}
 			 
 			$html .="</td>";
@@ -1037,6 +1087,7 @@ class TechnicienController extends AbstractActionController {
 		$listeHematologie = array();
 		$k=0;
 		$l=0;
+		
 		for($i = 0 ; $i < count($hematologie) ; $i++){
 		
 			if(!in_array($hematologie[$i]['Idanalyse'], $listeId)){
@@ -1056,6 +1107,7 @@ class TechnicienController extends AbstractActionController {
 						$listeHematologie[$k][3][] = $hematologie[$j]['Nom'];
 						$listeHematologie[$k][4][] = $hematologie[$j]['Prenom'];
 						$listeHematologie[$k][5][] = $hematologie[$j]['Conformite'];
+						$listeHematologie[$k][6][] = $hematologie[$j]['Ordre'];
 							
 					}
 				}
@@ -1108,6 +1160,7 @@ class TechnicienController extends AbstractActionController {
 						$listeBiochimie[$k][3][] = $biochimie[$j]['Nom'];
 						$listeBiochimie[$k][4][] = $biochimie[$j]['Prenom'];
 						$listeBiochimie[$k][5][] = $biochimie[$j]['Conformite'];
+						$listeBiochimie[$k][6][] = $biochimie[$j]['Ordre'];
 							
 					}
 				}
@@ -1161,6 +1214,7 @@ class TechnicienController extends AbstractActionController {
 						$listeParasitologie[$k][3][] = $parasitologie[$j]['Nom'];
 						$listeParasitologie[$k][4][] = $parasitologie[$j]['Prenom'];
 						$listeParasitologie[$k][5][] = $parasitologie[$j]['Conformite'];
+						$listeParasitologie[$k][6][] = $parasitologie[$j]['Ordre'];
 							
 					}
 				}
@@ -1214,6 +1268,7 @@ class TechnicienController extends AbstractActionController {
 						$listeBacteriologie[$k][3][] = $bacteriologie[$j]['Nom'];
 						$listeBacteriologie[$k][4][] = $bacteriologie[$j]['Prenom'];
 						$listeBacteriologie[$k][5][] = $bacteriologie[$j]['Conformite'];
+						$listeBacteriologie[$k][6][] = $bacteriologie[$j]['Ordre'];
 							
 					}
 				}
@@ -1267,6 +1322,7 @@ class TechnicienController extends AbstractActionController {
 						$listeDepistage[$k][3][] = $depistage[$j]['Nom'];
 						$listeDepistage[$k][4][] = $depistage[$j]['Prenom'];
 						$listeDepistage[$k][5][] = $depistage[$j]['Conformite'];
+						$listeDepistage[$k][6][] = $depistage[$j]['Ordre'];
 							
 					}
 				}
@@ -2212,22 +2268,74 @@ class TechnicienController extends AbstractActionController {
 
         
         //Gestion des AGE
-        if($personne->age){
-            $html .="<div style=' left: 70px; top: 235px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$personne->age." ans </span></div>";
-        }else{
-            $aujourdhui = (new \DateTime() ) ->format('Y-m-d');
-            $age_jours = $this->nbJours($personne->date_naissance, $aujourdhui);
-            if($age_jours < 31){
-                $html .="<div style=' left: 70px; top: 235px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_jours." jours </span></div>";
-            }else if($age_jours >= 31) {
-		        
-		        $nb_mois = (int)($age_jours/30);
-		        $nb_jours = $age_jours - ($nb_mois*30);
-		        
-		        $html .="<div style=' left: 70px; top: 235px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$nb_mois."m ".$nb_jours."j </span></div>";
-		    }
-        }
-        
+		if($personne->age && !$personne->date_naissance){
+			$html .="<div style=' left: 70px; top: 235px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$personne->age." ans </span></div>";
+		}else{
+			$aujourdhui = (new \DateTime() ) ->format('Y-m-d');
+			$age_jours = $this->nbJours($personne->date_naissance, $aujourdhui);
+		
+			$age_annees = (int)($age_jours/365);
+		
+			if($age_annees == 0){
+		
+				if($age_jours < 31){
+					$html .="<div style='left: 70px; top: 235px; position: absolute; font-family: time new romans; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_jours." jours </span></div>";
+				}else if($age_jours >= 31) {
+					 
+					$nb_mois = (int)($age_jours/31);
+					$nb_jours = $age_jours - ($nb_mois*31);
+					if($nb_jours == 0){
+						$html .="<div style='left: 70px; top: 235px; position: absolute; font-family: time new romans; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$nb_mois."m </span></div>";
+					}else{
+						$html .="<div style='left: 70px; top: 235px; position: absolute; font-family: time new romans; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$nb_mois."m ".$nb_jours."j </span></div>";
+					}
+		
+				}
+		
+			}else{
+				$age_jours = $age_jours - ($age_annees*365);
+		
+				if($age_jours < 31){
+		
+					if($age_annees == 1){
+						if($age_jours == 0){
+							$html .="<div style='left: 60px; top: 235px; position: absolute; font-family: time new romans; '> <span style='font-size: 14px;'> Age: </span> <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an </span></div>";
+						}else{
+							$html .="<div style='left: 60px; top: 235px; position: absolute; font-family: time new romans; '> <span style='font-size: 14px;'> Age: </span> <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$age_jours." j </span></div>";
+						}
+					}else{
+						if($age_jours == 0){
+							$html .="<div style='left: 60px; top: 235px; position: absolute; font-family: time new romans; '> <span style='font-size: 14px;'> Age: </span> <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans </span></div>";
+						}else{
+							$html .="<div style='left: 60px; top: 235px; position: absolute; font-family: time new romans; '> <span style='font-size: 14px;'> Age: </span> <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans ".$age_jours."j </span></div>";
+						}
+					}
+					 
+				}else if($age_jours >= 31) {
+					 
+					$nb_mois = (int)($age_jours/31);
+					$nb_jours = $age_jours - ($nb_mois*31);
+		
+					if($age_annees == 1){
+						if($nb_jours == 0){
+							$html .="<div style='left: 60px; top: 235px; position: absolute; font-family: time new romans; '> <span style='font-size: 13px;'> Age: </span> <span style='font-size:18px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$nb_mois."m </span></div>";
+						}else{
+							$html .="<div style='left: 50px; top: 235px; position: absolute; font-family: time new romans; '> <span style='font-size: 13px;'> Age: </span> <span style='font-size:17px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$nb_mois."m ".$nb_jours."j </span></div>";
+						}
+		
+					}else{
+						if($nb_jours == 0){
+							$html .="<div style='left: 60px; top: 235px; position: absolute; font-family: time new romans; '> <span style='font-size: 13px;'> Age: </span> <span style='font-size:18px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans ".$nb_mois."m </span></div>";
+						}else{
+							$html .="<div style='left: 50px; top: 235px; position: absolute; font-family: time new romans; '> <span style='font-size: 13px;'> Age: </span> <span style='font-size:17px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans ".$nb_mois."m ".$nb_jours."j </span></div>";
+						}
+					}
+		
+				}
+		
+			}
+		
+		}
         
         
         $html .="<p style='color: white; opacity: 0.09;'>
@@ -2451,22 +2559,76 @@ class TechnicienController extends AbstractActionController {
 		
         
         //Gestion des AGE
-        if($personne->age){
-            $html .="<div style=' left: 70px; top: 235px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$personne->age." ans </span></div>";
-        }else{
-            $aujourdhui = (new \DateTime() ) ->format('Y-m-d');
-            $age_jours = $this->nbJours($personne->date_naissance, $aujourdhui);
-            if($age_jours < 31){
-                $html .="<div style=' left: 70px; top: 235px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_jours." jours </span></div>";
-            }else if($age_jours >= 31) {
-		        
-		        $nb_mois = (int)($age_jours/30);
-		        $nb_jours = $age_jours - ($nb_mois*30);
-		        
-		        $html .="<div style=' left: 70px; top: 235px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$nb_mois."m ".$nb_jours."j </span></div>";
-		    }
-        }
-        
+		if($personne->age && !$personne->date_naissance){
+			$html .="<div style=' left: 70px; top: 235px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$personne->age." ans </span></div>";
+		}else{
+			$aujourdhui = (new \DateTime() ) ->format('Y-m-d');
+			$age_jours = $this->nbJours($personne->date_naissance, $aujourdhui);
+		
+			$age_annees = (int)($age_jours/365);
+		
+			if($age_annees == 0){
+		
+				if($age_jours < 31){
+					$html .="<div style='left: 70px; top: 235px; position: absolute; font-family: time new romans; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_jours." jours </span></div>";
+				}else if($age_jours >= 31) {
+		
+					$nb_mois = (int)($age_jours/31);
+					$nb_jours = $age_jours - ($nb_mois*31);
+					if($nb_jours == 0){
+						$html .="<div style='left: 70px; top: 235px; position: absolute; font-family: time new romans; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$nb_mois."m </span></div>";
+					}else{
+						$html .="<div style='left: 70px; top: 235px; position: absolute; font-family: time new romans; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$nb_mois."m ".$nb_jours."j </span></div>";
+					}
+		
+				}
+		
+			}else{
+				$age_jours = $age_jours - ($age_annees*365);
+		
+				if($age_jours < 31){
+		
+					if($age_annees == 1){
+						if($age_jours == 0){
+							$html .="<div style='left: 60px; top: 235px; position: absolute; font-family: time new romans; '> <span style='font-size: 14px;'> Age: </span> <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an </span></div>";
+						}else{
+							$html .="<div style='left: 60px; top: 235px; position: absolute; font-family: time new romans; '> <span style='font-size: 14px;'> Age: </span> <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$age_jours." j </span></div>";
+						}
+					}else{
+						if($age_jours == 0){
+							$html .="<div style='left: 60px; top: 235px; position: absolute; font-family: time new romans; '> <span style='font-size: 14px;'> Age: </span> <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans </span></div>";
+						}else{
+							$html .="<div style='left: 60px; top: 235px; position: absolute; font-family: time new romans; '> <span style='font-size: 14px;'> Age: </span> <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans ".$age_jours."j </span></div>";
+						}
+					}
+		
+				}else if($age_jours >= 31) {
+		
+					$nb_mois = (int)($age_jours/31);
+					$nb_jours = $age_jours - ($nb_mois*31);
+		
+					if($age_annees == 1){
+						if($nb_jours == 0){
+							$html .="<div style='left: 60px; top: 235px; position: absolute; font-family: time new romans; '> <span style='font-size: 13px;'> Age: </span> <span style='font-size:18px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$nb_mois."m </span></div>";
+						}else{
+							$html .="<div style='left: 50px; top: 235px; position: absolute; font-family: time new romans; '> <span style='font-size: 13px;'> Age: </span> <span style='font-size:17px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$nb_mois."m ".$nb_jours."j </span></div>";
+						}
+		
+					}else{
+						if($nb_jours == 0){
+							$html .="<div style='left: 60px; top: 235px; position: absolute; font-family: time new romans; '> <span style='font-size: 13px;'> Age: </span> <span style='font-size:18px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans ".$nb_mois."m </span></div>";
+						}else{
+							$html .="<div style='left: 50px; top: 235px; position: absolute; font-family: time new romans; '> <span style='font-size: 13px;'> Age: </span> <span style='font-size:17px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans ".$nb_mois."m ".$nb_jours."j </span></div>";
+						}
+					}
+		
+				}
+		
+			}
+		
+		}
+		
+		
         
         $html .="<p style='color: white; opacity: 0.09;'>
          <img id='photo' src='".$this->chemin()."/img/photos_patients/".$personne->photo."' style='float:right; margin-right:15px; width:95px; height:95px;'/>
@@ -3162,6 +3324,19 @@ class TechnicienController extends AbstractActionController {
 		return $html;
 	}
 	
+	protected function getResultatsDDimeres($iddemande){
+		$resultat = $this->getResultatDemandeAnalyseTable()->getValeursDDimeres($iddemande);
+		$html ="";
+		if($resultat){
+			$html .=
+			"<script>
+	            $('#type_materiel_dimeres').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
+	    	    $('#d_dimeres').val('".$resultat['d_dimeres']."');
+	    	 </script>";
+		}
+		return $html;
+	}
+	
 	protected function getResultatsGlycemie($iddemande){
 	    $resultat = $this->getResultatDemandeAnalyseTable()->getValeursGlycemie($iddemande);
 	    $html ="";
@@ -3331,8 +3506,8 @@ class TechnicienController extends AbstractActionController {
 	    if($resultat){
 	        $html .=
 	        "<script>
-	            $('#type_materiel_tgo_asat').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
-	    	    $('#tgo_asat').val('".$resultat['tgo_asat']."');
+	            $('.ER_".$iddemande." #type_materiel_tgo_asat').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
+	    	    $('.ER_".$iddemande." #tgo_asat').val('".$resultat['tgo_asat']."');
 	    	 </script>";
 	    }
 	    return $html;
@@ -3344,8 +3519,8 @@ class TechnicienController extends AbstractActionController {
 	    if($resultat){
 	        $html .=
 	        "<script>
-	            $('#type_materiel_tgp_alat').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
-	    	    $('#tgp_alat').val('".$resultat['tgp_alat']."');
+	            $('.ER_".$iddemande." #type_materiel_tgp_alat').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
+	    	    $('.ER_".$iddemande." #tgp_alat').val('".$resultat['tgp_alat']."');
 	    	 </script>";
 	    }
 	    return $html;
@@ -3819,9 +3994,7 @@ class TechnicienController extends AbstractActionController {
 		if($analyse['Idanalyse'] == 17){ $html .= $this->temps_saignement_17(); $html .= $this->getResultatsTempsSaignement($iddemande); }
 		if($analyse['Idanalyse'] == 18){ $html .= $this->facteur_viii_18(); $html .= $this->getResultatsFacteur8($iddemande); }
 		if($analyse['Idanalyse'] == 19){ $html .= $this->facteur_ix_19(); $html .= $this->getResultatsFacteur9($iddemande);  }
-
-		   if($analyse['Idanalyse'] == 20){ $html .= $this->dimeres_20();      }
-		
+		if($analyse['Idanalyse'] == 20){ $html .= $this->dimeres_20();  $html .= $this->getResultatsDDimeres($iddemande);    }
 		if($analyse['Idanalyse'] == 21){ $html .= $this->glycemie_21(); $html .= $this->getResultatsGlycemie($iddemande); }
 		if($analyse['Idanalyse'] == 22){ $html .= $this->creatininemie_22(); $html .= $this->getResultatsCreatininemie($iddemande); }
 		if($analyse['Idanalyse'] == 23){ $html .= $this->azotemie_23(); $html .= $this->getResultatsAzotemie($iddemande); }
@@ -3989,7 +4162,11 @@ class TechnicienController extends AbstractActionController {
 	           	$this->getResultatDemandeAnalyseTable()->addResultatDemandeAnalyse($iddemande, $idemploye);
 	           	$donneesExiste = $this->getResultatDemandeAnalyseTable()->addValeursFacteur9($tab, $iddemande);
 	        }
-	    
+	    else 
+	    	if($idanalyse == 20){
+	    		$this->getResultatDemandeAnalyseTable()->addResultatDemandeAnalyse($iddemande, $idemploye);
+	    		$donneesExiste = $this->getResultatDemandeAnalyseTable()->addValeursDDimeres($tab, $iddemande);
+	    	}
 	    else
 	        if($idanalyse == 21){
 	            $this->getResultatDemandeAnalyseTable()->addResultatDemandeAnalyse($iddemande, $idemploye);
@@ -4274,11 +4451,9 @@ class TechnicienController extends AbstractActionController {
 			if($liste['Idanalyse'] == 15){ $html .= $this->tca_15(); $html .= $this->getResultatsTca($liste['iddemande']); }
 			if($liste['Idanalyse'] == 16){ $html .= $this->fibrinemie_16(); $html .= $this->getResultatsFibrinemie($liste['iddemande']); }
 			if($liste['Idanalyse'] == 17){ $html .= $this->temps_saignement_17(); $html .= $this->getResultatsTempsSaignement($liste['iddemande']); }
-			
 			if($liste['Idanalyse'] == 18){ $html .= $this->facteur_viii_18();  $html .= $this->getResultatsFacteur8($liste['iddemande']); }
 			if($liste['Idanalyse'] == 19){ $html .= $this->facteur_ix_19(); $html .= $this->getResultatsFacteur9($liste['iddemande']);  }
-			   if($liste['Idanalyse'] == 20){ $html .= $this->dimeres_20();      }
-			
+			if($liste['Idanalyse'] == 20){ $html .= $this->dimeres_20();  $html .= $this->getResultatsDDimeres($liste['iddemande']);    }
 			if($liste['Idanalyse'] == 21){ $html .= $this->glycemie_21(); $html .= $this->getResultatsGlycemie($liste['iddemande']); }
 			if($liste['Idanalyse'] == 22){ $html .= $this->creatininemie_22(); $html .= $this->getResultatsCreatininemie($liste['iddemande']); }
 			if($liste['Idanalyse'] == 23){ $html .= $this->azotemie_23(); $html .= $this->getResultatsAzotemie($liste['iddemande']); }
@@ -4472,9 +4647,12 @@ class TechnicienController extends AbstractActionController {
 	            	$this->getResultatDemandeAnalyseTable()->addResultatDemandeAnalyse($iddemande, $idemploye);
 	            	$donneesExiste = $this->getResultatDemandeAnalyseTable()->addValeursFacteur9($tab, $iddemande);
 	        }
-	        
-	        
-	        
+	        else 
+	        	if($idanalyse == 20){
+	        		$tab = $tableau[$idanalyse];
+	        		$this->getResultatDemandeAnalyseTable()->addResultatDemandeAnalyse($iddemande, $idemploye);
+	        		$donneesExiste = $this->getResultatDemandeAnalyseTable()->addValeursDDimeres($tab, $iddemande);
+	        }
 	        else
 	            if($idanalyse == 21){
 	                $tab = $tableau[$idanalyse];

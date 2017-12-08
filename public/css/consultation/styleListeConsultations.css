@@ -74,12 +74,12 @@ width: 100%; /* la largeur du champ input*/
 
 #numero
 {
-	width: 12%;
+	width: 14%;
 }
 
 #nom
 {
-	width: 13%;
+	width: 14%;
 }
 
 #prenom
@@ -98,7 +98,7 @@ width: 100%; /* la largeur du champ input*/
 
 #adresse
 {
-	width: 28%;
+	width: 25%;
 }
 
 #effectuer
@@ -219,7 +219,7 @@ div .dataTables_paginate
 
 tr:hover
 {
-	/* background: white; */
+	background: white;
 }
 
 
@@ -1030,3 +1030,132 @@ table td p
 	height: 10px;
 	font-size: 9px; 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#contenuPageA, #contenuPageB, #contenuPageC {
+    background: #fff; 
+    max-height: 1000px;
+    border: 2px solid #ccc ;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top: 2px solid #cccccc;
+    padding-left: 20px;
+    padding-right: 25px;
+    padding-top: 5px;
+    padding-bottom: 10px;
+    box-shadow: 0pt 5pt 12px rgba(0, 0, 0, 0.5);
+}
+
+#menuGeneral {
+    background: #fff; max-height: 1000px;
+    border: 2px solid #ccc ;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top: 2px solid #cccccc;
+    padding-left: 20px;
+    padding-right: 25px;
+    padding-top: 5px;
+    padding-bottom: 10px;
+    box-shadow: 0pt 5pt 12px rgba(0, 0, 0, 0.5);
+}
+
+/*GESTION DU MENU --- GESTION DU MENU*/
+/*GESTION DU MENU --- GESTION DU MENU*/
+/*GESTION DU MENU --- GESTION DU MENU*/
+/*GESTION DU MENU --- GESTION DU MENU*/
+#menuGeneral table{
+	margin-top: 15px;
+	border-radius: 50%;
+	margin-bottom: 15px;
+}
+
+#menuGeneral table table{
+	background: #8cff77; /* #cccccc */
+}
+
+#menuGeneral table div{
+	font-weight: normal;
+	box-shadow: 0pt 0pt 11px rgba(0, 0, 1, 0.5);
+	border-radius: 50%;
+	font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+	font-size: 14px; 
+}
+
+#menuGeneral table div div{
+	background: #eeffe8; 
+	height: 100px;
+	text-align: center;
+}
+
+#menuGeneral table div:hover{
+	cursor: pointer;
+	box-shadow: 0pt 1pt 22px rgba(0, 0, 1, 0.9);
+	
+	font-family: time new romans;
+	font-weight: bold;
+	font-size: 18px;
+	background: #b5ffb5; /* #7FDD4C; */
+	border-radius: 50%;
+}
+
+#menuGeneral table div td:hover{
+	background: #f9f9f9;
+	border-radius: 50%;
+}
+
+#menuGeneral section{
+	padding-top: 40px;
+}
+
+#menuGeneral td{
+	border-radius: 50%;
+	background: #f3f3f3;
+}
+
+.liste_patient tr{
+	background: #f9f9f9;
+}
+
+.liste_patient tr:hover{
+	background: #ebebeb;
+}
+

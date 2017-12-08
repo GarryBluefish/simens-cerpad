@@ -84,7 +84,7 @@ width: 100%; /* la largeur du champ input*/
 
 #numero_patient
 {
-	width: 11%;
+	width: 14%;
 }
 
 #nom
@@ -108,12 +108,12 @@ width: 100%; /* la largeur du champ input*/
 
 #telephone
 {
-	width: 13%;
+	width: 16%;
 }
 
 #nationalite
 {
-	width: 15%;
+	width: 16%;
 }
 
 #effectuer

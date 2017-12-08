@@ -169,14 +169,14 @@
     	
     	}).bind('mousedown', function (e) {
     			var aData = oTable.fnGetData( this );
-    		    id = aData[7]; 
+    		    id = aData[8]; 
     	});
     	
     	
     	
     	$("#patientAdmis tbody tr").bind('dblclick', function (event) {
     		var aData = oTable.fnGetData( this );
-    		var id = aData[7]; 
+    		var id = aData[8]; 
     		if(id){ vueAdmissionConsultation(id); }
     	});
     	

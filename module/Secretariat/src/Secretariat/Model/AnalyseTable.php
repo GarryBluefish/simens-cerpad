@@ -819,7 +819,16 @@ class AnalyseTable {
 	
 	
 	
-	
+	public function getParentPatient($idpatient){
+		$db = $this->tableGateway->getAdapter();
+		$sql = new Sql($db);
+		$sQuery = $sql->select()
+		->from(array('pers' => 'personne'))->columns(array('*'))
+		->join(array('par' => 'parent'), ' par.idpersonne = pers.idpersonne', array())
+		->where(array('par.idpatient' => $idpatient, 'par.parent' => 'mere'));
+		$stat = $sql->prepareStatementForSqlObject($sQuery);
+		return $stat->execute()->current();
+	}
 	
 	//********** RECUPERER LA LISTE DES BILANS DES PRELEVEMENTS POUR LESQUELS IL Y A DES ANALYSES NON CONFORMES *********
 	//********** RECUPERER LA LISTE DES BILANS DES PRELEVEMENTS POUR LESQUELS IL Y A DES ANALYSES NON CONFORMES *********
@@ -827,7 +836,7 @@ class AnalyseTable {
 	
 		$db = $this->tableGateway->getAdapter();
 			
-		$aColumns = array('id3', 'Nom','Prenom','Datenaissance','Sexe', 'Telephone', 'Date_enregistrementTri', 'id', 'id2');
+		$aColumns = array('numero_dossier', 'Nom','Prenom','Datenaissance', 'Telephone', 'Date_enregistrementTri', 'id', 'id2');
 			
 		/* Indexed column (used for fast and accurate table cardinality) */
 		$sIndexColumn = "id";
@@ -928,6 +937,14 @@ class AnalyseTable {
 						$date_naissance = $aRow[ $aColumns[$i] ];
 						if($date_naissance){ $row[] = $Control->convertDate($aRow[ $aColumns[$i] ]); }else{ $row[] = null;}
 	
+					}
+					
+					else if ($aColumns[$i] == 'Telephone') {
+							
+						$infosMaman = $this->getParentPatient($aRow[ 'id' ]);
+
+						$row[] = $infosMaman['telephone']; 
+					
 					}
 	
 					else if ($aColumns[$i] == 'Date_enregistrementTri') {

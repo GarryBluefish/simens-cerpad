@@ -402,20 +402,73 @@ class ConsultationController extends AbstractActionController {
 		$consultation = $this->getConsultationTable()->getConsultation($idcons)->getArrayCopy();
 		//---- Gestion des AGE ----
 		//---- Gestion des AGE ----
-		if($personne->age){
+		if($personne->age && !$personne->date_naissance){
 			$age = $personne->age." ans ";
 		}else{
+			
 			$aujourdhui = (new \DateTime() ) ->format('Y-m-d');
 			$age_jours = $this->nbJours($personne->date_naissance, $aujourdhui);
-			if($age_jours < 31){
-				$age = $age_jours." jours";
-			}else if($age_jours >= 31) {
-		
-				$nb_mois = (int)($age_jours/30);
-				$nb_jours = $age_jours - ($nb_mois*30);
-		
-				$age = $nb_mois."m ".$nb_jours."j ";
+			$age_annees = (int)($age_jours/365);
+				
+			if($age_annees == 0){
+					
+				if($age_jours < 31){
+					$age ="<span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_jours." jours </span>";
+				}else if($age_jours >= 31) {
+			
+					$nb_mois = (int)($age_jours/31);
+					$nb_jours = $age_jours - ($nb_mois*31);
+					if($nb_jours == 0){
+						$age ="<span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$nb_mois."m </span>";
+					}else{
+						$age ="<span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$nb_mois."m ".$nb_jours."j </span>";
+					}
+						
+				}
+					
+			}else{
+				$age_jours = $age_jours - ($age_annees*365);
+					
+				if($age_jours < 31){
+						
+					if($age_annees == 1){
+						if($age_jours == 0){
+							$age ="<span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an </span>";
+						}else{
+							$age ="<span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$age_jours." j </span>";
+						}
+					}else{
+						if($age_jours == 0){
+							$age ="<span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans </span>";
+						}else{
+							$age ="<span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans ".$age_jours."j </span>";
+						}
+					}
+			
+				}else if($age_jours >= 31) {
+			
+					$nb_mois = (int)($age_jours/31);
+					$nb_jours = $age_jours - ($nb_mois*31);
+						
+					if($age_annees == 1){
+						if($nb_jours == 0){
+							$age ="<span style='font-size:18px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$nb_mois."m </span>";
+						}else{
+							$html .="<span style='font-size:17px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$nb_mois."m ".$nb_jours."j </span>";
+						}
+							
+					}else{
+						if($nb_jours == 0){
+							$age ="<span style='font-size:18px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans ".$nb_mois."m </span>";
+						}else{
+							$age ="<span style='font-size:17px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans ".$nb_mois."m ".$nb_jours."j </span>";
+						}
+					}
+						
+				}
+					
 			}
+			
 		}
 		//---- FIN Gestion des AGE ----
 		//---- FIN Gestion des AGE ----
@@ -558,124 +611,8 @@ class ConsultationController extends AbstractActionController {
 				'nbAntMedPat' => 0, //$antMedPat->count(),
 				'listeActes' => null, //$listeActes,
 				
-				
-				
 		);
 
-		// instancier la consultation et rï¿½cupï¿½rer l'enregistrement
-// 		$consult = $this->getConsultationTable ()->getConsult ( $id );
-	
-// 		// POUR LES HISTORIQUES OU TERRAIN PARTICULIER
-// 		// POUR LES HISTORIQUES OU TERRAIN PARTICULIER
-// 		// POUR LES HISTORIQUES OU TERRAIN PARTICULIER
-// 		//*** Liste des consultations
-// 		$listeConsultation = $this->getConsultationTable ()->getConsultationPatient($id_pat, $id);
-		
-// 		//Liste des examens biologiques
-// 		$listeDesExamensBiologiques = $this->demandeExamensTable()->getDemandeDesExamensBiologiques();
-// 		//Liste des examens Morphologiques
-// 		$listeDesExamensMorphologiques = $this->demandeExamensTable()->getDemandeDesExamensMorphologiques();
-		
-	
-// 		//*** Liste des Hospitalisations
-// 		$listeHospitalisation = $this->getDemandeHospitalisationTable()->getDemandeHospitalisationWithIdPatient($id_pat);
-	
-// 		// instancier le motif d'admission et recupï¿½rer l'enregistrement
-// 		$motif_admission = $this->getMotifAdmissionTable ()->getMotifAdmission ( $id );
-// 		$nbMotif = $this->getMotifAdmissionTable ()->nbMotifs ( $id );
-	
-// 		// rï¿½cupï¿½ration de la liste des hopitaux
-// 		$hopital = $this->getTransfererPatientServiceTable ()->fetchHopital ();
-// 		$form->get ( 'hopital_accueil' )->setValueOptions ( $hopital );
-// 		// RECUPERATION DE L'HOPITAL DU SERVICE
-// 		$transfertPatientHopital = $this->getTransfererPatientServiceTable ()->getHopitalPatientTransfert($IdDuService);
-// 		$idHopital = $transfertPatientHopital['ID_HOPITAL'];
-		
-// 		// RECUPERATION DE LA LISTE DES SERVICES DE L'HOPITAL OU SE TROUVE LE SERVICE OU LE MEDECIN TRAVAILLE
-// 		$serviceHopital = $this->getTransfererPatientServiceTable ()->fetchServiceWithHopitalNotServiceActual($idHopital, $IdDuService);
-	
-// 		// LISTE DES SERVICES DE L'HOPITAL
-// 		$form->get ( 'service_accueil' )->setValueOptions ($serviceHopital);
-	
-// 		// liste des heures rv
-// 		$heure_rv = array (
-// 				'08:00' => '08:00',
-// 				'09:00' => '09:00',
-// 				'10:00' => '10:00',
-// 				'15:00' => '15:00',
-// 				'16:00' => '16:00'
-// 		);
-// 		$form->get ( 'heure_rv' )->setValueOptions ( $heure_rv );
-	
-// 		$data = array (
-// 				'id_cons' => $consult->id_cons,
-// 				'id_medecin' => $id_medecin,
-// 				'id_patient' => $consult->id_patient,
-// 				'date_cons' => $consult->date,
-// 				'poids' => $consult->poids,
-// 				'taille' => $consult->taille,
-// 				'temperature' => $consult->temperature,
-// 				'pouls' => $consult->pouls,
-// 				'frequence_respiratoire' => $consult->frequence_respiratoire,
-// 				'glycemie_capillaire' => $consult->glycemie_capillaire,
-// 				'pressionarterielle' => $consult->pression_arterielle,
-// 				'hopital_accueil' => $idHopital,
-// 		);
-// 		$k = 1;
-// 		foreach ( $motif_admission as $Motifs ) {
-// 			$data ['motif_admission' . $k] = $Motifs ['Libelle_motif'];
-// 			$k ++;
-// 		}
-		
-// 		// Pour recuper les bandelettes
-// 		$bandelettes = $this->getConsultationTable ()->getBandelette($id);
-		
-// 		//RECUPERATION DES ANTECEDENTS
-// 		//RECUPERATION DES ANTECEDENTS
-// 		//RECUPERATION DES ANTECEDENTS
-// 		$donneesAntecedentsPersonnels = $this->getAntecedantPersonnelTable()->getTableauAntecedentsPersonnels($id_pat);
-// 		$donneesAntecedentsFamiliaux  = $this->getAntecedantsFamiliauxTable()->getTableauAntecedentsFamiliaux($id_pat);
-		
-// 		//Recuperer les antecedents medicaux ajouter pour le patient
-// 		//Recuperer les antecedents medicaux ajouter pour le patient
-// 		$antMedPat = $this->getConsultationTable()->getAntecedentMedicauxPersonneParIdPatient($id_pat);
-		
-// 		//Recuperer les antecedents medicaux
-// 		//Recuperer les antecedents medicaux
-// 		$listeAntMed = $this->getConsultationTable()->getAntecedentsMedicaux();
-		
-// 		//FIN ANTECEDENTS --- FIN ANTECEDENTS --- FIN ANTECEDENTS
-// 		//FIN ANTECEDENTS --- FIN ANTECEDENTS --- FIN ANTECEDENTS
-	
-// 		//Recuperer la liste des actes 
-// 		//Recuperer la liste des actes
-// 		$listeActes = $this->getConsultationTable()->getListeDesActes();
-	
-// 		$form->populateValues ( array_merge($data,$bandelettes,$donneesAntecedentsPersonnels,$donneesAntecedentsFamiliaux) );
-// 		return array (
-// 				'lesdetails' => $liste,
-// 				'id_cons' => $id,
-// 				'nbMotifs' => $nbMotif,
-// 				'image' => $image,
-// 				'form' => $form,
-// 				'heure_cons' => $consult->heurecons,
-// 				'dateonly' => $consult->dateonly,
-// 				'liste_med' => $listeMedicament,
-// 				'temoin' => $bandelettes['temoin'],
-// 				'listeForme' => $listeForme,
-// 				'listetypeQuantiteMedicament'  => $listetypeQuantiteMedicament,
-// 				'donneesAntecedentsPersonnels' => $donneesAntecedentsPersonnels,
-// 				'donneesAntecedentsFamiliaux'  => $donneesAntecedentsFamiliaux,
-// 				'liste' => $listeConsultation,
-// 				'resultRV' => $resultRV,
-// 				'listeHospitalisation' => $listeHospitalisation,
-// 				'listeDesExamensBiologiques' => $listeDesExamensBiologiques,
-// 				'listeDesExamensMorphologiques' => $listeDesExamensMorphologiques,
-// 				'listeAntMed' => $listeAntMed,
-// 				'antMedPat' => $antMedPat,
-// 				'nbAntMedPat' => $antMedPat->count(),
-// 				'listeActes' => $listeActes,
-// 		);
 	}
 	
 	
@@ -683,6 +620,66 @@ class ConsultationController extends AbstractActionController {
 		
 	}
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	function item_percentage($item, $total){
+	
+		if($total){
+			return number_format(($item * 100 / $total), 1);
+		}else{
+			return 0;
+		}
+	
+	}
+	
+	function pourcentage_element_tab($tableau, $total){
+		$resultat = array();
+	
+		foreach ($tableau as $tab){
+			$resultat [] = $this->item_percentage($tab, $total);
+		}
+	
+		return $resultat;
+	}
 	
 	public function informationsStatistiquesAction() {
 		$this->layout ()->setTemplate ( 'layout/consultation' );
@@ -695,7 +692,23 @@ class ConsultationController extends AbstractActionController {
 		
 		$typagesPatientsInternes = $this->getDepistageTable()->getListeFormesGravesDepistes();
 		
-		//var_dump($this->getDepistageTable()->getListeFormesGravesDepistes()); exit();
+		//Pourcentage des patients dépistés
+		//Pourcentage des patients dépistés
+		$tabNbPatientDepister = array($nbPatientDN, $nbPatientDP);
+		$pourcentageDepister = $this->pourcentage_element_tab($tabNbPatientDepister, $nbPatientD);
+		
+		//Pourcentage des patients dépistés positifs et négatifs
+		//Pourcentage des patients dépistés positifs et négatifs
+		$tabNbPatientDepisterPositif = array($nbPatientDPM, $nbPatientDPF);
+		$pourcentageDepisterPositif = $this->pourcentage_element_tab($tabNbPatientDepisterPositif, $nbPatientDP);
+		
+		
+		//Pourcentage des patients par profil de SDM
+		//Pourcentage des patients par profil de SDM
+		$totalProfilsPatientsInterne = array_sum($typagesPatientsInternes[1]);
+		$tableau = array_values($typagesPatientsInternes[1]);
+		$pourcentageProfilsPatientsInterne = $this->pourcentage_element_tab($tableau, $totalProfilsPatientsInterne);
+		
 		
 		return array (
 				'nbPatientD'   => $nbPatientD,
@@ -703,6 +716,9 @@ class ConsultationController extends AbstractActionController {
 				'nbPatientDP'  => $nbPatientDP,
 				'nbPatientDPF' => $nbPatientDPF,
 				'nbPatientDPM' => $nbPatientDPM,
+				'pourcentageDepister' => $pourcentageDepister,
+				'pourcentageDepisterPositif' => $pourcentageDepisterPositif,
+				'pourcentageProfilsPatientsInterne' => $pourcentageProfilsPatientsInterne,
 				
 				'typagesPatientsInternes' => $typagesPatientsInternes,
 		);

@@ -200,6 +200,7 @@ class ParasitologiePaillasseParAnalyse
  			$listeNom = $listeHematologie[$i][3];
  			$prenom = $listeHematologie[$i][4];
  			$conformite = $listeHematologie[$i][5];
+ 			$numOrdrePatient = $listeHematologie[$i][6];
  			
   			$this->_page->setFillColor(new ZendPdf\Color\Html('black'));
   			$this->getStyle();
@@ -262,7 +263,7 @@ class ParasitologiePaillasseParAnalyse
  			//Affichage de la liste des noms des patients
  			//Affichage de la liste des noms des patients
  			//Affichage de la liste des noms des patients
- 			for($a = 0 ; $a < count($listeNom) ; $a++){
+ 			for($a = 0 ; $a < 36 ; $a++){
  				$this->_page->setLineColor(new ZendPdf\Color\Html('#cfcfcf'));
  				$this->_page->setLineWidth(0.5);
  				
@@ -278,7 +279,7 @@ class ParasitologiePaillasseParAnalyse
  				}
 
  				$this->getStyle7();
- 				$this->_page->drawText($idpatient[$a].'-'.$typepatient,
+ 				$this->_page->drawText($numOrdrePatient[$a].'-'.$typepatient,
  						$this->_leftMargin+10,
  						$this->_yPosition );
 

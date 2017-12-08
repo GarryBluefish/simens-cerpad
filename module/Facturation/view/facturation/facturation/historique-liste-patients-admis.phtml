@@ -38,17 +38,17 @@ $(window).load(function () {
 		<table class="table table-bordered tab_list_mini" id="patientAdmis">
 			<thead>
 				<tr style="height:50px; width:100%;">
+    				<th id="sexe" align="center" >N&deg; dossier</th>
 					<th id="nom" align="center">Nom</th>
 					<th id="prenom" align="center">Prenom</th>
-					<th id="date" align="center" >D. naissance</th>
-					<th id="sexe" align="center" >Sexe</th>
+					<th id="date" align="center" >Date naiss.</th>
 					<th id="adresse" align="center" >Adresse</th>
 					<th id="nationalite" align="center" >Date & Heure</th>
 					<th id="effectuer" align="center">Options</th>
 				</tr>
 			</thead>
 
-			<tbody id="donnees" class="liste_patient">
+			<tbody id="donnees" class="liste_patient" style="font-family: times new roman; font-size: 19px;">
 
             <!-- ******* On affiche la liste des patients ****** -->
 
@@ -56,13 +56,13 @@ $(window).load(function () {
 
 			<tfoot id="foot" class="foot_style">
 				<tr>
+					<th id="sexe_" style="width: 14%;"><input type="text" name="search_browser" value=" Sexe" class="search_init" /></th>
 					<th id="nom_" style="width: 13%;"><input type="text" name="search_browser" value=" Nom" class="search_init" /></th>
 					<th id="prenom_" style="width: 15%;"><input type="text" name="search_browser" value=" Prenom" class="search_init" /></th>
-					<th id="date_" style="width: 12%;"><input type="text" name="search_browser" value=" Date naissance" class="search_init" /></th>
-					<th id="sexe_" style="width: 7%;"><input type="text" name="search_browser" value=" Sexe" class="search_init" /></th>
-					<th id="adresse_" style="width: 28%;"><input type="text" name="search_browser" value=" Adresse" class="search_init" /></th>
-					<th id="nationalite_" style="width: 15%;"><input type="text" name="search_browser" value=" Nationalite" class="search_init" /></th>
-					<th id="effectuer_" style="width: 10%;"><input type="hidden" name="search_browser" value="" class="" /></th>
+					<th id="date_" style="width: 10%;"><input type="text" name="search_browser" value=" Date naiss." class="search_init" /></th>
+					<th id="adresse_" style="width: 23%;"><input type="text" name="search_browser" value=" Adresse" class="search_init" /></th>
+					<th id="nationalite_" style="width: 16%;"><input type="text" name="search_browser" value=" Nationalite" class="search_init" /></th>
+					<th id="effectuer_" style="width: 9%;"><input type="hidden" name="search_browser" value="" class="" /></th>
 
 				</tr>
 			</tfoot>

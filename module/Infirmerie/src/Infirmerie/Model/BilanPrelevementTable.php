@@ -16,7 +16,12 @@ class BilanPrelevementTable {
  	
  	
  	public function addBilanPrelevement($donnees){
- 	    return $this->tableGateway->getLastInsertValue( $this->tableGateway->insert($donnees) );
+ 		
+ 		if($this->getBilanPrelevement($donnees['idfacturation'])){
+ 			return null;			
+ 		}else{
+ 			return $this->tableGateway->getLastInsertValue( $this->tableGateway->insert($donnees) );
+ 		}
  	}
  	
  	
@@ -109,8 +114,8 @@ class BilanPrelevementTable {
  	//FONCTION UTILISER DANS LE MODULE DU TECHNICIEN
  	//FONCTION UTILISER DANS LE MODULE DU TECHNICIEN
  	
- 	//********** RECUPERER LA LISTE DES PATIENTS AYANT DES BILANS DE PRELEVEMENTS *********
- 	//********** RECUPERER LA LISTE DES PATIENTS AYANT DES BILANS DE PRELEVEMENTS *********
+ 	//********** RECUPERER LA LISTE DES PATIENTS AYANT DES BILANS DE PRELEVEMENTS  REPRIS *********
+ 	//********** RECUPERER LA LISTE DES PATIENTS AYANT DES BILANS DE PRELEVEMENTS  REPRIS *********
  	
  	public function getListeBilansPrelevement() {
  	
@@ -709,24 +714,76 @@ class BilanPrelevementTable {
  	}
  	
  	public function gestionAges($age, $date_naissance) {
- 		//Gestion des AGE
- 		if($age){
- 			return $age." ans";
- 		}else{
- 			$aujourdhui = (new \DateTime() ) ->format('Y-m-d');
- 			$age_jours = $this->nbJours($date_naissance, $aujourdhui);
- 			if($age_jours < 31){
- 				return $age_jours." jours";
- 			
- 			}else if($age_jours >= 31) {
- 		
- 				$nb_mois = (int)($age_jours/30);
- 				$nb_jours = $age_jours - ($nb_mois*30);
- 		
- 				return $nb_mois."m ".$nb_jours."j";
- 			}
- 		}
- 	}
+		//Gestion des AGE
+		if($age && !$date_naissance){
+			return $age." ans";
+		}else{
+			$aujourdhui = (new \DateTime() ) ->format('Y-m-d');
+			$age_jours = $this->nbJours($date_naissance, $aujourdhui);
+		
+			$age_annees = (int)($age_jours/365);
+		
+			if($age_annees == 0){
+		
+				if($age_jours < 31){
+					return $age_jours." jours";
+				}else if($age_jours >= 31) {
+		
+					$nb_mois = (int)($age_jours/31);
+					$nb_jours = $age_jours - ($nb_mois*31);
+					if($nb_jours == 0){
+						return $nb_mois."m";
+					}else{
+						return $nb_mois."m ".$nb_jours."j";
+					}
+		
+				}
+		
+			}else{
+				$age_jours = $age_jours - ($age_annees*365);
+		
+				if($age_jours < 31){
+		
+					if($age_annees == 1){
+						if($age_jours == 0){
+							return $age_annees."an";
+						}else{
+							return $age_annees."an ".$age_jours."j";
+						}
+					}else{
+						if($age_jours == 0){
+							return $age_annees."ans";
+						}else{
+							return $age_annees."ans ".$age_jours."j";
+						}
+					}
+		
+				}else if($age_jours >= 31) {
+		
+					$nb_mois = (int)($age_jours/31);
+					$nb_jours = $age_jours - ($nb_mois*31);
+		
+					if($age_annees == 1){
+						if($nb_jours == 0){
+							return $age_annees."an ".$nb_mois."m";
+						}else{
+							return $age_annees."an ".$nb_mois."m ";
+						}
+		
+					}else{
+						if($nb_jours == 0){
+							return $age_annees."ans ".$nb_mois."m";
+						}else{
+							return $age_annees."ans ".$nb_mois."m";
+						}
+					}
+		
+				}
+		
+			}
+		
+		}
+	}
  	
  	//********** RECUPERER LA LISTE DES PATIENTS AYANT DES BILANS DE PRELEVEMENTS DEJA TRIES *********
  	//********** RECUPERER LA LISTE DES PATIENTS AYANT DES BILANS DE PRELEVEMENTS DEJA TRIES *********

@@ -192,7 +192,7 @@ class PatientTable {
 	
 		$db = $this->tableGateway->getAdapter();
 		 
-		$aColumns = array('Idpatient','Nom','Prenom','Datenaissance', 'Adresse', 'id');
+		$aColumns = array('numero_dossier','Nom','Prenom','Datenaissance', 'Adresse', 'id','Idpatient');
 		 
 		/* Indexed column (used for fast and accurate table cardinality) */
 		$sIndexColumn = "id";
@@ -714,7 +714,7 @@ class PatientTable {
 	
 		$db = $this->tableGateway->getAdapter();
 		 
-		$aColumns = array('Nom','Prenom','Datenaissance','Sexe', 'Adresse', 'Date', 'id', 'Idfacturation');
+		$aColumns = array('numero_dossier','Nom','Prenom','Datenaissance','Adresse', 'Date', 'id', 'Idfacturation');
 		 
 		/* Indexed column (used for fast and accurate table cardinality) */
 		$sIndexColumn = "id";
@@ -947,7 +947,7 @@ class PatientTable {
 	
 		$db = $this->tableGateway->getAdapter();
 		 
-		$aColumns = array('Nom','Prenom','Datenaissance','Sexe', 'Adresse', 'Date', 'id', 'id2');
+		$aColumns = array('numero_dossier','Nom','Prenom','Datenaissance','Adresse', 'Date', 'id', 'id2');
 		 
 		/* Indexed column (used for fast and accurate table cardinality) */
 		$sIndexColumn = "id";
@@ -1386,7 +1386,7 @@ class PatientTable {
 	
 		$db = $this->tableGateway->getAdapter();
 			
-		$aColumns = array('Nom','Prenom','Datenaissance','Sexe', 'Adresse', 'Date', 'id', 'Idfacturation', 'id2');
+		$aColumns = array('numero_dossier', 'Nom','Prenom','Datenaissance', 'Adresse', 'Date', 'id', 'Idfacturation', 'id2');
 			
 		/* Indexed column (used for fast and accurate table cardinality) */
 		$sIndexColumn = "id";
@@ -1658,7 +1658,7 @@ class PatientTable {
 	
 		$db = $this->tableGateway->getAdapter();
 			
-		$aColumns = array('id2', 'Nom','Prenom','Datenaissance','Sexe', 'Adresse', 'id');
+		$aColumns = array('numero_dossier', 'Nom','Prenom','Datenaissance','Sexe', 'Adresse', 'id');
 			
 		/* Indexed column (used for fast and accurate table cardinality) */
 		$sIndexColumn = "id";

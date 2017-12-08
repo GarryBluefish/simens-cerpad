@@ -17,6 +17,8 @@ use Infirmerie\Model\ConsultationTable;
 use Infirmerie\Model\Consultation;
 use Infirmerie\Model\MotifAdmissionTable;
 use Infirmerie\Model\MotifAdmission;
+use Infirmerie\Model\DemandeAnalyseTable;
+use Infirmerie\Model\DemandeAnalyse;
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface, ViewHelperProviderInterface {
 
@@ -91,6 +93,17 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 							$resultSetPrototype = new ResultSet();
 							$resultSetPrototype->setArrayObjectPrototype ( new MotifAdmission());
 							return new TableGateway ( 'motif_admission', $dbAdapter, null, $resultSetPrototype );
+						},
+						'Infirmerie\Model\DemandeAnalyseTable' => function ($sm) {
+							$tableGateway = $sm->get ( 'DemandeAnalyseTableGateway' );
+							$table = new DemandeAnalyseTable($tableGateway);
+							return $table;
+						},
+						'DemandeAnalyseTableGateway' => function ($sm) {
+							$dbAdapter = $sm->get ( 'Zend\Db\Adapter\Adapter' );
+							$resultSetPrototype = new ResultSet();
+							$resultSetPrototype->setArrayObjectPrototype ( new DemandeAnalyse());
+							return new TableGateway ( 'demande_analyse', $dbAdapter, null, $resultSetPrototype );
 						},
 				)
 		);

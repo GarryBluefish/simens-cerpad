@@ -17,7 +17,6 @@
 		/***
 		 * INFO BULLE DE LA LISTE
 		 */
-
 		var tooltips = $( 'table tbody tr td infoBulleVue' ).tooltip({show: {effect: 'slideDown', delay: 250}});
 		tooltips.tooltip( 'close' );
 		$('table tbody tr td infoBulleVue').mouseenter(function(){

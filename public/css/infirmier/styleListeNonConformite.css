@@ -83,21 +83,21 @@ width: 100%; /* la largeur du champ input*/
 
 #date
 {
-	width: 12%;
+	width: 10%;
 }
 #sexe
 {
-	width: 7%;
+	width: 14%;
 }
 
 #adresse
 {
-	width: 28%;
+	width: 23%;
 }
 
 #nationalite
 {
-	width: 15%;
+	width: 16%;
 }
 
 #effectuer

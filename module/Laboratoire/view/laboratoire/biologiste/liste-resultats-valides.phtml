@@ -37,7 +37,7 @@ $(window).load(function () {
 					</tr>
 				</thead>
 
-				<tbody id="donnees" class="liste_patient" style="font-family: time new romans; font-size: 17px;">
+				<tbody id="donnees" class="liste_patient" style="font-family: time new romans; font-size: 18px;">
 
 					<!-- ************ On affiche les patients en une liste ordonnï¿½e************ -->
 
@@ -45,7 +45,7 @@ $(window).load(function () {
 
 				<tfoot id="foot" class="foot_style">
 					<tr>
-					    <th id="numero_dossier_" style='width: 12%;'><input type="text" name="search_browser"
+					    <th id="numero_dossier_" style='width: 13%;'><input type="text" name="search_browser"
 							value=" N&deg; dossier" class="search_init" /></th>
 						<th id="nom_" style='width: 15%;'><input type="text" name="search_browser"
 							value=" Nom" class="search_init" /></th>
@@ -53,9 +53,9 @@ $(window).load(function () {
 							value=" Pr&eacute;nom" class="search_init" /></th>
 						<th id="age_" style='width: 8%;'><input type="text" name="search_browser"
 							value=" Age" class="search_init" /></th>
-						<th id="adresse_" style='width: 24%;'><input type="text" name="search_browser"
+						<th id="adresse_" style='width: 22%;'><input type="text" name="search_browser"
 							value=" Adresse" class="search_init" /></th>
-						<th id="date_" style='width: 14%;'><input type="text" name="search_browser"
+						<th id="date_" style='width: 15%;'><input type="text" name="search_browser"
 							value=" Date" class="search_init" /></th>
 						<th id="effectuer_" style='width: 10%;'><input type="hidden" name="search_browser"
 							value="" class="" /></th>
@@ -253,7 +253,7 @@ var tabUrl = base_url.split("public");
 $('#plus_analyses').toggle(true);
 $("#analyses").replaceWith("<li id='analyses' style='background:#4a5765;'><a href=''><span style='color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img  src='"+tabUrl[0]+"public/images_icons/moin-green2.png'  /> Analyses </span></a></li>");
 dep_analyses1();
-$('#liste_resultats_analyses').css({'font-weight':'bold','color':'white','font-size':'21px'});
+$('#liste_resultats_analyses').css({'font-weight':'bold','color':'white','font-size':'19px'});
 
 //Empêcher la touche entrée de répondre 
 $('#resultatsAnalyses, #contenuResultatsAnalysesParType, #resultatsAnalysesDuneDemande').keypress(function(event) {

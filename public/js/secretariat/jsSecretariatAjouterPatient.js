@@ -510,20 +510,20 @@ nationalite_actuelle.attr( 'readonly', false );
 			$('#volet').show('slow');
 			//Lors d'un scroll
 			$(window).scroll(function(){
-				var top = ($(window).scrollTop());  
+				var top = ($(window).scrollTop()); 
 				if(top > 52){
-					$('#volet').css({'top': top-52});
+					$('#volet').css({'position' : 'fixed', 'top': 0});
 				}else{
-					$('#volet').css({'top': 0});
+					$('#volet').css({'position' : 'fixed', 'top': 52-top});
 				}
 			});
 			
 			//Au click
 			var top = ($(window).scrollTop()); 
 			if(top > 52){
-				$('#volet').css({'top': top-52});
+				$('#volet').css({'position' : 'fixed','top': 0})
 			}else{
-				$('#volet').css({'top': 0});
+				$('#volet').css({'position' : 'fixed','top': 52-top});
 			}
 		});
 

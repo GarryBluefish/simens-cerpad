@@ -1995,6 +1995,8 @@
             	     $('#contenuResultatsAnalyses div').empty();
                	     $('#contenuResultatsAnalysesDuneDemande div').empty();
             	     $('#contenuResultatsAnalysesDuneDemande div').html(html);
+            	     
+            	     
             	     gestionFormuleLeucocytaire();
             	     rapportCHOL_HDL();
             	     getCreatininemie_umol();
@@ -2010,7 +2012,86 @@
             	     getTestCombsIndirect();
             	     getTestCompatibilite();
             	     getAsatAlatAuto();
+            	     
+            	     var scriptFormule;
+            	     scriptFormule += gestionFormuleRapportCholHdl_TAD(listeDesDemandesSelect);
+            	     $('#scriptFormules').html(scriptFormule);
+            	     
             	     $("#resultatsAnalysesDuneDemande").dialog('open');
             }
         });
     }
+    
+    function gestionFormuleRapportCholHdl_TAD(demande){
+    	
+    	var scriptFormule = "<script> ";
+    	for(var i=0 ; i<demande.length ; i++){
+        	var iddemande = demande[i];
+        	
+        	scriptFormule += "$('.ER_"+iddemande+" #cholesterol_total_1, .ER_"+iddemande+" #cholesterol_HDL_1').keyup( function () {"+
+        	                    
+        	                    "var cholesterol_total_1 = $('.ER_"+iddemande+" #cholesterol_total_1').val();"+
+    		                    "var cholesterol_HDL_1 = $('.ER_"+iddemande+" #cholesterol_HDL_1').val();"+
+        	
+    		                    "if( cholesterol_total_1 == '' || cholesterol_total_1 == 0 || cholesterol_HDL_1 == '' || cholesterol_HDL_1 == 0 ){"+   
+    		            			"$('.ER_"+iddemande+" .rapport_chol_hdl table').toggle(false);"+
+    		            		"}"+
+    		                	"else if( cholesterol_total_1 && cholesterol_HDL_1 ){"+
+    		                	
+    		                		"var rapport = cholesterol_total_1/cholesterol_HDL_1;"+
+    		                		"$('.ER_"+iddemande+" .rapport_chol_hdl').toggle(true);"+
+    		                		"$('.ER_"+iddemande+" #rapport_chol_hdl').val(rapport.toFixed(2));"+
+    		                		"$('.ER_"+iddemande+" .rapport_chol_hdl table').toggle(true);"+
+    		                		
+    		                		//Affichage de la conclusion du rapport
+    		                		"if(rapport >= 3.5 && rapport <= 5){"+
+    		                			"$('.ER_"+iddemande+" #conclusion_rapport_chol_hdl').html('<span style=\"color: orange; float: left;\"> Risque dath&eacute;rog&egrave;ne faible </span>');"+
+    		                		"}else if(rapport > 5 && rapport <= 6.5){"+
+    		                			"$('.ER_"+iddemande+" #conclusion_rapport_chol_hdl').html('<span style=\"color: orange; float: left;\"> Risque dath&eacute;rog&egrave;ne mod&eacute;r&eacute; </span>');"+
+    		                		"}else if(rapport > 6.5){"+
+    		                			"$('.ER_"+iddemande+" #conclusion_rapport_chol_hdl').html('<span style=\"color: red; float: left;\"> Risque dath&eacute;rog&egrave;ne &eacute;lev&eacute; </span>');"+
+    		                		"}else{"+
+    		                			"$('.ER_"+iddemande+" #conclusion_rapport_chol_hdl').html('<span style=\"color: green; float: left;\"> RAS </span>');"+
+    		                		"}"+
+    		                		
+    	                        "}"+
+    		                    
+    		                    
+        	                 "}).change( function() { "+
+
+        	                    "var cholesterol_total_1 = $('.ER_"+iddemande+" #cholesterol_total_1').val();"+
+ 		                        "var cholesterol_HDL_1 = $('.ER_"+iddemande+" #cholesterol_HDL_1').val();"+
+     	
+ 		                        "if( cholesterol_total_1 == '' || cholesterol_total_1 == 0 || cholesterol_HDL_1 == '' || cholesterol_HDL_1 == 0 ){"+   
+ 		            			    "$('.ER_"+iddemande+" .rapport_chol_hdl table').toggle(false);"+
+ 		            		    "}"+
+ 		                	    "else if( cholesterol_total_1 && cholesterol_HDL_1 ){"+
+ 		                	
+ 		                		    "var rapport = cholesterol_total_1/cholesterol_HDL_1;"+
+ 		                		    "$('.ER_"+iddemande+" .rapport_chol_hdl').toggle(true);"+
+ 		                		    "$('.ER_"+iddemande+" #rapport_chol_hdl').val(rapport.toFixed(2));"+
+ 		                		    "$('.ER_"+iddemande+" .rapport_chol_hdl table').toggle(true);"+
+ 		                		
+ 		                		    //Affichage de la conclusion du rapport
+ 		                		    "if(rapport >= 3.5 && rapport <= 5){"+
+ 		                			    "$('.ER_"+iddemande+" #conclusion_rapport_chol_hdl').html('<span style=\"color: orange; float: left;\"> Risque dath&eacute;rog&egrave;ne faible </span>');"+
+ 		                		    "}else if(rapport > 5 && rapport <= 6.5){"+
+ 		                			    "$('.ER_"+iddemande+" #conclusion_rapport_chol_hdl').html('<span style=\"color: orange; float: left;\"> Risque dath&eacute;rog&egrave;ne mod&eacute;r&eacute; </span>');"+
+ 		                		    "}else if(rapport > 6.5){"+
+ 		                			    "$('.ER_"+iddemande+" #conclusion_rapport_chol_hdl').html('<span style=\"color: red; float: left;\"> Risque dath&eacute;rog&egrave;ne &eacute;lev&eacute; </span>');"+
+ 		                		    "}else{"+
+ 		                			    "$('.ER_"+iddemande+" #conclusion_rapport_chol_hdl').html('<span style=\"color: green; float: left;\"> RAS </span>');"+
+ 		                		    "}"+
+ 		                		
+ 	                            "}"+
+        	                 
+        	                 "}).trigger('keyup');";
+        	
+    	}
+    	
+    	scriptFormule += "</script>";
+        
+    	return scriptFormule;
+    
+    }
+    

@@ -10,6 +10,7 @@ $('#menu_statistiques_style').css({'font-weight':'bold','color':'white','font-si
 <?php echo $this->headLink()->appendStylesheet($this->basePath().'/css/consultation/styleListeConsultations.css');?>
 <!-- MES JS -->
 <?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/jqueryCharts/jquery.canvasjs.min.js');?>
+<?php echo $this->headScript()->appendFile($this->basePath().'/js/facturation/informationsStatistiques.js');?>
 
 <?php use Facturation\View\Helper\DateHelper;
 $Control = new DateHelper();?>
@@ -19,18 +20,23 @@ $Control = new DateHelper();?>
 
 <script>
 $(window).load(function () {
-
-	$('#wait').toggle(false);
-	$('#contenuInterface').fadeIn().css({'visibility':'visible'});
-	 
+	setTimeout(function(){
+		$('#wait').toggle(false);
+		$('#contenuInterface').fadeIn().css({'visibility':'visible'}); 
+	});
 });
 </script>
 
 
-<div id="titre" style='font-family: police2; text-decoration:none; color: green; font-size: 18px; font-weight: bold; padding-left: 20px;'><iS style='font-size: 25px;'>&curren;</iS> <span> INFOS STATISTIQUES </span></div>
+<div id="titre" style='font-family: police2; text-decoration:none; color: green; font-size: 18px; font-weight: bold; padding-left: 20px;'><iS style='font-size: 25px;'>&curren;</iS> <span id="menu_infos"> MENU INFOS </span></div>
 <div id="wait" style="color: gray; font-size: 20px; text-align: center; margin-top: 80px;" > <span> Chargement ... </span> </div>
 <div id="contenuInterface" >
-<div id="contenu" >
+
+
+<!-- LA PREMIERE PAGE POUR INFOS 1 -->
+<!-- LA PREMIERE PAGE POUR INFOS 1 -->
+<!-- LA PREMIERE PAGE POUR INFOS 1 -->
+<div id="contenuPageA" >
 
 
     <script type="text/javascript"> 
@@ -72,8 +78,8 @@ $(window).load(function () {
 				type: "column",
 				dataPoints: [
 
-					{ y: nbPatientDP, label: "Interne" },
 					{ y: nbPatientDN, label: "Externe" },
+					{ y: nbPatientDP, label: "Interne" },
 				]
 
 			}]
@@ -132,19 +138,47 @@ $(window).load(function () {
 	
 	
 	<table style="width: 100%; height: 20%;">
+	
+	 <tr style="background: white; width: 100%;"><td colspan="3"> <img id="retourPageAMenuInfos" style="width: 16px;position: absolute; height: 16px; float: left; cursor: pointer; " src='../images_icons/72.png' > <!-- a style='float: right; position: absolute; right: 50px; text-decoration: none;' href="javascript:captureImage();" title=""> &#9775; </a--> </td></tr>
 	 <tr style="width: 100%; height: 20%;">
 	 
 	   <!-- PREMIERE COLONNE -->
 	   <!-- PREMIERE COLONNE -->
-	   <td style="width: 25%; height: 20%;" >
+	   <td style="width: 25%; height: 20%; vertical-align: top;" >
 	     <table style="width: 100%;">
 	       <tr style="width: 100%; ">
 	         <td style="width: 100%; height: 40px; font-family: Goudy Old Style; text-align: center;">
-	          
 	          <?php echo $this->nbPatientD; ?> patients dépistés
-	         
 	         </td>
 	       </tr>
+	       
+	       
+           <tr style="width: 100%; ">
+	         <td style="width: 100%; height: 40px; font-family: Goudy Old Style; font-weight: normal; font-size: 17px; text-align: center;">
+	             <div  align="center" style="overflow-y: auto; margin-right: 5px; margin-bottom: 15px;" >
+	              <table style="height: 36px; border: 1px solid #cccccc;">
+	                <tr style="height: 18px; border: 1px solid #cccccc;">
+	                  <td style=" border: 2px solid #cccccc; padding-left: 6px; padding-right: 6px;"> Externe </td>
+	                  <td style=" border: 2px solid #cccccc; padding-left: 10px; padding-right: 5px; text-align: right; min-width: 50px;"> <?php echo $this->nbPatientDN; ?> </td>
+	                  <?php if( count($this->pourcentageDepister) == 2){ ?>
+    	                  <td style=" border: 2px solid #cccccc; padding-left: 10px; padding-right: 5px; text-align: right;"> <?php echo $this->pourcentageDepister[0]." %"; ?> </td>
+	                  <?php } ?>
+	                </tr>
+	                <tr style="width: 100%; height: 18px; border: 1px solid #cccccc;">
+	                  <td style=" border: 2px solid #cccccc; padding-left: 6px; padding-right: 6px;"> Interne </td>
+	                  <td style=" border: 2px solid #cccccc; padding-left: 10px; padding-right: 5px; text-align: right; min-width: 50px;"> <?php echo $this->nbPatientDP; ?> </td>
+	                  <?php if( count($this->pourcentageDepister) == 2){ ?>
+    	                  <td style=" border: 2px solid #cccccc; padding-left: 10px; padding-right: 5px; text-align: right;"> <?php echo $this->pourcentageDepister[1]." %"; ?> </td>
+	                  <?php } ?>
+	                </tr>
+	                
+	                
+	              </table>
+	             </div> 
+	         </td>
+	       </tr>	       
+	       
+	       
 	       <tr style="width: 100%; vertical-align: top;">
 	         <td style="width: 100%; height: 400px;">
 	         <div id="patientsDepistes" style="height: 400px;"></div>
@@ -156,15 +190,41 @@ $(window).load(function () {
 	
        <!-- DEUXIEME COLONNE -->
        <!-- DEUXIEME COLONNE -->
-	   <td style="width: 25%; height: 20%;">
+	   <td style="width: 25%; height: 20%; vertical-align: top; ">
 	     <table style="width: 100%; border-left: 2px solid #cccccc;">
 	       <tr style="width: 100%; ">
 	         <td style="width: 100%; height: 40px; font-family: Goudy Old Style; text-align: center;">
-	          
 	          <?php echo $this->nbPatientDP; ?> patients internes
-	         
 	         </td>
 	       </tr>
+	       
+	       
+	       <tr style="width: 100%; ">
+	         <td style="width: 100%; height: 40px; font-family: Goudy Old Style; font-weight: normal; font-size: 17px; text-align: center; ">
+	             <div  align="center" style="margin-bottom: 15px;">
+	              <table style="width: 75%; height: 36px; border: 1px solid #cccccc;">
+	                <tr style="width: 100%; height: 18px; border: 1px solid #cccccc;">
+	                  <td style="width: 33%; border: 2px solid #cccccc; padding-left: 10px;"> Masculin </td>
+	                  <td style="width: 33%; border: 2px solid #cccccc; padding-left: 10px; padding-right: 5px; text-align: right;"> <?php echo $this->nbPatientDPM; ?> </td>
+	                  <?php if( count($this->pourcentageDepisterPositif) == 2){ ?>
+    	                  <td style="width: 33%; border: 2px solid #cccccc; padding-left: 5px; padding-right: 5px; text-align: right;"> <?php echo $this->pourcentageDepisterPositif[0]." %"; ?> </td>
+	                  <?php } ?>
+	                </tr>
+	                <tr style="width: 100%; height: 18px; border: 1px solid #cccccc;">
+	                  <td style="width: 33%; border: 2px solid #cccccc; padding-left: 10px;"> F&eacute;minin </td>
+	                  <td style="width: 33%; border: 2px solid #cccccc; padding-left: 10px; padding-right: 5px; text-align: right;"> <?php echo $this->nbPatientDPF; ?> </td>
+	                  <?php if( count($this->pourcentageDepisterPositif) == 2){ ?>
+    	                  <td style="width: 33%; border: 2px solid #cccccc; padding-left: 5px; padding-right: 5px; text-align: right;"> <?php echo $this->pourcentageDepisterPositif[1]." % "; ?> </td>
+	                  <?php } ?>
+	                </tr>
+	                
+	                
+	              </table>
+	             </div> 
+	         </td>
+	       </tr>	       
+	       
+	       
 	       <tr style="width: 100%; vertical-align: top;">
 	         <td style="width: 100%; height: 400px;">
 	         <div id="patientsInternes" style="height: 400px;"></div>
@@ -176,15 +236,46 @@ $(window).load(function () {
 	   
    	   <!-- TROISIEME COLONNE -->
    	   <!-- TROISIEME COLONNE -->
-	   <td style="width: 50%; height: 20%;">
+	   <td style="width: 50%; height: 20%; vertical-align: top;">
 	     <table style="width: 100%; border-left: 2px solid #cccccc;">
 	       <tr style="width: 100%; ">
 	         <td style="width: 100%; height: 40px; font-family: Goudy Old Style; text-align: center;">
-	          
-	           <?php echo $formeGraves ?> profils de sympt&ocirc;me drépanocitaire majeur
-	         
+	           <?php /*echo ''.$this->nbPatientDP.' patients - ';*/ ?>
+	           <?php echo $formeGraves ?> profils de sympt&ocirc;me drépanocitaire majeur 
 	         </td>
 	       </tr>
+	       
+	       
+	       <tr style="width: 100%; ">
+	         <td align="center" style="width: 100%; height: 40px; font-family: Goudy Old Style; font-weight: normal; font-size: 17px; text-align: center;">
+	             <div  align="center" style="width: 100%; margin-left: 10px; max-width: 560px; overflow: auto; margin-bottom: 15px;">
+	              <table style="height: 36px; border: 1px solid #cccccc;">
+	                <tr style="height: 18px; border: 1px solid #cccccc;">
+	                  
+	                  <?php for( $i = 0 ; $i < count($this->typagesPatientsInternes[0]) ; $i++){ ?>
+    	                  <td style="min-width: 80px; border: 2px solid #cccccc; padding-left: 10px; padding-right: 5px;"> <?php echo $this->typagesPatientsInternes[0][$i]; ?> </td>
+	                  <?php } ?>
+	                
+	                </tr>
+	                
+	                <tr style="height: 18px; border: 1px solid #cccccc;">
+
+	                  <?php for( $i = 0 ; $i < count($this->typagesPatientsInternes[0]) ; $i++){ ?>
+    	                  <td style="border: 2px solid #cccccc; padding-left: 10px; text-align: center;"> 
+    	                    <span style="font-weight: bold;"><?php echo $this->typagesPatientsInternes[1][$this->typagesPatientsInternes[0][$i]].' '; ?> </span>
+    	                    <?php echo ' - {'.$this->pourcentageProfilsPatientsInterne[$i].'%}'; ?>
+    	                  </td>
+	                  <?php } ?>
+	                  
+	                </tr>
+	                
+	                
+	              </table>
+	             </div> 
+	         </td>
+	       </tr>	       
+	       
+	       
 	       <tr style="width: 100%; vertical-align: top;">
 	         <td style="width: 100%; height: 400px;">
 	         <div id="typagePatientsInternes" style="height: 400px;"></div>
@@ -195,7 +286,131 @@ $(window).load(function () {
 	 </tr>
 	</table>
 	
-	
+</div>
+
+<!-- LA PREMIERE PAGE POUR INFOS 1 -->
+<!-- LA PREMIERE PAGE POUR INFOS 1 -->
+<!-- LA PREMIERE PAGE POUR INFOS 1 -->
+<div id="contenuPageB" >
+    <table style="width: 100%; height: 20%;">
+	 <tr style="background: white; width: 100%; vertical-align: top;"><td colspan="3"> <img id="retourPageBMenuInfos" style="width: 16px;position: absolute; height: 16px; float: left; cursor: pointer; " src='../images_icons/72.png' > <!--a style='float: right; position: absolute; right: 50px; text-decoration: none;' href="javascript:captureImage();" title=""> &#9775; </a--> </td></tr>
+	 
+	</table>
 
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- MENU GENERAL  -- MENU GENERAL -->
+<!-- MENU GENERAL  -- MENU GENERAL -->
+<!-- MENU GENERAL  -- MENU GENERAL -->
+<div id="menuGeneral">
+
+  <table style="width: 100%;">
+    <tr style="width: 100%; height: 50px;" >
+      <td style="width: 25%;">
+      
+            <div id="menuOption1" style='width: 90%; margin: auto;'>
+		      <table style="width: 100%; border-radius: 50%;">
+		          <tr style="border-radius: 50%; height: 120px;">
+		             <th style="border-radius: 50%; ">
+		               <div>
+		                 <section>
+		                   <img style="width: 40px; height: 40px; margin-top: -15px;" src='../images_icons/bar-un-diagramme-48.png' /> G&Eacute;N&Eacute;RAL 
+		                 </section>
+		               </div>
+		             </th>
+		          </tr>
+		       </table>
+		    </div>
+		    
+      </td>
+      
+      <td style="width: 25%;" > 
+      
+            <div id="menuOption2" style='width: 90%; margin: auto;'>
+		      <table style="width: 100%; border-radius: 50%;">
+		          <tr style="border-radius: 50%; height: 120px;">
+		             <th style="border-radius: 50%; ">
+		               <div>
+		                 <section>
+   		                   <img style="width: 40px; height: 40px; margin-top: -15px;" src='../images_icons/tableau-graphique-ligne.png' /> PARAM&Eacute;TRABLE
+		                 </section>
+		               </div>
+		             </th>
+		          </tr>
+		       </table>
+		    </div>
+		    
+      </td>
+      
+      <td style="width: 25%;" >
+      
+            <div id="menuOption3" style='width: 90%; margin: auto;'>
+		      <table style="width: 100%; border-radius: 50%;">
+		          <tr style="border-radius: 50%; height: 120px;">
+		             <th style="border-radius: 50%; ">
+		               <div>
+		                 <section>
+		                   <img src='../images_icons/Table16X16.png' > INFOS 3 - <span style="color: red;"> No</span> 
+		                 </section>
+		               </div>
+		             </th>
+		          </tr>
+		       </table>
+		    </div>
+		    
+      </td>
+      
+      <td style="width: 25%;" >
+      
+            <div style='width: 90%; margin: auto;'>
+		      <table style="width: 100%; border-radius: 50%;">
+		          <tr style="border-radius: 50%; height: 120px;">
+		             <th style="border-radius: 50%; ">
+		               <div>
+		                 <section>
+		                   <img src='../images_icons/Table16X16.png' > INFOS 4 - <span style="color: red;"> No</span>
+		                 </section>
+		               </div>
+		             </th>
+		          </tr>
+		       </table>
+		    </div>
+		    
+      </td>
+      
+    </tr>
+  </table>
+
 </div>
+
+
+</div>
+
+
+<script>
+    setTimeout(function(){ $('#contenuPageA, #contenuPageB').toggle(false); });
+    initialisation();
+</script>

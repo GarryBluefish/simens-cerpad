@@ -23,6 +23,7 @@ class SecretariatController extends AbstractActionController {
 	protected $patientTable;
 	protected $analyseTable;
 	protected $resultatDemandeAnalyseTable;
+	protected $listeRechercheTable;
 	
 	public function getPersonneTable() {
 		if (! $this->personneTable) {
@@ -54,6 +55,14 @@ class SecretariatController extends AbstractActionController {
 			$this->resultatDemandeAnalyseTable = $sm->get ( 'Laboratoire\Model\ResultatDemandeAnalyseTable' );
 		}
 		return $this->resultatDemandeAnalyseTable;
+	}
+	
+	public function getListeRechercheTable() {
+		if (! $this->listeRechercheTable) {
+			$sm = $this->getServiceLocator ();
+			$this->listeRechercheTable = $sm->get ( 'Secretariat\Model\listeRechercheTable' );
+		}
+		return $this->listeRechercheTable;
 	}
 	
 /*****************************************************************************************************************************/
@@ -180,7 +189,6 @@ class SecretariatController extends AbstractActionController {
 		$this->layout ()->setTemplate ( 'layout/secretariat' );
 		
 		//$list = $this->getPatientTable()->getListeDepistagePatient();
-		
 		//var_dump($list); exit();
 		
 		return new ViewModel ( );
@@ -228,12 +236,15 @@ class SecretariatController extends AbstractActionController {
 
         <img id='photo' src='".$this->chemin()."/img/photos_patients/".$personne->photo."' style='float:left; margin-right:40px; width:105px; height:105px;'/>";
 
-		//Gestion des AGE
-		if($personne->age){
+		//Gestion des AGES
+		//Gestion des AGES
+		if($personne->age && !$personne->date_naissance){
 		    $html .="<div style=' left: 70px; top: 235px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$personne->age." ans </span></div>";
 		}else{
+			
 		    $aujourdhui = (new \DateTime() ) ->format('Y-m-d');
 		    $age_jours = $this->nbJours($personne->date_naissance, $aujourdhui);
+		    /*
 		    if($age_jours < 31){
 		        $html .="<div style=' left: 70px; top: 235px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_jours." jours </span></div>";		        
 		    }else if($age_jours >= 31) {
@@ -243,7 +254,73 @@ class SecretariatController extends AbstractActionController {
 		        
 		        $html .="<div style=' left: 70px; top: 235px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$nb_mois."m ".$nb_jours."j </span></div>";
 		    }
+		    */
+		    
+		    $age_annees = (int)($age_jours/365);
+		    
+		    if($age_annees == 0){
+		    		
+		    	if($age_jours < 31){
+		    		$html .="<div style=' left: 70px; top: 235px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_jours." jours </span></div>";
+		    	}else if($age_jours >= 31) {
+		    			
+		    		$nb_mois = (int)($age_jours/31);
+		    		$nb_jours = $age_jours - ($nb_mois*31);
+		    		if($nb_jours == 0){
+		    			$html .="<div style=' left: 70px; top: 235px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$nb_mois."m </span></div>";
+		    		}else{
+		    			$html .="<div style=' left: 70px; top: 235px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$nb_mois."m ".$nb_jours."j </span></div>";
+		    		}
+
+		    	}
+		    		
+		    }else{
+		    	$age_jours = $age_jours - ($age_annees*365);
+		    
+		    	if($age_jours < 31){
+		    
+		    		if($age_annees == 1){
+		    			if($age_jours == 0){
+		    				$html .="<div style=' left: 60px; top: 235px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an </span></div>";
+		    			}else{
+		    				$html .="<div style=' left: 60px; top: 235px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$age_jours." j </span></div>";
+		    			}
+		    		}else{
+		    			if($age_jours == 0){
+		    				$html .="<div style=' left: 60px; top: 235px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans </span></div>";
+		    			}else{
+		    				$html .="<div style=' left: 60px; top: 235px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans ".$age_jours."j </span></div>";
+		    			}
+		    		}
+		    			
+		    	}else if($age_jours >= 31) {
+		    			
+		    		$nb_mois = (int)($age_jours/31);
+		    		$nb_jours = $age_jours - ($nb_mois*31);
+		    
+		    		if($age_annees == 1){
+		    			if($nb_jours == 0){
+		    				$html .="<div style=' left: 50px; top: 235px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$nb_mois."m </span></div>";
+		    			}else{
+		    				$html .="<div style=' left: 50px; top: 235px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$nb_mois."m ".$nb_jours."j </span></div>";
+		    			}
+
+		    		}else{
+		    			if($nb_jours == 0){
+		    				$html .="<div style=' left: 50px; top: 235px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans ".$nb_mois."m </span></div>";
+		    			}else{
+		    				$html .="<div style=' left: 50px; top: 235px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans ".$nb_mois."m ".$nb_jours."j </span></div>";
+		    			}
+		    		}
+		    
+		    	}
+		    		
+		    }
+		    
 		}
+		
+		//Fin gestion des ages
+		//Fin gestion des ages
 
 		
         $html .="<p>
@@ -535,6 +612,20 @@ class SecretariatController extends AbstractActionController {
 		//$listeAnalysesDemandees = $this->getAnalyseTable()->getAnalyseTypageHemoglobineDemande(23109);
 		//var_dump($listeAnalysesDemandees); exit();
 		
+		
+		
+		//$timestart = microtime(true);
+		
+		//$output = $this->getPatientTable ()->listeRecherchePatientAjax();
+		
+		//$liste = $this->getListeRechercheTable()->fetchAll();
+		
+		//$timeend = microtime(true);
+		//$time = $timeend-$timestart;
+		
+		//var_dump(number_format($time,3)); exit();		
+		
+		
 		return new ViewModel ( array () );
 	}
 	
@@ -564,22 +655,72 @@ class SecretariatController extends AbstractActionController {
 		$html = "<div style='float:left;' ><div id='photo' style='float:left; margin-right:20px; margin-bottom: 10px;'> <img  src='".$this->chemin()."/img/photos_patients/" . $personne->photo . "'  style='width:105px; height:105px;'></div>";
 			
 		//Gestion des AGE
-		if($personne->age){
+		if($personne->age && !$personne->date_naissance){
 		    $html .= "<div style='margin-left:8px;'> <div style='text-decoration:none; font-size:14px; float:left; padding-right: 7px; '>Age:</div>  <div style='font-weight:bold; font-size:19px; font-family: time new romans; color: green; font-weight: bold;'>" . $personne->age . " ans</div></div></div>";
 		    
 		}else{
 		    $aujourdhui = (new \DateTime() ) ->format('Y-m-d');
 		    $age_jours = $this->nbJours($personne->date_naissance, $aujourdhui);
-		    if($age_jours < 31){
-		        $html .= "<div style='margin-left:8px;'> <div style='text-decoration:none; font-size:14px; float:left; padding-right: 7px; '>Age:</div>  <div style='font-weight:bold; font-size:19px; font-family: time new romans; color: green; font-weight: bold;'>" . $age_jours . " jours</div></div></div>";
-		        
-		    }else if($age_jours >= 31) {
-		
-		        $nb_mois = (int)($age_jours/30);
-		        $nb_jours = $age_jours - ($nb_mois*30);
-		
-		        $html .= "<div style='margin-left:8px;'> <div style='text-decoration:none; font-size:14px; float:left; padding-right: 7px; '>Age:</div>  <div style='font-weight:bold; font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$nb_mois."m ".$nb_jours."j </div></div></div>";
-		        
+		    
+		    $age_annees = (int)($age_jours/365);
+		    
+		    if($age_annees == 0){
+		    
+		    	if($age_jours < 31){
+		    		$html .="<div style=' left: 30px; top: 145px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_jours." jours </span></div>";
+		    	}else if($age_jours >= 31) {
+		    		 
+		    		$nb_mois = (int)($age_jours/31);
+		    		$nb_jours = $age_jours - ($nb_mois*31);
+		    		if($nb_jours == 0){
+		    			$html .="<div style=' left: 30px; top: 145px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$nb_mois."m </span></div>";
+		    		}else{
+		    			$html .="<div style=' left: 30px; top: 145px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$nb_mois."m ".$nb_jours."j </span></div>";
+		    		}
+		    
+		    	}
+		    
+		    }else{
+		    	$age_jours = $age_jours - ($age_annees*365);
+		    
+		    	if($age_jours < 31){
+		    
+		    		if($age_annees == 1){
+		    			if($age_jours == 0){
+		    				$html .="<div style=' left: 30px; top: 145px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an </span></div>";
+		    			}else{
+		    				$html .="<div style=' left: 20px; top: 145px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$age_jours." j </span></div>";
+		    			}
+		    		}else{
+		    			if($age_jours == 0){
+		    				$html .="<div style=' left: 30px; top: 145px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans </span></div>";
+		    			}else{
+		    				$html .="<div style=' left: 20px; top: 145px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans ".$age_jours."j </span></div>";
+		    			}
+		    		}
+		    		 
+		    	}else if($age_jours >= 31) {
+		    		 
+		    		$nb_mois = (int)($age_jours/31);
+		    		$nb_jours = $age_jours - ($nb_mois*31);
+		    
+		    		if($age_annees == 1){
+		    			if($nb_jours == 0){
+		    				$html .="<div style=' left: 10px; top: 145px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$nb_mois."m </span></div>";
+		    			}else{
+		    				$html .="<div style=' left: 10px; top: 145px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$nb_mois."m ".$nb_jours."j </span></div>";
+		    			}
+		    
+		    		}else{
+		    			if($nb_jours == 0){
+		    				$html .="<div style=' left: 10px; top: 145px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans ".$nb_mois."m </span></div>";
+		    			}else{
+		    				$html .="<div style=' left: 10px; top: 145px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans ".$nb_mois."m ".$nb_jours."j </span></div>";
+		    			}
+		    		}
+		    
+		    	}
+		    
 		    }
 		}
 		
@@ -587,7 +728,7 @@ class SecretariatController extends AbstractActionController {
 		$html .= "<table>";
 		
 		$html .= "<tr>";
-		$html .= "<td><a style='text-decoration:underline; font-size:12px;'>Nom:</a><br><p style='width:280px; font-weight:bold; font-size:17px;'>" . $personne->nom . "</p></td>";
+		$html .= "<td><a style='text-decoration:underline; font-size:12px;'>aa Nom:</a><br><p style='width:280px; font-weight:bold; font-size:17px;'>" . $personne->nom . "</p></td>";
 		$html .= "</tr><tr>";
 		$html .= "<td><a style='text-decoration:underline; font-size:12px;'>Pr&eacute;nom:</a><br><p style='width:280px; font-weight:bold; font-size:17px;'>" . $personne->prenom . "</p></td>";
 		$html .= "</tr><tr>";
@@ -661,20 +802,72 @@ class SecretariatController extends AbstractActionController {
 				  <img id='photo' src='".$this->chemin()."/img/photos_patients/".$personne->photo."' style='width:105px; height:105px; margin-bottom: 10px;'/>";
 		
 		//Gestion des AGE
-		if($personne->age){
+		if($personne->age && !$personne->date_naissance){
 		    $html .="<div style=' margin-left: 20px; margin-top: 145px; font-family: time new romans; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$personne->age." ans </span></div>";
 		}else{
 		    $aujourdhui = (new \DateTime() ) ->format('Y-m-d');
 		    $age_jours = $this->nbJours($personne->date_naissance, $aujourdhui);
-		    if($age_jours < 31){
-		        $html .="<div style=' margin-left: 20px; margin-top: 145px; font-family: time new romans; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_jours." jours </span></div>";
-		    }else if($age_jours >= 31) {
-		        
-		        $nb_mois = (int)($age_jours/30);
-		        $nb_jours = $age_jours - ($nb_mois*30);
-		        
-		        $html .="<div style=' margin-left: 20px; margin-top: 145px; font-family: time new romans; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$nb_mois."m ".$nb_jours."j </span></div>";
+		    $age_annees = (int)($age_jours/365);
+		    
+		    if($age_annees == 0){
+		    
+		    	if($age_jours < 31){
+		    		$html .="<div style='margin-left: 20px; margin-top: 145px; font-family: time new romans; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_jours." jours </span></div>";
+		    	}else if($age_jours >= 31) {
+		    		 
+		    		$nb_mois = (int)($age_jours/31);
+		    		$nb_jours = $age_jours - ($nb_mois*31);
+		    		if($nb_jours == 0){
+		    			$html .="<div style='margin-left: 20px; margin-top: 145px; font-family: time new romans; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$nb_mois."m </span></div>";
+		    		}else{
+		    			$html .="<div style='margin-left: 20px; margin-top: 145px; font-family: time new romans; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$nb_mois."m ".$nb_jours."j </span></div>";
+		    		}
+		    
+		    	}
+		    
+		    }else{
+		    	$age_jours = $age_jours - ($age_annees*365);
+		    
+		    	if($age_jours < 31){
+		    
+		    		if($age_annees == 1){
+		    			if($age_jours == 0){
+		    				$html .="<div style='margin-left: 15px; margin-top: 145px; font-family: time new romans; '> <span style='font-size: 14px;'> Age: </span> <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an </span></div>";
+		    			}else{
+		    				$html .="<div style='margin-left: 10px; margin-top: 145px; font-family: time new romans; '> <span style='font-size: 14px;'> Age: </span> <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$age_jours." j </span></div>";
+		    			}
+		    		}else{
+		    			if($age_jours == 0){
+		    				$html .="<div style='margin-left: 15px; margin-top: 145px; font-family: time new romans; '> <span style='font-size: 14px;'> Age: </span> <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans </span></div>";
+		    			}else{
+		    				$html .="<div style='margin-left: 10px; margin-top: 145px; font-family: time new romans; '> <span style='font-size: 14px;'> Age: </span> <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans ".$age_jours."j </span></div>";
+		    			}
+		    		}
+		    		 
+		    	}else if($age_jours >= 31) {
+		    		 
+		    		$nb_mois = (int)($age_jours/31);
+		    		$nb_jours = $age_jours - ($nb_mois*31);
+		    
+		    		if($age_annees == 1){
+		    			if($nb_jours == 0){
+		    				$html .="<div style='margin-left: 5px; margin-top: 145px; font-family: time new romans; '> <span style='font-size: 13px;'> Age: </span> <span style='font-size:18px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$nb_mois."m </span></div>";
+		    			}else{
+		    				$html .="<div style='margin-left: 2px; margin-top: 145px; font-family: time new romans; '> <span style='font-size: 13px;'> Age: </span> <span style='font-size:17px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$nb_mois."m ".$nb_jours."j </span></div>";
+		    			}
+		    
+		    		}else{
+		    			if($nb_jours == 0){
+		    				$html .="<div style='margin-left: 5px; margin-top: 145px; font-family: time new romans; '> <span style='font-size: 13px;'> Age: </span> <span style='font-size:18px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans ".$nb_mois."m </span></div>";
+		    			}else{
+		    				$html .="<div style='margin-left: 2px; margin-top: 145px; font-family: time new romans; '> <span style='font-size: 13px;'> Age: </span> <span style='font-size:17px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans ".$nb_mois."m ".$nb_jours."j </span></div>";
+		    			}
+		    		}
+		    
+		    	}
+		    
 		    }
+		    
 		}
 		
 		
@@ -1046,20 +1239,73 @@ class SecretariatController extends AbstractActionController {
         <img id='photo' src='".$this->chemin()."/img/photos_patients/".$personne->photo."' style='float:left; margin-right:40px; width:105px; height:105px;'/>";
 		
 		//Gestion des AGE
-		if($personne->age){
-		    $html .="<div style=' left: 70px; top: 235px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$personne->age." ans </span></div>";
+		if($personne->age && !$personne->date_naissance){
+		    $html .="<div style=' left: 70px; top: 235px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> HJGH".$personne->age." ans </span></div>";
 		}else{
 		    $aujourdhui = (new \DateTime() ) ->format('Y-m-d');
 		    $age_jours = $this->nbJours($personne->date_naissance, $aujourdhui);
-		    if($age_jours < 31){
-		        $html .="<div style=' left: 70px; top: 235px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_jours." jours </span></div>";
-		    }else if($age_jours >= 31) {
-		        
-		        $nb_mois = (int)($age_jours/30);
-		        $nb_jours = $age_jours - ($nb_mois*30);
-		        
-		        $html .="<div style=' left: 70px; top: 235px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$nb_mois."m ".$nb_jours."j </span></div>";
+		    
+		    $age_annees = (int)($age_jours/365);
+		    
+		    if($age_annees == 0){
+		    
+		    	if($age_jours < 31){
+		    		$html .="<div style='left: 70px; top: 235px; position: absolute; font-family: time new romans; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_jours." jours </span></div>";
+		    	}else if($age_jours >= 31) {
+		    		 
+		    		$nb_mois = (int)($age_jours/31);
+		    		$nb_jours = $age_jours - ($nb_mois*31);
+		    		if($nb_jours == 0){
+		    			$html .="<div style='left: 70px; top: 235px; position: absolute; font-family: time new romans; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$nb_mois."m </span></div>";
+		    		}else{
+		    			$html .="<div style='left: 70px; top: 235px; position: absolute; font-family: time new romans; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$nb_mois."m ".$nb_jours."j </span></div>";
+		    		}
+		    
+		    	}
+		    
+		    }else{
+		    	$age_jours = $age_jours - ($age_annees*365);
+		    
+		    	if($age_jours < 31){
+		    
+		    		if($age_annees == 1){
+		    			if($age_jours == 0){
+		    				$html .="<div style='left: 60px; top: 235px; position: absolute; font-family: time new romans; '> <span style='font-size: 14px;'> Age: </span> <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an </span></div>";
+		    			}else{
+		    				$html .="<div style='left: 60px; top: 235px; position: absolute; font-family: time new romans; '> <span style='font-size: 14px;'> Age: </span> <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$age_jours." j </span></div>";
+		    			}
+		    		}else{
+		    			if($age_jours == 0){
+		    				$html .="<div style='left: 60px; top: 235px; position: absolute; font-family: time new romans; '> <span style='font-size: 14px;'> Age: </span> <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans </span></div>";
+		    			}else{
+		    				$html .="<div style='left: 60px; top: 235px; position: absolute; font-family: time new romans; '> <span style='font-size: 14px;'> Age: </span> <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans ".$age_jours."j </span></div>";
+		    			}
+		    		}
+		    		 
+		    	}else if($age_jours >= 31) {
+		    		 
+		    		$nb_mois = (int)($age_jours/31);
+		    		$nb_jours = $age_jours - ($nb_mois*31);
+		    
+		    		if($age_annees == 1){
+		    			if($nb_jours == 0){
+		    				$html .="<div style='left: 60px; top: 235px; position: absolute; font-family: time new romans; '> <span style='font-size: 13px;'> Age: </span> <span style='font-size:18px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$nb_mois."m </span></div>";
+		    			}else{
+		    				$html .="<div style='left: 50px; top: 235px; position: absolute; font-family: time new romans; '> <span style='font-size: 13px;'> Age: </span> <span style='font-size:17px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$nb_mois."m ".$nb_jours."j </span></div>";
+		    			}
+		    
+		    		}else{
+		    			if($nb_jours == 0){
+		    				$html .="<div style='left: 60px; top: 235px; position: absolute; font-family: time new romans; '> <span style='font-size: 13px;'> Age: </span> <span style='font-size:18px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans ".$nb_mois."m </span></div>";
+		    			}else{
+		    				$html .="<div style='left: 50px; top: 235px; position: absolute; font-family: time new romans; '> <span style='font-size: 13px;'> Age: </span> <span style='font-size:17px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans ".$nb_mois."m ".$nb_jours."j </span></div>";
+		    			}
+		    		}
+		    
+		    	}
+		    
 		    }
+		    
 		}
    
         $html .="<p style='color: white; opacity: 0.09;'>

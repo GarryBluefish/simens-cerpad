@@ -17,9 +17,17 @@ class TriPrelevementTable {
  	
  	public function addTriPrelevement($donnees){
  		
- 	    return $this->tableGateway->getLastInsertValue( $this->tableGateway->insert($donnees) );
+ 		if($this->getPrelevementTrieParIddemande($donnees['iddemande'])){
+ 			return null;
+ 		}else{
+ 			return $this->tableGateway->getLastInsertValue( $this->tableGateway->insert($donnees) ); 			
+ 		}
  	}
  	
+ 	public function getPrelevementTrieParIddemande($iddemande) {
+ 		$iddemande = ( int ) $iddemande;
+ 		return $this->tableGateway->select ( array ('iddemande' => $iddemande ) )->toArray();
+ 	}
  	
  	public function getPrelevementTrie($idbilan) {
  		$idbilan = ( int ) $idbilan;
@@ -152,7 +160,7 @@ class TriPrelevementTable {
  		->from(array('tp' => 'tri_prelevement'))->columns(array('Idtri' => 'idtri', 'Conformite' => 'conformite'))
  		->join(array('fda' => 'facturation_demande_analyse'), 'fda.iddemande_analyse = tp.iddemande', array('Idfacturation' => 'idfacturation'))
  		->join(array('d' => 'demande_analyse'), 'd.iddemande = fda.iddemande_analyse', array('Iddemande' => 'iddemande'))
- 		->join(array('pat' => 'patient'), 'pat.idpersonne = d.idpatient' , array('Idpatient' => 'idpersonne'))
+ 		->join(array('pat' => 'patient'), 'pat.idpersonne = d.idpatient' , array('Idpatient' => 'idpersonne', 'Ordre' => 'ordre' ))
  		->join(array('pers' => 'personne'), 'pers.idpersonne = pat.idpersonne' , array('Nom'=>'nom','Prenom'=>'prenom','Sexe'=>'sexe'))
  			
  		->join(array('a' => 'analyse'), 'a.idanalyse = d.idanalyse', array('Idanalyse' => 'idanalyse', 'LibelleAnalyse' => 'designation'))

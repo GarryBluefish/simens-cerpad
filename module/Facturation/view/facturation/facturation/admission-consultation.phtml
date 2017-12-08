@@ -38,18 +38,18 @@ $(window).load(function () {
 		<table style='width:95%; margin-left: 10px; align:center' class="table table-bordered tab_list_mini" id="patient">
 			<thead >
 			    <tr >
-				    <th id="idpatient_" style='width: 10%;'><input type="text" name="search_browser" value=" ID_Patient" class="search_init" /></th>
+				    <th id="idpatient_" style='width: 15%;'><input type="text" name="search_browser" value=" Num&eacute;ro dossier" class="search_init" /></th>
 					<th id="nom_" style='width: 15%;'><input type="text" name="search_browser" value=" Nom" class="search_init" /></th>
 					<th id="prenom_" style='width: 17%;'><input type="text" name="search_browser" value=" Pr&eacute;nom" class="search_init" /></th>
 					<th id="date_" style='width: 13%;'><input type="text" name="search_browser" value=" Date naissance" class="search_init" /></th>
-					<th id="adresse_" style='width: 40%;'><input type="text" name="search_browser" value=" Adresse" class="search_init" /></th>
+					<th id="adresse_" style='width: 35%;'><input type="text" name="search_browser" value=" Adresse" class="search_init" /></th>
 					<th id="effectuer_" style='width: 5%;'><input type="hidden" value="" class="" />Options</th>
 
 				</tr>
 
 			</thead>
 
-			<tbody id="donnees" class="liste_patient">
+			<tbody id="donnees" class="liste_patient" style="font-family: times new roman; font-size: 19px;">
 
 	            <?php /* AFFICHAGE DE LA LISTE DES PATIENTS */?>
 
@@ -78,7 +78,7 @@ initialisation();
 
     <div id="info_facturation">
           <a href="" id="precedent" style="text-decoration: none; font-family: police2; width:50px; margin-left:30px;">
-	        <img style=" display: inline; " src='<?php echo $this->basePath().'/images_icons/transfert_gauche.png'?>' title="Precedent" />
+	        <img style=" display: inline; " src='<?php echo $this->basePath().'/images_icons/transfert_gauche.png'?>' title="Pr&eacute;c&eacute;dent" />
 		    Pr&eacute;c&eacute;dent
 		  </a>
 
@@ -169,9 +169,9 @@ initialisation();
     
 <div id="context-menu">
     <ul class="dropdown-menu" >
-         <li><a style="cursor: pointer;"><img id="visualiserCTX" style='margin-right: 10px; width: 19px; height: 16px;' src='/simens/public/images_icons/voir2.png'>Visualiser</a></li>
+         <li><a style="cursor: pointer;"><img id="visualiserCTX" style='margin-right: 10px; width: 19px; height: 16px;' src='../images_icons/voir2.png'>Visualiser</a></li>
          <li class="divider2"></li>
-         <li><a style="cursor: pointer;"><img id="suivantCTX" style='margin-right: 10px; width: 19px; height: 16px;' src='/simens/public/images_icons/transfert_droite.png'>Suivant</a></li>
+         <li><a style="cursor: pointer;"><img id="suivantCTX" style='margin-right: 10px; width: 19px; height: 16px;' src='../images_icons/transfert_droite.png'>Suivant</a></li>
          <li class="divider"></li>
          <li><a id="quitterCTX"  style="cursor: pointer;">Quitter</a></li>
     </ul>
