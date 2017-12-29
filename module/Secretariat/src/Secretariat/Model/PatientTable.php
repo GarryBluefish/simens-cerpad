@@ -1640,6 +1640,10 @@ class PatientTable {
 						$row[] = $Control->convertDateTimeHm($aRow[ 'DateEnregistrementRda' ]);
 					}
 	
+					else if ($aColumns[$i] == 'Adresse'){
+						$row[] = "<div>".$aRow[ $aColumns[$i]]."</div>";
+					}
+					
 					else if ($aColumns[$i] == 'id') {
 						$html  ="<infoBulleVue> <a id='".$aRow[ $aColumns[$i] ]."' href='javascript:visualiser(".$aRow[ 'id' ].");'>";
 						$html .="<img style='display: inline; margin-right: 10%;' src='".$tabURI[0]."public/images_icons/voir2.png' title='d&eacute;tails'></a></infoBulleVue>";
@@ -1789,6 +1793,10 @@ class PatientTable {
 						$row[] = $Control->convertDateTimeHm($aRow[ 'DateValidationRda' ]);
 					}
 	
+					else if ($aColumns[$i] == 'Adresse'){
+						$row[] = "<div>".$aRow[ $aColumns[$i]]."</div>";
+					}
+					
 					else if ($aColumns[$i] == 'id') {
 						$html  ="<infoBulleVue> <a id='".$aRow[ $aColumns[$i] ]."' href='javascript:visualiser(".$aRow[ 'id' ].");'>";
 						$html .="<img style='display: inline; margin-right: 10%;' src='".$tabURI[0]."public/images_icons/voir2.png' title='d&eacute;tails'></a></infoBulleVue>";

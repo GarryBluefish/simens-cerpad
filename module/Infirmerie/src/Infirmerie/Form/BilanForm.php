@@ -136,6 +136,7 @@ class BilanForm extends Form{
 				),
 				'attributes' => array (
 						'id' =>'diagnostic',
+						'style' =>'height:70px'
 				)
 		) );
 		
@@ -148,6 +149,19 @@ class BilanForm extends Form{
 				),
 				'attributes' => array (
 						'id' =>'traitement',
+						'style' =>'height:70px'
+				)
+		) );
+		
+		
+		$this->add ( array (
+				'name' => 'origine_prelevement',
+				'type' => 'Text',
+				'options' => array (
+						'label' => iconv('ISO-8859-1', 'UTF-8','Origine du prélèvement'),
+				),
+				'attributes' => array (
+						'id' =>'origine_prelevement',
 				)
 		) );
 		

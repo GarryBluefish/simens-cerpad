@@ -76,10 +76,10 @@ if($sexe == 'Masculin'){$civilite = 'M';}
   <ul class="nav" style="width:100%;">
     <li  class="dropdown" style=" width: 30%;"><a title=""  class="dropdown-toggle">
       <i> <span style="color: white; font-size: 13px;">Service: </span></i>
-      <b class="caret" ></b> <span style="font-size: 15px; color: white; font-family: Times  New Roman;"><?php echo $service;?></span></a>
+      <b class="caret" ></b> <span style="font-size: 15px; color: white; font-family: Times  New Roman;"><?php echo $service;?> <span style='color: #48ce77;'> (Facturation)</span> </span></a>
     </li>
 
-    <li  class="dropdown" style=" width: 50%;"><a title="" class="dropdown-toggle">
+    <li  class="dropdown" style=" width: 55%;"><a title="" class="dropdown-toggle">
       
       <i>
         <?php if($user['Photo'] != 'identite.jpg'){ ?>
@@ -94,20 +94,19 @@ if($sexe == 'Masculin'){$civilite = 'M';}
       <b class="caret" ></b> <span style="font-size: 15px; color: white;font-family: Times  New Roman;"><?php echo $prenom.'  '.$nom;?></span></a>
     </li>
 
-    <li style="width: 20%;">
+    <li style="width: 15%;">
    
       <div style='width: 30%; padding-top: 10px; float:left;'>
-       <?php if($user['role'] == 'medecin') { ?>
-         <a href="<?php echo $this->url('consultation', array('action'=> 'protocole-operatoire'));?>">
-           <img src="<?php echo $this->basePath().'/img/light/arrow_up_left.png';?>" title="Protocole op&eacute;ratoire" />
-         </a>
-       <?php } ?>
+        <?php if($user['role'] == 'secretariat' || $user['role'] == 'superAdmin'){ ?>
+          <a style="padding-right: 6px;" href="<?php echo $this->url('secretariat', array('action'=>'demandes-analyses'));?>">
+            <img src="<?php echo $this->basePath().'/img/light/arrow_up_left.png';?>" title="Secr&eacute;tariat" />
+          </a>
+        <?php } ?>
       </div>
-
-      <div style='width: 70%; padding-top: 10px; float:right'>
-        <a href="<?php echo $this->url('admin', array('action'=>'logout'));?>">
-          <img src="<?php echo $this->basePath().'/img/light/bended_arrow_right.png';?>"/> <span style="color: white; font-size: 15px; font-family: New time romans;"><i>D&eacute;connexion</i></span>
-        </a>
+      
+      <div style='width: 70%; padding-top: 10px; float:right;'>
+        <a title="" style="" href="<?php echo $this->url('admin', array('action'=>'logout'));?>">
+        <i><img src="<?php echo $this->basePath().'/img/light/bended_arrow_right.png';?>"/> <span style="color: white; font-size: 12px;">D&eacute;connexion</span></i></a>
       </div>
     </li>
   </ul>

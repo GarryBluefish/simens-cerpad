@@ -11,8 +11,8 @@ return array(
         		
         		//***Cerpad
         		//***Cerpad
-        		'secretariat' => 'guest',
-                'facturation' => 'guest',
+        		'facturation' => 'guest',
+        		'secretariat' => 'facturation',
         		'infirmier'   => 'guest',
         		'technicien'  => 'guest',
         		'biologiste'  => 'technicien',
@@ -211,6 +211,11 @@ return array(
             		'vue-liste-prelevement-tri-repris' => 'technicien',
             		'prelevement-precedent' => 'technicien',		
             		'enregistrer-tri-prelevement-repris' => 'technicien',	
+            			
+            			
+            		'infos-statistiques-resultats-depistages' => 'technicien',
+            		'infos-statistiques-resultats-depistages-optionnelles' => 'technicien',
+            		'imprimer-informations-statistiques-depistages' => 'technicien',
             	),	
             		
             		

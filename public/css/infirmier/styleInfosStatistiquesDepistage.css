@@ -134,3 +134,35 @@
 .optionsPeriodePath{
 	margin-top: -10px:
 }
+
+#periodeDiagrammeAfficher div{
+	border: 2px solid #cccccc; 
+	padding-top: 4px;
+	padding-bottom: 3px;
+	padding-left: 8px;
+	padding-right: 8px;
+}
+
+#periodeDiagrammeAfficher img{
+	position: absolute;
+	right: 25px;
+	box-shadow: 0pt 2pt 6px rgba(0, 0, 0, 0.5);
+	border-radius: 20%;
+	cursor: pointer;
+}
+
+#periodeDiagrammeAfficher .typeDiagrammeColumn{
+	right: 165px;
+}
+
+#periodeDiagrammeAfficher .typeDiagrammeBar{
+	right: 120px;
+}
+
+#periodeDiagrammeAfficher .typeDiagrammePie{
+	right: 75px;
+}
+
+#periodeDiagrammeAfficher .typeDiagrammeLine{
+	right: 30px;
+}

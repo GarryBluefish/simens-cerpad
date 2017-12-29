@@ -300,7 +300,7 @@ class BiochimiePaillasseParAnalyse
  			//Affichage de la liste des noms des patients
  			//Affichage de la liste des noms des patients
  			//Affichage de la liste des noms des patients
- 			for($a = 0 ; $a < 36 ; $a++){
+ 			for($a = 0 ; $a < count($idpatient) && $a < 36 ; $a++){
  				$this->_page->setLineColor(new ZendPdf\Color\Html('#cfcfcf'));
  				$this->_page->setLineWidth(0.5);
  				
@@ -345,10 +345,10 @@ class BiochimiePaillasseParAnalyse
   							$this->_leftMargin+240,
   							$this->_yPosition);
   					
-  					$this->_page->setFillColor(new ZendPdf\Color\Html('#eeeeee'));
-  					$this->_page->drawText(" _____ ",
-  							$this->_leftMargin+240,
-  							$this->_yPosition+19);
+  					//$this->_page->setFillColor(new ZendPdf\Color\Html('#eeeeee'));
+  					//$this->_page->drawText(" _____ ",
+  							//$this->_leftMargin+240,
+  							//$this->_yPosition+19);
   				}
   				
  				//POUR TOUTES LES ANALYSES AYANT PLUS DE DEUX VALEURS

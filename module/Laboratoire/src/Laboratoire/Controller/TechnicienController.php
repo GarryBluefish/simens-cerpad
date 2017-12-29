@@ -24,6 +24,7 @@ use Laboratoire\View\Helper\BiochimiePaillasseParAnalyse;
 use Laboratoire\View\Helper\ParasitologiePaillasseParAnalyse;
 use Laboratoire\View\Helper\BacteriologiePaillasseParAnalyse;
 use Laboratoire\View\Helper\DepistagePaillasseParAnalyse;
+use Laboratoire\View\Helper\infosStatistiquePdf;
 
 
 class TechnicienController extends AbstractActionController {
@@ -35,6 +36,7 @@ class TechnicienController extends AbstractActionController {
 	protected $triPrelevement;
 	protected $analyseTable;
 	protected $resultatDemandeAnalyseTable;
+	protected $resultatsDepistagesTable;
 	
 	
 	public function getBilanPrelevementTable() {
@@ -93,6 +95,14 @@ class TechnicienController extends AbstractActionController {
 		return $this->resultatDemandeAnalyseTable;
 	}
 	
+	public function getResultatsDepistagesTable() {
+		if (! $this->resultatsDepistagesTable) {
+			$sm = $this->getServiceLocator ();
+			$this->resultatsDepistagesTable = $sm->get ( 'Laboratoire\Model\ResultatsDepistagesTable' );
+		}
+		return $this->resultatsDepistagesTable;
+	}
+	
 /*****************************************************************************************************************************/
 /*****************************************************************************************************************************/
 /*****************************************************************************************************************************/
@@ -103,7 +113,6 @@ class TechnicienController extends AbstractActionController {
 		return $tabURI[0];
 	}
 	
-	
 	public function listeBilanAjaxAction() {
 		$output = $this->getBilanPrelevementTable() ->getListeBilansPrelevement();
 		return $this->getResponse ()->setContent ( Json::encode ( $output, array (
@@ -111,8 +120,16 @@ class TechnicienController extends AbstractActionController {
 		) ) );
 	}
 	
+	public function moisEnLettre($mois){
+		$lesMois = array('','Janvier','Fevrier','Mars','Avril',
+				'Mais','Juin','Juillet','Aout','Septembre','Octobre','Novembre','Decembre');
+		return $lesMois[$mois];
+	}
 	
 	public function listeBilansAction() {
+		
+		//$listeBilan = $this->getBilanPrelevementTable()->pourCorrection();
+		//var_dump($listeBilan); exit();
 		
 		$this->layout ()->setTemplate ( 'layout/technicien' );
 		$bilanPrelevement = $this->getBilanPrelevementTable() ->getBilanPrelevementRepris(12);
@@ -1127,7 +1144,6 @@ class TechnicienController extends AbstractActionController {
 			$DocPdf->addPage($page->getPage());
 			$entreeVerif = 1;
 		}
-		
 		//===========================================
 		//*******************************************
 		//===========================================
@@ -8150,5 +8166,485 @@ class TechnicienController extends AbstractActionController {
 	}
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	public function infosStatistiquesResultatsDepistagesAction(){
+	
+		$listeResultatsDepistages = $this->getResultatsDepistagesTable()->getResultatsDepistages();
+		$intervalleDate = $this->getResultatsDepistagesTable() ->getMinMaxDateResultatsDepistages();
+		
+		$tabAnnees = array();
+		$tabDonneesAnnuelle = array();
+		$tabMois = array();
+		$tabProfils = array();
+		$tabProfilsAnneesMois = array();
+		
+		for($i=0 ; $i<count($listeResultatsDepistages) ; $i++){
+		
+			$annee_naissance = $listeResultatsDepistages[$i]['annee_prelevement'];
+			if(!in_array($annee_naissance, $tabAnnees)){
+				$tabAnnees[] = $annee_naissance;
+				$tabDonneesAnnuelle[$annee_naissance] = array();
+				$tabMois[$annee_naissance] = array();
+			}
+		
+			$mois_naissance = $listeResultatsDepistages[$i]['mois_prelevement'];
+			$tabDonneesAnnuelle[$annee_naissance][] = $mois_naissance;
+		
+			if(!in_array($mois_naissance, $tabMois[$annee_naissance])){
+				$tabMois[$annee_naissance][] = $mois_naissance;
+				$tabProfilsAnneesMois[$annee_naissance][$mois_naissance] = array();
+			}
+				
+			$profil = $listeResultatsDepistages[$i]['profil'];
+			$tabProfilsAnneesMois[$annee_naissance][$mois_naissance][] = $profil;
+				
+			if(!in_array($profil, $tabProfils)){
+				$tabProfils[] = $profil;
+			}
+				
+		}
+		sort($tabProfils);
+		
+		$totalCol = array();
+		
+		$html = '<table class="titreTableauInfosStatistiques">
+				   <tr class="ligneTitreTableauInfos">
+				     <td style="width: 23%; height: 40px;">P&eacute;riodes</td>';
+				     
+		        if(count($tabProfils) == 0){ $largeur = 65; }else{ $largeur = 65/count($tabProfils); }
+		
+				for($iProf=0 ; $iProf<count($tabProfils) ;$iProf++){
+					$html .='
+				    <td style="width: '.$largeur.'%; height: 40px; text-align: center; color: green; font-family: times new roman; font-size: 18px; font-weight: bold; ">'.$tabProfils[$iProf].'</td>';
+					
+					$totalCol[$iProf] = 0;
+				}
+				
+				
+		$html .='     <td style="width: 12%; height: 40px; text-align: center; font-family: Goudy Old Style; font-size: 20px; ">Total</td>
+				   </tr>
+				 </table>';
+	
+		
+		$nombrePatientDepistes = 0;
+		$kligne = 0;
+		$html .="<script> var Pile = new Array(); </script>";
+	
+		$html .="<div id='listeTableauInfosStatistiques'>
+		           <table class='tableauInfosStatistiques'>";
+	
+		for($i=0 ; $i<count($tabAnnees) ; $i++){
+				
+			$annee = $tabAnnees[$i];
+			$tabDonneesAnnee = array_count_values($tabDonneesAnnuelle[$annee]);
+			sort($tabMois[$annee]); //ordonne la liste des mois
+			$tabIndexDonnees = $tabMois[$annee];
+			
+			
+			for($ij=0 ; $ij<count($tabIndexDonnees) ; $ij++){
+				$mois = $tabIndexDonnees[$ij];
+				$listeProfils = array_count_values($tabProfilsAnneesMois[$annee][$mois]);
+				
+				if($ij==0){
+					$html .='<tr style="width: 100%; " class="couleurLigne_'.$kligne.'">
+				             <td class="infosPath periodeInfosLigne" style="width: 23%; height: 40px; padding-left: 15px; font-family: police2; font-size: 20px;">'. $this->moisEnLettre($mois).' '.$annee.' </td>';
+					
+					for($iProf=0 ; $iProf<count($tabProfils) ;$iProf++){
+						
+						$leProfil = $tabProfils[$iProf];
+ 						if(array_key_exists($leProfil, $listeProfils)){
+ 							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; color: green;">'.$listeProfils[$leProfil].'</td>';
+ 							$totalCol[$iProf] += $listeProfils[$leProfil];
+ 						}else{
+							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal;">0</td>';
+ 						}
+
+					}
+				           
+				    $html .='<td class="infosPath" style="width: 12%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 22px; font-weight: bold; border-left: 2.5px solid #cccccc;">'.$tabDonneesAnnee[$mois].'</td>
+				         </tr>';
+						
+				}else{
+					$html .='<tr style="width: 100%; " class="couleurLigne_'.$kligne.'">
+				             <td class="infosPath periodeInfosLigne" style="width: 23%; height: 40px; padding-left: 15px; font-family: police2; font-size: 20px;">'. $this->moisEnLettre($mois).' '.$annee.' </td>';
+				           
+					for($iProf=0 ; $iProf<count($tabProfils) ;$iProf++){
+					
+ 						$leProfil = $tabProfils[$iProf];
+ 						if(array_key_exists($leProfil, $listeProfils)){
+ 							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; color: green;">'.$listeProfils[$leProfil].'</td>';
+ 							$totalCol[$iProf] += $listeProfils[$leProfil];
+ 						}else{
+							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal;">0</td>';
+ 						}
+					
+					}
+				           
+				    $html .='<td class="infosPath" style="width: 12%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 22px; font-weight: bold; border-left: 2.5px solid #cccccc;">'.$tabDonneesAnnee[$mois].'</td>
+				         </tr>';
+	
+				}
+	
+	
+				if(($kligne%2)==0){
+					$html .='<script>$(".couleurLigne_'.$kligne.'").css({"background":"#f9f9f9"}); </script>';
+				}
+	
+				$kligne++;
+				$nombrePatientDepistes += $tabDonneesAnnee[$mois];
+			}
+			
+				
+		}
+	
+		$html .="  </table>
+                 </div>";
+		 
+	
+		$grandTotal = 0;
+		$piedTotal ='<td class="infosPath infosPathTotalDepiste" style="width: 23%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: bold;">Total <span></span></td>';
+		for($i=0 ; $i<count($totalCol) ; $i++){
+			$piedTotal .= '<td class="infosPath " style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: bold;">'.$totalCol[$i].'</td>';
+			$grandTotal += $totalCol[$i];
+			
+			//Gestion des statistiques pour les profils
+			$html .="<script> Pile.push({ y: ".$totalCol[$i]." , label: '".$tabProfils[$i]."' }); </script>";
+		}
+		
+		$piedTotal .='<td class="infosPath " style="width: 12%; height: 40px; text-align: right; padding-right: 15px; font-family: times new roman; font-size: 20px; font-weight: bold; color: green; border-left: 2.5px solid #cccccc;">'.$grandTotal.'</td>';
+		
+		
+		$control = new DateHelper();
+		$html .="<script> $('#dateDebutPeriodeDiag div').html('".$control->convertDate($intervalleDate[0])."'); </script>";
+		$html .="<script> $('#dateFinPeriodeDiag div').html('".$control->convertDate($intervalleDate[1])."'); </script>";
+		$html .="<script> $('.champOP1 input, .champOP2 input').attr({'min':'".$intervalleDate[0]."', 'max':'".$intervalleDate[1]."'}); </script>";
+		$html .="<script> setTimeout(function(){ $('.champOP1 input').val('".$intervalleDate[0]."'); },1000); </script>";
+		$html .="<script> setTimeout(function(){ $('.champOP2 input').val('".$intervalleDate[1]."'); },1000); </script>";
+		
+		
+		$html .="<script> var nbkligne = ".$kligne."; $('.tableauInfosTotalDepistage tr').html('".$piedTotal."'); </script>";
+	
+		$this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );
+		return $this->getResponse ()->setContent ( Json::encode ( $html ) );
+	}
+	
+	public function infosStatistiquesResultatsDepistagesOptionnellesAction(){
+		$date_debut = $this->params ()->fromPost ( 'date_debut' );
+		$date_fin = $this->params ()->fromPost ( 'date_fin' );
+		$typeInfos = $this->params ()->fromPost ( 'typeInfos', 0 );
+		
+		if($typeInfos == 1){
+			if($date_debut && $date_fin){
+				$listeResultatsDepistages = $this->getResultatsDepistagesTable()->getResultatsDepistagesValidesPourUnePeriode($date_debut, $date_fin);
+			}else{
+				$listeResultatsDepistages = $this->getResultatsDepistagesTable()->getResultatsDepistagesValides();
+			}
+		}else if($typeInfos == 2){
+			if($date_debut && $date_fin){
+				$listeResultatsDepistages = $this->getResultatsDepistagesTable()->getResultatsDepistagesNonValidesPourUnePeriode($date_debut, $date_fin);
+			}else{
+				$listeResultatsDepistages = $this->getResultatsDepistagesTable()->getResultatsDepistagesNonValides();
+			}
+		}else{
+			if($date_debut && $date_fin){
+				$listeResultatsDepistages = $this->getResultatsDepistagesTable()->getResultatsDepistagesPourUnePeriode($date_debut, $date_fin);
+			}else{
+				$listeResultatsDepistages = $this->getResultatsDepistagesTable()->getResultatsDepistages();
+			}
+		}
+	
+		$tabAnnees = array();
+		$tabDonneesAnnuelle = array();
+		$tabMois = array();
+		$tabProfils = array();
+		$tabProfilsAnneesMois = array();
+	
+		for($i=0 ; $i<count($listeResultatsDepistages) ; $i++){
+	
+			$annee_naissance = $listeResultatsDepistages[$i]['annee_prelevement'];
+			if(!in_array($annee_naissance, $tabAnnees)){
+				$tabAnnees[] = $annee_naissance;
+				$tabDonneesAnnuelle[$annee_naissance] = array();
+				$tabMois[$annee_naissance] = array();
+			}
+	
+			$mois_naissance = $listeResultatsDepistages[$i]['mois_prelevement'];
+			$tabDonneesAnnuelle[$annee_naissance][] = $mois_naissance;
+	
+			if(!in_array($mois_naissance, $tabMois[$annee_naissance])){
+				$tabMois[$annee_naissance][] = $mois_naissance;
+				$tabProfilsAnneesMois[$annee_naissance][$mois_naissance] = array();
+			}
+	
+			$profil = $listeResultatsDepistages[$i]['profil'];
+			$tabProfilsAnneesMois[$annee_naissance][$mois_naissance][] = $profil;
+	
+			if(!in_array($profil, $tabProfils)){
+				$tabProfils[] = $profil;
+			}
+	
+		}
+		sort($tabProfils);
+	
+		$totalCol = array();
+	
+		$html = '<table class="titreTableauInfosStatistiques">
+				   <tr class="ligneTitreTableauInfos">
+				     <td style="width: 23%; height: 40px;">P&eacute;riodes</td>';
+
+		if(count($tabProfils) == 0){ $largeur = 65; }else{ $largeur = 65/count($tabProfils); }
+		
+		for($iProf=0 ; $iProf<count($tabProfils) ;$iProf++){
+			$html .='
+				    <td style="width: '.$largeur.'%; height: 40px; text-align: center; color: green; font-family: times new roman; font-size: 18px; font-weight: bold; ">'.$tabProfils[$iProf].'</td>';
+				
+			$totalCol[$iProf] = 0;
+		}
+	
+	
+		$html .='     <td style="width: 12%; height: 40px; text-align: center; font-family: Goudy Old Style; font-size: 20px; ">Total</td>
+				   </tr>
+				 </table>';
+	
+	
+		$nombrePatientDepistes = 0;
+		$kligne = 0;
+		$html .="<script> var Pile = new Array(); </script>";
+	
+		$html .="<div id='listeTableauInfosStatistiques'>
+		           <table class='tableauInfosStatistiques'>";
+	
+		for($i=0 ; $i<count($tabAnnees) ; $i++){
+	
+			$annee = $tabAnnees[$i];
+			$tabDonneesAnnee = array_count_values($tabDonneesAnnuelle[$annee]);
+			sort($tabMois[$annee]); //ordonne la liste des mois
+			$tabIndexDonnees = $tabMois[$annee];
+				
+				
+			for($ij=0 ; $ij<count($tabIndexDonnees) ; $ij++){
+				$mois = $tabIndexDonnees[$ij];
+				$listeProfils = array_count_values($tabProfilsAnneesMois[$annee][$mois]);
+	
+				if($ij==0){
+					$html .='<tr style="width: 100%; " class="couleurLigne_'.$kligne.'">
+				             <td class="infosPath periodeInfosLigne" style="width: 23%; height: 40px; padding-left: 15px; font-family: police2; font-size: 20px;">'. $this->moisEnLettre($mois).' '.$annee.' </td>';
+						
+					for($iProf=0 ; $iProf<count($tabProfils) ;$iProf++){
+	
+						$leProfil = $tabProfils[$iProf];
+						if(array_key_exists($leProfil, $listeProfils)){
+							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; color: green;">'.$listeProfils[$leProfil].'</td>';
+							$totalCol[$iProf] += $listeProfils[$leProfil];
+						}else{
+							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal;">0</td>';
+						}
+	
+					}
+					 
+					$html .='<td class="infosPath" style="width: 12%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 22px; font-weight: bold; border-left: 2.5px solid #cccccc;">'.$tabDonneesAnnee[$mois].'</td>
+				         </tr>';
+	
+				}else{
+					$html .='<tr style="width: 100%; " class="couleurLigne_'.$kligne.'">
+				             <td class="infosPath periodeInfosLigne" style="width: 23%; height: 40px; padding-left: 15px; font-family: police2; font-size: 20px;">'. $this->moisEnLettre($mois).' '.$annee.' </td>';
+					 
+					for($iProf=0 ; $iProf<count($tabProfils) ;$iProf++){
+							
+						$leProfil = $tabProfils[$iProf];
+						if(array_key_exists($leProfil, $listeProfils)){
+							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; color: green;">'.$listeProfils[$leProfil].'</td>';
+							$totalCol[$iProf] += $listeProfils[$leProfil];
+						}else{
+							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal;">0</td>';
+						}
+							
+					}
+					 
+					$html .='<td class="infosPath" style="width: 12%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 22px; font-weight: bold; border-left: 2.5px solid #cccccc;">'.$tabDonneesAnnee[$mois].'</td>
+				         </tr>';
+	
+				}
+	
+	
+				if(($kligne%2)==0){
+					$html .='<script>$(".couleurLigne_'.$kligne.'").css({"background":"#f9f9f9"}); </script>';
+				}
+	
+				$kligne++;
+				$nombrePatientDepistes += $tabDonneesAnnee[$mois];
+			}
+				
+	
+		}
+	
+		$html .="  </table>
+                 </div>";
+			
+	
+		$grandTotal = 0;
+		$piedTotal ='<td class="infosPath infosPathTotalDepiste" style="width: 23%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: bold;">Total <span></span></td>';
+		for($i=0 ; $i<count($totalCol) ; $i++){
+			$piedTotal .= '<td class="infosPath " style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: bold;">'.$totalCol[$i].'</td>';
+			$grandTotal += $totalCol[$i];
+			
+			//Gestion des statistiques pour les profils
+			$html .="<script> Pile.push({ y: ".$totalCol[$i]." , label: '".$tabProfils[$i]."' }); </script>";
+		}
+		$piedTotal .='<td class="infosPath " style="width: 12%; height: 40px; text-align: right; padding-right: 15px; font-family: times new roman; font-size: 20px; font-weight: bold; color: green; border-left: 2.5px solid #cccccc;">'.$grandTotal.'</td>';
+	
+	
+		$control = new DateHelper();
+		$html .="<script> $('#dateDebutPeriodeDiag div').html('".$control->convertDate($date_debut)."'); </script>";
+		$html .="<script> $('#dateFinPeriodeDiag div').html('".$control->convertDate($date_fin)."'); </script>";
+	
+		if(!$date_debut || !$date_fin){
+			$intervalleDate = $this->getResultatsDepistagesTable() ->getMinMaxDateResultatsDepistages();
+			$html .="<script> setTimeout(function(){ $('.champOP1 input').val('".$intervalleDate[0]."'); },100); </script>";
+			$html .="<script> setTimeout(function(){ $('.champOP2 input').val('".$intervalleDate[1]."'); },100); </script>";
+		}
+	
+		$html .="<script> var nbkligne = ".$kligne."; $('.tableauInfosTotalDepistage tr').html('".$piedTotal."'); </script>";
+	
+		$this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );
+		return $this->getResponse ()->setContent ( Json::encode ( $html ) );
+	}
+	
+	
+	
+	
+
+	public function infosStatistiquesParametreesAction($typeInfos, $date_debut=null, $date_fin=null)
+	{
+		if($typeInfos == 1){
+			if($date_debut && $date_fin){
+				$listeResultatsDepistages = $this->getResultatsDepistagesTable()->getResultatsDepistagesValidesPourUnePeriode($date_debut, $date_fin);
+			}else{
+				$listeResultatsDepistages = $this->getResultatsDepistagesTable()->getResultatsDepistagesValides();
+			}
+		}else if($typeInfos == 2){
+			if($date_debut && $date_fin){
+				$listeResultatsDepistages = $this->getResultatsDepistagesTable()->getResultatsDepistagesNonValidesPourUnePeriode($date_debut, $date_fin);
+			}else{
+				$listeResultatsDepistages = $this->getResultatsDepistagesTable()->getResultatsDepistagesNonValides();
+			}
+		}else{
+			if($date_debut && $date_fin){
+				$listeResultatsDepistages = $this->getResultatsDepistagesTable()->getResultatsDepistagesPourUnePeriode($date_debut, $date_fin);
+			}else{
+				$listeResultatsDepistages = $this->getResultatsDepistagesTable()->getResultatsDepistages();
+			}
+		}
+	
+		$tabAnnees = array();
+		$tabDonneesAnnuelle = array();
+		$tabMois = array();
+		$tabProfils = array();
+		$tabProfilsAnneesMois = array();
+	
+		for($i=0 ; $i<count($listeResultatsDepistages) ; $i++){
+	
+			$annee_naissance = $listeResultatsDepistages[$i]['annee_prelevement'];
+			if(!in_array($annee_naissance, $tabAnnees)){
+				$tabAnnees[] = $annee_naissance;
+				$tabDonneesAnnuelle[$annee_naissance] = array();
+				$tabMois[$annee_naissance] = array();
+			}
+	
+			$mois_naissance = $listeResultatsDepistages[$i]['mois_prelevement'];
+			$tabDonneesAnnuelle[$annee_naissance][] = $mois_naissance;
+	
+			if(!in_array($mois_naissance, $tabMois[$annee_naissance])){
+				$tabMois[$annee_naissance][] = $mois_naissance;
+				$tabProfilsAnneesMois[$annee_naissance][$mois_naissance] = array();
+			}
+	
+			$profil = $listeResultatsDepistages[$i]['profil'];
+			$tabProfilsAnneesMois[$annee_naissance][$mois_naissance][] = $profil;
+	
+			if(!in_array($profil, $tabProfils)){
+				$tabProfils[] = $profil;
+			}
+	
+		}
+		sort($tabProfils);
+	
+		return array($tabAnnees, $tabDonneesAnnuelle, $tabMois, $tabProfils, $tabProfilsAnneesMois);
+	}
+	
+	
+	
+	//impression des informations statistiques
+	//impression des informations statistiques
+	public function imprimerInformationsStatistiquesDepistagesAction(){
+		$user = $this->layout()->user;
+		$nomService = $user['NomService'];
+		$infosComp['dateDuJour'] = (new \DateTime ())->format( 'd/m/Y' );
+			
+		$date_debut = $this->params ()->fromPost (  'date_debut' );
+		$date_fin = $this->params ()->fromPost (  'date_fin' );
+		$typeInfos = $this->params ()->fromPost ( 'typeInfos', 0 );
+		
+		$periodePrelevement = array();
+		$infosStatistique = array();
+		
+		if($date_debut && $date_fin){
+			$infosStatistique = $this->infosStatistiquesParametreesAction($typeInfos, $date_debut, $date_fin);
+			$periodePrelevement[] = $date_debut;
+			$periodePrelevement[] = $date_fin;
+		}else{
+			$intervalleDate = $this->getResultatsDepistagesTable() ->getMinMaxDateResultatsDepistages();
+			$date_debut = $intervalleDate[0];
+			$date_fin = $intervalleDate[1];
+			
+			$periodePrelevement[] = $date_debut;
+			$periodePrelevement[] = $date_fin;
+			$infosStatistique = $this->infosStatistiquesParametreesAction($typeInfos, $date_debut, $date_fin);
+		}
+	
+		//var_dump($infosStatistique); exit();
+		
+		$pdf = new infosStatistiquePdf();
+		$pdf->SetMargins(13.5,13.5,13.5);
+		$pdf->setTabInformations($infosStatistique);
+			
+		$pdf->setNomService($nomService);
+		$pdf->setInfosComp($infosComp);
+		$pdf->setPeriodePrelevement($periodePrelevement);
+		$pdf->setTypeInfos($typeInfos);
+			
+		$pdf->ImpressionInfosStatistiques();
+		$pdf->Output('I');
+			
+	}
 	
 }

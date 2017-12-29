@@ -329,7 +329,7 @@ width: 100%; /* la largeur du champ input*/
 /* EN TETE*/
 #numero_dossier
 {
-	width: 13%;
+	width: 16%;
 }
 
 #nom
@@ -349,12 +349,12 @@ width: 100%; /* la largeur du champ input*/
 
 #adresse
 {
-	width: 23%;
+	width: 18%;
 }
 
 #date
 {
-	width: 15%;
+	width: 17%;
 }
 
 #effectuer
@@ -365,7 +365,6 @@ width: 100%; /* la largeur du champ input*/
 .liste_patient div{
 	height: 22px;
 	overflow: hidden;
-	
 }
 
 .liste_patient .adresseText{
@@ -444,6 +443,13 @@ table td p
 	max-width: 90%;
 	overflow: auto;
 }
+
+
+#affichageInfosStatistiques table td 
+{
+	vertical-align: middle;
+}
+
 
 #etat_civil{
 	width: 70%;

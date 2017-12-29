@@ -37,8 +37,6 @@ function getInfoAutresEvenements(id){
 
 function scriptHistoriqueTerrainParticulier(){
 	
-	$( "#tabsAntecedents" ).tabs();
-	
 	//CONSULTATION
 	//CONSULTATION
 	$("#titreTableauConsultation").toggle(false);
@@ -68,15 +66,22 @@ function scriptHistoriqueTerrainParticulier(){
 		 });
 	});
 	
-	$("#TerminerConsultation").click(function(){
-		$("#boutonTerminerConsultation").fadeOut();
-		$(".pager").fadeOut();
-		$("#titreTableauConsultation").fadeOut();
-		$("#ListeCons").fadeOut();
-		$("#ListeConsultationPatient").fadeOut(function(){ 
-		    $("#MenuAntecedent").fadeIn("fast");
+	setTimeout(function(){ 
+		$(".TerminerConsultation" ).html("<button id='TerminerConsultation' style='height:35px;'>Terminer</button>"); 
+
+		$("#TerminerConsultation").click(function(){
+			$("#boutonTerminerConsultation").fadeOut();
+			$(".pager").fadeOut();
+			$("#titreTableauConsultation").fadeOut();
+			$("#ListeCons").fadeOut();
+			$("#ListeConsultationPatient").fadeOut(function(){ 
+				$("#MenuAntecedent").fadeIn("fast");
+			});
+		
+			return false;
 		});
-	});
+	
+	},5000);
 	
 	//HOSPITALISATION
 	//HOSPITALISATION
@@ -89,15 +94,21 @@ function scriptHistoriqueTerrainParticulier(){
 		 });
 	});
 	
-	$("#TerminerHospitalisation").click(function(){
-		$("#boutonTerminerHospitalisation").fadeOut();
-		$("#ListeHospitalisation").fadeOut();
-		$("#ListeHospi").fadeOut();
-		$("#titreTableauHospitalisation").fadeOut(function(){ 
-		    $("#MenuAntecedent").fadeIn("fast");
-		});
-	});
+	setTimeout(function(){ 
+		$(".TerminerHospitalisation" ).html("<button id='TerminerHospitalisation' style='height:35px;'>Terminer</button>"); 
 	
+		$("#TerminerHospitalisation").click(function(){
+			$("#boutonTerminerHospitalisation").fadeOut();
+			$("#ListeHospitalisation").fadeOut();
+			$("#ListeHospi").fadeOut();
+			$("#titreTableauHospitalisation").fadeOut(function(){ 
+				$("#MenuAntecedent").fadeIn("fast");
+			});
+		
+			return false;
+		});
+
+	},5000);
 	
 	//ANALYSES
 	//ANALYSES
@@ -114,15 +125,19 @@ function scriptHistoriqueTerrainParticulier(){
 		 });
 	});
 	
-	$("#boutonTerminerAnalyses").click(function(){
-		$("#boutonTerminerAnalyses").fadeOut();
-		$("#titreTableauAnalyses").fadeOut(false);
-		$("#TabAnalyses").fadeOut(function(){ 
-		    $("#MenuAntecedent").fadeIn("fast");
+	setTimeout(function(){ 
+		$(".TerminerAnalyses" ).html("<button id='TerminerAnalyses' style='height:35px;'>Terminer</button>"); 
+	
+		$("#TerminerAnalyses").click(function(){
+			$("#boutonTerminerAnalyses").fadeOut();
+			$("#titreTableauAnalyses").fadeOut(false);
+			$("#TabAnalyses").fadeOut(function(){ 
+				$("#MenuAntecedent").fadeIn("fast");
+			});
+			
+			return false;
 		});
-	});
-	
-	
+	},5000);
 	
 	//HISTOIRE DE LA MALADIE
 	//HISTOIRE DE LA MALADIE
@@ -139,14 +154,19 @@ function scriptHistoriqueTerrainParticulier(){
 		 });
 	});
 	
-	$("#boutonTerminerHistoireMaladie").click(function(){
-		$("#boutonTerminerHistoireMaladie").fadeOut();
-		$("#titreTableauHistoireMaladie").fadeOut(false);
-		$("#TabHistoireMaladie").fadeOut(function(){ 
-		    $("#MenuAntecedent").fadeIn("fast");
-		});
-	});
+	setTimeout(function(){ 
+		$(".TerminerHistoireMaladie" ).html("<button id='TerminerHistoireMaladie' style='height:35px;'>Terminer</button>"); 
 	
+		$("#TerminerHistoireMaladie").click(function(){
+			$("#boutonTerminerHistoireMaladie").fadeOut();
+			$("#titreTableauHistoireMaladie").fadeOut(false);
+			$("#TabHistoireMaladie").fadeOut(function(){ 
+				$("#MenuAntecedent").fadeIn("fast");
+			});
+	
+			return false;
+		});
+	},5000);
 	
  /*************************************************************************************************************/
  
@@ -188,11 +208,17 @@ function scriptHistoriqueTerrainParticulier(){
 			 });
 		});
 		
-		$("#TerminerHabitudeDeVie").click(function(){
-			$("#AntecedentObstetrique").fadeOut(function(){ 
-				 $("#MenuAntecedentPersonnel").fadeIn("fast");
-			 });
-		});
+		setTimeout(function(){ 
+			$(".TerminerAntecedentObstetrique" ).html("<button id='TerminerAntecedentObstetrique' style='height:35px;'>Terminer</button>"); 
+			$("#TerminerAntecedentObstetrique").click(function(){
+				$("#AntecedentObstetrique").fadeOut(function(){ 
+					 $("#MenuAntecedentPersonnel").fadeIn("fast");
+				 });
+
+				return false;
+			});
+		},5000);
+
 		
 		//ANTECEDENTS MEDICAUX
 		//ANTECEDENTS MEDICAUX
@@ -202,11 +228,18 @@ function scriptHistoriqueTerrainParticulier(){
 			 });
 		});
 		
-		$("#TerminerAntecedentPerineonatale").click(function(){
-			$("#AntecedentPerineonatale").fadeOut(function(){ 
-				 $("#MenuAntecedentPersonnel").fadeIn("fast");
-			 });
-		});
+		setTimeout(function(){ 
+			$(".TerminerAntecedentPerineonatale" ).html("<button id='TerminerAntecedentPerineonatale' style='height:35px;'>Terminer</button>"); 
+		
+			$("#TerminerAntecedentPerineonatale").click(function(){
+				$("#AntecedentPerineonatale").fadeOut(function(){ 
+					$("#MenuAntecedentPersonnel").fadeIn("fast");
+				});
+				
+				return false;
+			});
+		},5000);
+		
 		
 		//ANTECEDENTS CHIRURGICAUX
 		//ANTECEDENTS CHIRURGICAUX
@@ -216,11 +249,17 @@ function scriptHistoriqueTerrainParticulier(){
 			 });
 		});
 		
-		$("#TerminerAntecedentNutritionnel").click(function(){
-			$("#AntecedentNutritionnel").fadeOut(function(){ 
-				 $("#MenuAntecedentPersonnel").fadeIn("fast");
-			 });
-		});
+		setTimeout(function(){ 
+			$(".TerminerAntecedentNutritionnel" ).html("<button id='TerminerAntecedentNutritionnel' style='height:35px;'>Terminer</button>"); 
+		
+			$("#TerminerAntecedentNutritionnel").click(function(){
+				$("#AntecedentNutritionnel").fadeOut(function(){ 
+					$("#MenuAntecedentPersonnel").fadeIn("fast");
+				});
+				
+				return false;
+			});
+		},5000);
 		
 		//ANTECEDENTS CHIRURGICAUX
 		//ANTECEDENTS CHIRURGICAUX
@@ -244,12 +283,17 @@ function scriptHistoriqueTerrainParticulier(){
 				 });
 			}); 
 			
-			$("#TerminerAntecedentsFamiliaux").click(function(){
-				$("#AntecedentsFamiliaux").fadeOut(function(){ 
-					 $("#MenuTerrainParticulier").fadeIn("fast");
-				 });
-			}); 
-		
+			setTimeout(function(){ 
+				$(".TerminerAntecedentsFamiliaux" ).html("<button id='TerminerAntecedentsFamiliaux' style='height:35px;'>Terminer</button>"); 
+			
+				$("#TerminerAntecedentsFamiliaux").click(function(){
+					$("#AntecedentsFamiliaux").fadeOut(function(){ 
+						$("#MenuTerrainParticulier").fadeIn("fast");
+					});
+
+					return false;
+				}); 
+			},5000);
 		
 		scriptAuClick();
 
@@ -257,175 +301,7 @@ function scriptHistoriqueTerrainParticulier(){
 
 
 
-
-
 function scriptAuClick(){
-
-	//ANTECEDENT OBSTETRIQUE TESTER SI UNE HABITUDE EST COCHEE OU PAS
-	//ANTECEDENT OBSTETRIQUE TESTER SI UNE HABITUDE EST COCHEE OU PAS
-	//$("#AntecedentObstetrique input[name=testHV]").attr('checked', true);
-	
-//	if(temoinAlcoolique != 1){
-//		$("#dateDebAlcoolique, #dateFinAlcoolique").toggle(false);
-//	}
-//	if(temoinFumeurHV != 1){
-//		$("#dateDebFumeur, #dateFinFumeur, #nbPaquetJour, #nbPaquetAnnee").toggle(false);
-//		$('#nbPaquetFumeurHV').val("");
-//		$('#nbPaquetAnnee').toggle(false);
-//	}else{
-//		if(nbPaquetFumeurHV != 0 ){
-//			var nbPaquetAnnee = nbPaquetFumeurHV*365;
-//			$("#nbPaquetAnnee label").html("<span style='font-weight: bold; color: green;'>"+nbPaquetAnnee+"</span> paquets/an");
-//		}else{
-//			$('#nbPaquetFumeurHV').val("");
-//			$('#nbPaquetAnnee').toggle(false);
-//		}
-//	}
-//	if(temoinDroguerHV != 1){
-//		$("#dateDebDroguer, #dateFinDroguer").toggle(false);
-//	}
-//	
-//	$("#DivNoteAutresHV").toggle(false);
-//	
-//	if($('#DateDebutAlcooliqueHV').val() == '00/00/0000'){ $('#DateDebutAlcooliqueHV').val("");}
-//	if($('#DateFinAlcooliqueHV').val() == '00/00/0000'){ $('#DateFinAlcooliqueHV').val("");}
-//	$('#AntecedentObstetrique input[name=AlcooliqueHV]').click(function(){ 
-//		var boutons = $('#AntecedentObstetrique input[name=AlcooliqueHV]');
-//		if( boutons[1].checked){ $("#dateDebAlcoolique, #dateFinAlcoolique").toggle(true); }
-//		if(!boutons[1].checked){ $("#dateDebAlcoolique, #dateFinAlcoolique").toggle(false); }
-//	});
-//	
-//	if($('#DateDebutFumeurHV').val() == '00/00/0000'){ $('#DateDebutFumeurHV').val(""); }
-//	if($('#DateFinFumeurHV').val() == '00/00/0000'){ $('#DateFinFumeurHV').val(""); }
-//	$('#AntecedentObstetrique input[name=FumeurHV]').click(function(){
-//		var boutons = $('#AntecedentObstetrique input[name=FumeurHV]');
-//		if( boutons[1].checked){ $("#dateDebFumeur, #dateFinFumeur, #nbPaquetJour, #nbPaquetAnnee").toggle(true); }
-//		if(!boutons[1].checked){ $("#dateDebFumeur, #dateFinFumeur, #nbPaquetJour, #nbPaquetAnnee").toggle(false); }
-//		if($('#nbPaquetFumeurHV').val() == ""){ $('#nbPaquetAnnee').toggle(false);} 
-//	});
-//	
-//	$('#nbPaquetFumeurHV').keyup(function(){
-//		var valeur = $('#nbPaquetFumeurHV').val();
-//		if(isNaN(valeur/1) || valeur > 10){
-//			$('#nbPaquetFumeurHV').val("");
-//			valeur = null;
-//		}
-//		if(valeur){
-//			var nbPaquetAnnee = valeur*365;
-//			$("#nbPaquetAnnee").toggle(true);
-//			$("#nbPaquetAnnee label").html("<span style='font-weight: bold; color: green;'>"+nbPaquetAnnee+"</span> paquets/an");
-//		}else{
-//			$("#nbPaquetAnnee").toggle(false);
-//		}
-//	}); 
-//	
-//	if($('#DateDebutDroguerHV').val() == '00/00/0000'){ $('#DateDebutDroguerHV').val("");}
-//	if($('#DateFinDroguerHV').val() == '00/00/0000'){ $('#DateFinDroguerHV').val("");}
-//	$('#AntecedentObstetrique input[name=DroguerHV]').click(function(){
-//		var boutons = $('#AntecedentObstetrique input[name=DroguerHV]');
-//		if( boutons[1].checked){ $("#dateDebDroguer, #dateFinDroguer").toggle(true); }
-//		if(!boutons[1].checked){ $("#dateDebDroguer, #dateFinDroguer").toggle(false); }
-//	});
-//	
-//	$('#AntecedentObstetrique input[name=AutresHV]').click(function(){
-//		var boutons = $('#AntecedentObstetrique input[name=AutresHV]');
-//		if( boutons[1].checked){ $("#DivNoteAutresHV").toggle(true); }
-//		if(!boutons[1].checked){ $("#DivNoteAutresHV").toggle(false); }
-//	});
-//	
-//	//ANTECEDENTS MEDICAUX TESTER SI C'EST COCHE
-//	//ANTECEDENTS MEDICAUX TESTER SI C'EST COCHE
-//	if(temoinDiabeteAM != 1){
-//		$(".imageValiderDiabeteAM").toggle(false);
-//	}
-//	if(temoinhtaAM != 1){
-//		$(".imageValiderHtaAM").toggle(false);
-//	}
-//	if(temoindrepanocytoseAM != 1){
-//		$(".imageValiderDrepanocytoseAM").toggle(false);
-//	}
-//	if(temoindislipidemieAM != 1){
-//		$(".imageValiderDislipidemieAM").toggle(false);
-//	}
-//	if(temoinasthmeAM != 1){
-//		$(".imageValiderAsthmeAM").toggle(false);
-//	}
-//	
-//	$('#AntecedentPerineonatale input[name=DiabeteAM]').click(function(){
-//		var boutons = $('#AntecedentPerineonatale input[name=DiabeteAM]');
-//		if( boutons[1].checked){ $(".imageValiderDiabeteAM").toggle(true); }
-//		if(!boutons[1].checked){ $(".imageValiderDiabeteAM").toggle(false); }
-//	});
-//	
-//	$('#AntecedentPerineonatale input[name=htaAM]').click(function(){
-//		var boutons = $('#AntecedentPerineonatale input[name=htaAM]');
-//		if( boutons[1].checked){ $(".imageValiderHtaAM").toggle(true); }
-//		if(!boutons[1].checked){ $(".imageValiderHtaAM").toggle(false); }
-//	});
-//	
-//	$('#AntecedentPerineonatale input[name=drepanocytoseAM]').click(function(){
-//		var boutons = $('#AntecedentPerineonatale input[name=drepanocytoseAM]');
-//		if( boutons[1].checked){ $(".imageValiderDrepanocytoseAM").toggle(true); }
-//		if(!boutons[1].checked){ $(".imageValiderDrepanocytoseAM").toggle(false); }
-//	});
-//	
-//	$('#AntecedentPerineonatale input[name=dislipidemieAM]').click(function(){
-//		var boutons = $('#AntecedentPerineonatale input[name=dislipidemieAM]');
-//		if( boutons[1].checked){ $(".imageValiderDislipidemieAM").toggle(true); }
-//		if(!boutons[1].checked){ $(".imageValiderDislipidemieAM").toggle(false); }
-//	});
-//	
-//	$('#AntecedentPerineonatale input[name=asthmeAM]').click(function(){
-//		var boutons = $('#AntecedentPerineonatale input[name=asthmeAM]');
-//		if( boutons[1].checked){ $(".imageValiderAsthmeAM").toggle(true); }
-//		if(!boutons[1].checked){ $(".imageValiderAsthmeAM").toggle(false); }
-//	});
-//	
-//	//GYNECO-OBSTETRIQUE TESTER SI C'EST COCHE
-//	//GYNECO-OBSTETRIQUE TESTER SI C'EST COCHE
-//	if(temoinMenarcheGO != 1){
-//		$("#NoteMonarche").toggle(false);
-//	}
-//	if(temoinGestiteGO != 1){
-//		$("#NoteGestite").toggle(false);
-//	}
-//	if(temoinPariteGO != 1){
-//		$("#NoteParite").toggle(false);
-//	}
-//	if(temoinCycleGO != 1){
-//		$("#RegulariteON, #DysmenorrheeON, #DureeGO").toggle(false);
-//	}
-//	$("#DivNoteAutresGO").toggle(false);
-//	
-//	$('#GynecoObstetrique input[name=MenarcheGO]').click(function(){
-//		var boutons = $('#GynecoObstetrique input[name=MenarcheGO]');
-//		if( boutons[1].checked){ $("#NoteMonarche").toggle(true); }
-//		if(!boutons[1].checked){ $("#NoteMonarche").toggle(false); }
-//	});
-//	
-//	$('#GynecoObstetrique input[name=GestiteGO]').click(function(){
-//		var boutons = $('#GynecoObstetrique input[name=GestiteGO]');
-//		if( boutons[1].checked){ $("#NoteGestite").toggle(true); }
-//		if(!boutons[1].checked){ $("#NoteGestite").toggle(false); }
-//	});
-//	
-//	$('#GynecoObstetrique input[name=PariteGO]').click(function(){
-//		var boutons = $('#GynecoObstetrique input[name=PariteGO]');
-//		if( boutons[1].checked){ $("#NoteParite").toggle(true); }
-//		if(!boutons[1].checked){ $("#NoteParite").toggle(false); }
-//	});
-//	
-//	$('#GynecoObstetrique input[name=CycleGO]').click(function(){
-//		var boutons = $('#GynecoObstetrique input[name=CycleGO]');
-//		if( boutons[1].checked){ $("#RegulariteON, #DysmenorrheeON, #DureeGO").toggle(true); }
-//		if(!boutons[1].checked){ $("#RegulariteON, #DysmenorrheeON, #DureeGO").toggle(false); }
-//	});
-//	
-//	$('#GynecoObstetrique input[name=AutresGO]').click(function(){
-//		var boutons = $('#GynecoObstetrique input[name=AutresGO]');
-//		if( boutons[1].checked){ $("#DivNoteAutresGO").toggle(true); }
-//		if(!boutons[1].checked){ $("#DivNoteAutresGO").toggle(false); }
-//	});
 	
 	//ANTECEDENTS FAMILIAUX TESTER SI C'EST COCHE
 	//ANTECEDENTS FAMILIAUX TESTER SI C'EST COCHE

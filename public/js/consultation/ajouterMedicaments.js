@@ -101,10 +101,10 @@ function nbListeMedicaments () {
 	return $("LesMedicaments").length;
 }
 
-
-//SUPPRIMER LE DERNIER ELEMENT
+function suppressionDerniereLigne() {
+	//SUPPRIMER LE DERNIER ELEMENT
 	//Au début on cache la suppression
-	$("#supprimer_medicament").click(function(){
+	$("#supprimer_medicament").click(function(){ 
 		//ON PEUT SUPPRIMER QUAND C'EST PLUS DE DEUX LISTE
 		if(nbListeMedicaments () >  1){$("#Medicament_"+nbListeMedicaments ()).remove();}
 		//ON CACHE L'ICONE SUPPRIMER QUAND ON A UNE LIGNE
@@ -114,12 +114,15 @@ function nbListeMedicaments () {
 			  "<img class='supprimerMedicament' style='margin-left: 5px; margin-top: 10px;' src='../images/images/sup2.png' />"
 			);
 		}
+		
 		//Afficher L'ICONE AJOUT QUAND ON A CINQ LIGNES
 		if((nbListeMedicaments()+1) == 6){
 			$("#ajouter_medicament").toggle(true);
 		}    
+		
 		Event.stopPropagation();
 	});
+}
 
 
 //FONCTION INITIALISATION (Par défaut)
@@ -147,11 +150,13 @@ function partDefautMedicament (Liste, ListeForme, ListeQuantite, n) {
     	$("#supprimer_medicament").toggle(true);
     } else {
     	$("#supprimer_medicament").toggle(false);
-      }
+    }
+    
+    suppressionDerniereLigne();
 }
 
 //SUPPRIMER ELEMENT SELECTIONNER
-function supprimer_medicament_selectionne(id) { 
+function supprimer_medicament_selectionne(id) {
 
 	for(var i = (id+1); i <= nbListeMedicaments(); i++ ){
 		var element = $('#medicament_0'+i).val();

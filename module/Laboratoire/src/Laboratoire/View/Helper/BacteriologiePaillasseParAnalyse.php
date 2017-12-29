@@ -234,10 +234,21 @@ class BacteriologiePaillasseParAnalyse
   			
   			//=== GESTION DES TITRES === GESTION DES TITRES
   			//=== GESTION DES TITRES === GESTION DES TITRES
-  			$this->_page->drawText( $libelleAnalyse ,
-  					$this->_leftMargin+10,
-  					$this->_yPosition - 3.5);
-
+  			if($idAnalyse == 60){
+  				$this->_page->drawText( 'SEROLOGIE SYPHYL.. BW (RPR/TPHA)' ,
+  						$this->_leftMargin+10,
+  						$this->_yPosition - 3.5);
+  			}else {
+  				$this->_page->drawText( $libelleAnalyse ,
+  						$this->_leftMargin+10,
+  						$this->_yPosition - 3.5);
+  			}
+  			/*
+  			 $this->_page->drawText( $libelleAnalyse ,
+  			 		$this->_leftMargin+10,
+  			 		$this->_yPosition - 3.5);
+  			*/
+  			
   			
  		    if($idAnalyse == 59){
   				$this->_page->drawText(" IGM ",
@@ -274,7 +285,7 @@ class BacteriologiePaillasseParAnalyse
  			//Affichage de la liste des noms des patients
  			//Affichage de la liste des noms des patients
  			//Affichage de la liste des noms des patients
- 			for($a = 0 ; $a < 36 ; $a++){
+ 			for($a = 0 ; $a < count($idpatient) && $a < 36 ; $a++){
  				$this->_page->setLineColor(new ZendPdf\Color\Html('#cfcfcf'));
  				$this->_page->setLineWidth(0.5);
  				

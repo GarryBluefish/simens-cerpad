@@ -13,6 +13,8 @@ use Laboratoire\Model\ResultatDemandeAnalyse;
 use Zend\Db\TableGateway\TableGateway;
 use Laboratoire\Model\TriPrelevementTable;
 use Laboratoire\Model\TriPrelevement;
+use Laboratoire\Model\ResultatsDepistagesTable;
+use Laboratoire\Model\ResultatsDepistages;
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface, ViewHelperProviderInterface {
 
@@ -63,6 +65,17 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 							$resultSetPrototype = new ResultSet();
 							$resultSetPrototype->setArrayObjectPrototype ( new TriPrelevement() );
 							return new TableGateway( 'tri_prelevement', $dbAdapter, null, $resultSetPrototype );
+						},
+						'Laboratoire\Model\ResultatsDepistagesTable' => function ($sm) {
+							$tableGateway = $sm->get ( 'ResultatsDepistagesTableGateway' );
+							$table = new ResultatsDepistagesTable($tableGateway);
+							return $table;
+						},
+						'ResultatsDepistagesTableGateway' => function ($sm) {
+							$dbAdapter = $sm->get ( 'Zend\Db\Adapter\Adapter' );
+							$resultSetPrototype = new ResultSet();
+							$resultSetPrototype->setArrayObjectPrototype ( new ResultatsDepistages());
+							return new TableGateway ( 'demande_analyse', $dbAdapter, null, $resultSetPrototype );
 						},
  				)
 		);

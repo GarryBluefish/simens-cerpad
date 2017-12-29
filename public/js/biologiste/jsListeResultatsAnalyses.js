@@ -403,13 +403,13 @@
     	
     }
     
-    //Validation des résultats des analyses
-    //Validation des résultats des analyses
-    //Validation des résultats des analyses
+    //Validation des résultats des analyses sur les listes
+    //Validation des résultats des analyses sur les listes
+    //Validation des résultats des analyses sur les listes
     function validerResultatAnalyse(id)
     {
     	$('#resultat_existe'+id).w2overlay({ html: "" +
-    		"" +
+    		"<style> .w2ui-overlay{ margin-left: 20px; } </style>" +
   			"<div style='border-bottom:1px solid green; height: 30px; background: #f9f9f9; width: 180px; text-align:center; padding-top: 10px; font-size: 13px; color: green; font-weight: bold;'>Valider l'analyse</div>" +
   			"<div style='height: 50px; width: 180px; padding-top:10px; text-align:center;'>" +
   			"<button class='btn' style='cursor:pointer;' onclick='popupFermer(); return false;'>Non</button>" +
@@ -447,11 +447,46 @@
     	
     }
     
+    //Validation des resultats des analyses sur l'interface de visualisation
+    //Validation des resultats des analyses sur l'interface de visualisation
+    //Validation des resultats des analyses sur l'interface de visualisation
+    function validerResultatAnalyseInterfaceVisual(id)
+    {
+    	$('#resultat_existe_interface_visual_'+id).w2overlay({ html: "" +
+    		"<style> .w2ui-overlay{ margin-left: -30px; } </style>" +
+  			"<div style='border-bottom:1px solid green; height: 30px; background: #f9f9f9; width: 180px; text-align:center; padding-top: 10px; font-size: 13px; color: green; font-weight: bold;'>Valider l'analyse</div>" +
+  			"<div style='height: 50px; width: 180px; padding-top:10px; text-align:center;'>" +
+  			"<button class='btn' style='cursor:pointer;' onclick='popupFermer(); return false;'>Non</button>" +
+  			"<button class='btn' style='cursor:pointer;' onclick='validationResultatInterfaceVisual("+id+"); return false;'>Oui</button>" +
+  			"</div>" +
+  			"" 
+    	});
+    	
+    }
     
     
-    
-    
-    
+    function validationResultatInterfaceVisual(iddemande) { 
+
+    	$('.resultat_existe_interface_visual_'+iddemande).html("<img  src='../images_icons/tick_16.png' style='float: right; padding-right: 10px;' >");
+    	$('.resultat_existe'+iddemande).html("<img  src='../images_icons/tick_16.png' >");
+    	$(null).w2overlay(null); 
+    	
+        $.ajax({
+            type: 'POST',
+            url: tabUrl[0]+'public/biologiste/valider-demande' ,
+            data:'iddemande='+iddemande,
+            success: function(data) {
+            	     
+            	var result = jQuery.parseJSON(data);
+            	if(result == 0){
+            		//$("#resultatsAnalyses").dialog('close');
+            	    $(location).attr("href",tabUrl[0]+'public/biologiste/liste-resultats-analyses');
+            	}
+            	
+            }
+        });
+    	
+    }
     
     
     

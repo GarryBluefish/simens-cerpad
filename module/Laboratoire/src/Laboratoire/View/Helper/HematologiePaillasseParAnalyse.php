@@ -284,7 +284,7 @@ class HematologiePaillasseParAnalyse
  			//Affichage de la liste des noms des patients
  			//Affichage de la liste des noms des patients
  			//Affichage de la liste des noms des patients
- 			for($a = 0 ; $a < 36 ; $a++){
+ 			for($a = 0 ; $a < count($idpatient) && $a < 36 ; $a++){
  				$this->_page->setLineColor(new ZendPdf\Color\Html('#cfcfcf'));
  				$this->_page->setLineWidth(0.5);
  				
@@ -295,10 +295,11 @@ class HematologiePaillasseParAnalyse
  						$this->_yPosition -2);
  				
  				$typepatient = "E";
+ 				//var_dump(count($idpatient)); exit();
  				if(in_array($idpatient[$a], $this->_depistage)){
  					$typepatient = "I";
  				}
-
+ 				
  				$this->getStyle7();
  				$this->_page->drawText($numOrdrePatient[$a].'-'.$typepatient,
  						$this->_leftMargin+10,
@@ -308,7 +309,7 @@ class HematologiePaillasseParAnalyse
  				if($conformite[$a] == 0){
  					$conforme = "n";
  				}
-
+ 				
  				$this->_page->setFillColor(new ZendPdf\Color\Html('black'));
  				$this->getNewTime();
   				$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $listeNom[$a]."   ".$prenom[$a]),

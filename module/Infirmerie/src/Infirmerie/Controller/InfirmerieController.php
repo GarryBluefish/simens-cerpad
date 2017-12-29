@@ -755,7 +755,7 @@ class InfirmerieController extends AbstractActionController {
 		$html .="<form  id='formEnregistrementBilan' method='post' action='../infirmerie/enregistrer-bilan'>";
 		$html .= $formHidden($form->get( 'idfacturation' )); 
 		
-		$html .="<table id='form_patient' style='margin-top:10px; margin-left:17.5%; width: 80%; margin-bottom: 10px;'>
+		$html .="<table id='form_patient' style='margin-top:10px; margin-left:17.5%; width: 80%;'>
 		           <tr>
 		             <td class='comment-form-patient reductText' style='width: 25%; vertical-align:top; margin-right:10px; '>" . $formRow($form->get ( 'nb_tube' )) . $formText($form->get ( 'nb_tube' )) . "</td>
 		             <td class='comment-form-patient reductText' style='width: 25%; vertical-align:top; margin-right:10px; '>" . $formRow($form->get ( 'date_heure' )) . $formText($form->get ( 'date_heure' )) . "</td>
@@ -791,8 +791,8 @@ class InfirmerieController extends AbstractActionController {
 		$html .="</table>";
 		
 		
-		$html .="<table id='form_patient' style='margin-top:10px; margin-left:17.5%; width: 80%; margin-bottom: 20px;'>
-		           <tr>
+		$html .="<table id='form_patient' style='margin-left:17.5%; width: 80%; border-top: 1px solid #cccccc;'>
+		           <tr style='background: gree;'>
 		             <td class='comment-form-patient reductSelect' style='width: 18%; vertical-align:top; margin-right:10px;'>" . $formRow($form->get ( 'difficultes' )) . $formSelect($form->get ( 'difficultes' )) . "</td>
 		             <td class='comment-form-patient reductTextarea' style='background: re; width: 32%; vertical-align:top; margin-right:10px;'>" . $formRow($form->get ( 'difficultes_prelevement' )) . $formTextarea($form->get ( 'difficultes_prelevement' )) . "</td>
 		             <td class='comment-form-patient reductSelect' style='width: 20%; vertical-align:top; margin-right:10px;'>" . $formRow($form->get ( 'transfuser' )) . $formSelect($form->get ( 'transfuser' )) . "</td>
@@ -800,10 +800,11 @@ class InfirmerieController extends AbstractActionController {
 		           </tr>";
 		$html .="</table>";
 		
-		$html .="<table id='form_patient' style='margin-top:10px; margin-left:17.5%; width: 80%; margin-bottom: 20px;'>
-		           <tr>
-		             <td class='comment-form-patient ' style='width: 50%; vertical-align:top; margin-right:10px;'>" . $formRow($form->get ( 'diagnostic' )) . $formTextarea($form->get ( 'diagnostic' )) . "</td>
-		             <td class='comment-form-patient ' style='width: 50%; vertical-align:top; margin-right:10px;'>" . $formRow($form->get ( 'traitement' )) . $formTextarea($form->get ( 'traitement' )) . "</td>
+		$html .="<table id='form_patient' style='margin-left:17.5%; width: 80%; border-top: 1px solid #cccccc;'>
+		           <tr style='vertical-align: top; background: re;'>
+					 <td class='comment-form-patient ' style='width: 30%; vertical-align:top; margin-right:0px;'>" . $formRow($form->get ( 'origine_prelevement' )) . $formText($form->get ( 'origine_prelevement' )) . "</td>
+		             <td class='comment-form-patient ' style='width: 35%; vertical-align:top; margin-right:0px;'>" . $formRow($form->get ( 'diagnostic' )) . $formTextarea($form->get ( 'diagnostic' )) . "</td>
+		             <td class='comment-form-patient ' style='width: 35%; vertical-align:top; margin-right:0px;'>" . $formRow($form->get ( 'traitement' )) . $formTextarea($form->get ( 'traitement' )) . "</td>
 		           </tr>";
 		$html .="</table>";
 		
@@ -946,15 +947,19 @@ class InfirmerieController extends AbstractActionController {
 		$diagnostic = $this->params ()->fromPost ( 'diagnostic' );
 		$traitement = $this->params ()->fromPost ( 'traitement' );
 		$idfacturation = $this->params ()->fromPost ( 'idfacturation' );
+		$origine_prelevement = $this->params ()->fromPost ( 'origine_prelevement' );
+		$date_prelevement = (new DateHelper())->convertDateInAnglais( substr($date_heure, 0, 10) ); 
 		
 		$donnees = array (
 				'nb_tube' => $nb_tube,
 				'date_heure' => $date_heure,
+				'date_prelevement' => $date_prelevement,
 				'a_jeun' => $a_jeun,
 				'difficultes' => $difficultes,
 				'difficultes_prelevement' => $difficultes_prelevement,
 				'transfuser' => $transfuser,
 				'moment_transfusion' => $moment_transfusion,
+				'origine_prelevement' => $origine_prelevement,
 				'diagnostic' => $diagnostic,
 				'traitement' => $traitement,
 				
@@ -964,7 +969,7 @@ class InfirmerieController extends AbstractActionController {
 		);
 		
 		//Ajouter le bilan du prélèvement
-		$idbilan = $this->getBilanPrelevementTable() ->addBilanPrelevement( $donnees );
+		$idbilan = $this->getBilanPrelevementTable()->addBilanPrelevement( $donnees );
 		
 	    return $this->redirect()->toRoute('infirmerie', array('action' =>'liste-patient'));
 	}
@@ -1298,7 +1303,7 @@ class InfirmerieController extends AbstractActionController {
 		$html .="<form id='formEnregistrementModificationBilan' method='post' action='../infirmerie/modifier-bilan'>";
 		$html .= $formHidden($form->get( 'idfacturation' ));
 		
-		$html .="<table id='form_patient' style='margin-top:10px; margin-left:17.5%; width: 80%; margin-bottom: 10px;'>
+		$html .="<table id='form_patient' style='margin-top:10px; margin-left:17.5%; width: 80%;'>
 		           <tr>
 		             <td class='comment-form-patient reductText' style='width: 25%; vertical-align:top; margin-right:10px;'>" . $formRow($form->get ( 'nb_tube' )) . $formText($form->get ( 'nb_tube' )) . "</td>
 		             <td class='comment-form-patient reductText' style='width: 25%; vertical-align:top; margin-right:10px;'>" . $formRow($form->get ( 'date_heure' )) . $formText($form->get ( 'date_heure' )) . "</td>
@@ -1337,7 +1342,7 @@ class InfirmerieController extends AbstractActionController {
 		$html .="</table>";
 		
 		
-		$html .="<table id='form_patient' style='margin-top:10px; margin-left:17.5%; width: 80%; margin-bottom: 20px;'>
+		$html .="<table id='form_patient' style='margin-left:17.5%; width: 80%; border-top: 1px solid #cccccc;'>
 		           <tr>
 		             <td class='comment-form-patient reductSelect' style='width: 18%; vertical-align:top; margin-right:10px;'>" . $formRow($form->get ( 'difficultes' )) . $formSelect($form->get ( 'difficultes' )) . "</td>
 		             <td class='comment-form-patient reductTextarea' style='width: 32%; vertical-align:top; margin-right:10px; font-size: 10px;'>" . $formRow($form->get ( 'difficultes_prelevement' )) . $formTextarea($form->get ( 'difficultes_prelevement' )) . "</td>
@@ -1347,10 +1352,11 @@ class InfirmerieController extends AbstractActionController {
 		$html .="</table>";
 		
 		
-		$html .="<table id='form_patient' style='margin-top:10px; margin-left:17.5%; width: 80%; margin-bottom: 20px;'>
+		$html .="<table id='form_patient' style='margin-left:17.5%; width: 80%; border-top: 1px solid #cccccc;'>
 		           <tr>
-		             <td class='comment-form-patient ' style='width: 50%; vertical-align:top; margin-right:10px;'>" . $formRow($form->get ( 'diagnostic' )) . $formTextarea($form->get ( 'diagnostic' )) . "</td>
-		             <td class='comment-form-patient ' style='width: 50%; vertical-align:top; margin-right:10px;'>" . $formRow($form->get ( 'traitement' )) . $formTextarea($form->get ( 'traitement' )) . "</td>
+  					 <td class='comment-form-patient ' style='width: 30%; vertical-align:top; margin-right:0px;'>" . $formRow($form->get ( 'origine_prelevement' )) . $formText($form->get ( 'origine_prelevement' )) . "</td>
+		             <td class='comment-form-patient ' style='width: 35%; vertical-align:top; margin-right:10px;'>" . $formRow($form->get ( 'diagnostic' )) . $formTextarea($form->get ( 'diagnostic' )) . "</td>
+		             <td class='comment-form-patient ' style='width: 35%; vertical-align:top; margin-right:10px;'>" . $formRow($form->get ( 'traitement' )) . $formTextarea($form->get ( 'traitement' )) . "</td>
 		           </tr>";
 		$html .="</table>";
 		
@@ -1376,7 +1382,7 @@ class InfirmerieController extends AbstractActionController {
 				       if(transfuser == 0){ $('.reductSelect2 select').val('').attr({'disabled':true}); }	
 				       else{ $('.reductSelect2 select').val(".(int)$bilanPrelevement->moment_transfusion.").attr({'disabled':false}); } 
 				       		
-				       		
+				       $('#origine_prelevement').val('".preg_replace("/(\r\n|\n|\r)/", " ", str_replace("'", "\'", $bilanPrelevement->origine_prelevement))."');		
 				       $('#diagnostic').val('".preg_replace("/(\r\n|\n|\r)/", " ", str_replace("'", "\'", $bilanPrelevement->diagnostic))."');		
 				       $('#traitement').val('".preg_replace("/(\r\n|\n|\r)/", " ", str_replace("'", "\'", $bilanPrelevement->traitement))."');		
 				       		
@@ -1438,10 +1444,12 @@ class InfirmerieController extends AbstractActionController {
 		$diagnostic = $this->params ()->fromPost ( 'diagnostic' );
 		$traitement = $this->params ()->fromPost ( 'traitement' );
 		$idfacturation = $this->params ()->fromPost ( 'idfacturation' );
+		$date_prelevement = (new DateHelper())->convertDateInAnglais( substr($date_heure, 0, 10) );
 	
 		$donnees = array (
 				'nb_tube' => $nb_tube,
 				'date_heure' => $date_heure,
+				'date_prelevement' => $date_prelevement,
 				'a_jeun' => $a_jeun,
 				'difficultes' => $difficultes,
 				'difficultes_prelevement' => $difficultes_prelevement,
@@ -2443,6 +2451,7 @@ class InfirmerieController extends AbstractActionController {
 		
 		$nombrePatientDepistes = 0;
 		$kligne = 0;
+		$html .="<script> var Pile = new Array(); </script>";
 		
 		$html .="<div id='listeTableauInfosStatistiques'>
 		           <table class='tableauInfosStatistiques'>";
@@ -2464,12 +2473,20 @@ class InfirmerieController extends AbstractActionController {
 				           <td class="infosPath" style="width: 30%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: bold;">'.$tabDonneesAnnee[$mois].'</td>
 				           <td class="infosPath" style="width: 30%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 14px; font-weight: bold; color: red;">A renseigner</td>
 				         </tr>';
+					
+					$html .="<script> Pile.push({ y: ".$tabDonneesAnnee[$mois]." , label: '".$this->moisEnLettre($mois)." ".$annee."' }); </script>";
 				}else{
 					$html .='<tr style="width: 100%; " class="couleurLigne_'.$kligne.'">
 				           <td class="infosPath periodeInfosLigne" style="width: 40%; height: 40px; padding-left: 15px; font-family: police2; font-size: 20px;"><div style="width: 28%; height: 20px; float: left; text-align: center;"> du 1<sup>er</sup> au </div>'.' '.$dernierJourMois.' '. $this->moisEnLettre($mois).' '.$annee.' </td>
 				           <td class="infosPath" style="width: 30%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: bold;">'.$tabDonneesAnnee[$mois].'</td>
 				           <td class="infosPath" style="width: 30%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 12px; font-weight: bold;">-----</td>
 				         </tr>';
+					if(($ij+1) == count($tabIndexDonnees)){
+						$html .="<script> Pile.push({ y: ".$tabDonneesAnnee[$mois]." , label: '".$this->moisEnLettre($mois)." ".$annee."' }); </script>";
+					}else{
+						$html .="<script> Pile.push({ y: ".$tabDonneesAnnee[$mois]." , label: 'du 1er au ".$dernierJourMois." ".$this->moisEnLettre($mois)." ".$annee."' }); </script>";
+					}
+
 				}
 				
 				
@@ -2519,6 +2536,10 @@ class InfirmerieController extends AbstractActionController {
 		$html .="<script> $('.infosPathTotalDepiste span').html('".$nombrePatientDepistes."'); </script>";
 		$html .="<script> $('.champOP1 input, .champOP2 input').attr({'min':'".$intervalleDate[0]."', 'max':'".$intervalleDate[1]."'}); </script>";
 		
+		$control = new DateHelper();
+		$html .="<script> $('#dateDebutPeriodeDiag div').html('".$control->convertDate($intervalleDate[0])."'); </script>";
+		$html .="<script> $('#dateFinPeriodeDiag div').html('".$control->convertDate($intervalleDate[1])."'); </script>";
+		$html .="<script> var nbkligne = ".$kligne."; </script>";
 		
 		$this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );
 		return $this->getResponse ()->setContent ( Json::encode ( $html ) );
@@ -2565,6 +2586,7 @@ class InfirmerieController extends AbstractActionController {
 	
 		$nombrePatientDepistes = 0;
 		$kligne = 0;
+		$html .="<script> var Pile = new Array(); </script>";
 	
 		$html .="<div id='listeTableauInfosStatistiques'>
 		           <table class='tableauInfosStatistiques'>";
@@ -2584,12 +2606,22 @@ class InfirmerieController extends AbstractActionController {
 				           <td class="infosPath" style="width: 30%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: bold;">'.$tabDonneesAnnee[$mois].'</td>
 				           <td class="infosPath" style="width: 30%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 14px; font-weight: bold; color: red;">A renseigner</td>
 				         </tr>';
+					
+					$html .="<script> Pile.push({ y: ".$tabDonneesAnnee[$mois]." , label: '".$this->moisEnLettre($mois)." ".$annee."' }); </script>";
+				
 				}else{
 					$html .='<tr style="width: 100%; " class="couleurLigne_'.$kligne.'">
 				           <td class="infosPath infoPeriodeLibelle" style="width: 40%; height: 40px; padding-left: 15px; font-family: police2; font-size: 20px;"><div style="width: 28%; height: 20px; float: left; text-align: center;">du 1<sup>er</sup> au </div>'.$dernierJourMois.' '. $this->moisEnLettre($mois).' '.$annee.' </td>
 				           <td class="infosPath" style="width: 30%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: bold;">'.$tabDonneesAnnee[$mois].'</td>
 				           <td class="infosPath" style="width: 30%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 12px; font-weight: bold;">-----</td>
 				         </tr>';
+					
+					if(($ij+1) == count($tabIndexDonnees)){
+						$html .="<script> Pile.push({ y: ".$tabDonneesAnnee[$mois]." , label: '".$this->moisEnLettre($mois)." ".$annee."' }); </script>";
+					}else{
+						$html .="<script> Pile.push({ y: ".$tabDonneesAnnee[$mois]." , label: 'du 1er au ".$dernierJourMois." ".$this->moisEnLettre($mois)." ".$annee."' }); </script>";
+					}
+					
 				}
 	
 				if(($kligne%2)==0){
@@ -2643,6 +2675,11 @@ class InfirmerieController extends AbstractActionController {
 		
 		$html .="<script> $('.infosPathTotalDepiste span').html('".$nombrePatientDepistes."'); </script>";
 		$html .="<script> $('.champOP1 input, .champOP2 input').attr({'min':'".$intervalleDate[0]."', 'max':'".$intervalleDate[1]."'}); </script>";
+		
+		$control = new DateHelper();
+		$html .="<script> $('#dateDebutPeriodeDiag div').html('".$control->convertDate($date_debut)."'); </script>";
+		$html .="<script> $('#dateFinPeriodeDiag div').html('".$control->convertDate($date_fin)."'); </script>";
+		$html .="<script> var nbkligne = ".$kligne."; </script>";
 		
 		
 		$this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );

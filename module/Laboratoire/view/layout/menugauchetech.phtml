@@ -41,6 +41,12 @@ $(window).load(function () {
 	   </div>
 	   
 	</li>
+	
+	<!-- MENU *** AFFICHAGE - TABLEAU STATISTIQUE *** technicien -->
+	<li>
+	   <div style="margin-left: 15px; border: 0.5px dashed gray; width: 80%; margin-top: 25px;"> </div>
+	   <img onclick="affichageInfosDepistageMensuel();" style="margin-left: 15px; margin-top: 5px; margin-bottom: 5px; display: inline; cursor: pointer;" src='<?php echo $this->basePath().'/img/light/information.png'?>' />
+	</li>
 
 </ul>
 
@@ -89,3 +95,142 @@ return false;
 
 </script>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<?php echo $this->headScript()->appendFile($this->basePath().'/js/technicien/jsInfosStatistiquesDepistage.js'); ?>
+<?php echo $this->headLink()->appendStylesheet($this->basePath().'/css/technicien/styleInfosStatistiquesDepistage.css');?>
+<?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/jqueryCharts/jquery.canvasjs.min.js');?>
+
+<!--  
+*******************************************************************************************************************************
+*******************************************************************************************************************************
+-->
+
+<!-- GESTION DE L'INTERFACE D'AFFICHAGE DES RESULTATS STATISTIQUES -->
+<!-- GESTION DE L'INTERFACE D'AFFICHAGE DES RESULTATS STATISTIQUES -->
+<!-- GESTION DE L'INTERFACE D'AFFICHAGE DES RESULTATS STATISTIQUES -->
+
+
+<div id="affichageInfosStatistiques" title="Afficher des informations statistiques" style="display: none;" >
+
+<div class="optionsPeriode" align="center" style="margin-bottom: 10px;">
+    <div class="optionsPeriodePath" align="center" >
+       <form id="formOtionsPeriodePath" style="margin-top: -25px;">
+          <div class="champOP1">
+            <img onclick='imprimerInformationsStatistiques();' src='../images_icons/Apps-Pdf-B-icon-2.png' title='imprimer'>
+            <img onclick='afficherInformationsStatistiquesDiagramme();' class='infosDiagramme' src='../images_icons/81.png' style='width: 32px; height: 32px;' title='diagramme'>
+            <input type="date" required>
+          </div> 
+          <div class="champOP2"><input type="date" required><!--button onclick="getInfosStatistiquesDepistageParPeriode(); return false;">Afficher</button-->  
+            <span class='typeTR' title='Tous les r&eacute;sultats' onclick='afficherTousLesResultats();'>TR</span>
+            <span class='typeRV' title='R&eacute;sultats valid&eacute;s' onclick='afficherLesResultatsValides();'>R&#x2714;</span>
+            <span class='typeRNV' title='R&eacute;sultats non encore valid&eacute;s' onclick='afficherLesResultatsNonValides();'>R&#x2717;</span> 
+           
+          </div>
+       </form>
+    </div>    
+</div>
+
+<div class="zoneResultatsInfosStatiquesDepistage"></div>
+
+<div style='width: 100%;'>
+  <div class='affichageInfosTotalDepistage' style='height: 40px;'>
+    <table class='tableauInfosTotalDepistage' style="width: 100%;">
+	  <tr style="width: 100%;">
+
+	  </tr>
+    </table>
+  </div>
+</div>
+
+
+</div>
+
+<div  style="display: none;">
+<form id="imprimerInformationsStatistiques"> <button></button> </form>
+</div>
+
+
+<!-- FIN FIN GESTION DE L'INTERFACE D'AFFICHAGE DES RESULTATS STATISTIQUES -->
+<!-- FIN FIN GESTION DE L'INTERFACE D'AFFICHAGE DES RESULTATS STATISTIQUES -->
+<!-- FIN FIN GESTION DE L'INTERFACE D'AFFICHAGE DES RESULTATS STATISTIQUES -->
+
+
+
+<!-- GESTION DE L'INTERFACE D'AFFICHAGE DES DIAGRAMMES RESULTATS STATISTIQUES -->
+<!-- GESTION DE L'INTERFACE D'AFFICHAGE DES DIAGRAMMES RESULTATS STATISTIQUES -->
+<!-- GESTION DE L'INTERFACE D'AFFICHAGE DES DIAGRAMMES RESULTATS STATISTIQUES -->
+
+<div id="affichageInfosStatistiquesDiagramme" title="Affichage du diagramme des informations" style="display: none;">
+
+<div style="width: 100%; height: 45px; background: re;" align="center">
+   <table style='width: 90%;'> 
+      <tr style='width: 90%;' id='periodeDiagrammeAfficher'>
+        <td style='width: 50%; height: 30px;' id='dateDebutPeriodeDiag'><div style='float: right; height: 25px; background: #f1f1f1; margin-right: 2px;'></div></td> 
+        <td style='width: 50%; height: 30px;' id='dateFinPeriodeDiag'>
+           <div style='float: left; height: 25px; background: #f1f1f1; margin-left: 2px;'></div>
+           <img class='typeDiagrammeColumn iconeDiag' onclick='affichageDiagrammeColumn();' src='../images_icons/bande verticale 24.png' style='width: 24px; height: 24px;' title='bande verticale'>
+           <img class='typeDiagrammeBar iconeDiag' onclick='affichageDiagrammeBar();' src='../images_icons/bande horizontale 24.png' style='width: 24px; height: 24px;' title='bande horizontale'>
+           <img class='typeDiagrammePie iconeDiag' onclick='affichageDiagrammePie();' src='../images_icons/Actions-office-chart-pie-icon.png' style='width: 24px; height: 24px;' title='circulaire'>
+           <img class='typeDiagrammeLine iconeDiag' onclick='affichageDiagrammeLine();' src='../images_icons/Actions-office-chart-line-stacked-icon.png' style='width: 24px; height: 24px;' title='lin&eacute;aire'>
+        </td>
+      <tr> 
+   </table>
+</div>
+
+<div style="width: 100%; height: 460px; background: yello;"  align="center" >
+   <div id="diagrammeInfosStatistiques">
+     <table style="margin-top: 25px; margin-bottom: 15px;"> 
+       <tr> 
+          <td style="margin-top: 35px; border: 1px solid #ffffff; text-align: center;"> Chargement </td> 
+       </tr>  
+       <tr> 
+          <td align="center" style="border: 1px solid #ffffff; text-align: center;"> 
+             <img style="margin-top: 13px; width: 50px; height: 50px;" src="../images/loading/Chargement_1.gif" /> 
+          </td> 
+       </tr>
+     </table>
+   </div>
+</div>
+
+</div>
+
+
+<!-- FIN FIN GESTION DE L'INTERFACE D'AFFICHAGE DES DIAGRAMMES RESULTATS STATISTIQUES -->
+<!-- FIN FIN GESTION DE L'INTERFACE D'AFFICHAGE DES DIAGRAMMES RESULTATS STATISTIQUES -->
+<!-- FIN FIN GESTION DE L'INTERFACE D'AFFICHAGE DES DIAGRAMMES RESULTATS STATISTIQUES -->
+
+<script>
+ getInfosStatistiquesParDefaut();
+</script>

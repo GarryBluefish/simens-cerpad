@@ -108,3 +108,129 @@ function imprimerInformationsStatistiques(){
 	$("#imprimerInformationsStatistiques button").trigger('click');
 	
 }
+
+
+
+
+
+
+
+
+
+
+function afficherInformationsStatistiquesDiagramme(){
+	
+	if(nbkligne > 5){
+		var x=900;
+	}else{
+		var x=700;
+	}
+	
+	$( "#affichageInfosStatistiquesDiagramme" ).dialog({
+		resizable: false,
+	    height: 640,
+	    width: x,
+	    autoOpen: false,
+	    modal: true,
+	    buttons: {
+	        "Fermer": function() {
+              $( this ).dialog( "close" );
+	        }
+	    }
+	});
+  
+	$("#affichageInfosStatistiquesDiagramme").dialog('open');
+	affichageDiagrammeColumn();
+}
+
+function affichageDiagrammeColumn(){
+	$('.iconeDiag').css({'opacity': '0.4', 'color': 'white', 'box-shadow' : '0pt 2pt 6px rgba(0, 0, 0, 0.4)'});
+	$('.typeDiagrammeColumn').css({'opacity': '10', 'box-shadow' : '0pt 2pt 6px rgba(0, 0, 0, 0.7)'});
+	
+	$(document).ready(function($) {
+
+		function diagrammeInfosStatistiques() {
+			var diagrammeInfosStatistiques = new CanvasJS.Chart("diagrammeInfosStatistiques", {
+				data: [{
+					type: "column",
+					dataPoints: Pile,
+				}]
+
+			});
+			diagrammeInfosStatistiques.render();
+		}
+
+		diagrammeInfosStatistiques(); 
+
+	});
+	
+}
+
+function affichageDiagrammePie(){
+	$('.iconeDiag').css({'opacity': '0.4', 'color': 'white', 'box-shadow' : '0pt 2pt 6px rgba(0, 0, 0, 0.4)'});
+	$('.typeDiagrammePie').css({'opacity': '10', 'box-shadow' : '0pt 2pt 6px rgba(0, 0, 0, 0.7)'});
+	
+	$(document).ready(function($) {
+
+		function diagrammeInfosStatistiques() {
+			var diagrammeInfosStatistiques = new CanvasJS.Chart("diagrammeInfosStatistiques", {
+				data: [{
+					type: "pie",
+					dataPoints: Pile,
+				}]
+
+			});
+			diagrammeInfosStatistiques.render();
+		}
+
+		diagrammeInfosStatistiques(); 
+
+	});
+	
+}
+
+function affichageDiagrammeBar(){
+	$('.iconeDiag').css({'opacity': '0.4', 'color': 'white', 'box-shadow' : '0pt 2pt 6px rgba(0, 0, 0, 0.4)'});
+	$('.typeDiagrammeBar').css({'opacity': '10', 'box-shadow' : '0pt 2pt 6px rgba(0, 0, 0, 0.7)'});
+	
+	$(document).ready(function($) {
+
+		function diagrammeInfosStatistiques() {
+			var diagrammeInfosStatistiques = new CanvasJS.Chart("diagrammeInfosStatistiques", {
+				data: [{
+					type: "bar",
+					dataPoints: Pile,
+				}]
+
+			});
+			diagrammeInfosStatistiques.render();
+		}
+
+		diagrammeInfosStatistiques(); 
+
+	});
+	
+}
+
+function affichageDiagrammeLine(){
+	$('.iconeDiag').css({'opacity': '0.4', 'color': 'white', 'box-shadow' : '0pt 2pt 6px rgba(0, 0, 0, 0.4)'});
+	$('.typeDiagrammeLine').css({'opacity': '10', 'box-shadow' : '0pt 2pt 6px rgba(0, 0, 0, 0.7)'});
+	
+	$(document).ready(function($) {
+
+		function diagrammeInfosStatistiques() {
+			var diagrammeInfosStatistiques = new CanvasJS.Chart("diagrammeInfosStatistiques", {
+				data: [{
+					type: "line",
+					dataPoints: Pile,
+				}]
+
+			});
+			diagrammeInfosStatistiques.render();
+		}
+
+		diagrammeInfosStatistiques(); 
+
+	});
+	
+}

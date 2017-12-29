@@ -905,6 +905,10 @@ class BilanPrelevementTable {
  					else if ($aColumns[$i] == 'DateEnregistrementTri') {
  						$row[] = $Control->convertDateTimeHm($aRow[ 'DateEnregistrementTri' ]);
  					}
+ 					
+ 					else if ($aColumns[$i] == 'Adresse'){
+ 						$row[] = "<div>".$aRow[ $aColumns[$i]]."</div>";
+ 					}
  	
  					else if ($aColumns[$i] == 'id') {
  						$html  ="<infoBulleVue> <a id='".$aRow[ $aColumns[$i] ]."' href='javascript:visualiser(".$aRow[ 'id' ].");'>";
@@ -989,6 +993,63 @@ class BilanPrelevementTable {
  		return $tab;
  			
  	}
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	function pourCorrection(){
+ 		$liste_prelevement = $this->tableGateway->select()->toArray();
+ 		/**
+ 		 * Commenter le var_dump pour corriger la BD
+ 		 */
+ 		var_dump($liste_prelevement); exit();
+ 		
+ 		for($i=0; $i<count($liste_prelevement); $i++){
+ 			$date_convertie = (new DateHelper())->convertDateInAnglais( substr($liste_prelevement[$i]['date_heure'], 0, 10) );
+ 			$this->tableGateway->update(array('date_prelevement' => $date_convertie), array('idbilan' => $liste_prelevement[$i]['idbilan']) );
+ 		}
+ 		
+ 		return $this->tableGateway->select()->toArray();
+ 	} 
+ 	
  	
 }
 

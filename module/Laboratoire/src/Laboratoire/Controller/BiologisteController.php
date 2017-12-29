@@ -1863,8 +1863,11 @@ class BiologisteController extends AbstractActionController {
 	    	    $('#type_materiel_typage_hemoglobine').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	    	    $('#typage_hemoglobine').val('".$resultat['valeur']."');
 	    	    $('#autre_typage_hemoglobine').val('".$resultat['valeur_Hbarts']."');
+	    	   
+	    	    $('.iconeValidationInterfaceVisual').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
+	    
 	    return $html;
 	}
 	
@@ -6302,7 +6305,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'><div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_typage_hemoglobine' readonly> </div></td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;' class='iconeValidationInterfaceVisual' > </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
