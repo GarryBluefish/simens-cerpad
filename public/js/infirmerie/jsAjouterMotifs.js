@@ -5,29 +5,36 @@ var siege;
 var intensite;
 
 
-function listeMotifsConsultation(myArrayListeMotifCons){
+function getMotifAdmissionDouleurFievre(indexMotif){
+	
+	if(indexMotif == -1 ){
+		alert('Un autre motif à ajouter');
+	}
+	
+	//Dès que fièvre est selectionné mettre la température superieure à 38,5
+	if(indexMotif == 1){
+		$('#temperatureFievre, #temperature').val(38.5).trigger('click');
+	}
+}
+
+function listeMotifsConsultation(){
 	
 	  setTimeout(function(){
 		  $("#deuxiemeColonneIndicateur").html('<div id="artistiqueDesign" style="position: relative; background: fcfcfc; height: 40px; width: 50px;">  </div>');
 	  },1000);
 
 	
-	  $( "#respondeMotif input" ).autocomplete({
-		  source: myArrayListeMotifCons
-	  });
+	  $( "#respondeMotif select" ).change(function(){
 
-	  
-	  $( "#respondeMotif input" ).blur(function(){ 
-
-		  //Lorsqu'on sélectionne "Fièvre"
-		  //Lorsqu'on sélectionne "Fièvre"
-		  if($(this).val() == 'FiÃ¨vre'){
+		  //Lorsqu'on sélectionne "Fièvre" == 1
+		  //Lorsqu'on sélectionne "Fièvre" == 1
+		  if($(this).val() == 1){
 			  popListeMedicamentsFievre();
 		  }
 		  
-	   	  //Lorsqu'on sélectionne "Douleur"
-		  //Lorsqu'on sélectionne "Douleur"
-		  if($(this).val() == 'Douleur'){
+	   	  //Lorsqu'on sélectionne "Douleur" == 2
+		  //Lorsqu'on sélectionne "Douleur" == 2
+		  if($(this).val() == 2){
 			  var top   = $(this).position().top-55; 
 			  var right = $(this).position().right; 
 			  
@@ -35,7 +42,6 @@ function listeMotifsConsultation(myArrayListeMotifCons){
 			  $("#zoneTableauMotifDouleur").html($('#tableauMotifDouleur').html());
 			 
 			  entre = 1;
-			  listeSiege(myArrayListeSiege);
 			  recupDonnees();
 			  $( "#siege" ).val(siege);
 			  $( "#intensite" ).val(intensite);
@@ -47,9 +53,11 @@ function listeMotifsConsultation(myArrayListeMotifCons){
 		  }
 		  
 		  
-	  }).click(function(){
+	  }).click(function(){ 
 		
-		  if($(this).val() == 'Douleur'){ 
+		  //Lorsqu'on sélectionne "Douleur"
+		  //Lorsqu'on sélectionne "Douleur"
+		  if($(this).val() == 2){ 
 			  var top   = $(this).position().top-55; 
 			  var right = $(this).position().right; 
 			  
@@ -57,7 +65,6 @@ function listeMotifsConsultation(myArrayListeMotifCons){
 			  $("#zoneTableauMotifDouleur").html($('#tableauMotifDouleur').html());
 
 			  entre = 1;
-			  listeSiege(myArrayListeSiege);
 			  recupDonnees();
 			  $( "#siege" ).val(siege);
 			  $( "#intensite" ).val(intensite);
@@ -65,19 +72,11 @@ function listeMotifsConsultation(myArrayListeMotifCons){
 			  stopPropagation();
 		  }
 		  
-		  if(entre == 0){ $("#deuxiemeColonneIndicateur").html(""); }
+		  if(entre == 0){ $("#deuxiemeColonneIndicateur").html('<div id="artistiqueDesign" style="position: relative; background: fcfcfc; height: 40px; width: 50px;">  </div>'); }
 	  });
 	  
 }
 
-
-function listeSiege(myArrayListeSiege){
-	
-	$( "#siege" ).autocomplete({
-		source: myArrayListeSiege
-	});
-	  
-}
 
 function placeSiegeDouleur(i, pos, val, T){
 	if(i==1){
@@ -130,7 +129,7 @@ function popListeMedicaments(){
 function listeMedicamentsFievre(){
 	  $( "#listeDesMedicamentsFievre" ).dialog({
 	    resizable: false,
-	    height:310,
+	    height:330,
 	    width:700,
 	    autoOpen: false,
 	    modal: true,
@@ -152,7 +151,7 @@ function listeMedicamentsFievre(){
 function listeMedicaments(){
 	  $( "#listeDesMedicaments" ).dialog({
 	    resizable: false,
-	    height:470,
+	    height:480,
 	    width:700,
 	    autoOpen: false,
 	    modal: true,
@@ -258,7 +257,7 @@ function supprimerMotif(){
 		if(nbChampMotif == 4){
 			$('#ajouter_motif_img').toggle(true);
 		}
-		//alert('c bas');
+		
 		//Faire remonter les infos complémentaires sur la douleur
 		$('#motif_admission1, #motif_admission2, #motif_admission3, #motif_admission4, #motif_admission5').trigger('click');
 		

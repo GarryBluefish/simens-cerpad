@@ -84,63 +84,73 @@ class ConsultationForm extends Form {
 		 */
 		$this->add ( array (
 				'name' => 'motif_admission1',
-				'type' => 'Text',
+				'type' => 'Select',
 				'options' => array (
 						'label' => 'motif 1'
 				),
 				'attributes' => array (
 						'readonly' => 'readonly',
-						'id' => 'motif_admission1'
+						'id' => 'motif_admission1',
+						'class' => 'motif_admission_liste_fixe',
+						'onchange' => 'getMotifAdmissionDouleurFievre(this.value)',
 				)
 		) );
 		$this->add ( array (
 				'name' => 'motif_admission2',
-				'type' => 'Text',
+				'type' => 'Select',
 				'options' => array (
 						'label' => 'motif 2'
 				),
 				'attributes' => array (
 						'readonly' => 'readonly',
-						'id' => 'motif_admission2'
+						'id' => 'motif_admission2',
+						'class' => 'motif_admission_liste_fixe',
+						'onchange' => 'getMotifAdmissionDouleurFievre(this.value)',
 				)
 		) );
 		$this->add ( array (
 				'name' => 'motif_admission3',
-				'type' => 'Text',
+				'type' => 'Select',
 				'options' => array (
 						'label' => 'motif 3'
 				),
 				'attributes' => array (
 						'readonly' => 'readonly',
-						'id' => 'motif_admission3'
+						'id' => 'motif_admission3',
+						'class' => 'motif_admission_liste_fixe',
+						'onchange' => 'getMotifAdmissionDouleurFievre(this.value)',
 				)
 		) );
 		$this->add ( array (
 				'name' => 'motif_admission4',
-				'type' => 'Text',
+				'type' => 'Select',
 				'options' => array (
 						'label' => 'motif 4'
 				),
 				'attributes' => array (
 						'readonly' => 'readonly',
-						'id' => 'motif_admission4'
+						'id' => 'motif_admission4',
+						'class' => 'motif_admission_liste_fixe',
+						'onchange' => 'getMotifAdmissionDouleurFievre(this.value)',
 				)
 		) );
 		$this->add ( array (
 				'name' => 'motif_admission5',
-				'type' => 'Text',
+				'type' => 'Select',
 				'options' => array (
 						'label' => 'motif 5'
 				),
 				'attributes' => array (
 						'readonly' => 'readonly',
-						'id' => 'motif_admission5'
+						'id' => 'motif_admission5',
+						'class' => 'motif_admission_liste_fixe',
+						'onchange' => 'getMotifAdmissionDouleurFievre(this.value)',
 				)
 		) );
 		
 		$this->add ( array (
 				'name' => 'siege',
-				'type' => 'Text',
+				'type' => 'Select',
 				'options' => array (
 						'label' => iconv ( 'ISO-8859-1', 'UTF-8', 'Siège')
 				),
@@ -152,10 +162,11 @@ class ConsultationForm extends Form {
 				'name' => 'intensite',
 				'type' => 'number',
 				'options' => array (
-						'label' => iconv ( 'ISO-8859-1', 'UTF-8', 'Intensité'),
+						'label' => iconv ( 'ISO-8859-1', 'UTF-8', 'Intensité échelle (EVA)'),
 				),
 				'attributes' => array (
 						'id' => 'intensite',
+						'class' => 'intensiteClassStyle',
 						'max' => 10,
 						'min' => 1,
 						'step' => 'any',
@@ -194,8 +205,8 @@ class ConsultationForm extends Form {
 						'label' => 'Taille (cm)'
 				),
 				'attributes' => array (
-						'max' => 300,
-						'min' => 50,
+						'max' => 200,
+						'min' => 45,
 						'id' => 'taille',
 						'required' => true,
 				)
@@ -222,6 +233,8 @@ class ConsultationForm extends Form {
 						'label' => iconv ( 'ISO-8859-1', 'UTF-8', 'Périmètre cranien (cm)'),
 				),
 				'attributes' => array (
+						'min' => 30,
+						'max' => 55,
 						'id' => 'perimetre_cranien',
 				)
 		) );

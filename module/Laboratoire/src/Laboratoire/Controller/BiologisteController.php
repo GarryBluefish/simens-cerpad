@@ -1936,13 +1936,14 @@ class BiologisteController extends AbstractActionController {
 	            $html .=
 	            "<script>
 	              setTimeout(function(){ 
-	                $('#electro_hemo_plus').trigger('click'); 
 	                $('#electro_hemo_label_".($i+1)."').val('".$resultat[$i]['libelle']."');
 	                $('#electro_hemo_valeur_".($i+1)."').val('".$resultat[$i]['valeur']."');
+	                $('#electro_hemo_plus').trigger('click'); 
 	              }, 50);
 	    	    </script>";
 	        }
-	        $html .="<script> setTimeout(function(){ $('#electro_hemo_moins').trigger('click'); },50); </script>";
+	        
+	        $html .="<script> setTimeout(function(){ $('#electro_hemo_moins').trigger('click'); $('#electro_hemo_mp td').toggle(false); },50); </script>";
 	        
 	    }
 	    return $html;
@@ -4943,7 +4944,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
 	    $html .= "  <td style='width: 55%;'><label class='lab1' style='background: #f9f9f9; padding-top: 5px; width: 100%; margin-left: 8px;' ><span style='font-weight: bold;'> &raquo; Rapport: CHOL/HDL <input id='rapport_chol_hdl' type='number' step='any' readonly> </span></label></td>";
 	    $html .= "  <td style='width: 15%;'><label class='lab2' style='background: #f9f9f9; padding-top: 5px;'>  </label></td>";
-	    $html .= "  <td style='width: 30%;'><label class='lab3' style='background: #f9f9f9; padding-top: 5px; width: 75%;'> N: < 3,5 </label></td>";
+	    $html .= "  <td style='width: 30%;'><label class='lab3' style='background: #f9f9f9; padding-top: 5px; width: 75%;'> N: < 4,5 </label></td>";
 	    $html .= "</tr>";
 	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; '>";
@@ -5493,7 +5494,17 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "  <td style='width: 20%;'></td>";
 	    $html .= "</tr>";
 	    
-	    $html .= "</table> </td> </tr>";
+	    $html .= "</table> ";
+	    
+	    $html .= "<table id='conclusion_resultat_electro_hemo' style='width: 100%; margin-left: 5px;'>";
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 55%;'><label class='lab1'><span style='font-weight: bold;'> Conclusion :  <input id='conclusion_electro_hemo_valeur' type='number' step='any' readonly > </span></label></td>";
+	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'>  </label></td>";
+	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 86%;'> </label></td>";
+	    $html .= "</tr>";
+	    $html .= "</table> ";
+	    
+	    $html .= "</td> </tr>";
 	    
 		return $html;
 	}
@@ -5507,55 +5518,55 @@ class BiologisteController extends AbstractActionController {
 	
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    $html .= "<tr class='ligneAnanlyse labelTypeMateriel' style='width: 100%; font-family: times new roman; font-size: 15px; margin-top: -45px;'>";
-	    $html .= "  <td style='width: 55%;'> <label> Mat&eacute;riel utilis&eacute;</label> </td>";
+	    $html .= "  <td style='width: 45%;'> <label> Mat&eacute;riel utilis&eacute;</label> </td>";
 	    $html .= "  <td colspan='2' style='width: 35%;'> </td>";
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
-	    $html .= "  <td style='width: 45%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_electro_proteine' tabindex='1' readonly> </div> </td>";
+	    $html .= "  <td style='width: 35%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_electro_proteine' tabindex='1' readonly> </div> </td>";
 	    $html .= "  <td colspan='3' style='width: 45%;'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 45%;'><label><span style='font-weight: bold; '> Albumine <input id='albumine' type='number' step='any' tabindex='1' readonly > </span></label></td>";
+	    $html .= "  <td style='width: 35%;'><label><span style='font-weight: bold; '> Albumine <input id='albumine' type='number' step='any' tabindex='1' readonly > </span></label></td>";
 	    $html .= "  <td style='width: 10%;'><label style='padding-top: 5px;'> % </label></td>";
 	    $html .= "  <td style='width: 15%;'><label style='padding-top: 5px;'> <input id='albumine_abs' type='number' step='any' readonly='true' readonly > </label></td>";
-	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 50%; padding-left: 55px; font-size: 14px;'> 40,2 - 47,6 </label></td>";
+	    $html .= "  <td style='width: 40%;'><label style='padding-top: 5px; width: 50%; padding-left: 55px; font-size: 14px;'> 40,2 - 47,6 </label></td>";
 	    $html .= "</tr>";
 	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 45%;'><label><span style='font-weight: bold; '> Alpha 1 <input id='alpha_1' type='number' step='any' tabindex='2' readonly> </span></label></td>";
-	    $html .= "  <td style='width: 10%;'><label style='padding-top: 5px;'> % </label></td>";
-	    $html .= "  <td style='width: 15%;'><label style='padding-top: 5px;'> <input id='alpha_1_abs' type='number' step='any' readonly > </label></td>";
-	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 50%; padding-left: 55px; font-size: 14px;'> 2,1 - 3,5 </label></td>";
+	    $html .= "  <td ><label><span style='font-weight: bold; '> Alpha 1 <input id='alpha_1' type='number' step='any' tabindex='2' readonly> </span></label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px;'> % </label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px;'> <input id='alpha_1_abs' type='number' step='any' readonly > </label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px; width: 50%; padding-left: 55px; font-size: 14px;'> 2,1 - 3,5 </label></td>";
 	    $html .= "</tr>";
 	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 45%;'><label><span style='font-weight: bold; '> Alpha 2 <input id='alpha_2' type='number' step='any' tabindex='3' readonly > </span></label></td>";
-	    $html .= "  <td style='width: 10%;'><label style='padding-top: 5px;'> % </label></td>";
-	    $html .= "  <td style='width: 15%;'><label style='padding-top: 5px;'> <input id='alpha_2_abs' type='number' step='any' readonly  > </label></td>";
-	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 50%; padding-left: 55px; font-size: 14px;'> 5,1 - 8,5 </label></td>";
+	    $html .= "  <td ><label><span style='font-weight: bold; '> Alpha 2 <input id='alpha_2' type='number' step='any' tabindex='3' readonly > </span></label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px;'> % </label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px;'> <input id='alpha_2_abs' type='number' step='any' readonly  > </label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px; width: 50%; padding-left: 55px; font-size: 14px;'> 5,1 - 8,5 </label></td>";
 	    $html .= "</tr>";
 	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 45%;'><label><span style='font-weight: bold; '> Beta 1 <input id='beta_1' type='number' step='any' tabindex='4' readonly> </span></label></td>";
-	    $html .= "  <td style='width: 10%;'><label style='padding-top: 5px;'> % </label></td>";
-	    $html .= "  <td style='width: 15%;'><label style='padding-top: 5px;'> <input id='beta_1_abs' type='number' step='any' readonly > </label></td>";
-	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 50%; padding-left: 55px; font-size: 14px;'> 3,4 - 5,2 </label></td>";
+	    $html .= "  <td ><label><span style='font-weight: bold; '> Beta 1 <input id='beta_1' type='number' step='any' tabindex='4' readonly> </span></label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px;'> % </label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px;'> <input id='beta_1_abs' type='number' step='any' readonly > </label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px; width: 50%; padding-left: 55px; font-size: 14px;'> 3,4 - 5,2 </label></td>";
 	    $html .= "</tr>";
 	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 45%;'><label><span style='font-weight: bold; '> Beta 2 <input id='beta_2' type='number' step='any' tabindex='5' readonly> </span></label></td>";
-	    $html .= "  <td style='width: 10%;'><label style='padding-top: 5px;'> % </label></td>";
-	    $html .= "  <td style='width: 15%;'><label style='padding-top: 5px;'> <input id='beta_2_abs' type='number' step='any' readonly > </label></td>";
-	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 50%; padding-left: 55px; font-size: 14px;'> 2,3 - 4,7 </label></td>";
+	    $html .= "  <td ><label><span style='font-weight: bold; '> Beta 2 <input id='beta_2' type='number' step='any' tabindex='5' readonly> </span></label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px;'> % </label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px;'> <input id='beta_2_abs' type='number' step='any' readonly > </label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px; width: 50%; padding-left: 55px; font-size: 14px;'> 2,3 - 4,7 </label></td>";
 	    $html .= "</tr>";
 	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 45%;'><label><span style='font-weight: bold; '> Gamma <input id='gamma' type='number' step='any' tabindex='6' readonly > </span></label></td>";
-	    $html .= "  <td style='width: 10%;'><label style='padding-top: 5px;'> % </label></td>";
-	    $html .= "  <td style='width: 15%;'><label style='padding-top: 5px;'> <input id='gamma_abs' type='number' step='any' readonly > </label></td>";
-	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 50%; padding-left: 55px; font-size: 14px;'> 8,0 - 13,5 </label></td>";
+	    $html .= "  <td ><label><span style='font-weight: bold; '> Gamma <input id='gamma' type='number' step='any' tabindex='6' readonly > </span></label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px;'> % </label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px;'> <input id='gamma_abs' type='number' step='any' readonly > </label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px; width: 50%; padding-left: 55px; font-size: 14px;'> 8,0 - 13,5 </label></td>";
 	    $html .= "</tr>";
 	
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
@@ -5565,12 +5576,12 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
 	    $html .= "  <td colspan='2' ><label><span style='font-size: 16px;'> Proteine totale:  </span></label></td>";
 	    $html .= "  <td style='width: 15%;'><label style='padding-top: 5px;'> <input id='proteine_totale' type='number' step='any'  tabindex='7' readonly > </label></td>";
-	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 80%; font-size: 14px;'> g/dL </label></td>";
+	    $html .= "  <td style='width: 40%;'><label style='padding-top: 5px; width: 80%; font-size: 14px;'> g/dL </label></td>";
 	    $html .= "</tr>";
 
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
 	    $html .= "  <td colspan='3' ><label style='height: 80px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_electrophorese_proteine' style='max-height: 57px; min-height: 57px; max-width: 400px; min-width: 400px; margin-left: 30px;' tabindex='8'> </textarea> </label></td>";
-	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 80%; height: 80px; font-size: 14px;'>  </label></td>";
+	    $html .= "  <td style='width: 40%;'><label style='padding-top: 5px; width: 80%; height: 80px; font-size: 14px;'>  </label></td>";
 	    $html .= "</tr>";
 	    
 	    $html .= "</table> </td> </tr>";
@@ -6341,8 +6352,12 @@ class BiologisteController extends AbstractActionController {
 		$analysesImmunoHemato = array();
 		$analysesCytologie = array();
 		$analysesHemostase = array();
+		$analysesMetabolismeGlucidique = array();
+		$analysesBilanLipidique = array();
 		$analysesBilanHepatique = array();
 		$analysesBilanRenal = array();
+		$analysesSerologie = array();
+		$analysesTypageHemoProteine = array();
 		$analysesTypageHemoglobine = array();
 		
 		$resultatsAnalysesDemandees = array();
@@ -6472,10 +6487,79 @@ class BiologisteController extends AbstractActionController {
 				$analysesHemostase [] = 19;
 				$resultatsAnalysesDemandees[19] = $this->getResultatDemandeAnalyseTable()->getValeursFacteur9($iddemande);
 			}
+			
+			elseif($idanalyse == 20){ //D-DIMERES
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesHemostase [] = 20;
+				$resultatsAnalysesDemandees[20] = $this->getResultatDemandeAnalyseTable()->getValeursDDimeres($iddemande);
+			}
 			//=========================================================
 			//=========================================================
 			
 			
+			//METABOLISME GLUCIDIQUE --- METABOLISME GLUCIDIQUE --- METABOLISME GLUCIDIQUE
+			//METABOLISME GLUCIDIQUE --- METABOLISME GLUCIDIQUE --- METABOLISME GLUCIDIQUE
+			//METABOLISME GLUCIDIQUE --- METABOLISME GLUCIDIQUE --- METABOLISME GLUCIDIQUE
+			elseif($idanalyse == 21){ //Glycemie
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesMetabolismeGlucidique [] = 21;
+				$resultatsAnalysesDemandees[21] = $this->getResultatDemandeAnalyseTable()->getValeursGlycemie($iddemande);
+			}
+			elseif($idanalyse == 43){ //Hemoglobine glyquee
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesMetabolismeGlucidique [] = 43;
+				$resultatsAnalysesDemandees[43] = $this->getResultatDemandeAnalyseTable()->getValeursHemoglobineGlyqueeHBAC($iddemande);
+			}
+			
+			//=========================================================
+			//=========================================================
+			
+			
+			//BILAN LIPIDIQUE --- BILAN LIPIDIQUE --- BILAN LIPIDIQUE
+			//BILAN LIPIDIQUE --- BILAN LIPIDIQUE --- BILAN LIPIDIQUE
+			//BILAN LIPIDIQUE --- BILAN LIPIDIQUE --- BILAN LIPIDIQUE
+			elseif($idanalyse == 25){ //CHOLESTEROL TOTAL
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanLipidique  [] = 25;
+				$resultatsAnalysesDemandees[25] = $this->getResultatDemandeAnalyseTable()->getValeursCholesterolTotal($iddemande);
+			}
+			elseif($idanalyse == 26){ //TRIGLYCERIDES
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanLipidique  [] = 26;
+				$resultatsAnalysesDemandees[26] = $this->getResultatDemandeAnalyseTable()->getValeursTriglycerides($iddemande);
+			}
+			elseif($idanalyse == 27){ //CHOLESTEROL HDL
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanLipidique  [] = 27;
+				$resultatsAnalysesDemandees[27] = $this->getResultatDemandeAnalyseTable()->getValeursCholesterolHDL($iddemande);
+			}
+			elseif($idanalyse == 28){ //CHOLESTEROL LDL
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanLipidique  [] = 28;
+				$resultatsAnalysesDemandees[28] = $this->getResultatDemandeAnalyseTable()->getValeursCholesterolLDL($iddemande);
+			}
+			elseif($idanalyse == 29){ //CHOLESTEROL (TOTAL - HDL - LDL) Triglyceride
+				
+				//CHOLESTEROL TOTAL
+				$analysesBilanLipidique  [] = 25;
+				$resultatsAnalysesDemandees[25] = $this->getResultatDemandeAnalyseTable()->getValeursCholesterolTotal($iddemande);
+			
+			    //TRIGLYCERIDES
+				$analysesBilanLipidique  [] = 26;
+				$resultatsAnalysesDemandees[26] = $this->getResultatDemandeAnalyseTable()->getValeursTriglycerides($iddemande);
+					
+				//CHOLESTEROL HDL
+				$analysesBilanLipidique  [] = 27;
+				$resultatsAnalysesDemandees[27] = $this->getResultatDemandeAnalyseTable()->getValeursCholesterolHDL($iddemande);
+					
+				//CHOLESTEROL LDL
+				$analysesBilanLipidique  [] = 28;
+				$resultatsAnalysesDemandees[28] = $this->getResultatDemandeAnalyseTable()->getValeursCholesterolLDL($iddemande);
+					
+			}
+			//=========================================================
+			//=========================================================
+					
 			
 			//BILAN HEPATIQUE --- BILAN HEPATIQUE --- BILAN HEPATIQUE
 			//BILAN HEPATIQUE --- BILAN HEPATIQUE --- BILAN HEPATIQUE
@@ -6524,13 +6608,9 @@ class BiologisteController extends AbstractActionController {
 				$resultatsAnalysesDemandees[46] = $this->getResultatDemandeAnalyseTable()->getValeursAlbuminemie($iddemande);
 			}
 			
-			elseif($idanalyse == 46){ //ALBUMINEMIE
-				$analysesDemandees  [$j++] = $listeResultats[$i];
-				$analysesBilanRenal  [] = 46;
-				$resultatsAnalysesDemandees[46] = $this->getResultatDemandeAnalyseTable()->getValeursAlbuminemie($iddemande);
-			}
 			//=========================================================
 			//=========================================================
+			
 			
 			
 			elseif($idanalyse == 30){ //LIPIDES - TOTAUX
@@ -6546,6 +6626,54 @@ class BiologisteController extends AbstractActionController {
 			elseif($idanalyse == 57){ //RUBEOLE
 				$analysesDemandees  [$j++] = $listeResultats[$i];
 				$resultatsAnalysesDemandees[57] = $this->getResultatDemandeAnalyseTable()->getValeursRubeole($iddemande);
+			}
+			//=========================================================
+			//=========================================================
+			
+			
+			//SEROLOGIE  ---  SEROLOGIE  ---  SEROLOGIE
+			//SEROLOGIE  ---  SEROLOGIE  ---  SEROLOGIE
+			//SEROLOGIE  ---  SEROLOGIE  ---  SEROLOGIE
+			elseif($idanalyse == 53){ //CRP
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 53;
+				$resultatsAnalysesDemandees[53] = $this->getResultatDemandeAnalyseTable()->getValeursCrp($iddemande);
+			}
+			
+			elseif($idanalyse == 55){ //RF Waaler Rose
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 55;
+				$resultatsAnalysesDemandees[55] = $this->getResultatDemandeAnalyseTable()->getValeursRfWaalerRose($iddemande);
+			}
+			
+			elseif($idanalyse == 60){ //Serologie Syphilitique
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 60;
+				$resultatsAnalysesDemandees[60] = $this->getResultatDemandeAnalyseTable()->getValeursSerologieSyphilitique($iddemande);
+			}
+			
+			elseif($idanalyse == 61){ //ASLO
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 61;
+				$resultatsAnalysesDemandees[61] = $this->getResultatDemandeAnalyseTable()->getValeursAslo($iddemande);
+			}
+			//=========================================================
+			//=========================================================
+			
+			
+			//TYPAGE DE L'HEMOGLOBINE (Avec ELECTROPHORESE DE L'HEMOGLOBINE et DES PROTEINES)
+			//TYPAGE DE L'HEMOGLOBINE (Avec ELECTROPHORESE DE L'HEMOGLOBINE et DES PROTEINES)
+			//TYPAGE DE L'HEMOGLOBINE (Avec ELECTROPHORESE DE L'HEMOGLOBINE et DES PROTEINES)
+			elseif($idanalyse == 44){ //ELECTROPHORESE DE HEMOGLOBINE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesTypageHemoProteine[44] = 44;
+				$resultatsAnalysesDemandees[44] = $this->getResultatDemandeAnalyseTable()->getValeursElectrophoreseHemoglobine($iddemande);
+			}
+			
+			elseif($idanalyse == 45){ //ELECTROPHORESE DES PROTEINES
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesTypageHemoProteine[45] = 45;  
+				$resultatsAnalysesDemandees[45] = $this->getResultatDemandeAnalyseTable()->getValeursElectrophoreseProteines($iddemande);
 			}
 			//=========================================================
 			//=========================================================
@@ -6600,8 +6728,8 @@ class BiologisteController extends AbstractActionController {
 		//========= Créaton de la page 2 ========
 		//========= Créaton de la page 2 ========
 		
-		if($analysesImmunoHemato || $analysesCytologie || $analysesHemostase || 
-		   $analysesBilanHepatique || $analysesBilanRenal ){
+		if($analysesImmunoHemato || $analysesCytologie || $analysesHemostase || $analysesMetabolismeGlucidique ||
+		   $analysesBilanLipidique || $analysesBilanHepatique || $analysesBilanRenal || $analysesSerologie || $analysesTypageHemoProteine){
 			
 			$page2 = new ResultatsAnalysesDemandeesPdf();
 			
@@ -6626,6 +6754,18 @@ class BiologisteController extends AbstractActionController {
 			//GESTION DES ANALYSES DE L'HEMOSTASE
 			$page2->setAnalysesHemostase($analysesHemostase);
 			
+			//GESTION DES ANALYSES DU TYPAGE (Helectrophorèse)
+			//GESTION DES ANALYSES DU TYPAGE (Helectrophorèse)
+			$page2->setAnalysesTypageHemoProteine($analysesTypageHemoProteine);
+			
+			//GESTION DES ANALYSES DU METABOLISME GLUCIDIQUE
+			//GESTION DES ANALYSES DU METABOLISME GLUCIDIQUE
+			$page2->setAnalysesMetabolismeGlucidique($analysesMetabolismeGlucidique);
+				
+			//GESTION DES ANALYSES DU BILAN LIPIDIQUE
+			//GESTION DES ANALYSES DU BILAN LIPIDIQUE
+			$page2->setAnalysesBilanLipidique($analysesBilanLipidique);
+			
 			//GESTION DES ANALYSES DU BILAN HEPATIQUE
 			//GESTION DES ANALYSES DU BILAN HEPATIQUE
 			$page2->setAnalysesBilanHepatique($analysesBilanHepatique);
@@ -6633,6 +6773,11 @@ class BiologisteController extends AbstractActionController {
 			//GESTION DES ANALYSES DU BILAN RENAL
 			//GESTION DES ANALYSES DU BILAN RENAL
 			$page2->setAnalysesBilanRenal($analysesBilanRenal);
+			
+			//GESTION DES ANALYSES DE SEROLOGIE
+			//GESTION DES ANALYSES DE SEROLOGIE
+			$page2->setAnalysesSerologie($analysesSerologie);
+			
 			
 			//Ajouter une note à la page
 			$page2->addNote();

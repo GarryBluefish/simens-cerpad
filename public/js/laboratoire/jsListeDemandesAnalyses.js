@@ -1118,7 +1118,7 @@
     		$('#rapport_chol_hdl').val(rapport.toFixed(2));
     		
     		//Affichage de la conclusion du rapport
-			if(rapport >= 3.5 && rapport <= 5){
+			if(rapport >= 4.5 && rapport <= 5){
 				$('#conclusion_rapport_chol_hdl').html('<span style="color: orange; float: left"> Risque d\'ath&eacute;rog&egrave;ne faible </span>');
 			}else if(rapport > 5 && rapport <= 6.5){
 				$('#conclusion_rapport_chol_hdl').html('<span style="color: orange; float: left"> Risque d\'ath&eacute;rog&egrave;ne mod&eacute;r&eacute; </span>');
@@ -1143,7 +1143,7 @@
     			$('.rapport_chol_hdl table').toggle(true);
     			
     			//Affichage de la conclusion du rapport
-    			if(rapport >= 3.5 && rapport <= 5){
+    			if(rapport >= 4.5 && rapport <= 5){
     				$('#conclusion_rapport_chol_hdl').html('<span style="color: orange; float: left"> Risque d\'ath&eacute;rog&egrave;ne faible </span>');
     			}else if(rapport > 5 && rapport <= 6.5){
     				$('#conclusion_rapport_chol_hdl').html('<span style="color: orange; float: left"> Risque d\'ath&eacute;rog&egrave;ne mod&eacute;r&eacute; </span>');
@@ -1172,7 +1172,7 @@
     			$('.rapport_chol_hdl table').toggle(true);
 
     			//Affichage de la conclusion du rapport
-    			if(rapport >= 3.5 && rapport <= 5){
+    			if(rapport >= 4.5 && rapport <= 5){
     				$('#conclusion_rapport_chol_hdl').html('<span style="color: orange; float: left"> Risque d\'ath&eacute;rog&egrave;ne faible </span>');
     			}else if(rapport > 5 && rapport <= 6.5){
     				$('#conclusion_rapport_chol_hdl').html('<span style="color: orange; float: left"> Risque d\'ath&eacute;rog&egrave;ne mod&eacute;r&eacute; </span>');

@@ -306,8 +306,11 @@ return array(
             		'liste-consultations' =>	'medecin',
             		'consulter' => 'medecin',
             		'modifier-consultation' => 'medecin',	
+            		'demandes-analyses-vue' => 'medecin',
+            		'get-liste-analyses' => 'medecin',
+            		'get-tarif-analyse' => 'medecin',
 
-            		'informations-statistiques' => 'medecin',	
+            		'informations-statistiques' => 'medecin',
             				
             	)
                 

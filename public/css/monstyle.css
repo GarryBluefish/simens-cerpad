@@ -446,7 +446,7 @@ tr:hover /* Apparence au survol des liens */
 
 /************************************ style du tableau N°1 ****************************************/
 
-#responde input[type="text"], #respond textarea , #respondeMotif input[type="text"]
+#responde input[type="text"], #respond textarea , #respondeMotif input[type="text"] , #respondeMotif select, #SiegeDouleur select
 
 { /*le input ou le textarea*/
 
@@ -547,7 +547,7 @@ padding-right: 10px;
 
 padding-bottom: 10px;
 
-padding-left: 15px; /* padding du text dans le champ*/
+padding-left: 10px; /* padding du text dans le champ*/
 
 text-indent: 75px; /* alignement du text dans le champ input après saisie*/
 
@@ -732,7 +732,7 @@ width: 100%; /* la largeur du champ input*/
 
 }
 
-#respondeMotif input[type="text"]
+#respondeMotif input[type="text"], #respondeMotif select, #SiegeDouleur select
 {
 
 display: block;
@@ -743,7 +743,7 @@ width: 100%; /* la largeur du champ input*/
 
 }
 
-#responde input[type="text"]:focus, #responde textarea:focus, #respondeMotif input[type="text"]:focus
+#responde input[type="text"]:focus, #responde textarea:focus, #respondeMotif input[type="text"]:focus, #respondeMotif select:focus, #SiegeDouleur select:focus
 {
 
 text-indent: 0pt;
@@ -3922,7 +3922,7 @@ margin-left: 2px;
 
 /*----fin style--------*/
 
-#BUcheckbox label 
+#BUcheckbox label, .antFamStyle label 
 {/* le label*/
 line-height: 1.7em;
 
@@ -4293,7 +4293,7 @@ div .dataTables_paginate
 #contenu{ visibility: hidden }
 /*CODE POUR LE STYLE DU LECTEUR AUDIO (MP3)*/
 
-.designHistoireMaladie label 
+.designHistoireMaladie label, .designLabelExamenComplementaire label
 {
 	line-height: 1.7em;
 

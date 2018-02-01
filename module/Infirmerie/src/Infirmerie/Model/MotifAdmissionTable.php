@@ -68,20 +68,14 @@ class MotifAdmissionTable{
 		return $result;
 	}
 	
-	public function insertMotifDouleurPrecision($idcons, $siege, $intensite, $idemploye){
+	public function insertMotifDouleurPrecision($idcons, $idsiege, $intensite, $idemploye){
 		$adapter = $this->tableGateway->getAdapter();
 		$sql = new Sql($adapter);
 		
-		$idSiege = null;
-		if($this->getSiegeDouleur($siege)){
-			$infossiege = $this->getSiegeDouleur($siege);
-			$idSiege = $infossiege['idsiege'];
-		}
-		
-		if($idSiege) {
+		if($idsiege) {
 			$donnees = array(
 					'idcons'    => $idcons,
-					'siege'     => $idSiege,
+					'siege'     => $idsiege,
 					'intensite' => $intensite,
 					'idemploye' => $idemploye,
 			);
@@ -108,12 +102,8 @@ class MotifAdmissionTable{
 		for($i=1 ; $i<=5; $i++){
 
 			if($values->get ( 'motif_admission'.$i )->getValue ()){ 
-				$idMotif = null;
-				$libelle_motif = $values->get ( 'motif_admission'.$i )->getValue ();
-				if($this->getMotifConsultation($libelle_motif)){
-					$infosmotif = $this->getMotifConsultation($libelle_motif);
-					$idMotif = $infosmotif['idmotifconsultation'];
-				}
+				
+				$idMotif = $values->get ( 'motif_admission'.$i )->getValue ();
 				
 				if($idMotif){
 					$idcons    = $values->get ( 'idcons' )->getValue ();
@@ -127,7 +117,6 @@ class MotifAdmissionTable{
 					$this->tableGateway->insert($datamotifadmission);
 					
 					if($idMotif == 2){ $this->insertMotifDouleurPrecision($idcons, $siege, $intensite, $idemploye); }
-					
 				}
 				
 			}
@@ -198,4 +187,37 @@ class MotifAdmissionTable{
 	
 		return $result;
 	}
+	
+	public function getListeSelectMotifConsultation(){
+		$adapter = $this->tableGateway->getAdapter();
+		$sql = new Sql($adapter);
+		$select = $sql->select();
+		$select->from('liste_motif_consultation');
+		$select->order('idmotifconsultation ASC');
+		$result = $sql->prepareStatementForSqlObject($select)->execute();
+	
+		$options = array(0 => '');
+		foreach ($result as $data) {
+			$options[$data['idmotifconsultation']] = $data['libelle'];
+		}
+		$options[-1] = 'Autres ... ';
+		return $options;
+	}
+	
+	public function getListeSelectSiege(){
+		$adapter = $this->tableGateway->getAdapter();
+		$sql = new Sql($adapter);
+		$select = $sql->select();
+		$select->from('liste_siege');
+		$select->order('idsiege ASC');
+		$result = $sql->prepareStatementForSqlObject($select)->execute();
+	
+		$options = array(0 => '');
+		foreach ($result as $data) {
+			$options[$data['idsiege']] = $data['libelle'];
+		}
+		$options[-1] = 'Autres ...';
+		return $options;
+	}
+	
 }

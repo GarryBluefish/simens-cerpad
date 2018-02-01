@@ -10,7 +10,7 @@ $('#menu_consultations_style').css({'font-weight':'bold','color':'white','font-s
 </script>
 
 <?php use Facturation\View\Helper\DateHelper;?>
-<?php echo $this->headScript()->appendFile($this->basePath().'/js/mesjs/accordeon_controle_validation.js');?>
+<?php echo $this->headScript()->appendFile($this->basePath().'/js/infirmerie/jsConsultation.js');?>
 
 <!-- Mes CSS -->
 <?php echo $this->headLink()->appendStylesheet($this->basePath().'/css/infirmier/styleMotifsConstantes.css');?>
@@ -163,7 +163,7 @@ echo $this->form()->openTag($form); ?>
               <div style='font-family: police2;font-size: 17px; font-weight: bold;'> Motifs de consultation </div>
                <div style=''>
                 
-                <?php echo  $this->headScript()->appendFile($this->basePath().'/js/infirmerie/ajouterMotifs.js');?>
+                <?php echo  $this->headScript()->appendFile($this->basePath().'/js/infirmerie/jsAjouterMotifs.js');?>
                 <div style='width: 100%; height: 340px;'>
                 
                 
@@ -206,7 +206,7 @@ echo $this->form()->openTag($form); ?>
 
 		               <!--********************* BOUTON VALIDER-MODIFIER ************************-->
                        <!--********************* BOUTON VALIDER-MODIFIER ************************-->		            
-                       <table style="width: 70%; position: relative; top: 0px; float: right;">
+                       <!--table style="width: 70%; position: relative; top: 0px; float: right;">
                           <tr style="width: 100%;">
                              <th style="width:65%;">
                                 <div style="float:right;">
@@ -217,7 +217,7 @@ echo $this->form()->openTag($form); ?>
                                 </div>
                              </th>
                           </tr>
-                       </table>
+                       </table-->
                        
                        <script>
                          var nbMotif = "<?php echo $this->nbMotifs;?>";
@@ -226,27 +226,8 @@ echo $this->form()->openTag($form); ?>
                          afficherMotif(nbMotif);
                          supprimerUnMotif();
 
+                         listeMotifsConsultation();
                        </script>
-                       
-                       
-                       <script> 
-                         var myArrayListeMotifCons = [''];
-                         var i = 0;
-                       </script>
-                         <?php foreach ($this->listeMotifConsultation as $listeMotifCons){ ?>
-                           <script> myArrayListeMotifCons[i++] =  "<?php echo $listeMotifCons['libelle']; ?>" </script>
-                         <?php } ?>
-                       <script> 
-                           listeMotifsConsultation(myArrayListeMotifCons);
-                       </script>
-                       
-                       <script> 
-                         var myArrayListeSiege = [''];
-                         var j = 0;
-                       </script>
-                         <?php foreach ($this->listeSiege as $listeSiege){ ?>
-                           <script> myArrayListeSiege[j++] =  "<?php echo $listeSiege['libelle']; ?>" </script>
-                         <?php } ?>
                        
                    </div>
                     
@@ -282,10 +263,6 @@ echo $this->form()->openTag($form); ?>
                 
                 
               </div>
-                
-                
-                
-                
                 
                 
                 
@@ -421,15 +398,15 @@ echo $this->form()->openTag($form); ?>
        </tr>
        <tr style="height: 35px; width:100%;">
 	     <!--td style='width: 7%;'>P2</td-->
-		 <td style='width: 43%;'>D&eacute;riv&eacute;e morphine</td>
-		 <td style='width: 25%; max-height: 25px;'><select  id="voieAdminM4" style="max-height: 25px; width: 95%;"><option value="0"></option> <option value="1">Orale</option> <option value="2">Injectable</option> <option value="3">Suppositoire</option></select></td>
+		 <td style='width: 43%;'>D&eacute;riv&eacute;e morphine - Tramadol (2mg/kg) </td>
+		 <td style='width: 25%; max-height: 25px;'><select id="voieAdminM4" style="max-height: 25px; width: 95%;"><option value="0"></option> <option value="1">Orale</option> <option value="2">Injectable</option> <option value="3">Suppositoire</option></select></td>
 		 <td style='width: 12%;' id="poidsP2b"><input style="font-size: 16px;" type="number" readonly></td>
 		 <td style='width: 13%; padding-left: 10px; font-size: 19px; font-family: times new roman;'><span class="poidsP2b"> </span></td>
        </tr>
        <tr style="height: 35px; width:100%;">
 	     <td style='width: 7%;'>P3</td>
-		 <td style='width: 43%;'>Morphine</td>
-		 <td style='width: 25%; max-height: 25px;'><select  id="voieAdminM5" style="max-height: 25px; width: 95%;"><option value="0"></option> <option value="1">Orale</option> <option value="2">Injectable</option> <option value="3">Suppositoire</option></select></td>
+		 <td style='width: 43%;'>Morphine <span id="MorphineDosageInfos"> </span> </td>
+		 <td style='width: 25%; max-height: 25px;'><select id="voieAdminM5" style="max-height: 25px; width: 95%;"><option value="0"></option> <option value="1">Orale</option> <option value="2">Injectable</option> </select></td>
 		 <td style='width: 12%;' id="poidsP3"><input style="font-size: 16px;" type="number" readonly></td>
 		 <td style='width: 13%; padding-left: 10px; font-size: 19px; font-family: times new roman;'><span class="poidsP3"> </span></td>
        </tr>
@@ -640,12 +617,12 @@ $('#constantesClick').click(function(){
 	
 	//*** Pour la prise en charge lors d'une Fi�vre ou temperature constante ***
 	//*** Pour la prise en charge lors d'une Fi�vre ou temperature constante ***
-	if($('#temperatureFievre').val() >= 37.5 || $('#temperature').val() >= 37.5){
-		if($('#motif_admission1').val() == 'Fièvre' || 
-		   $('#motif_admission2').val() == 'Fièvre' ||
-	       $('#motif_admission3').val() == 'Fièvre' ||
-	       $('#motif_admission4').val() == 'Fièvre' ||
-	       $('#motif_admission5').val() == 'Fièvre'
+	if($('#temperatureFievre').val() >= 38.5 || $('#temperature').val() >= 38.5){
+		if($('#motif_admission1').val() == 1 || 
+		   $('#motif_admission2').val() == 1 ||
+	       $('#motif_admission3').val() == 1 ||
+	       $('#motif_admission4').val() == 1 ||
+	       $('#motif_admission5').val() == 1
 	       ){
 		    if(entrePriseEnChargeFievre == 0){
 		    	popListeMedicamentsFievre();
@@ -658,4 +635,3 @@ $('#constantesClick').click(function(){
 });
 
 </script>
-<?php  echo $this->headScript()->appendFile($this->basePath().'/js/jquery.maskedinput.cons.js');?>

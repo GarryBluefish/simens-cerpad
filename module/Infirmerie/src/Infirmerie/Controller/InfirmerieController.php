@@ -1444,11 +1444,13 @@ class InfirmerieController extends AbstractActionController {
 		$diagnostic = $this->params ()->fromPost ( 'diagnostic' );
 		$traitement = $this->params ()->fromPost ( 'traitement' );
 		$idfacturation = $this->params ()->fromPost ( 'idfacturation' );
+		$origine_prelevement = $this->params ()->fromPost ( 'origine_prelevement' );
 		$date_prelevement = (new DateHelper())->convertDateInAnglais( substr($date_heure, 0, 10) );
 	
 		$donnees = array (
 				'nb_tube' => $nb_tube,
 				'date_heure' => $date_heure,
+				'origine_prelevement' => $origine_prelevement,
 				'date_prelevement' => $date_prelevement,
 				'a_jeun' => $a_jeun,
 				'difficultes' => $difficultes,
@@ -2145,8 +2147,15 @@ class InfirmerieController extends AbstractActionController {
 		$form = new ConsultationForm();
 		$form->populateValues($data);
 		
-		$listeMotifConsultation = $this->getMotifAdmissionTable() ->getListeMotifConsultation();
-		$listeSiege = $this->getMotifAdmissionTable() ->getListeSiege();
+		$listeMotifConsultation = $this->getMotifAdmissionTable() ->getListeSelectMotifConsultation();
+		$form->get('motif_admission1')->setvalueOptions($listeMotifConsultation);
+		$form->get('motif_admission2')->setvalueOptions($listeMotifConsultation);
+		$form->get('motif_admission3')->setvalueOptions($listeMotifConsultation);
+		$form->get('motif_admission4')->setvalueOptions($listeMotifConsultation);
+		$form->get('motif_admission5')->setvalueOptions($listeMotifConsultation);
+		
+		$listeSiege = $this->getMotifAdmissionTable() ->getListeSelectSiege();
+		$form->get('siege')->setvalueOptions($listeSiege);
 		
 		return array(
 				'idcons' => $form->get ( 'idcons' )->getValue (),
@@ -2157,12 +2166,17 @@ class InfirmerieController extends AbstractActionController {
 				'typage' => $type.' '.$typage,
 				'form' => $form,
 				'patient' => $patient,
-				
-				'listeMotifConsultation' => $listeMotifConsultation,
-				'listeSiege' => $listeSiege,
 		);
 	}
 	
+	//Verifier si un tableau est vide ou pas
+	function array_empty($array) {
+		$is_empty = true;
+		foreach($array as $k) {
+			$is_empty = $is_empty && empty($k);
+		}
+		return $is_empty;
+	}
 	
 	public function enregistrerMotifsConstantesAction() {
 
@@ -2312,8 +2326,7 @@ class InfirmerieController extends AbstractActionController {
 		//POUR LES MOTIFS D'ADMISSION
 		$k = 1;
 		foreach ( $motif_admission as $Motifs ) {
-			$le_motif_admission = $this->getMotifAdmissionTable ()->getNomMotifConsultation($Motifs ['idlistemotif'])['libelle'];
-			$data ['motif_admission' . $k] = $le_motif_admission;
+			$data ['motif_admission' . $k] = $Motifs ['idlistemotif'];
 			
 			//Recuperation des infos supplémentaires du motif douleur
 			if($Motifs ['idlistemotif'] == 2){
@@ -2327,18 +2340,28 @@ class InfirmerieController extends AbstractActionController {
 		//Siege --- Siege --- Siege
 		$motif_douleur_precision = $this->getMotifAdmissionTable ()->getMotifDouleurPrecision ( $idcons );
 		if($motif_douleur_precision){
-			$siege_motif_douleur = $this->getMotifAdmissionTable ()->getSiegeMotifDouleur($motif_douleur_precision['siege']);
-			$mDouleur[3] = $siege_motif_douleur['libelle'];
+			$mDouleur[3] = $motif_douleur_precision['siege'];
 			$mDouleur[4] = $motif_douleur_precision['intensite'];
 		}
-
+		
 		
 		$form = new ConsultationForm();
 		$form->populateValues($data);
 		$form->populateValues($consultation);
 		
-		$listeMotifConsultation = $this->getMotifAdmissionTable() ->getListeMotifConsultation();
-		$listeSiege = $this->getMotifAdmissionTable() ->getListeSiege();
+		$listeMotifConsultation = $this->getMotifAdmissionTable() ->getListeSelectMotifConsultation();
+		$form->get('motif_admission1')->setvalueOptions($listeMotifConsultation);
+		$form->get('motif_admission2')->setvalueOptions($listeMotifConsultation);
+		$form->get('motif_admission3')->setvalueOptions($listeMotifConsultation);
+		$form->get('motif_admission4')->setvalueOptions($listeMotifConsultation);
+		$form->get('motif_admission5')->setvalueOptions($listeMotifConsultation);
+		
+		$listeSiege = $this->getMotifAdmissionTable() ->getListeSelectSiege();
+		$form->get('siege')->setvalueOptions($listeSiege);
+		
+		
+		//$listeMotifConsultation = $this->getMotifAdmissionTable() ->getListeMotifConsultation();
+		//$listeSiege = $this->getMotifAdmissionTable() ->getListeSiege();
 
 
 		//RECUPERER LA LISTE DES VOIES ADMINISTRATION DES MEDICAMENTS
@@ -2355,8 +2378,6 @@ class InfirmerieController extends AbstractActionController {
 				'form' => $form,
 				'patient' => $patient,
 				
-				'listeMotifConsultation' => $listeMotifConsultation,
-				'listeSiege' => $listeSiege,
 				'mDouleur' => $mDouleur,
 				'listeVoieAdministration' => $listeVoieAdministration,
 				

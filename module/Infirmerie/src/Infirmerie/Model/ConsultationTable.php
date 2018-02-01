@@ -1299,20 +1299,17 @@ class ConsultationTable {
  		return $sql->prepareStatementForSqlObject($select)->execute()->current();
  	}
  	
+ 	//Verifier si un tableau est vide ou pas
+ 	function array_empty($array) {
+ 		$is_empty = true;
+ 		foreach($array as $k) {
+ 			$is_empty = $is_empty && empty($k);
+ 		}
+ 		return $is_empty;
+ 	}
  	
  	public function addVoieAdministration($data){
  		$idcons = $data['idcons'];
- 		
- 		$donnees = array(
- 				'm1' => $data['voie_med_1'],
- 				'm2' => $data['voie_med_2'],
- 				'm3' => $data['voie_med_3'],
- 				'm4' => $data['voie_med_4'],
- 				'm5' => $data['voie_med_5'],
- 				'm6' => $data['voie_med_6'],
- 				'idcons' => $idcons
- 		);
-
  		if($this->getVoieAdministration($idcons)){
  			$db = $this->tableGateway->getAdapter();
  			$sql = new Sql($db);
@@ -1321,9 +1318,29 @@ class ConsultationTable {
  			$sql->prepareStatementForSqlObject($sQuery)->execute();
  		}
  		
- 		if( $data['intensite'] > 3 || $data['motif_admission1'] == "FiÃ¨vre" || $data['motif_admission2'] == "FiÃ¨vre" 
- 		                           || $data['motif_admission3'] == "FiÃ¨vre" || $data['motif_admission4'] == "FiÃ¨vre" 
- 			                       || $data['motif_admission5'] == "FiÃ¨vre"){
+ 		$donnees = array();
+ 		
+ 		//S'il y a une intensite supérieur à 3 alors il y a des données de prise en charge 
+ 		if( $data['intensite'] > 3 ){
+ 			$donnees['m1'] = $data['voie_med_1'];
+ 		    $donnees['m2'] = $data['voie_med_2'];
+ 			$donnees['m3'] = $data['voie_med_3'];
+ 			$donnees['m4'] = $data['voie_med_4'];
+ 			$donnees['m5'] = $data['voie_med_5'];
+ 		}
+ 		
+ 		//S'il y a un motif 'Fièvre' alors il y a des données de prise en charge 
+ 		if( $data['motif_admission1'] == 1 || $data['motif_admission2'] == 1 ||
+ 		    $data['motif_admission3'] == 1 || $data['motif_admission4'] == 1 ||
+ 			$data['motif_admission5'] == 1){
+ 			
+ 			$donnees['m6'] = $data['voie_med_6'];
+ 		}
+ 		
+ 		//S'il y a des infos de prise en charge on insère
+ 		if(!$this->array_empty($donnees)){
+ 			$donnees['idcons'] = $idcons;
+ 			
  			$db = $this->tableGateway->getAdapter();
  			$sql = new Sql($db);
  			$sQuery = $sql->insert()->into('voie_administration')->values($donnees);

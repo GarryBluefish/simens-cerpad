@@ -122,7 +122,7 @@ class TechnicienController extends AbstractActionController {
 	
 	public function moisEnLettre($mois){
 		$lesMois = array('','Janvier','Fevrier','Mars','Avril',
-				'Mais','Juin','Juillet','Aout','Septembre','Octobre','Novembre','Decembre');
+				'Mai','Juin','Juillet','Aout','Septembre','Octobre','Novembre','Decembre');
 		return $lesMois[$mois];
 	}
 	
@@ -7283,55 +7283,55 @@ class TechnicienController extends AbstractActionController {
 	
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    $html .= "<tr class='ligneAnanlyse labelTypeMateriel' style='width: 100%; font-family: times new roman; font-size: 15px; margin-top: -45px;'>";
-	    $html .= "  <td style='width: 55%;'> <label> Mat&eacute;riel utilis&eacute;</label> </td>";
+	    $html .= "  <td style='width: 45%;'> <label> Mat&eacute;riel utilis&eacute;</label> </td>";
 	    $html .= "  <td colspan='2' style='width: 35%;'> </td>";
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
-	    $html .= "  <td style='width: 45%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_electro_proteine' tabindex='1' > </div> </td>";
+	    $html .= "  <td style='width: 35%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_electro_proteine' tabindex='1' > </div> </td>";
 	    $html .= "  <td colspan='3' style='width: 45%;'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 45%;'><label><span style='font-weight: bold; '> Albumine <input id='albumine' type='number' step='any' tabindex='1'> </span></label></td>";
+	    $html .= "  <td style='width: 35%;'><label><span style='font-weight: bold; '> Albumine <input id='albumine' type='number' step='any' tabindex='1'> </span></label></td>";
 	    $html .= "  <td style='width: 10%;'><label style='padding-top: 5px;'> % </label></td>";
 	    $html .= "  <td style='width: 15%;'><label style='padding-top: 5px;'> <input id='albumine_abs' type='number' step='any' readonly='true' > </label></td>";
-	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 50%; padding-left: 55px; font-size: 14px;'> 40,2 - 47,6 </label></td>";
+	    $html .= "  <td style='width: 40%;'><label style='padding-top: 5px; width: 50%; padding-left: 55px; font-size: 14px;'> 40,2 - 47,6 </label></td>";
 	    $html .= "</tr>";
 	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 45%;'><label><span style='font-weight: bold; '> Alpha 1 <input id='alpha_1' type='number' step='any' tabindex='2'> </span></label></td>";
-	    $html .= "  <td style='width: 10%;'><label style='padding-top: 5px;'> % </label></td>";
-	    $html .= "  <td style='width: 15%;'><label style='padding-top: 5px;'> <input id='alpha_1_abs' type='number' step='any' readonly='true' > </label></td>";
-	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 50%; padding-left: 55px; font-size: 14px;'> 2,1 - 3,5 </label></td>";
+	    $html .= "  <td ><label><span style='font-weight: bold; '> Alpha 1 <input id='alpha_1' type='number' step='any' tabindex='2'> </span></label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px;'> % </label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px;'> <input id='alpha_1_abs' type='number' step='any' readonly='true' > </label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px; width: 50%; padding-left: 55px; font-size: 14px;'> 2,1 - 3,5 </label></td>";
 	    $html .= "</tr>";
 	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 45%;'><label><span style='font-weight: bold; '> Alpha 2 <input id='alpha_2' type='number' step='any' tabindex='3'> </span></label></td>";
-	    $html .= "  <td style='width: 10%;'><label style='padding-top: 5px;'> % </label></td>";
-	    $html .= "  <td style='width: 15%;'><label style='padding-top: 5px;'> <input id='alpha_2_abs' type='number' step='any' readonly='true' > </label></td>";
-	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 50%; padding-left: 55px; font-size: 14px;'> 5,1 - 8,5 </label></td>";
+	    $html .= "  <td ><label><span style='font-weight: bold; '> Alpha 2 <input id='alpha_2' type='number' step='any' tabindex='3'> </span></label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px;'> % </label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px;'> <input id='alpha_2_abs' type='number' step='any' readonly='true' > </label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px; width: 50%; padding-left: 55px; font-size: 14px;'> 5,1 - 8,5 </label></td>";
 	    $html .= "</tr>";
 	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 45%;'><label><span style='font-weight: bold; '> Beta 1 <input id='beta_1' type='number' step='any' tabindex='4'> </span></label></td>";
-	    $html .= "  <td style='width: 10%;'><label style='padding-top: 5px;'> % </label></td>";
-	    $html .= "  <td style='width: 15%;'><label style='padding-top: 5px;'> <input id='beta_1_abs' type='number' step='any' readonly='true' > </label></td>";
-	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 50%; padding-left: 55px; font-size: 14px;'> 3,4 - 5,2 </label></td>";
+	    $html .= "  <td ><label><span style='font-weight: bold; '> Beta 1 <input id='beta_1' type='number' step='any' tabindex='4'> </span></label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px;'> % </label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px;'> <input id='beta_1_abs' type='number' step='any' readonly='true' > </label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px; width: 50%; padding-left: 55px; font-size: 14px;'> 3,4 - 5,2 </label></td>";
 	    $html .= "</tr>";
 	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 45%;'><label><span style='font-weight: bold; '> Beta 2 <input id='beta_2' type='number' step='any' tabindex='5'> </span></label></td>";
-	    $html .= "  <td style='width: 10%;'><label style='padding-top: 5px;'> % </label></td>";
-	    $html .= "  <td style='width: 15%;'><label style='padding-top: 5px;'> <input id='beta_2_abs' type='number' step='any' readonly='true' > </label></td>";
-	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 50%; padding-left: 55px; font-size: 14px;'> 2,3 - 4,7 </label></td>";
+	    $html .= "  <td ><label><span style='font-weight: bold; '> Beta 2 <input id='beta_2' type='number' step='any' tabindex='5'> </span></label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px;'> % </label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px;'> <input id='beta_2_abs' type='number' step='any' readonly='true' > </label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px; width: 50%; padding-left: 55px; font-size: 14px;'> 2,3 - 4,7 </label></td>";
 	    $html .= "</tr>";
 	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 45%;'><label><span style='font-weight: bold; '> Gamma <input id='gamma' type='number' step='any' tabindex='6'> </span></label></td>";
-	    $html .= "  <td style='width: 10%;'><label style='padding-top: 5px;'> % </label></td>";
-	    $html .= "  <td style='width: 15%;'><label style='padding-top: 5px;'> <input id='gamma_abs' type='number' step='any' readonly='true' > </label></td>";
-	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 50%; padding-left: 55px; font-size: 14px;'> 8,0 - 13,5 </label></td>";
+	    $html .= "  <td ><label><span style='font-weight: bold; '> Gamma <input id='gamma' type='number' step='any' tabindex='6'> </span></label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px;'> % </label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px;'> <input id='gamma_abs' type='number' step='any' readonly='true' > </label></td>";
+	    $html .= "  <td ><label style='padding-top: 5px; width: 50%; padding-left: 55px; font-size: 14px;'> 8,0 - 13,5 </label></td>";
 	    $html .= "</tr>";
 	
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
@@ -7341,12 +7341,12 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
 	    $html .= "  <td colspan='2' ><label><span style='font-size: 16px;'> Proteine totale:  </span></label></td>";
 	    $html .= "  <td style='width: 15%;'><label style='padding-top: 5px;'> <input id='proteine_totale' type='number' step='any'  tabindex='7'> </label></td>";
-	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 80%; font-size: 14px;'> g/dL </label></td>";
+	    $html .= "  <td style='width: 40%;'><label style='padding-top: 5px; width: 80%; font-size: 14px;'> g/dL </label></td>";
 	    $html .= "</tr>";
 
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
 	    $html .= "  <td colspan='3' ><label style='height: 80px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_electrophorese_proteine' style='max-height: 57px; min-height: 57px; max-width: 400px; min-width: 400px; margin-left: 30px;' tabindex='8'> </textarea> </label></td>";
-	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 80%; height: 80px; font-size: 14px;'>  </label></td>";
+	    $html .= "  <td style='width: 40%;'><label style='padding-top: 5px; width: 80%; height: 80px; font-size: 14px;'>  </label></td>";
 	    $html .= "</tr>";
 	    
 	    $html .= "</table> </td> </tr>";
@@ -8631,8 +8631,6 @@ class TechnicienController extends AbstractActionController {
 			$infosStatistique = $this->infosStatistiquesParametreesAction($typeInfos, $date_debut, $date_fin);
 		}
 	
-		//var_dump($infosStatistique); exit();
-		
 		$pdf = new infosStatistiquePdf();
 		$pdf->SetMargins(13.5,13.5,13.5);
 		$pdf->setTabInformations($infosStatistique);

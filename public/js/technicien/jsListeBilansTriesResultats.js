@@ -1243,7 +1243,7 @@
     		$('#rapport_chol_hdl').val(rapport.toFixed(2));
     		
     		//Affichage de la conclusion du rapport
-			if(rapport >= 3.5 && rapport <= 5){
+			if(rapport >= 4.5 && rapport <= 5){
 				$('#conclusion_rapport_chol_hdl').html('<span style="color: orange; float: left"> Risque d\'ath&eacute;rog&egrave;ne faible </span>');
 			}else if(rapport > 5 && rapport <= 6.5){
 				$('#conclusion_rapport_chol_hdl').html('<span style="color: orange; float: left"> Risque d\'ath&eacute;rog&egrave;ne mod&eacute;r&eacute; </span>');
@@ -1268,7 +1268,7 @@
     			$('.rapport_chol_hdl table').toggle(true);
     			
     			//Affichage de la conclusion du rapport
-    			if(rapport >= 3.5 && rapport <= 5){
+    			if(rapport >= 4.5 && rapport <= 5){
     				$('#conclusion_rapport_chol_hdl').html('<span style="color: orange; float: left"> Risque d\'ath&eacute;rog&egrave;ne faible </span>');
     			}else if(rapport > 5 && rapport <= 6.5){
     				$('#conclusion_rapport_chol_hdl').html('<span style="color: orange; float: left"> Risque d\'ath&eacute;rog&egrave;ne mod&eacute;r&eacute; </span>');
@@ -1297,7 +1297,7 @@
     			$('.rapport_chol_hdl table').toggle(true);
 
     			//Affichage de la conclusion du rapport
-    			if(rapport >= 3.5 && rapport <= 5){
+    			if(rapport >= 4.5 && rapport <= 5){
     				$('#conclusion_rapport_chol_hdl').html('<span style="color: orange; float: left"> Risque d\'ath&eacute;rog&egrave;ne faible </span>');
     			}else if(rapport > 5 && rapport <= 6.5){
     				$('#conclusion_rapport_chol_hdl').html('<span style="color: orange; float: left"> Risque d\'ath&eacute;rog&egrave;ne mod&eacute;r&eacute; </span>');
@@ -1473,7 +1473,7 @@
     		triglycerides_1 = $('#triglycerides_1').val();
     		if(triglycerides_1){
         		valeur_mmol = triglycerides_1 * 1.143;
-        		$('#triglycerides_2').val(valeur_mmol.toFixed(3));
+        		$('#triglycerides_2').val(valeur_mmol.toFixed(2));
         	}else{
         		$('#triglycerides_2').val(null);
         	}
@@ -1490,7 +1490,7 @@
     		glycemie_1 = $('#glycemie_1').val();
     		if(glycemie_1){
         		valeur_mmol = glycemie_1 * 5.551;
-        		$('#glycemie_2').val(valeur_mmol.toFixed(3));
+        		$('#glycemie_2').val(valeur_mmol.toFixed(2));
         	}else{
         		$('#glycemie_2').val(null);
         	}
@@ -1498,7 +1498,7 @@
     		glycemie_1 = $('#glycemie_1').val();
     		if(glycemie_1){
         		valeur_mmol = glycemie_1 * 5.551;
-        		$('#glycemie_2').val(valeur_mmol.toFixed(3));
+        		$('#glycemie_2').val(valeur_mmol.toFixed(2));
         	}else{
         		$('#glycemie_2').val(null);
         	}
@@ -3971,7 +3971,7 @@
         	                    "var glycemie_1 = $('.ER_"+iddemande+" #glycemie_1').val();"+
         	                    "if(glycemie_1){"+
         	                        "var valeur_mmol = glycemie_1 * 5.551;"+
-        	         			    "$('.ER_"+iddemande+" #glycemie_2').val(valeur_mmol.toFixed(3));"+
+        	         			    "$('.ER_"+iddemande+" #glycemie_2').val(valeur_mmol.toFixed(2));"+
         	         		    "}else{ $('.ER_"+iddemande+" #glycemie_2').val(null); }"+
         	                 
         	                 "}).change( function () {"+
@@ -3979,7 +3979,7 @@
         	                    "var glycemie_1 = $('.ER_"+iddemande+" #glycemie_1').val();"+
      	                        "if(glycemie_1){"+
      	                            "var valeur_mmol = glycemie_1 * 5.551;"+
-     	         			        "$('.ER_"+iddemande+" #glycemie_2').val(valeur_mmol.toFixed(3));"+
+     	         			        "$('.ER_"+iddemande+" #glycemie_2').val(valeur_mmol.toFixed(2));"+
      	         		        "}else{ $('.ER_"+iddemande+" #glycemie_2').val(null); }"+
         	                 
         	                 "}).trigger('keyup');";
@@ -4096,7 +4096,7 @@
         	                    "var triglycerides_1 = $('.ER_"+iddemande+" #triglycerides_1').val();"+
     	   	                    "if(triglycerides_1){"+
         		                    "var valeur_mmol = triglycerides_1 * 1.143;"+
-        		                    "$('.ER_"+iddemande+" #triglycerides_2').val(valeur_mmol.toFixed(3));"+
+        		                    "$('.ER_"+iddemande+" #triglycerides_2').val(valeur_mmol.toFixed(2));"+
         	                    "}else{	$('.ER_"+iddemande+" #triglycerides_2').val(null); }"+
         	                 
         	                 "}).change( function () {"+
@@ -4104,7 +4104,7 @@
         	                    "var triglycerides_1 = $('.ER_"+iddemande+" #triglycerides_1').val();"+
  	   	                        "if(triglycerides_1){"+
      		                        "var valeur_mmol = triglycerides_1 * 1.143;"+
-     		                        "$('.ER_"+iddemande+" #triglycerides_2').val(valeur_mmol.toFixed(3));"+
+     		                        "$('.ER_"+iddemande+" #triglycerides_2').val(valeur_mmol.toFixed(2));"+
      	                        "}else{	$('.ER_"+iddemande+" #triglycerides_2').val(null); }"+
      	                 
         	                 "}).trigger('keyup');";
@@ -4199,7 +4199,7 @@
     		                		"$('.ER_"+iddemande+" .rapport_chol_hdl table').toggle(true);"+
     		                		
     		                		//Affichage de la conclusion du rapport
-    		                		"if(rapport >= 3.5 && rapport <= 5){"+
+    		                		"if(rapport >= 4.5 && rapport <= 5){"+
     		                			"$('.ER_"+iddemande+" #conclusion_rapport_chol_hdl').html('<span style=\"color: orange; float: left;\"> Risque dath&eacute;rog&egrave;ne faible </span>');"+
     		                		"}else if(rapport > 5 && rapport <= 6.5){"+
     		                			"$('.ER_"+iddemande+" #conclusion_rapport_chol_hdl').html('<span style=\"color: orange; float: left;\"> Risque dath&eacute;rog&egrave;ne mod&eacute;r&eacute; </span>');"+
@@ -4228,7 +4228,7 @@
  		                		    "$('.ER_"+iddemande+" .rapport_chol_hdl table').toggle(true);"+
  		                		
  		                		    //Affichage de la conclusion du rapport
- 		                		    "if(rapport >= 3.5 && rapport <= 5){"+
+ 		                		    "if(rapport >= 4.5 && rapport <= 5){"+
  		                			    "$('.ER_"+iddemande+" #conclusion_rapport_chol_hdl').html('<span style=\"color: orange; float: left;\"> Risque dath&eacute;rog&egrave;ne faible </span>');"+
  		                		    "}else if(rapport > 5 && rapport <= 6.5){"+
  		                			    "$('.ER_"+iddemande+" #conclusion_rapport_chol_hdl').html('<span style=\"color: orange; float: left;\"> Risque dath&eacute;rog&egrave;ne mod&eacute;r&eacute; </span>');"+

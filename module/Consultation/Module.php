@@ -11,6 +11,8 @@ use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 use Consultation\Model\Depistage;
 use Consultation\Model\DepistageTable;
+use Consultation\Model\AnalyseTable;
+use Consultation\Model\Analyse;
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface, ViewHelperProviderInterface {
 
@@ -52,6 +54,18 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 						    $resultSetPrototype = new ResultSet ();
 						    $resultSetPrototype->setArrayObjectPrototype ( new Depistage() );
 						    return new TableGateway ( 'depistage', $dbAdapter, null, $resultSetPrototype );
+						},
+						
+						'Consultation\Model\AnalyseTable' => function ($sm) {
+							$tableGateway = $sm->get( 'AnalyseModuleConsultationTableGateway' );
+							$table = new AnalyseTable( $tableGateway );
+							return $table;
+						},
+						'AnalyseModuleConsultationTableGateway' => function ($sm) {
+							$dbAdapter = $sm->get ( 'Zend\Db\Adapter\Adapter' );
+							$resultSetPrototype = new ResultSet ();
+							$resultSetPrototype->setArrayObjectPrototype ( new Analyse() );
+							return new TableGateway ( 'analyse', $dbAdapter, null, $resultSetPrototype );
 						},
 
 				)

@@ -15,7 +15,8 @@ class ConsultationController extends AbstractActionController {
 	protected $patientTable;
 	protected $motifAdmissionTable;
 	protected $depistageTable;
-	
+	protected $analyseAFaireTable;
+	protected $analyseTable;
 	
 	public function getConsultationTable() {
 		if (! $this->consultation) {
@@ -56,6 +57,23 @@ class ConsultationController extends AbstractActionController {
 		}
 		return $this->depistageTable;
 	}
+	
+	public function getAnalyseAFaireTable() {
+		if (! $this->analyseAFaireTable) {
+			$sm = $this->getServiceLocator ();
+			$this->analyseAFaireTable = $sm->get ( 'Consultation\Model\AnalyseTable' );
+		}
+		return $this->analyseAFaireTable;
+	}
+	
+	public function getAnalyseTable() {
+		if (! $this->analyseTable) {
+			$sm = $this->getServiceLocator ();
+			$this->analyseTable = $sm->get ( 'Secretariat\Model\AnalyseTable' );
+		}
+		return $this->analyseTable;
+	}
+	
 	//=============================================================================================
 	//---------------------------------------------------------------------------------------------
 	//=============================================================================================
@@ -364,6 +382,10 @@ class ConsultationController extends AbstractActionController {
 	
 	
 	public function consulterAction() {
+		  //DEBUT --- DEBUT --- DEBUT
+		  $timestart = microtime(true);
+		  //-------------------------
+		
 		$this->layout ()->setTemplate ( 'layout/consultation' );
 	
 		$user = $this->layout()->user;
@@ -473,20 +495,6 @@ class ConsultationController extends AbstractActionController {
 		//---- FIN Gestion des AGE ----
 		//---- FIN Gestion des AGE ----
 		
-		
-// 		$listeMedicament = $this->getConsultationTable()->listeDeTousLesMedicaments();
-// 		$listeForme = $this->getConsultationTable()->formesMedicaments();
-// 		$listetypeQuantiteMedicament = $this->getConsultationTable()->typeQuantiteMedicaments();
-	
-		//$liste = $this->getConsultationTable ()->getInfoPatient ( $id_pat );
-		//$image = $this->getConsultationTable ()->getPhoto ( $id_pat );
-	
-		//RECUPERER TOUS LES PATIENTS AYANT UN RV aujourd'hui
-// 		$tabPatientRV = $this->getConsultationTable()->getPatientsRV($IdDuService);
-// 		$resultRV = null;
-// 		if(array_key_exists($id_pat, $tabPatientRV)){
-// 			$resultRV = $tabPatientRV[ $id_pat ];
-// 		}
 
 		$data = array(
 				'idpatient' => $idpatient,
@@ -494,27 +502,6 @@ class ConsultationController extends AbstractActionController {
 		);
 		
 		$consultation = $this->getConsultationTable()->getConsultation($idcons)->getArrayCopy();
-		
-// 		$pos = strpos($consultation['pression_arterielle'], '/') ;
-// 		$tensionmaximale = substr($consultation['pression_arterielle'], 0, $pos);
-// 		$tensionminimale = substr($consultation['pression_arterielle'], $pos+1);
-// 		$data ['tensionmaximale'] = $tensionmaximale;
-// 		$data ['tensionminimale'] = $tensionminimale;
-		
-		
-		//POUR LES MOTIFS D'ADMISSION
-		//POUR LES MOTIFS D'ADMISSION
-		//POUR LES MOTIFS D'ADMISSION
-		// instancier le motif d'admission et recupï¿½rer l'enregistrement
-		//$motif_admission = $this->getMotifAdmissionTable ()->getMotifAdmission ( $idcons );
-		//$nbMotif = $this->getMotifAdmissionTable ()->nbMotifs ( $idcons );
-		
-		//POUR LES MOTIFS D'ADMISSION
-		//$k = 1;
-		//foreach ( $motif_admission as $Motifs ) {
-		//	$data ['motif_admission' . $k] = $Motifs ['Libelle_motif'];
-		//	$k++;
-		//}
 		
 		//==================================================================================
 		//==================================================================================
@@ -527,46 +514,41 @@ class ConsultationController extends AbstractActionController {
 		$mDouleur = array(1 => 0,2 => 0,3 => 0,4 => 0);
 		//POUR LES MOTIFS D'ADMISSION
 		$k = 1;
-		foreach ( $motif_admission as $Motifs ) {
-			$le_motif_admission = $this->getMotifAdmissionTable ()->getNomMotifConsultation($Motifs ['idlistemotif'])['libelle'];
-			$data ['motif_admission' . $k] = $le_motif_admission;
-				
+	    foreach ( $motif_admission as $Motifs ) {
+			$data ['motif_admission' . $k] = $Motifs ['idlistemotif'];
+			
 			//Recuperation des infos supplémentaires du motif douleur
 			if($Motifs ['idlistemotif'] == 2){
 				$mDouleur[1] = 1;
 				$mDouleur[2] = $k;
 			}
-				
+			
 			$k ++;
 		}
-		
-		//var_dump($mDouleur); exit();
 		
 		//Siege --- Siege --- Siege
 		$motif_douleur_precision = $this->getMotifAdmissionTable ()->getMotifDouleurPrecision ( $idcons );
 		if($motif_douleur_precision){
-			$siege_motif_douleur = $this->getMotifAdmissionTable ()->getSiegeMotifDouleur($motif_douleur_precision['siege']);
-			$mDouleur[3] = $siege_motif_douleur['libelle'];
+			$mDouleur[3] = $motif_douleur_precision['siege'];
 			$mDouleur[4] = $motif_douleur_precision['intensite'];
 		}
 		
+		//==================================================================================
+		//==================================================================================
+		//==================================================================================
 		$form = new ConsultationForm();
 		$form->populateValues($data);
 		$form->populateValues($consultation);
 		
-		$listeMotifConsultation = $this->getMotifAdmissionTable() ->getListeMotifConsultation();
-		$listeSiege = $this->getMotifAdmissionTable() ->getListeSiege();
+		$listeMotifConsultation = $this->getMotifAdmissionTable() ->getListeSelectMotifConsultation();
+		$form->get('motif_admission1')->setvalueOptions($listeMotifConsultation);
+		$form->get('motif_admission2')->setvalueOptions($listeMotifConsultation);
+		$form->get('motif_admission3')->setvalueOptions($listeMotifConsultation);
+		$form->get('motif_admission4')->setvalueOptions($listeMotifConsultation);
+		$form->get('motif_admission5')->setvalueOptions($listeMotifConsultation);
 		
-		//==================================================================================
-		//==================================================================================
-		//==================================================================================
-		
-		
-		
-		$form = new ConsultationForm();
-		$form->populateValues($data);
-		$form->populateValues($consultation);
-		
+		$listeSiege = $this->getMotifAdmissionTable() ->getListeSelectSiege();
+		$form->get('siege')->setvalueOptions($listeSiege);
 		
 		//RECUPERER LA LISTE DES VOIES ADMINISTRATION DES MEDICAMENTS
 		$listeVoieAdministration = $this->getConsultationTable()->getVoieAdministration($idcons);
@@ -574,7 +556,21 @@ class ConsultationController extends AbstractActionController {
 		//RECUPERER LA LISTE DES ACTES
 		$listeActes = $this->getConsultationTable()->getListeDesActes();
 		
-		//var_dump($listeActes); exit();
+		//RECUPERER LES ANALYSES EFFECTUEES PAR LE PATIENT FAISANT PARTIE DES ANALYSES OBLIGATOIRES A FAIRE 
+		$donneesExamensEffectues = $this->getAnalyseAFaireTable()->getAnalyseEffectuees($idpatient);
+
+		
+		
+		
+		
+		
+		
+		
+		//FIN --- FIN --- FIN --- FIN --- FIN --- FIN --- FIN
+		//$timeend = microtime(true);
+		//$time = $timeend-$timestart;
+		//var_dump(number_format($time,3)); exit();
+		//---------------------------------------------------
 		
 		
 		return array(
@@ -588,13 +584,17 @@ class ConsultationController extends AbstractActionController {
 				'nbMotifs' => $nbMotif,
 				'form' => $form,
 				'patient' => $patient,
+				'donneesExamensEffectues' => $donneesExamensEffectues,
 				
-				'listeMotifConsultation' => $listeMotifConsultation,
-				'listeSiege' => $listeSiege,
 				'mDouleur' => $mDouleur,
 				'listeVoieAdministration' => $listeVoieAdministration,
 				'listeActesCons' => $listeActes,
+				'listeMotifConsultation' => $listeMotifConsultation,
+				
+				
 
+				
+				
 				'liste_med' => null, //$listeMedicament,
 				'temoin' => 0, //$bandelettes['temoin'],
 				// 				'listeForme' => $listeForme,
@@ -610,11 +610,88 @@ class ConsultationController extends AbstractActionController {
 				'antMedPat' => null, //$antMedPat,
 				'nbAntMedPat' => 0, //$antMedPat->count(),
 				'listeActes' => null, //$listeActes,
-				
 		);
 
 	}
 	
+	public function demandesAnalysesVueAction() {
+	
+		$id = ( int ) $this->params ()->fromPost ( 'id', 0 );
+	
+		/*----------------------------------------------------*/
+		/*----------------------------------------------------*/
+		$existeADA = 0; //Existance d'Analyses Demandées Aujourdhui
+		$listeAnalysesDemandees = $this->getAnalyseTable()->getListeAnalysesDemandeesDP($id);
+		if($listeAnalysesDemandees){ $existeADA = 1; }
+	
+		/*----------------------------------------------------*/
+		$listeTypesAnalyses = $this->getPatientTable()->getListeDesTypesAnalyses();
+		$tabTypesAnalyses = array(0 => '');
+		foreach ($listeTypesAnalyses as $listeTA){
+			$tabTypesAnalyses[$listeTA['idtype']] =  $listeTA['libelle'];
+		}
+		/*--Ajout du dernier type 'Imagerie'--*/
+		$tabTypesAnalyses[6] = 'IMAGERIE';
+	
+		/*----------------------------------------------------*/
+		$tabListeAnalysesParType = array();
+		for($i = 1 ; $i<=5 ; $i++){ // 5 est le nombre de type d'analyse
+			$tabListeAnalysesParType[$i] = $this->getListeAnalysesParType($i);
+		}
+	
+		/*----------------------------------------------------*/
+		/*----------------------------------------------------*/
+		$verifTypageHemo = $this->getAnalyseTable()->getAnalyseTypageHemoglobineDemande($id);
+	
+		/*----------------------------------------------------*/
+		/*----------------------------------------------------*/
+		/*----------------------------------------------------*/
+	
+		$donnees = array('', $existeADA, $listeAnalysesDemandees, $tabTypesAnalyses, $tabListeAnalysesParType, $verifTypageHemo);
+	
+		$this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );
+		return $this->getResponse ()->setContent ( Json::encode ( $donnees ) );
+	}
+	
+	public function getListeAnalysesParType($type)
+	{
+		$liste_select = "";
+		foreach($this->getPatientTable()->getListeDesAnalyses($type) as $listeAnalyses){
+			$liste_select.= "<option value=".$listeAnalyses['idanalyse'].">".$listeAnalyses['designation']."</option>";
+		}
+		return $liste_select;
+	}
+	
+	public function getListeAnalysesAction()
+	{
+		$id = (int)$this->params()->fromPost ('id');
+		$liste_select = "";
+		if($id == 6){
+			foreach($this->getPatientTable()->getListeDesExamenImagerie() as $listeExamens){
+				$liste_select.= "<option value='0,".$listeExamens['idexamen']."'>".$listeExamens['designation']."</option>";
+			}
+		}else{
+			foreach($this->getPatientTable()->getListeDesAnalyses($id) as $listeAnalyses){
+				$liste_select.= "<option value='".$listeAnalyses['idanalyse']."'>".$listeAnalyses['designation']."</option>";
+			}
+		}
+		$this->getResponse()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html' );
+		return $this->getResponse ()->setContent(Json::encode ( $liste_select));
+	}
+	
+	public function getTarifAnalyseAction()
+	{
+		$id = (int)$this->params()->fromPost ('id');
+	
+		$tarif = $this->getPatientTable()->getTarifAnalyse($id);
+		$tarifString = $this->prixMill( $tarif );
+	
+		$html = array((int)$tarif, $tarifString);
+	
+		$this->getResponse()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html' );
+		return $this->getResponse ()->setContent(Json::encode ( $html));
+		
+	}
 	
 	public function modifierConsultationAction() {
 		

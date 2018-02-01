@@ -725,6 +725,7 @@ width: 100%;
 
 }
 
+
 #SiegeDouleur .form-author-douleur label
 {/* le label*/
 line-height: 2.0em;
@@ -775,13 +776,14 @@ float: left;
 
 margin-left: 2px;
 
-text-transform: lowercase;
+/*text-transform: lowercase;*/
 
 }
 
 #SiegeDouleur input[type="number"]
 {
 	font-size: 22px;
+	padding-left: 110px; 
 }
 
 minus

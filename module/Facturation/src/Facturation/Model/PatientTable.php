@@ -1912,4 +1912,76 @@ class PatientTable {
 	}
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//TABLE UTILISEE DANS LE MODULE 'SECRETARIAT'
+	//TABLE UTILISEE DANS LE MODULE 'SECRETARIAT'
+	//TABLE UTILISEE DANS LE MODULE 'SECRETARIAT'
+	
+	//Recupere la liste des actes
+	//Recupere la liste des actes
+	public function getListeDesTypesAnalyses(){
+		$adapter = $this->tableGateway->getAdapter();
+		$sql = new Sql($adapter);
+		$select = $sql->select();
+		$select->columns(array('*'));
+		$select->from(array('t'=>'type_analyse'));
+		return $sql->prepareStatementForSqlObject($select)->execute();
+	}
+	
+	public function getTarifAnalyse($id){
+		$adapter = $this->tableGateway->getAdapter ();
+		$sql = new Sql($adapter);
+		$select = $sql->select();
+		$select->from(array('a'=>'analyse'));
+		$select->columns(array('*'));
+		$select->where(array('idanalyse' => $id));
+		return $sql->prepareStatementForSqlObject($select)->execute()->current()['tarif'];
+	}
+	
+	
+	
+	//UTILISEE DANS LE MODULE 'CONSULTATION'
+	//UTILISEE DANS LE MODULE 'CONSULTATION'
+	//UTILISEE DANS LE MODULE 'CONSULTATION'
+	public function getListeDesExamenImagerie(){
+		$adapter = $this->tableGateway->getAdapter ();
+		$sql = new Sql($adapter);
+		$select = $sql->select();
+		$select->from(array('ei'=>'examen_imagerie'));
+		$select->columns(array('*'));
+		$select->order('idexamen ASC');
+		return $sql->prepareStatementForSqlObject($select)->execute();
+	}
 }

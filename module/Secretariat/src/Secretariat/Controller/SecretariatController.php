@@ -1240,7 +1240,7 @@ class SecretariatController extends AbstractActionController {
 		
 		//Gestion des AGE
 		if($personne->age && !$personne->date_naissance){
-		    $html .="<div style=' left: 70px; top: 235px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> HJGH".$personne->age." ans </span></div>";
+		    $html .="<div style=' left: 70px; top: 235px; font-family: time new romans; position: absolute; '> Age: <span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$personne->age." ans </span></div>";
 		}else{
 		    $aujourdhui = (new \DateTime() ) ->format('Y-m-d');
 		    $age_jours = $this->nbJours($personne->date_naissance, $aujourdhui);
@@ -2176,9 +2176,13 @@ class SecretariatController extends AbstractActionController {
 		$analysesImmunoHemato = array();
 		$analysesCytologie = array();
 		$analysesHemostase = array();
+		$analysesMetabolismeGlucidique = array();
+		$analysesBilanLipidique = array();
 		$analysesBilanHepatique = array();
 		$analysesBilanRenal = array();
+		$analysesSerologie = array();
 		$analysesTypageHemoglobine = array();
+		$analysesTypageHemoProteine = array();
 		
 		$resultatsAnalysesDemandees = array();
 		
@@ -2307,6 +2311,76 @@ class SecretariatController extends AbstractActionController {
 				$analysesHemostase [] = 19;
 				$resultatsAnalysesDemandees[19] = $this->getResultatDemandeAnalyseTable()->getValeursFacteur9($iddemande);
 			}
+			elseif($idanalyse == 20){ //D-DIMERES
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesHemostase [] = 20;
+				$resultatsAnalysesDemandees[20] = $this->getResultatDemandeAnalyseTable()->getValeursDDimeres($iddemande);
+			}
+			//=========================================================
+			//=========================================================
+			
+			
+			//METABOLISME GLUCIDIQUE --- METABOLISME GLUCIDIQUE --- METABOLISME GLUCIDIQUE
+			//METABOLISME GLUCIDIQUE --- METABOLISME GLUCIDIQUE --- METABOLISME GLUCIDIQUE
+			//METABOLISME GLUCIDIQUE --- METABOLISME GLUCIDIQUE --- METABOLISME GLUCIDIQUE
+			elseif($idanalyse == 21){ //Glycemie
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesMetabolismeGlucidique [] = 21;
+				$resultatsAnalysesDemandees[21] = $this->getResultatDemandeAnalyseTable()->getValeursGlycemie($iddemande);
+			}
+			elseif($idanalyse == 43){ //Hemoglobine glyquee
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesMetabolismeGlucidique [] = 43;
+				$resultatsAnalysesDemandees[43] = $this->getResultatDemandeAnalyseTable()->getValeursHemoglobineGlyqueeHBAC($iddemande);
+			}
+			
+			//=========================================================
+			//=========================================================
+			
+			//BILAN LIPIDIQUE --- BILAN LIPIDIQUE --- BILAN LIPIDIQUE
+			//BILAN LIPIDIQUE --- BILAN LIPIDIQUE --- BILAN LIPIDIQUE
+			//BILAN LIPIDIQUE --- BILAN LIPIDIQUE --- BILAN LIPIDIQUE
+			elseif($idanalyse == 25){ //CHOLESTEROL TOTAL
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanLipidique  [] = 25;
+				$resultatsAnalysesDemandees[25] = $this->getResultatDemandeAnalyseTable()->getValeursCholesterolTotal($iddemande);
+			}
+			elseif($idanalyse == 26){ //TRIGLYCERIDES 
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanLipidique  [] = 26;
+				$resultatsAnalysesDemandees[26] = $this->getResultatDemandeAnalyseTable()->getValeursTriglycerides($iddemande);
+			}
+			elseif($idanalyse == 27){ //CHOLESTEROL HDL
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanLipidique  [] = 27;
+				$resultatsAnalysesDemandees[27] = $this->getResultatDemandeAnalyseTable()->getValeursCholesterolHDL($iddemande);
+			}
+			elseif($idanalyse == 28){ //CHOLESTEROL LDL
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanLipidique  [] = 28;
+				$resultatsAnalysesDemandees[28] = $this->getResultatDemandeAnalyseTable()->getValeursCholesterolLDL($iddemande);
+			}
+			elseif($idanalyse == 29){ //CHOLESTEROL (TOTAL - HDL - LDL) Triglyceride
+				
+				//CHOLESTEROL TOTAL
+				$analysesBilanLipidique  [] = 25;
+				$resultatsAnalysesDemandees[25] = $this->getResultatDemandeAnalyseTable()->getValeursCholesterolTotal($iddemande);
+			
+			    //TRIGLYCERIDES
+				$analysesBilanLipidique  [] = 26;
+				$resultatsAnalysesDemandees[26] = $this->getResultatDemandeAnalyseTable()->getValeursTriglycerides($iddemande);
+					
+				//CHOLESTEROL HDL
+				$analysesBilanLipidique  [] = 27;
+				$resultatsAnalysesDemandees[27] = $this->getResultatDemandeAnalyseTable()->getValeursCholesterolHDL($iddemande);
+					
+				//CHOLESTEROL LDL
+				$analysesBilanLipidique  [] = 28;
+				$resultatsAnalysesDemandees[28] = $this->getResultatDemandeAnalyseTable()->getValeursCholesterolLDL($iddemande);
+					
+			}
+			
+			
 			//=========================================================
 			//=========================================================
 			
@@ -2386,6 +2460,55 @@ class SecretariatController extends AbstractActionController {
 			//=========================================================
 			
 			
+			//SEROLOGIE  ---  SEROLOGIE  ---  SEROLOGIE
+			//SEROLOGIE  ---  SEROLOGIE  ---  SEROLOGIE
+			//SEROLOGIE  ---  SEROLOGIE  ---  SEROLOGIE
+			elseif($idanalyse == 53){ //CRP
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 53;
+				$resultatsAnalysesDemandees[53] = $this->getResultatDemandeAnalyseTable()->getValeursCrp($iddemande);
+			}
+				
+			elseif($idanalyse == 55){ //RF Waaler Rose
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 55;
+				$resultatsAnalysesDemandees[55] = $this->getResultatDemandeAnalyseTable()->getValeursRfWaalerRose($iddemande);
+			}
+				
+			elseif($idanalyse == 60){ //Serologie Syphilitique
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 60;
+				$resultatsAnalysesDemandees[60] = $this->getResultatDemandeAnalyseTable()->getValeursSerologieSyphilitique($iddemande);
+			}
+				
+			elseif($idanalyse == 61){ //ASLO
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 61;
+				$resultatsAnalysesDemandees[61] = $this->getResultatDemandeAnalyseTable()->getValeursAslo($iddemande);
+			}
+			//=========================================================
+			//=========================================================
+						
+					
+			//TYPAGE DE L'HEMOGLOBINE (Avec ELECTROPHORESE DE L'HEMOGLOBINE et DES PROTEINES)
+			//TYPAGE DE L'HEMOGLOBINE (Avec ELECTROPHORESE DE L'HEMOGLOBINE et DES PROTEINES)
+			//TYPAGE DE L'HEMOGLOBINE (Avec ELECTROPHORESE DE L'HEMOGLOBINE et DES PROTEINES)
+			elseif($idanalyse == 44){ //ELECTROPHORESE DE HEMOGLOBINE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesTypageHemoProteine[44] = 44;
+				$resultatsAnalysesDemandees[44] = $this->getResultatDemandeAnalyseTable()->getValeursElectrophoreseHemoglobine($iddemande);
+			}
+				
+			elseif($idanalyse == 45){ //ELECTROPHORESE DES PROTEINES
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesTypageHemoProteine[45] = 45;
+				$resultatsAnalysesDemandees[45] = $this->getResultatDemandeAnalyseTable()->getValeursElectrophoreseProteines($iddemande);
+			}
+			
+			//=========================================================
+			//=========================================================
+			
+			
 			//TYPAGE DE L'HEMOGLOBINE  ---  TYPAGE DE L'HEMOGLOBINE
 			//TYPAGE DE L'HEMOGLOBINE  ---  TYPAGE DE L'HEMOGLOBINE
 			//TYPAGE DE L'HEMOGLOBINE  ---  TYPAGE DE L'HEMOGLOBINE
@@ -2435,8 +2558,8 @@ class SecretariatController extends AbstractActionController {
 		//========= Créaton de la page 2 ========
 		//========= Créaton de la page 2 ========
 		
-		if($analysesImmunoHemato || $analysesCytologie || $analysesHemostase || 
-		   $analysesBilanHepatique || $analysesBilanRenal ){
+		if($analysesImmunoHemato || $analysesCytologie || $analysesHemostase || $analysesMetabolismeGlucidique ||
+		   $analysesBilanLipidique || $analysesBilanHepatique || $analysesBilanRenal || $analysesSerologie || $analysesTypageHemoProteine){
 			
 			$page2 = new ResultatsAnalysesDemandeesPdf();
 			
@@ -2461,6 +2584,18 @@ class SecretariatController extends AbstractActionController {
 			//GESTION DES ANALYSES DE L'HEMOSTASE
 			$page2->setAnalysesHemostase($analysesHemostase);
 			
+			//GESTION DES ANALYSES DU TYPAGE (Helectrophorèse)
+			//GESTION DES ANALYSES DU TYPAGE (Helectrophorèse)
+			$page2->setAnalysesTypageHemoProteine($analysesTypageHemoProteine);
+			
+			//GESTION DES ANALYSES DU METABOLISME GLUCIDIQUE
+			//GESTION DES ANALYSES DU METABOLISME GLUCIDIQUE
+			$page2->setAnalysesMetabolismeGlucidique($analysesMetabolismeGlucidique);
+			
+			//GESTION DES ANALYSES DU BILAN LIPIDIQUE
+			//GESTION DES ANALYSES DU BILAN LIPIDIQUE
+			$page2->setAnalysesBilanLipidique($analysesBilanLipidique);
+			
 			//GESTION DES ANALYSES DU BILAN HEPATIQUE
 			//GESTION DES ANALYSES DU BILAN HEPATIQUE
 			$page2->setAnalysesBilanHepatique($analysesBilanHepatique);
@@ -2468,6 +2603,10 @@ class SecretariatController extends AbstractActionController {
 			//GESTION DES ANALYSES DU BILAN RENAL
 			//GESTION DES ANALYSES DU BILAN RENAL
 			$page2->setAnalysesBilanRenal($analysesBilanRenal);
+			
+			//GESTION DES ANALYSES DE SEROLOGIE
+			//GESTION DES ANALYSES DE SEROLOGIE
+			$page2->setAnalysesSerologie($analysesSerologie);
 			
 			//Ajouter une note à la page
 			$page2->addNote();

@@ -10,7 +10,7 @@ $('#menu_consultations_style').css({'font-weight':'bold','color':'white','font-s
 </script>
 
 <?php use Facturation\View\Helper\DateHelper;?>
-<?php echo $this->headScript()->appendFile($this->basePath().'/js/mesjs/accordeon_controle_validation.js');?>
+<?php echo $this->headScript()->appendFile($this->basePath().'/js/infirmerie/jsConsultation.js');?>
 
 <!-- Mes CSS -->
 <?php echo $this->headLink()->appendStylesheet($this->basePath().'/css/infirmier/styleMotifsConstantes.css');?>
@@ -161,7 +161,7 @@ echo $this->form()->openTag($form); ?>
            <!-- **1** -->
               <div style='font-family: police2;font-size: 17px; font-weight: bold;'> Motifs de consultation </div>
                <div style=''>
-                <?php echo  $this->headScript()->appendFile($this->basePath().'/js/infirmerie/ajouterMotifs.js');?>
+                <?php echo  $this->headScript()->appendFile($this->basePath().'/js/infirmerie/jsAjouterMotifs.js');?>
                 
                 <div style='width: 100%; height: 340px;'>
                 
@@ -225,29 +225,7 @@ echo $this->form()->openTag($form); ?>
                          afficherMotif(nbMotif);
                          supprimerUnMotif();
 
-                       </script>
-                       
-                       
-                       <script> 
-                         var myArrayListeMotifCons = [''];
-                         var i = 0;
-                       </script>
-                         <?php foreach ($this->listeMotifConsultation as $listeMotifCons){ ?>
-                           <script> myArrayListeMotifCons[i++] =  "<?php echo $listeMotifCons['libelle']; ?>" </script>
-                         <?php } ?>
-                       <script> 
-                           listeMotifsConsultation(myArrayListeMotifCons);
-                       </script>
-                       
-                       <script> 
-                         var myArrayListeSiege = [''];
-                         var j = 0;
-                       </script>
-                         <?php foreach ($this->listeSiege as $listeSiege){ ?>
-                           <script> myArrayListeSiege[j++] =  "<?php echo $listeSiege['libelle']; ?>" </script>
-                         <?php } ?>
-                       <script> 
-                           //setTimeout(function(){ listeSiege(myArrayListeSiege); }, 2000);
+                         listeMotifsConsultation();
                        </script>
                        
                    </div>
@@ -392,36 +370,36 @@ echo $this->form()->openTag($form); ?>
 	 <tbody style="font-size: 16px; font-family: times new roman;" id="champsPoids">
        <tr style="height: 35px; width:100%;">
 	     <td style='width: 7%;'>P1</td>
-		 <td style='width: 43%; '>Parac&eacute;tamol (15mg/Kg)</td>
+		 <td style='width: 43%; '>Parac&eacute;tamol (15mg/kg)</td>
 		 <td style='width: 25%; max-height: 25px;'><select id="voieAdminM1" style="max-height: 25px; width: 95%;"> <option value="0"></option> <option value="1">Orale</option> <option value="2">Injectable</option> <option value="3">Suppositoire</option> </select></td>
 		 <td style='width: 12%;' id="poidsP1"><input id="poidsP1Alerte" style="font-size: 16px;" type="number" min="1" max="100"></td>
 		 <td style='width: 13%; padding-left: 10px; font-size: 19px; font-family: times new roman;'><span class="poidsP1"> </span></td>
        </tr>
        <tr style="height: 35px; width:100%;">
 	     <td rowspan="3" style='width: 7%;'>P2</td>
-		 <td style='width: 43%;'>AINS - Ibuprof&egrave;ne (30mg/Kg)</td>
+		 <td style='width: 43%;'>AINS - Ibuprof&egrave;ne (30mg/kg)</td>
 		 <td style='width: 25%; max-height: 25px;'><select id="voieAdminM2" style="max-height: 25px; width: 95%;"><option value="0"></option> <option value="1">Orale</option> <option value="2">Injectable</option> <option value="3">Suppositoire</option></select></td>
 		 <td style='width: 12%;' id="poidsP2"><input style="font-size: 16px;" type="number" readonly></td>
 		 <td style='width: 13%; padding-left: 10px; font-size: 19px; font-family: times new roman;'><span class="poidsP2"> </span></td>
        </tr>
        <tr style="height: 35px; width:100%;">
 	     <!--td style='width: 7%;'>P2</td-->
-		 <td style='width: 43%;'>AINS - Diclofenac (0,5 &agrave; 1mg/Kg)</td>
+		 <td style='width: 43%;'>AINS - Diclofenac (0,5 &agrave; 1mg/kg)</td>
 		 <td style='width: 25%; max-height: 25px;'><select id="voieAdminM3" style="max-height: 25px; width: 95%;"><option value="0"></option> <option value="1">Orale</option> <option value="2">Injectable</option> <option value="3">Suppositoire</option></select></td>
 		 <td style='width: 12%;' id="poidsP2a"><input style="font-size: 16px;" type="number" readonly></td>
 		 <td style='width: 13%; padding-left: 10px; font-size: 19px; font-family: times new roman;'><span class="poidsP2a"> </span></td>
        </tr>
        <tr style="height: 35px; width:100%;">
 	     <!--td style='width: 7%;'>P2</td-->
-		 <td style='width: 43%;'>D&eacute;riv&eacute;e morphine</td>
+		 <td style='width: 43%;'>D&eacute;riv&eacute;e morphine - Tramadol (2mg/kg) </td>
 		 <td style='width: 25%; max-height: 25px;'><select id="voieAdminM4" style="max-height: 25px; width: 95%;"><option value="0"></option> <option value="1">Orale</option> <option value="2">Injectable</option> <option value="3">Suppositoire</option></select></td>
 		 <td style='width: 12%;' id="poidsP2b"><input style="font-size: 16px;" type="number" readonly></td>
 		 <td style='width: 13%; padding-left: 10px; font-size: 19px; font-family: times new roman;'><span class="poidsP2b"> </span></td>
        </tr>
        <tr style="height: 35px; width:100%;">
 	     <td style='width: 7%;'>P3</td>
-		 <td style='width: 43%;'>Morphine</td>
-		 <td style='width: 25%; max-height: 25px;'><select id="voieAdminM5" style="max-height: 25px; width: 95%;"><option value="0"></option> <option value="1">Orale</option> <option value="2">Injectable</option> <option value="3">Suppositoire</option></select></td>
+		 <td style='width: 43%;'>Morphine <span id="MorphineDosageInfos"> </span> </td>
+		 <td style='width: 25%; max-height: 25px;'><select id="voieAdminM5" style="max-height: 25px; width: 95%;"><option value="0"></option> <option value="1">Orale</option> <option value="2">Injectable</option> </select></td>
 		 <td style='width: 12%;' id="poidsP3"><input style="font-size: 16px;" type="number" readonly></td>
 		 <td style='width: 13%; padding-left: 10px; font-size: 19px; font-family: times new roman;'><span class="poidsP3"> </span></td>
        </tr>
@@ -533,6 +511,9 @@ $(function(){
 	$('#responde input, #respond input').attr('autocomplete','off');
 });
 
+$('#listeDesMedicaments, #listeDesMedicamentsFievre').keypress(function(event) {
+	if (event.keyCode == 13) { return false; }
+});
 
 //*********************************************************************
 //*********************************************************************
@@ -689,7 +670,10 @@ var temperatureFievre = $('#temperature').val();
 $("#poidsP1AlerteFievre").val($('#poids').val());
 $("#temperatureFievre").val(temperatureFievre);
 if(temperatureFievre >= 37.5){
-	$("#temperatureFievre").trigger('change');
+
+	//Code qui fait que le pop-up s'affiche automatiquement à l'ouverture du dossier
+	//$("#temperatureFievre").trigger('change');
+	//******************************************************************************
 	$("#alertePriseEnChargeFievre input").trigger('click');
 }
 
@@ -710,6 +694,3 @@ if($listeVoieAdmin){ ?>
 	</script>
 <?php } ?>
 
-
-
-<?php  echo $this->headScript()->appendFile($this->basePath().'/js/jquery.maskedinput.cons.js');?>
