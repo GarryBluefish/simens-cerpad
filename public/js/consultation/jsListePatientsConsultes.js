@@ -99,7 +99,7 @@
 					}
 			   },
 					   	
-			   "sAjaxSource": ""+tabUrl[0]+"public/infirmerie/liste-patient-ajax", 
+			   "sAjaxSource": ""+tabUrl[0]+"public/consultation/liste-patients-consultes-ajax", 
 			   
 			   "fnDrawCallback": function() 
 				{
@@ -180,50 +180,45 @@
     		if(id){ listeAnalyses(id); }
     	});
     	
-    	$('a,img,hass').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });
     }
     
-    var entreeValidation = 0;
-    function listeAnalyses(idfacturation){
-        var chemin = tabUrl[0]+'public/infirmerie/liste-analyses-facturees';
-        $.ajax({
-            type: 'POST',
-            url: chemin ,
-            data:{'idfacturation':idfacturation},
-            success: function(data) {
-       	    
-            	$('#titre span').html('INFORMATIONS SUR L\'ADMISSION');
-            	     var result = jQuery.parseJSON(data);  
-            	     $("#contenu").fadeOut(function(){ $("#vue_patient").html(result); $("#interfaceListeFactures").fadeIn("fast"); }); 
-            	     
-            	     $('.boutonAnnuler').click(function(){
-            	    	 
-            	    	 $('#interfaceListeFactures').fadeOut(function(){
-            	    		$('#titre span').html('LISTE DES PATIENTS ADMIS'); 
-            	    		$('#contenu').fadeIn(300);
-            	    	 });
-            	    		 
-            	     });
-            	     
-            	     if(entreeValidation == 0){
-            	    	 entreeValidation = 1;
-                         $('.boutonTerminer').click(function(){
-                         
-                        	 if($('#formEnregistrementBilan')[0].checkValidity() == true){
-                        		 //formulaire valide et envoi des donn�es
-                        		 $('.boutonTerminer button').attr('disabled', true);
-                        		 $('#validerForm').trigger('click');
-                        	 }else{
-                        		 $('#validerForm').trigger('click');
-                        	 }
-                         });
-            	     }
-                     
-            },
-            error:function(e){console.log(e);alert("Une erreur interne est survenue!");},
-            dataType: "html"
-        });
+    function Consultation(idcons) {
+    	alert(idcons);
     }
+    
+    
+//    function listeAnalyses(idfacturation){ 
+//        var chemin = tabUrl[0]+'public/infirmerie/liste-analyses-facturees';
+//        $.ajax({
+//            type: 'POST',
+//            url: chemin ,
+//            data:{'idfacturation':idfacturation},
+//            success: function(data) {
+//       	    
+//            	$('#titre span').html('INFORMATIONS SUR L\'ADMISSION');
+//            	     var result = jQuery.parseJSON(data);  
+//            	     $("#contenu").fadeOut(function(){ $("#vue_patient").html(result); $("#interfaceListeFactures").fadeIn("fast"); }); 
+//            	     
+//            	     $('.boutonAnnuler').click(function(){
+//            	    	 
+//            	    	 $('#interfaceListeFactures').fadeOut(function(){
+//            	    		$('#titre span').html('LISTE DES PATIENTS ADMIS'); 
+//            	    		$('#contenu').fadeIn(300);
+//            	    	 });
+//            	    		 
+//            	     });
+//            	     
+//                     $('.boutonTerminer').click(function(){
+//            	    	 
+//            	    	 //Validation du formulaire
+//            	    	 $('#validerForm').trigger('click');
+//            	    	 
+//            	     });
+//            },
+//            error:function(e){console.log(e);alert("Une erreur interne est survenue!");},
+//            dataType: "html"
+//        });
+//    }
     
 
     function infos_parentales(id)
@@ -240,47 +235,6 @@
     	
     }
     
-    function getdifficultes(val)
-    {
-    	if(val == 0){
-    		$('.reductTextarea textarea').val('Néant').attr({'readonly':true});
-    	}else{
-    		$('.reductTextarea textarea').val('').attr({'readonly':false});
-    	}
-    }
-
-    function getMomentTransfusion(val)
-    {
-    	if(val == 0){
-    		$('.reductSelect2 select').val('').attr({'disabled':true});
-    	}else{
-    		$('.reductSelect2 select').val(1).attr({'disabled':false});
-    	}
-    }
     
-    
-    function initForm()
-    {
-    	$('#difficultes').val(0);
-    	$('.reductTextarea textarea').val('Néant').attr({'readonly':true});
-    	
-    	$('#transfuser').val(0);
-    	$('.reductSelect2 select').val('').attr({'disabled':true});
-    	
-    	
-    	$('#date_heure').datetimepicker(
-    		$.datepicker.regional['fr'] = {
-    			dateFormat: 'dd/mm/yy -', 
-    			timeText: 'H:M', 
-    			hourText: 'Heure', 
-    			minuteText: 'Minute', 
-    			currentText: 'Actuellement', 
-    			closeText: 'F',
-    			showAnim : 'bounce',
-    			maxDate : '0',
-    		} 
-    	);
-    	
-    }
     
 	

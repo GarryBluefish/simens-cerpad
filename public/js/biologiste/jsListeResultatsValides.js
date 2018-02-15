@@ -1221,9 +1221,19 @@
     function getCrp(){
     	var tab = [];
     	tab[1] = $('#type_materiel_crp').val();
-    	tab[2] = $('#crp').val();
+    	tab[2] = $('#optionResultatCrp').val();
+    	tab[3] = $('#crpValeurResultat').val();
 	    
 	    return tab;
+    }
+    
+    function getChoixResultatCrp(id){
+    	if(id == 'positif'){
+    		$('#crpValeurResultatChamp').css({'visibility':'visible'});
+    	}else{
+    		$('#crpValeurResultatChamp').css({'visibility':'hidden'});
+    		$('#crpValeurResultat').val('')
+    	}
     }
     
     function getFacteursRhumatoides(){

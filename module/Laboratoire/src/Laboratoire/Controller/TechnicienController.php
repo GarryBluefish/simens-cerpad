@@ -3658,17 +3658,19 @@ class TechnicienController extends AbstractActionController {
 	    if($resultat){
 	        $html .="<script> setTimeout(function(){ $('#type_materiel_electro_hemo').val('".str_replace( "'", "\'", $resultat[0]['type_materiel'])."'); },50); </script>";
 	        for($i = 0 ; $i < count($resultat) ; $i++){
+	        	if($i > 0){
+	        		$html .= "<script> setTimeout(function(){ $('#electro_hemo_plus').trigger('click'); }, 50); </script>";
+	        	}
 	            $html .=
 	            "<script>
 	              setTimeout(function(){ 
-	                $('#electro_hemo_plus').trigger('click'); 
 	                $('#electro_hemo_label_".($i+1)."').val('".$resultat[$i]['libelle']."');
 	                $('#electro_hemo_valeur_".($i+1)."').val('".$resultat[$i]['valeur']."');
 	              }, 50);
 	    	    </script>";
 	        }
-	        $html .="<script> setTimeout(function(){ $('#electro_hemo_moins').trigger('click'); },50); </script>";
-	        
+	        $html .="<script> setTimeout(function(){ $('#conclusion_electro_hemo_valeur').val('".str_replace( "'", "\'", $resultat[0]['conclusion'])."'); },50); </script>";
+	         
 	    }
 	    return $html;
 	}
@@ -3830,7 +3832,9 @@ class TechnicienController extends AbstractActionController {
 	        $html .=
 	        "<script>
 	            $('#type_materiel_crp').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
-	    	    $('#crp').val('".$resultat['crp']."');
+	    	    $('#optionResultatCrp').val('".$resultat['optionResultatCrp']."');
+	    	    $('#crpValeurResultat').val('".$resultat['crpValeurResultat']."');
+	    	    $('#optionResultatCrp').trigger('change');		
 	    	 </script>";
 	    }
 	    return $html;
@@ -7269,7 +7273,17 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "  <td style='width: 20%;'></td>";
 	    $html .= "</tr>";
 	    
-	    $html .= "</table> </td> </tr>";
+	    $html .= "</table>";
+	    
+	    $html .= "<table id='conclusion_resultat_electro_hemo' style='width: 100%; margin-left: 5px;'>";
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 70%;'><label class='lab1'><span style='font-weight: bold; width: 100%; text-align: right;'> Conclusion :  <input id='conclusion_electro_hemo_valeur' type='text' step='any' style='width: 70%; float: right; text-align: left;'> </span></label></td>";
+	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 86%;'> </label></td>";
+	    $html .= "</tr>";
+	    $html .= "</table> ";
+	     
+	    $html .= "</td> </tr>";
+	     
 	    
 		return $html;
 	}
@@ -7593,13 +7607,19 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
+	    $html .= "</table>";
+	    
+	    $html .= "<table style='width: 100%;'>";
+	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 55%;'><label class='lab1'><span style='font-weight: bold; '> CRP <input id='crp' type='number' step='any' tabindex='2'> </span></label></td>";
-	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'> mg/l </label></td>";
-	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> < 6 mg/l </label></td>";
+	    $html .= "  <td style='width: 45%;'><label class='lab1'><span style='font-weight: bold; '> CRP <select id='optionResultatCrp' onchange='getChoixResultatCrp(this.value);'> <option value=''></option> <option value='positif'> Positif </option> <option value='negatif'> N&eacute;gatif </option> </select> </span></label></td>";
+	    $html .= "  <td style='width: 25%;'><label class='lab2' style='padding-top: 5px;'> <span id='crpValeurResultatChamp' style='visibility: hidden;'> <input id='crpValeurResultat' type='number' step='any' tabindex='2'> mg/l </span> </label></td>";
+	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%; text-align: center;'> < 6 mg/l </label></td>";
 	    $html .= "</tr>";
-	
-	    $html .= "</table> </td> </tr>";
+	     
+	    $html .= "</table>";
+	    
+	    $html .= "</td> </tr>";
 	
 	    return $html;
 	}

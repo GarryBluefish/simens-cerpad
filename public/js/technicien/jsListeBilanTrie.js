@@ -188,7 +188,7 @@
     }
     
     
-    
+    var entreeValidation = 0;
     function modifierPrelevementTrie(idpatient, idfacturation)
     {
     	
@@ -214,21 +214,24 @@
             		});
             	    		 
             	});
-            	     
-            	$('.boutonValider').click(function(){
-            	    	 
-            	    //Validation du formulaire
-            		////$('#validerConformitePrelevementForm').trigger('click');
+            	
+            	if(entreeValidation == 0){
+            		entreeValidation = 1;
             		
-            		if($('#formEnregistrementTri')[0].checkValidity() == true){
-            			//formulaire valide et envoi des données
-            			$('.boutonValider button').attr('disabled', true);
-                		$('#validerConformitePrelevementForm').trigger('click');
-        			}else{
-        				$('#validerConformitePrelevementForm').trigger('click');
-        			}
+            		$('.boutonValider').click(function(){
+           	    	 
+                		if($('#formEnregistrementTri')[0].checkValidity() == true){
+                			//formulaire valide et envoi des données
+                			$('.boutonValider button').attr('disabled', true);
+                    		$('#validerConformitePrelevementForm').trigger('click');
+            			}else{
+            				$('#validerConformitePrelevementForm').trigger('click');
+            			}
 
-            	});
+                	});
+            	}
+            	     
+            	
 
             },
             error:function(e){console.log(e);alert("Une erreur interne est survenue!");},

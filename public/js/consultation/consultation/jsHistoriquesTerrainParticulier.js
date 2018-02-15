@@ -1,31 +1,9 @@
 
 //A l'entrée
-getInfoCrise(0);
-getInfoAutresEvenements(0);
+//getInfoCrise(0);
+//getInfoAutresEvenements(0);
 //gestionChoixMotifRendezVous();
-
-function getInfoCrise(id){
-
-	if(id == 1){
-		$(".criseInfo div").fadeIn();
-	}else if(id == 0 || id == ''){
-		$(".criseInfo div").fadeOut(false);
-	}
-	
-}
-
-$(".episodeFievreClassHM div").toggle(false);
-
-function getInfoEpisodeFievre(id){
-
-	if(id == 1){
-		$(".episodeFievreClassHM div").fadeIn();
-	}else if(id == 0 || id == ''){
-		$(".episodeFievreClassHM div").fadeOut(false);
-	}
-	
-}
-
+/*
 function getInfoAutresEvenements(id){
 
 	if(id == 1 || id == 2){
@@ -34,6 +12,7 @@ function getInfoAutresEvenements(id){
 		$(".autresInfo div").fadeOut(false);
 	}
 }
+*/
 
 function scriptHistoriqueTerrainParticulier(){
 	
@@ -423,6 +402,7 @@ function scriptAuClick(){
 			$('.labelDegreAF').toggle(true);
 		}else{
 			$('.labelDegreAF').toggle(false);
+			$('#degreAF').val(0);
 		}
 		
 	});
@@ -435,9 +415,22 @@ function scriptAuClick(){
 	
 	$('#fratrieTailleAF').change(function(){
 		$('#fratrieTailleFilleAF, #fratrieTailleGarconAF').val('');
-	});
+		$('#fratrieRangAF').attr({'max':$(this).val()});
+	}).keyup(function(){
+		$('#fratrieTailleFilleAF, #fratrieTailleGarconAF').val('');
+		$('#fratrieRangAF').attr({'max':$(this).val()});
+	}).click(function(){
+		$('#fratrieTailleFilleAF, #fratrieTailleGarconAF').val('');
+		$('#fratrieRangAF').attr({'max':$(this).val()});
+	});;
 	
 	$('#fratrieTailleFilleAF').change(function(){
+		var tailleFilleAF = $(this).val();
+		var tailleFratrieAF = $('#fratrieTailleAF').val();
+		$(this).attr({'max':tailleFratrieAF});
+		
+		if(tailleFilleAF){ $('#fratrieTailleGarconAF').val(tailleFratrieAF - tailleFilleAF); }
+	}).keyup(function(){
 		var tailleFilleAF = $(this).val();
 		var tailleFratrieAF = $('#fratrieTailleAF').val();
 		$(this).attr({'max':tailleFratrieAF});
@@ -460,6 +453,14 @@ function scriptAuClick(){
 			$('#fratrieTailleFilleAF').val(tailleFratrieAF - tailleGarconAF);			
 		}
 
+	}).keyup(function(){
+		var tailleGarconAF = $(this).val();
+		var tailleFratrieAF = $('#fratrieTailleAF').val();
+		$(this).attr({'max':tailleFratrieAF});
+		
+		if(tailleGarconAF){
+			$('#fratrieTailleFilleAF').val(tailleFratrieAF - tailleGarconAF);			
+		}
 	}).click(function(){
 		var tailleGarconAF = $(this).val();
 		var tailleFratrieAF = $('#fratrieTailleAF').val();
@@ -468,6 +469,23 @@ function scriptAuClick(){
 		if(tailleGarconAF){
 			$('#fratrieTailleFilleAF').val(tailleFratrieAF - tailleGarconAF);			
 		}
+	});
+	
+	$('#fratrieRangAF').change(function(){
+		var rang = $(this).val();
+		if(rang == 1){ $('#fratrieTailleAFSuff').html('er'); }
+		else if(rang > 1){  $('#fratrieTailleAFSuff').html('&egrave;me');  }
+		else{ $('#fratrieTailleAFSuff').html(''); }
+	}).keyup(function(){
+		var rang = $(this).val();
+		if(rang == 1){ $('#fratrieTailleAFSuff').html('er'); }
+		else if(rang > 1){  $('#fratrieTailleAFSuff').html('&egrave;me');  }
+		else{ $('#fratrieTailleAFSuff').html(''); }
+	}).click(function(){
+		var rang = $(this).val();
+		if(rang == 1){ $('#fratrieTailleAFSuff').html('er'); }
+		else if(rang > 1){  $('#fratrieTailleAFSuff').html('&egrave;me');  }
+		else{ $('#fratrieTailleAFSuff').html(''); }
 	});
 	
 	/** Choix statut drépanocytose enfants **/
@@ -480,21 +498,22 @@ function scriptAuClick(){
 			
 			var html = "";
 			if(indice > 0){ html +="<span style='margin-left: 8px; font-weight: bold; font-size: 19px;'>&#38;</span>";}
-			$('#choixStatutEnfant'+indice++).after( html +
-					"<span id='choixStatutEnfant"+indice+"' >"+
+			$('#choixStatutEnfant_'+indice++).after( html +
+					"<span id='choixStatutEnfant_"+indice+"' >"+
 					"<select  id='choixStatutEnfant"+indice+"' name='choixStatutEnfant"+indice+"' >" +
 					"<option value=''></option>" +
-					"<option value='AS'>AS</option>" +
-					"<option value='AC'>AC</option>" +
-					"<option value='A-Bth'>A-Bth</option>" +
-					"<option value='SS'>SS</option>" +
-					"<option value='SC'>SC</option>" +
-					"<option value='S-Bth'>S-Bth</option>" +
-					"<option value='Autres'>Autres..</option>" +
-					"<option value='Inconnu'>Inconnu</option>" +
+					"<option value='1'>AS</option>" +
+					"<option value='2'>AC</option>" +
+					"<option value='3'>A-Bth</option>" +
+					"<option value='4'>SS</option>" +
+					"<option value='5'>SC</option>" +
+					"<option value='6'>S-Bth</option>" +
+					"<option value='-1'>Autres..</option>" +
+					"<option value='-2'>Inconnu</option>" +
 					"</select>" +
 					"<input type='number' id='choixStatutEnfantNb"+indice+"' name='choixStatutEnfantNb"+indice+"' >" +
 					"</span>");
+			$('#nbChoixStatutEnfantAF').val(indice);
 		}
 	});
 	
@@ -537,48 +556,41 @@ function scriptAuClick(){
 			 */
 		}
 	});
-	
-	
-	
-	
-	
-	//ANTECEDENTS FAMILIAUX TESTER SI C'EST COCHE
-	//ANTECEDENTS FAMILIAUX TESTER SI C'EST COCHE
+
+		
+	//AFFICHAGE AU DEMARRAGE --- AFFICHAGE AU DEMARRAGE
+	//AFFICHAGE AU DEMARRAGE --- AFFICHAGE AU DEMARRAGE
 	/*
-	if(temoinDiabeteAF != 1){ 
-		$("#DivNoteDiabeteAF").toggle(false);
-	}
-	if(temoinDrepanocytoseAF != 1){
-		$("#DivNoteDrepanocytoseAF").toggle(false);
-	}
-	if(temoinhtaAF != 1){
-		$("#DivNoteHtaAF").toggle(false);
-	}
-	$("#DivNoteAutresAF").toggle(false);
+	 * A mettre uniquement les éléments à appliquer automatiquement
+	 */
+	$('.image2_TP').click(function(){
+		//Consanguinité - Fratrie --- Consanguinité - Fratrie --- Consanguinité - Fratrie
+		$('#consanguiniteAF, #fratrieRangAF').trigger('change');
+		
+		//Autres maladies familiales --- Autres maladies familiales --- Autres maladies familiales
+		var boutons = $('#autresMaladiesFamiliales input[name="AllergiesAF"]');
+		if( boutons[1].checked){ $("#libelleAllergiesAF").html('&#10003; Allergie').css({'color':'red', 'font-weight':'bold'}); }
 	
-	$('#AntecedentsFamiliaux input[name=DiabeteAF]').click(function(){ 
-		var boutons = $('#AntecedentsFamiliaux input[name=DiabeteAF]');
-		if( boutons[1].checked){ $("#DivNoteDiabeteAF").toggle(true); }
-		if(!boutons[1].checked){ $("#DivNoteDiabeteAF").toggle(false); }
+		var boutons = $('#autresMaladiesFamiliales input[name="AsthmeAF"]');
+		if( boutons[1].checked){ $("#libelleAsthmeAF").html('&#10003; Asthme').css({'color':'red', 'font-weight':'bold'}); }
+		 
+		var boutons = $('#autresMaladiesFamiliales input[name="DiabeteAF"]');
+		if( boutons[1].checked){ $("#libelleDiabeteAF").html('&#10003; Diabete').css({'color':'red', 'font-weight':'bold'}); }
+	
+		var boutons = $('#autresMaladiesFamiliales input[name="HtaAF"]');
+		if( boutons[1].checked){ $("#libelleHtaAF").html('&#10003; Hta').css({'color':'red', 'font-weight':'bold'}); }
+
+	});
+
+	//Statuts drepanocytoses enfants
+	setTimeout(function(){
+		for(var i=0 ; i<choixStatutEnfant.length ; i++){
+			$('#ajoutChoixStatutDrepanoEnfants').trigger('click');
+			$('#choixStatutEnfant'+(i+1)).val(choixStatutEnfant[i]);
+			$('#choixStatutEnfantNb'+(i+1)).val(choixStatutEnfantNb[i]);
+		}
 	});
 	
-	$('#AntecedentsFamiliaux input[name=DrepanocytoseAF]').click(function(){ 
-		var boutons = $('#AntecedentsFamiliaux input[name=DrepanocytoseAF]');
-		if( boutons[1].checked){ $("#DivNoteDrepanocytoseAF").toggle(true); }
-		if(!boutons[1].checked){ $("#DivNoteDrepanocytoseAF").toggle(false); }
-	});
-	
-	$('#AntecedentsFamiliaux input[name=htaAF]').click(function(){ 
-		var boutons = $('#AntecedentsFamiliaux input[name=htaAF]');
-		if( boutons[1].checked){ $("#DivNoteHtaAF").toggle(true); }
-		if(!boutons[1].checked){ $("#DivNoteHtaAF").toggle(false); }
-	});
-	
-	$('#AntecedentsFamiliaux input[name=autresAF]').click(function(){ 
-		var boutons = $('#AntecedentsFamiliaux input[name=autresAF]');
-		if( boutons[1].checked){ $("#DivNoteAutresAF").toggle(true); }
-		if(!boutons[1].checked){ $("#DivNoteAutresAF").toggle(false); }
-	});
-	*/
 	
 }
+

@@ -2596,8 +2596,9 @@ class ResultatDemandeAnalyseTable {
 	    $sql->prepareStatementForSqlObject($sQuery)->execute();
 	    $this->setResultDemandeNonEffectuee($iddemande);
 	    
-	    if(count($tab) == 3){
+	    if(count($tab) == 4){
 	        $donnees['type_materiel'] = $tab[0];
+	        $donnees['conclusion'] = $tab[3];
 	         
 	        for($i = 1 ; $i < count($tab[1]) ; $i++){
 	            if($tab[1][$i]){
@@ -3149,8 +3150,9 @@ class ResultatDemandeAnalyseTable {
 	    $donnees = array();
 	
 	    if($tab[1]){ $donnees['type_materiel'] = $tab[1]; }else{ $donnees['type_materiel'] = null; }
-	    if($tab[2]){ $donnees['crp']           = $tab[2]; }else{ $donnees['crp']           = null; }
-	
+	    if($tab[2]){ $donnees['optionResultatCrp'] = $tab[2]; }else{ $donnees['optionResultatCrp'] = null; }
+	    if($tab[3]){ $donnees['crpValeurResultat'] = $tab[3]; }else{ $donnees['crpValeurResultat'] = null; }
+	    
 	    if($tab[2]){ $donneesExiste = 1; }
 	
 	    //Si les resultats n y sont pas on les ajoute

@@ -1,5 +1,5 @@
 <style>
-#sideBareMenuGaucheinfirmerie{ visibility: hidden }
+#sideBareMenuGaucheinfirmerie{ visibility: hidden; }
 
 #sideBareMenuGaucheinfirmerie{ min-width:200px; max-width: 430px;}
 </style>
@@ -23,14 +23,20 @@ $(window).load(function () {
 	    <span style="margin-left:0px; color: #48ce77; font-weight:bold; font-size:20px; font-family:Times New Roman;"> <img id="image" style="display: inline;" src='<?php echo $this->basePath().'/images_icons/plus-green1.png'?>' alt='Liste' /> Consultations</span></a> 
 	</li>
 
-	<li id="plus_menu_consultations" style="background: #4a5765;" >
+	<li id="plus_menu_consultations" style="background: #4a5765; " >
 
-	   <div id="menuDesConsultations" style="margin-left:30px; height:40px; padding-top:20px;"><a href="<?php echo $this->basePath()."/consultation/liste-consultations";?>" >
-	       <img style="margin-left:5px; display: inline;" src='<?php echo $this->basePath().'/images_icons/liste.png'?>' />
-	       <span id="menu_consultations_style" style="font-size:15px; color: white; font-family:Times New Roman;">En cours </span></a>
+	   <div id="menuDesConsultations" style="margin-left:30px; height:35px; padding-top:10px; background: yello; border-bottom: solid gray 1px;"><a href="<?php echo $this->basePath()."/consultation/liste-consultations";?>" >
+	       <img style="margin-left:5px; margin-top: -7px; display: inline; width: 18px; height: 20px;" src='<?php echo $this->basePath().'/images_icons/list2.png'?>' />
+	       <span id="menu_consultations_style" style="font-size:15px; color: white; font-family:Times New Roman;"> En cours </span></a>
+	   </div>
+	   
+	   <div id="menuDesConsultations" style="margin-left:30px; height:35px; padding-top:10px; background: gra;"><a href="<?php echo $this->basePath()."/consultation/liste-patients-consultes";?>" >
+	       <img style="margin-left:5px; margin-top: -7px; display: inline; width: 18px; height: 20px;" src='<?php echo $this->basePath().'/images_icons/list2.png'?>' />
+	       <span id="menu_historique_style" style="font-size:15px; color: white; font-family:Times New Roman;"> Historique </span></a>
 	   </div>
 	   
 	</li>
+	
 	
 	
 	<!-- MENU *** STATISTIQUES*** medecin -->

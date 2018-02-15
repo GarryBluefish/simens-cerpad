@@ -309,7 +309,12 @@ return array(
             		'demandes-analyses-vue' => 'medecin',
             		'get-liste-analyses' => 'medecin',
             		'get-tarif-analyse' => 'medecin',
-
+            		'enregistrer-consultation' => 'medecin',	
+            		'liste-patients-consultes' => 'medecin',	
+            		'enregistrer-modification-consultation' => 'medecin',	
+            		'impression-demandes-analyses' => 'medecin',	
+            		'liste-patients-consultes-ajax' => 'medecin',
+            			
             		'informations-statistiques' => 'medecin',
             				
             	)

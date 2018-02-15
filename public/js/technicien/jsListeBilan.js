@@ -187,9 +187,9 @@
     }
     
     
-    
-    function trierPrelevement(idpatient, idfacturation)
-    {
+    var entreeValidation = 0;
+    function trierPrelevement(idpatient, idfacturation){
+    	
     	$('#boutonAnnulerTerminer').toggle(true);
     	$('#boutonTerminer').toggle(false);
     	
@@ -213,17 +213,20 @@
             	    		 
             	});
             	     
-            	$('.boutonValider').click(function(){
-            	    	 
-            		if($('#formEnregistrementTri')[0].checkValidity() == true){
-            			//formulaire valide et envoi des données
-            			$('.boutonValider button').attr('disabled', true);
-                		$('#validerConformitePrelevementForm').trigger('click');
-        			}else{
-        				$('#validerConformitePrelevementForm').trigger('click');
-        			}
-            		
-            	});
+            	if(entreeValidation == 0){
+            		entreeValidation = 1;
+            		$('.boutonValider').click(function(){
+           	    	 
+                		if($('#formEnregistrementTri')[0].checkValidity() == true){
+                			//formulaire valide et envoi des données
+                			$('.boutonValider button').attr('disabled', true);
+                    		$('#validerConformitePrelevementForm').trigger('click');
+            			}else{
+            				$('#validerConformitePrelevementForm').trigger('click');
+            			}
+                		
+                	});
+            	}
 
             },
             error:function(e){console.log(e);alert("Une erreur interne est survenue!");},

@@ -628,7 +628,6 @@ function getInfoEpisodeFievre(id){
 	
 }
 
-
 function getSuiviDesTraitements(id){
 
 	if(id == 2 || id == 3){

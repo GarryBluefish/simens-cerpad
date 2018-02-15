@@ -1,0 +1,588 @@
+@CHARSET "ISO-8859-1";
+
+
+#respond input[type="number"], #respond textarea
+{ /*le input ou le textarea*/
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+border-top-width: 2px;
+
+border-right-width-value: 2px;
+
+border-right-width-ltr-source: physical;
+
+border-right-width-rtl-source: physical;
+
+border-bottom-width: 2px;
+
+border-left-width-value: 2px;
+
+border-left-width-ltr-source: physical;
+
+border-left-width-rtl-source: physical;
+
+border-top-style: solid;
+
+border-right-style-value: solid;
+
+border-right-style-ltr-source: physical;
+
+border-right-style-rtl-source: physical;
+
+border-bottom-style: solid;
+
+border-left-style-value: solid;
+
+border-left-style-ltr-source: physical;
+
+border-left-style-rtl-source: physical;
+
+border-right-color-value: #eeeeee;
+
+border-right-color-ltr-source: physical;
+
+border-right-color-rtl-source: physical;
+
+border-left-color-value: #eeeeee;
+
+border-left-color-ltr-source: physical;
+
+border-left-color-rtl-source: physical;
+
+border-top-left-radius: 5px;
+
+border-top-right-radius: 5px;
+
+border-bottom-right-radius: 5px;
+
+border-bottom-left-radius: 5px;
+
+box-shadow: 0pt 1px 3px rgba(204, 204, 204, 0.95) inset;
+
+position: relative;
+
+/* le texte des champs*/
+padding-top: 5px;
+
+padding-right: 10px;
+
+padding-bottom: 5px;
+
+margin-bottom : 15px;
+
+padding-left: 10px; /* padding du text dans le champ*/
+
+text-indent: 0px; /* alignement du text dans le champ input*/
+
+/* balise input text*/
+display: block;
+
+height: 30px; /*la hauteur du champ input*/
+
+width: 92%; /*225px; /* la largeur du champ input*/
+
+}
+
+#respond input[type="number"]
+{
+	padding-right: 0px;
+	
+	font-size: 20px;
+	
+	font-weight: bold;
+	
+	padding-top: 0px;
+	
+	padding-bottom: 0px;
+}
+
+
+#indiceDeuxiemeCol{
+	background: none repeat scroll 0% 0%; 
+	border-color: #ffffff #cccccc #ffffff #655552;
+	border-style: solid;
+	border-width: 20px 20px 20px 0px;
+	width: 0px; 
+	height: 0px;  
+}
+
+#artistiqueDesign{
+	background: none repeat scroll 0% 0%; 
+	border-color: #f1f1f1 #cccccc #eeeeee #cccccc;
+	border-style: solid;
+	border-width: 135px 135px 135px 135px;
+	width: 0px; 
+	height: 0px;  
+}
+
+#SiegeDouleur input[type="text"], #SiegeDouleur input[type="number"]
+{ /*le input ou le textarea*/
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+border-right-width-value: 4px;
+
+border-right-width-ltr-source: physical;
+
+border-right-width-rtl-source: physical;
+
+border-left-width-value: 4px;
+
+border-left-width-ltr-source: physical;
+
+border-left-width-rtl-source: physical;
+
+border-top-style: solid;
+
+border-right-style-value: solid;
+
+border-right-style-ltr-source: physical;
+
+border-right-style-rtl-source: physical;
+
+border-bottom-style: solid;
+
+border-left-style-value: solid;
+
+border-left-style-ltr-source: physical;
+
+border-left-style-rtl-source: physical;
+
+border-top-color: #eeeeee;
+
+border-right-color-value: #eeeeee;
+
+border-right-color-ltr-source: physical;
+
+border-right-color-rtl-source: physical;
+
+border-bottom-color: #eeeeee;
+
+border-left-color-value: #eeeeee;
+
+border-left-color-ltr-source: physical;
+
+border-left-color-rtl-source: physical;
+
+border-top-left-radius: 5px; 
+
+border-top-right-radius: 5px;
+
+border-bottom-right-radius: 5px;
+
+border-bottom-left-radius: 5px;
+
+border-left-color: #eeeeee;
+
+border-right-color: #eeeeee;
+
+box-shadow: 0pt 1px 3px rgba(204, 204, 204, 0.95) inset;
+
+position: relative;
+
+border-right-width: 2px;
+
+border-left-width: 2px;
+
+border-top-width: 2px;
+
+border-bottom-width: 2px;
+
+padding-top: 10px;
+
+padding-right: 10px;
+
+padding-bottom: 10px;
+
+padding-left: 15px; 
+
+text-indent: 75px; 
+
+margin-bottom: 1px;
+
+margin-top: -40px;
+
+float: left;
+
+height: 50px;
+
+width: 100%;
+
+}
+
+#SiegeDouleur .form-author-douleur label
+{/* le label*/
+line-height: 2.0em;
+
+background-color: #eeeeee;
+
+background-image: none;
+
+background-repeat: repeat;
+
+background-attachment: scroll;
+
+background-position: 0% 0%;
+
+background-clip: border-box;
+
+background-origin: padding-box;
+
+background-size: auto auto;
+
+box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.8);
+
+color: black;
+
+display: inline-block;
+
+font-size: 13px;
+
+min-width: 60px;
+
+padding-top: 8px;
+
+padding-right: 10px;
+
+padding-bottom: 4px;
+
+padding-left: 5px;
+
+position: relative;
+
+top: 6px;
+
+z-index: 1;
+
+border-top-left-radius: 5px; 
+
+float: left;
+
+margin-left: 2px;
+
+/*text-transform: lowercase;*/
+
+}
+
+#SiegeDouleur input[type="number"]
+{
+	font-size: 22px;
+	padding-left: 110px; 
+}
+
+minus
+{
+	text-transform: lowercase;
+}
+
+#champsPoids input[type='number']
+{
+	width: 100%;
+	margin-bottom: 0px;
+	padding-left:5px;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+
+#medicament input[type="text"]
+{ /*le input ou le textarea*/
+
+background-color: #fffffa; /*la couleur du champ*/
+
+height: 25px; /*la hauteur du champ input*/
+
+width: 190px; /* la largeur du champ input*/
+}
+
+#posologie input[type="text"]
+{ /*le input ou le textarea*/
+
+background-color: #fffffa; /*la couleur du champ*/
+
+height: 25px; /*la hauteur du champ input*/
+
+width: 190px; /* la largeur du champ input*/
+}
+
+#quantite input[type="text"]
+{ /*le input ou le textarea*/
+
+background-color: #fffffa; /*la couleur du champ*/
+
+height: 25px; /*la hauteur du champ input*/
+
+width: 190px; /* la largeur du champ input*/
+}
+
+#duree input[type="text"]
+{ /*le input ou le textarea*/
+
+background-color: #fffffa; /*la couleur du champ*/
+
+height: 25px; /*la hauteur du champ input*/
+
+width: 190px; /* la largeur du champ input*/
+}
+
+#etat_civil
+{
+	color: green;
+	width: 70%;
+}
+
+#etat_civil td 
+{
+	vertical-align: top;
+}
+
+#etat_civil td p
+{
+	margin-right: 15px;
+	max-height: 46px;
+	max-width: 95%;
+	overflow: auto;
+}
+
+#etat_civil tr{
+	width: 70%;
+}
+
+#contenu{ visibility: hidden; }
+
+
+
+/****************************BOUTON************************/
+.styleBouton button
+{
+    width:auto;
+    padding:8px 0;
+    text-align:center;
+    display: inline-block;
+    float:left;
+    margin:0 8px 0 0;
+    border-radius:7px;
+    font-size: 0.85em;
+	font-weight: bold;
+    width:80px;
+    color:#000;
+    font-family: Arial,sans-serif;
+	box-shadow: 0 0 1px rgba( 0, 0, 0, 0.2), 0 -1px 0 rgba( 255, 255, 255, 0.1);
+    text-shadow: 0px 1px 0px rgba( 255, 255, 255, 0.3);
+}
+
+.styleBouton button:hover
+{
+    background: #ccc;
+    background: -webkit-linear-gradient( #eee, #aaa);
+    background: -moz-linear-gradient( #eee, #aaa);
+    background: -ms-linear-gradient( #eee, #aaa);
+    background: -o-linear-gradient( #eee, #aaa);
+    background: linear-gradient( #eee, #aaa);
+}
+
+.antFamStyle select
+{
+	height: 24px;
+	margin-top: 3px;
+	margin-left: 10px;
+	font-size: 17px;
+}
+
+.antFamStyle input[type='text']
+{
+	height: 24px;
+}
+
+.antFamStyle input[type='number']
+{
+	width: 45px;
+	height: 24px;
+	margin-top: 3px;
+	margin-left: 10px;
+	font-size: 20px;
+}
+
+.titreZoneInfosStyle
+{
+	width: 100%; 
+	font-family: Tempus Sans ITC;  
+	color: green; 
+	font-size: 20px; 
+	padding-bottom: 2px;
+	margin-top: 5px;
+}
+
+.zoneInfosStyle
+{
+	width: 100%; 
+	height: 90px; 
+	border: 1px solid #cccccc;
+	box-shadow: 0pt 1px 3px rgba(204, 204, 204, 0.95);
+	border-radius: 5px;
+	padding-top: 5px;
+	padding-left: 5px;
+	background: #fdfdfd;
+}
+
+.zoneInfosStyle table tr:hover
+{
+	background: #fdfdfd;
+}
+
+.titreHistoireMaladieStyle
+{
+	height: 135px;
+	margin-bottom: 15px;
+}
+
+.titreInterrogatoireStyle
+{
+	height: 45px;
+	margin-bottom: 15px;
+}
+
+.titreSuiviTraitementStyle
+{
+	height: 45px;
+	margin-bottom: 15px;
+}
+
+.titreMajVaccinStyle
+{
+	height: 45px;
+	margin-bottom: 15px;
+}
+
+.zoneInfosStyle select
+{
+	height: 27px;
+	margin-top: 3px;
+	margin-left: 10px;
+	font-size: 18px;
+}
+
+.zoneInfosStyle input[type='number']
+{
+	height: 24px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.zoneInfosStyle input[type='date'] 
+{
+	height: 28px;
+	margin-top: 2px;
+	font-size: 17px;
+}
+
+.titreDonneesExamenStyle
+{
+	height: 270px;
+	margin-bottom: 15px;
+}
+
+.titreSyntheseConsultationStyle
+{
+	height: 90px;
+	margin-bottom: 15px;
+}
+
+
+.contenuExamensEffectuesStyle, .contenuExamensAFaireStyle
+{
+	height: 45px;
+	margin-bottom: 15px;
+}
+
+.titreZoneInfosEFStyle, .titreZoneInfosEAFStyle
+{
+	width: 100%; 
+	font-family: Tempus Sans ITC;  
+	color: green; 
+	font-size: 20px; 
+	padding-bottom: 2px;
+}
+
+
+.contenuResultatsExamensDemandesStyle
+{
+	
+}
+
+.titreDiagnosticDuJourStyle
+{
+	height: 230px;
+}
+
+.barreVerticaleSeparateur
+{
+	width: 1px;
+	height: 300px;
+	padding-left: 1px;
+	visibility: hidden;
+}
+
+.contenuComplicationsAiguesStyle
+{
+	height: 75px;   /*165px = 45x3+30 */
+	margin-bottom: 15px;
+}
+
+.contenuComplicationsChroniquesStyle
+{
+	height: 75px; /*165px;*/
+	margin-bottom: 15px;
+}
+
+.contenuComplicationsAiguesStyle select, .contenuComplicationsChroniquesStyle select
+{
+	width: 95%;
+	float: left;
+}
+
+.contenuComplicationsAiguesStyle label, .contenuComplicationsChroniquesStyle label
+{
+	line-height: 1.7em;
+
+	background-color: #f3f3f3;
+
+	background-size: auto auto;
+
+	box-shadow: 1px 1px 2px rgba(204, 204, 204, 0.9);
+	
+	color: black;
+
+	font-size: 18px;
+
+	padding-top: 4px;
+
+	padding-bottom: 4px;
+
+	font-family: time new romans;
+}

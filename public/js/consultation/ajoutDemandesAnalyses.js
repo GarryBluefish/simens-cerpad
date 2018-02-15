@@ -1,4 +1,7 @@
+var base_url = window.location.toString();
+var tabUrl = base_url.split("public");
 var $isupp = 1;
+
 function creerLalisteActe ($listeDesElements) {
     	var index = $("LesActes").length; 
 			        $liste = "<div id='Acte_"+(index+1)+"'>"+
@@ -232,15 +235,12 @@ function chargementModificationAnalyses (listeAnalysesDemandees, tabListeAnalyse
 	setTimeout(function(){ $('#bouton_Acte_valider_demande button').trigger('click'); },500);
 }
 
-var base_url = window.location.toString();
-var tabUrl = base_url.split("public");
-
 //VALIDATION VALIDATION VALIDATION
 //********************* EXAMEN MORPHOLOGIQUE *****************************
 //********************* EXAMEN MORPHOLOGIQUE *****************************
 //********************* EXAMEN MORPHOLOGIQUE *****************************
 
-function ValiderDemandeActe(){
+function validerDemandeActe(){
 $(function(){
 	$("#bouton_Acte_modifier_demande").toggle(false);
 	$("#bouton_Acte_valider_demande").toggle(true);
@@ -400,18 +400,6 @@ function getTarifAnalyseBiologique(id, pos){
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 var temoinExisteADA = 0;
 var nbEntrees = 0;
 
@@ -504,47 +492,49 @@ function imprimerAnalyse(){
 			j++;
 		}
 	}
-	
-	
+
 	if(analyses[1]){
-		var vart = tabUrl[0]+'public/secretariat/impression-demandes-analyses';
-		var FormulaireImprimerDemandesAnalyses = document.getElementById("FormulaireImprimerDemandesAnalyses");
-		FormulaireImprimerDemandesAnalyses.setAttribute("action", vart);
-		FormulaireImprimerDemandesAnalyses.setAttribute("method", "POST");
-		FormulaireImprimerDemandesAnalyses.setAttribute("target", "_blank");
+		
+		var lienUrl = tabUrl[0]+'public/consultation/impression-demandes-analyses';
+		var formulaireImprimerDemandesAnalyses = document.getElementById("formulaireImprimerDemandesAnalyses");
+		formulaireImprimerDemandesAnalyses.setAttribute("action", lienUrl);
+		formulaireImprimerDemandesAnalyses.setAttribute("method", "POST");
+		formulaireImprimerDemandesAnalyses.setAttribute("target", "_blank");
 		
 		// Ajout dynamique de champs dans le formulaire
+		
 		var champ = document.createElement("input");
 		champ.setAttribute("type", "hidden");
 		champ.setAttribute("name", 'idpatient');
 		champ.setAttribute("value", idpatient);
-		FormulaireImprimerDemandesAnalyses.appendChild(champ);
+		formulaireImprimerDemandesAnalyses.appendChild(champ);
 		
 		var champ2 = document.createElement("input");
 		champ2.setAttribute("type", "hidden");
 		champ2.setAttribute("name", 'typesAnalyses');
 		champ2.setAttribute("value", typesAnalyses);
-		FormulaireImprimerDemandesAnalyses.appendChild(champ2);
+		formulaireImprimerDemandesAnalyses.appendChild(champ2);
 		
 		var champ3 = document.createElement("input");
 		champ3.setAttribute("type", "hidden");
 		champ3.setAttribute("name", 'analyses');
 		champ3.setAttribute("value", analyses);
-		FormulaireImprimerDemandesAnalyses.appendChild(champ3);
+		formulaireImprimerDemandesAnalyses.appendChild(champ3);
 		
 		var champ4 = document.createElement("input");
 		champ4.setAttribute("type", "hidden");
 		champ4.setAttribute("name", 'tarifs');
 		champ4.setAttribute("value", tarifs);
-		FormulaireImprimerDemandesAnalyses.appendChild(champ4);
+		formulaireImprimerDemandesAnalyses.appendChild(champ4);
 		
-		$("#ImprimerDemandesAnalyses").trigger('click');
+		$("#imprimerDemandesAnalyses").trigger('click');
 	} else {
 		alert('veuillez choisir une analyse');
 	}
 
 }
 
+/*
 function imprimerAnalysesDemandees(iddemande){
 	
 	if(iddemande){
@@ -564,3 +554,7 @@ function imprimerAnalysesDemandees(iddemande){
 	}
 	
 }
+
+*/
+
+

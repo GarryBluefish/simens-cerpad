@@ -219,8 +219,9 @@
     	
     }
     
-    function modifierBilan(idfacturation)
-    {
+    var entreeValidation = 0;
+    function modifierBilan(idfacturation){
+    	
     	$('#boutonAnnulerTerminer').toggle(true);
     	$('#boutonTerminer').toggle(false);
     	
@@ -244,19 +245,21 @@
             	    		 
             	     });
             	     
-                     $('.boutonValider').click(function(){
+            	     if(entreeValidation == 0){
+            	    	 entreeValidation = 1;
+                         $('.boutonValider').click(function(){
+                        	 
+                        	 if($('#formEnregistrementModificationBilan')[0].checkValidity() == true){
+                        		 //formulaire valide et envoi des données
+                        		 $('.boutonValider button').attr('disabled', true);
+                        		 $('#validerForm').trigger('click');
+                	    	 }else{
+                  				$('#validerForm').trigger('click');
+                	    	 }
+                	    
+                         });
+            	     }
 
-                    	 if($('#formEnregistrementModificationBilan')[0].checkValidity() == true){
-                  			
-                    		 //formulaire valide et envoi des données
-                    		 $('.boutonValider button').attr('disabled', true);
-                    		 $('#validerForm').trigger('click');
-                  			  
-            	    	 }else{
-              				$('#validerForm').trigger('click');
-            	    	 }
-            	    
-                     });
             },
             error:function(e){console.log(e);alert("Une erreur interne est survenue!");},
             dataType: "html"

@@ -1933,18 +1933,19 @@ class BiologisteController extends AbstractActionController {
 	    if($resultat){
 	        $html .="<script> setTimeout(function(){ $('#type_materiel_electro_hemo').val('".str_replace( "'", "\'", $resultat[0]['type_materiel'])."'); },50); </script>";
 	        for($i = 0 ; $i < count($resultat) ; $i++){
+	        	if($i > 0){
+	        		$html .= "<script> setTimeout(function(){ $('#electro_hemo_plus').trigger('click'); }, 50); </script>";
+	        	}
 	            $html .=
 	            "<script>
 	              setTimeout(function(){ 
-	                $('#electro_hemo_label_".($i+1)."').val('".$resultat[$i]['libelle']."');
-	                $('#electro_hemo_valeur_".($i+1)."').val('".$resultat[$i]['valeur']."');
-	                $('#electro_hemo_plus').trigger('click'); 
+	                $('#electro_hemo_label_".($i+1)."').val('".$resultat[$i]['libelle']."').attr('readonly',true);
+	                $('#electro_hemo_valeur_".($i+1)."').val('".$resultat[$i]['valeur']."').attr('readonly',true);
 	              }, 50);
 	    	    </script>";
 	        }
 	        
-	        $html .="<script> setTimeout(function(){ $('#electro_hemo_moins').trigger('click'); $('#electro_hemo_mp td').toggle(false); },50); </script>";
-	        
+	        $html .="<script> setTimeout(function(){ $('#conclusion_electro_hemo_valeur').val('".str_replace( "'", "\'", $resultat[0]['conclusion'])."').attr('readonly',true); },50); </script>";
 	    }
 	    return $html;
 	}
@@ -2102,7 +2103,10 @@ class BiologisteController extends AbstractActionController {
 	        $html .=
 	        "<script>
 	            $('#type_materiel_crp').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
-	    	    $('#crp').val('".$resultat['crp']."');
+	    	    $('#optionResultatCrp').val('".$resultat['optionResultatCrp']."');
+	    	    $('#crpValeurResultat').val('".$resultat['crpValeurResultat']."');
+	    	    $('#optionResultatCrp').trigger('change');
+	    	    setTimeout(function(){ $('#optionResultatCrp').attr('disabled', true); });			
 	    	 </script>";
 	    }
 	    return $html;
@@ -5498,8 +5502,7 @@ class BiologisteController extends AbstractActionController {
 	    
 	    $html .= "<table id='conclusion_resultat_electro_hemo' style='width: 100%; margin-left: 5px;'>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 55%;'><label class='lab1'><span style='font-weight: bold;'> Conclusion :  <input id='conclusion_electro_hemo_valeur' type='number' step='any' readonly > </span></label></td>";
-	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'>  </label></td>";
+	    $html .= "  <td style='width: 70%;'><label class='lab1'><span style='font-weight: bold; width: 100%; text-align: right;'> Conclusion :  <input id='conclusion_electro_hemo_valeur' type='text' step='any' style='width: 70%; float: right; text-align: left;'> </span></label></td>";
 	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 86%;'> </label></td>";
 	    $html .= "</tr>";
 	    $html .= "</table> ";
@@ -5828,13 +5831,19 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
+	    $html .= "</table>";
+	    
+	    $html .= "<table style='width: 100%;'>";
+	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 55%;'><label class='lab1'><span style='font-weight: bold; '> CRP <input id='crp' type='number' step='any' tabindex='2' readonly > </span></label></td>";
-	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'> mg/l </label></td>";
-	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> < 6 mg/l </label></td>";
+	    $html .= "  <td style='width: 45%;'><label class='lab1'><span style='font-weight: bold; '> CRP <select id='optionResultatCrp' onchange='getChoixResultatCrp(this.value);' readonly> <option value=''></option> <option value='positif'> Positif </option> <option value='negatif'> N&eacute;gatif </option> </select> </span></label></td>";
+	    $html .= "  <td style='width: 25%;'><label class='lab2' style='padding-top: 5px;'> <span id='crpValeurResultatChamp' style='visibility: hidden;'> <input id='crpValeurResultat' type='number' step='any' tabindex='2' readonly> mg/l </span> </label></td>";
+	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%; text-align: center;'> < 6 mg/l </label></td>";
 	    $html .= "</tr>";
-	
-	    $html .= "</table> </td> </tr>";
+	     
+	    $html .= "</table>";
+	    
+	    $html .= "</td> </tr>";
 	
 	    return $html;
 	}
@@ -6359,6 +6368,7 @@ class BiologisteController extends AbstractActionController {
 		$analysesSerologie = array();
 		$analysesTypageHemoProteine = array();
 		$analysesTypageHemoglobine = array();
+		$analysesMetabolismeProtidique = array();
 		
 		$resultatsAnalysesDemandees = array();
 		
@@ -6557,6 +6567,10 @@ class BiologisteController extends AbstractActionController {
 				$resultatsAnalysesDemandees[28] = $this->getResultatDemandeAnalyseTable()->getValeursCholesterolLDL($iddemande);
 					
 			}
+			elseif($idanalyse == 30){ //LIPIDES - TOTAUX
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$resultatsAnalysesDemandees[30] = $this->getResultatDemandeAnalyseTable()->getValeursLipidesTotaux($iddemande);
+			}
 			//=========================================================
 			//=========================================================
 					
@@ -6612,12 +6626,6 @@ class BiologisteController extends AbstractActionController {
 			//=========================================================
 			
 			
-			
-			elseif($idanalyse == 30){ //LIPIDES - TOTAUX
-				$analysesDemandees  [$j++] = $listeResultats[$i];
-				$resultatsAnalysesDemandees[30] = $this->getResultatDemandeAnalyseTable()->getValeursLipidesTotaux($iddemande);
-			}
-			
 			elseif($idanalyse == 56){ //TOXOPLASMOSE
 				$analysesDemandees  [$j++] = $listeResultats[$i];
 				$resultatsAnalysesDemandees[56] = $this->getResultatDemandeAnalyseTable()->getValeursToxoplasmose($iddemande);
@@ -6669,12 +6677,32 @@ class BiologisteController extends AbstractActionController {
 				$analysesTypageHemoProteine[44] = 44;
 				$resultatsAnalysesDemandees[44] = $this->getResultatDemandeAnalyseTable()->getValeursElectrophoreseHemoglobine($iddemande);
 			}
+
+			//=========================================================
+			//=========================================================
 			
+
+			//METABOLISME PROTIDIQUE  ---  METABOLISME PROTIDIQUE
+			//METABOLISME PROTIDIQUE  ---  METABOLISME PROTIDIQUE
+			//METABOLISME PROTIDIQUE  ---  METABOLISME PROTIDIQUE
 			elseif($idanalyse == 45){ //ELECTROPHORESE DES PROTEINES
 				$analysesDemandees  [$j++] = $listeResultats[$i];
-				$analysesTypageHemoProteine[45] = 45;  
+				$analysesMetabolismeProtidique[45] = 45;
 				$resultatsAnalysesDemandees[45] = $this->getResultatDemandeAnalyseTable()->getValeursElectrophoreseProteines($iddemande);
 			}
+				
+			elseif($idanalyse == 48){ //PROTEINES TOTAL (PROTIDEMIE)
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesMetabolismeProtidique[48] = 48;
+				$resultatsAnalysesDemandees[48] = $this->getResultatDemandeAnalyseTable()->getValeursElectrophoreseProteines($iddemande);
+			}
+				
+			elseif($idanalyse == 49){ //PROTEINURIE DES 24H (PU 24H)
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesMetabolismeProtidique[49] = 49;
+				$resultatsAnalysesDemandees[49] = $this->getResultatDemandeAnalyseTable()->getValeursElectrophoreseProteines($iddemande);
+			}
+			
 			//=========================================================
 			//=========================================================
 			
@@ -6691,7 +6719,7 @@ class BiologisteController extends AbstractActionController {
 			//=========================================================
 			
 		}
-		 
+		
 		//******************************************************
 		//******************************************************
 		//************** Création de l'imprimé pdf *************

@@ -13,6 +13,16 @@ use Consultation\Model\Depistage;
 use Consultation\Model\DepistageTable;
 use Consultation\Model\AnalyseTable;
 use Consultation\Model\Analyse;
+use Consultation\Model\AntecedentsFamiliauxTable;
+use Consultation\Model\AntecedentsFamiliaux;
+use Consultation\Model\HistoireMaladieTable;
+use Consultation\Model\HistoireMaladie;
+use Consultation\Model\DonneesExamenTable;
+use Consultation\Model\DonneesExamen;
+use Consultation\Model\DiagnosticConsultationTable;
+use Consultation\Model\DiagnosticConsultation;
+use Consultation\Model\ConsultationTable;
+use Consultation\Model\Consultation;
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface, ViewHelperProviderInterface {
 
@@ -67,7 +77,67 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 							$resultSetPrototype->setArrayObjectPrototype ( new Analyse() );
 							return new TableGateway ( 'analyse', $dbAdapter, null, $resultSetPrototype );
 						},
+						
+						'Consultation\Model\AntecedentsFamiliauxTable' => function ($sm) {
+							$tableGateway = $sm->get( 'AntecedentsFamiliauxModuleConsultationTableGateway' );
+							$table = new AntecedentsFamiliauxTable( $tableGateway );
+							return $table;
+						},
+						'AntecedentsFamiliauxModuleConsultationTableGateway' => function ($sm) {
+							$dbAdapter = $sm->get ( 'Zend\Db\Adapter\Adapter' );
+							$resultSetPrototype = new ResultSet ();
+							$resultSetPrototype->setArrayObjectPrototype ( new AntecedentsFamiliaux() );
+							return new TableGateway ( 'antecedents_familiaux', $dbAdapter, null, $resultSetPrototype );
+						},
+						
+						'Consultation\Model\HistoireMaladieTable' => function ($sm) {
+							$tableGateway = $sm->get( 'HistoireMaladieModuleConsultationTableGateway' );
+							$table = new HistoireMaladieTable( $tableGateway );
+							return $table;
+						},
+						'HistoireMaladieModuleConsultationTableGateway' => function ($sm) {
+							$dbAdapter = $sm->get ( 'Zend\Db\Adapter\Adapter' );
+							$resultSetPrototype = new ResultSet ();
+							$resultSetPrototype->setArrayObjectPrototype ( new HistoireMaladie() );
+							return new TableGateway ( 'histoire_maladie_patient', $dbAdapter, null, $resultSetPrototype );
+						},
 
+						'Consultation\Model\DonneesExamenTable' => function ($sm) {
+							$tableGateway = $sm->get( 'DonneesExamenModuleConsultationTableGateway' );
+							$table = new DonneesExamenTable( $tableGateway );
+							return $table;
+						},
+						'DonneesExamenModuleConsultationTableGateway' => function ($sm) {
+							$dbAdapter = $sm->get ( 'Zend\Db\Adapter\Adapter' );
+							$resultSetPrototype = new ResultSet ();
+							$resultSetPrototype->setArrayObjectPrototype ( new DonneesExamen() );
+							return new TableGateway ( 'donnees_de_examen_patient', $dbAdapter, null, $resultSetPrototype );
+						},
+						
+						'Consultation\Model\DiagnosticConsultationTable' => function ($sm) {
+							$tableGateway = $sm->get( 'DiagnosticConsultationModuleConsultationTableGateway' );
+							$table = new DiagnosticConsultationTable( $tableGateway );
+							return $table;
+						},
+						'DiagnosticConsultationModuleConsultationTableGateway' => function ($sm) {
+							$dbAdapter = $sm->get ( 'Zend\Db\Adapter\Adapter' );
+							$resultSetPrototype = new ResultSet ();
+							$resultSetPrototype->setArrayObjectPrototype ( new DiagnosticConsultation() );
+							return new TableGateway ( 'diagnostic_jour_consultation', $dbAdapter, null, $resultSetPrototype );
+						},
+						
+						'Consultation\Model\ConsultationTable' => function ($sm) {
+							$tableGateway = $sm->get( 'ConsultationModuleConsultationTableGateway' );
+							$table = new ConsultationTable($tableGateway);
+							return $table;
+						},
+						'ConsultationModuleConsultationTableGateway' => function ($sm) {
+							$dbAdapter = $sm->get ( 'Zend\Db\Adapter\Adapter' );
+							$resultSetPrototype = new ResultSet ();
+							$resultSetPrototype->setArrayObjectPrototype ( new Consultation() );
+							return new TableGateway ( 'consultation', $dbAdapter, null, $resultSetPrototype );
+						},
+						
 				)
 		);
 	}

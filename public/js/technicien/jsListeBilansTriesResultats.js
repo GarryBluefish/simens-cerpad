@@ -538,6 +538,8 @@
 	    	}
 
 	    });
+	    
+	    
     }
 
     function getElectrophoreseHemoglobine(){
@@ -556,6 +558,7 @@
         		tab[2][j++] = valeur;
     		}
     	}
+	    tab[3] = $('#conclusion_electro_hemo_valeur').val();
 	    
 	    return tab;
     }
@@ -1107,9 +1110,19 @@
     function getCrp(){
     	var tab = [];
     	tab[1] = $('#type_materiel_crp').val();
-    	tab[2] = $('#crp').val();
+    	tab[2] = $('#optionResultatCrp').val();
+    	tab[3] = $('#crpValeurResultat').val();
 	    
 	    return tab;
+    }
+    
+    function getChoixResultatCrp(id){
+    	if(id == 'positif'){
+    		$('#crpValeurResultatChamp').css({'visibility':'visible'});
+    	}else{
+    		$('#crpValeurResultatChamp').css({'visibility':'hidden'});
+    		$('#crpValeurResultat').val('')
+    	}
     }
     
     function getFacteursRhumatoides(){
@@ -2584,6 +2597,8 @@
     		}
     	}
 	    
+    	tab[3] =  $('.ER_'+id+' #conclusion_electro_hemo_valeur').val(); 
+    	
 	    return tab;
     }
     
@@ -2745,8 +2760,9 @@
     	var tab = new Array();
     	
     	tab[1] = $('.ER_'+id+' #type_materiel_crp').val();
-    	tab[2] = $('.ER_'+id+' #crp').val();
-	    
+    	tab[2] = $('.ER_'+id+' #optionResultatCrp').val();
+    	tab[3] = $('.ER_'+id+' #crpValeurResultat').val();
+    	
 	    return tab;
     }
     

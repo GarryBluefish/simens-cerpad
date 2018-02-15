@@ -460,7 +460,7 @@ class ResultatsNfsPdf
 		$this->_page->setFont($this->_newTimeGras, 9);
 		$this->_page->drawText('Cachet et signature',
 				$this->_leftMargin+400,
-				$this->_pageWidth - ( 140 + 380));
+				$this->_pageWidth - ( 140 + 360));
 		
 		$this->_page->setlineColor(new ZendPdf\Color\Html('green'));
 		$this->_page->setLineWidth(1.5);
@@ -793,7 +793,7 @@ class ResultatsNfsPdf
 	    
 	    //---------------- valeur en % -----------
 	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10.5);
-	    $this->_page->drawText($this->prixMill($resultats[1]['champ7']),
+	    $this->_page->drawText($resultats[1]['champ7'],
 	        $this->_leftMargin+210,
 	        $this->_yPosition +12);
 	    
@@ -863,7 +863,7 @@ class ResultatsNfsPdf
 	    
 	    //---------------- valeur en % -----------
 	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10.5);
-	    $this->_page->drawText($this->prixMill($resultats[1]['champ8']),
+	    $this->_page->drawText($resultats[1]['champ8'],
 	        $this->_leftMargin+210,
 	        $this->_yPosition +12);
 	     
@@ -916,7 +916,7 @@ class ResultatsNfsPdf
 	     
 	    //------------- valeur en mm3 -------------
 	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10.5);
-	    $this->_page->drawText($this->prixMill($resultats[1]['champ4']),
+	    $this->_page->drawText($resultats[1]['champ4'],
 	        $this->_leftMargin+115,
 	        $this->_yPosition +12);
 	     
@@ -928,7 +928,7 @@ class ResultatsNfsPdf
 	     
 	    //---------------- valeur en % -----------
 	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10.5);
-	    $this->_page->drawText($this->prixMill($resultats[1]['champ9']),
+	    $this->_page->drawText($resultats[1]['champ9'],
 	        $this->_leftMargin+210,
 	        $this->_yPosition +12);
 	    
@@ -950,7 +950,7 @@ class ResultatsNfsPdf
 	    //-----ANTERIORITE -------- ANTERIORITE -------- ANTERIORITE --------
 	    if($p_basophiles){
 	    	$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10.5);
-	    	$this->_page->drawText($this->prixMill($p_basophiles),
+	    	$this->_page->drawText($p_basophiles,
 	    			$this->_leftMargin+425,
 	    			$this->_yPosition +12);
 	    }
@@ -991,7 +991,7 @@ class ResultatsNfsPdf
 
 	    //---------------- valeur en % -----------
 	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10.5);
-	    $this->_page->drawText($this->prixMill($resultats[1]['champ10']),
+	    $this->_page->drawText($resultats[1]['champ10'],
 	        $this->_leftMargin+210,
 	        $this->_yPosition +12);
 	     
@@ -1105,7 +1105,7 @@ class ResultatsNfsPdf
 	        $this->_yPosition +12);
 	     
 	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 10.5);
-	    $this->_page->drawText($this->prixMill($resultats[1]['champ12']),
+	    $this->_page->drawText($resultats[1]['champ12'],
 	        $this->_leftMargin+115,
 	        $this->_yPosition +12);
 	     
@@ -1129,7 +1129,7 @@ class ResultatsNfsPdf
 	    //-----ANTERIORITE -------- ANTERIORITE -------- ANTERIORITE --------
 	    if($hematies){
 	        $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 10.5);
-	        $this->_page->drawText($this->prixMill($hematies),
+	        $this->_page->drawText($hematies,
 	            $this->_leftMargin+425,
 	            $this->_yPosition +12);
 	    
@@ -1166,7 +1166,7 @@ class ResultatsNfsPdf
 	        $this->_yPosition +12);
 	     
 	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 10.5);
-	    $this->_page->drawText($this->prixMill($resultats[1]['champ13']),
+	    $this->_page->drawText($resultats[1]['champ13'],
 	        $this->_leftMargin+115,
 	        $this->_yPosition +12);
 	     
@@ -1183,7 +1183,7 @@ class ResultatsNfsPdf
 	    //-----ANTERIORITE -------- ANTERIORITE -------- ANTERIORITE --------
 	    if($hemoglobines){
 	        $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 10.5);
-	        $this->_page->drawText($this->prixMill($hemoglobines),
+	        $this->_page->drawText($hemoglobines,
 	            $this->_leftMargin+425,
 	            $this->_yPosition +12);
 	         
@@ -1215,7 +1215,7 @@ class ResultatsNfsPdf
 	        $this->_yPosition +12);
 	     
 	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10.5);
-	    $this->_page->drawText($this->prixMill($resultats[1]['champ14']),
+	    $this->_page->drawText($resultats[1]['champ14'],
 	        $this->_leftMargin+115,
 	        $this->_yPosition +12);
 	     
@@ -1233,7 +1233,7 @@ class ResultatsNfsPdf
 	    //-----ANTERIORITE -------- ANTERIORITE -------- ANTERIORITE --------
 	    if($hematocrites){
 	    	$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10.5);
-	    	$this->_page->drawText($this->prixMill($hematocrites),
+	    	$this->_page->drawText($hematocrites,
 	    			$this->_leftMargin+425,
 	    			$this->_yPosition +12);
 	    }
@@ -1260,7 +1260,7 @@ class ResultatsNfsPdf
 	        $this->_yPosition +12);
 	     
 	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10.5);
-	    $this->_page->drawText($this->prixMill($resultats[1]['champ15']),
+	    $this->_page->drawText($resultats[1]['champ15'],
 	        $this->_leftMargin+115,
 	        $this->_yPosition +12);
 	     
@@ -1308,7 +1308,7 @@ class ResultatsNfsPdf
 	        $this->_yPosition +12);
 	     
 	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10.5);
-	    $this->_page->drawText($this->prixMill($resultats[1]['champ16']),
+	    $this->_page->drawText($resultats[1]['champ16'],
 	        $this->_leftMargin+115,
 	        $this->_yPosition +12);
 	     
@@ -1326,7 +1326,7 @@ class ResultatsNfsPdf
 	    //-----ANTERIORITE -------- ANTERIORITE -------- ANTERIORITE --------
 	    if($tcmh){
 	    	$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10.5);
-	    	$this->_page->drawText($this->prixMill($tcmh),
+	    	$this->_page->drawText($tcmh,
 	    			$this->_leftMargin+425,
 	    			$this->_yPosition +12);
 	    }
@@ -1353,7 +1353,7 @@ class ResultatsNfsPdf
 	        $this->_yPosition +12);
 	     
 	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10.5);
-	    $this->_page->drawText($this->prixMill($resultats[1]['champ17']),
+	    $this->_page->drawText($resultats[1]['champ17'],
 	        $this->_leftMargin+115,
 	        $this->_yPosition +12);
 	     
@@ -1371,7 +1371,7 @@ class ResultatsNfsPdf
 	    //-----ANTERIORITE -------- ANTERIORITE -------- ANTERIORITE --------
 	    if($ccmh){
 	    	$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10.5);
-	    	$this->_page->drawText($this->prixMill($ccmh),
+	    	$this->_page->drawText($ccmh,
 	    			$this->_leftMargin+425,
 	    			$this->_yPosition +12);
 	    }
@@ -1399,7 +1399,7 @@ class ResultatsNfsPdf
 	        $this->_yPosition +12);
 	     
 	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10.5);
-	    $this->_page->drawText($this->prixMill($resultats[1]['champ18']),
+	    $this->_page->drawText($resultats[1]['champ18'],
 	        $this->_leftMargin+115,
 	        $this->_yPosition +12);
 	     
@@ -1416,7 +1416,7 @@ class ResultatsNfsPdf
 	    //-----ANTERIORITE -------- ANTERIORITE -------- ANTERIORITE --------
 	    if($idr_cv){
 	    	$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10.5);
-	    	$this->_page->drawText($this->prixMill($idr_cv),
+	    	$this->_page->drawText($idr_cv,
 	    			$this->_leftMargin+425,
 	    			$this->_yPosition +12);
 	    }
@@ -1447,7 +1447,7 @@ class ResultatsNfsPdf
 	            $this->_yPosition +12);
 	        
 	        $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10.5);
-	        $this->_page->drawText($this->prixMill($resultats[1]['champ19']),
+	        $this->_page->drawText($resultats[1]['champ19'],
 	            $this->_leftMargin+115,
 	            $this->_yPosition +12);
 	        
@@ -1464,7 +1464,7 @@ class ResultatsNfsPdf
 	        //-----ANTERIORITE -------- ANTERIORITE -------- ANTERIORITE --------
 	        if($idr_ds){
 	        	$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10.5);
-	        	$this->_page->drawText($this->prixMill($idr_ds),
+	        	$this->_page->drawText($idr_ds,
 	        			$this->_leftMargin+425,
 	        			$this->_yPosition +12);
 	        }
@@ -1496,7 +1496,7 @@ class ResultatsNfsPdf
 	        $this->_yPosition +12);
 	     
 	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 10.5);
-	    $this->_page->drawText($this->prixMill($resultats[1]['champ20']),
+	    $this->_page->drawText($resultats[1]['champ20'],
 	        $this->_leftMargin+115,
 	        $this->_yPosition +12);
 	     
@@ -1556,7 +1556,7 @@ class ResultatsNfsPdf
 	        $this->_yPosition +12);
 	     
 	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10.5);
-	    $this->_page->drawText($this->prixMill($resultats[1]['champ21']),
+	    $this->_page->drawText($resultats[1]['champ21'],
 	        $this->_leftMargin+115,
 	        $this->_yPosition +12);
 	     
@@ -1573,7 +1573,7 @@ class ResultatsNfsPdf
 	    //-----ANTERIORITE -------- ANTERIORITE -------- ANTERIORITE --------
 	    if($vmp){
 	    	$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10.5);
-	    	$this->_page->drawText($this->prixMill($vmp),
+	    	$this->_page->drawText($vmp,
 	    			$this->_leftMargin+425,
 	    			$this->_yPosition +12);
 	    }
@@ -1602,7 +1602,7 @@ class ResultatsNfsPdf
 	        $this->_yPosition +12);
 	     
 	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10.5);
-	    $this->_page->drawText($this->prixMill($resultats[1]['champ22']),
+	    $this->_page->drawText($resultats[1]['champ22'],
 	        $this->_leftMargin+115,
 	        $this->_yPosition +12);
 	     
@@ -1619,7 +1619,7 @@ class ResultatsNfsPdf
 	    //-----ANTERIORITE -------- ANTERIORITE -------- ANTERIORITE --------
 	    if($idp){
 	    	$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10.5);
-	    	$this->_page->drawText($this->prixMill($idp),
+	    	$this->_page->drawText($idp,
 	    			$this->_leftMargin+425,
 	    			$this->_yPosition +12);
 	    }
@@ -1647,7 +1647,7 @@ class ResultatsNfsPdf
 	        $this->_yPosition +12);
 	     
 	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10.5);
-	    $this->_page->drawText($this->prixMill($resultats[1]['champ23']),
+	    $this->_page->drawText($resultats[1]['champ23'],
 	        $this->_leftMargin+115,
 	        $this->_yPosition +12);
 	     
@@ -1664,7 +1664,7 @@ class ResultatsNfsPdf
 	    //-----ANTERIORITE -------- ANTERIORITE -------- ANTERIORITE --------
 	    if($pct){
 	    	$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10.5);
-	    	$this->_page->drawText($this->prixMill($pct),
+	    	$this->_page->drawText($pct,
 	    			$this->_leftMargin+425,
 	    			$this->_yPosition +12);
 	    }
@@ -1673,60 +1673,59 @@ class ResultatsNfsPdf
 	    /**
 	     * CHAMP 24 & 25 -- Taux de réticulocytes ------ CHAMP 24 & 25 -- Taux de réticulocytes ------ 
 	     */
-	     
-	    $this->_yPosition -= $noteLineHeight; //aller a la ligne suivante
-	     
-	    $this->_page->setLineColor(new ZendPdf\Color\Html('#e1e1e1'));
-	    $this->_page->setLineWidth(15);
-	    $this->_page->drawLine($this->_leftMargin,
-	        $this->_yPosition +15,
-	        $this->_pageWidth -
-	        $this->_leftMargin,
-	        $this->_yPosition +15);
-	    //------- Separateur actuelle et précédent -------
-	    $this->_page->setLineColor(new ZendPdf\Color\Html('#ffffff'))->setLineWidth(15) ->drawLine($this->_leftMargin+386, $this->_yPosition +15, $this->_pageWidth - $this->_leftMargin-110, $this->_yPosition +15);
-	    	    
-	     
-	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 10.5);
-	    $this->_page->drawText('Réticulocytes',
-	        $this->_leftMargin+15,
-	        $this->_yPosition +12);
-	    
-	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 10.5);
-	    $this->_page->drawText($this->prixMill($resultats[1]['champ24']),
-	        $this->_leftMargin+115,
-	        $this->_yPosition +12);
-	    
-	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 10.5);
-	    $this->_page->drawText('/mm', $this->_leftMargin+160, $this->_yPosition +12);
-	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 8.5);
-	    $this->_page->drawText('3', $this->_leftMargin+181, $this->_yPosition +15);
-	    
-	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 10.5);
-	    $this->_page->drawText($this->prixMill($resultats[1]['champ25'])." %",
-	        $this->_leftMargin+210,
-	        $this->_yPosition +12);
-	    
-	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 10.5);
-	    $this->_page->drawText('(25 000 - 80 000)',
-	        $this->_leftMargin+255,
-	        $this->_yPosition +12);
-	     
-	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 10.5);
-	    $this->_page->drawText('(0,5 - 1,5)',
-	        $this->_leftMargin+335,
-	        $this->_yPosition +12);
-	    
-	    //-----ANTERIORITE -------- ANTERIORITE -------- ANTERIORITE --------
-	    //-----ANTERIORITE -------- ANTERIORITE -------- ANTERIORITE --------
-	    if($reticulocytes){
+	    if($resultats[1]['champ24']){
+	    	$this->_yPosition -= $noteLineHeight; //aller a la ligne suivante
+	    	
+	    	$this->_page->setLineColor(new ZendPdf\Color\Html('#e1e1e1'));
+	    	$this->_page->setLineWidth(15);
+	    	$this->_page->drawLine($this->_leftMargin,
+	    			$this->_yPosition +15,
+	    			$this->_pageWidth -
+	    			$this->_leftMargin,
+	    			$this->_yPosition +15);
+	    	//------- Separateur actuelle et précédent -------
+	    	$this->_page->setLineColor(new ZendPdf\Color\Html('#ffffff'))->setLineWidth(15) ->drawLine($this->_leftMargin+386, $this->_yPosition +15, $this->_pageWidth - $this->_leftMargin-110, $this->_yPosition +15);
+	    	
+	    	
 	    	$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 10.5);
-	    	$this->_page->drawText($this->prixMill($reticulocytes),
-	    			$this->_leftMargin+425,
+	    	$this->_page->drawText('Réticulocytes',
+	    			$this->_leftMargin+15,
 	    			$this->_yPosition +12);
+	    	 
+	    	$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 10.5);
+	    	$this->_page->drawText($this->prixMill($resultats[1]['champ24']),
+	    			$this->_leftMargin+115,
+	    			$this->_yPosition +12);
+	    	 
+	    	$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 10.5);
+	    	$this->_page->drawText('/mm', $this->_leftMargin+160, $this->_yPosition +12);
+	    	$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 8.5);
+	    	$this->_page->drawText('3', $this->_leftMargin+181, $this->_yPosition +15);
+	    	 
+	    	$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 10.5);
+	    	$this->_page->drawText($resultats[1]['champ25']." %",
+	    			$this->_leftMargin+210,
+	    			$this->_yPosition +12);
+	    	 
+	    	$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 10.5);
+	    	$this->_page->drawText('(25 000 - 80 000)',
+	    			$this->_leftMargin+255,
+	    			$this->_yPosition +12);
+	    	
+	    	$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 10.5);
+	    	$this->_page->drawText('(0,5 - 1,5)',
+	    			$this->_leftMargin+335,
+	    			$this->_yPosition +12);
+	    	 
+	    	//-----ANTERIORITE -------- ANTERIORITE -------- ANTERIORITE --------
+	    	//-----ANTERIORITE -------- ANTERIORITE -------- ANTERIORITE --------
+	    	if($reticulocytes){
+	    		$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 10.5);
+	    		$this->_page->drawText($this->prixMill($reticulocytes),
+	    				$this->_leftMargin+425,
+	    				$this->_yPosition +12);
+	    	}
 	    }
-	    
-	    
 	    
 	    /**
 	     * ------ COMMENTAIRE ------ COMMENTAIRE ------ COMMENTAIRE -------

@@ -2183,6 +2183,7 @@ class SecretariatController extends AbstractActionController {
 		$analysesSerologie = array();
 		$analysesTypageHemoglobine = array();
 		$analysesTypageHemoProteine = array();
+		$analysesMetabolismeProtidique = array();
 		
 		$resultatsAnalysesDemandees = array();
 		
@@ -2379,7 +2380,11 @@ class SecretariatController extends AbstractActionController {
 				$resultatsAnalysesDemandees[28] = $this->getResultatDemandeAnalyseTable()->getValeursCholesterolLDL($iddemande);
 					
 			}
-			
+			elseif($idanalyse == 30){ //LIPIDES - TOTAUX
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$resultatsAnalysesDemandees[30] = $this->getResultatDemandeAnalyseTable()->getValeursLipidesTotaux($iddemande);
+			}
+				
 			
 			//=========================================================
 			//=========================================================
@@ -2442,24 +2447,6 @@ class SecretariatController extends AbstractActionController {
 			//=========================================================
 			
 			
-			elseif($idanalyse == 30){ //LIPIDES - TOTAUX
-				$analysesDemandees  [$j++] = $listeResultats[$i];
-				$resultatsAnalysesDemandees[30] = $this->getResultatDemandeAnalyseTable()->getValeursLipidesTotaux($iddemande);
-			}
-			
-			elseif($idanalyse == 56){ //TOXOPLASMOSE
-				$analysesDemandees  [$j++] = $listeResultats[$i];
-				$resultatsAnalysesDemandees[56] = $this->getResultatDemandeAnalyseTable()->getValeursToxoplasmose($iddemande);
-			}
-			
-			elseif($idanalyse == 57){ //RUBEOLE
-				$analysesDemandees  [$j++] = $listeResultats[$i];
-				$resultatsAnalysesDemandees[57] = $this->getResultatDemandeAnalyseTable()->getValeursRubeole($iddemande);
-			}
-			//=========================================================
-			//=========================================================
-			
-			
 			//SEROLOGIE  ---  SEROLOGIE  ---  SEROLOGIE
 			//SEROLOGIE  ---  SEROLOGIE  ---  SEROLOGIE
 			//SEROLOGIE  ---  SEROLOGIE  ---  SEROLOGIE
@@ -2486,6 +2473,16 @@ class SecretariatController extends AbstractActionController {
 				$analysesSerologie  [] = 61;
 				$resultatsAnalysesDemandees[61] = $this->getResultatDemandeAnalyseTable()->getValeursAslo($iddemande);
 			}
+			
+			elseif($idanalyse == 56){ //TOXOPLASMOSE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$resultatsAnalysesDemandees[56] = $this->getResultatDemandeAnalyseTable()->getValeursToxoplasmose($iddemande);
+			}
+				
+			elseif($idanalyse == 57){ //RUBEOLE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$resultatsAnalysesDemandees[57] = $this->getResultatDemandeAnalyseTable()->getValeursRubeole($iddemande);
+			}
 			//=========================================================
 			//=========================================================
 						
@@ -2499,15 +2496,30 @@ class SecretariatController extends AbstractActionController {
 				$resultatsAnalysesDemandees[44] = $this->getResultatDemandeAnalyseTable()->getValeursElectrophoreseHemoglobine($iddemande);
 			}
 				
+			//=========================================================
+			//=========================================================
+			
+			
+			//METABOLISME PROTIDIQUE  ---  METABOLISME PROTIDIQUE
+			//METABOLISME PROTIDIQUE  ---  METABOLISME PROTIDIQUE
+			//METABOLISME PROTIDIQUE  ---  METABOLISME PROTIDIQUE
 			elseif($idanalyse == 45){ //ELECTROPHORESE DES PROTEINES
 				$analysesDemandees  [$j++] = $listeResultats[$i];
-				$analysesTypageHemoProteine[45] = 45;
+				$analysesMetabolismeProtidique[45] = 45;
 				$resultatsAnalysesDemandees[45] = $this->getResultatDemandeAnalyseTable()->getValeursElectrophoreseProteines($iddemande);
 			}
 			
-			//=========================================================
-			//=========================================================
+			elseif($idanalyse == 48){ //PROTEINES TOTAL (PROTIDEMIE)
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesMetabolismeProtidique[48] = 48;
+				$resultatsAnalysesDemandees[48] = $this->getResultatDemandeAnalyseTable()->getValeursElectrophoreseProteines($iddemande);
+			}
 			
+			elseif($idanalyse == 49){ //PROTEINURIE DES 24H (PU 24H)
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesMetabolismeProtidique[49] = 49;
+				$resultatsAnalysesDemandees[49] = $this->getResultatDemandeAnalyseTable()->getValeursElectrophoreseProteines($iddemande);
+			}
 			
 			//TYPAGE DE L'HEMOGLOBINE  ---  TYPAGE DE L'HEMOGLOBINE
 			//TYPAGE DE L'HEMOGLOBINE  ---  TYPAGE DE L'HEMOGLOBINE

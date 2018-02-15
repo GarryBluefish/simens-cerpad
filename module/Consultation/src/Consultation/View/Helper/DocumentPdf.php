@@ -1,5 +1,5 @@
 <?php
-namespace Facturation\View\Helper;
+namespace Consultation\View\Helper;
 
 use Zend\View\Helper\AbstractHelper;
 use ZendPdf\PdfDocument;

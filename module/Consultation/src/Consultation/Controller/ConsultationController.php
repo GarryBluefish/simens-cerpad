@@ -7,6 +7,8 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Infirmerie\View\Helper\DateHelper;
 use Zend\Json\Json;
 use Consultation\Form\ConsultationForm;
+use Consultation\View\Helper\DocumentPdf;
+use Consultation\View\Helper\DemandeAnalysePdf;
 
 class ConsultationController extends AbstractActionController {
 	
@@ -17,6 +19,11 @@ class ConsultationController extends AbstractActionController {
 	protected $depistageTable;
 	protected $analyseAFaireTable;
 	protected $analyseTable;
+	protected $antecedentsFamiliauxTable;
+	protected $histoireMaladieTable;
+	protected $donneesExamenTable;
+	protected $diagnosticConsultation;
+	protected $consultationTable;
 	
 	public function getConsultationTable() {
 		if (! $this->consultation) {
@@ -24,6 +31,14 @@ class ConsultationController extends AbstractActionController {
 			$this->consultation = $sm->get ( 'Infirmerie\Model\ConsultationTable' );
 		}
 		return $this->consultation;
+	}
+	
+	public function getConsultationModConsTable() {
+		if (! $this->consultationTable) {
+			$sm = $this->getServiceLocator ();
+			$this->consultationTable = $sm->get ( 'Consultation\Model\ConsultationTable' );
+		}
+		return $this->consultationTable;
 	}
 	
 	public function getPersonneTable() {
@@ -74,6 +89,37 @@ class ConsultationController extends AbstractActionController {
 		return $this->analyseTable;
 	}
 	
+	public function getAntecedentsFamiliauxTable() {
+		if (! $this->antecedentsFamiliauxTable) {
+			$sm = $this->getServiceLocator ();
+			$this->antecedentsFamiliauxTable = $sm->get ( 'Consultation\Model\AntecedentsFamiliauxTable' );
+		}
+		return $this->antecedentsFamiliauxTable;
+	}
+	
+	public function getHistoireMaladieTable() {
+		if (! $this->histoireMaladieTable) {
+			$sm = $this->getServiceLocator ();
+			$this->histoireMaladieTable = $sm->get ( 'Consultation\Model\HistoireMaladieTable' );
+		}
+		return $this->histoireMaladieTable;
+	}
+	
+	public function getDonneesExamenTable() {
+		if (! $this->donneesExamenTable) {
+			$sm = $this->getServiceLocator ();
+			$this->donneesExamenTable = $sm->get ( 'Consultation\Model\DonneesExamenTable' );
+		}
+		return $this->donneesExamenTable;
+	}
+	
+	public function getDiagnosticConsultationTable() {
+		if (! $this->diagnosticConsultation) {
+			$sm = $this->getServiceLocator ();
+			$this->diagnosticConsultation = $sm->get ( 'Consultation\Model\DiagnosticConsultationTable' );
+		}
+		return $this->diagnosticConsultation;
+	}
 	//=============================================================================================
 	//---------------------------------------------------------------------------------------------
 	//=============================================================================================
@@ -563,9 +609,21 @@ class ConsultationController extends AbstractActionController {
 		
 		
 		
+		/**
+		 * Recuperer les historiques et les antecedents du patient
+		 * Recuperer les historiques et les antecedents du patient
+		 * Recuperer les historiques et les antecedents du patient
+		 */
+		/*
+		 * ANTECEDENTS FAMILIAUX --- ANTECEDENTS FAMILIAUX
+		*/
+		$infosAntecedentsFamiliaux = $this->getAntecedentsFamiliauxTable()->getAntecedentsFamilauxParIdpatient($idpatient);
+		$infosAutresMaladiesFamiliales = $this->getAntecedentsFamiliauxTable()->getAutresMaladiesFamiliales($idpatient);
+		if($infosAntecedentsFamiliaux){ $form->populateValues($infosAntecedentsFamiliaux[0]); };
+		if($infosAutresMaladiesFamiliales){ $form->populateValues($infosAutresMaladiesFamiliales); }
+		$listeChoixStatutDrepanoEnfant = $this->getAntecedentsFamiliauxTable()->getStatutDrepanocytoseEnfant($idpatient);
 		
-		
-		
+		//var_dump($listeChoixStatutDrepanoEnfant->current()); exit();
 		//FIN --- FIN --- FIN --- FIN --- FIN --- FIN --- FIN
 		//$timeend = microtime(true);
 		//$time = $timeend-$timestart;
@@ -590,26 +648,7 @@ class ConsultationController extends AbstractActionController {
 				'listeVoieAdministration' => $listeVoieAdministration,
 				'listeActesCons' => $listeActes,
 				'listeMotifConsultation' => $listeMotifConsultation,
-				
-				
-
-				
-				
-				'liste_med' => null, //$listeMedicament,
-				'temoin' => 0, //$bandelettes['temoin'],
-				// 				'listeForme' => $listeForme,
-				// 				'listetypeQuantiteMedicament'  => $listetypeQuantiteMedicament,
-				'donneesAntecedentsPersonnels' => null, //$donneesAntecedentsPersonnels,
-				'donneesAntecedentsFamiliaux'  => null, //$donneesAntecedentsFamiliaux,
-				'liste' => null, //$listeConsultation,
-				// 				'resultRV' => $resultRV,
-				'listeHospitalisation' => null, //$listeHospitalisation,
-				'listeDesExamensBiologiques' => null, //$listeDesExamensBiologiques,
-				'listeDesExamensMorphologiques' => null, //$listeDesExamensMorphologiques,
-				'listeAntMed' => null, //$listeAntMed,
-				'antMedPat' => null, //$antMedPat,
-				'nbAntMedPat' => 0, //$antMedPat->count(),
-				'listeActes' => null, //$listeActes,
+				'listeChoixStatutDrepanoEnfant' => $listeChoixStatutDrepanoEnfant,
 		);
 
 	}
@@ -693,8 +732,438 @@ class ConsultationController extends AbstractActionController {
 		
 	}
 	
-	public function modifierConsultationAction() {
+	public function enregistrerConsultationAction(){
+		$idmedecin = $this->layout()->user['idemploye'];
 		
+		$tabDonnees = $this->params ()->fromPost();
+		/**
+		 *ANTECEDENT FAMILIAUX --- ANTECEDENTS FAMILIAUX
+		 *ANTECEDENT FAMILIAUX --- ANTECEDENTS FAMILIAUX
+		 */
+		$this->getAntecedentsFamiliauxTable()->insertAntecedentsFamiliaux($tabDonnees);
+		$this->getAntecedentsFamiliauxTable()->insertStatutDrepanocytoseEnfant($tabDonnees);
+		
+		/**
+		 * CONSULTATION DU JOUR --- CONSULTATION DU JOUR
+		 * CONSULTATION DU JOUR --- CONSULTATION DU JOUR
+		 */
+		/** Histoire de la maladie **/
+		$this->getHistoireMaladieTable()->insertHistoireMaladie($tabDonnees, $idmedecin);
+		
+		/** Interrogatoire (description des symptomes) **/
+		$this->getHistoireMaladieTable()->insertInterrogatoireMotif($tabDonnees, $idmedecin);
+		
+		
+		/** Suivi des traitements **/
+		$this->getHistoireMaladieTable()->insertSuiviDesTraitements($tabDonnees, $idmedecin);
+		
+		/** Mise à jour des vaccins**/
+		$this->getHistoireMaladieTable()->insertMiseAJourVaccin($tabDonnees, $idmedecin);
+		
+		/** Données de l'examen **/
+		$this->getDonneesExamenTable()->insertDonneesExamen($tabDonnees, $idmedecin);
+		
+		/** Synthèse de la consultation du jour **/
+		$this->getDonneesExamenTable()->insertSyntheseConsultation($tabDonnees, $idmedecin);
+		
+		/**
+		 * DIAGNOSTIC --- DIAGNOSTIC --- DIAGNOSTIC 
+ 		 * DIAGNOSTIC --- DIAGNOSTIC --- DIAGNOSTIC 
+		 */
+		/** Diagnostics du jour **/
+		$this->getDiagnosticConsultationTable()->insertDiagnosticConsultation($tabDonnees, $idmedecin);
+		
+		/** Complications aigues **/
+		$this->getDiagnosticConsultationTable()->insertComplicationsAigues($tabDonnees, $idmedecin);
+		
+		/** Complications chroniques **/
+		$this->getDiagnosticConsultationTable()->insertComplicationsChroniques($tabDonnees, $idmedecin);
+		
+		var_dump($tabDonnees); exit();
+		
+		return $this->redirect ()->toRoute ('consultation', array ('action' => 'liste-consultations' ));
+	}
+ 
+    public function modifierConsultationAction(){
+    	
+		  //DEBUT --- DEBUT --- DEBUT
+		  $timestart = microtime(true);
+		  //-------------------------
+		
+		$this->layout ()->setTemplate ( 'layout/consultation' );
+	
+		$user = $this->layout()->user;
+		$IdDuService = $user['IdService'];
+		$idmedecin = $user['idemploye']; 
+		
+		$idpatient = $this->params ()->fromQuery ( 'idpatient', 0 );
+		$idcons = $this->params ()->fromQuery ( 'idcons' );
+		$patient = $this->getPatientTable()->getPatient($idpatient);
+	
+		//---- GESTION DU TYPE DE PATIENT ----
+		//---- GESTION DU TYPE DE PATIENT ----
+		$depistage = $this->getPatientTable()->getDepistagePatient($idpatient);
+	    $depister = 0;
+		$type = "Externe";
+		$typage = "";
+		
+		if($depistage->current()){
+			$depister = 1;
+			if($depistage->current()['valide'] == 1){
+				$idTypage = $depistage->current()['typage'];
+				$typageHemoglobine = $this->getPatientTable()->getTypageHemoglobine($idTypage);
+					
+				if($depistage->current()['typepatient'] == 1){
+					$type = "Interne";
+					$typage = "(<span style='color: red;'>".$typageHemoglobine['designation']."</span>)" ;
+				}else{
+					$typage = "(".$typageHemoglobine['designation'].")" ;
+				}
+			}
+		}
+		//---- FIN GESTION DU TYPE DE PATIENT ----
+		//---- FIN GESTION DU TYPE DE PATIENT ----
+		
+		$personne = $this->getPersonneTable()->getPersonne($idpatient);
+		$consultation = $this->getConsultationTable()->getConsultation($idcons)->getArrayCopy();
+		//---- Gestion des AGE ----
+		//---- Gestion des AGE ----
+		if($personne->age && !$personne->date_naissance){
+			$age = $personne->age." ans ";
+		}else{
+			
+			$aujourdhui = (new \DateTime() ) ->format('Y-m-d');
+			$age_jours = $this->nbJours($personne->date_naissance, $aujourdhui);
+			$age_annees = (int)($age_jours/365);
+				
+			if($age_annees == 0){
+					
+				if($age_jours < 31){
+					$age ="<span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_jours." jours </span>";
+				}else if($age_jours >= 31) {
+			
+					$nb_mois = (int)($age_jours/31);
+					$nb_jours = $age_jours - ($nb_mois*31);
+					if($nb_jours == 0){
+						$age ="<span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$nb_mois."m </span>";
+					}else{
+						$age ="<span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$nb_mois."m ".$nb_jours."j </span>";
+					}
+						
+				}
+					
+			}else{
+				$age_jours = $age_jours - ($age_annees*365);
+					
+				if($age_jours < 31){
+						
+					if($age_annees == 1){
+						if($age_jours == 0){
+							$age ="<span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an </span>";
+						}else{
+							$age ="<span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$age_jours." j </span>";
+						}
+					}else{
+						if($age_jours == 0){
+							$age ="<span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans </span>";
+						}else{
+							$age ="<span style='font-size:19px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans ".$age_jours."j </span>";
+						}
+					}
+			
+				}else if($age_jours >= 31) {
+			
+					$nb_mois = (int)($age_jours/31);
+					$nb_jours = $age_jours - ($nb_mois*31);
+						
+					if($age_annees == 1){
+						if($nb_jours == 0){
+							$age ="<span style='font-size:18px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$nb_mois."m </span>";
+						}else{
+							$html .="<span style='font-size:17px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$nb_mois."m ".$nb_jours."j </span>";
+						}
+							
+					}else{
+						if($nb_jours == 0){
+							$age ="<span style='font-size:18px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans ".$nb_mois."m </span>";
+						}else{
+							$age ="<span style='font-size:17px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."ans ".$nb_mois."m ".$nb_jours."j </span>";
+						}
+					}
+						
+				}
+					
+			}
+			
+		}
+		//---- FIN Gestion des AGE ----
+		//---- FIN Gestion des AGE ----
+		
+
+		$data = array(
+				'idpatient' => $idpatient,
+				'idmedecin' => $idmedecin,
+		);
+		
+		$consultation = $this->getConsultationTable()->getConsultation($idcons)->getArrayCopy();
+		
+		//==================================================================================
+		//==================================================================================
+		//==================================================================================
+		// instancier le motif d'admission et recuperer l'enregistrement
+		$motif_admission = $this->getMotifAdmissionTable ()->getMotifAdmission ( $idcons );
+		$nbMotif = $this->getMotifAdmissionTable ()->nbMotifs ( $idcons );
+		
+		$data = array();
+		$mDouleur = array(1 => 0,2 => 0,3 => 0,4 => 0);
+		//POUR LES MOTIFS D'ADMISSION
+		$k = 1;
+	    foreach ( $motif_admission as $Motifs ) {
+			$data ['motif_admission' . $k] = $Motifs ['idlistemotif'];
+			
+			//Recuperation des infos supplémentaires du motif douleur
+			if($Motifs ['idlistemotif'] == 2){
+				$mDouleur[1] = 1;
+				$mDouleur[2] = $k;
+			}
+			
+			$k ++;
+		}
+		
+		//Siege --- Siege --- Siege
+		$motif_douleur_precision = $this->getMotifAdmissionTable ()->getMotifDouleurPrecision ( $idcons );
+		if($motif_douleur_precision){
+			$mDouleur[3] = $motif_douleur_precision['siege'];
+			$mDouleur[4] = $motif_douleur_precision['intensite'];
+		}
+		
+		//==================================================================================
+		//==================================================================================
+		//==================================================================================
+		$form = new ConsultationForm();
+		$form->populateValues($data);
+		$form->populateValues($consultation);
+		
+		$listeMotifConsultation = $this->getMotifAdmissionTable() ->getListeSelectMotifConsultation();
+		$form->get('motif_admission1')->setvalueOptions($listeMotifConsultation);
+		$form->get('motif_admission2')->setvalueOptions($listeMotifConsultation);
+		$form->get('motif_admission3')->setvalueOptions($listeMotifConsultation);
+		$form->get('motif_admission4')->setvalueOptions($listeMotifConsultation);
+		$form->get('motif_admission5')->setvalueOptions($listeMotifConsultation);
+		
+		$listeSiege = $this->getMotifAdmissionTable() ->getListeSelectSiege();
+		$form->get('siege')->setvalueOptions($listeSiege);
+		
+		//RECUPERER LA LISTE DES VOIES ADMINISTRATION DES MEDICAMENTS
+		$listeVoieAdministration = $this->getConsultationTable()->getVoieAdministration($idcons);
+		
+		//RECUPERER LA LISTE DES ACTES
+		$listeActes = $this->getConsultationTable()->getListeDesActes();
+		
+		//RECUPERER LES ANALYSES EFFECTUEES PAR LE PATIENT FAISANT PARTIE DES ANALYSES OBLIGATOIRES A FAIRE 
+		$donneesExamensEffectues = $this->getAnalyseAFaireTable()->getAnalyseEffectuees($idpatient);
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		//RECUPERATION DES INFORMATIONS POUR LA MODIFICATION 
+		//RECUPERATION DES INFORMATIONS POUR LA MODIFICATION
+		//RECUPERATION DES INFORMATIONS POUR LA MODIFICATION
+		/**
+		 * Recuperer les historiques et les antecedents du patient
+		 */
+		/*
+		 * ANTECEDENTS FAMILIAUX --- ANTECEDENTS FAMILIAUX 
+		 */
+		$infosAntecedentsFamiliaux = $this->getAntecedentsFamiliauxTable()->getAntecedentsFamilauxParIdpatient($idpatient);
+		$infosAutresMaladiesFamiliales = $this->getAntecedentsFamiliauxTable()->getAutresMaladiesFamiliales($idpatient);
+    	if($infosAntecedentsFamiliaux){ $form->populateValues($infosAntecedentsFamiliaux[0]); }; 
+		if($infosAutresMaladiesFamiliales){ $form->populateValues($infosAutresMaladiesFamiliales); }
+		$listeChoixStatutDrepanoEnfant = $this->getAntecedentsFamiliauxTable()->getStatutDrepanocytoseEnfant($idpatient);
+    	
+		
+		/**
+		 * Recuperer la consultation du jour
+		 */
+		/*
+		 * HISTOIRE DE LA MALADIE --- HITOIRE DE LA MALADIE
+		 */
+		$infosHistoireMaladie = $this->getHistoireMaladieTable()->getHistoireMaladie($idcons);
+		if($infosHistoireMaladie){ 
+			$form->populateValues($infosHistoireMaladie[0]); 
+			if($infosHistoireMaladie[0]['criseHM'] == 1){ 
+				$infosCriseVasoOcclusiveHm = $this->getHistoireMaladieTable()->getCriseVasoOcclusiveHm($idcons); 
+				$form->populateValues($infosCriseVasoOcclusiveHm);
+			}
+			if($infosHistoireMaladie[0]['episodeFievreHM'] == 1){
+				$infosEpisodeFievreHm = $this->getHistoireMaladieTable()->getEpisodeFievreHm($idcons);
+				$form->populateValues($infosEpisodeFievreHm);
+			}
+			if($infosHistoireMaladie[0]['hospitalisationHM'] == 1){
+				$infosHospitalisationHm = $this->getHistoireMaladieTable()->getHospitalisationHm($idcons);
+				$form->populateValues($infosHospitalisationHm);
+			}
+		}
+		
+		/*
+		 * INTERROGATOIRE (Description des symptomes)
+		 */
+		$infosInterrogatoireMotif = $this->getHistoireMaladieTable()->getInterrogatoireMotif($idcons);
+		if($infosInterrogatoireMotif){  
+			$tabInfosInter = array();
+			$indiceEmp = 1;
+			foreach ($infosInterrogatoireMotif as $infosInter){
+				$tabInfosInter['motif_interrogatoire_'.$indiceEmp++] = $infosInter['motif_interrogatoire'];
+			}
+			$form->populateValues($tabInfosInter);  
+		}
+		
+		/*
+		 * SUIVI DES TRAITEMENTS
+		 */
+		$infosSuiviDesTraitements = $this->getHistoireMaladieTable()->getSuiviDesTraitements($idcons);
+		if($infosSuiviDesTraitements){ $form->populateValues($infosSuiviDesTraitements); }
+		
+		/*
+		 * MISE A JOUR DES VACCINS
+		 */
+		$infosMiseAJourVaccin = $this->getHistoireMaladieTable()->getMiseAJourVaccin($idcons);
+		if($infosMiseAJourVaccin){ $form->populateValues($infosMiseAJourVaccin); }
+    	
+    	/*
+    	 * DONNEES DE L'EXAMEN
+    	 */
+		$infosDonneesExamen = $this->getDonneesExamenTable()->getDonneesExamen($idcons);
+    	if($infosDonneesExamen){ $form->populateValues($infosDonneesExamen[0]); }
+    	
+    	/*
+    	 * SYNTHESE DE LA CONSULTATION
+    	 */
+    	$infosSyntheseConsultation = $this->getDonneesExamenTable()->getSyntheseConsultation($idcons);
+    	if($infosSyntheseConsultation){ $form->populateValues($infosSyntheseConsultation); }
+    	
+    	/**
+    	 * Recuperer le diagnostic
+    	 */
+    	/*
+    	 * DIAGNOSTIC DU JOUR
+    	 */
+    	$infosDiagnosticConsultation = $this->getDiagnosticConsultationTable()->getDiagnosticConsultation($idcons);
+    	if($infosDiagnosticConsultation){ $form->populateValues($infosDiagnosticConsultation[0]); }
+    	/*
+    	 * COMPLICATIONS AIGUES
+    	 */
+    	$infosComplicationsAigues = $this->getDiagnosticConsultationTable()->getComplicationsAigues($idcons);
+    	if($infosComplicationsAigues->count() != 0){ 
+    		$nbDiagnosticComplicationsAigues = array('nbDiagnosticComplicationsAigues' => $infosComplicationsAigues->count());
+    		$form->populateValues($nbDiagnosticComplicationsAigues); 
+    	}
+    	/*
+    	 * COMPLICATIONS CHRONIQUES
+    	 */
+    	$infosComplicationsChroniques = $this->getDiagnosticConsultationTable()->getComplicationsChroniques($idcons);
+    	if($infosComplicationsChroniques->count() != 0){
+    		$nbDiagnosticComplicationsChroniques = array('nbDiagnosticComplicationsChroniques' => $infosComplicationsChroniques->count());
+    		$form->populateValues($nbDiagnosticComplicationsChroniques);
+    	}
+    	
+    	
+    	//var_dump($form); exit();
+		
+		
+		//FIN --- FIN --- FIN --- FIN --- FIN --- FIN --- FIN
+		//$timeend = microtime(true);
+		//$time = $timeend-$timestart;
+		//var_dump(number_format($time,3)); exit();
+		//---------------------------------------------------
+		
+		
+		return array(
+				
+				'idcons' => $idcons,
+				'lesdetails' => $personne,
+				'date' => $consultation['date'],
+				'heure' => $consultation['heure'],
+				'age' => $age,
+				'typage' => $type.' '.$typage,
+				'nbMotifs' => $nbMotif,
+				'form' => $form,
+				'patient' => $patient,
+				'donneesExamensEffectues' => $donneesExamensEffectues,
+				
+				'mDouleur' => $mDouleur,
+				'listeVoieAdministration' => $listeVoieAdministration,
+				'listeActesCons' => $listeActes,
+				'listeMotifConsultation' => $listeMotifConsultation,
+				'listeChoixStatutDrepanoEnfant' => $listeChoixStatutDrepanoEnfant,
+				
+				'infosComplicationsAigues' => $infosComplicationsAigues,
+				'infosComplicationsChroniques' => $infosComplicationsChroniques,
+
+		);
+
+	}
+	
+	public function enregistrerModificationConsultationAction(){
+		$idmedecin = $this->layout()->user['idemploye'];
+
+		$tabDonnees = $this->params ()->fromPost();
+		/**
+		 *ANTECEDENT FAMILIAUX --- ANTECEDENTS FAMILIAUX
+		 *ANTECEDENT FAMILIAUX --- ANTECEDENTS FAMILIAUX
+		*/
+		
+		$this->getAntecedentsFamiliauxTable()->insertAntecedentsFamiliaux($tabDonnees);
+		$this->getAntecedentsFamiliauxTable()->insertStatutDrepanocytoseEnfant($tabDonnees);
+		
+		/**
+		 * CONSULTATION DU JOUR --- CONSULTATION DU JOUR
+		 * CONSULTATION DU JOUR --- CONSULTATION DU JOUR
+		 */
+		/** Histoire de la maladie **/
+		$this->getHistoireMaladieTable()->insertHistoireMaladie($tabDonnees, $idmedecin);
+		
+		//var_dump($tabDonnees); exit();
+		
+		return $this->redirect ()->toRoute ('consultation', array ('action' => 'liste-consultations' ));
+	}
+	
+	
+	//HISTORIQUE DES PATIENTS CONSULTES
+	//HISTORIQUE DES PATIENTS CONSULTES
+	public function listePatientsConsultesAjaxAction() {
+		$output = $this->getConsultationModConsTable ()->getListePatientsConsultes();
+		return $this->getResponse ()->setContent ( Json::encode ( $output, array ( 'enableJsonExprFinder' => true ) ) );
+	}
+	
+	public function listePatientsConsultesAction() {
+		$this->layout ()->setTemplate ( 'layout/consultation' );
+		
+		//$output = $this->getConsultationModConsTable ()->getListePatientsConsultes();
+		//var_dump($output); exit();
 	}
 	
 	
@@ -707,14 +1176,53 @@ class ConsultationController extends AbstractActionController {
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
+	//GESTION DES IMPRESSIONS --- GESTION DES IMPRESSION
+	//GESTION DES IMPRESSIONS --- GESTION DES IMPRESSION
+	public function impressionDemandesAnalysesAction() {
+
+		$service = $this->layout()->user['NomService'];
+		$idpatient = $this->params()->fromPost( 'idpatient' );
+		$personne = $this->getPersonneTable()->getPersonne($idpatient);
+		$patient = $this->getPatientTable()->getPatient($idpatient);
+		$depistage = $this->getPatientTable()->getDepistagePatient($idpatient);
+		
+		$formData = $this->getRequest ()->getPost ();
+		$analyses = $formData['analyses'];
+		$typesAnalyses = $formData['typesAnalyses'];
+		$tarifs = $formData['tarifs'];
+		
+		$analysesTab = explode(',', $analyses);
+		$typesAnalysesTab = explode(',', $typesAnalyses);
+		$tarifsTab = explode(',', $tarifs);
+		
+		//******************************************************
+		//******************************************************
+		//*************** Création de l'imprimé pdf **************
+		//******************************************************
+		//******************************************************
+		//Créer le document
+		$DocPdf = new DocumentPdf();
+		//Créer la page
+		$page = new DemandeAnalysePdf();
+		
+		//Envoyer les données sur le patient
+		$page->setPatient($patient);
+		$page->setDonneesPatient($personne);
+		$page->setService($service);
+		$page->setAnalyses($analysesTab);
+		$page->setTypesAnalyses($typesAnalysesTab);
+		$page->setTarifs($tarifsTab);
+		$page->setDepistage($depistage);
+		
+		//Ajouter une note à la page
+		$page->addNote();
+		//Ajouter la page au document
+		$DocPdf->addPage($page->getPage());
+		//Afficher le document contenant la page
+		$DocPdf->getDocument();
+		
+		
+	}	
 	
 	
 	
