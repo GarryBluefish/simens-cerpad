@@ -131,6 +131,11 @@ class TechnicienController extends AbstractActionController {
 		//$listeBilan = $this->getBilanPrelevementTable()->pourCorrection();
 		//var_dump($listeBilan); exit();
 		
+		
+		//$listeResultatsDepistages = $this->getResultatsDepistagesTable()->getResultatsDepistagesPourUnePeriode('2018-01-01','2018-01-10');
+		//var_dump($listeResultatsDepistages); exit();
+		
+		
 		$this->layout ()->setTemplate ( 'layout/technicien' );
 		$bilanPrelevement = $this->getBilanPrelevementTable() ->getBilanPrelevementRepris(12);
 		

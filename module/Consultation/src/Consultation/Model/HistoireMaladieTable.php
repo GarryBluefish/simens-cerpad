@@ -20,6 +20,16 @@ class HistoireMaladieTable {
 		return $is_empty;
 	}
 	
+	/**
+	 * Indiquer que la consultation est effectuée par le médecin
+	 */
+	function validerConsultation($idcons, $idmedecin){
+		$sql = new Sql($this->tableGateway->getAdapter());
+		$sQuery = $sql->update()->table('consultation')->set(array('idmedecin' => $idmedecin , 'consprise' => 1))
+		              ->where(array('idcons' => $idcons ));
+		$sql->prepareStatementForSqlObject($sQuery)->execute();
+	}
+	
 	function getHistoireMaladie($idcons){
 		return $this->tableGateway->select( array('idcons' => $idcons) )->toArray();
 	}
@@ -80,6 +90,8 @@ class HistoireMaladieTable {
 			$histoireMaladie['idcons'] = $tabDonnees['idcons'];
 			$histoireMaladie['idmedecin'] = $idmedecin;
 			$this->tableGateway->insert($histoireMaladie);
+			
+			$this->validerConsultation($tabDonnees['idcons'], $idmedecin);
 			
 			//Inserer les infos sur les crises vaso-occlusive
 			if($histoireMaladie['criseHM'] == 1){ $this->insertCriseVasoOcclusiveHm($tabDonnees, $idmedecin); }

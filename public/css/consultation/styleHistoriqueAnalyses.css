@@ -1,0 +1,384 @@
+.listeCodesDesPatients
+{
+	width: 20%; 
+	height: 25px; 
+	margin-bottom: 30px;
+	padding-top: 5px;
+	background: #cccccc; 
+	text-align: center; 
+	border-radius: 10px;
+	box-shadow: 0pt 1pt 2px rgba(0, 0, 0, 0.5);
+}
+
+.listeAnalyseParTypeParDate
+{
+	width: 40%; 
+	height: 25px; 
+	margin-bottom: 30px;
+	padding-top: 5px;
+	background: #cccccc; 
+	text-align: center; 
+	border-radius: 10px;
+	box-shadow: 0pt 1pt 2px rgba(0, 0, 0, 0.5);
+}
+
+.listeAnalyseParTypeParDate select, .listeCodesDesPatients select
+{
+	height: 20px;
+	text-align: center;
+	font-size: 13px;
+}
+
+#listeAnalyseParType, #typeAnalyseDesign{
+	font-size: 13px;
+}
+
+.noteTypeMateriel input[type='text']{
+	padding-left: 2px;
+	text-align: left; 
+	font-size: 13px;
+	border: 1px solid #cccccc;
+	float: right;
+	width: 100%;
+	margin-right: 10px; 
+	margin-left: 15px; 
+	margin-bottom: 15px;
+}
+
+
+.designEnTeteSelect
+{
+	width: 100%; 
+	height: 30px; 
+	margin-bottom: 30px;
+	padding-top: 5px;
+	background: #cccccc; 
+	text-align: center; 
+	border-radius: 10px;
+	box-shadow: 0pt 1pt 2px rgba(0, 0, 0, 0.5);
+}
+
+.designEnTeteSelect select
+{
+	height: 25px;
+	text-align: center;
+}
+
+.designEnTeteAnalyse .enTete
+{
+	width: 100%; 
+	height: 30px; 
+	padding-top: 5px;
+	background: #cccccc; 
+	text-align: center; 
+	border-radius: 10px;
+	box-shadow: 0pt 1pt 2px rgba(0, 0, 0, 0.5);
+}
+
+.designEnTeteAnalyse .enTete2
+{
+	width: 100%; 
+	height: 30px; 
+	padding-top: 5px;
+	background:  #a0f54b; /* #efefef; */
+	text-align: center; 
+	border-radius: 10px;
+	box-shadow: 0pt 1pt 2px rgba(0, 0, 0, 0.5);
+}
+
+.designEnTeteAnalyse tr:hover
+{
+	background-color: white;
+}
+
+.designEnTeteAnalyse .enTitre div
+{
+	color: green;
+	text-align: center; 
+	padding-top: 20px;
+	padding-bottom: 20px;
+	font-size: 13px;
+	text-decoration: underline;
+}
+
+.designEnTeteAnalyse label 
+{
+line-height: 1.7em;
+
+background-color: #f3f3f3;
+
+background-size: auto auto;
+
+box-shadow: 1px 1px 2px rgba(204, 204, 204, 0.8);
+
+color: black;
+
+display: inline-block;
+
+font-size: 13px;
+
+padding-top: 4px;
+
+padding-right: 5px;
+
+padding-bottom: 4px;
+
+position: relative;
+
+font-family: time new romans;
+
+width: 100%;
+
+height: 20px;
+}
+
+.ligneAnanlyse label:hover
+{
+
+background-color: #f6f6f6;
+
+}
+
+.designEnTeteAnalyse .lab2, .designEnTeteAnalyse .lab3
+{
+	font-size: 14px;
+}
+
+.ligneAnanlyse span
+{
+	background-size: auto auto;
+	margin-right: 10px;
+	float: right;
+}
+
+.designEnTeteAnalyse input
+{
+	width:100px; 
+	margin-top:2px; 
+	margin-left:10px; 
+	font-family: time new romans; 
+	font-size: 16px;
+	padding-right: 1px;
+	padding-left: 10px; 
+	text-align: right; 
+	height: 18px;
+}
+
+
+.designEnTeteAnalyse select
+{
+	margin-left:10px;
+	margin-top:2px;
+	width: 100px;
+	height: 20px;
+}
+
+.designEnTeteAnalyse table
+{
+	margin-left: 15px;
+}
+
+/* EN TETE*/
+#numerof
+{
+	width: 15%;
+}
+
+#datef
+{
+	width: 67%;
+}
+
+#optionf
+{
+	width: 23%;
+}
+
+#typeA
+{
+	width: 25%;
+}
+
+#analyseA
+{
+	width: 65%;
+}
+
+#optionA
+{
+	width: 10%;
+}
+
+/* PIED DE PAGE*/
+#numerof_ input[type="hidden"], #datef_ input[type="text"], #optionf_ input[type="hidden"]
+{ 
+
+background-color: #fffffa; /*la couleur du champ*/
+
+height: 25px; /*la hauteur du champ input*/
+
+width: 100%; /* la largeur du champ input*/
+}
+
+#typeA_ input[type="text"], #analyseA_ input[type="text"], #optionA_ input[type="hidden"]
+{ 
+
+background-color: #fffffa; /*la couleur du champ*/
+
+height: 25px; /*la hauteur du champ input*/
+
+width: 100%; /* la largeur du champ input*/
+}
+
+
+
+
+/* STYLE POUR LA LISTE DE SELECTION DE LA TABLE*/
+/* #listeDataTable{
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-left: -10px;
+} */
+
+.dataTables_paginate *
+{
+	background: #e9e8e8;
+	padding-top: 6px;
+	padding-bottom: 6px;
+	padding-left: 6px;
+	padding-right: 6px;
+    color: black;	
+	/*margin-top: 100px;*/
+	cursor: pointer;
+
+}
+
+div .dataTables_paginate
+{
+	margin-bottom: 20px;
+}
+
+.dataTables_paginate .first
+{
+	margin-right: 0px;
+}
+
+.dataTables_paginate .last
+{
+	margin-left: 0px;
+}
+
+.dataTables_paginate .previous
+{
+	margin-right: 2px;
+	border-left: 1px solid #bdb9b9;
+}
+
+.dataTables_paginate .next
+{
+	margin-left: 3px;
+	border-right: 1px solid #bdb9b9;
+}
+
+.dataTables_paginate a:hover
+{
+	text-decoration: none;
+	background-color: #c3c1c1;
+	color: white;
+}
+
+.dataTables_paginate .paginate_active
+{
+	text-decoration: none;
+	background-color: #b5b2b2;
+	color: white;
+}
+
+#nomMaj{
+	text-transform : uppercase;
+}
+
+.formule_leucocytaire tr:hover
+{
+	background: none;
+}
+
+
+.titreParents
+{
+	width: 20px; 
+	height: 20px; 
+	background: #cccccc; 
+	float:left; 
+	margin-right: 10px;
+	border-top-left-radius:  50px;
+}
+
+
+.titreParentLab
+{
+	font-family: times new roman; 
+	border-bottom: 3px solid #cccccc; 
+	background: #f5f5f5; 
+	height: 20px;
+	border-top-left-radius: 50px; 
+	border-top-right-radius: 50px;
+	font-size: 15px;
+}
+
+.infos_parentales_tab tr td
+{
+	padding-left: 13px;
+}
+
+.zoneColor
+{
+   background: white;
+}
+
+.infos_parentales_tab tr:hover
+{
+	background: none;
+}
+
+.zoneColor p
+{
+	min-width: 100%;
+}
+
+.labelTypeMateriel label 
+{
+	background-color: #f1f1f1;
+
+	background-size: auto auto;
+
+	box-shadow: 1px 1px 2px rgba(204, 204, 204, 0.8);
+
+	color: black;
+
+	display: inline-block;
+	
+	border-top-right-radius: 10px;
+
+	font-size: 13px;
+
+	padding-top: 2px;
+
+	padding-right: 5px;
+
+	padding-bottom: 8px;
+	
+	padding-left: 10px;
+
+	position: relative;
+
+	font-family: time new romans;
+
+	height: 13px;
+	
+	width: 30%;
+	
+	margin-bottom: -4px;
+	
+	margin-top: -20px;
+}

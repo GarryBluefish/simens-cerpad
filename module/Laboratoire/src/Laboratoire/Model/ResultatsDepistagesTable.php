@@ -27,6 +27,8 @@ class ResultatsDepistagesTable {
  			$select->join('facturation_demande_analyse' , 'facturation_demande_analyse.iddemande_analyse = demande_analyse.iddemande' , array('*'));
  			$select->join('bilan_prelevement' , 'bilan_prelevement.idfacturation = facturation_demande_analyse.idfacturation' , array('date_heure'));                  
  			$select->order('date_heure asc');
+ 			$select->where(array('demande_analyse.idanalyse' => 68));
+ 			
  		})->toArray();
  	}
  	/**
@@ -47,6 +49,7 @@ class ResultatsDepistagesTable {
  			$select->where(array(
  					'date_prelevement >= ?' => $date_debut,
  					'date_prelevement <= ?' => $date_fin,
+ 					'demande_analyse.idanalyse' => 68,
  			));
  			
  		})->toArray();
@@ -70,12 +73,13 @@ class ResultatsDepistagesTable {
  			$select->join('facturation_demande_analyse' , 'facturation_demande_analyse.iddemande_analyse = demande_analyse.iddemande' , array('*'));
  			$select->join('bilan_prelevement' , 'bilan_prelevement.idfacturation = facturation_demande_analyse.idfacturation' , array('date_heure'));
  			$select->order('date_heure asc');
- 			$select->where(array('valide' => 1));
+ 			$select->where(array('demande_analyse.idanalyse' => 68, 'valide' => 1));
+ 			
  		})->toArray();
  	}
  	/**
  	 * Liste des patients dépistés ayant déjà un résultat (renseigné par un technicien)
- 	 * validé ou non-validé par un biologiste et pour une période donnée
+ 	 * validé par un biologiste et pour une période donnée
  	 */
  	public function getResultatsDepistagesValidesPourUnePeriode($date_debut=null, $date_fin=null){
  	
@@ -92,8 +96,9 @@ class ResultatsDepistagesTable {
  					'valide' => 1,
  					'date_prelevement >= ?' => $date_debut,
  					'date_prelevement <= ?' => $date_fin,
+ 					'demande_analyse.idanalyse' => 68,
  			));
- 	
+ 			
  		})->toArray();
  	}
  	
@@ -115,12 +120,13 @@ class ResultatsDepistagesTable {
  			$select->join('facturation_demande_analyse' , 'facturation_demande_analyse.iddemande_analyse = demande_analyse.iddemande' , array('*'));
  			$select->join('bilan_prelevement' , 'bilan_prelevement.idfacturation = facturation_demande_analyse.idfacturation' , array('date_heure'));
  			$select->order('date_heure asc');
- 			$select->where(array('valide' => 0));
+ 			$select->where(array('demande_analyse.idanalyse' => 68, 'valide' => 0));
+ 			
  		})->toArray();
  	}
  	/**
  	 * Liste des patients dépistés ayant déjà un résultat (renseigné par un technicien)
- 	 * validé ou non-validé par un biologiste et pour une période donnée
+ 	 * non-validé par un biologiste et pour une période donnée
  	 */
  	public function getResultatsDepistagesNonValidesPourUnePeriode($date_debut=null, $date_fin=null){
  	
@@ -137,8 +143,9 @@ class ResultatsDepistagesTable {
  					'valide' => 0,
  					'date_prelevement >= ?' => $date_debut,
  					'date_prelevement <= ?' => $date_fin,
+ 					'demande_analyse.idanalyse' => 68,
  			));
- 	
+ 			
  		})->toArray();
  	}
  	
@@ -160,7 +167,8 @@ class ResultatsDepistagesTable {
  			$select->join('facturation_demande_analyse' , 'facturation_demande_analyse.iddemande_analyse = demande_analyse.iddemande' , array('*'));
  			$select->join('bilan_prelevement' , 'bilan_prelevement.idfacturation = facturation_demande_analyse.idfacturation' , array('date_heure'));                  
  			$select->order('date_heure asc');
- 		
+ 			
+ 			$select->where(array('demande_analyse.idanalyse' => 68));
  		})->toArray();
  			
  		$tabDatePrelevement = array();

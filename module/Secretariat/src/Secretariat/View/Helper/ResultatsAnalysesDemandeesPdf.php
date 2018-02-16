@@ -39,6 +39,7 @@ class ResultatsAnalysesDemandeesPdf
 	protected $_analysesBilanHepatique;
 	protected $_analysesBilanRenal;
 	protected $_analysesSerologie;
+	protected $_analysesMetabolismeFer;
 	protected $_analysesTypageHemoProteine;
 	
 	public function __construct()
@@ -312,6 +313,11 @@ class ResultatsAnalysesDemandeesPdf
 	public function setAnalysesSerologie($analysesSerologie){
 		$this->_analysesSerologie = $analysesSerologie;
 	}
+	
+	public function setAnalysesMetabolismeFer($analysesMetabolismeFer){
+		$this->_analysesMetabolismeFer = $analysesMetabolismeFer;
+	}
+	
 	
 	protected  function getNoteInformations(){
 		$Control = new DateHelper();
@@ -621,6 +627,24 @@ class ResultatsAnalysesDemandeesPdf
 			//Affichage des analyses concernant le BILAN LIPIDIQUE
 			if(array_intersect(array(25,26,27,28,29), $idanalysesBilanLipidique)){
 				$this->_page = $this->getBilanLipidique($noteLineHeight, $infosAnalyseDemande, $value, $idanalysesBilanLipidique);
+			}
+			//===================================
+			//===================================
+			
+			//-----------------------------------------------------------------
+			//-----------------------------------------------------------------
+			//-----------------------------------------------------------------
+			//-----------------------------------------------------------------
+			//-----------------------------------------------------------------
+			//-----------------------------------------------------------------
+			
+			//Liste des analyses pour le METABOLISME DU FER
+			//Liste des analyses pour le METABOLISME DU FER
+			$idanalysesMetabolismeFer = $this->_analysesMetabolismeFer;
+			
+			//Affichage des analyses concernant le METABOLISME DU FER
+			if(array_intersect(array(40,41), $idanalysesMetabolismeFer)){
+				$this->_page = $this->getMetabolismeFer($noteLineHeight, $idanalysesMetabolismeFer);
 			}
 			//===================================
 			//===================================
@@ -2167,6 +2191,139 @@ class ResultatsAnalysesDemandeesPdf
 		
 		return $this->_page;
 		
+	}
+	
+	
+	public function getMetabolismeFer($noteLineHeight, $idanalysesMetabolismeFer){
+	
+		//-------------PLACER LES LIGNES DES EXAMENS A AFFICHER ---------
+		//-------------PLACER LES LIGNES DES EXAMENS A AFFICHER ---------
+		//-------------PLACER LES LIGNES DES EXAMENS A AFFICHER ---------
+		$j = 28;
+		for($i = 0 ; $i < count($idanalysesMetabolismeFer) ; $i++){
+	
+			if($i%2 == 0){
+				$this->_page->setLineColor(new ZendPdf\Color\Html('#e1e1e1'));
+				$this->_page->setLineWidth(17);
+				$this->_page->drawLine($this->_leftMargin,
+						$this->_yPosition -$j,
+						$this->_pageWidth -
+						$this->_leftMargin,
+						$this->_yPosition -$j);
+			}else{
+				$this->_page->setLineColor(new ZendPdf\Color\Html('#f1f1f1'));
+				$this->_page->setLineWidth(17);
+				$this->_page->drawLine($this->_leftMargin,
+						$this->_yPosition -$j,
+						$this->_pageWidth -
+						$this->_leftMargin,
+						$this->_yPosition -$j);
+			}
+	
+			$j += 19;
+		}
+			
+		//-----------------------------------------------------------------------
+		//-----------------------------------------------------------------------
+		//-----------------------------------------------------------------------
+	
+		$control = new DateHelper();
+	
+		$resultats = $this->_resultatsAnalysesDemandees;
+	
+		$this->_yPosition -= $noteLineHeight-20; //Allez à la ligne
+	
+		$this->_page->setLineColor(new ZendPdf\Color\Html('#999999'));
+		$this->_page->setLineWidth(1);
+		$this->_page->drawLine($this->_leftMargin+190,
+				$this->_yPosition -2,
+				$this->_pageWidth -
+				$this->_leftMargin-195,
+				$this->_yPosition -2);
+	
+		$this->getNewTime();
+		$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', 'METABOLISME DU FER' ),
+				$this->_leftMargin+190,
+				$this->_yPosition+1);
+	
+		$this->_yPosition -= $noteLineHeight;    //aller a la ligne suivante
+	
+		//--- FER SERIQUE  --- FER SERIQUE --- FER SERIQUE --- FER SERIQUE 
+		//--- FER SERIQUE  --- FER SERIQUE --- FER SERIQUE --- FER SERIQUE 
+		if(in_array(40, $idanalysesMetabolismeFer)){
+			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10);
+			$this->_page->drawText("FER SERIQUE ",
+					$this->_leftMargin+5,
+					$this->_yPosition+9);
+	
+			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
+			$this->_page->drawText($resultats[40]['valeur_ug'],
+					$this->_leftMargin+150,
+					$this->_yPosition+9);
+	
+			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
+			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "ug/dl " ),
+					$this->_leftMargin+170,
+					$this->_yPosition+9);
+			
+			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
+			$this->_page->drawText($resultats[40]['valeur_umol'],
+					$this->_leftMargin+250,
+					$this->_yPosition+9);
+	
+			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
+			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "umol/l " ),
+					$this->_leftMargin+270,
+					$this->_yPosition+9);
+	
+				/*
+			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
+			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "N : < 6 mg/l " ),
+					$this->_leftMargin+360,
+					$this->_yPosition+9);
+				*/
+			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
+		}
+	
+		//--- FERRITININE  --- FERRITININE --- FERRITININE --- FERRITININE 
+		//--- FERRITININE  --- FERRITININE --- FERRITININE --- FERRITININE
+		if(in_array(41, $idanalysesMetabolismeFer)){
+			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10);
+			$this->_page->drawText("FERRITININE ",
+					$this->_leftMargin+5,
+					$this->_yPosition+9);
+	
+			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
+			$this->_page->drawText($resultats[41]['ferritinine'],
+					$this->_leftMargin+150,
+					$this->_yPosition+9);
+	
+			/*
+			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
+			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "ug/dl " ),
+					$this->_leftMargin+170,
+					$this->_yPosition+9);
+			
+			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
+			$this->_page->drawText($resultats[40]['valeur_umol'],
+					$this->_leftMargin+250,
+					$this->_yPosition+9);
+	
+			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
+			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "umol/l " ),
+					$this->_leftMargin+270,
+					$this->_yPosition+9);
+	
+			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
+			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "N : < 6 mg/l " ),
+					$this->_leftMargin+360,
+					$this->_yPosition+9);
+				*/
+			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
+		}
+	
+		return $this->_page;
+	
 	}
 	
 }

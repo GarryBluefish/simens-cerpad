@@ -1072,6 +1072,18 @@ class ConsultationForm extends Form {
 				)
 		) );
 		
+		
+		/**Examen complémentaire --- Examen complémentaire --- Examen complémentaire**/
+		/**Examen complémentaire --- Examen complémentaire --- Examen complémentaire**/
+		$this->add ( array (
+				'name' => 'nbDemandeExamenComplementaire',
+				'type' => 'Hidden',
+				'attributes' => array (
+						'id' => 'nbDemandeExamenComplementaire',
+				)
+		) );
+		
+		
 		/**Diagnostic --- Diagnostic --- Diagnostic **/
 		/**Diagnostic --- Diagnostic --- Diagnostic **/
 		$this->add ( array (

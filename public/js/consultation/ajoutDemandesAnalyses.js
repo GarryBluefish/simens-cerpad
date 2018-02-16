@@ -1,8 +1,12 @@
 var base_url = window.location.toString();
 var tabUrl = base_url.split("public");
 var $isupp = 1;
+var nbExamensDemandes = 0;
 
 function creerLalisteActe ($listeDesElements) {
+	nbExamensDemandes++;
+	$('#nbDemandeExamenComplementaire').val(nbExamensDemandes);
+	
     	var index = $("LesActes").length; 
 			        $liste = "<div id='Acte_"+(index+1)+"'>"+
 				             "<LesActes>"+
@@ -47,7 +51,7 @@ function creerLalisteActe ($listeDesElements) {
                              "<img class='viderActe' style='margin-left: 15px; margin-top: 10px; cursor: pointer;' src='../images_icons/gomme.png' title='vider' />"+
                              "</a>"+
                              "<span id='analyse_effectuee_"+ (index+1) +"'  style='display: none;'>"+
-                             "<img  style='margin-left: 10px; margin-top: 10px; cursor: pointer;' src='../images_icons/tick_16.png' title='analyse r&eacute;alis&eacute;e' />"+
+                             "<img  style='margin-left: 10px; margin-top: 10px; cursor: pointer;' src='../images_icons/tick_16.png' title='pr&eacute;l&egrave;vement r&eacute;alis&eacute;' />"+
                              "</span>"+
                              "</th >"+
                              
@@ -89,6 +93,9 @@ function nbListeActe () {
 $(function () {
 	//Au debut on cache la suppression
 	$("#supprimer_acte").click(function(){
+		nbExamensDemandes--;
+		$('#nbDemandeExamenComplementaire').val(nbExamensDemandes);
+		
 		//ON PEUT SUPPRIMER QUAND C'EST PLUS DE DEUX LISTE
 		if(nbListeActe () >  $isupp){ $("#Acte_"+nbListeActe ()).remove(); }
 		//ON CACHE L'ICONE SUPPRIMER QUAND ON A UNE LIGNE
@@ -144,7 +151,9 @@ function partDefautActe (Liste, n) {
 
 //SUPPRIMER ELEMENT SELECTIONNER
 function supprimer_acte_selectionne(id) {
-
+	nbExamensDemandes--;
+	$('#nbDemandeExamenComplementaire').val(nbExamensDemandes);
+	
 	for(var i = (id+1); i <= nbListeActe(); i++ ){
 		
 		var element = $('#SelectTypeAnalyse_'+i+' select').val(); 
@@ -202,134 +211,69 @@ function prixMill(num) {
 
 function chargementModificationAnalyses (listeAnalysesDemandees, tabListeAnalysesParType) {
 	
+	var champHidden = "";
 	for(var index = 0 ; index < listeAnalysesDemandees.length ; index++){
 		var idtype = listeAnalysesDemandees[index]['idtype'];
 		$("#SelectTypeAnalyse_"+(index+1)+" option[value='"+idtype+"']").attr('selected','selected'); 
 		//Chargement des listes des analyses
 		$("#analyse_name_"+(index+1)).html(tabListeAnalysesParType[idtype]);
 		
-		var idanalyse = listeAnalysesDemandees[index]['idanalyse'];
-		//Sélection des analyses sur les listes 
-		$("#SelectAnalyse_"+(index+1)+" option[value='"+idanalyse+"']").attr('selected','selected');
-		
-		//Affichage des tarifs pour chaque analyse sélectionnée
-		var tarif = listeAnalysesDemandees[index]['tarif'];
-		$("#tarifActe"+(index+1)).val(prixMill(tarif));
-		
-		//Calcul de la somme à afficher
-		$("#tarifAnalyse"+(index+1)).val(tarif);
-		montantTotal();
+		if(idtype == 6){ 
+			var idanalyse = listeAnalysesDemandees[index]['idanalyse'];
+			//Sélection des analyses sur les listes 
+			$("#SelectAnalyse_"+(index+1)+" option[value='0,"+idanalyse+"']").attr('selected','selected');
+
+			$("#tarifActe"+(index+1)).val('___');
+		}else{
+			var idanalyse = listeAnalysesDemandees[index]['idanalyse'];
+			//Sélection des analyses sur les listes 
+			$("#SelectAnalyse_"+(index+1)+" option[value='"+idanalyse+"']").attr('selected','selected');
+
+			//Affichage des tarifs pour chaque analyse sélectionnée
+			var tarif = listeAnalysesDemandees[index]['tarif'];
+			$("#tarifActe"+(index+1)).val(prixMill(tarif));
+			
+			//Calcul de la somme à afficher
+			$("#tarifAnalyse"+(index+1)).val(tarif);
+			montantTotal();
+		}
 		
 		//Verifier si le résultat est déjà appliqué pour l'analyse et afficher l'icône
-		var result = listeAnalysesDemandees[index]['facturer'];
-		if(result == 1){ $isupp++;
-			$('#type_analyse_name_'+(index+1)+', #analyse_name_'+(index+1)).attr('disabled',true).css({'background':'#f8f8f8'});
-			$("#SelectTypeAnalyse_"+(index+1)+" select, #SelectAnalyse_"+(index+1)+" select").removeAttr('id');
+		var prelever = listeAnalysesDemandees[index]['prelever'];
+		if(prelever == 1){ $isupp++;
+		
+			$('.type_analyse_name_'+(index+1)+', #analyse_name_'+(index+1)).attr('disabled',true).css({'background':'#f8f8f8'});
+			champHidden = champHidden+'<input type="hidden" name="type_analyse_name_'+(index+1)+'" >';
+			
+			$("#champHiddenAnalysesBloquees").html(champHidden);
+			
 			$("#supprimer_acte_selectionne_"+(index+1)).remove();
 			$("#vider_analyse_selectionne_"+(index+1)).remove();
 			$("#analyse_effectuee_"+(index+1)).toggle(true);
+			
+		}else if(prelever == -1){ $isupp++;
+		
+		    var infosAnalysesDemandee = listeAnalysesDemandees[index];
+		
+			$('.type_analyse_name_'+(index+1)+', #analyse_name_'+(index+1)).attr('disabled',true).css({'background':'#f8f8f8'});
+			champHidden = champHidden+'<input type="hidden" name="type_analyse_name_'+(index+1)+'" >';
+			
+			$("#champHiddenAnalysesBloquees").html(champHidden);
+			
+			$("#supprimer_acte_selectionne_"+(index+1)).remove();
+			$("#vider_analyse_selectionne_"+(index+1)).remove();
+			$("#analyse_effectuee_"+(index+1)).toggle(true);
+			
+			//Placer les informations sur l'infirmier ayant effectu� la demande 
+			$("#analyse_effectuee_"+(index+1)).html("<img  style='margin-left: 10px; margin-top: 10px; cursor: pointer;' src='../images_icons/info_infirmier.png' title='demand&eacute; par : "+infosAnalysesDemandee['prenom']+" "+infosAnalysesDemandee['nom']+" ' />");
+	
 		}
+		
 		
 	}
 	
-	setTimeout(function(){ $('#bouton_Acte_valider_demande button').trigger('click'); },500);
+	$('a,img,hass').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });
 }
-
-//VALIDATION VALIDATION VALIDATION
-//********************* EXAMEN MORPHOLOGIQUE *****************************
-//********************* EXAMEN MORPHOLOGIQUE *****************************
-//********************* EXAMEN MORPHOLOGIQUE *****************************
-
-function validerDemandeActe(){
-$(function(){
-	$("#bouton_Acte_modifier_demande").toggle(false);
-	$("#bouton_Acte_valider_demande").toggle(true);
-	
-	$("#bouton_Acte_valider_demande button").click(function(){
-		
-		if( $('#type_analyse_name_'+1).val() != "" ){
-			$("#controls_acte div").toggle(false);
-			$("#iconeActe_supp_vider a img").toggle(false);
-			$("#bouton_Acte_modifier_demande").toggle(true);
-			$("#bouton_Acte_valider_demande").toggle(false);
-			
-			for(var i = 1; i <= nbListeActe(); i++ ){
-				$('#type_analyse_name_'+i).attr('disabled',true); $('#type_analyse_name_'+i).css({'background':'#f8f8f8'});
-				$("#analyse_name_"+i).attr('disabled',true); $("#analyse_name_"+i).css({'background':'#f8f8f8'});
-			}
-			
-			$("#bouton_Acte_modifier_demande").click(function(){
-				for(var i = 1; i <= nbListeActe(); i++ ){
-					$('#type_analyse_name_'+i).attr('disabled',false); $('#type_analyse_name_'+i).css({'background':'white'});
-					$("#analyse_name_"+i).attr('disabled',false); $("#analyse_name_"+i).css({'background':'white'});
-				}
-				$("#controls_acte div").toggle(true);
-				if(nbListeActe() == 1){
-					$("#supprimer_acte").toggle(false);
-				}
-				$("#iconeActe_supp_vider a img").toggle(true);
-				$("#bouton_Acte_modifier_demande").toggle(false);
-				$("#bouton_Acte_valider_demande").toggle(true);
-			});
-		}
-
-		stopPropagation();
-	});
-	
-	$("#terminer").click(function(){
-		
-		var diagnostic_demande = $("#diagnostic_demande_text").val();
-		var temoinTypageHemo = $("#temoinTypageHemo").val();
-		var TypageHemoSelect = 0;
-		
-		var typesAnalyses = [];
-		var analyses = [];
-		for(var i = 1, j = 1; i <= nbListeActe(); i++ ){
-			if($('#type_analyse_name_'+i).val()) {
-				typesAnalyses[j] = $('#type_analyse_name_'+i).val();
-				analyses[j] = $('#analyse_name_'+i).val();
-				if(analyses[j] == 68){ TypageHemoSelect = 1; }
-				j++;
-			}
-		}
-		
-		
-		if(analyses[1]){
-			
-			if(temoinTypageHemo == 1 && TypageHemoSelect == 1){
-				$('.messageAlertVoletPopup').html('<span style="font-size: 16px; color: red;"> La demande de d&eacute;pistage &agrave; d&eacute;j&agrave; &eacute;t&eacute; faite pour ce patient. Veuillez annuler celle s&eacute;lectionner pour pouvoir continuer. ! </span>');
-				$('#volet').fadeIn(1000);
-				setTimeout(function(){ $('#volet').fadeOut(1000); }, 15000);
-				
-			}else{
-				$('#volet').fadeOut(1000);
-				imprimerAnalyse();
-				$.ajax({
-			        type: 'POST',
-			        url: tabUrl[0]+'public/secretariat/envoyer-demandes-analyses',
-			        data: {'analyses':analyses, 'idpatient':$("#idpatient").val(), 'diagnostic_demande':diagnostic_demande , 'verifModifier':$('#verifModifier').val()},
-			        success: function() {
-			        	vart = tabUrl[0]+'public/secretariat/demandes-analyses';
-			    	    $(location).attr("href",vart);
-			        },
-			        error:function(e){console.log(e);alert("Une erreur interne est survenue!");},
-			        dataType: "html"
-				});
-			}
-			
-		}else{
-			$('.messageAlertVoletPopup').html('<span style="font-size: 22px; color: red;"> Veuillez choisir une analyse ! </span>');
-			$('#volet').fadeIn(1000);
-			setTimeout(function(){ $('#volet').fadeOut(1000); }, 10000);
-		}
-		
-		return false;
-
-	});
-	
-});
-}
-
 
 function desactivationChamps(){
 	
@@ -360,7 +304,6 @@ function getListeAnalyses(id, pos){
 	});
 
 }
-
 
 function montantTotal(){ 
 	var somme = 0;
@@ -405,12 +348,14 @@ var nbEntrees = 0;
 
 function demandesAnalyses(){
 
-	var idpatient = 0;
+	var idpatient = $("#idpatient").val();
+	var idcons = $("#idcons").val();
+	
 	var chemin = tabUrl[0]+'public/consultation/demandes-analyses-vue';
     $.ajax({
         type: 'POST',
         url: chemin ,
-        data:'id='+idpatient,
+        data: {'id' :idpatient, 'idcons' :idcons},
         success: function(data) {    
         	    var result = jQuery.parseJSON(data);  
         	    

@@ -23,6 +23,8 @@ use Consultation\Model\DiagnosticConsultationTable;
 use Consultation\Model\DiagnosticConsultation;
 use Consultation\Model\ConsultationTable;
 use Consultation\Model\Consultation;
+use Consultation\Model\ExamenTable;
+use Consultation\Model\Examen;
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface, ViewHelperProviderInterface {
 
@@ -136,6 +138,18 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 							$resultSetPrototype = new ResultSet ();
 							$resultSetPrototype->setArrayObjectPrototype ( new Consultation() );
 							return new TableGateway ( 'consultation', $dbAdapter, null, $resultSetPrototype );
+						},
+						
+						'Consultation\Model\ExamenTable' => function ($sm) {
+							$tableGateway = $sm->get( 'ExamenModuleConsultationTableGateway' );
+							$table = new ExamenTable($tableGateway);
+							return $table;
+						},
+						'ExamenModuleConsultationTableGateway' => function ($sm) {
+							$dbAdapter = $sm->get ( 'Zend\Db\Adapter\Adapter' );
+							$resultSetPrototype = new ResultSet ();
+							$resultSetPrototype->setArrayObjectPrototype ( new Examen() );
+							return new TableGateway ( 'examen_imagerie', $dbAdapter, null, $resultSetPrototype );
 						},
 						
 				)

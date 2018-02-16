@@ -1031,5 +1031,164 @@ class AnalyseTable {
 	}
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*
+	 * UTILISER DANS LE MODULE 'Consultation'
+	 * UTILISER DANS LE MODULE 'Consultation'
+	 * UTILISER DANS LE MODULE 'Consultation'
+	 */
+	
+	/**
+	 * Verifier est ce que la demande fait l'objet d'un prélèvement
+	 */
+	public function verifierPrelevementIdDemande($iddemande){/*
+		 * Verifier si la demande fait l'objet de prélèvement
+		 */
+		$sql = new Sql($this->tableGateway->getAdapter());
+		$sQuery = $sql->select()->from(array('fda' => 'facturation_demande_analyse'))->columns(array('*'))
+		                        ->join(array('bp' => 'bilan_prelevement') , 'bp.idfacturation = fda.idfacturation' , array('*'))
+		                        ->where(array('fda.iddemande_analyse' => $iddemande) );
+		return $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
+	}
+
+    function getConsultationParIdcons($idcons){
+		$sql = new Sql($this->tableGateway->getAdapter());
+		$sQuery = $sql->select() ->from('consultation')->where( array('idcons' => $idcons) );
+		return $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
+	}
+	
+	
+	//Recuperer la liste des analyses demandees avec 'D'=date, 'P'=idpatient
+	/**
+	 * Recuperer la liste des analyses du patient du jour j
+	 * @param $idcons
+	 * @param $idpatient
+	 */
+	public function getListeAnalysesDemandeesDansConsDP($idcons, $idpatient){
+		
+		$donnees = array();
+		
+		/**
+		 * Recuperer les analyses demandées par le medecin et faisant l'objet de prélèvement (blocage)
+		 */
+		$sql = new Sql($this->tableGateway->getAdapter());
+		$sQuery = $sql->select()
+		->from(array('d' => 'demande_analyse'))->columns(array('*'))
+		->join(array('a' => 'analyse'), 'a.idanalyse = d.idanalyse', array('*'))
+		->join(array('t' => 'type_analyse'), 't.idtype = a.idtype_analyse', array('idtype', 'prelever' => 'idemploye'))
+		->join(array('dac' => 'demande_analyse_cons'), 'dac.iddemande = d.iddemande', array('idcons'))
+		->where(array('idcons' => $idcons))
+		->order(array('t.idtype' => 'ASC', 'd.idanalyse' => 'ASC'));
+		$resultat = $sql->prepareStatementForSqlObject($sQuery)->execute();
+			
+		foreach ($resultat as $result){
+
+			//Verifier si le prélèvement est effectué et si oui 1 sinon 0
+			if( $this->verifierPrelevementIdDemande( $result['iddemande'] ) ){
+				$result['prelever'] = 1;
+				$donnees[] = $result;
+			}
+		}
+		
+		/**
+		 * Recuperer les analyses demandées par le secretaire et (blocage)  
+		 */
+		$infosConsultation = $this->getConsultationParIdcons($idcons);
+		
+		$sql2 = new Sql ($this->tableGateway->getAdapter());
+		$subselect = $sql2->select ();
+		$subselect->from ( array ( 'dac' => 'demande_analyse_cons' ) )->columns (array ( 'iddemande' ) );
+		$subselect->where( array( 'idcons' => $idcons) );
+		
+		$sql = new Sql($this->tableGateway->getAdapter());
+		$sQuery = $sql->select()
+		->from(array('d' => 'demande_analyse'))->columns(array('*'))
+		->join(array('a' => 'analyse'), 'a.idanalyse = d.idanalyse', array('*'))
+		->join(array('t' => 'type_analyse'), 't.idtype = a.idtype_analyse', array('idtype', 'prelever' => 'idemploye'))
+		->join(array('p' => 'personne'), 'p.idpersonne = d.idsecretaire', array('nom', 'prenom'))
+		->where(array('d.date' => $infosConsultation['date'], 'd.idpatient' => $idpatient,  new NotIn ( 'd.iddemande', $subselect )))
+		->order(array('t.idtype' => 'ASC', 'd.idanalyse' => 'ASC')); 
+			
+		$resultat = $sql->prepareStatementForSqlObject($sQuery)->execute();
+			
+		foreach ($resultat as $result){
+			$result['prelever'] = -1;
+			$donnees[] = $result;
+		}
+		
+		
+		/**
+		 * Recuperer les analyses demandées par le médecin ne faisant pas encore l'objet de prélèvement
+		 */
+		$sql = new Sql($this->tableGateway->getAdapter());
+		$sQuery = $sql->select()
+		->from(array('d' => 'demande_analyse'))->columns(array('*'))
+		->join(array('a' => 'analyse'), 'a.idanalyse = d.idanalyse', array('*'))
+		->join(array('t' => 'type_analyse'), 't.idtype = a.idtype_analyse', array('idtype', 'prelever' => 'idemploye'))
+		->join(array('dac' => 'demande_analyse_cons'), 'dac.iddemande = d.iddemande', array('idcons'))
+		->where(array('idcons' => $idcons))
+		->order(array('t.idtype' => 'ASC', 'd.idanalyse' => 'ASC'));
+		$resultat = $sql->prepareStatementForSqlObject($sQuery)->execute();
+			
+		foreach ($resultat as $result){
+		
+			//Verifier si le prélèvement est effectué et si oui 1 sinon 0
+			if( !$this->verifierPrelevementIdDemande( $result['iddemande'] ) ){
+				$result['prelever'] = 0;
+				$donnees[] = $result;
+			}
+		}
+		
+		
+		/**
+		 * Recupérer la liste des examens radiologiques demandés par le médecin
+		 */
+		
+		$sql = new Sql($this->tableGateway->getAdapter());
+		$sQuery = $sql->select()->from(array('dec' => 'demande_examen_cons'))->columns( array('idtype' => 'idcons',  'idanalyse' => 'idexamen', 'prelever' => 'idmedecin') )
+		->join(array('ei' => 'examen_imagerie') , 'ei.idexamen = dec.idexamen' , array('tarif' => 'idemploye'))
+		->where( array('idcons' => $idcons) );
+		$resultat =  $sql->prepareStatementForSqlObject($sQuery)->execute();
+		
+		foreach ($resultat as $result){
+			$result['idtype'] = 6;
+			$result['prelever'] = 0;
+			$result['tarif'] = '___';
+			$donnees[] = $result;
+		}
+		
+		
+		return $donnees;
+		
+	}
 }
 

@@ -778,6 +778,72 @@ function getExamensNonFaitsDansExamComp(nbExamensNonFaits,tabIndexAnalysesNonFai
 	
 }
 
+
+function gestionAlerteExistanceAnalyseNonFait(nbExamensNonFaits){
+	
+	$('#volet').dblclick(function(){
+	   $(this).animate({'top': -120}, 'slow');
+	   setTimeout(function(){ $('#volet').hide(); },1500);
+	});
+
+	$('#clickOuvrirPopup').click(function(){
+		$('#volet').show('slow');
+		//Lors d'un scroll
+		$(window).scroll(function(){
+			var top = ($(window).scrollTop()); 
+			if(top > 52){
+				$('#volet').css({'position' : 'fixed', 'top': 0});
+			}else{
+				$('#volet').css({'position' : 'fixed', 'top': 0}); //52-top
+			}
+		});
+		
+		//Au click
+		var top = ($(window).scrollTop()); 
+		if(top > 52){
+			$('#volet').css({'position' : 'fixed','top': 0})
+		}else{
+			$('#volet').css({'position' : 'fixed','top': 0}); //52-top
+		}
+	});
+	
+	//Afficher lorsqu'il y a au moins une analyse non faite 
+	if(nbExamensNonFaits > 0){
+		
+		setTimeout(function(){
+
+			$('#clickOuvrirPopup').trigger('click');
+			$('.messageAlertVoletPopup').html('<div style="color: black; font-size: 17px; font-weight: bold; width: 100%; font-family: Tempus Sans ITC;">'
+	                                           +nbExamensNonFaits+' analyses obligatoires &agrave; faire <img onclick="ouvrirLeDepliantExamenComplementaireAFaire();" style="float: right; cursor: pointer;" src="../images_icons/voir.png" /> </div>');
+			alerteSonore(); 
+		 
+			//Fermer le pop-up au click sur le depliant
+			$('.examenComplementaireAFaireDelpiantAlert').click(function(){ $('#volet').trigger('dblclick'); });
+			
+		},1000);
+	}
+
+}
+
+function ouvrirLeDepliantExamenComplementaireAFaire(){
+	$('#volet').trigger('dblclick');
+	$('.examenComplementaireDelpiantAlert').trigger('click');
+	$('.examenComplementaireAFaireDelpiantAlert').trigger('click');
+}
+
+function alerteSonore() { 
+	var player = document.querySelector('#audioAlerteAutoAnalyse');
+	setTimeout(function(){ player.play(); },500);
+	//player.pause(); //pour la pause
+}
+
+
+
+
+
+
+
+
 //DIAGNOSTIC --- COMPLICATIONS AIGUES & COMPLICATIONS CHRONIQUES
 //DIAGNOSTIC --- COMPLICATIONS AIGUES & COMPLICATIONS CHRONIQUES
 /**

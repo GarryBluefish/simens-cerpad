@@ -55,7 +55,7 @@ class DiagnosticConsultationTable {
 			
 			$idcomplicationaigue = $tabDonnees['diagnosticComplicationsAiguesChamp_'.$i];
 			
-			if(!$this->getComplicationsAiguesAvecIdconsIdcomp($tabDonnees['idcons'], $idcomplicationaigue)){
+			if($idcomplicationaigue && !$this->getComplicationsAiguesAvecIdconsIdcomp($tabDonnees['idcons'], $idcomplicationaigue)){
 				$complicationsAigues = array();
 				$complicationsAigues['idcons'] = $tabDonnees['idcons'];
 				$complicationsAigues['idmedecin'] = $idmedecin;
@@ -100,7 +100,7 @@ class DiagnosticConsultationTable {
 				
 			$idcomplicationchronique = $tabDonnees['diagnosticComplicationsChroniquesChamp_'.$i];
 				
-			if(!$this->getComplicationsChroniquesAvecIdconsIdcomp($tabDonnees['idcons'], $idcomplicationchronique)){
+			if($idcomplicationchronique && !$this->getComplicationsChroniquesAvecIdconsIdcomp($tabDonnees['idcons'], $idcomplicationchronique)){
 				$complicationsChroniques = array();
 				$complicationsChroniques['idcons'] = $tabDonnees['idcons'];
 				$complicationsChroniques['idmedecin'] = $idmedecin;

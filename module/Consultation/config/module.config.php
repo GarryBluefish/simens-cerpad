@@ -10,10 +10,10 @@ return array (
 						'consultation' => array (
 								'type' => 'segment',
 								'options' => array (
-										'route' => '/consultation[/][:action][/:idconsultation]',
+										'route' => '/consultation[/][:action][/:idpatient]',
 										'constraints' => array (
 												'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-												'idconsultation' => '[0-9]+'
+												'idpatient' => '[0-9]+'
 										),
 										'defaults' => array (
 												'controller' => 'Consultation\Controller\Consultation',

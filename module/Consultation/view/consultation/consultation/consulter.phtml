@@ -333,10 +333,10 @@ echo $this->form()->openTag($form); ?>
      <!-- ********************Antécédents ou Terrain particulier ******************--> 
      
      <div style='font-family: police2;font-size: 17px; font-weight: bold;'>Ant&eacute;c&eacute;dents et Historiques</div>  
-        <div style=' max-height: 450px;'>
+        <div style=' max-height: 500px;'>
              <?php 
                echo $this->headLink()->appendStylesheet($this->basePath().'/css/consultation/styleHistoriquesTerrainParticulier.css');
-               echo  $this->headScript()->appendFile($this->basePath().'/js/consultation/consultation/jsHistoriquesTerrainParticulier.js');
+               echo  $this->headScript()->appendFile($this->basePath().'/js/consultation/jsHistoriquesTerrainParticulier.js');
              ?>
         
          <div id="tabsAntecedents">
@@ -719,14 +719,23 @@ echo $this->form()->openTag($form); ?>
 					<th style="width:25%;" >DATE & HEURE</th>
 					<th style="width:35%;" >SURVEILLANT DE SERVICE</th>
 					<th style="width:35%;" >M&Eacute;DECIN CONSULTANT</th>
-					<th style="width:5%;">Vue</th>
+					<th style="width:5%;">Voir</th>
 				  </tr>
-			  </thead>
+			   </thead>
 			  
-			  <tbody>
+			  <tbody class="liste_patient">
 			    <!-- AFFICHAGE DE LA LISTE DES CONSULTATIONS PRECEDENTES -->
+			    <!-- AFFICHAGE DE LA LISTE DES CONSULTATIONS PRECEDENTES -->
+			    
+			    
+			    
               </tbody>
+             
+             
              </table>
+             
+             <script> historiquesDesConsultations($("#idpatient").val()); </script>
+              
              </div>
                
              <table id="boutonTerminerConsultation" style="width:5%;">
@@ -742,12 +751,16 @@ echo $this->form()->openTag($form); ?>
               <!-- ANALYSES -->
               <!-- ANALYSES -->
               
+              <?php echo $this->headLink()->appendStylesheet($this->basePath().'/css/consultation/styleHistoriqueAnalyses.css');?>
+              
               <div id="titreTableauAnalyses" style="width: 100%; font-family: Tempus Sans ITC;  color: green; font-size: 20px; padding-bottom: 10px;" >&#10049; Liste des analyses pr&eacute;c&eacute;dentes</div>
              
               <div id='TabAnalyses'>
-                <table style="width:100%;">
-				  
-                </table>
+                <div id='listeAnalysesParDemande' style='min-height: 250px; border-top: 0px solid #cccccc;'>
+           
+           
+       
+                </div>
               </div>
               
               <table id="boutonTerminerAnalyses" style="width:5%;">
@@ -755,6 +768,8 @@ echo $this->form()->openTag($form); ?>
                    <td class="TerminerAnalyses styleBouton" style='width:100%; padding-bottom: 5px; padding-top: 15px;'> </td>
                 </tr>
               </table>
+              <script> listeAnalysesValidees($('#idpatient').val()); </script>
+              
               <!-- FIN ANALYSES -->
               <!-- FIN ANALYSES -->
               <!-- FIN ANALYSES -->
@@ -1123,7 +1138,7 @@ echo $this->form()->openTag($form); ?>
      <!-- ********************Examen complementaire (examen et analyse)******************-->
     
      <!--*4*-->
-     <div style='font-family: police2;font-size: 17px; font-weight: bold;'>Examens compl&eacute;mentaires</div>
+     <div style='font-family: police2;font-size: 17px; font-weight: bold;' class='examenComplementaireDelpiantAlert' >Examens compl&eacute;mentaires</div>
      <div style='max-height: 600px;'>
             
         <div id="accordionsss">
@@ -1216,7 +1231,7 @@ echo $this->form()->openTag($form); ?>
                   
             <!--**************** EXAMENS A FAIRE *****************-->
             <!--**************** EXAMENS A FAIRE *****************-->
-            <div style='font-family: police2;font-size: 17px; font-weight: bold;'> Examens &agrave; faire </div>
+            <div style='font-family: police2;font-size: 17px; font-weight: bold;' class='examenComplementaireAFaireDelpiantAlert'> Examens &agrave; faire </div>
             <div style='max-height:200px;'>
             
                  <div class="titreZoneInfosEAFStyle">&#10049; Les examens suivants ne sont pas encore faits</div>
@@ -1304,7 +1319,7 @@ echo $this->form()->openTag($form); ?>
             <!--**************** DEMANDE D'EXAMENS PAR LE MEDECIN *****************-->
             <div style='font-family: police2;font-size: 17px; font-weight: bold;'> Demande </div>
             <div>
-                <?php echo  $this->headScript()->appendFile($this->basePath().'/js/consultation/consultation/ajoutDemandesAnalyses.js'); ?>
+                <?php echo  $this->headScript()->appendFile($this->basePath().'/js/consultation/ajoutDemandesAnalyses.js'); ?>
                 <div id='montantTotal' style='height: 15; cursor: pointer; float:right; margin-top: -5px;'> 
                     <span style='padding-left: 20px; color: green; font-size: 17px; font-family: times new roman;'> </span>
                     <hass> <a href="javascript:imprimerAnalyse();" >
@@ -1344,25 +1359,11 @@ echo $this->form()->openTag($form); ?>
 					     </div>
 				    </div>
 				                
-                    <!--********************* BOUTON VALIDER OU MODIFIER ************************-->
-                    <!--********************* BOUTON VALIDER OU MODIFIER ************************-->
-                    <!-- table style="width: 90%; float:right; position: relative; right: 0;">
-                         <tr style="width: 100%;">
-                             <th style="height:15px;">
-                                <div id='bouton_Acte_valider_demande' style="float:right;">
-                                     <button >Valider</button>
-                                </div>
-                                <div id='bouton_Acte_modifier_demande' style="float:right;">
-                                     <button >Modifier</button>
-                                </div>
-                              </th>
-                         </tr>
-                     </table-->
+				     <?php echo $this->formRow($form->get('nbDemandeExamenComplementaire'));?>  
 				                
      		      </div>
                 
                   <script> 
-                    ValiderDemandeActe();
                     demandesAnalyses();
                   </script>
      		</div>
@@ -1757,14 +1758,6 @@ echo $this->form()->openTag($form); ?>
 <?php echo $this->form()->closeTag();?>
 </div>
 
-
-
-<form id="formulaireImprimerDemandesAnalyses" style="display: none;">
-   <button id="imprimerDemandesAnalyses" > </button>
-</form>
-
-
-
 <script>
 $("#annuler2").click(function() {
 	confirmation(); 
@@ -1773,6 +1766,73 @@ $("#annuler2").click(function() {
     return false;
 }); 
 </script>
+
+
+<form id="formulaireImprimerDemandesAnalyses" style="display: none;">
+   <button id="imprimerDemandesAnalyses" > </button>
+</form>
+
+<!-- Pour imprimer les resultats des analyses dans historique -->
+<form id="FormulaireImprimerDemandesAnalysesHistorique" style="display: none;">
+    <button id="ImprimerDemandesAnalysesHistorique"></button>
+</form>
+
+<!-- POP UP pour Ajouter les résultats des analyses d'une demande -->
+<div id="resultatsAnalysesDuneDemande" title="R&eacute;sultats des analyses" style="display: none;"  align="center">
+    <div id="contenuResultatsAnalysesDuneDemande" style="width: 95%;"> 
+      <form id="formEnvoyerResultatsAnalysesDuneDemande" >
+        <div> </div>
+        <button id='envoyerResultatsAnalysesDuneDemande' style='display: none;'> le button </button> 
+      </form>
+    </div>
+</div>
+
+
+<!-- POP UP pour Ajouter les résultats d'une analyse -->
+<div id="resultatsAnalyses" title="R&eacute;sultats de l'analyse" style="display: none;"  align="center">
+    <div id="contenuResultatsAnalyses" style="width: 95%;"> 
+      <form id="formEnvoyerResultatsAnalyses" >
+        <div> </div>
+        <button id='envoyerResultatsAnalyses' style='display: none;'> le button </button> 
+      </form>
+    </div>
+</div>
+
+<!-- GESTION DES ALERTES ANALYSE OBLIGATOIRE A FAIRE -->
+<!-- GESTION DES ALERTES ANALYSE OBLIGATOIRE A FAIRE -->
+<!-- GESTION DES ALERTES ANALYSE OBLIGATOIRE A FAIRE -->
+     <div id="volet_clos">
+		 <div id="volet">
+			<table style="width: 100%; font-family: time new romans; ">
+			  <tr style="width: 100%; height: 30px; ">
+			     <td style="width:10%; background: yello; padding-top: 2px;"> 
+			       <div style="float: left; padding-right: 4px; padding-left: 2px;" > 
+			        <img src='../images_icons/avert.png' /> 
+			       </div>
+			     </td>
+			     <td style="width:90%; background: re;"> 
+			       <div class="messageAlertVoletPopup" style="float: left; padding-right: 2px; padding-left: 2px; text-align: justify; width: 100%;" > 
+			         <!-- Emplacement des messages d'alerte  --> 3 analyses a faire
+			       </div>
+			     </td>
+			  </tr>
+			</table>
+		 </div>
+   	 </div>
+	 <div id="clickOuvrirPopup"></div>	
+	 <script> gestionAlerteExistanceAnalyseNonFait(nbExamensNonFaits); </script>
+
+     <audio id='audioAlerteAutoAnalyse' src='../images_icons/alerteExamenNonFaire.mp3' style='display: none;'></audio>
+<!-- FIN FIN GESTION DES ALERTES OBLIGATOIRE A FAIRE -->
+<!-- FIN FIN GESTION DES ALERTES OBLIGATOIRE A FAIRE -->
+<!-- FIN FIN GESTION DES ALERTES OBLIGATOIRE A FAIRE -->
+
+	 
+	 
+
+
+
+
 
 
 

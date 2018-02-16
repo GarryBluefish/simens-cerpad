@@ -337,7 +337,7 @@ echo $this->form()->openTag($form); ?>
         <div style=' max-height: 450px;'>
              <?php 
                echo $this->headLink()->appendStylesheet($this->basePath().'/css/consultation/styleHistoriquesTerrainParticulier.css');
-               echo  $this->headScript()->appendFile($this->basePath().'/js/consultation/consultation/jsHistoriquesTerrainParticulier.js');
+               echo  $this->headScript()->appendFile($this->basePath().'/js/consultation/jsHistoriquesTerrainParticulier.js');
              ?>
         
          <div id="tabsAntecedents">
@@ -1345,11 +1345,13 @@ echo $this->form()->openTag($form); ?>
 					         </div>
 					     </div>
 				    </div>
+				    <div style="display: none" id="champHiddenAnalysesBloquees"> </div>
+                    
+                    <?php echo $this->formRow($form->get('nbDemandeExamenComplementaire'));?> 
                     
      		      </div>
                 
                   <script> 
-                    validerDemandeActe();
                     demandesAnalyses();
                   </script>
      		</div>

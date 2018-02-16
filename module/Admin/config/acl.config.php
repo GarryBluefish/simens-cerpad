@@ -154,15 +154,15 @@ return array(
                     'infos-patient' => 'biologiste', 
                     'get-informations-patient' => 'biologiste', 
                     'get-liste-analyses-demandees' => 'biologiste',
-                    'recuperer-analyse' => 'biologiste',
-                    'recuperer-les-analyses-de-la-demande' => 'biologiste',
+                    'recuperer-analyse' => array('biologiste','medecin'),
+                    'recuperer-les-analyses-de-la-demande' => array('biologiste','medecin'),
                     'recuperer-les-analyses-demandees-par-type' => 'biologiste',
                     'enregistrer-resultat' => 'biologiste',
                     'enregistrer-resultats-demande' => 'biologiste',
                     'get-liste-analyses' => 'biologiste',
                     'recuperer-les-analyses-demandees-par-type-et-analyse' => 'biologiste',
                     'recuperer-les-analyses-demandees-par-type-et-analyse-et-date' => 'biologiste',
-                    'impression-resultats-analyses-demandees' => 'biologiste',
+                    'impression-resultats-analyses-demandees' => array('biologiste','medecin'),
     						    
                     'liste-resultats-analyses' => 'biologiste',
                     'liste-resultats-analyses-ajax' => 'biologiste',
@@ -171,8 +171,8 @@ return array(
                 	'liste-resultats-valides' => 'biologiste',	
                 	'liste-resultats-valides-ajax' => 'biologiste',		
                 		
-                	'get-informations-resultats-analyses-validees-patient' => 'biologiste',
-                	'get-liste-analyses-demandees-validees' => 'biologiste',
+                	'get-informations-resultats-analyses-validees-patient' => array('biologiste','medecin'),
+                	'get-liste-analyses-demandees-validees' => array('biologiste','medecin'),
                 	'retirer-validation' => 'biologiste',			
                 ),
 
@@ -314,6 +314,10 @@ return array(
             		'enregistrer-modification-consultation' => 'medecin',	
             		'impression-demandes-analyses' => 'medecin',	
             		'liste-patients-consultes-ajax' => 'medecin',
+            			
+            			
+            		'historiques-des-consultations-du-patient-ajax' => 'medecin',
+            		'visualisation-historique-consultation' => 'medecin', 	
             			
             		'informations-statistiques' => 'medecin',
             				

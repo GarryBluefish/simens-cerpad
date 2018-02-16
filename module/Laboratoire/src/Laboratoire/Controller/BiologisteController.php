@@ -1020,7 +1020,7 @@ class BiologisteController extends AbstractActionController {
 		
 		$html ='<table style="width: 100%;" >
  				    <tr style="width: 100%;" >
-				        <td style="width: 35%; height: 350px;" >';
+				        <td class="listeDemandeHauteurChangeModCons" style="width: 35%; height: 350px;" >';
 		
 		
 		$html .="<table class='table table-bordered tab_list_mini' id='listeDemandesFiltre' >";
@@ -1085,7 +1085,7 @@ class BiologisteController extends AbstractActionController {
 		
 		
 		
-		$html .="<td style='width: 4%;' > <div style='width: 3px; height: 400px; background: #cccccc; margin-left: 15px;'></div> </td>";
+		$html .="<td style='width: 4%;' > <div class='barreVerticalSeparateurHauteurChangeModCons' style='width: 3px; height: 400px; background: #cccccc; margin-left: 15px;'></div> </td>";
 		
 		
 		$html .="<td id='liste_analyses_demandes' style='width: 61%; height: 50px;' >";
@@ -6369,6 +6369,7 @@ class BiologisteController extends AbstractActionController {
 		$analysesTypageHemoProteine = array();
 		$analysesTypageHemoglobine = array();
 		$analysesMetabolismeProtidique = array();
+		$analysesMetabolismeFer = array();
 		
 		$resultatsAnalysesDemandees = array();
 		
@@ -6707,6 +6708,23 @@ class BiologisteController extends AbstractActionController {
 			//=========================================================
 			
 			
+			//METABOLISME DU FER --- METABOLISME DU FER
+			//METABOLISME DU FER --- METABOLISME DU FER
+			//METABOLISME DU FER --- METABOLISME DU FER
+			elseif($idanalyse == 40){ //FER SERIQUE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesMetabolismeFer[40] = 40;
+				$resultatsAnalysesDemandees[40] = $this->getResultatDemandeAnalyseTable()->getValeursFerSerique($iddemande);
+			}
+			elseif($idanalyse == 41){ //FERRITININE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesMetabolismeFer[41] = 41;
+				$resultatsAnalysesDemandees[41] = $this->getResultatDemandeAnalyseTable()->getValeursFerritinine($iddemande);
+			}
+			//=========================================================
+			//=========================================================
+			
+			
 			//TYPAGE DE L'HEMOGLOBINE  ---  TYPAGE DE L'HEMOGLOBINE
 			//TYPAGE DE L'HEMOGLOBINE  ---  TYPAGE DE L'HEMOGLOBINE
 			//TYPAGE DE L'HEMOGLOBINE  ---  TYPAGE DE L'HEMOGLOBINE
@@ -6757,7 +6775,8 @@ class BiologisteController extends AbstractActionController {
 		//========= Créaton de la page 2 ========
 		
 		if($analysesImmunoHemato || $analysesCytologie || $analysesHemostase || $analysesMetabolismeGlucidique ||
-		   $analysesBilanLipidique || $analysesBilanHepatique || $analysesBilanRenal || $analysesSerologie || $analysesTypageHemoProteine){
+		   $analysesBilanLipidique || $analysesBilanHepatique || $analysesBilanRenal || $analysesSerologie || $analysesTypageHemoProteine ||
+		   $analysesMetabolismeFer){
 			
 			$page2 = new ResultatsAnalysesDemandeesPdf();
 			
@@ -6806,6 +6825,9 @@ class BiologisteController extends AbstractActionController {
 			//GESTION DES ANALYSES DE SEROLOGIE
 			$page2->setAnalysesSerologie($analysesSerologie);
 			
+			//GESTION DES ANALYSES DE METABOLISME DU FER
+			//GESTION DES ANALYSES DE METABOLISME DU FER
+			$page2->setAnalysesMetabolismeFer($analysesMetabolismeFer);
 			
 			//Ajouter une note à la page
 			$page2->addNote();
