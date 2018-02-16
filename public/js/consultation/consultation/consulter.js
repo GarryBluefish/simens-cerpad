@@ -814,7 +814,7 @@ function gestionAlerteExistanceAnalyseNonFait(nbExamensNonFaits){
 
 			$('#clickOuvrirPopup').trigger('click');
 			$('.messageAlertVoletPopup').html('<div style="color: black; font-size: 17px; font-weight: bold; width: 100%; font-family: Tempus Sans ITC;">'
-	                                           +nbExamensNonFaits+' analyses obligatoires &agrave; faire <img onclick="ouvrirLeDepliantExamenComplementaireAFaire();" style="float: right; cursor: pointer;" src="../images_icons/voir.png" /> </div>');
+					                          +'<span style="color: red; font-size: 18px;">'+nbExamensNonFaits+'</span> analyses obligatoires &agrave; faire <img onclick="ouvrirLeDepliantExamenComplementaireAFaire();" style="float: right; cursor: pointer;" src="../images_icons/voirAlert_24.png" title="Voir" /> </div>');
 			alerteSonore(); 
 		 
 			//Fermer le pop-up au click sur le depliant
@@ -837,6 +837,46 @@ function alerteSonore() {
 	//player.pause(); //pour la pause
 }
 
+
+
+var iaj = 1;
+var jsel = 1;
+function demanderLesAnalysesAFaire() {
+	
+	$('#examenComplementaireDemandeDelpiant').trigger('click');
+	
+	//Lorsqu'il n'y aucune analyse demand�e
+	if(nbAnalysesDemandeesDansExamenAFaire == 0){
+
+		//Placer les lignes des analyses
+		for( ; iaj <= (nbExamensNonFaits-1) ; iaj++){
+			$('#ajouter_acte').trigger('click');
+		}
+		
+		//Selectionner les analyses sur les lignes plac�es
+		for( ; jsel <= nbExamensNonFaits ; jsel++){
+			var idtype = tabTypesAnalysesNonFaits[jsel];
+			$("#SelectTypeAnalyse_"+(jsel)+" option[value='"+idtype+"']").attr('selected','selected'); 
+			
+			//Chargement des listes des analyses
+			$("#analyse_name_"+(jsel)).html(arrayListeAnalysesParTypeDansExamenAFaire[idtype]);
+			//Sélection des analyses sur les listes 
+			$("#SelectAnalyse_"+(jsel)+" option[value='"+tabIndexAnalysesNonFaits[jsel]+"']").attr('selected','selected');
+
+			//Affichage des tarifs pour chaque analyse sélectionnée
+			var tarif = tabTarifAnalysesNonFaits[jsel];
+			$("#tarifActe"+(jsel)).val(prixMillTarifAnalyseAFaire(tarif));
+			
+			//Calcul de la somme à afficher
+			$("#tarifAnalyse"+(jsel)).val(tarif);
+			montantTotal();
+		}
+	}
+}
+
+function prixMillTarifAnalyseAFaire(num) {
+	return ("" + num).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, function($1) { return $1 + " " });
+}
 
 
 

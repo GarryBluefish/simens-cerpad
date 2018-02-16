@@ -16,13 +16,13 @@ class AnalyseTable {
 	 */
 	public function getListeAnalyseAFaire(){
 		return array(
-				1  => 'HEMOGRAMME',
-				9  => 'TAUX DE RETICULOCYTES (TR)',
-				22 => 'CREATININEMIE',
-				40 => 'FER SERIQUE',
-				41 => 'FERRITININE',
-				44 => 'ELECTROPHORESE DE HEMOGLOBINE',
-				49 => 'PROTEINURIE DES 24H (PU 24H)'
+				1  => array(1, 'HEMOGRAMME', '5000'),
+				9  => array(1, 'TAUX DE RETICULOCYTES (TR)', '2000'),
+				22 => array(2, 'CREATININEMIE', '2500'),
+				40 => array(2, 'FER SERIQUE', '5000'),
+				41 => array(2, 'FERRITININE', '10000'),
+				44 => array(2, 'ELECTROPHORESE DE HEMOGLOBINE', '15000'),
+				49 => array(2, 'PROTEINURIE DES 24H (PU 24H)', '15000')
 		);
 	}
 	
@@ -37,29 +37,33 @@ class AnalyseTable {
  		 * (A revoir avec PROFESSEUR)
  		 */
  		$tabAnalysesObligatoireAFaire = array(1,9,22,40,41,44,49);
- 		$tabIndexAnalyses = array();
- 		$tabAnalyses = array();
+ 		$tabIndexAnalysesFaites = array();
+ 		$tabAnalysesFaites = array();
  		for($i = 0 ; $i < count($listeAnalysesEffectuees) ; $i++){
  			$idanalyse = $listeAnalysesEffectuees[$i]['idanalyse'];
  			if(in_array($idanalyse, $tabAnalysesObligatoireAFaire)){
- 				$tabIndexAnalyses[] = $listeAnalysesEffectuees[$i]['idanalyse'];
- 				$tabAnalyses[] = $listeAnalysesEffectuees[$i]['designation'];
+ 				$tabIndexAnalysesFaites[] = $listeAnalysesEffectuees[$i]['idanalyse'];
+ 				$tabAnalysesFaites[] = $listeAnalysesEffectuees[$i]['designation'];
  			}
  		}
  		
  		/*
  		 * Recuperer les analyses non faites par le patient
  		 */
- 		$tabIndexAnalysesNonFaits = array_values(array_diff($tabAnalysesObligatoireAFaire, $tabIndexAnalyses));
+ 		$tabIndexAnalysesNonFaits = array_values(array_diff($tabAnalysesObligatoireAFaire, $tabIndexAnalysesFaites));
+ 		$tabTypesAnalysesFaites = array();
  		$tabAnalysesNonFaits = array();
+ 		$tabTarifAnalysesFaites = array();
  		for($i = 0 ; $i < count($tabIndexAnalysesNonFaits) ; $i++){
- 			$tabAnalysesNonFaits[] = $this->getListeAnalyseAFaire()[$tabIndexAnalysesNonFaits[$i]];
+ 			$tabTypesAnalysesFaites[] = $this->getListeAnalyseAFaire()[$tabIndexAnalysesNonFaits[$i]][0];
+ 			$tabAnalysesNonFaits[] = $this->getListeAnalyseAFaire()[$tabIndexAnalysesNonFaits[$i]][1];
+ 			$tabTarifAnalysesFaites[] = $this->getListeAnalyseAFaire()[$tabIndexAnalysesNonFaits[$i]][2]; 
  		}
  		
  		//var_dump($tabIndexAnalysesNonFaits); exit();
  		
  		
- 		return array($tabIndexAnalyses, $tabAnalyses, $tabIndexAnalysesNonFaits, $tabAnalysesNonFaits);
+ 		return array($tabIndexAnalysesFaites, $tabAnalysesFaites, $tabIndexAnalysesNonFaits, $tabAnalysesNonFaits, $tabTypesAnalysesFaites, $tabTarifAnalysesFaites);
 	}
 	
 	

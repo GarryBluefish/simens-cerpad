@@ -617,7 +617,7 @@ width: 190px; /* la largeur du champ input*/
 	border-bottom: 1px solid #bdb9b9;
 	display: none;
 
-	/*box-shadow: 1px 6px 12px rgba(204, 204, 204, 20);*/
+	box-shadow: 1px 4px 5px rgba(204, 204, 204, 0.5);
 	z-index: 12000;
 }
 

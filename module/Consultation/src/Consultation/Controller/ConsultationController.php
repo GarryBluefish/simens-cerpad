@@ -1167,7 +1167,7 @@ class ConsultationController extends AbstractActionController {
 		$donneesExamensEffectues = $this->getAnalyseAFaireTable()->getAnalyseEffectuees($idpatient);
 
 		
-		
+		//var_dump($donneesExamensEffectues); exit();
 		
 		
 		

@@ -717,7 +717,7 @@ echo $this->form()->openTag($form); ?>
 			   <thead>
 				  <tr style="height:40px; width:100%;">
 					<th style="width:25%;" >DATE & HEURE</th>
-					<th style="width:35%;" >SURVEILLANT DE SERVICE</th>
+					<th style="width:35%;" >INFIRMI&Egrave;RE</th>
 					<th style="width:35%;" >M&Eacute;DECIN CONSULTANT</th>
 					<th style="width:5%;">Voir</th>
 				  </tr>
@@ -758,8 +758,6 @@ echo $this->form()->openTag($form); ?>
               <div id='TabAnalyses'>
                 <div id='listeAnalysesParDemande' style='min-height: 250px; border-top: 0px solid #cccccc;'>
            
-           
-       
                 </div>
               </div>
               
@@ -1148,7 +1146,7 @@ echo $this->form()->openTag($form); ?>
             <div style='font-family: police2;font-size: 17px; font-weight: bold;'> Examens effectu&eacute;s </div>
             <div style='max-height:200px;'>
             
-		         <div class="titreZoneInfosEFStyle">&#10049; Les examens suivants sont d&eacute;j&agrave; effectu&eacute;s</div>
+		         <div class="titreZoneInfosEFStyle">&#10049; Les examens suivants sont d&eacute;j&agrave; effectu&eacute;s </div>
 		         <div class="zoneInfosStyle contenuExamensEffectuesStyle">
 		            <table style="width:100%;">
 		              
@@ -1234,7 +1232,7 @@ echo $this->form()->openTag($form); ?>
             <div style='font-family: police2;font-size: 17px; font-weight: bold;' class='examenComplementaireAFaireDelpiantAlert'> Examens &agrave; faire </div>
             <div style='max-height:200px;'>
             
-                 <div class="titreZoneInfosEAFStyle">&#10049; Les examens suivants ne sont pas encore faits</div>
+                 <div class="titreZoneInfosEAFStyle">&#10049; Les examens suivants ne sont pas encore faits  <img onclick="demanderLesAnalysesAFaire();" style="float: right; cursor: pointer; " src="../images_icons/demander_analyses.png" title="Envoyer la demande des analyses"> </div>
 		         <div class="zoneInfosStyle contenuExamensAFaireStyle">
 		            <table style="width:100%;">
 		              
@@ -1304,11 +1302,15 @@ echo $this->form()->openTag($form); ?>
                    var nbExamensNonFaits = '<?php echo count($this->donneesExamensEffectues[2]); ?>';
                    var tabIndexAnalysesNonFaits = new Array();
                    var tabAnalysesNonFaits = new Array();
+                   var tabTypesAnalysesNonFaits = new Array();
+                   var tabTarifAnalysesNonFaits = new Array();
                    var i = 1;
 
                    <?php for($i=0 ; $i<count($this->donneesExamensEffectues[2]) ; $i++){?>
                 	   tabIndexAnalysesNonFaits[i] = '<?php echo $this->donneesExamensEffectues[2][$i]; ?>';
-                	   tabAnalysesNonFaits[i++] = '<?php echo $this->donneesExamensEffectues[3][$i]; ?>';
+                	   tabAnalysesNonFaits[i] = '<?php echo $this->donneesExamensEffectues[3][$i]; ?>';
+                	   tabTypesAnalysesNonFaits[i] = '<?php echo $this->donneesExamensEffectues[4][$i]; ?>';
+                	   tabTarifAnalysesNonFaits[i++] = '<?php echo $this->donneesExamensEffectues[5][$i]; ?>';
                    <?php }?>
                    
                    getExamensNonFaitsDansExamComp(nbExamensNonFaits,tabIndexAnalysesNonFaits,tabAnalysesNonFaits); 
@@ -1317,7 +1319,7 @@ echo $this->form()->openTag($form); ?>
                   
             <!--**************** DEMANDE D'EXAMENS PAR LE MEDECIN *****************-->
             <!--**************** DEMANDE D'EXAMENS PAR LE MEDECIN *****************-->
-            <div style='font-family: police2;font-size: 17px; font-weight: bold;'> Demande </div>
+            <div style='font-family: police2;font-size: 17px; font-weight: bold;' id='examenComplementaireDemandeDelpiant'> Demande </div>
             <div>
                 <?php echo  $this->headScript()->appendFile($this->basePath().'/js/consultation/ajoutDemandesAnalyses.js'); ?>
                 <div id='montantTotal' style='height: 15; cursor: pointer; float:right; margin-top: -5px;'> 
@@ -1804,7 +1806,7 @@ $("#annuler2").click(function() {
      <div id="volet_clos">
 		 <div id="volet">
 			<table style="width: 100%; font-family: time new romans; ">
-			  <tr style="width: 100%; height: 30px; ">
+			  <tr style="width: 100%; height: 25px; ">
 			     <td style="width:10%; background: yello; padding-top: 2px;"> 
 			       <div style="float: left; padding-right: 4px; padding-left: 2px;" > 
 			        <img src='../images_icons/avert.png' /> 

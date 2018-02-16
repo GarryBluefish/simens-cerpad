@@ -343,6 +343,10 @@ function getTarifAnalyseBiologique(id, pos){
 
 }
 
+var arrayTypeAnalysesDansExamenAFaire = null;
+var arrayListeAnalysesParTypeDansExamenAFaire = null;
+var nbAnalysesDemandeesDansExamenAFaire = 0;
+
 var temoinExisteADA = 0;
 var nbEntrees = 0;
 
@@ -371,6 +375,15 @@ function demandesAnalyses(){
         	    for(var i=1 ; i<=tabTypesAnalyses.length ; i++){
         	    	myArrayTypeAnalyse[i] = tabTypesAnalyses[i];
         	    }
+        	    
+        	    /** Utiliser dans Examens complémentaires (Examen à faire) **/
+        	    /** Utiliser dans Examens complémentaires (Examen à faire) **/
+        	    arrayTypeAnalysesDansExamenAFaire = myArrayTypeAnalyse;
+        	    arrayListeAnalysesParTypeDansExamenAFaire = tabListeAnalysesParType;
+        	    nbAnalysesDemandeesDansExamenAFaire = listeAnalysesDemandees.length;
+        	    /*__________________________________________________________*/
+        	    /*__________________________________________________________*/
+        	    
         	    
         	    if(existeADA == 1){ 
         	    	$('LesActes').remove();

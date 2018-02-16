@@ -586,3 +586,46 @@ width: 190px; /* la largeur du champ input*/
 
 	font-family: time new romans;
 }
+
+
+.liste_patient tr{
+	background: #f9f9f9;
+}
+
+.liste_patient tr:hover{
+	background: #ebebeb;
+}
+
+
+
+#volet {
+	width: 280px;
+	padding: 6px;
+	background: #f1f1f1; 
+	color: #black;	
+	position: absolute;
+	right: 16%; top: 0px;
+	-webkit-transition: all .5s ease-in;
+	-moz-transition: all .5s ease-in;
+	transition: all .5s ease-in;
+			
+	border-bottom-left-radius: 20px;
+	border-bottom-right-radius: 20px;
+	border-top: 0.1px solid #bdb9b9;
+	border-left: 1px solid #bdb9b9;
+	border-right: 1px solid #bdb9b9;
+	border-bottom: 1px solid #bdb9b9;
+	display: none;
+
+	box-shadow: 1px 4px 5px rgba(204, 204, 204, 0.5);
+	z-index: 12000;
+}
+
+#volet table tr td{
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+}
+
+#volet table tr:hover{
+	background-color: #f1f1f1;
+}

@@ -777,6 +777,187 @@ function getExamensNonFaitsDansExamComp(nbExamensNonFaits,tabIndexAnalysesNonFai
 	
 }
 
+
+
+function gestionAlerteExistanceAnalyseNonFait(nbExamensNonFaits){
+	
+	$('#volet').dblclick(function(){
+	   $(this).animate({'top': -120}, 'slow');
+	   setTimeout(function(){ $('#volet').hide(); },1500);
+	});
+
+	$('#clickOuvrirPopup').click(function(){
+		$('#volet').show('slow');
+		//Lors d'un scroll
+		$(window).scroll(function(){
+			var top = ($(window).scrollTop()); 
+			if(top > 52){
+				$('#volet').css({'position' : 'fixed', 'top': 0});
+			}else{
+				$('#volet').css({'position' : 'fixed', 'top': 0}); //52-top
+			}
+		});
+		
+		//Au click
+		var top = ($(window).scrollTop()); 
+		if(top > 52){
+			$('#volet').css({'position' : 'fixed','top': 0})
+		}else{
+			$('#volet').css({'position' : 'fixed','top': 0}); //52-top
+		}
+	});
+	
+	//Afficher lorsqu'il y a au moins une analyse non faite 
+	if(nbExamensNonFaits > 0){
+		
+		setTimeout(function(){
+
+			$('#clickOuvrirPopup').trigger('click');
+			$('.messageAlertVoletPopup').html('<div style="color: black; font-size: 15px; font-weight: bold; width: 100%; font-family: Tempus Sans ITC;">'
+	                                          +'<span style="color: red; font-size: 18px;">'+nbExamensNonFaits+'</span> analyses obligatoires &agrave; faire <img onclick="ouvrirLeDepliantExamenComplementaireAFaire();" style="float: right; cursor: pointer;" src="../images_icons/voirAlert.png" /> </div>');
+			alerteSonore(); 
+		 
+			//Fermer le pop-up au click sur le depliant
+			$('.examenComplementaireAFaireDelpiantAlert').click(function(){ $('#volet').trigger('dblclick'); });
+			
+		},1000);
+	}
+
+}
+
+function ouvrirLeDepliantExamenComplementaireAFaire(){
+	$('#volet').trigger('dblclick');
+	$('.examenComplementaireDelpiantAlert').trigger('click');
+	$('.examenComplementaireAFaireDelpiantAlert').trigger('click');
+}
+
+function alerteSonore() { 
+	var player = document.querySelector('#audioAlerteAutoAnalyse');
+	setTimeout(function(){ player.play(); },500);
+	//player.pause(); //pour la pause
+}
+
+var iaj = 1;
+var jsel = 1;
+function demanderLesAnalysesAFaire() {
+	
+	$('#examenComplementaireDemandeDelpiant').trigger('click');
+	
+	//Lorsqu'il n'y aucune analyse demand�e
+	if(nbAnalysesDemandeesDansExamenAFaire == 0){
+
+		//Placer les lignes des analyses
+		for( ; iaj <= (nbExamensNonFaits-1) ; iaj++){
+			$('#ajouter_acte').trigger('click');
+		}
+		
+		//Selectionner les analyses sur les lignes plac�es
+		for( ; jsel <= nbExamensNonFaits ; jsel++){
+			var idtype = tabTypesAnalysesNonFaits[jsel];
+			$("#SelectTypeAnalyse_"+(jsel)+" option[value='"+idtype+"']").attr('selected','selected'); 
+			
+			//Chargement des listes des analyses
+			$("#analyse_name_"+(jsel)).html(arrayListeAnalysesParTypeDansExamenAFaire[idtype]);
+			//Sélection des analyses sur les listes 
+			$("#SelectAnalyse_"+(jsel)+" option[value='"+tabIndexAnalysesNonFaits[jsel]+"']").attr('selected','selected');
+
+			//Affichage des tarifs pour chaque analyse sélectionnée
+			var tarif = tabTarifAnalysesNonFaits[jsel];
+			$("#tarifActe"+(jsel)).val(prixMillTarifAnalyseAFaire(tarif));
+			
+			//Calcul de la somme à afficher
+			$("#tarifAnalyse"+(jsel)).val(tarif);
+			montantTotal();
+		}
+	}
+}
+
+function prixMillTarifAnalyseAFaire(num) {
+	return ("" + num).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, function($1) { return $1 + " " });
+}
+
+
+/*
+function chargementDesAnalysesAFaire(listeAnalysesDemandees, tabListeAnalysesParType) {
+	
+	var champHidden = "";
+	for(var index = 0 ; index < listeAnalysesDemandees.length ; index++){
+		var idtype = listeAnalysesDemandees[index]['idtype'];
+		$("#SelectTypeAnalyse_"+(index+1)+" option[value='"+idtype+"']").attr('selected','selected'); 
+		//Chargement des listes des analyses
+		$("#analyse_name_"+(index+1)).html(tabListeAnalysesParType[idtype]);
+		
+		if(idtype == 6){ 
+			var idanalyse = listeAnalysesDemandees[index]['idanalyse'];
+			//Sélection des analyses sur les listes 
+			$("#SelectAnalyse_"+(index+1)+" option[value='0,"+idanalyse+"']").attr('selected','selected');
+
+			$("#tarifActe"+(index+1)).val('___');
+		}else{
+			var idanalyse = listeAnalysesDemandees[index]['idanalyse'];
+			//Sélection des analyses sur les listes 
+			$("#SelectAnalyse_"+(index+1)+" option[value='"+idanalyse+"']").attr('selected','selected');
+
+			//Affichage des tarifs pour chaque analyse sélectionnée
+			var tarif = listeAnalysesDemandees[index]['tarif'];
+			$("#tarifActe"+(index+1)).val(prixMill(tarif));
+			
+			//Calcul de la somme à afficher
+			$("#tarifAnalyse"+(index+1)).val(tarif);
+			montantTotal();
+		}
+		
+		
+		//Verifier si le résultat est déjà appliqué pour l'analyse et afficher l'icône
+		var prelever = listeAnalysesDemandees[index]['prelever'];
+		if(prelever == 1){ $isupp++;
+		
+			$('.type_analyse_name_'+(index+1)+', #analyse_name_'+(index+1)).attr('disabled',true).css({'background':'#f8f8f8'});
+			champHidden = champHidden+'<input type="hidden" name="type_analyse_name_'+(index+1)+'" >';
+			
+			$("#champHiddenAnalysesBloquees").html(champHidden);
+			
+			$("#supprimer_acte_selectionne_"+(index+1)).remove();
+			$("#vider_analyse_selectionne_"+(index+1)).remove();
+			$("#analyse_effectuee_"+(index+1)).toggle(true);
+			
+		}else if(prelever == -1){ $isupp++;
+		
+		    var infosAnalysesDemandee = listeAnalysesDemandees[index];
+		
+			$('.type_analyse_name_'+(index+1)+', #analyse_name_'+(index+1)).attr('disabled',true).css({'background':'#f8f8f8'});
+			champHidden = champHidden+'<input type="hidden" name="type_analyse_name_'+(index+1)+'" >';
+			
+			$("#champHiddenAnalysesBloquees").html(champHidden);
+			
+			$("#supprimer_acte_selectionne_"+(index+1)).remove();
+			$("#vider_analyse_selectionne_"+(index+1)).remove();
+			$("#analyse_effectuee_"+(index+1)).toggle(true);
+			
+			//Placer les informations sur l'infirmier ayant effectu� la demande 
+			$("#analyse_effectuee_"+(index+1)).html("<img  style='margin-left: 10px; margin-top: 10px; cursor: pointer;' src='../images_icons/info_infirmier.png' title='demand&eacute; par : "+infosAnalysesDemandee['prenom']+" "+infosAnalysesDemandee['nom']+" ' />");
+	
+		}
+		
+		
+	}
+	
+	//$('a,img,hass').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });
+}
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
 //DIAGNOSTIC --- COMPLICATIONS AIGUES & COMPLICATIONS CHRONIQUES
 //DIAGNOSTIC --- COMPLICATIONS AIGUES & COMPLICATIONS CHRONIQUES
 /**
