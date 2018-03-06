@@ -314,6 +314,7 @@ return array(
             		'enregistrer-modification-consultation' => 'medecin',	
             		'impression-demandes-analyses' => 'medecin',	
             		'liste-patients-consultes-ajax' => 'medecin',
+            		'impression-ordonnance' => 'medecin',
             			
             			
             		'historiques-des-consultations-du-patient-ajax' => 'medecin',

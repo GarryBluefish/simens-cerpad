@@ -728,7 +728,7 @@ function getExamensEffecutesDansExamComp(nbExamensEffectues,tabIndexAnalyses,tab
 	//Placer les analyses déjà effectuées
 	//Placer les analyses déjà effectuées
 	if(tabAnalyses.length == 0){
-		$('.contenuExamensEffectuesStyle table').html("<tr style='width: 100%'><td style='width: 100%; color: red; padding-top: 7px; text-align: center; font-family: times new roman;'>Aucun examen effectu&eacute;</td></tr>");
+		$('.contenuExamensEffectuesStyle table').html("<tr style='width: 100%'><td style='width: 100%; color: red; padding-top: 7px; text-align: center; font-family: times new roman;'>Aucune analyse effectu&eacute;e</td></tr>");
 	}else{
 		for(var i = 1 ; i < tabAnalyses.length ; i++){
 			$('#idAnalyseExamComp'+i).html("<label style='width: 100%; height:30px; text-align:left;'>" +
@@ -761,12 +761,21 @@ function getExamensNonFaitsDansExamComp(nbExamensNonFaits,tabIndexAnalysesNonFai
 		$('.contenuExamensAFaireStyle').css('height',hauteur+'px');
 	}
 
+	//Placer les analyses déjà effectuées 
 	//Placer les analyses déjà effectuées
-	//Placer les analyses déjà effectuées
-	for(var i = 1 ; i < tabAnalysesNonFaits.length ; i++){
-		$('#idAnalyseAFExamComp'+i).html("<label style='width: 100%; height:30px; text-align:left;'> <span style='font-size: 12px;'>&#11166; </span> <span style='font-size: 13px;'>"+tabAnalysesNonFaits[i]+"</span> <span style='color: red;'>&#x2717;</span></label>");
+	if(tabAnalysesNonFaits.length == 0){
+		$('#demanderLesAnalysesAFaireIcone').toggle(false);
+		$('.contenuExamensAFaireStyle table').html("<tr style='width: 100%'><td style='width: 100%; color: red; padding-top: 7px; text-align: center; font-family: times new roman;'>Aucune analyse &agrave; faire </td></tr>");
+	}else{
+		for(var i = 1 ; i < tabAnalysesNonFaits.length ; i++){
+			$('#idAnalyseAFExamComp'+i).html("<label style='width: 100%; height:30px; text-align:left;'>" +
+					                         " <span style='font-size: 12px;'>&#11166; </span> <span style='font-size: 13px;'>" +
+					                         ""+tabAnalysesNonFaits[i]+"</span> <span style='color: red;'>&#x2717;</span>" +
+					                         " <span style='color: green; float: right;' id='iconeIndicateurSelection_"+tabIndexAnalysesNonFaits[i]+"' title='Demande effectu&eacute;e'></span>" +
+					                         "</label>");
+		}
 	}
-
+	
 	//Affichage des labels
 	//Affichage des labels
 	setTimeout(function(){
@@ -839,42 +848,112 @@ function alerteSonore() {
 
 var iaj = 1;
 var jsel = 1;
+var jsupsel = 1;
+var jsupselDebut = 1;
+var nbExamensNonFaitsAFaire = 0;
 function demanderLesAnalysesAFaire() {
 	
 	$('#examenComplementaireDemandeDelpiant').trigger('click');
 	
-	//Lorsqu'il n'y aucune analyse demandée
-	if(nbAnalysesDemandeesDansExamenAFaire == 0){
-
+	var nbListeAnalyseActu = nbListeActe();
+	var valeurType = $("#SelectTypeAnalyse_"+nbListeAnalyseActu+" select").val();
+	
+	if(valeurType != ''){
+		jsel = nbListeAnalyseActu+1; 
+		jsupsel = jsel;
+		jsupselDebut = jsel;
+		nbExamensNonFaitsAFaire = parseInt(nbExamensNonFaits)+parseInt(nbListeAnalyseActu);
+		
+		//Placer les lignes des analyses
+		for( ; iaj <= (nbExamensNonFaits) ; iaj++){
+			$('#ajouter_acte').trigger('click');
+		}
+	}else{
+		nbExamensNonFaitsAFaire = nbExamensNonFaits;
+		jsupsel = jsel;
+		jsupselDebut = jsel;
+		
 		//Placer les lignes des analyses
 		for( ; iaj <= (nbExamensNonFaits-1) ; iaj++){
 			$('#ajouter_acte').trigger('click');
 		}
-		
-		//Selectionner les analyses sur les lignes placées
-		for( ; jsel <= nbExamensNonFaits ; jsel++){
-			var idtype = tabTypesAnalysesNonFaits[jsel];
-			$("#SelectTypeAnalyse_"+(jsel)+" option[value='"+idtype+"']").attr('selected','selected'); 
-			
-			//Chargement des listes des analyses
-			$("#analyse_name_"+(jsel)).html(arrayListeAnalysesParTypeDansExamenAFaire[idtype]);
-			//SÃ©lection des analyses sur les listes 
-			$("#SelectAnalyse_"+(jsel)+" option[value='"+tabIndexAnalysesNonFaits[jsel]+"']").attr('selected','selected');
-
-			//Affichage des tarifs pour chaque analyse sÃ©lectionnÃ©e
-			var tarif = tabTarifAnalysesNonFaits[jsel];
-			$("#tarifActe"+(jsel)).val(prixMillTarifAnalyseAFaire(tarif));
-			
-			//Calcul de la somme Ã  afficher
-			$("#tarifAnalyse"+(jsel)).val(tarif);
-			montantTotal();
-		}
 	}
+
+	var isel = 1;
+	//Selectionner les analyses sur les lignes placées
+	for( ; jsel <= nbExamensNonFaitsAFaire ; jsel++){ 
+		var idtype = tabTypesAnalysesNonFaits[isel];
+		
+		$("#SelectTypeAnalyse_"+parseInt(jsel)+" option[value='"+idtype+"']").attr('selected','selected'); 
+		$("#SelectTypeAnalyse_"+parseInt(jsel)+" select").val(idtype);
+		//Chargement des listes des analyses
+		$("#analyse_name_"+(jsel)).html(arrayListeAnalysesParTypeDansExamenAFaire[idtype]);
+		//SÃ©lection des analyses sur les listes 
+		var indexanalyse = tabIndexAnalysesNonFaits[isel];
+		$("#SelectAnalyse_"+(jsel)+" option[value='"+indexanalyse+"']").attr('selected','selected');
+
+		//Affichage des tarifs pour chaque analyse sÃ©lectionnÃ©e
+		var tarif = tabTarifAnalysesNonFaits[isel];
+		$("#tarifActe"+(jsel)).val(prixMillTarifAnalyseAFaire(tarif));
+		
+		//Calcul de la somme Ã  afficher
+		$("#tarifAnalyse"+(jsel)).val(tarif);
+		montantTotal();
+		
+		//Placer icone indicateur
+		$("#iconeIndicateurSelection_"+indexanalyse).html("<span style='font-size: 12px;'>&#9993;</span>");
+		
+		isel++;
+		
+		
+		//Signaler de quel type d'analyse il s'agit
+		$("#analyse_effectuee_"+(jsel)).toggle(true).html("<span class='signalDemandeEffectueIcon' style='margin-left: 3px; margin-top: 10px; cursor: pointer;' title='analyse obligatoire demand&eacute;e'>&#9993;</span>");
+		
+		//Appliquer le script bull info
+	    $('a,img,span').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });
+	}
+	
+	$("#iconeVoirSupprimerAlert").html('<img onclick="annulerDemandesDesAnalysesAFaire();" style="float: right; cursor: pointer;" src="../images_icons/annuleDemandeAlert_24.png" title="Annuler la demande" />');
+		
 }
 
 function prixMillTarifAnalyseAFaire(num) {
 	return ("" + num).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, function($1) { return $1 + " " });
 }
+
+function annulerDemandesDesAnalysesAFaire() {
+	$('#examenComplementaireDemandeDelpiant').trigger('click');
+	
+	var isel = 1;
+	for( ; jsupsel <= nbExamensNonFaitsAFaire ; jsupsel++){
+		
+		//Si la liste commence par le premier élément
+		//On supprime un par un jusqu'au dernier
+		if(jsupselDebut == 1){
+			setTimeout(function(){ 
+				//Enlever les icones indicateurs des analyses demandées
+				$(".signalDemandeEffectueIcon").remove();
+				supprimer_acte_selectionne(1); 
+			},500);
+		}else{
+			setTimeout(function(){
+				//Enlever les icones indicateurs des analyses demandées
+			    $(".signalDemandeEffectueIcon").remove();
+			    supprimer_acte_selectionne(jsupselDebut); 
+			},500);
+		}
+		
+	    //Enlever les icones indicateurs
+	    var indexanalyse = tabIndexAnalysesNonFaits[isel++];
+		$("#iconeIndicateurSelection_"+indexanalyse).html("");
+	    
+	    //Placer l'icone de demande
+		$("#iconeVoirSupprimerAlert").html('<img  id="demanderLesAnalysesAFaireIcone"  onclick="demanderLesAnalysesAFaire();" style="float: right; cursor: pointer; " src="../images_icons/demander_analyses.png" title="Effectuer la demande des analyses">');
+	}
+	jsel = 1;
+	iaj = 1;
+}
+
 
 
 

@@ -474,18 +474,18 @@ function scriptAuClick(){
 	});
 	
 	/** Choix statut drépanocytose enfants **/
-	var indice = 0;
+	var indiceSDEnf = 0;
 	$('#ajoutChoixStatutDrepanoEnfants').click(function(){
-		if(indice < 9){
+		if(indiceSDEnf < 9){
 			//var largeurAjout = 18.25;
-			if(indice == 4){ $('#choixStatutDrepanoEnfantLabel').css({'height':'67px'}); }
-			if(indice <  4){ var largeurAuto = 25+(18.25*(indice+1)); $('#choixStatutDrepanoEnfantDiv').css({'width':largeurAuto+'%'}); }
+			if(indiceSDEnf == 4){ $('#choixStatutDrepanoEnfantLabel').css({'height':'67px'}); }
+			if(indiceSDEnf <  4){ var largeurAuto = 25+(18.25*(indiceSDEnf+1)); $('#choixStatutDrepanoEnfantDiv').css({'width':largeurAuto+'%'}); }
 			
 			var html = "";
-			if(indice > 0){ html +="<span style='margin-left: 8px; font-weight: bold; font-size: 19px;'>&#38;</span>";}
-			$('#choixStatutEnfant_'+indice++).after( html +
-					"<span id='choixStatutEnfant_"+indice+"' >"+
-					"<select  id='choixStatutEnfant"+indice+"' name='choixStatutEnfant"+indice+"' >" +
+			if(indiceSDEnf > 0){ html +="<span id='Ecommercial_"+indiceSDEnf+"' style='margin-left: 8px; font-weight: bold; font-size: 19px;'>&#38;</span>"; $('#supprimeChoixStatutDrepanoEnfants').toggle(true); }
+			$('#choixStatutEnfant_'+indiceSDEnf++).after( html +
+					"<span id='choixStatutEnfant_"+indiceSDEnf+"' >"+
+					"<select  id='choixStatutEnfant"+indiceSDEnf+"' name='choixStatutEnfant"+indiceSDEnf+"' >" +
 					"<option value=''></option>" +
 					"<option value='1'>AS</option>" +
 					"<option value='2'>AC</option>" +
@@ -496,10 +496,26 @@ function scriptAuClick(){
 					"<option value='-1'>Autres..</option>" +
 					"<option value='-2'>Inconnu</option>" +
 					"</select>" +
-					"<input type='number' id='choixStatutEnfantNb"+indice+"' name='choixStatutEnfantNb"+indice+"' >" +
+					"<input type='number' id='choixStatutEnfantNb"+indiceSDEnf+"' name='choixStatutEnfantNb"+indiceSDEnf+"' >" +
 					"</span>");
-			$('#nbChoixStatutEnfantAF').val(indice);
+			$('#nbChoixStatutEnfantAF').val(indiceSDEnf);
+			
+			if(indiceSDEnf == 9){ $('#ajoutChoixStatutDrepanoEnfants').toggle(false); }
 		}
+	});
+	
+	$('#supprimeChoixStatutDrepanoEnfants').click(function(){
+		if(indiceSDEnf > 0){
+			$('#Ecommercial_'+(indiceSDEnf-1)).remove();
+			$('#choixStatutEnfant_'+(indiceSDEnf--)).remove();
+			if(indiceSDEnf <  4){ var largeurAuto = 25+(18.25*(indiceSDEnf)); $('#choixStatutDrepanoEnfantDiv').css({'width':largeurAuto+'%'}); }
+			if(indiceSDEnf == 1){ $('#supprimeChoixStatutDrepanoEnfants').toggle(false); }
+			if(indiceSDEnf == 8){ $('#ajoutChoixStatutDrepanoEnfants').toggle(true); }
+			if(indiceSDEnf == 4){ $('#choixStatutDrepanoEnfantLabel').css({'height':'30px'}); }
+			
+			$('#nbChoixStatutEnfantAF').val(indiceSDEnf);
+		}
+		
 	});
 	
 	/** Autres maladies familiales **/
@@ -532,12 +548,12 @@ function scriptAuClick(){
 		var boutons = $('#autresMaladiesFamiliales input[name=AutresAF]');
 		if( boutons[1].checked){
 			/*
-			 * EMplacement de la gestion des ajouts des autres maladies familiales
+			 * EMplacement pour la gestion des ajouts des autres maladies familiales
 			 */
 		}
 		if(!boutons[1].checked){
 			/*
-			 * EMplacement de la gestion des ajouts des autres maladies familiales
+			 * EMplacement pour la gestion des ajouts des autres maladies familiales
 			 */
 		}
 	});

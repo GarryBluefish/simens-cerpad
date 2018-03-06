@@ -629,3 +629,10 @@ width: 190px; /* la largeur du champ input*/
 #volet table tr:hover{
 	background-color: #f1f1f1;
 }
+
+
+.titreResultatExamenRadioStyle
+{
+	height: 45px;
+	margin-bottom: 15px;
+}

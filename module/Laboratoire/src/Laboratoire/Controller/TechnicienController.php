@@ -8217,9 +8217,35 @@ class TechnicienController extends AbstractActionController {
 	
 	
 	
+	function item_percentage($item, $total){
 	
+		if($total){
+			return number_format(($item * 100 / $total), 1);
+		}else{
+			return 0;
+		}
 	
+	}
 	
+	function item_percentage_virgule_unchiffre($item, $total){
+	
+		if($total){
+			return number_format(($item * 100 / $total), 1);
+		}else{
+			return 0;
+		}
+	
+	}
+	
+	function pourcentage_element_tab($tableau, $total){
+		$resultat = array();
+	
+		foreach ($tableau as $tab){
+			$resultat [] = $this->item_percentage_virgule_unchiffre($tab, $total);
+		}
+	
+		return $resultat;
+	}
 
 	public function infosStatistiquesResultatsDepistagesAction(){
 	
@@ -8231,6 +8257,8 @@ class TechnicienController extends AbstractActionController {
 		$tabMois = array();
 		$tabProfils = array();
 		$tabProfilsAnneesMois = array();
+		
+		$tabTotalColonneDesLignes = array();
 		
 		for($i=0 ; $i<count($listeResultatsDepistages) ; $i++){
 		
@@ -8307,7 +8335,11 @@ class TechnicienController extends AbstractActionController {
 						
 						$leProfil = $tabProfils[$iProf];
  						if(array_key_exists($leProfil, $listeProfils)){
- 							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; color: green;">'.$listeProfils[$leProfil].'</td>';
+ 							
+ 							//Pourcentage pour chaque valeur
+ 							$pourValeur = $this->item_percentage($listeProfils[$leProfil], $tabDonneesAnnee[$mois]);
+ 							
+ 							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; color: green;">'.$listeProfils[$leProfil].'<span class="valPourcentage" style="font-size: 13px;"> - ('.$pourValeur.'%)</span></td>';
  							$totalCol[$iProf] += $listeProfils[$leProfil];
  						}else{
 							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal;">0</td>';
@@ -8315,8 +8347,10 @@ class TechnicienController extends AbstractActionController {
 
 					}
 				           
-				    $html .='<td class="infosPath" style="width: 12%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 22px; font-weight: bold; border-left: 2.5px solid #cccccc;">'.$tabDonneesAnnee[$mois].'</td>
-				         </tr>';
+				    $html .='<td class="infosPath DepPourcentageTotalEnLigne_'.$kligne.'" style="width: 12%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 22px; font-weight: bold; border-left: 2.5px solid #cccccc;"><span class="valAbsolue">'.$tabDonneesAnnee[$mois].'</span><span class="valPourcentage" style="font-size: 13px;"></span></td>
+				             </tr>';
+				    
+				    $tabTotalColonneDesLignes[] = $tabDonneesAnnee[$mois];
 						
 				}else{
 					$html .='<tr style="width: 100%; " class="couleurLigne_'.$kligne.'">
@@ -8326,7 +8360,11 @@ class TechnicienController extends AbstractActionController {
 					
  						$leProfil = $tabProfils[$iProf];
  						if(array_key_exists($leProfil, $listeProfils)){
- 							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; color: green;">'.$listeProfils[$leProfil].'</td>';
+ 							
+ 							//Pourcentage pour chaque valeur
+ 							$pourValeur = $this->item_percentage($listeProfils[$leProfil], $tabDonneesAnnee[$mois]);
+ 							
+ 							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; color: green;">'.$listeProfils[$leProfil].'<span class="valPourcentage" style="font-size: 13px;"> - ('.$pourValeur.'%)</span></td>';
  							$totalCol[$iProf] += $listeProfils[$leProfil];
  						}else{
 							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal;">0</td>';
@@ -8334,9 +8372,10 @@ class TechnicienController extends AbstractActionController {
 					
 					}
 				           
-				    $html .='<td class="infosPath" style="width: 12%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 22px; font-weight: bold; border-left: 2.5px solid #cccccc;">'.$tabDonneesAnnee[$mois].'</td>
+				    $html .='<td class="infosPath DepPourcentageTotalEnLigne_'.$kligne.'" style="width: 12%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 22px; font-weight: bold; border-left: 2.5px solid #cccccc;"><span class="valAbsolue">'.$tabDonneesAnnee[$mois].'</span><span class="valPourcentage" style="font-size: 13px;"></span></td>
 				         </tr>';
 	
+				    $tabTotalColonneDesLignes[] = $tabDonneesAnnee[$mois];
 				}
 	
 	
@@ -8358,7 +8397,7 @@ class TechnicienController extends AbstractActionController {
 		$grandTotal = 0;
 		$piedTotal ='<td class="infosPath infosPathTotalDepiste" style="width: 23%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: bold;">Total <span></span></td>';
 		for($i=0 ; $i<count($totalCol) ; $i++){
-			$piedTotal .= '<td class="infosPath " style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: bold;">'.$totalCol[$i].'</td>';
+			$piedTotal .= '<td class="infosPath DepPourcentageTotalEnColonne_'.$i.'" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: bold;">'.$totalCol[$i].'<span class="valPourcentage" style="font-size: 13px;"></span></td>';
 			$grandTotal += $totalCol[$i];
 			
 			//Gestion des statistiques pour les profils
@@ -8378,6 +8417,28 @@ class TechnicienController extends AbstractActionController {
 		
 		$html .="<script> var nbkligne = ".$kligne."; $('.tableauInfosTotalDepistage tr').html('".$piedTotal."'); </script>";
 	
+		
+		
+		//Ajouter des valeurs en pourcentage
+		//Ajouter des valeurs en pourcentage
+		/*
+		 * Pourcentage dernière colonne
+		 */
+		for($i = 0 ; $i < $kligne ; $i++){
+			$pourValeur = $this->item_percentage($tabTotalColonneDesLignes[$i], $grandTotal);
+			$html .="<script> setTimeout(function(){ $('.DepPourcentageTotalEnLigne_".$i." .valPourcentage').html('  (".$pourValeur."%)'); }); </script>";
+		}
+		/*
+		 * Pourcentage dernière ligne
+		 */
+		for($i=0 ; $i<count($totalCol) ; $i++){
+			$pourValeur = $this->item_percentage($totalCol[$i], $grandTotal);
+			$html .="<script> setTimeout(function(){ $('.DepPourcentageTotalEnColonne_".$i." .valPourcentage').html('  (".$pourValeur."%)'); }); </script>";
+		}
+		
+		
+		
+		
 		$this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );
 		return $this->getResponse ()->setContent ( Json::encode ( $html ) );
 	}
@@ -8412,7 +8473,9 @@ class TechnicienController extends AbstractActionController {
 		$tabMois = array();
 		$tabProfils = array();
 		$tabProfilsAnneesMois = array();
-	
+		
+		$tabTotalColonneDesLignes = array();
+		
 		for($i=0 ; $i<count($listeResultatsDepistages) ; $i++){
 	
 			$annee_naissance = $listeResultatsDepistages[$i]['annee_prelevement'];
@@ -8488,16 +8551,22 @@ class TechnicienController extends AbstractActionController {
 	
 						$leProfil = $tabProfils[$iProf];
 						if(array_key_exists($leProfil, $listeProfils)){
-							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; color: green;">'.$listeProfils[$leProfil].'</td>';
+							
+							//Pourcentage pour chaque valeur
+							$pourValeur = $this->item_percentage($listeProfils[$leProfil], $tabDonneesAnnee[$mois]);
+							
+							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; color: green;">'.$listeProfils[$leProfil].'<span class="valPourcentage" style="font-size: 13px;"> - ('.$pourValeur.'%)</span></td>';
 							$totalCol[$iProf] += $listeProfils[$leProfil];
 						}else{
 							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal;">0</td>';
 						}
 	
 					}
-					 
-					$html .='<td class="infosPath" style="width: 12%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 22px; font-weight: bold; border-left: 2.5px solid #cccccc;">'.$tabDonneesAnnee[$mois].'</td>
-				         </tr>';
+
+					$html .='<td class="infosPath DepPourcentageTotalEnLigne_'.$kligne.'" style="width: 12%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 22px; font-weight: bold; border-left: 2.5px solid #cccccc;"><span class="valAbsolue">'.$tabDonneesAnnee[$mois].'</span><span class="valPourcentage" style="font-size: 13px;"></span></td>
+				             </tr>';
+					
+					$tabTotalColonneDesLignes[] = $tabDonneesAnnee[$mois];
 	
 				}else{
 					$html .='<tr style="width: 100%; " class="couleurLigne_'.$kligne.'">
@@ -8507,7 +8576,12 @@ class TechnicienController extends AbstractActionController {
 							
 						$leProfil = $tabProfils[$iProf];
 						if(array_key_exists($leProfil, $listeProfils)){
-							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; color: green;">'.$listeProfils[$leProfil].'</td>';
+							
+							//Pourcentage pour chaque valeur
+							$pourValeur = $this->item_percentage($listeProfils[$leProfil], $tabDonneesAnnee[$mois]);
+							
+							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; color: green;">'.$listeProfils[$leProfil].'<span class="valPourcentage" style="font-size: 13px;"> - ('.$pourValeur.'%)</span></td>';
+							
 							$totalCol[$iProf] += $listeProfils[$leProfil];
 						}else{
 							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal;">0</td>';
@@ -8515,8 +8589,11 @@ class TechnicienController extends AbstractActionController {
 							
 					}
 					 
-					$html .='<td class="infosPath" style="width: 12%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 22px; font-weight: bold; border-left: 2.5px solid #cccccc;">'.$tabDonneesAnnee[$mois].'</td>
+					$html .='<td class="infosPath DepPourcentageTotalEnLigne_'.$kligne.'" style="width: 12%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 22px; font-weight: bold; border-left: 2.5px solid #cccccc;"><span class="valAbsolue">'.$tabDonneesAnnee[$mois].'</span><span class="valPourcentage" style="font-size: 13px;"></span></td>
 				         </tr>';
+					
+					$tabTotalColonneDesLignes[] = $tabDonneesAnnee[$mois];
+				         
 	
 				}
 	
@@ -8539,7 +8616,8 @@ class TechnicienController extends AbstractActionController {
 		$grandTotal = 0;
 		$piedTotal ='<td class="infosPath infosPathTotalDepiste" style="width: 23%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: bold;">Total <span></span></td>';
 		for($i=0 ; $i<count($totalCol) ; $i++){
-			$piedTotal .= '<td class="infosPath " style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: bold;">'.$totalCol[$i].'</td>';
+			//$piedTotal .= '<td class="infosPath " style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: bold;">'.$totalCol[$i].'</td>';
+			$piedTotal .= '<td class="infosPath DepPourcentageTotalEnColonne_'.$i.'" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: bold;">'.$totalCol[$i].'<span class="valPourcentage" style="font-size: 13px;"></span></td>';
 			$grandTotal += $totalCol[$i];
 			
 			//Gestion des statistiques pour les profils
@@ -8560,6 +8638,32 @@ class TechnicienController extends AbstractActionController {
 	
 		$html .="<script> var nbkligne = ".$kligne."; $('.tableauInfosTotalDepistage tr').html('".$piedTotal."'); </script>";
 	
+		
+		
+		
+		
+		
+		
+		//Ajouter des valeurs en pourcentage
+		//Ajouter des valeurs en pourcentage
+		/*
+		 * Pourcentage dernière colonne
+		*/
+		for($i = 0 ; $i < $kligne ; $i++){
+			$pourValeur = $this->item_percentage($tabTotalColonneDesLignes[$i], $grandTotal);
+			$html .="<script> setTimeout(function(){ $('.DepPourcentageTotalEnLigne_".$i." .valPourcentage').html('  (".$pourValeur."%)'); }); </script>";
+		}
+		/*
+		 * Pourcentage dernière ligne
+		*/
+		for($i=0 ; $i<count($totalCol) ; $i++){
+			$pourValeur = $this->item_percentage($totalCol[$i], $grandTotal);
+			$html .="<script> setTimeout(function(){ $('.DepPourcentageTotalEnColonne_".$i." .valPourcentage').html('  (".$pourValeur."%)'); }); </script>";
+		}
+		
+		
+		
+		
 		$this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );
 		return $this->getResponse ()->setContent ( Json::encode ( $html ) );
 	}

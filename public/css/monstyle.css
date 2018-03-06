@@ -4293,7 +4293,7 @@ div .dataTables_paginate
 #contenu{ visibility: hidden }
 /*CODE POUR LE STYLE DU LECTEUR AUDIO (MP3)*/
 
-.designHistoireMaladie label, .designLabelExamenComplementaire label
+.designHistoireMaladie label, .designLabelExamenComplementaire label, .designLabelResultatExamenComplementaire label
 {
 	line-height: 1.7em;
 
@@ -4386,3 +4386,13 @@ div .dataTables_paginate
 	padding-left: 10px;
 	padding-top: 10px;
 }
+
+
+.designLabelResultatExamenComplementaire label input[type='text'], .designLabelResultatExamenComplementaire label input[type='number']
+{
+	padding-left: 5px;
+	font-size: 18px;
+	height: 30px;
+}
+
+

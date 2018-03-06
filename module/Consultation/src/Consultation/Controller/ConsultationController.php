@@ -9,6 +9,7 @@ use Zend\Json\Json;
 use Consultation\Form\ConsultationForm;
 use Consultation\View\Helper\DocumentPdf;
 use Consultation\View\Helper\DemandeAnalysePdf;
+use Consultation\View\Helper\imprimerOrdonnance;
 
 class ConsultationController extends AbstractActionController {
 	
@@ -656,6 +657,19 @@ class ConsultationController extends AbstractActionController {
 		if($infosAutresMaladiesFamiliales){ $form->populateValues($infosAutresMaladiesFamiliales); }
 		$listeChoixStatutDrepanoEnfant = $this->getAntecedentsFamiliauxTable()->getStatutDrepanocytoseEnfant($idpatient);
 		
+		
+		
+		
+		
+		
+		/*
+		 * TRAITEMENT MEDICAMENTEUX --- TRAITEMENT MEDICAMENTEUX
+		 */
+		$listeMedicament = $this->getConsultationModConsTable()->listeDeTousLesMedicaments();
+		$listeForme = $this->getConsultationModConsTable()->formesMedicaments();
+		$listetypeQuantiteMedicament = $this->getConsultationModConsTable()->typeQuantiteMedicaments();
+		
+		
 		//var_dump($listeChoixStatutDrepanoEnfant->current()); exit();
 		//FIN --- FIN --- FIN --- FIN --- FIN --- FIN --- FIN
 		//$timeend = microtime(true);
@@ -682,6 +696,11 @@ class ConsultationController extends AbstractActionController {
 				'listeActesCons' => $listeActes,
 				'listeMotifConsultation' => $listeMotifConsultation,
 				'listeChoixStatutDrepanoEnfant' => $listeChoixStatutDrepanoEnfant,
+				
+				'listeMedicament' => $listeMedicament,
+				'listeFormeMedicament' => $listeForme,
+				'listeTypeQuantiteMedicament'  => $listetypeQuantiteMedicament,
+				
 		);
 
 	}
@@ -753,7 +772,7 @@ class ConsultationController extends AbstractActionController {
 		$liste_select = "";
 		if($id == 6){
 			foreach($this->getPatientTable()->getListeDesExamenImagerie() as $listeExamens){
-				$liste_select.= "<option value='0,".$listeExamens['idexamen']."'>".$listeExamens['designation']."</option>";
+				$liste_select.= "<option id='examen_".$listeExamens['idexamen']."'  value='0,".$listeExamens['idexamen']."'>".$listeExamens['designation']."</option>";
 			}
 		}else{
 			foreach($this->getPatientTable()->getListeDesAnalyses($id) as $listeAnalyses){
@@ -919,6 +938,7 @@ class ConsultationController extends AbstractActionController {
 		 *ANTECEDENT FAMILIAUX --- ANTECEDENTS FAMILIAUX
 		 *ANTECEDENT FAMILIAUX --- ANTECEDENTS FAMILIAUX
 		 */
+		//var_dump($tabDonnees); exit();
 		$this->getAntecedentsFamiliauxTable()->insertAntecedentsFamiliaux($tabDonnees);
 		$this->getAntecedentsFamiliauxTable()->insertStatutDrepanocytoseEnfant($tabDonnees);
 		
@@ -1832,6 +1852,40 @@ class ConsultationController extends AbstractActionController {
 	}	
 	
 	
+	/**
+	 * IMPRESSION DES ORDONNANCES --- IMPRESSION DES ORDONNANCES
+	 */
+	public function impressionOrdonnanceAction() {
+	
+		$nomService = $this->layout()->user['NomService'];
+		$idpatient = $this->params()->fromPost( 'idpatient' );
+		$personne = $this->getPersonneTable()->getPersonne($idpatient);
+		$patient = $this->getPatientTable()->getPatient($idpatient);
+		$depistage = $this->getPatientTable()->getDepistagePatient($idpatient);
+	
+		$idcons = $this->params()->fromPost( 'idcons' );
+		
+		$medicamentLibelle = explode( "," , $this->params()->fromPost( 'medicamentLibelle' ));
+		$formeMedicament = explode( "," , $this->params()->fromPost( 'formeMedicament' ));
+		$nbMedicament = explode( "," , $this->params()->fromPost( 'nbMedicament' ));
+		$quantiteMedicament = explode( "," , $this->params()->fromPost( 'quantiteMedicament' ));
+		
+		//var_dump($medicamentLibelle); exit();
+		
+		$pdf = new imprimerOrdonnance();
+		$pdf->SetMargins(13.5,13.5,13.5);
+		$pdf->setNomService($nomService);
+		$pdf->setInfosPatients($personne);
+		
+		$pdf->setMedicamentLibelle($medicamentLibelle);
+		$pdf->setFormeMedicament($formeMedicament);
+		$pdf->setNbMedicament($nbMedicament);
+		$pdf->setQuantiteMedicament($quantiteMedicament);
+		
+		$pdf->impressionOrdonnance();
+		$pdf->Output('I');
+		
+	}
 	
 	
 	
@@ -1853,6 +1907,43 @@ class ConsultationController extends AbstractActionController {
 	
 	
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	function item_percentage($item, $total){
 	
 		if($total){

@@ -440,6 +440,7 @@ function initialisationScript(agePatient) {
 			$('#infoTemperatureFievre input').val(valeur);
 			
 			//Vérifier s'il y a un motif_admission 'Fievre' et l'enlever
+			/*
 			for(var ind = 1 ; ind <= 5 ; ind++){
 				var val = $("#motif_admission"+ind).val();
 				if(val == 1){
@@ -450,6 +451,9 @@ function initialisationScript(agePatient) {
 					}
 				}
 			}
+			*/
+			
+			
 		}
 		
 	}).click(function(){
@@ -482,6 +486,7 @@ function initialisationScript(agePatient) {
 			$('#infoTemperatureFievre input').val(valeur);
 			
 			//Vérifier s'il y a un motif_admission 'Fievre' et l'enlever
+			/*
 			for(var ind = 1 ; ind <= 5 ; ind++){
 				var val = $("#motif_admission"+ind).val();
 				if(val == 1){
@@ -492,6 +497,7 @@ function initialisationScript(agePatient) {
 					}
 				}
 			}
+			*/
 		}
 	
 	});
@@ -729,7 +735,7 @@ function getExamensEffecutesDansExamComp(nbExamensEffectues,tabIndexAnalyses,tab
 	//Placer les analyses déjà effectuées
 	//Placer les analyses déjà effectuées
 	if(tabAnalyses.length == 0){
-		$('.contenuExamensEffectuesStyle table').html("<tr style='width: 100%'><td style='width: 100%; color: red; padding-top: 7px; text-align: center; font-family: times new roman;'>Aucun examen effectu&eacute;</td></tr>");
+		$('.contenuExamensEffectuesStyle table').html("<tr style='width: 100%'><td style='width: 100%; color: red; padding-top: 7px; text-align: center; font-family: times new roman;'>Aucune analyse effectu&eacute;e</td></tr>");
 	}else{
 		for(var i = 1 ; i < tabAnalyses.length ; i++){
 			$('#idAnalyseExamComp'+i).html("<label style='width: 100%; height:30px; text-align:left;'>" +
@@ -764,8 +770,17 @@ function getExamensNonFaitsDansExamComp(nbExamensNonFaits,tabIndexAnalysesNonFai
 
 	//Placer les analyses déjà effectuées
 	//Placer les analyses déjà effectuées
-	for(var i = 1 ; i < tabAnalysesNonFaits.length ; i++){
-		$('#idAnalyseAFExamComp'+i).html("<label style='width: 100%; height:30px; text-align:left;'> <span style='font-size: 12px;'>&#11166; </span> <span style='font-size: 13px;'>"+tabAnalysesNonFaits[i]+"</span> <span style='color: red;'>&#x2717;</span></label>");
+	if(tabAnalysesNonFaits.length == 0){
+		$('#demanderLesAnalysesAFaireIcone').toggle(false);
+		$('.contenuExamensAFaireStyle table').html("<tr style='width: 100%'><td style='width: 100%; color: red; padding-top: 7px; text-align: center; font-family: times new roman;'>Aucune analyse &agrave; faire </td></tr>");
+	}else{
+		for(var i = 1 ; i < tabAnalysesNonFaits.length ; i++){
+			$('#idAnalyseAFExamComp'+i).html("<label style='width: 100%; height:30px; text-align:left;'>" +
+	                " <span style='font-size: 12px;'>&#11166; </span> <span style='font-size: 13px;'>" +
+	                ""+tabAnalysesNonFaits[i]+"</span> <span style='color: red;'>&#x2717;</span>" +
+	                " <span style='color: green; float: right;' id='iconeIndicateurSelection_"+tabIndexAnalysesNonFaits[i]+"' title='Demande effectu&eacute;e'></span>" +
+	                "</label>");
+		}
 	}
 
 	//Affichage des labels
@@ -840,43 +855,244 @@ function alerteSonore() {
 
 
 var iaj = 1;
-var jsel = 1;
+var jsel = 1; 
+var jsupsel = 1;
+var jsupselDebut = 1;
+var nbExamensNonFaitsAFaire = 0;
 function demanderLesAnalysesAFaire() {
 	
 	$('#examenComplementaireDemandeDelpiant').trigger('click');
 	
-	//Lorsqu'il n'y aucune analyse demandée
-	if(nbAnalysesDemandeesDansExamenAFaire == 0){
-
+	var nbListeAnalyseActu = nbListeActe();
+	var valeurType = $("#SelectTypeAnalyse_"+nbListeAnalyseActu+" select").val();
+	
+	if(valeurType != ''){
+		jsel = nbListeAnalyseActu+1; 
+		jsupsel = jsel;
+		jsupselDebut = jsel;
+		nbExamensNonFaitsAFaire = parseInt(nbExamensNonFaits)+parseInt(nbListeAnalyseActu);
+		
+		//Placer les lignes des analyses
+		for( ; iaj <= (nbExamensNonFaits) ; iaj++){
+			$('#ajouter_acte').trigger('click');
+		}
+	}else{
+		nbExamensNonFaitsAFaire = nbExamensNonFaits;
+		jsupsel = jsel;
+		jsupselDebut = jsel;
+		
 		//Placer les lignes des analyses
 		for( ; iaj <= (nbExamensNonFaits-1) ; iaj++){
 			$('#ajouter_acte').trigger('click');
 		}
-		
-		//Selectionner les analyses sur les lignes placées
-		for( ; jsel <= nbExamensNonFaits ; jsel++){
-			var idtype = tabTypesAnalysesNonFaits[jsel];
-			$("#SelectTypeAnalyse_"+(jsel)+" option[value='"+idtype+"']").attr('selected','selected'); 
-			
-			//Chargement des listes des analyses
-			$("#analyse_name_"+(jsel)).html(arrayListeAnalysesParTypeDansExamenAFaire[idtype]);
-			//SÃ©lection des analyses sur les listes 
-			$("#SelectAnalyse_"+(jsel)+" option[value='"+tabIndexAnalysesNonFaits[jsel]+"']").attr('selected','selected');
-
-			//Affichage des tarifs pour chaque analyse sÃ©lectionnÃ©e
-			var tarif = tabTarifAnalysesNonFaits[jsel];
-			$("#tarifActe"+(jsel)).val(prixMillTarifAnalyseAFaire(tarif));
-			
-			//Calcul de la somme Ã  afficher
-			$("#tarifAnalyse"+(jsel)).val(tarif);
-			montantTotal();
-		}
 	}
+
+	var isel = 1;
+	//Selectionner les analyses sur les lignes placées
+	for( ; jsel <= nbExamensNonFaitsAFaire ; jsel++){ 
+		var idtype = tabTypesAnalysesNonFaits[isel];
+		
+		$("#SelectTypeAnalyse_"+parseInt(jsel)+" option[value='"+idtype+"']").attr('selected','selected'); 
+		$("#SelectTypeAnalyse_"+parseInt(jsel)+" select").val(idtype);
+		//Chargement des listes des analyses
+		$("#analyse_name_"+(jsel)).html(arrayListeAnalysesParTypeDansExamenAFaire[idtype]);
+		//SÃ©lection des analyses sur les listes 
+		var indexanalyse = tabIndexAnalysesNonFaits[isel];
+		$("#SelectAnalyse_"+(jsel)+" option[value='"+indexanalyse+"']").attr('selected','selected');
+
+		//Affichage des tarifs pour chaque analyse sÃ©lectionnÃ©e
+		var tarif = tabTarifAnalysesNonFaits[isel];
+		$("#tarifActe"+(jsel)).val(prixMillTarifAnalyseAFaire(tarif));
+		
+		//Calcul de la somme Ã  afficher
+		$("#tarifAnalyse"+(jsel)).val(tarif);
+		montantTotal();
+		
+		//Placer icone indicateur
+		$("#iconeIndicateurSelection_"+indexanalyse).html("<span style='font-size: 12px;'>&#9993;</span>");
+		
+		isel++;
+		
+		
+		//Signaler de quel type d'analyse il s'agit
+		$("#analyse_effectuee_"+(jsel)).toggle(true).html("<span class='signalDemandeEffectueIcon' style='margin-left: 3px; margin-top: 10px; cursor: pointer;' title='analyse obligatoire demand&eacute;e'>&#9993;</span>");
+		
+		//Appliquer le script bull info
+	    $('a,img,span').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });
+	
+	}
+	
+	$("#iconeVoirSupprimerAlert").html('<img onclick="annulerDemandesDesAnalysesAFaire();" style="float: right; cursor: pointer;" src="../images_icons/annuleDemandeAlert_24.png" title="Annuler la demande" />');
+		
 }
 
 function prixMillTarifAnalyseAFaire(num) {
 	return ("" + num).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, function($1) { return $1 + " " });
 }
+
+function annulerDemandesDesAnalysesAFaire() {
+	$('#examenComplementaireDemandeDelpiant').trigger('click');
+	
+	var isel = 1;
+	for( ; jsupsel <= nbExamensNonFaitsAFaire ; jsupsel++){
+		
+		//Si la liste commence par le premier élément
+		//On supprime un par un jusqu'au dernier
+		if(jsupselDebut == 1){
+			setTimeout(function(){ 
+				//Enlever les icones indicateurs des analyses demandées
+				$(".signalDemandeEffectueIcon").remove();
+				supprimer_acte_selectionne(1); 
+			},500);
+		}else{
+			setTimeout(function(){
+				//Enlever les icones indicateurs des analyses demandées
+			    $(".signalDemandeEffectueIcon").remove();
+			    supprimer_acte_selectionne(jsupselDebut); 
+			},500);
+		}
+		
+	    //Enlever les icones indicateurs
+	    var indexanalyse = tabIndexAnalysesNonFaits[isel++];
+		$("#iconeIndicateurSelection_"+indexanalyse).html("");
+	    
+	    //Placer l'icone de demande
+		$("#iconeVoirSupprimerAlert").html('<img  id="demanderLesAnalysesAFaireIcone"  onclick="demanderLesAnalysesAFaire();" style="float: right; cursor: pointer; " src="../images_icons/demander_analyses.png" title="Effectuer la demande des analyses">');
+	}
+	jsel = 1;
+	iaj = 1;
+}
+
+
+
+//RESULTAT -- DEMANDE EXAMEN RADIOLOGIQUE -- DEMANDE EXAMEN RADIOLOGIQUE 
+//RESULTAT -- DEMANDE EXAMEN RADIOLOGIQUE -- DEMANDE EXAMEN RADIOLOGIQUE 
+var hauteurLabelContenu = 0;
+function ajoutChampResultatExamenRadio($id, $idexamenRadio, $libelleexamenRadio){
+	
+	var nbExamenRadio = $("#contenuResultatExamenRadio table tr").length;
+	
+	var champResultatExamen = ''+
+		           '<tr id="contenuResultExamen'+(nbExamenRadio+1)+'" class="designLabelResultatExamenComplementaire positionResultatExamenRadio'+$id+'" style="height:40px; width:100%;" >'+
+                   '<th style="width:100%; padding-right: 25px; vertical-align: top;" > '+
+                   '<div style="float:left; width: 100%;">'+
+                     '<label style="width: 100%; height:30px; text-align:left;" >'+
+                       '<span style="font-size: 12px;">&#11166; </span> <span id="textExamenRadio_'+$idexamenRadio+'" style="font-size: 13px; "> '+$libelleexamenRadio+' </span> '+
+                       '<input name="resultatExamenRadio_'+$idexamenRadio+'" id="resultatExamenRadio_'+$idexamenRadio+'" type="text" style="width: 75%; float: right;"> '+
+                     '</label>'+
+                   '</div>'+ 
+                   '</th>'+
+                   '</tr>';
+	
+	var existeResultatRadio = $('#contenuResultatExamenRadio table tr').hasClass('positionResultatExamenRadio'+$id);
+	
+	if(existeResultatRadio){
+		
+		var champResultatExamenReplace = ''+
+                   '<th style="width:100%; padding-right: 25px; vertical-align: top;" > '+
+                     '<div style="float:left; width: 100%;">'+
+                       '<label style="width: 100%; height:30px; text-align:left;" >'+
+                         '<span style="font-size: 12px;">&#11166; </span> <span id="textExamenRadio_'+$idexamenRadio+'" style="font-size: 13px; "> '+$libelleexamenRadio+' </span> '+
+                         '<input name="resultatExamenRadio_'+$idexamenRadio+'" id="resultatExamenRadio_'+$idexamenRadio+'" type="text" style="width: 75%; float: right;"> '+
+                         '</label>'+
+                     '</div>'+ 
+                   '</th>';
+		
+		$('.positionResultatExamenRadio'+$id).empty().html(champResultatExamenReplace);
+	}else{ 
+
+		hauteurLabelContenu = 45*parseInt(nbExamenRadio);
+		$(".titreResultatExamenRadioStyle").css({'height':hauteurLabelContenu+'px'});
+		$('#contenuResultatExamenRadio #contenuResultExamen'+nbExamenRadio).after(champResultatExamen);
+	}
+	
+}
+
+function supprimeChampResultatExamenRadio($id){
+	$('.positionResultatExamenRadio'+$id).remove();
+	hauteurLabelContenu -= 45;
+	$(".titreResultatExamenRadioStyle").css({'height':hauteurLabelContenu+'px'});
+	
+}
+
+function supprimeDroiteChampResultatExamenRadio($id, nbListeActe, elsup){
+	
+	//On supprime a partir de la ligne demandée et recréer toutes les lignes en bas
+	var tabPos = new Array();
+	var itp = 0;
+	for(var i = $id ; i <= nbListeActe ; i++ ){
+		
+		//On supprime les resultats unpar un 
+		$('.positionResultatExamenRadio'+i).remove();
+		
+		//On crée la nouvelle table avec les données à sauvegarder
+		if($('#type_analyse_name_'+i).val() == 6){
+			tabPos[itp++] = i;
+		}
+	}
+	
+	//Un champ résultat supprimé du fait de la suppression
+	//d'une ligne est supprimée dans la liste des demandes
+	if(elsup == 0){
+		var indiceDep = 0;
+		if($('#type_analyse_name_'+$id).val() == 6){
+			indiceDep = 1;
+		}
+		
+		setTimeout(function(){ 
+			//On recrée les différents champs
+			for(var i = indiceDep ; i < tabPos.length ; i++ ){
+				var $pos = tabPos[i]-1;
+				ajoutAutomatiqueChampsResultats($pos);
+			}
+		},1000);
+		
+	}
+	//Un champ résultat supprimé sans la suppression
+	//d'une ligne dans la liste des demandes
+	else{
+		setTimeout(function(){ 
+			//On recrée les différents champs
+			for(var i = 0 ; i < tabPos.length ; i++ ){
+				var $pos = tabPos[i];
+				ajoutAutomatiqueChampsResultats($pos);
+			}
+		},1000);
+	}
+
+	hauteurLabelContenu -= 45;
+	$(".titreResultatExamenRadioStyle").css({'height':hauteurLabelContenu+'px'});
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -906,6 +1122,7 @@ function ajouterComplicationAigue(){
 			                     					  "<option value='7'>Priapisme</option>" +
 			                     					  "<option value='8'>Vasculopathie C&eacute;r&eacute;brale</option>" +
 			                     					  "</select>" +
+			                     					  "<div style='color: green; font-size: 8px; font-weight: bold; float: right; margin-top: -13px; height: 10px;' title='supprimer' onclick='supprimerDiagnosticComplicationAigue("+i+")'> X </div>" +
 			                                         "</label>");
 	if(i==9){ $("#ajouterComplicationAigueBouton").toggle(false); }
 	if(i==2){ $("#enleverComplicationAigueBouton").toggle(true); }
@@ -914,6 +1131,9 @@ function ajouterComplicationAigue(){
 	if(i==7){ $(".contenuComplicationsAiguesStyle").css({'height':'165px'});  }
 	
 	$("#nbDiagnosticComplicationsAigues").val(i);
+	
+    $('a,img,div,span').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });
+
 }
 
 function enleverComplicationAigue(){
@@ -928,6 +1148,16 @@ function enleverComplicationAigue(){
 	
 	$("#nbDiagnosticComplicationsAigues").val(i-1);
 }
+
+function supprimerDiagnosticComplicationAigue(id){
+	
+	for(var i=id ; i<9 ; i++){
+		var valSuiv= $("#diagnosticComplicationsAiguesChamp_"+(i+1)+" select").val();
+		$("#diagnosticComplicationsAiguesChamp_"+i+" select").val(valSuiv);
+	}
+	enleverComplicationAigue();
+}
+
 
 /**
  * Complications chroniques
@@ -949,6 +1179,7 @@ function ajouterComplicationChronique(){
 			                     					  "<option value='6'>Cardiomyopathie</option>" +
 			                     					  "<option value='7'>HTAP</option>" +
 			                     					  "</select>" +
+			                     					  "<div style='color: green; font-size: 8px; font-weight: bold; float: right; margin-top: -13px; height: 10px;' title='supprimer' onclick='supprimerDiagnosticComplicationChronique("+i+")'> X </div>" +
 			                                         "</label>");
 	if(i==9){ $("#ajouterComplicationChroniqueBouton").toggle(false); }
 	if(i==2){ $("#enleverComplicationChroniqueBouton").toggle(true); }
@@ -970,4 +1201,82 @@ function enleverComplicationChronique(){
 	if(i==7){ $(".contenuComplicationsChroniquesStyle").css({'height':'120px'});  }
 	
 	$("#nbDiagnosticComplicationsChroniques").val(i-1);
+}
+
+function supprimerDiagnosticComplicationChronique(id){
+
+	for(var i=id ; i<9 ; i++){
+		var valSuiv= $("#diagnosticComplicationsChroniquesChamp_"+(i+1)+" select").val();
+		$("#diagnosticComplicationsChroniquesChamp_"+i+" select").val(valSuiv);
+	}
+	enleverComplicationChronique();
+}
+
+
+
+//TRAITEMENT MEDICAMENTEUX --- TRAITEMENT MEDICAMENTEUX
+//TRAITEMENT MEDICAMENTEUX --- TRAITEMENT MEDICAMENTEUX
+function imprimerTraitementMedicamenteux(){
+	var idpatient = $("#idpatient").val();
+	var id_cons = $('#idcons').val();
+	
+	var medicamentLibelle = [];
+	var formeMedicament = [];
+	var nbMedicament = [];
+	var quantiteMedicament = [];
+	for(var i = 1, j = 1; i <= nbListeMedicaments(); i++ ){
+		if($('#medicament_0'+i).val()) {
+			medicamentLibelle[j] = $('#medicament_0'+i).val();
+			formeMedicament[j] = $('#noteMedicament_'+i+' input').val();
+			nbMedicament[j] = $('#nb_medicament_'+i).val();
+			quantiteMedicament[j] = $('#quantite_'+i).val();
+			j++;
+		}
+	}
+	
+	var lienUrl = tabUrl[0]+'public/consultation/impression-ordonnance';
+	var formulaireImprimerDemandesAnalyses = document.getElementById("formulaireImprimerOrdonnance");
+	formulaireImprimerDemandesAnalyses.setAttribute("action", lienUrl);
+	formulaireImprimerDemandesAnalyses.setAttribute("method", "POST");
+	formulaireImprimerDemandesAnalyses.setAttribute("target", "_blank");
+	
+	// Ajout dynamique de champs dans le formulaire
+	var champ = document.createElement("input");
+	champ.setAttribute("type", "hidden");
+	champ.setAttribute("name", 'idpatient');
+	champ.setAttribute("value", idpatient);
+	formulaireImprimerDemandesAnalyses.appendChild(champ);
+	
+	
+	var champ2 = document.createElement("input");
+	champ2.setAttribute("type", "hidden");
+	champ2.setAttribute("name", 'idcons');
+	champ2.setAttribute("value", idcons);
+	formulaireImprimerDemandesAnalyses.appendChild(champ2);
+	
+	var champ3 = document.createElement("input");
+	champ3.setAttribute("type", "hidden");
+	champ3.setAttribute("name", 'medicamentLibelle');
+	champ3.setAttribute("value", medicamentLibelle);
+	formulaireImprimerDemandesAnalyses.appendChild(champ3);
+	
+	var champ4 = document.createElement("input");
+	champ4.setAttribute("type", "hidden");
+	champ4.setAttribute("name", 'formeMedicament');
+	champ4.setAttribute("value", formeMedicament);
+	formulaireImprimerDemandesAnalyses.appendChild(champ4);
+	
+	var champ5 = document.createElement("input");
+	champ5.setAttribute("type", "hidden");
+	champ5.setAttribute("name", 'nbMedicament');
+	champ5.setAttribute("value", nbMedicament);
+	formulaireImprimerDemandesAnalyses.appendChild(champ5);
+	
+	var champ6 = document.createElement("input");
+	champ6.setAttribute("type", "hidden");
+	champ6.setAttribute("name", 'quantiteMedicament');
+	champ6.setAttribute("value", quantiteMedicament);
+	formulaireImprimerDemandesAnalyses.appendChild(champ6);
+	
+	$("#imprimerOrdonnance").trigger('click');
 }

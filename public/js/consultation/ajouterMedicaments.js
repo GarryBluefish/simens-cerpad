@@ -203,7 +203,7 @@ var tabUrl = base_url.split("public");
 //********************* EXAMEN MORPHOLOGIQUE *****************************
 //********************* EXAMEN MORPHOLOGIQUE *****************************
 //********************* EXAMEN MORPHOLOGIQUE *****************************
-
+/*
 function ValiderOrdonnance(){
 	//Au debut on affiche pas le bouton modifier
 	$("#bouton_Medicament_modifier_demande").toggle(false);
@@ -284,3 +284,4 @@ function ValiderOrdonnance(){
 		return false;
 	});
 }
+*/

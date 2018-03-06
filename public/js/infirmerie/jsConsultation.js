@@ -422,6 +422,7 @@
     			$('#infoTemperatureFievre input').val(valeur);
     			
     			//Vérifier s'il y a un motif_admission 'Fievre' et l'enlever
+    			/*
     			for(var ind = 1 ; ind <= 5 ; ind++){
     				var val = $("#motif_admission"+ind).val();
     				if(val == 1){
@@ -432,6 +433,7 @@
     					}
     				}
     			}
+    			*/
     		}
     		
     	}).click(function(){
@@ -464,6 +466,7 @@
     			$('#infoTemperatureFievre input').val(valeur);
     			
     			//Vérifier s'il y a un motif_admission 'Fievre' et l'enlever
+    			/*
     			for(var ind = 1 ; ind <= 5 ; ind++){
     				var val = $("#motif_admission"+ind).val();
     				if(val == 1){
@@ -474,6 +477,7 @@
     					}
     				}
     			}
+    			*/
     		}
     	
     	});

@@ -22,7 +22,7 @@ function creerLalisteActe ($listeDesElements) {
 			                 "<option value='' > --- S&eacute;l&eacute;ctionner un type ---  </option>";
                              for(var i = 1 ; i < $listeDesElements.length ; i++){
                             	 if($listeDesElements[i]){
-                    $liste +="<option value='"+i+"'>"+$listeDesElements[i]+"</option>";
+                    $liste +="<option value='"+(i)+"'>"+$listeDesElements[i]+"</option>";
                             	 }
                              }   
                     $liste +="</select>"+                           
@@ -91,8 +91,12 @@ function nbListeActe () {
 
 //SUPPRIMER LE DERNIER ELEMENT
 $(function () {
+	
 	//Au debut on cache la suppression
 	$("#supprimer_acte").click(function(){
+		//Supprimer l'examen radio correspondant
+		suppressionAutomatiqueChampsResultats();
+		
 		nbExamensDemandes--;
 		$('#nbDemandeExamenComplementaire').val(nbExamensDemandes);
 		
@@ -111,6 +115,7 @@ $(function () {
 		}   
 		
 		montantTotal();
+		
 		Event.stopPropagation();
 	});
 });
@@ -151,6 +156,10 @@ function partDefautActe (Liste, n) {
 
 //SUPPRIMER ELEMENT SELECTIONNER
 function supprimer_acte_selectionne(id) {
+	//Supprimer l'examen radio correspondant
+	suppressionDroiteAutomatiqueChampsResultats(id,0);
+
+	
 	nbExamensDemandes--;
 	$('#nbDemandeExamenComplementaire').val(nbExamensDemandes);
 	
@@ -218,7 +227,7 @@ function chargementModificationAnalyses (listeAnalysesDemandees, tabListeAnalyse
 		//Chargement des listes des analyses
 		$("#analyse_name_"+(index+1)).html(tabListeAnalysesParType[idtype]);
 		
-		if(idtype == 6){ 
+		if(idtype == 6){
 			var idanalyse = listeAnalysesDemandees[index]['idanalyse'];
 			//SÃ©lection des analyses sur les listes 
 			$("#SelectAnalyse_"+(index+1)+" option[value='0,"+idanalyse+"']").attr('selected','selected');
@@ -272,7 +281,7 @@ function chargementModificationAnalyses (listeAnalysesDemandees, tabListeAnalyse
 		
 	}
 	
-	$('a,img,hass').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });
+	$('a,img,hass,span').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });
 }
 
 function desactivationChamps(){
@@ -285,27 +294,61 @@ function desactivationChamps(){
 	
 }
 
-function getListeAnalyses(id, pos){ 
+function getListeAnalyses(id, pos){
 	
 	$.ajax({
 		type: 'POST',
 		url: tabUrl[0]+'public/consultation/get-liste-analyses',
 		data:{'id':id},
-		success: function(data) {    
+		success: function(data) {
 			var result = jQuery.parseJSON(data);  
 			$("#analyse_name_"+pos).html(result);
 			
 			if($("#analyse_name_"+pos).val()[0] == 0){
 				$("#tarifActe"+pos).val('__');
+				ajoutAutomatiqueChampsResultats(pos);
 			}else{
-				getTarifAnalyseBiologique($("#analyse_name_"+pos).val(), pos);
+				
+				var existeResultatRadio = $('#contenuResultatExamenRadio table tr').hasClass('positionResultatExamenRadio'+pos);
+				
+				if(existeResultatRadio){
+					suppressionDroiteAutomatiqueChampsResultats(pos,1);
+				}else{
+					getTarifAnalyseBiologique($("#analyse_name_"+pos).val(), pos);
+				}
+				
 			}
 		}
 	});
 
 }
 
-function montantTotal(){ 
+
+function ajoutAutomatiqueChampsResultats(pos){
+	//Pour ajout automatique des champs de résultats 
+	$tabInfoExamen = $('#analyse_name_'+pos).val();
+	$idexamenRadio = $tabInfoExamen.split(',')[1];
+	$libelleexamenRadio = $('#analyse_name_'+pos+' #examen_'+$idexamenRadio).text();
+	ajoutChampResultatExamenRadio(pos , $idexamenRadio, $libelleexamenRadio);
+}
+
+/**
+ * En utilisant l'icône (-) en bas de la liste 
+ */
+function suppressionAutomatiqueChampsResultats(){
+	supprimeChampResultatExamenRadio(nbListeActe());
+}
+
+/**
+ * En utilisant l'icône (X) à droite de la liste
+ */
+function suppressionDroiteAutomatiqueChampsResultats(id, elsup){
+	supprimeDroiteChampResultatExamenRadio(id, nbListeActe(), elsup);
+}
+
+
+
+function montantTotal(){
 	var somme = 0;
 	for(var i = 1; i <= nbListeActe(); i++ ){
 		if($("#tarifAnalyse"+i).val()){
@@ -322,6 +365,7 @@ function montantTotal(){
 function getTarifAnalyse(id, pos){
 	if(id[0] == 0){
 		$("#tarifActe"+pos).val('__');
+		ajoutAutomatiqueChampsResultats(pos);
 	}else{
 		getTarifAnalyseBiologique(id, pos)
 	}
@@ -413,6 +457,7 @@ function demandesAnalyses(){
         	    	}
         	    }
         	    
+        	    $('a,img,hass,span').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });
         }
     });
     

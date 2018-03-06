@@ -22,7 +22,9 @@ class AnalyseTable {
 				40 => array(2, 'FER SERIQUE', '5000'),
 				41 => array(2, 'FERRITININE', '10000'),
 				44 => array(2, 'ELECTROPHORESE DE HEMOGLOBINE', '15000'),
-				49 => array(2, 'PROTEINURIE DES 24H (PU 24H)', '15000')
+				49 => array(2, 'PROTEINURIE DES 24H (PU 24H)', '15000'),
+				69 => array(2, 'MICRO-ALBUMINURIE', '0'),
+				70 => array(2, 'LDH', '0'),
 		);
 	}
 	
@@ -30,13 +32,14 @@ class AnalyseTable {
 		$listeAnalysesEffectuees = $this->tableGateway->select(function (Select $select) use ($idpatient){
  			$select->join('demande_analyse' , 'demande_analyse.idanalyse = analyse.idanalyse' , array('*'));
  			$select->where(array('demande_analyse.idpatient' => $idpatient));
+ 			$select->group('analyse.idanalyse');
  		})->toArray();
  		
  		/*
  		 * Recuperer les analyses demandees, faites et validees faisant partie des analyses ciblées
  		 * (A revoir avec PROFESSEUR)
  		 */
- 		$tabAnalysesObligatoireAFaire = array(1,9,22,40,41,44,49);
+ 		$tabAnalysesObligatoireAFaire = array(1,9,22,40,41,44,49,69,70);
  		$tabIndexAnalysesFaites = array();
  		$tabAnalysesFaites = array();
  		for($i = 0 ; $i < count($listeAnalysesEffectuees) ; $i++){

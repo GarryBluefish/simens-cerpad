@@ -12,9 +12,13 @@ function getMotifAdmissionDouleurFievre(indexMotif){
 	}
 	
 	//Dès que fièvre est selectionné mettre la température superieure à 38,5
-	if(indexMotif == 1){
-		$('#temperatureFievre, #temperature').val(38.5).trigger('click');
-	}
+	//if(indexMotif == 1){
+		//$('#temperatureFievre, #temperature').val(38.5).trigger('click');
+	//}
+}
+
+function affichagePriseEnCharge(){
+	popListeMedicaments();
 }
 
 function listeMotifsConsultation(){
@@ -29,7 +33,7 @@ function listeMotifsConsultation(){
 		  //Lorsqu'on sélectionne "Fièvre" == 1
 		  //Lorsqu'on sélectionne "Fièvre" == 1
 		  if($(this).val() == 1){
-			  popListeMedicamentsFievre();
+			  //popListeMedicamentsFievre();
 		  }
 		  
 	   	  //Lorsqu'on sélectionne "Douleur" == 2
@@ -53,7 +57,7 @@ function listeMotifsConsultation(){
 		  }
 		  
 		  
-	  }).click(function(){ 
+	  }).click(function(){
 		
 		  //Lorsqu'on sélectionne "Douleur"
 		  //Lorsqu'on sélectionne "Douleur"

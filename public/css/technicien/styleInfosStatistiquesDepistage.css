@@ -202,6 +202,9 @@
 	border-bottom-right-radius: 10px;
     box-shadow: 0pt 3pt 8px rgba(0, 0, 0, 0.5);
 	margin-top: 0px;
+	
+	max-height: 40px;
+	overflow-y: auto;
 }
 
 .tableauInfosTotalDepistage{
@@ -211,3 +214,6 @@
 .tableauInfosTotalDepistage tr:hover{
 	background: #fafafa;
 }
+
+
+
