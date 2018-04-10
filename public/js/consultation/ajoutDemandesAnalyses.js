@@ -208,7 +208,7 @@ function vider_analyse_selectionne(id) {
     $("#tarifAnalyse"+id).val("");
 
     montantTotal();
-    stopPropagation();
+    //stopPropagation();
 }
 
 //CHARGEMENT DES ELEMENTS SELECTIONNES POUR LA MODIFICATION

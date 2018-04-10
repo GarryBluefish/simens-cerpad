@@ -315,6 +315,7 @@ return array(
             		'impression-demandes-analyses' => 'medecin',	
             		'liste-patients-consultes-ajax' => 'medecin',
             		'impression-ordonnance' => 'medecin',
+            		'impression-examens-demandes' => 'medecin',
             			
             			
             		'historiques-des-consultations-du-patient-ajax' => 'medecin',

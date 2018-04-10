@@ -502,7 +502,7 @@ var mDouleurV = '<?php echo $this->mDouleur[3]; ?>';
 var mDouleurT = '<?php echo $this->mDouleur[4]; ?>';
 var temoinEntre = 0;
 
-$('#motifsAdmissionConstanteClick').click(function(){ 
+$('#motifsAdmissionConstanteClick').click(function(){
 	if(temoinEntre == 0){ setTimeout(function(){ placeSiegeDouleur(mDouleurI, mDouleurP, mDouleurV, mDouleurT); }); temoinEntre = 1;}
 });
 
@@ -691,6 +691,11 @@ if($listeVoieAdmin){ ?>
 	  $('#voieAdminM4, #voie_med_4').val(<?php echo $listeVoieAdmin['m4']; ?>); 
 	  $('#voieAdminM5, #voie_med_5').val(<?php echo $listeVoieAdmin['m5']; ?>); 
 	  $('#voieAdminM6, #voie_med_6').val(<?php echo $listeVoieAdmin['m6']; ?>); 
+
+	  if(mDouleurT > 3){
+    	  var labelActuIntensiteDouleur = $("label[for='intensite']").html();
+    	  $("label[for='intensite']").html(labelActuIntensiteDouleur+" <span onclick='affichagePriseEnCharge();' style='color: red; font-size: 16px;' title='voir la prise en charge' >&#9673;</span>");
+      }
 	</script>
 <?php } ?>
 

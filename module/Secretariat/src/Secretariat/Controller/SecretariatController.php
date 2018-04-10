@@ -2167,7 +2167,7 @@ class SecretariatController extends AbstractActionController {
 		$patient   = $this->getPatientTable()->getPatient($idpatient);
 		$depistage = $this->getPatientTable()->getDepistagePatient($idpatient);
 		 
-		//Recuperation de la liste des analyses pour lesquelles les résultats sont déjà renseignés
+		//Recuperation de la liste des analyses pour lesquelles les résultats sont déjà renseignés et validés
 		$listeResultats = $this->getResultatDemandeAnalyseTable()->getListeResultatsAnalysesDemandeesImpSecretaire($iddemande);
 		 
 		
@@ -2270,6 +2270,12 @@ class SecretariatController extends AbstractActionController {
 				$analysesDemandees  [$j++] = $listeResultats[$i];
 				$analysesCytologie [] = 50;
 				$resultatsAnalysesDemandees[50] = $this->getResultatDemandeAnalyseTable()->getValeursHlmCompteDaddis($iddemande);
+			}
+			
+			elseif($idanalyse == 58){ //CULOT URINAIRE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesCytologie [] = 58;
+				$resultatsAnalysesDemandees[58] = $this->getResultatDemandeAnalyseTable()->getValeursCulotUrinaire($iddemande);
 			}
 			//=========================================================
 			//=========================================================
@@ -2428,6 +2434,12 @@ class SecretariatController extends AbstractActionController {
 			//BILAN RENAL  ---  BILAN RENAL  ---  BILAN RENAL
 			//BILAN RENAL  ---  BILAN RENAL  ---  BILAN RENAL
 			//BILAN RENAL  ---  BILAN RENAL  ---  BILAN RENAL
+			elseif($idanalyse == 22){ //CREATININEMIE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanRenal  [] = 22;
+				$resultatsAnalysesDemandees[22] = $this->getResultatDemandeAnalyseTable()->getValeursCreatininemie($iddemande);
+			}
+			
 			elseif($idanalyse == 23){ //AZOTEMIE = UREE
 				$analysesDemandees  [$j++] = $listeResultats[$i];
 				$analysesBilanRenal  [] = 23;
@@ -2439,19 +2451,19 @@ class SecretariatController extends AbstractActionController {
 				$analysesBilanRenal  [] = 46;
 				$resultatsAnalysesDemandees[46] = $this->getResultatDemandeAnalyseTable()->getValeursAlbuminemie($iddemande);
 			}
+			//=========================================================
+			//=========================================================
 			
-			elseif($idanalyse == 46){ //ALBUMINEMIE
+			
+			//SEROLOGIE  ---  SEROLOGIE  ---  SEROLOGIE
+			//SEROLOGIE  ---  SEROLOGIE  ---  SEROLOGIE
+			//SEROLOGIE  ---  SEROLOGIE  ---  SEROLOGIE
+			elseif($idanalyse == 10){ //GOUTE EPAISSE / GE
 				$analysesDemandees  [$j++] = $listeResultats[$i];
-				$analysesBilanRenal  [] = 46;
-				$resultatsAnalysesDemandees[46] = $this->getResultatDemandeAnalyseTable()->getValeursAlbuminemie($iddemande);
+				$analysesSerologie  [] = 10;
+				$resultatsAnalysesDemandees[10] = $this->getResultatDemandeAnalyseTable()->getValeursGoutteEpaisse($iddemande);
 			}
-			//=========================================================
-			//=========================================================
 			
-			
-			//SEROLOGIE  ---  SEROLOGIE  ---  SEROLOGIE
-			//SEROLOGIE  ---  SEROLOGIE  ---  SEROLOGIE
-			//SEROLOGIE  ---  SEROLOGIE  ---  SEROLOGIE
 			elseif($idanalyse == 53){ //CRP
 				$analysesDemandees  [$j++] = $listeResultats[$i];
 				$analysesSerologie  [] = 53;
@@ -2478,11 +2490,13 @@ class SecretariatController extends AbstractActionController {
 			
 			elseif($idanalyse == 56){ //TOXOPLASMOSE
 				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 56;
 				$resultatsAnalysesDemandees[56] = $this->getResultatDemandeAnalyseTable()->getValeursToxoplasmose($iddemande);
 			}
 				
 			elseif($idanalyse == 57){ //RUBEOLE
 				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 57;
 				$resultatsAnalysesDemandees[57] = $this->getResultatDemandeAnalyseTable()->getValeursRubeole($iddemande);
 			}
 			//=========================================================
@@ -2514,13 +2528,13 @@ class SecretariatController extends AbstractActionController {
 			elseif($idanalyse == 48){ //PROTEINES TOTAL (PROTIDEMIE)
 				$analysesDemandees  [$j++] = $listeResultats[$i];
 				$analysesMetabolismeProtidique[48] = 48;
-				$resultatsAnalysesDemandees[48] = $this->getResultatDemandeAnalyseTable()->getValeursElectrophoreseProteines($iddemande);
+				$resultatsAnalysesDemandees[48] = $this->getResultatDemandeAnalyseTable()->getValeursProtidemie($iddemande);
 			}
 			
 			elseif($idanalyse == 49){ //PROTEINURIE DES 24H (PU 24H)
 				$analysesDemandees  [$j++] = $listeResultats[$i];
 				$analysesMetabolismeProtidique[49] = 49;
-				$resultatsAnalysesDemandees[49] = $this->getResultatDemandeAnalyseTable()->getValeursElectrophoreseProteines($iddemande);
+				$resultatsAnalysesDemandees[49] = $this->getResultatDemandeAnalyseTable()->getValeursProteinurie($iddemande);
 			}
 			//=========================================================
 			//=========================================================
@@ -2594,7 +2608,7 @@ class SecretariatController extends AbstractActionController {
 		
 		if($analysesImmunoHemato || $analysesCytologie || $analysesHemostase || $analysesMetabolismeGlucidique ||
 		   $analysesBilanLipidique || $analysesBilanHepatique || $analysesBilanRenal || $analysesSerologie || $analysesTypageHemoProteine ||
-		   $analysesMetabolismeFer ){
+		   $analysesMetabolismeFer || $analysesMetabolismeProtidique){
 			
 			$page2 = new ResultatsAnalysesDemandeesPdf();
 			
@@ -2647,6 +2661,9 @@ class SecretariatController extends AbstractActionController {
 			//GESTION DES ANALYSES DE METABOLISME DU FER
 			$page2->setAnalysesMetabolismeFer($analysesMetabolismeFer);
 			
+			//GESTION DES ANALYSES DE METABOLISME PROTIDIQUE
+			//GESTION DES ANALYSES DE METABOLISME PROTIDIQUE
+			$page2->setAnalysesMetabolismeProtidique($analysesMetabolismeProtidique);
 			
 			//Ajouter une note à la page
 			$page2->addNote();

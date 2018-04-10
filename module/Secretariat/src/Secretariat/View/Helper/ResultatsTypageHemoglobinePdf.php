@@ -78,16 +78,16 @@ class ResultatsTypageHemoglobinePdf
 	    
  		$imageHeader = ZendPdf\Image::imageWithPath($tabURI[0].'public/images_icons/CERPAD_UGB_LOGO_M.png');
 		$this->_page->drawImage($imageHeader, 440, //-x
-				$this->_pageHeight - 110, //-y
+				$this->_pageHeight - 100, //-y
 				535, //+x
-				787); //+y
+				802); //+y
 		
 		$this->_page->setFont($this->_newTime, 10);
 		$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', 'République du Sénégal'),
 				$this->_leftMargin,
 				$this->_pageHeight - 50);
 		$this->_page->setFont($this->_newTime, 10);
-		$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', 'Université Gaston Berger / UFR 2S'),
+		$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', 'Université Gaston Berger de Saint-Louis / UFR 2S'),
 				$this->_leftMargin,
 				$this->_pageHeight - 65);
 		$this->_page->setFont($this->_newTime, 10);
@@ -98,7 +98,7 @@ class ResultatsTypageHemoglobinePdf
 		$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', 'Ambulatoire de la Drépanocytose (CERPAD)'),
 		    $this->_leftMargin,
 		    $this->_pageHeight - 95);
-		
+		/*
 		$font = ZendPdf\Font::fontWithName(ZendPdf\Font::FONT_TIMES_ROMAN);
 		$this->_page->setFont($font, 8);
 		$today = new \DateTime ();
@@ -106,6 +106,7 @@ class ResultatsTypageHemoglobinePdf
 		$this->_page->drawText('Saint-Louis le, ' . $dateNow,
 				450,
 				$this->_pageHeight - 50);
+				*/
 	}
 	
 	public function setPatient($patient){
@@ -296,7 +297,7 @@ class ResultatsTypageHemoglobinePdf
 	protected  function getNoteInformations(){
 		$Control = new DateHelper();
 		
-		$this->_yPosition -= 35;
+		$this->_yPosition -= 25;
 		$this->_page->setFont($this->_newTime, 15);
 		$this->_page->setFillColor(new ZendPdf\Color\Html('green'));
 		$this->_page->drawText('RESULTATS D\'ANALYSES',
@@ -544,13 +545,19 @@ class ResultatsTypageHemoglobinePdf
 	     
 	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 8);
 	    $this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', ' par : '),
-	        $this->_leftMargin+135,
+	        $this->_leftMargin+130,
 	        $this->_yPosition+10);
 	     
 	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 9);
 	    $this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', ''. $infosAnalyseDemande[68]['Prenom'] .' '.$infosAnalyseDemande[68]['Nom'].'  -  validé par : '.$infosAnalyseDemande[68]['PrenomValidateur'] .' '.$infosAnalyseDemande[68]['NomValidateur']),
-	        $this->_leftMargin+155,
+	        $this->_leftMargin+150,
 	        $this->_yPosition+10);
+	    
+	    $aujourdhui = (new \DateTime ())->format ( 'd/m/Y' );
+	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 8);
+	    $this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', ' Imprimé le : '.$aujourdhui),
+	    		$this->_leftMargin+414,
+	    		$this->_yPosition+10);
 	     
 	    $this->_yPosition -= $noteLineHeight-20; //Allez à la ligne
 	     

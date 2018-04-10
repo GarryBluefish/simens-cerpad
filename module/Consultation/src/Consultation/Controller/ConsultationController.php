@@ -10,6 +10,7 @@ use Consultation\Form\ConsultationForm;
 use Consultation\View\Helper\DocumentPdf;
 use Consultation\View\Helper\DemandeAnalysePdf;
 use Consultation\View\Helper\imprimerOrdonnance;
+use Consultation\View\Helper\imprimerDemandesExamens;
 
 class ConsultationController extends AbstractActionController {
 	
@@ -1807,7 +1808,7 @@ class ConsultationController extends AbstractActionController {
 	//GESTION DES IMPRESSIONS --- GESTION DES IMPRESSION
 	public function impressionDemandesAnalysesAction() {
 
-		$service = $this->layout()->user['NomService'];
+		$nomService = $this->layout()->user['NomService'];
 		$idpatient = $this->params()->fromPost( 'idpatient' );
 		$personne = $this->getPersonneTable()->getPersonne($idpatient);
 		$patient = $this->getPatientTable()->getPatient($idpatient);
@@ -1827,6 +1828,7 @@ class ConsultationController extends AbstractActionController {
 		//*************** Création de l'imprimé pdf **************
 		//******************************************************
 		//******************************************************
+		
 		//Créer le document
 		$DocPdf = new DocumentPdf();
 		//Créer la page
@@ -1835,7 +1837,7 @@ class ConsultationController extends AbstractActionController {
 		//Envoyer les données sur le patient
 		$page->setPatient($patient);
 		$page->setDonneesPatient($personne);
-		$page->setService($service);
+		$page->setService($nomService);
 		$page->setAnalyses($analysesTab);
 		$page->setTypesAnalyses($typesAnalysesTab);
 		$page->setTarifs($tarifsTab);
@@ -1850,6 +1852,49 @@ class ConsultationController extends AbstractActionController {
 		
 		
 	}	
+	
+	
+	
+	//GESTION DES IMPRESSIONS --- GESTION DES IMPRESSION
+	//GESTION DES IMPRESSIONS --- GESTION DES IMPRESSION
+	public function impressionDemandesExamensAction() {
+	
+		$nomService = $this->layout()->user['NomService'];
+		$idpatient = $this->params()->fromPost( 'idpatient' );
+		$personne = $this->getPersonneTable()->getPersonne($idpatient);
+		$patient = $this->getPatientTable()->getPatient($idpatient);
+		$depistage = $this->getPatientTable()->getDepistagePatient($idpatient);
+	
+		$formData = $this->getRequest ()->getPost ();
+		$analyses = $formData['analyses'];
+		$typesAnalyses = $formData['typesAnalyses'];
+		$tarifs = $formData['tarifs'];
+	
+		$analysesTab = explode(',', $analyses);
+		$typesAnalysesTab = explode(',', $typesAnalyses);
+		$tarifsTab = explode(',', $tarifs);
+	
+		//******************************************************
+		//******************************************************
+		//*************** Création de l'imprimé pdf **************
+		//******************************************************
+		//******************************************************
+	
+		$pdf = new imprimerDemandesExamens();
+		$pdf->SetMargins(13.5,13.5,13.5);
+		$pdf->setNomService($nomService);
+		$pdf->setInfosPatients($personne);
+		$pdf->setInfosDetailsPatients($patient);
+		
+		$pdf->impressionDemandesAnalyses();
+		$pdf->Output('I');
+	}
+	
+	
+	
+	
+	
+	
 	
 	
 	/**
@@ -1887,6 +1932,49 @@ class ConsultationController extends AbstractActionController {
 		
 	}
 	
+	
+	/**
+	 * IMPRESSION DES EXAMENS DEMANDES DU Popup --- IMPRESSION DES EXAMENS DEMANDES DU Popup
+	 */
+	public function impressionExamensDemandesAction() {
+	
+		$nomService = $this->layout()->user['NomService'];
+		$idpatient = $this->params()->fromPost( 'idpatient' );
+		$personne = $this->getPersonneTable()->getPersonne($idpatient);
+		$patient = $this->getPatientTable()->getPatient($idpatient);
+		$depistage = $this->getPatientTable()->getDepistagePatient($idpatient);
+	
+		
+		var_dump($idpatient); exit();
+		
+		
+		
+		//$idcons = $this->params()->fromPost( 'idcons' );
+	
+		/*
+		$medicamentLibelle = explode( "," , $this->params()->fromPost( 'medicamentLibelle' ));
+		$formeMedicament = explode( "," , $this->params()->fromPost( 'formeMedicament' ));
+		$nbMedicament = explode( "," , $this->params()->fromPost( 'nbMedicament' ));
+		$quantiteMedicament = explode( "," , $this->params()->fromPost( 'quantiteMedicament' ));
+	
+		//var_dump($medicamentLibelle); exit();
+	
+		/*
+		$pdf = new imprimerOrdonnance();
+		$pdf->SetMargins(13.5,13.5,13.5);
+		$pdf->setNomService($nomService);
+		$pdf->setInfosPatients($personne);
+	
+		$pdf->setMedicamentLibelle($medicamentLibelle);
+		$pdf->setFormeMedicament($formeMedicament);
+		$pdf->setNbMedicament($nbMedicament);
+		$pdf->setQuantiteMedicament($quantiteMedicament);
+	
+		$pdf->impressionOrdonnance();
+		$pdf->Output('I');
+		*/
+	
+	}
 	
 	
 	

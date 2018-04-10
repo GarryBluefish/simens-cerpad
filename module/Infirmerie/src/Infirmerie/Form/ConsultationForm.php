@@ -170,6 +170,7 @@ class ConsultationForm extends Form {
 						'max' => 10,
 						'min' => 1,
 						'step' => 'any',
+						'style' => 'text-align: right',
 				)
 		) );
 		

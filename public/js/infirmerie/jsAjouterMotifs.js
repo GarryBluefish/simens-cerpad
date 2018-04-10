@@ -102,11 +102,11 @@ function recupDonnees(){
 	
 	$( "#intensite" ).keyup(function(){
 		intensite = $( "#intensite").val(); 
-		if(intensite > 3 && intensite < 11){ popListeMedicaments(); $('#poids').val($('#poidsP1 input').val()).attr('readonly', true); }
+		if(intensite > 3 && intensite < 11){ popListeMedicaments(); $('#poids').val($('#poidsP1 input').val()).attr('readonly', false); }
 		else{$('#poids').attr('readonly', false);}
 	}).blur(function(){
 		intensite = $( "#intensite").val(); 
-		if(intensite > 3 && intensite < 11){ popListeMedicaments(); $('#poids').val($('#poidsP1 input').val()).attr('readonly', true);}
+		if(intensite > 3 && intensite < 11){ popListeMedicaments(); $('#poids').val($('#poidsP1 input').val()).attr('readonly', false);}
 		else{$('#poids').attr('readonly', false);}
 	});
 

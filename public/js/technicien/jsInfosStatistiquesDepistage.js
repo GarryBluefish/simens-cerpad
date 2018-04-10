@@ -35,7 +35,7 @@ function getInfosStatistiquesParDefaut(){
 			$('.zoneResultatsInfosStatiquesDepistage').html(result);
 			
 			//Auto-ajustement
-			if(nbkligne > 9){
+			if(nbkligne > 10){
 				$('.affichageInfosTotalDepistage .ajustementColonne').css({'height':'1px'});
 			}else{
 				$('.affichageInfosTotalDepistage .ajustementColonne').css({'height':'0px'});
@@ -92,7 +92,7 @@ function afficherTousLesResultats(){
 			$('.zoneResultatsInfosStatiquesDepistage').html(result);
 			
 			//Auto-ajustement
-			if(nbkligne > 9){
+			if(nbkligne > 10){
 				$('.affichageInfosTotalDepistage .ajustementColonne').css({'height':'1px'});
 			}else{
 				$('.affichageInfosTotalDepistage .ajustementColonne').css({'height':'0px'});
@@ -125,7 +125,7 @@ function afficherLesResultatsValides(){
 			$('.zoneResultatsInfosStatiquesDepistage').html(result);
 			
 			//Auto-ajustement
-			if(nbkligne > 9){
+			if(nbkligne > 10){
 				$('.affichageInfosTotalDepistage .ajustementColonne').css({'height':'1px'});
 			}else{
 				$('.affichageInfosTotalDepistage .ajustementColonne').css({'height':'0px'});
@@ -157,7 +157,7 @@ function afficherLesResultatsNonValides(){
 			$('.zoneResultatsInfosStatiquesDepistage').html(result);
 			
 			//Auto-ajustement
-			if(nbkligne > 9){
+			if(nbkligne > 10){
 				$('.affichageInfosTotalDepistage .ajustementColonne').css({'height':'1px'});
 			}else{
 				$('.affichageInfosTotalDepistage .ajustementColonne').css({'height':'0px'});
@@ -193,7 +193,7 @@ function getInfosStatistiquesDepistageParPeriode(){
 			$('.zoneResultatsInfosStatiquesDepistage').html(result);
 			
 			//Auto-ajustement
-			if(nbkligne > 9){
+			if(nbkligne > 10){
 				$('.affichageInfosTotalDepistage .ajustementColonne').css({'height':'1px'});
 			}else{
 				$('.affichageInfosTotalDepistage .ajustementColonne').css({'height':'0px'});

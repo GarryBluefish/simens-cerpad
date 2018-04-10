@@ -5,7 +5,7 @@ use ZendPdf;
 use ZendPdf\Page;
 use ZendPdf\Font;
 
-class ResultatsAnalysesDemandeesPdf
+class ResultatsAnalysesDemandeesPdfModif
 {
 	protected $_page;
 	protected $_yPosition;
@@ -40,7 +40,6 @@ class ResultatsAnalysesDemandeesPdf
 	protected $_analysesBilanRenal;
 	protected $_analysesSerologie;
 	protected $_analysesMetabolismeFer;
-	protected $_analysesMetabolismeProtidique;
 	protected $_analysesTypageHemoProteine;
 	
 	public function __construct()
@@ -84,16 +83,16 @@ class ResultatsAnalysesDemandeesPdf
 	    
  		$imageHeader = ZendPdf\Image::imageWithPath($tabURI[0].'public/images_icons/CERPAD_UGB_LOGO_M.png');
 		$this->_page->drawImage($imageHeader, 440, //-x
-				$this->_pageHeight - 100, //-y
+				$this->_pageHeight - 110, //-y
 				535, //+x
-				802); //+y
+				787); //+y
 		
 		$this->_page->setFont($this->_newTime, 10);
 		$this->_page->drawText('République du Sénégal',
 				$this->_leftMargin,
 				$this->_pageHeight - 50);
 		$this->_page->setFont($this->_newTime, 10);
-		$this->_page->drawText('Université Gaston Berger de Saint-Louis / UFR 2S',
+		$this->_page->drawText('Université Gaston Berger / UFR 2S',
 				$this->_leftMargin,
 				$this->_pageHeight - 65);
 		$this->_page->setFont($this->_newTime, 10);
@@ -105,7 +104,6 @@ class ResultatsAnalysesDemandeesPdf
 		    $this->_leftMargin,
 		    $this->_pageHeight - 95);
 		
-		/*
 		$font = ZendPdf\Font::fontWithName(ZendPdf\Font::FONT_TIMES_ROMAN);
 		$this->_page->setFont($font, 8);
 		$today = new \DateTime ();
@@ -113,7 +111,6 @@ class ResultatsAnalysesDemandeesPdf
 		$this->_page->drawText('Saint-Louis le, ' . $dateNow,
 				450,
 				$this->_pageHeight - 50);
-				*/
 	}
 	
 	public function setPatient($patient){
@@ -321,15 +318,11 @@ class ResultatsAnalysesDemandeesPdf
 		$this->_analysesMetabolismeFer = $analysesMetabolismeFer;
 	}
 	
-	public function setAnalysesMetabolismeProtidique($analysesMetabolismeProtidique){
-		$this->_analysesMetabolismeProtidique = $analysesMetabolismeProtidique;
-	}
-	
 	
 	protected  function getNoteInformations(){
 		$Control = new DateHelper();
 		
-		$this->_yPosition -= 25;
+		$this->_yPosition -= 35;
 		$this->_page->setFont($this->_newTime, 15);
 		$this->_page->setFillColor(new ZendPdf\Color\Html('green'));
 		$this->_page->drawText('RESULTATS D\'ANALYSES',
@@ -360,27 +353,27 @@ class ResultatsAnalysesDemandeesPdf
 		$this->_page->setFont($this->_newTime, 10); //NÂ°: 
 		$this->_page->drawText(iconv ('UTF-8' , 'ISO-8859-1' , ''.$this->_patient->numero_dossier),
 	    $this->_leftMargin,
-	    $this->_yPosition+3);
+	    $this->_yPosition);
 		
 		$this->_page->setFont($this->_newTimeGras, 9);
 		$this->_page->drawText('PRENOM & NOM :',
 				$this->_leftMargin+123,
-				$this->_yPosition+3);
+				$this->_yPosition);
 		$this->_page->setFont($this->_newTime, 10);
 		$this->_page->drawText(iconv ('UTF-8' ,'ISO-8859-1' , $value->prenom.'  '.$value->nom),
 				$this->_leftMargin+210,
-				$this->_yPosition+3);
+				$this->_yPosition);
 		//-----------------------------------------------
 		$this->_yPosition -= 15;
 		//----------------------------------------------
 		$this->_page->setFont($this->_newTimeGras, 9);
 		$this->_page->drawText('SEXE :',
 				$this->_leftMargin+173,
-				$this->_yPosition+3);
+				$this->_yPosition);
 		$this->_page->setFont($this->_newTime, 10);
 		$this->_page->drawText(iconv ('UTF-8' ,'ISO-8859-1' , $value->sexe),
 				$this->_leftMargin+210,
-				$this->_yPosition+3);
+				$this->_yPosition);
 		//-----------------------------------------------
    		$this->_yPosition -= 15;
 		//----- -----------------------------------------
@@ -392,7 +385,7 @@ class ResultatsAnalysesDemandeesPdf
 			$this->_page->setFont($this->_newTimeGras, 9);
 			$this->_page->drawText('DATE DE NAISSANCE :',
 					$this->_leftMargin+102,
-					$this->_yPosition+3);
+					$this->_yPosition);
 			$this->_page->setFont($this->_newTime, 10);
 			
 			$age = $value->age;
@@ -421,18 +414,18 @@ class ResultatsAnalysesDemandeesPdf
 			
 			$this->_page->drawText($date_naissance."  (".$age.")",
 					$this->_leftMargin+210,
-					$this->_yPosition+3);
+					$this->_yPosition);
 			
 		}else {
 			$this->_page->setFont($this->_newTimeGras, 9);
 			$this->_page->drawText('AGE :',
 					$this->_leftMargin+176,
-					$this->_yPosition+3);
+					$this->_yPosition);
 			$this->_page->setFont($this->_newTime, 10);
 			
 			$this->_page->drawText($value->age." ans",
 					$this->_leftMargin+210,
-					$this->_yPosition+3);
+					$this->_yPosition);
 		}
 
 		//-----------------------------------------------
@@ -441,27 +434,22 @@ class ResultatsAnalysesDemandeesPdf
 		$this->_page->setFont($this->_newTimeGras, 9);
 		$this->_page->drawText('ADRESSE :',
 				$this->_leftMargin+155,
-				$this->_yPosition+5);
+				$this->_yPosition);
 		$this->_page->setFont($this->_newTime, 10);
     	$this->_page->drawText(iconv ('UTF-8' ,'ISO-8859-1' , $value->adresse),
 				$this->_leftMargin+210,
-				$this->_yPosition+5);
+				$this->_yPosition);
 		//-----------------------------------------------
 			
     	
     	$this->_page->setlineColor(new ZendPdf\Color\Html('green'));
     	$this->_page->drawLine($this->_leftMargin,
-    			$this->_yPosition,
+    			$this->_yPosition-10,
     			$this->_pageWidth -
     			$this->_leftMargin,
-    			$this->_yPosition);
+    			$this->_yPosition-10);
+    	$this->_yPosition -= $noteLineHeight-10;
     	
-    	$aujourdhui = (new \DateTime ())->format ( 'd/m/Y' );
-    	$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 8);
-    	$this->_page->drawText( ' Imprimé le : '.$aujourdhui,
-    			$this->_leftMargin+414,
-    			$this->_yPosition-8);
-    	$this->_yPosition -= 10;
     	
 		//-----------------------------------------------------------------------
 		//-----------------------------------------------------------------------
@@ -506,7 +494,7 @@ class ResultatsAnalysesDemandeesPdf
 			$idanalysesCytologie = $this->_analysesCytologie;
 				
 			//Affichage des analyses concernant l'IMMUNO_HEMATO
-			if(array_intersect(array(7,8,50,58), $idanalysesCytologie)){
+			if(array_intersect(array(7,8,50), $idanalysesCytologie)){
 				$this->_page = $this->getCytologie($noteLineHeight, $value, $idanalysesCytologie);
 			}
 			//====================================
@@ -562,7 +550,7 @@ class ResultatsAnalysesDemandeesPdf
 			$idanalysesBilanRenal = $this->_analysesBilanRenal;
 			
 			//Affichage des analyses concernant le BILAN RENAL
-			if(array_intersect(array(22,23,46), $idanalysesBilanRenal)){
+			if(array_intersect(array(23,46), $idanalysesBilanRenal)){
 				$this->_page = $this->getBilanRenal($noteLineHeight, $value, $idanalysesBilanRenal);
 			}
 			//=========================================
@@ -581,7 +569,7 @@ class ResultatsAnalysesDemandeesPdf
 			$idanalysesSerologie = $this->_analysesSerologie;
 			
 			//Affichage des analyses concernant la Serologie
-			if(array_intersect(array(10, 53, 55, 56, 57, 60, 61, 62, 63), $idanalysesSerologie)){
+			if(array_intersect(array(53, 55, 60, 61), $idanalysesSerologie)){
 				$this->_page = $this->getSerologie($noteLineHeight, $idanalysesSerologie);
 			}
 			//=========================================
@@ -670,26 +658,6 @@ class ResultatsAnalysesDemandeesPdf
 			//-----------------------------------------------------------------
 			
 		
-			//Liste des analyses pour le METABOLISME PROTIDIQUE
-			//Liste des analyses pour le METABOLISME PROTIDIQUE
-			$idanalysesMetabolismeProtidique = $this->_analysesMetabolismeProtidique;
-				
-			//Affichage des analyses concernant le METABOLISME DU FER
-			if(array_intersect(array(45,48,49), $idanalysesMetabolismeProtidique)){
-				$this->_page = $this->getMetabolismeProtidique($noteLineHeight, $idanalysesMetabolismeProtidique);
-			}
-			//===================================
-			//===================================
-			
-				
-			//-----------------------------------------------------------------
-			//-----------------------------------------------------------------
-			//-----------------------------------------------------------------
-			//-----------------------------------------------------------------
-			//-----------------------------------------------------------------
-			//-----------------------------------------------------------------
-					
-			
 			$this->_yPosition -= $noteLineHeight;
 	}
 	
@@ -728,6 +696,8 @@ class ResultatsAnalysesDemandeesPdf
 	//--- GESTION DE L'AFFICHAGE DES RESULTATS DES ANALYSES --- GESTION DE L'AFFICHAGE DES RESULTATS DES ANALYSES
 	
 	public function getImmunoHemato($noteLineHeight, $infosAnalyseDemande, $value, $idanalysesImmunoHemato){
+		$tabAnalyses = array_intersect(array(2,3,4,5,6), $idanalysesImmunoHemato);
+		$tabAnalyses = array_reverse($tabAnalyses);
 	
 		$this->_page->setLineColor(new ZendPdf\Color\Html('#999999'));
 		$this->_page->setLineWidth(1);
@@ -794,10 +764,8 @@ class ResultatsAnalysesDemandeesPdf
 					$this->_leftMargin+260,
 					$this->_yPosition-$j);
 	
-			$RhesusType = 'Positif';
-			if($resultats[2]['rhesus'] == 'Rh-'){ $RhesusType = 'Négatif'; }
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($RhesusType,
+			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $resultats[2]['rhesus'] ),
 					$this->_leftMargin+300,
 					$this->_yPosition-$j);
 			
@@ -813,26 +781,12 @@ class ResultatsAnalysesDemandeesPdf
 					$this->_yPosition-$j);
 				
 			$rechAntDFaible = $resultats[3]['antigene_d_faible'];
-			if($rechAntDFaible == 'Negatif'){ $rechAntDFaible = 'Négatif'; }
+			if($rechAntDFaible == 'Present'){ $rechAntDFaible = 'Présent'; }
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
 			$this->_page->drawText($rechAntDFaible,
-					$this->_leftMargin+180,
+					$this->_leftMargin+185,
 					$this->_yPosition-$j);
 
-			if($resultats[3]['conclusion_antigene_d_faible']){
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 10);
-				$this->_page->drawText('Conclusion : ',
-						$this->_leftMargin+230,
-						$this->_yPosition-$j);
-				
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 10);
-				$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $resultats[3]['conclusion_antigene_d_faible']),
-						$this->_leftMargin+285,
-						$this->_yPosition-$j);
-			}
-			
-			
-			
 			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
 			$j += 1;
 		}
@@ -907,19 +861,19 @@ class ResultatsAnalysesDemandeesPdf
 			$testCompatibilite = $resultats[6]['valeur'];
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
 			$this->_page->drawText($testCompatibilite ,
-					$this->_leftMargin+165,
+					$this->_leftMargin+185,
 					$this->_yPosition-$j);
 		
 			
 			if($testCompatibilite == 'Compatible'){
 				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-				$this->_page->drawText(" Poche numéro : " ,
+				$this->_page->drawText(" Poche : " ,
 						$this->_leftMargin+260,
 						$this->_yPosition-$j);
 		
 				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
 				$this->_page->drawText( $resultats[6]['poche'] ,
-						$this->_leftMargin+330,
+						$this->_leftMargin+300,
 						$this->_yPosition-$j);
 			}
 		
@@ -927,11 +881,13 @@ class ResultatsAnalysesDemandeesPdf
 			$j += 1;
 		}
 		
-		$this->_yPosition -= $noteLineHeight+5;
+		$this->_yPosition -= $noteLineHeight+20;
 		return $this->_page;
 	}
 	
 	public function getCytologie($noteLineHeight, $value, $idanalysesCytologie){
+		
+		$this->_yPosition -= $noteLineHeight-45; //Allez à la ligne
 		
 		$this->_page->setLineColor(new ZendPdf\Color\Html('#999999'));
 		$this->_page->setLineWidth(1);
@@ -951,10 +907,7 @@ class ResultatsAnalysesDemandeesPdf
 		//-------------PLACER LES LIGNES DES EXAMENS A AFFICHER ---------
 		$j = 36;
 		
-		$resultats = $this->_resultatsAnalysesDemandees;
-		$nbLigneResult = count($idanalysesCytologie);
-		
-		for($i = 0 ; $i < $nbLigneResult ; $i++){
+		for($i = 0 ; $i < count($idanalysesCytologie) ; $i++){
 		
 			if($i%2 == 0){
 				$this->_page->setLineColor(new ZendPdf\Color\Html('#e1e1e1'));
@@ -977,91 +930,21 @@ class ResultatsAnalysesDemandeesPdf
 			$j += 19;
 		}
 		
-		
-		//Augmenter la hauteur de la ligne
-		//Augmenter la hauteur de la ligne
-		if(in_array(58, $idanalysesCytologie)){
-			
-			$nbLigne = count($resultats[58]);
-			if($resultats[58][0]['conclusion']){ $nbLigne +=1; }
-			
-			for($inlig = 0 ; $inlig < $nbLigne-1 ; $inlig++){
-				
-				if(($i-1)%2 == 0){
-					$this->_page->setLineColor(new ZendPdf\Color\Html('#e1e1e1'));
-					$this->_page->setLineWidth(21);
-					$this->_page->drawLine($this->_leftMargin,
-							$this->_yPosition -$j,
-							$this->_pageWidth -
-							$this->_leftMargin,
-							$this->_yPosition -$j);
-				}else{
-					$this->_page->setLineColor(new ZendPdf\Color\Html('#f1f1f1'));
-					$this->_page->setLineWidth(21);
-					$this->_page->drawLine($this->_leftMargin,
-							$this->_yPosition -$j,
-							$this->_pageWidth -
-							$this->_leftMargin,
-							$this->_yPosition -$j);
-				}
-				
-				$j += 19;
-			}
-			
-		}
-		//FIn augmentation de la hauteur de la ligne
-		//Fin augmentation de la hauteur de la ligne
-		
 		$j = 40;
+		$resultats = $this->_resultatsAnalysesDemandees;
 		
 		if(in_array(7, $idanalysesCytologie)){
 		
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "VITESSE DE SEDIMENTATION (VS) : " ),
+			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "VITESSE SE SEDIMENTATION (VS) : " ),
 					$this->_leftMargin+5,
-					$this->_yPosition-$j);
-			
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-			$this->_page->drawText('1',
-					$this->_leftMargin+185,
-					$this->_yPosition-$j);
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-			$this->_page->drawText('ère ',
-					$this->_leftMargin+190,
-					$this->_yPosition-$j+2);
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-			$this->_page->drawText('Heure : ',
-					$this->_leftMargin+205,
 					$this->_yPosition-$j);
 		
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText( $resultats[7]['valeur1'].'  mm',
-					$this->_leftMargin+240,
+			$this->_page->drawText( $resultats[7]['valeur'] ,
+					$this->_leftMargin+185,
 					$this->_yPosition-$j);
-			
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-			$this->_page->drawText('2',
-					$this->_leftMargin+300,
-					$this->_yPosition-$j);
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-			$this->_page->drawText('ème ',
-					$this->_leftMargin+305,
-					$this->_yPosition-$j+2);
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-			$this->_page->drawText('Heure : ',
-					$this->_leftMargin+322,
-					$this->_yPosition-$j);
-			
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText( $resultats[7]['valeur2'].'  mm',
-					$this->_leftMargin+355,
-					$this->_yPosition-$j);
-			
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 7);
-			$this->_page->drawText('H<15 | H>20 ; +60ans <30',
-					$this->_leftMargin+410,
-					$this->_yPosition-$j);
-			
+		
 			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
 			$j += 1;
 		}
@@ -1113,70 +996,7 @@ class ResultatsAnalysesDemandeesPdf
 			$j += 1;
 		}
 		
-		if(in_array(58, $idanalysesCytologie)){
-			
-			$listeElementsA  = array(1=>'Leucocytes', 2=>'Hematies', 3=>'Cristaux', 4=>'Oeufs', 5=>'Parasites');
-			$listeSousElemA3 = array(1=>'Oxalate de potassium | calcium', 2=>'Phosphate', 3=>'Cystine', 4=>'Acide Urique');
-			$listeSousElemA4 = array(1=>'Schistoma hematobium');
-			$listeSousElemA5 = array(1=>'Trichomonas vaginale', 2=>'Schistosoma hematobium');
-			
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "CULOT URINAIRE : " ),
-					$this->_leftMargin+5,
-					$this->_yPosition-$j);
-			
-			for($i = 0 ; $i < count($resultats[58]) ; $i++){
-			
-				$valeur1 = $resultats[58][$i]['culot_urinaire_1'];
-				
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10.5);
-				$this->_page->drawText(' » '.$listeElementsA[$valeur1].' ',
-						$this->_leftMargin+100,
-						$this->_yPosition-$j);
-				
-			    $valeur2Aff = "";
-				if($valeur1 == 3){
-					$valeur2 = $resultats[58][$i]['culot_urinaire_2'];
-					$valeur2Aff = $listeSousElemA3[$valeur2];
-				}else if($valeur1 == 4){
-					$valeur2 = $resultats[58][$i]['culot_urinaire_2'];
-					$valeur2Aff = $listeSousElemA4[$valeur2];
-				}else if($valeur1 == 5){
-					$valeur2 = $resultats[58][$i]['culot_urinaire_2'];
-					$valeur2Aff = $listeSousElemA5[$valeur2];
-				}
-				
-				if($valeur2Aff){
-					$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10);
-					$this->_page->drawText('------',
-							$this->_leftMargin+165,
-							$this->_yPosition-$j);
-					
-					$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10.5);
-					$this->_page->drawText($valeur2Aff,
-							$this->_leftMargin+195,
-							$this->_yPosition-$j);
-				}
-				
-				$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
-			}
-			
-			if($resultats[58][0]['conclusion']){
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 10);
-				$this->_page->drawText("conclusion : ",
-						$this->_leftMargin+45,
-						$this->_yPosition-$j);
-					
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 10);
-				$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', ' '.$resultats[58][0]['conclusion']),
-						$this->_leftMargin+100,
-						$this->_yPosition-$j);
-				$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
-			}
-			
-		}
-		
-		$this->_yPosition -= $noteLineHeight+5;
+		$this->_yPosition -= $noteLineHeight+10;
 		return $this->_page;
 	}
 	
@@ -1244,50 +1064,27 @@ class ResultatsAnalysesDemandeesPdf
 					$this->_yPosition+13);
 		
 			$indiceEmpl = 210;
-			for($i = 0 ; $i < count($resultats[44])&& $i < 4 ; $i++){
+			for($i = 0 ; $i < count($resultats[44]) ; $i++){
 				
-				$libElecHem = $resultats[44][$i]['libelle'];
-				if(strlen($libElecHem) == 4){ 
-					//Dernier caractère pour indice
-					$dernierCaractere = $libElecHem{strlen($libElecHem)-1};
-					$premierePartie = $libElecHem[0].$libElecHem[1].$libElecHem[2];
-				}else{
-					$dernierCaractere = null;
-					$premierePartie = $libElecHem;
-				}
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 11);
-				$this->_page->drawText($premierePartie,
+				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 11);
+				$this->_page->drawText($resultats[44][$i]['libelle'],
 						$this->_leftMargin+$indiceEmpl,
 						$this->_yPosition+13);
 				
-				if($dernierCaractere){
-					$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 10);
-					$this->_page->drawText($dernierCaractere,
-							$this->_leftMargin+$indiceEmpl+20,
-							$this->_yPosition+10);
-				}
-				
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 12);
+				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
 				$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $resultats[44][$i]['valeur'] ),
-				$this->_leftMargin+$indiceEmpl+30,
-				$this->_yPosition+13);
+						$this->_leftMargin+$indiceEmpl+30,
+						$this->_yPosition+13);
 				
-				
-				$indiceEmpl += 73;
+				$indiceEmpl += 80;
 				
 			}
 			
 			
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 10);
-			$this->_page->drawText("Conclusion : ",
-					$this->_leftMargin+95,
-					$this->_yPosition);
-
-                        $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 10);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', ' '.$resultats[44][0]['conclusion']),
+			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10);
+			$this->_page->drawText("conclusion : ". iconv ( 'UTF-8', 'ISO-8859-1', ' '.$resultats[44][0]['conclusion']),
 					$this->_leftMargin+150,
 					$this->_yPosition);
-
 			
 			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
 		}
@@ -1407,29 +1204,18 @@ class ResultatsAnalysesDemandeesPdf
 			
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
 			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "g/l " ),
-					$this->_leftMargin+135,
+					$this->_leftMargin+145,
 					$this->_yPosition+9);
-
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 8);
-			$this->_page->drawText( 'N: 0,7 à 1,10',
-					$this->_leftMargin+170,
-					$this->_yPosition+9);
-			
+				
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
 			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $resultats[21]['glycemie_2'] ),
-					$this->_leftMargin+290,
+					$this->_leftMargin+200,
 					$this->_yPosition+9);
 				
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
 			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "mmol/l " ),
-					$this->_leftMargin+320,
+					$this->_leftMargin+235,
 					$this->_yPosition+9);
-			
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 8);
-			$this->_page->drawText( 'N: 4,1 à 5,9',
-					$this->_leftMargin+370,
-					$this->_yPosition+9);
-			
 			
 			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
 		}
@@ -1465,13 +1251,15 @@ class ResultatsAnalysesDemandeesPdf
 			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
 		}
 		
-		$this->_yPosition += 7;
+		
 		return $this->_page;
 	}
 	
 	public function getBilanLipidique($noteLineHeight, $infosAnalyseDemande, $value, $idanalysesBilanLipidique){
 
-		$this->_yPosition -= 6;
+		$tabAnalyses = array_intersect(array(25,26,27,28,29), $idanalysesBilanLipidique);
+		$tabAnalyses= array_reverse($tabAnalyses);
+		
 		//-------------PLACER LES LIGNES DES EXAMENS A AFFICHER ---------
 		//-------------PLACER LES LIGNES DES EXAMENS A AFFICHER ---------
 		//-------------PLACER LES LIGNES DES EXAMENS A AFFICHER ---------
@@ -1729,7 +1517,7 @@ class ResultatsAnalysesDemandeesPdf
 		//--- CHOLESTEROL TOTAL & HDL  --- CHOLESTEROL TOTAL & HDL --- CHOLESTEROL TOTAL & HDL
 		if(in_array(25, $idanalysesBilanLipidique) && in_array(27, $idanalysesBilanLipidique)){
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10);
-			$this->_page->drawText("» Rapport: CHOLT/HDL : ",
+			$this->_page->drawText("» Rapport: CHOL/HDL : ",
 					$this->_leftMargin+5,
 					$this->_yPosition+9);
 			
@@ -1777,7 +1565,6 @@ class ResultatsAnalysesDemandeesPdf
 			$this->_yPosition -= $noteLineHeight+2; //aller a la ligne suivante
 		}
 		
-		$this->_yPosition += 25;
 		return $this->_page;
 	}
 	
@@ -1846,12 +1633,12 @@ class ResultatsAnalysesDemandeesPdf
 				
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 8);
 			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "temps quick temoin : " ),
-					$this->_leftMargin+70,
+					$this->_leftMargin+80,
 					$this->_yPosition+9);
 				
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $resultats[14]['temps_quick_temoin'].' s' ),
-					$this->_leftMargin+140,
+			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $resultats[14]['temps_quick_temoin'] ),
+					$this->_leftMargin+150,
 					$this->_yPosition+9);
 				
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 8);
@@ -1860,32 +1647,19 @@ class ResultatsAnalysesDemandeesPdf
 					$this->_yPosition+9);
 				
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $resultats[14]['temps_quick_patient'].' s' ),
+			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $resultats[14]['temps_quick_patient'] ),
 					$this->_leftMargin+250,
 					$this->_yPosition+9);
 				
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 8);
 			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "taux prothrombine patient : " ),
-					$this->_leftMargin+290,
+					$this->_leftMargin+310,
 					$this->_yPosition+9);
 				
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $resultats[14]['taux_prothrombine_patient'].' %' ),
-					$this->_leftMargin+385,
+			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $resultats[14]['taux_prothrombine_patient'] ),
+					$this->_leftMargin+400,
 					$this->_yPosition+9);
-			
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 8);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "INR : " ),
-					$this->_leftMargin+430,
-					$this->_yPosition+9);
-			
-			//Notation française avec un chiffre après la virgule et un séparateur pour les milliers
-			$valeurINRFormatee = number_format($resultats[14]['inr_patient'], 1, ',', ' ');
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($valeurINRFormatee,
-					$this->_leftMargin+452,
-					$this->_yPosition+9);
-			
 				
 			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
 		}
@@ -1904,7 +1678,7 @@ class ResultatsAnalysesDemandeesPdf
 					$this->_yPosition+8);
 				
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($resultats[15]['tca_patient'].' s',
+			$this->_page->drawText($resultats[15]['tca_patient'],
 					$this->_leftMargin+120,
 					$this->_yPosition+8);
 				
@@ -1914,7 +1688,7 @@ class ResultatsAnalysesDemandeesPdf
 					$this->_yPosition+8);
 				
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($resultats[15]['temoin_patient'].' s',
+			$this->_page->drawText($resultats[15]['temoin_patient'],
 					$this->_leftMargin+220,
 					$this->_yPosition+8);
 				
@@ -1941,15 +1715,10 @@ class ResultatsAnalysesDemandeesPdf
 					$this->_yPosition+6);
 	
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($resultats[16]['fibrinemie'].'  g/l',
+			$this->_page->drawText($resultats[16]['fibrinemie'],
 					$this->_leftMargin+100,
 					$this->_yPosition+6);
 	
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-			$this->_page->drawText(" N: 2 - 4 g/l ",
-					$this->_leftMargin+200,
-					$this->_yPosition+6);
-			
 			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
 	
 		}
@@ -1963,15 +1732,9 @@ class ResultatsAnalysesDemandeesPdf
 					$this->_yPosition+6);
 	
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($resultats[17]['temps_saignement'].'  min',
+			$this->_page->drawText($resultats[17]['temps_saignement'],
 					$this->_leftMargin+150,
 					$this->_yPosition+6);
-			
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-			$this->_page->drawText(" N: 2 - 6 min",
-					$this->_leftMargin+220,
-					$this->_yPosition+6);
-			
 	
 			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
 	
@@ -2033,7 +1796,6 @@ class ResultatsAnalysesDemandeesPdf
 	
 		}
 			
-		$this->_yPosition += 10;
 		return $this->_page;
 	}
 
@@ -2142,21 +1904,10 @@ class ResultatsAnalysesDemandeesPdf
 					$this->_yPosition+9);
 	
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $resultats[39]['valeur'].' UI/L' ),
-					$this->_leftMargin+110,
+			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $resultats[39]['valeur'] ),
+					$this->_leftMargin+180,
 					$this->_yPosition+9);
-			/*
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', " UI/l " ),
-					$this->_leftMargin+130,
-					$this->_yPosition+9);
-				*/
-			
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 8);
-			$this->_page->drawText( 'N: H: 11 à 50 ; F: 7 à 32',
-					$this->_leftMargin+170,
-					$this->_yPosition+9);
-			
+	
 			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
 		}
 	
@@ -2170,27 +1921,26 @@ class ResultatsAnalysesDemandeesPdf
 			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', " mg : " ),
 					$this->_leftMargin+180,
 					$this->_yPosition+9);
-	
+				
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
 			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $resultats[42]['bilirubine_totale_mg'] ),
 					$this->_leftMargin+200,
 					$this->_yPosition+9);
-	
+				
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
 			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', " umol : " ),
 					$this->_leftMargin+240,
 					$this->_yPosition+9);
-	
+				
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
 			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $resultats[42]['bilirubine_totale_umol'] ),
 					$this->_leftMargin+270,
 					$this->_yPosition+9);
-	
-	
+				
+				
 			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
 		}
 	
-		$this->_yPosition += 10;
 		return $this->_page;
 	}
 	
@@ -2233,65 +1983,18 @@ class ResultatsAnalysesDemandeesPdf
 		
 		$this->_page->setLineColor(new ZendPdf\Color\Html('#999999'));
 		$this->_page->setLineWidth(1);
-		$this->_page->drawLine($this->_leftMargin+205,
+		$this->_page->drawLine($this->_leftMargin+210,
 				$this->_yPosition -2,
 				$this->_pageWidth -
-				$this->_leftMargin-223,
+				$this->_leftMargin-218,
 				$this->_yPosition -2);
 		
 		$this->getNewTime();
 		$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', 'BILAN RENAL' ),
-				$this->_leftMargin+205,
+				$this->_leftMargin+210,
 				$this->_yPosition+1);
 		
 		$this->_yPosition -= $noteLineHeight;    //aller a la ligne suivante
-		
-		//--- CREATININEMIE --- CREATININEMIE --- CREATININEMIE --- CREATININEMIE --- 
-		//--- CREATININEMIE --- CREATININEMIE --- CREATININEMIE --- CREATININEMIE ---
-		if(in_array(22, $idanalysesBilanRenal)){
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "CREATININEMIE : " ),
-					$this->_leftMargin+5,
-					$this->_yPosition+9);
-		
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($resultats[22]['creatininemie'],
-					$this->_leftMargin+110,
-					$this->_yPosition+9);
-			
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', " mg/l " ),
-					$this->_leftMargin+130,
-					$this->_yPosition+9);
-			
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 8);
-			$this->_page->drawText( 'N: H= 7 à 13 | F= 6 à 11',
-					$this->_leftMargin+170,
-					$this->_yPosition+9);
-			
-			if($resultats[22]['creatininemie']){ 
-				$valeurEnUmol = number_format($resultats[22]['creatininemie']*8.84, 2); 
-				
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-				$this->_page->drawText($valeurEnUmol,
-						$this->_leftMargin+290,
-						$this->_yPosition+9);
-				
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-				$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', " umol/l " ),
-						$this->_leftMargin+330,
-						$this->_yPosition+9);
-				
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 8);
-				$this->_page->drawText( 'N: H= 61,8 à 114,9 | F= 53,0 à 97,2',
-						$this->_leftMargin+370,
-						$this->_yPosition+9);
-			}
-		
-			
-			
-			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
-		}
 		
 		//--- AZOTEMIE = UREE --- AZOTEMIE = UREE --- AZOTEMIE = UREE --- AZOTEMIE = UREE ---
 		//--- AZOTEMIE = UREE --- AZOTEMIE = UREE --- AZOTEMIE = UREE --- AZOTEMIE = UREE ---
@@ -2318,26 +2021,13 @@ class ResultatsAnalysesDemandeesPdf
 					$this->_yPosition+9);
 		
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($resultats[46]['albuminemie'].' g/l',
-					$this->_leftMargin+110,
+			$this->_page->drawText($resultats[46]['albuminemie'],
+					$this->_leftMargin+160,
 					$this->_yPosition+9);
 		
-			/*
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', " g/l " ),
-					$this->_leftMargin+130,
-					$this->_yPosition+9);
-			*/
-			
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-			$this->_page->drawText( 'N: 35 - 53',
-					$this->_leftMargin+170,
-					$this->_yPosition+9);
-			
 			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
 		}
 	
-		$this->_yPosition += 10;
 		return $this->_page;
 	}
 	
@@ -2370,26 +2060,6 @@ class ResultatsAnalysesDemandeesPdf
 		
 			$j += 19;
 		}
-		
-		if(in_array(62, $idanalysesSerologie)){
-			if(($i-1)%2 == 0){
-				$this->_page->setLineColor(new ZendPdf\Color\Html('#e1e1e1'));
-				$this->_page->setLineWidth(68);
-				$this->_page->drawLine($this->_leftMargin,
-						$this->_yPosition -$j-10,
-						$this->_pageWidth -
-						$this->_leftMargin,
-						$this->_yPosition -$j-10);
-			}else{
-				$this->_page->setLineColor(new ZendPdf\Color\Html('#f1f1f1'));
-				$this->_page->setLineWidth(68);
-				$this->_page->drawLine($this->_leftMargin,
-						$this->_yPosition -$j-10,
-						$this->_pageWidth -
-						$this->_leftMargin,
-						$this->_yPosition -$j-10);
-			}
-		}
 			
 		//-----------------------------------------------------------------------
 		//-----------------------------------------------------------------------
@@ -2416,608 +2086,109 @@ class ResultatsAnalysesDemandeesPdf
 		
 		$this->_yPosition -= $noteLineHeight;    //aller a la ligne suivante
 		
-		$yPos = 8;
-		//1) --- CRP  --- CRP --- CRP --- CRP ---
-		//1) --- CRP  --- CRP --- CRP --- CRP ---
+		//--- CRP  --- CRP --- CRP --- CRP ---
+		//--- CRP  --- CRP --- CRP --- CRP ---
 		if(in_array(53, $idanalysesSerologie)){
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10);
 			$this->_page->drawText("CRP ou C. Protéine Réactive ",
 					$this->_leftMargin+5,
-					$this->_yPosition+$yPos);
+					$this->_yPosition+9);
 		
 			if($resultats[53]['optionResultatCrp'] == 'positif'){
 				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
 				$this->_page->drawText('Positif ',
 						$this->_leftMargin+160,
-						$this->_yPosition+$yPos);
+						$this->_yPosition+9);
 				
 				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
 				$this->_page->drawText($resultats[53]['crpValeurResultat'],
 						$this->_leftMargin+240,
-						$this->_yPosition+$yPos);
+						$this->_yPosition+9);
 				
 				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
 				$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "mg/l " ),
 						$this->_leftMargin+265,
-						$this->_yPosition+$yPos);
+						$this->_yPosition+9);
 			}else{
 				
 				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
 				$this->_page->drawText('Négatif ',
 						$this->_leftMargin+160,
-						$this->_yPosition+$yPos);
+						$this->_yPosition+9);
 				
 			}
 
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
 			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "N : < 6 mg/l " ),
 					$this->_leftMargin+360,
-					$this->_yPosition+$yPos);
+					$this->_yPosition+9);
 			
 			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
 		}
 		
-		
-		//2) --- RF WAALER ROSE --- RF WAALER ROSE --- RF WAALER ROSE --- RF WAALER ROSE 
-		//2) --- RF WAALER ROSE --- RF WAALER ROSE --- RF WAALER ROSE --- RF WAALER ROSE
-		if(in_array(55, $idanalysesSerologie)){ 
+		//--- RF WAALER ROSE --- RF WAALER ROSE --- RF WAALER ROSE --- RF WAALER ROSE 
+		//--- RF WAALER ROSE --- RF WAALER ROSE --- RF WAALER ROSE --- RF WAALER ROSE
+		if(in_array(55, $idanalysesSerologie)){
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10);
 			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "RF WAALER ROSE : " ),
 					$this->_leftMargin+5,
-					$this->_yPosition+$yPos);
+					$this->_yPosition+9);
 		
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
 			$this->_page->drawText($resultats[55]['rf_waaler_rose'],
-					$this->_leftMargin+135,
-					$this->_yPosition+$yPos);
+					$this->_leftMargin+130,
+					$this->_yPosition+9);
 		
-			if($resultats[55]['rf_waaler_rose_titre']){
-				
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-				$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', 'Titre : ' ),
-						$this->_leftMargin+200,
-						$this->_yPosition+$yPos);
-				
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-				$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $resultats[55]['rf_waaler_rose_titre'].' UI/ml' ),
-						$this->_leftMargin+230,
-						$this->_yPosition+$yPos);
-				
-			}
-			
-			$yPos-=0.75;
 			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
 		}
 		
-		//3) --- TOXOPLASMOSE --- TOXOPLASMOSE --- TOXOPLASMOSE --- TOXOPLASMOSE
-		//3) --- TOXOPLASMOSE --- TOXOPLASMOSE --- TOXOPLASMOSE --- TOXOPLASMOSE
-		if(in_array(56, $idanalysesSerologie)){
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "TOXOPLASMOSE : " ),
-					$this->_leftMargin+5,
-					$this->_yPosition+$yPos);
-			
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', " IgM : " ),
-					$this->_leftMargin+100,
-					$this->_yPosition+$yPos);
-		
-			$resultatToxoIGM = 'Positif';
-			if($resultats[56]['toxoplasmose_igm'] == 'Negatif'){ $resultatToxoIGM = 'Négatif'; }
-			
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($resultatToxoIGM,
-					$this->_leftMargin+135,
-					$this->_yPosition+$yPos);
-
-			
-			if($resultats[56]['toxoplasmose_igm_titre']){
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 10);
-				$this->_page->drawText("titre : ",
-						$this->_leftMargin+190,
-						$this->_yPosition+$yPos);
-					
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-				$this->_page->drawText($resultats[56]['toxoplasmose_igm_titre'].'  UI/ml',
-						$this->_leftMargin+220,
-						$this->_yPosition+$yPos);
-			}
-			
-			
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', " IgG : " ),
-					$this->_leftMargin+300,
-					$this->_yPosition+$yPos);
-			
-			
-			$resultatToxoIGG = 'Positif';
-			if($resultats[56]['toxoplasmose_igg'] == 'Negatif'){ $resultatToxoIGG = 'Négatif'; }
-				
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($resultatToxoIGG,
-					$this->_leftMargin+335,
-					$this->_yPosition+$yPos);
-			
-				
-			if($resultats[56]['toxoplasmose_igg_titre']){
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 10);
-				$this->_page->drawText("titre : ",
-						$this->_leftMargin+390,
-						$this->_yPosition+$yPos);
-					
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-				$this->_page->drawText($resultats[56]['toxoplasmose_igg_titre'].'  UI/ml',
-						$this->_leftMargin+425,
-						$this->_yPosition+$yPos);
-			}
-			
-			$yPos-=0.75;
-			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
-		}
-		
-		//4) --- RUBEOLE --- RUBEOLE --- RUBEOLE --- RUBEOLE --- RUBEOLE --- RUBEOLE
-		//4) --- RUBEOLE --- RUBEOLE --- RUBEOLE --- RUBEOLE --- RUBEOLE --- RUBEOLE
-		if(in_array(57, $idanalysesSerologie)){
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "RUBEOLE : " ),
-					$this->_leftMargin+5,
-					$this->_yPosition+$yPos);
-				
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', " IgM : " ),
-					$this->_leftMargin+100,
-					$this->_yPosition+$yPos);
-		
-			$resultatRubeoleIGM = 'Positif';
-			if($resultats[57]['rubeole_igm'] == 'Negatif'){ $resultatRubeoleIGM = 'Négatif'; }
-				
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($resultatRubeoleIGM,
-					$this->_leftMargin+135,
-					$this->_yPosition+$yPos);
-		
-				
-			if($resultats[57]['rubeole_igm_titre']){
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 10);
-				$this->_page->drawText("titre : ",
-						$this->_leftMargin+190,
-						$this->_yPosition+$yPos);
-					
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-				$this->_page->drawText($resultats[57]['rubeole_igm_titre'].'  UI/ml',
-						$this->_leftMargin+220,
-						$this->_yPosition+$yPos);
-			}
-				
-				
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', " IgG : " ),
-					$this->_leftMargin+300,
-					$this->_yPosition+$yPos);
-				
-				
-			$resultatRubeoleIGG = 'Positif';
-			if($resultats[57]['rubeole_igg'] == 'Negatif'){ $resultatRubeoleIGG = 'Négatif'; }
-		
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($resultatRubeoleIGG,
-					$this->_leftMargin+335,
-					$this->_yPosition+$yPos);
-				
-		
-			if($resultats[57]['rubeole_igg_titre']){
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 10);
-				$this->_page->drawText("titre : ",
-						$this->_leftMargin+390,
-						$this->_yPosition+$yPos);
-					
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-				$this->_page->drawText($resultats[57]['rubeole_igg_titre'].'  UI/ml',
-						$this->_leftMargin+425,
-						$this->_yPosition+$yPos);
-			}
-				
-			$yPos-=0.75;
-			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
-		}
-		
-		//5) --- SEROLOGIE SYPHILITIQUE BW --- SEROLOGIE SYPHILITIQUE BW --- SEROLOGIE SYPHILITIQUE BW
-		//5) --- SEROLOGIE SYPHILITIQUE BW --- SEROLOGIE SYPHILITIQUE BW --- SEROLOGIE SYPHILITIQUE BW
+		//--- SEROLOGIE SYPHILITIQUE BW --- SEROLOGIE SYPHILITIQUE BW --- SEROLOGIE SYPHILITIQUE BW
+		//--- SEROLOGIE SYPHILITIQUE BW --- SEROLOGIE SYPHILITIQUE BW --- SEROLOGIE SYPHILITIQUE BW
 		if(in_array(60, $idanalysesSerologie)){
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10);
 			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "SEROLOGIE SYPHILITIQUE BW : " ),
 					$this->_leftMargin+5,
-					$this->_yPosition+$yPos);
+					$this->_yPosition+9);
 		
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 8);
-			$this->_page->drawText("RPR ",
-					$this->_leftMargin+180,
-					$this->_yPosition+$yPos);
-				
-			$resultatSerologieSyphilitiqueRpr = 'Positif';
-			if($resultats[60]['serologie_syphilitique_rpr'] == 'Negatif'){ $resultatSerologieSyphilitiqueRpr = 'Négatif'; }
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($resultatSerologieSyphilitiqueRpr,
-					$this->_leftMargin+215,
-					$this->_yPosition+$yPos);
-				
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 8);
 			$this->_page->drawText("TPHA ",
-					$this->_leftMargin+300,
-					$this->_yPosition+$yPos);
+					$this->_leftMargin+180,
+					$this->_yPosition+9);
 				
-			$resultatSerologieSyphilitiqueTpha = 'Positif';
-			if($resultats[60]['serologie_syphilitique_tpha'] == 'Negatif'){ $resultatSerologieSyphilitiqueTpha = 'Négatif'; }
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($resultatSerologieSyphilitiqueTpha,
+			$this->_page->drawText($resultats[60]['serologie_syphilitique'],
+					$this->_leftMargin+215,
+					$this->_yPosition+9);
+				
+			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 8);
+			$this->_page->drawText("RPR ",
+					$this->_leftMargin+300,
+					$this->_yPosition+9);
+				
+			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
+			$this->_page->drawText($resultats[60]['serologie_syphilitique'],
 					$this->_leftMargin+335,
-					$this->_yPosition+$yPos);
+					$this->_yPosition+9);
 		
-			
-			if($resultats[60]['serologie_syphilitique_tpha_titre']){ 
-				
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 8);
-				$this->_page->drawText("TITRE : ",
-						$this->_leftMargin+390,
-						$this->_yPosition+$yPos);
-				
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 8);
-				$this->_page->drawText($resultats[60]['serologie_syphilitique_tpha_titre'],
-						$this->_leftMargin+420,
-						$this->_yPosition+$yPos);
-			}
-			
-			$yPos-=0.75;
 			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
 		}
 		
-		//6) --- ASLO --- ASLO --- ASLO --- ASLO --- ASLO --- ASLO --- ASLO --- ASLO	
-		//6) --- ASLO --- ASLO --- ASLO --- ASLO --- ASLO --- ASLO --- ASLO --- ASLO
+		//--- ASLO --- ASLO --- ASLO --- ASLO --- ASLO --- ASLO --- ASLO --- ASLO	
+		//--- ASLO --- ASLO --- ASLO --- ASLO --- ASLO --- ASLO --- ASLO --- ASLO
 		if(in_array(61, $idanalysesSerologie)){
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10);
 			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "ASLO : " ),
 					$this->_leftMargin+5,
-					$this->_yPosition+$yPos);
+					$this->_yPosition+9);
 		
-			$resultatAslo = 'Positif';
-			if($resultats[61]['aslo'] == 'Negatif'){ $resultatAslo = 'Négatif'; }
-				
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($resultatAslo,
-					$this->_leftMargin+70,
-					$this->_yPosition+$yPos);
-			
-			if($resultats[61]['titre']){
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 10);
-				$this->_page->drawText("Titre : ",
-						$this->_leftMargin+150,
-						$this->_yPosition+$yPos);
-			
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-				$this->_page->drawText($resultats[61]['titre'].' UI/ml',
-						$this->_leftMargin+180,
-						$this->_yPosition+$yPos);
-				
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-				$this->_page->drawText("N : < 200 UI/mL",
-						$this->_leftMargin+290,
-						$this->_yPosition+$yPos);
-				
-			}
-		
-			$yPos-=0.75;
-			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
-		}
-		
-		//7) --- Ag HbS --- Ag HbS --- Ag HbS --- Ag HbS --- Ag HbS --- Ag HbS ---
-		//7) --- Ag HbS --- Ag HbS --- Ag HbS --- Ag HbS --- Ag HbS --- Ag HbS ---
-		if(in_array(63, $idanalysesSerologie)){
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "ANTIGENE HbS : " ),
-					$this->_leftMargin+5,
-					$this->_yPosition+$yPos);
-		
-			$valeurAgHbS = 'Positif';
-			if($resultats[63]['ag_hbs'] == 'Negatif'){ $valeurAgHbS = 'Négatif'; }
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($valeurAgHbS,
+			$this->_page->drawText($resultats[61]['aslo'],
 					$this->_leftMargin+80,
-					$this->_yPosition+$yPos);
+					$this->_yPosition+9);
 		
-			$yPos-=0.75;
-			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
-		}
-
-		//8) --- WIDAL --- WIDAL --- WIDAL--- WIDAL --- WIDAL --- WIDAL--- WIDAL ---
-		//8) --- WIDAL --- WIDAL --- WIDAL--- WIDAL --- WIDAL --- WIDAL--- WIDAL ---
-		if(in_array(62, $idanalysesSerologie)){
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "WIDAL : " ),
-					$this->_leftMargin+5,
-					$this->_yPosition+$yPos);
-				
-			///**** Typhi TO ************************************************************
-			///**** Typhi TO ************************************************************
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', " Typhi TO : " ),
-					$this->_leftMargin+60,
-					$this->_yPosition+$yPos);
-				
-			$resultatTyphiTO  = 'Positif';
-			if($resultats[62]['widal_to'] == 'Negatif'){ $resultatTyphiTO = 'Négatif'; }
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($resultatTyphiTO,
-					$this->_leftMargin+120,
-					$this->_yPosition+$yPos);
-				
-			//**** Titre TO
-			if($resultats[62]['widal_titre_to']){
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-				$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', " Titre : " ),
-						$this->_leftMargin+170,
-						$this->_yPosition+$yPos);
-		
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-				$this->_page->drawText($resultats[62]['widal_titre_to'],
-						$this->_leftMargin+200,
-						$this->_yPosition+$yPos);
-			}
-			///**** FIN Typhi TO ************************************************************
-			///**** FIN Typhi TO ************************************************************
-				
-			///**** Typhi TH ************************************************************
-			///**** Typhi TH ************************************************************
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', " Typhi TH : " ),
-					$this->_leftMargin+235,
-					$this->_yPosition+$yPos);
-		
-			$resultatTyphiTH  = 'Positif';
-			if($resultats[62]['widal_th'] == 'Negatif'){ $resultatTyphiTH = 'Négatif'; }
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($resultatTyphiTH,
-					$this->_leftMargin+295,
-					$this->_yPosition+$yPos);
-		
-			//**** Titre TH
-			if($resultats[62]['widal_titre_th']){
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-				$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', " Titre : " ),
-						$this->_leftMargin+350,
-						$this->_yPosition+$yPos);
-					
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-				$this->_page->drawText($resultats[62]['widal_titre_th'],
-						$this->_leftMargin+380,
-						$this->_yPosition+$yPos);
-			}
-			///**** FIN Typhi TH ************************************************************
-			///**** FIN Typhi TH ************************************************************
-			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
-			
-			
-			
-			///**** Paratyphi AO ************************************************************
-			///**** Paratyphi AO ************************************************************
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', " Paratyphi AO : " ),
-					$this->_leftMargin+60,
-					$this->_yPosition+$yPos);
-				
-			$resultatTyphiAO  = 'Positif';
-			if($resultats[62]['widal_ao'] == 'Negatif'){ $resultatTyphiAO = 'Négatif'; }
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($resultatTyphiAO,
-					$this->_leftMargin+120,
-					$this->_yPosition+$yPos);
-				
-			//**** Titre Paratyphi AO
-			if($resultats[62]['widal_titre_ao']){
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', " Titre : " ),
-			$this->_leftMargin+170,
-			$this->_yPosition+$yPos);
-				
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($resultats[62]['widal_titre_ao'],
-			$this->_leftMargin+200,
-			$this->_yPosition+$yPos);
-			}
-			///**** FIN Paratyphi AO ************************************************************
-			///**** FIN Paratyphi AO ************************************************************
-			
-			///**** Paratyphi AH ************************************************************
-			///**** Paratyphi AH ************************************************************
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', " Paratyphi AH : " ),
-					$this->_leftMargin+235,
-					$this->_yPosition+$yPos);
-			
-			$resultatTyphiTH  = 'Positif';
-			if($resultats[62]['widal_ah'] == 'Negatif'){ $resultatTyphiTH = 'Négatif'; }
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($resultatTyphiTH,
-					$this->_leftMargin+295,
-					$this->_yPosition+$yPos);
-			
-			//**** Titre Paratyphi AH
-			if($resultats[62]['widal_titre_ao']){
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-				$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', " Titre : " ),
-						$this->_leftMargin+350,
-						$this->_yPosition+$yPos);
-			
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-				$this->_page->drawText($resultats[62]['widal_titre_ah'],
-						$this->_leftMargin+380,
-						$this->_yPosition+$yPos);
-			}
-			///**** FIN Paratyphi AH ************************************************************
-			///**** FIN Paratyphi AH ************************************************************
-			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
-			
-			
-			
-			
-			///**** Paratyphi BO ************************************************************
-			///**** Paratyphi BO ************************************************************
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', " Paratyphi BO : " ),
-					$this->_leftMargin+60,
-					$this->_yPosition+$yPos);
-			
-			$resultatTyphiBO  = 'Positif';
-			if($resultats[62]['widal_bo'] == 'Negatif'){ $resultatTyphiBO = 'Négatif'; }
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($resultatTyphiBO,
-					$this->_leftMargin+120,
-					$this->_yPosition+$yPos);
-			
-			//**** Titre Paratyphi AO
-			if($resultats[62]['widal_titre_bo']){
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-				$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', " Titre : " ),
-						$this->_leftMargin+170,
-						$this->_yPosition+$yPos);
-			
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-				$this->_page->drawText($resultats[62]['widal_titre_bo'],
-						$this->_leftMargin+200,
-						$this->_yPosition+$yPos);
-			}
-			///**** FIN Paratyphi BO ************************************************************
-			///**** FIN Paratyphi BO ************************************************************
-					
-			///**** Paratyphi BH ************************************************************
-			///**** Paratyphi BH ************************************************************
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', " Paratyphi BH : " ),
-					$this->_leftMargin+235,
-					$this->_yPosition+$yPos);
-				
-			$resultatTyphiBH  = 'Positif';
-			if($resultats[62]['widal_bh'] == 'Negatif'){ $resultatTyphiBH = 'Négatif'; }
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($resultatTyphiBH,
-					$this->_leftMargin+295,
-					$this->_yPosition+$yPos);
-				
-			//**** Titre Paratyphi BH
-			if($resultats[62]['widal_titre_bh']){
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-				$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', " Titre : " ),
-						$this->_leftMargin+350,
-						$this->_yPosition+$yPos);
-					
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-				$this->_page->drawText($resultats[62]['widal_titre_bh'],
-						$this->_leftMargin+380,
-						$this->_yPosition+$yPos);
-			}
-			///**** FIN Paratyphi BH ************************************************************
-			///**** FIN Paratyphi BH ************************************************************
-			
-			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
-			
-			
-			
-			
-			///**** Paratyphi CO ************************************************************
-			///**** Paratyphi CO ************************************************************
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', " Paratyphi CO : " ),
-					$this->_leftMargin+60,
-					$this->_yPosition+$yPos);
-				
-			$resultatTyphiCO  = 'Positif';
-			if($resultats[62]['widal_co'] == 'Negatif'){ $resultatTyphiCO = 'Négatif'; }
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($resultatTyphiCO,
-					$this->_leftMargin+120,
-					$this->_yPosition+$yPos);
-				
-			//**** Titre Paratyphi CO
-			if($resultats[62]['widal_titre_co']){
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-				$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', " Titre : " ),
-						$this->_leftMargin+170,
-						$this->_yPosition+$yPos);
-					
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-				$this->_page->drawText($resultats[62]['widal_titre_co'],
-						$this->_leftMargin+200,
-						$this->_yPosition+$yPos);
-			}
-			///**** FIN Paratyphi CO ************************************************************
-			///**** FIN Paratyphi CO ************************************************************
-				
-			///**** Paratyphi CH ************************************************************
-			///**** Paratyphi CH ************************************************************
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', " Paratyphi CH : " ),
-					$this->_leftMargin+235,
-					$this->_yPosition+$yPos);
-			
-			$resultatTyphiCH  = 'Positif';
-			if($resultats[62]['widal_ch'] == 'Negatif'){ $resultatTyphiCH = 'Négatif'; }
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($resultatTyphiCH,
-					$this->_leftMargin+295,
-					$this->_yPosition+$yPos);
-			
-			//**** Titre Paratyphi CH
-			if($resultats[62]['widal_titre_ch']){
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-				$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', " Titre : " ),
-						$this->_leftMargin+350,
-						$this->_yPosition+$yPos);
-					
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-				$this->_page->drawText($resultats[62]['widal_titre_ch'],
-						$this->_leftMargin+380,
-						$this->_yPosition+$yPos);
-			}
-			///**** FIN Paratyphi CH ************************************************************
-			///**** FIN Paratyphi CH ************************************************************
-					
-			$yPos-=0.75;
 			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
 		}
 		
-		//9) --- GOUTTE EPAISSE --- GOUTTE EPAISSE --- GOUTTE EPAISSE --- GOUTTE EPAISSE
-		//9) --- GOUTTE EPAISSE --- GOUTTE EPAISSE --- GOUTTE EPAISSE --- GOUTTE EPAISSE
-		if(in_array(10, $idanalysesSerologie)){
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "GOUTTE EPAISSE : " ),
-					$this->_leftMargin+5,
-					$this->_yPosition+$yPos);
-		
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($resultats[10]['goutte_epaisse'],
-					$this->_leftMargin+130,
-					$this->_yPosition+$yPos);
-		
-			if($resultats[10]['densite_parasitaire']){
-		
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-				$this->_page->drawText('Densité parasitaire : ',
-						$this->_leftMargin+200,
-						$this->_yPosition+$yPos);
-		
-				$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-				$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $resultats[10]['densite_parasitaire'].' p/ul' ),
-						$this->_leftMargin+280,
-						$this->_yPosition+$yPos);
-		
-			}
-				
-			$yPos-=0.5;
-			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
-		}
-		
-		
-		
-		$this->_yPosition += 10;
 		return $this->_page;
 		
 	}
@@ -3081,34 +2252,36 @@ class ResultatsAnalysesDemandeesPdf
 		//--- FER SERIQUE  --- FER SERIQUE --- FER SERIQUE --- FER SERIQUE 
 		if(in_array(40, $idanalysesMetabolismeFer)){
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10);
-			$this->_page->drawText("FER SERIQUE : ",
+			$this->_page->drawText("FER SERIQUE ",
 					$this->_leftMargin+5,
 					$this->_yPosition+9);
 	
-			//Notation française avec un chiffre après la virgule et un séparateur pour les milliers
-			$valeurUgFormatee = number_format($resultats[40]['valeur_ug'], 1, ',', ' ');
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($valeurUgFormatee.' ug/dl',
-					$this->_leftMargin+90,
-					$this->_yPosition+9);
-			
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 8);
-			$this->_page->drawText('N: H: 64,8 à 175 - F: 50,3 à 170',
-					$this->_leftMargin+160,
+			$this->_page->drawText($resultats[40]['valeur_ug'],
+					$this->_leftMargin+150,
 					$this->_yPosition+9);
 	
-			$valeurUmolFormatee = number_format($resultats[40]['valeur_umol'], 1, ',', ' ');
+			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
+			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "ug/dl " ),
+					$this->_leftMargin+170,
+					$this->_yPosition+9);
+			
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($valeurUmolFormatee.' umol/l',
-					$this->_leftMargin+300,
+			$this->_page->drawText($resultats[40]['valeur_umol'],
+					$this->_leftMargin+250,
 					$this->_yPosition+9);
 	
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 8);
-			$this->_page->drawText('N: H: 11,6 à 31,3 - F: 9,0 à 30,4',
-					$this->_leftMargin+375,
+			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
+			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "umol/l " ),
+					$this->_leftMargin+270,
 					$this->_yPosition+9);
-			
-			
+	
+				/*
+			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
+			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "N : < 6 mg/l " ),
+					$this->_leftMargin+360,
+					$this->_yPosition+9);
+				*/
 			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
 		}
 	
@@ -3153,88 +2326,4 @@ class ResultatsAnalysesDemandeesPdf
 	
 	}
 	
-	
-	public function getMetabolismeProtidique($noteLineHeight, $idanalysesMetabolismeProtidique){
-	
-		//-------------PLACER LES LIGNES DES EXAMENS A AFFICHER ---------
-		//-------------PLACER LES LIGNES DES EXAMENS A AFFICHER ---------
-		//-------------PLACER LES LIGNES DES EXAMENS A AFFICHER ---------
-		$j = 28;
-		for($i = 0 ; $i < count($idanalysesMetabolismeProtidique) ; $i++){
-	
-			if($i%2 == 0){
-				$this->_page->setLineColor(new ZendPdf\Color\Html('#e1e1e1'));
-				$this->_page->setLineWidth(17);
-				$this->_page->drawLine($this->_leftMargin,
-						$this->_yPosition -$j,
-						$this->_pageWidth -
-						$this->_leftMargin,
-						$this->_yPosition -$j);
-			}else{
-				$this->_page->setLineColor(new ZendPdf\Color\Html('#f1f1f1'));
-				$this->_page->setLineWidth(17);
-				$this->_page->drawLine($this->_leftMargin,
-						$this->_yPosition -$j,
-						$this->_pageWidth -
-						$this->_leftMargin,
-						$this->_yPosition -$j);
-			}
-	
-			$j += 19;
-		}
-			
-		//-----------------------------------------------------------------------
-		//-----------------------------------------------------------------------
-		//-----------------------------------------------------------------------
-	
-		$control = new DateHelper();
-	
-		$resultats = $this->_resultatsAnalysesDemandees;
-	
-		$this->_yPosition -= $noteLineHeight-20; //Allez à la ligne
-	
-		$this->_page->setLineColor(new ZendPdf\Color\Html('#999999'));
-		$this->_page->setLineWidth(1);
-		$this->_page->drawLine($this->_leftMargin+180,
-				$this->_yPosition -2,
-				$this->_pageWidth -
-				$this->_leftMargin-180,
-				$this->_yPosition -2);
-	
-		$this->getNewTime();
-		$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', 'METABOLISME PROTIDIQUE' ),
-				$this->_leftMargin+180,
-				$this->_yPosition+1);
-	
-		$this->_yPosition -= $noteLineHeight;    //aller a la ligne suivante
-	
-		//--- PROTEINURIE DES 24H (PU 24H)  --- PROTEINURIE DES 24H (PU 24H) ---
-		//--- PROTEINURIE DES 24H (PU 24H)  --- PROTEINURIE DES 24H (PU 24H) ---
-		
-		if(in_array(49, $idanalysesMetabolismeProtidique)){
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10);
-			$this->_page->drawText("PROTEINURIE DES 24H (PU 24H) : ",
-					$this->_leftMargin+5,
-					$this->_yPosition+9);
-	
-			//Notation française avec un chiffre après la virgule et un séparateur pour les milliers
-			$valeurProteinurieFormatee = number_format($resultats[49]['proteinurie'], 1, ',', ' ');
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText($valeurProteinurieFormatee.' g/24h',
-					$this->_leftMargin+200,
-					$this->_yPosition+9);
-				
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 8);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "N : 	< 0,15 g/24h" ),
-					$this->_leftMargin+330,
-					$this->_yPosition+9);
-	
-			
-			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
-		}
-	
-	
-		return $this->_page;
-	
-	}
 }

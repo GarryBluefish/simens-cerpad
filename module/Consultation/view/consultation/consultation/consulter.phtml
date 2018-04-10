@@ -559,10 +559,10 @@ echo $this->form()->openTag($form); ?>
                                 <span style="font-weight: bold;"><span style='font-size: 12px;'>&#11166;</span> Fratrie (Taille & Rang) </span> 
                                 <span style="margin-left: 40px; font-weight: bold;" title="&#9072; Le nombre d'enfants de même père et mère" > &#10097; Taille </span> <?php echo $this->formRow($form->get('fratrieTailleAF'));?> 
                                  
-                                <span style="margin-left: 40px;"> Fille </span> 
+                                <span style="margin-left: 40px;"> Filles </span> 
                                 <?php echo $this->formRow($form->get('fratrieTailleFilleAF'));?> 
                                 
-                                <span style="margin-left: 20px;"> Gar&ccedil;on </span> 
+                                <span style="margin-left: 20px;"> Gar&ccedil;ons </span> 
                                 <?php echo $this->formRow($form->get('fratrieTailleGarconAF'));?> 
                                 
                                 <span style="margin-left: 40px; font-weight: bold;" title="&#9072; La place du patient dans l'ordre des naissances" > &#10097; Rang  </span> <?php echo $this->formRow($form->get('fratrieRangAF'));?> <sup id="fratrieTailleAFSuff" style='font-size: 18px;'></sup>
@@ -1094,7 +1094,7 @@ echo $this->form()->openTag($form); ?>
             <table style="width:100%;">
 			  <tr style="height:40px; width:100%;" class="designHistoireMaladie">
 			     <th style="width:43%; padding-right: 25px; vertical-align: top;"> 
-                      <div style="float:left; width: 100%;"><label style="width: 100%; height:30px; text-align:left;" ><span style='font-size: 12px;'>&#11166; </span><span> Examen du foie et voie biliaire</span> <?php echo $this->formRow($form->get('examenDuFoieVoieBiliaireDonneesExamen'));?> </label></div> 
+                      <div style="float:left; width: 100%;"><label style="width: 100%; height:30px; text-align:left;" ><span style='font-size: 12px;'>&#11166; </span><span> Examen du foie et des voies biliaires</span> <?php echo $this->formRow($form->get('examenDuFoieVoieBiliaireDonneesExamen'));?> </label></div> 
 				 </th>
 				 <th style="width:19%; padding-right: 25px; vertical-align: top;"> 
                       <div style="float:left; width: 100%;"><label style="width: 100%; height:30px; text-align:left;" ><span style='font-size: 12px;'>&#11166; </span><span> Hanche </span> <?php echo $this->formRow($form->get('examenHancheDonneesExamen'));?></label></div> 
@@ -1322,13 +1322,15 @@ echo $this->form()->openTag($form); ?>
             <!--**************** DEMANDE D'EXAMENS PAR LE MEDECIN *****************-->
             <div style='font-family: police2;font-size: 17px; font-weight: bold;' id='examenComplementaireDemandeDelpiant'> Demande </div>
             <div>
+                                       
                 <?php echo  $this->headScript()->appendFile($this->basePath().'/js/consultation/ajoutDemandesAnalyses.js'); ?>
                 <div id='montantTotal' style='height: 15; cursor: pointer; float:right; margin-top: -5px;'> 
                     <span style='padding-left: 20px; color: green; font-size: 17px; font-family: times new roman;'> </span>
-                    <hass> <a href="javascript:imprimerAnalyse();" >
-                           <img style="margin-top: -6px; float: right; cursor: pointer; height: 19px; width: 19px;" src="../images_icons/pdf.png"  title="Imprimer" />
-                           </a> 
-                     </hass> 
+                   
+                    <img onclick="effectuerDesDemandesExamens();" style="margin-top: -5px; float: left; cursor: pointer; height: 19px; width: 19px;" src="../images_icons/detailsd.png"  title="Demandes d'examens" />
+                    <a href="javascript:imprimerAnalyse();" >
+                      <img style="margin-top: -6px; float: right; cursor: pointer; height: 19px; width: 19px;" src="../images_icons/pdf.png"  title="Imprimer" />
+                    </a> 
                 </div>
                 
                 <div id="lesDemandesExamens" style="width: 100%; height:300px;">
@@ -1748,6 +1750,68 @@ $("#annuler2").click(function() {
     return false;
 }); 
 </script>
+
+
+
+
+<!-- POP UP pour Ajouter les r�sultats d'une analyse -->
+<div id="imprimerDesDemandesExamensAvecSaisiMotifs" title="Imprimer les demandes d'examens (Renseigner les motifs des examens)" style="display: none;"  align="center">
+    <div id="contenuimprimerDesDemandesExamensAvecSaisiMotifs" style="width: 97%;"> 
+      <table style="height: 50px; width: 100%;" id="contenuExamDemImprime_0">
+        <tr style="width: 100%">
+           <td class="titreZoneInfosStylePop" >
+           &#10049; Examens Radiologiques <img onclick="imprimerTousLesExamensDemandesPop();" style="float: right; width: 25px; height: 25px; cursor: pointer;" src="../images_icons/pdf.png"  title="Imprimer tous" >  
+           <div style="width: 100%; border: 1px solid green;"> </div>
+           </td>
+        </tr>
+      </table>
+      
+      
+    </div>
+    
+    <div style="display: none;" id="codePourAjouterDesExamensDemandesAImprimer">
+      <table style="width: 100%; height: 120px;" class="contenuExamDemImprime">
+        <tr>
+          <td style="width: 40%;" >
+             <table style="height: 50px; width: 95%; float: left;"  class="contenuZoneInfosStylePopDemExam zoneInfosStyle designHistoireMaladie" >
+		        <tr style="width: 100%;">
+		          <th style="width: 100%; padding-right: 25px; vertical-align: top;"> 
+				    <div style="float:left; width: 100%;" > <label style="width: 98%; margin-top: 3.5px; margin-left: 4px; height:30px; text-align:left;" ><span style='font-size: 12px;'> &#11166; </span> <span class='libelleExamenDemandeAImprimer'  style='font-size: 13px;'> Radiologie </span> </label></div> 
+		          </th>
+		        </tr>
+		      </table>
+          </td>
+		      
+		  <td style="width: 60%; ">    
+		     <table style="height: 50px; width: 100%; float: left;"  class="contenuZoneInfosStylePopDemExam zoneInfosStyle designHistoireMaladie" >
+		        <tr style="width: 100%;">
+		          <th style="width:100%; padding-right: 6px; padding-left: 6px; padding-top: 4px; padding-bottom: 3px; vertical-align: top;" class="textareaBaliseSaisiMotifExamen"> 
+				    <label> 
+				      &#129091; <i style="font-size: 16px;">  Motif de l'examen </i> <span id="imageImpressionExamenPopPrecis"> </span>
+				      <input type="hidden" >
+				      <textarea style="width: 100%; max-width: 475px;  min-width: 475px; height: 120px; max-height: 90px; min-height: 90px;"> </textarea> 
+				    </label>
+		          </th>
+		        </tr>
+		      </table>
+		  </td>
+        </tr>
+      </table>
+    </div>
+</div>
+
+<form id="formulaireExamensDemandesPopup" style="display: none;">
+   <button id="imprimerExamensDemandesPopup" > </button>
+</form>
+
+
+
+
+
+
+
+
+
 
 
 

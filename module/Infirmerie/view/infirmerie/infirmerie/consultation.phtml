@@ -318,15 +318,18 @@ echo $this->form()->openTag($form); ?>
 </div>
       <table>
          <tr>
-           <td style="background-color:#eeeeee;">
+           <td style="background-color:#eeeeee;" id="boutonBaliseAnnuler" >
               <div> <button  type="submit" id="annuler" style=" margin-left:400px; margin-top: 20px; font-family: police2;font-size: 18px; font-weight: bold;"> Annuler </button> </div>
            </td>
-           <td style="background-color:#eeeeee;">
+           <td style="background-color:#eeeeee;" id="boutonBaliseTerminer">
               <div> <button type="submit" id="terminer" style=" margin-right:340px; margin-top: 20px; font-family: police2;font-size: 18px; font-weight: bold;"> Terminer </button> </div>
            </td>
          </tr>
        </table>
 
+       <button id="boutonEnvoyerDonnees" style="display: none;" > </button>
+       
+       
                    <!-- POP UP pour Confirmation Annulation -->
                             <div id="confirmation" title="Confirmation de la suppression" style="display:none;">
                               <p style="font-size: 16px;">

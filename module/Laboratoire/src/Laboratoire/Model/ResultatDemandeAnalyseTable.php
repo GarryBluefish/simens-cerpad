@@ -229,7 +229,8 @@ class ResultatDemandeAnalyseTable {
 	    
 	    $donnees = array();
 	    $donnees['antigene_d_faible'] = $tab[1];
-	    $donnees['type_materiel'] = $tab[2];
+	    $donnees['type_materiel']     = $tab[2];
+	    $donnees['conclusion_antigene_d_faible'] = $tab[3];
 	    
 	    if($donnees['antigene_d_faible']){ $donneesExiste = 1; }
 	    
@@ -506,10 +507,13 @@ class ResultatDemandeAnalyseTable {
 	    $donneesExiste = 0;
 	    
 	    $donnees = array();
-	    $donnees['valeur'] = $tab[1];
-	    $donnees['type_materiel'] = $tab[2];
 	    
-	    if($donnees['valeur']){ $donneesExiste = 1; }
+	    if($tab[1]){ $donnees['valeur1']       = $tab[1]; } else { $donnees['valeur1']       = null; }
+	    if($tab[2]){ $donnees['type_materiel'] = $tab[2]; } else { $donnees['type_materiel'] = null; }
+	    if($tab[3]){ $donnees['valeur2']       = $tab[3]; } else { $donnees['valeur2']       = null; }
+	     
+	    
+	    if($tab[1] || $tab[3]){ $donneesExiste = 1; }
 	
 	    //Si les resultats n y sont pas on les ajoute
 	    if(!$this->getValeursVitesseSedimentation($iddemande)){
@@ -3094,8 +3098,9 @@ class ResultatDemandeAnalyseTable {
 	
 	    if($tab[1]){ $donnees['type_materiel'] = $tab[1]; }else{ $donnees['type_materiel'] = null; }
 	    if($tab[2]){ $donnees['psa']           = $tab[2]; }else{ $donnees['psa']           = null; }
+	    if($tab[3]){ $donnees['psa_qualitatif']= $tab[3]; }else{ $donnees['psa_qualitatif']= null; }
 	
-	    if($tab[2]){ $donneesExiste = 1; }
+	    if($tab[2] || $tab[3]){ $donneesExiste = 1; }
 	
 	    //Si les resultats n y sont pas on les ajoute
 	    if(!$this->getValeursPsa($iddemande)){
@@ -3206,8 +3211,9 @@ class ResultatDemandeAnalyseTable {
 	
 	    $donnees = array();
 	
-	    if($tab[1]){ $donnees['type_materiel']        = $tab[1]; }else{ $donnees['type_materiel']        = null; }
-	    if($tab[2]){ $donnees['facteurs_rhumatoides'] = $tab[2]; }else{ $donnees['facteurs_rhumatoides'] = null; }
+	    if($tab[1]){ $donnees['type_materiel']              = $tab[1]; }else{ $donnees['type_materiel']              = null; }
+	    if($tab[2]){ $donnees['facteurs_rhumatoides']       = $tab[2]; }else{ $donnees['facteurs_rhumatoides']       = null; }
+	    if($tab[3]){ $donnees['facteurs_rhumatoides_titre'] = $tab[3]; }else{ $donnees['facteurs_rhumatoides_titre'] = null; }
 	
 	    if($tab[2]){ $donneesExiste = 1; }
 	
@@ -3262,8 +3268,9 @@ class ResultatDemandeAnalyseTable {
 	
 	    $donnees = array();
 	
-	    if($tab[1]){ $donnees['type_materiel']  = $tab[1]; }else{ $donnees['type_materiel']  = null; }
-	    if($tab[2]){ $donnees['rf_waaler_rose'] = $tab[2]; }else{ $donnees['rf_waaler_rose'] = null; }
+	    if($tab[1]){ $donnees['type_materiel']        = $tab[1]; }else{ $donnees['type_materiel']        = null; }
+	    if($tab[2]){ $donnees['rf_waaler_rose']       = $tab[2]; }else{ $donnees['rf_waaler_rose']       = null; }
+	    if($tab[3]){ $donnees['rf_waaler_rose_titre'] = $tab[3]; }else{ $donnees['rf_waaler_rose_titre'] = null; }
 	
 	    if($tab[2]){ $donneesExiste = 1; }
 	
@@ -3318,11 +3325,13 @@ class ResultatDemandeAnalyseTable {
 	
 	    $donnees = array();
 	
-	    if($tab[1]){ $donnees['type_materiel']  = $tab[1]; }else{ $donnees['type_materiel']  = null; }
-	    if($tab[2]){ $donnees['toxoplasmose_1'] = $tab[2]; }else{ $donnees['toxoplasmose_1'] = null; }
-	    if($tab[3]){ $donnees['toxoplasmose_2'] = $tab[3]; }else{ $donnees['toxoplasmose_2'] = null; }
+	    if($tab[1]){ $donnees['type_materiel']          = $tab[1]; }else{ $donnees['type_materiel']          = null; }
+	    if($tab[2]){ $donnees['toxoplasmose_igm']       = $tab[2]; }else{ $donnees['toxoplasmose_igm']       = null; }
+	    if($tab[3]){ $donnees['toxoplasmose_igm_titre'] = $tab[3]; }else{ $donnees['toxoplasmose_igm_titre'] = null; }
+	    if($tab[4]){ $donnees['toxoplasmose_igg']       = $tab[4]; }else{ $donnees['toxoplasmose_igg']       = null; }
+	    if($tab[5]){ $donnees['toxoplasmose_igg_titre'] = $tab[5]; }else{ $donnees['toxoplasmose_igg_titre'] = null; }
 	
-	    if($tab[2] || $tab[3]){ $donneesExiste = 1; }
+	    if($tab[2] || $tab[4]){ $donneesExiste = 1; }
 	
 	    //Si les resultats n y sont pas on les ajoute
 	    if(!$this->getValeursToxoplasmose($iddemande)){
@@ -3376,11 +3385,14 @@ class ResultatDemandeAnalyseTable {
 	
 	    $donnees = array();
 	
-	    if($tab[1]){ $donnees['type_materiel']  = $tab[1]; }else{ $donnees['type_materiel']  = null; }
-	    if($tab[2]){ $donnees['rubeole_1'] = $tab[2]; }else{ $donnees['rubeole_1'] = null; }
-	    if($tab[3]){ $donnees['rubeole_2'] = $tab[3]; }else{ $donnees['rubeole_2'] = null; }
+	    if($tab[1]){ $donnees['type_materiel']     = $tab[1]; }else{ $donnees['type_materiel']     = null; }
+	    if($tab[2]){ $donnees['rubeole_igm']       = $tab[2]; }else{ $donnees['rubeole_igm']       = null; }
+	    if($tab[3]){ $donnees['rubeole_igm_titre'] = $tab[3]; }else{ $donnees['rubeole_igm_titre'] = null; }
+	    if($tab[4]){ $donnees['rubeole_igg']       = $tab[4]; }else{ $donnees['rubeole_igg']       = null; }
+	    if($tab[5]){ $donnees['rubeole_igg_titre'] = $tab[5]; }else{ $donnees['rubeole_igg_titre'] = null; }
+	    
 	
-	    if($tab[2] || $tab[3]){ $donneesExiste = 1; }
+	    if($tab[2] || $tab[4]){ $donneesExiste = 1; }
 	
 	    //Si les resultats n y sont pas on les ajoute
 	    if(!$this->getValeursRubeole($iddemande)){
@@ -3422,8 +3434,14 @@ class ResultatDemandeAnalyseTable {
 	    $sQuery = $sql->select()
 	    ->from(array('va' => 'valeurs_culot_urinaire'))->columns(array('*'))
 	    ->where(array('idresultat_demande_analyse' => $iddemande));
-	
-	    return $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
+	    $result = $sql->prepareStatementForSqlObject($sQuery)->execute();
+	     
+	    $donnees = array();
+	    foreach ($result as $res){
+	    	$donnees[] = $res;
+	    }
+	     
+	    return $donnees;
 	}
 	
 	public function addValeursCulotUrinaire($tab, $iddemande){
@@ -3433,41 +3451,36 @@ class ResultatDemandeAnalyseTable {
 	
 	    $donnees = array();
 	
-	    if($tab[1]){ $donnees['type_materiel']    = $tab[1]; }else{ $donnees['type_materiel']    = null; }
-	    if($tab[2]){ $donnees['culot_urinaire_1'] = $tab[2]; }else{ $donnees['culot_urinaire_1'] = null; }
-	    if($tab[3]){ $donnees['culot_urinaire_2'] = $tab[3]; }else{ $donnees['culot_urinaire_2'] = null; }
-	
-	    if($tab[2] || $tab[3]){ $donneesExiste = 1; }
-	
-	    //Si les resultats n y sont pas on les ajoute
-	    if(!$this->getValeursCulotUrinaire($iddemande)){
-	
-	        if($donneesExiste == 0){
-	            $this->tableGateway->delete ( array ( 'iddemande_analyse' => $iddemande ) );
-	            $this->setResultDemandeNonEffectuee($iddemande);
-	        }else{
-	            $donnees['idresultat_demande_analyse'] = $iddemande;
-	            $sQuery = $sql->insert() ->into('valeurs_culot_urinaire') ->values( $donnees );
-	            $sql->prepareStatementForSqlObject($sQuery)->execute();
-	            $this->setResultDemandeEffectuee($iddemande);
-	        }
-	
+	    //Suppression préalable des données
+	    $sQuery = $sql->delete() ->from('valeurs_culot_urinaire')
+	    ->where(array('idresultat_demande_analyse' => $iddemande));
+	    $sql->prepareStatementForSqlObject($sQuery)->execute();
+	    $this->setResultDemandeNonEffectuee($iddemande);
+	     
+	    if(count($tab) == 4){
+	    	$donnees['type_materiel'] = $tab[0];
+	    	$donnees['conclusion'] = $tab[3];
+	    
+	    	for($i = 1 ; $i < count($tab[1]) ; $i++){
+	    		if($tab[1][$i]){
+	    			$donnees['culot_urinaire_1'] = $tab[1][$i];
+	    			$donnees['culot_urinaire_2']  = $tab[2][$i];
+	    
+	    			$donnees['idresultat_demande_analyse'] = $iddemande;
+	    			$sQuery = $sql->insert() ->into('valeurs_culot_urinaire') ->values( $donnees );
+	    			$sql->prepareStatementForSqlObject($sQuery)->execute();
+	    			$this->setResultDemandeEffectuee($iddemande);
+	    			 
+	    			$donneesExiste = 1;
+	    		}
+	    	}
 	    }
-	    //Sinon on effectue des mises a jours
-	    else {
-	
-	        if($donneesExiste == 0){
-	            $this->tableGateway->delete ( array ( 'iddemande_analyse' => $iddemande ) );
-	            $this->setResultDemandeNonEffectuee($iddemande);
-	        }else{
-	            $sQuery = $sql->update() ->table('valeurs_culot_urinaire') ->set( $donnees )
-	            ->where(array('idresultat_demande_analyse' => $iddemande ));
-	            $sql->prepareStatementForSqlObject($sQuery)->execute();
-	            $this->setResultDemandeEffectuee($iddemande);
-	        }
-	
+	     
+	    if($donneesExiste == 0){
+	    	$this->tableGateway->delete ( array ( 'iddemande_analyse' => $iddemande ) );
+	    	$this->setResultDemandeNonEffectuee($iddemande);
 	    }
-	
+	     
 	    return $donneesExiste;
 	}
 	
@@ -3548,10 +3561,12 @@ class ResultatDemandeAnalyseTable {
 	
 	    $donnees = array();
 	
-	    if($tab[1]){ $donnees['type_materiel']          = $tab[1]; }else{ $donnees['type_materiel']          = null; }
-	    if($tab[2]){ $donnees['serologie_syphilitique'] = $tab[2]; }else{ $donnees['serologie_syphilitique'] = null; }
+	    if($tab[1]){ $donnees['type_materiel']  = $tab[1];             }else{ $donnees['type_materiel']          = null; }
+	    if($tab[2]){ $donnees['serologie_syphilitique_rpr'] = $tab[2]; }else{ $donnees['serologie_syphilitique_rpr'] = null; }
+	    if($tab[3]){ $donnees['serologie_syphilitique_tpha'] = $tab[3];}else{ $donnees['serologie_syphilitique_tpha'] = null; }
+	    if($tab[4]){ $donnees['serologie_syphilitique_tpha_titre'] = $tab[4]; }else{ $donnees['serologie_syphilitique_tpha_titre'] = null; }
 	
-	    if($tab[2]){ $donneesExiste = 1; }
+	    if($tab[2] || $tab[3]){ $donneesExiste = 1; }
 	
 	    //Si les resultats n y sont pas on les ajoute
 	    if(!$this->getValeursSerologieSyphilitique($iddemande)){
@@ -3606,6 +3621,7 @@ class ResultatDemandeAnalyseTable {
 	
 	    if($tab[1]){ $donnees['type_materiel'] = $tab[1]; }else{ $donnees['type_materiel'] = null; }
 	    if($tab[2]){ $donnees['aslo']          = $tab[2]; }else{ $donnees['aslo']          = null; }
+	    if($tab[3]){ $donnees['titre']         = $tab[3]; }else{ $donnees['titre']         = null; }
 	
 	    if($tab[2]){ $donneesExiste = 1; }
 	
@@ -3888,7 +3904,7 @@ class ResultatDemandeAnalyseTable {
 
 		$select->join(array('p2'=>'personne'), 'p2.idpersonne = r.valider_par', array('NomValidateur'=>'nom', 'PrenomValidateur'=>'prenom'));
 		
-		$select->where(array('d.date' => $dateDemande['date'], 'd.idpatient' => $dateDemande['idpatient']));
+		$select->where(array('d.date' => $dateDemande['date'], 'd.idpatient' => $dateDemande['idpatient'], 'r.valide' => 1));
 		$select->order(array('idanalyse' => 'ASC', 'idtype' =>'ASC'));
 		$result = $sql->prepareStatementForSqlObject($select)->execute();
 		 

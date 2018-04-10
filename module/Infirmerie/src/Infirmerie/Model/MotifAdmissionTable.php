@@ -193,7 +193,7 @@ class MotifAdmissionTable{
 		$sql = new Sql($adapter);
 		$select = $sql->select();
 		$select->from('liste_motif_consultation');
-		$select->order('idmotifconsultation ASC');
+		$select->order('ordre_libelle ASC');
 		$result = $sql->prepareStatementForSqlObject($select)->execute();
 	
 		$options = array(0 => '');

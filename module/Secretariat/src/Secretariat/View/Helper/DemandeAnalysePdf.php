@@ -82,7 +82,7 @@ class DemandeAnalysePdf
 				$this->_leftMargin,
 				$this->_pageHeight - 50);
 		$this->_page->setFont($this->_newTime, 10);
-		$this->_page->drawText('Université Gaston Berger / UFR 2S',
+		$this->_page->drawText('Université Gaston Berger de Saint-Louis / UFR 2S',
 				$this->_leftMargin,
 				$this->_pageHeight - 65);
 		$this->_page->setFont($this->_newTime, 10);
@@ -99,7 +99,7 @@ class DemandeAnalysePdf
 		$this->_page->setFont($font, 8);
 		$today = new \DateTime ();
 		$dateNow = $today->format ( 'd/m/Y' );
-		$this->_page->drawText('Saint-Louis le, ' . $dateNow,
+		$this->_page->drawText('Imprimé le, ' . $dateNow,
 				450,
 				$this->_pageHeight - 50);
 	}
@@ -165,6 +165,11 @@ class DemandeAnalysePdf
 	public function getStyle2(){
 		$font = ZendPdf\Font::fontWithName(ZendPdf\Font::FONT_HELVETICA_ITALIC);
 		$this->_page->setFont($font, 12);
+	}
+	
+	public function getStyle2_10(){
+		$font = ZendPdf\Font::fontWithName(ZendPdf\Font::FONT_HELVETICA_BOLD_ITALIC);
+		$this->_page->setFont($font, 10);
 	}
 	
 	public function getStyle3(){
@@ -379,7 +384,7 @@ class DemandeAnalysePdf
 			//$this->_page->setLineDashingPattern(array(1, 2));
 			
 		//-----------------------------------------------
-		$this->_yPosition -= $noteLineHeight+5;//aller a la ligne suivante
+		$this->_yPosition -= $noteLineHeight-5;//aller a la ligne suivante
 		
 		//-----------------------------------------------
 		//-----------------------------------------------
@@ -395,51 +400,12 @@ class DemandeAnalysePdf
 		//-----------------------------------------------------------------------
 		//-----------------------------------------------------------------------
 		if(in_array('HEMATOLOGIE', $typesAnalyses)){
-			
-			$this->_page->setLineColor(new ZendPdf\Color\Html('#cfcfcf'));
-			$this->_page->setLineWidth(17);
-			$this->_page->drawLine($this->_leftMargin, //180
-					$this->_yPosition +5,
-					$this->_pageWidth -
-					$this->_leftMargin, //220
-					$this->_yPosition +5);
-			
-			$this->getStyle();
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "HEMATOLOGIE"),
-					$this->_leftMargin+180,
+
+			$this->getStyle2_10();
+			$this->_page->drawText(":: Hématologie",
+					$this->_leftMargin+5,
 					$this->_yPosition);
-			
-			
-			//-----------------------------------------------
-			$this->_yPosition -= $noteLineHeight;//aller a la ligne suivante
-			
-			$this->getStyle6();
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "DESIGNATION "),
-					$this->_leftMargin+15,
-					$this->_yPosition);
-			
-			$this->_page->setLineColor(new ZendPdf\Color\Html('#999999'));
-			$this->_page->setLineWidth(1);
-			$this->_page->drawLine($this->_leftMargin+15,
-					$this->_yPosition -5,
-					$this->_pageWidth -
-					$this->_leftMargin-400,
-					$this->_yPosition -5);
-			
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "TARIF (FCFA)"),
-					$this->_leftMargin+325,
-					$this->_yPosition);
-			
-			$this->_page->setLineColor(new ZendPdf\Color\Html('#999999'));
-			$this->_page->setLineWidth(1);
-			$this->_page->drawLine($this->_leftMargin+325,
-					$this->_yPosition -5,
-					$this->_pageWidth -
-					$this->_leftMargin-95,
-					$this->_yPosition -5);
-			
-			
-			$this->_yPosition -= $noteLineHeight;
+			$this->_yPosition -= 20;
 			
 			$j = 0;
 			
@@ -457,7 +423,7 @@ class DemandeAnalysePdf
 							$this->_yPosition -2);
 			
 					$this->getNewTime();
-					$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', ++$j.') '.$analyses[$i]),
+					$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', ++$j.'.  '.$analyses[$i]),
 							$this->_leftMargin+10,
 							$this->_yPosition);
 			
@@ -490,54 +456,13 @@ class DemandeAnalysePdf
  		//-----------------------------------------------------------------
  		//-----------------------------------------------------------------
 		if(in_array('BIOCHIMIE', $typesAnalyses)){
-			$this->_yPosition -= -5;
-			$this->_yPosition -= $noteLineHeight;
-				
-			$this->_page->setLineColor(new ZendPdf\Color\Html('#cfcfcf'));
-			$this->_page->setLineWidth(17);
-			$this->_page->drawLine($this->_leftMargin, //180
-					$this->_yPosition +5,
-					$this->_pageWidth -
-					$this->_leftMargin, //220
-					$this->_yPosition +5);
-				
-			$this->getStyle();
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "BIOCHIMIE" ),
-					$this->_leftMargin+190,
+			
+			$this->getStyle2_10();
+			$this->_page->drawText(":: Biochimie",
+					$this->_leftMargin+5,
 					$this->_yPosition);
-				
-				
-			//-----------------------------------------------
-			$this->_yPosition -= $noteLineHeight;//aller a la ligne suivante
-				
-			$this->getStyle6();
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "DESIGNATION "),
-					$this->_leftMargin+15,
-					$this->_yPosition);
-				
-			$this->_page->setLineColor(new ZendPdf\Color\Html('#999999'));
-			$this->_page->setLineWidth(1);
-			$this->_page->drawLine($this->_leftMargin+15,
-					$this->_yPosition -5,
-					$this->_pageWidth -
-					$this->_leftMargin-400,
-					$this->_yPosition -5);
-				
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "TARIF (FCFA)"),
-					$this->_leftMargin+325,
-					$this->_yPosition);
-				
-			$this->_page->setLineColor(new ZendPdf\Color\Html('#999999'));
-			$this->_page->setLineWidth(1);
-			$this->_page->drawLine($this->_leftMargin+325,
-					$this->_yPosition -5,
-					$this->_pageWidth -
-					$this->_leftMargin-95,
-					$this->_yPosition -5);
-				
-				
-			$this->_yPosition -= $noteLineHeight;
-				
+			$this->_yPosition -= 20;
+							
 			$j = 0;
 			//-----------------------------------------------
 			//-----------------------------------------------
@@ -555,7 +480,7 @@ class DemandeAnalysePdf
 							$this->_yPosition -2);
 						
 					$this->getNewTime();
-					$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', ++$j.') '.$analyses[$i]),
+					$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', ++$j.'.  '.$analyses[$i]),
 							$this->_leftMargin+10,
 							$this->_yPosition);
 						
@@ -587,53 +512,13 @@ class DemandeAnalysePdf
  		//-----------------------------------------------------------------------------
  		//-----------------------------------------------------------------------------
 		if(in_array('PARASITOLOGIE', $typesAnalyses)){
-			$this->_yPosition -= -5;
-			$this->_yPosition -= $noteLineHeight;
 			
-			$this->_page->setLineColor(new ZendPdf\Color\Html('#cfcfcf'));
-			$this->_page->setLineWidth(17);
-			$this->_page->drawLine($this->_leftMargin, //180
-					$this->_yPosition +5,
-					$this->_pageWidth -
-					$this->_leftMargin, //220
-					$this->_yPosition +5);
-			
-			$this->getStyle();
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "PARASITOLOGIE"),
-					$this->_leftMargin+180,
+			$this->getStyle2_10();
+			$this->_page->drawText(":: Parasitologie",
+					$this->_leftMargin+5,
 					$this->_yPosition);
+			$this->_yPosition -= 20;
 			
-			
-			//-----------------------------------------------
-			$this->_yPosition -= $noteLineHeight;//aller a la ligne suivante
-			
-			$this->getStyle6();
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "DESIGNATION "),
-					$this->_leftMargin+15,
-					$this->_yPosition);
-			
-			$this->_page->setLineColor(new ZendPdf\Color\Html('#999999'));
-			$this->_page->setLineWidth(1);
-			$this->_page->drawLine($this->_leftMargin+15,
-					$this->_yPosition -5,
-					$this->_pageWidth -
-					$this->_leftMargin-400,
-					$this->_yPosition -5);
-			
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "TARIF (FCFA)"),
-					$this->_leftMargin+325,
-					$this->_yPosition);
-			
-			$this->_page->setLineColor(new ZendPdf\Color\Html('#999999'));
-			$this->_page->setLineWidth(1);
-			$this->_page->drawLine($this->_leftMargin+325,
-					$this->_yPosition -5,
-					$this->_pageWidth -
-					$this->_leftMargin-95,
-					$this->_yPosition -5);
-			
-			
-			$this->_yPosition -= $noteLineHeight;
 			
 			$j = 0;
 			//-----------------------------------------------
@@ -652,7 +537,7 @@ class DemandeAnalysePdf
 							$this->_yPosition -2);
 			
 					$this->getNewTime();
-					$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', ++$j.') '.$analyses[$i]),
+					$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', ++$j.'.  '.$analyses[$i]),
 							$this->_leftMargin+10,
 							$this->_yPosition);
 			
@@ -685,54 +570,13 @@ class DemandeAnalysePdf
  		//-----------------------------------------------------------------------------
  		//-----------------------------------------------------------------------------
 		if(in_array('BACTERIOLOGIE', $typesAnalyses)){
-			$this->_yPosition -= -5;
-			$this->_yPosition -= $noteLineHeight;
-				
-			$this->_page->setLineColor(new ZendPdf\Color\Html('#cfcfcf'));
-			$this->_page->setLineWidth(17);
-			$this->_page->drawLine($this->_leftMargin, //180
-					$this->_yPosition +5,
-					$this->_pageWidth -
-					$this->_leftMargin, //220
-					$this->_yPosition +5);
-				
-			$this->getStyle();
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "BACTERIOLOGIE"),
-					$this->_leftMargin+180,
+			
+			$this->getStyle2_10();
+			$this->_page->drawText(":: Bactériologie",
+					$this->_leftMargin+5,
 					$this->_yPosition);
-				
-				
-			//-----------------------------------------------
-			$this->_yPosition -= $noteLineHeight;//aller a la ligne suivante
-				
-			$this->getStyle6();
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "DESIGNATION "),
-					$this->_leftMargin+15,
-					$this->_yPosition);
-				
-			$this->_page->setLineColor(new ZendPdf\Color\Html('#999999'));
-			$this->_page->setLineWidth(1);
-			$this->_page->drawLine($this->_leftMargin+15,
-					$this->_yPosition -5,
-					$this->_pageWidth -
-					$this->_leftMargin-400,
-					$this->_yPosition -5);
-				
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "TARIF (FCFA)"),
-					$this->_leftMargin+325,
-					$this->_yPosition);
-				
-			$this->_page->setLineColor(new ZendPdf\Color\Html('#999999'));
-			$this->_page->setLineWidth(1);
-			$this->_page->drawLine($this->_leftMargin+325,
-					$this->_yPosition -5,
-					$this->_pageWidth -
-					$this->_leftMargin-95,
-					$this->_yPosition -5);
-				
-				
-			$this->_yPosition -= $noteLineHeight;
-				
+			$this->_yPosition -= 20;
+			
 			$j = 0;
 			//-----------------------------------------------
 			//-----------------------------------------------
@@ -750,7 +594,7 @@ class DemandeAnalysePdf
 							$this->_yPosition -2);
 						
 					$this->getNewTime();
-					$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', ++$j.') '.$analyses[$i]),
+					$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', ++$j.'.  '.$analyses[$i]),
 							$this->_leftMargin+10,
 							$this->_yPosition);
 						
@@ -782,54 +626,13 @@ class DemandeAnalysePdf
 		//-----------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------
 		if(in_array('DEPISTAGE', $typesAnalyses)){
-		    $this->_yPosition -= -5;
-		    $this->_yPosition -= $noteLineHeight;
-		
-		    $this->_page->setLineColor(new ZendPdf\Color\Html('#cfcfcf'));
-		    $this->_page->setLineWidth(17);
-		    $this->_page->drawLine($this->_leftMargin, //180
-		        $this->_yPosition +5,
-		        $this->_pageWidth -
-		        $this->_leftMargin, //220
-		        $this->_yPosition +5);
-		
-		    $this->getStyle();
-		    $this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "DEPISTAGE"),
-		        $this->_leftMargin+180,
-		        $this->_yPosition);
-		
-		
-		    //-----------------------------------------------
-		    $this->_yPosition -= $noteLineHeight;//aller a la ligne suivante
-		
-		    $this->getStyle6();
-		    $this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "DESIGNATION "),
-		        $this->_leftMargin+15,
-		        $this->_yPosition);
-		
-		    $this->_page->setLineColor(new ZendPdf\Color\Html('#999999'));
-		    $this->_page->setLineWidth(1);
-		    $this->_page->drawLine($this->_leftMargin+15,
-		        $this->_yPosition -5,
-		        $this->_pageWidth -
-		        $this->_leftMargin-400,
-		        $this->_yPosition -5);
-		
-		    $this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "TARIF (FCFA)"),
-		        $this->_leftMargin+325,
-		        $this->_yPosition);
-		
-		    $this->_page->setLineColor(new ZendPdf\Color\Html('#999999'));
-		    $this->_page->setLineWidth(1);
-		    $this->_page->drawLine($this->_leftMargin+325,
-		        $this->_yPosition -5,
-		        $this->_pageWidth -
-		        $this->_leftMargin-95,
-		        $this->_yPosition -5);
-		
-		
-		    $this->_yPosition -= $noteLineHeight;
-		
+			
+		   $this->getStyle2_10();
+			$this->_page->drawText(":: Dépistage",
+					$this->_leftMargin+5,
+					$this->_yPosition);
+			$this->_yPosition -= 20;
+			
 		    $j = 0;
 		    //-----------------------------------------------
 		    //-----------------------------------------------
@@ -847,7 +650,7 @@ class DemandeAnalysePdf
 		                $this->_yPosition -2);
 		
 		            $this->getNewTime();
-		            $this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', ++$j.') '.$analyses[$i]),
+		            $this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', ++$j.'.  '.$analyses[$i]),
 		                $this->_leftMargin+10,
 		                $this->_yPosition);
 		
@@ -869,7 +672,7 @@ class DemandeAnalysePdf
 		//---------------------------------------------------------------------------
 		//---------------------------------------------------------------------------
 		//---------------------------------------------------------------------------
-		$this->_yPosition -= $noteLineHeight;
+		$this->_yPosition -= $noteLineHeight-15;
 		
 		$montant = 0;
 		for($i = 0 ; $i < count($tarifs) ; $i++){

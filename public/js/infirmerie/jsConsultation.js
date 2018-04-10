@@ -161,7 +161,8 @@
 				}else
 					if( poidsVerif == 1 && tailleVerif == 1 && temperatureVerif == 1 && perimetrecranienVerif == 1){
 		    			//alert('formulaire envoye');
-		    			return true;
+						$( "#boutonBaliseTerminer button" ).attr('disabled', true);
+						$( "#boutonEnvoyerDonnees" ).trigger('click');
 		    		}
 			}else {
 				
@@ -176,7 +177,8 @@
 				}else 
 					if( poidsVerif == 1 && tailleVerif == 1 && temperatureVerif == 1 ){
 						//alert('formulaire envoye');
-						return true;
+						$( "#boutonBaliseTerminer button" ).attr('disabled', true);
+						$( "#boutonEnvoyerDonnees" ).trigger('click');
 					}
 
 			}
@@ -194,7 +196,7 @@
     		poidsPatient = $(this).val();
     		
     		if($(this).val()){
-        		$('#poids').val($(this).val()).attr('readonly', true);
+        		$('#poids').val($(this).val()).attr('readonly', false);
         		
         		$('#poidsP1Fievre input').val($(this).val());
         		var palier1 = 15 * $(this).val();
@@ -240,7 +242,7 @@
     		poidsPatient = $(this).val();
     		
     		if($(this).val()){
-        		$('#poids').val($(this).val()).attr('readonly', true);
+        		$('#poids').val($(this).val()).attr('readonly', false);
         		
         		$('#poidsP1Fievre input').val($(this).val());
         		var palier1 = 15 * $(this).val();
@@ -283,6 +285,16 @@
     	
     	});
     	
+    	
+    	$('#poids').change(function(){ 
+    		$('#poidsP1Fievre input, #poidsP1 input').val($(this).val());
+    		$('#poidsP1Fievre input, #poidsP1 input').trigger('keyup');
+    		
+    	}).keyup(function(){
+    		$('#poidsP1Fievre input, #poidsP1 input').val($(this).val());
+    		$('#poidsP1Fievre input, #poidsP1 input').trigger('keyup');
+    		
+    	});
     	
     	$('#voieAdminM5').change(function(){
     		var voieAdminM5 = $(this).val();
@@ -321,7 +333,7 @@
     		$('.poidsP1Fievre').html(palier1+" <span style='font-size: 13px;'> mg/j </span>");
     		
     		if($(this).val()){
-        		$('#poids').val($(this).val()).attr('readonly', true);
+        		$('#poids').val($(this).val()).attr('readonly', false);
         		
         		$('#poidsP1 input').val($(this).val());
         		$('#poidsP2 input, #poidsP2a input, #poidsP2b input, #poidsP3 input').val($(this).val()).attr('readonly', true); 
@@ -351,7 +363,7 @@
     		$('.poidsP1Fievre').html(palier1+" <span style='font-size: 13px;'> mg/j </span>");
     		
     		if($(this).val()){
-        		$('#poids').val($(this).val()).attr('readonly', true);
+        		$('#poids').val($(this).val()).attr('readonly', false);
         		
         		$('#poidsP1 input').val($(this).val());
         		$('#poidsP2 input, #poidsP2a input, #poidsP2b input, #poidsP3 input').val($(this).val()).attr('readonly', true); 

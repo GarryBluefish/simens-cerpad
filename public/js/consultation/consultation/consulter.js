@@ -214,7 +214,7 @@ function initialisationScript(agePatient) {
 	$('#poidsP1 input').change(function(){
 		poidsPatient = $(this).val();
 		if($(this).val()){
-    		$('#poids').val($(this).val()).attr('readonly', true);
+    		$('#poids').val($(this).val()).attr('readonly', false);
     		
     		$('#poidsP1Fievre input').val($(this).val());
     		var palier1 = 15 * $(this).val();
@@ -258,7 +258,7 @@ function initialisationScript(agePatient) {
 	}).keyup(function(){
 		poidsPatient = $(this).val();
 		if($(this).val()){
-    		$('#poids').val($(this).val()).attr('readonly', true);
+    		$('#poids').val($(this).val()).attr('readonly', false);
     		
     		$('#poidsP1Fievre input').val($(this).val());
     		var palier1 = 15 * $(this).val();
@@ -340,7 +340,7 @@ function initialisationScript(agePatient) {
 		$('.poidsP1Fievre').html(palier1+" <span style='font-size: 13px;'> mg/j </span>");
 		
 		if($(this).val()){
-    		$('#poids').val($(this).val()).attr('readonly', true);
+    		$('#poids').val($(this).val()).attr('readonly', false);
     		
     		$('#poidsP1 input').val($(this).val());
     		$('#poidsP2 input, #poidsP2a input, #poidsP2b input, #poidsP3 input').val($(this).val()).attr('readonly', true); 
@@ -370,7 +370,7 @@ function initialisationScript(agePatient) {
 		$('.poidsP1Fievre').html(palier1+" <span style='font-size: 13px;'> mg/j </span>");
 		
 		if($(this).val()){
-    		$('#poids').val($(this).val()).attr('readonly', true);
+    		$('#poids').val($(this).val()).attr('readonly', false);
     		
     		$('#poidsP1 input').val($(this).val());
     		$('#poidsP2 input, #poidsP2a input, #poidsP2b input, #poidsP3 input').val($(this).val()).attr('readonly', true); 
@@ -939,10 +939,11 @@ function annulerDemandesDesAnalysesAFaire() {
 		//Si la liste commence par le premier élément
 		//On supprime un par un jusqu'au dernier
 		if(jsupselDebut == 1){
-			setTimeout(function(){ 
+			setTimeout(function(){
 				//Enlever les icones indicateurs des analyses demandées
 				$(".signalDemandeEffectueIcon").remove();
-				supprimer_acte_selectionne(1); 
+				vider_analyse_selectionne(1);
+				supprimer_acte_selectionne(1);
 			},500);
 		}else{
 			setTimeout(function(){
@@ -1067,9 +1068,139 @@ function supprimeDroiteChampResultatExamenRadio($id, nbListeActe, elsup){
 
 
 
+function effectuerDesDemandesExamens(){
+	$( "#imprimerDesDemandesExamensAvecSaisiMotifs" ).dialog({
+	    resizable: false,
+	    height:675,
+	    width:900,
+	    autoOpen: false,
+	    modal: true,
+	    buttons: {
+	    	
+	        "Terminer": function() {
+	        	
+	        	$( this ).dialog( "close" );
+	        },
+	        
+	   }
+	  });
+	
+	affichageDesExamensDemandes();
+	
+	$("#imprimerDesDemandesExamensAvecSaisiMotifs").dialog('open');
+}
 
 
+function affichageDesExamensDemandes(){
+	
+	var tabTypesExamens = [];
+	var tabExamens = [];
+	var tabIdExamens = [];
+	var tabTarifsExamens =[];
+	for(var i = 1, j = 1; i <= nbListeActe(); i++ ){
+		if($('.type_analyse_name_'+i).val()) {
+			tabTypesExamens[j] = $('.type_analyse_name_'+i+' option:selected').text(); 
+			tabExamens[j] = $('.analyse_name_'+i+' option:selected').text(); 
+			tabIdExamens[j] = $('.analyse_name_'+i+' option:selected').val(); 
+			tabTarifsExamens[j] = $('#tarifActe'+i).val();
+			j++;
+		}
+	}
+	
+	
+	$('#contenuimprimerDesDemandesExamensAvecSaisiMotifs .contenuExamDemImprime').remove();
+	
+	var examenDemandeAajoute = "";
+	
+	for(var k=1 ; k<tabExamens.length ; k++){
+		var baliseMere = $('#codePourAjouterDesExamensDemandesAImprimer');
+		baliseMere.addClass('contenuExamDemImprime_'+k);
+		
+		//Creer les attributs name
+		$('.contenuExamDemImprime_'+k+' .textareaBaliseSaisiMotifExamen input').attr('name', 'idExamenDem_'+k);
+		$('.contenuExamDemImprime_'+k+' .textareaBaliseSaisiMotifExamen textarea').attr({'name':'motifExamenDem_'+k, 'id':'motifExamenDem_'+k});
+		
+		//Ajouter les valeurs
+		$('.contenuExamDemImprime_'+k+' .textareaBaliseSaisiMotifExamen input').val(tabIdExamens[k]);
+		$('.contenuExamDemImprime_'+k+' .libelleExamenDemandeAImprimer').html(tabExamens[k]);
+		
+		//Creer l'icone pdf pour imprimer un examens precis
+		$('.contenuExamDemImprime_'+k+' .textareaBaliseSaisiMotifExamen #imageImpressionExamenPopPrecis').html('<img onclick="imprimerUnExamenDemandePop('+k+');" style="float: right; width: 20px; height: 20px; margin-top: 5px; cursor: pointer;" src="../images_icons/pdf.png"  title="Imprimer" >');
+		
+		examenDemandeAajoute += baliseMere.html();
+	}
+	
+	//A PLACER APRES LA PREMIERE TABLE
+	$('#contenuExamDemImprime_0').after(examenDemandeAajoute);
+}
 
+
+function imprimerTousLesExamensDemandesPop(){
+	
+	var idpatient = $("#idpatient").val();
+	
+	var lienUrl = tabUrl[0]+'public/consultation/impression-examens-demandes';
+	var formulaireImprimerDemandesAnalyses = document.getElementById("formulaireExamensDemandesPopup");
+	formulaireImprimerDemandesAnalyses.setAttribute("action", lienUrl);
+	formulaireImprimerDemandesAnalyses.setAttribute("method", "POST");
+	formulaireImprimerDemandesAnalyses.setAttribute("target", "_blank");
+	
+	
+	// Ajout dynamique de champs dans le formulaire
+	var champ = document.createElement("input");
+	champ.setAttribute("type", "hidden");
+	champ.setAttribute("name", 'idpatient');
+	champ.setAttribute("value", idpatient);
+	formulaireImprimerDemandesAnalyses.appendChild(champ);
+	
+	
+	/*
+	 
+	var champ2 = document.createElement("input");
+	champ2.setAttribute("type", "hidden");
+	champ2.setAttribute("name", 'idcons');
+	champ2.setAttribute("value", idcons);
+	formulaireImprimerDemandesAnalyses.appendChild(champ2);
+	
+	var champ3 = document.createElement("input");
+	champ3.setAttribute("type", "hidden");
+	champ3.setAttribute("name", 'medicamentLibelle');
+	champ3.setAttribute("value", medicamentLibelle);
+	formulaireImprimerDemandesAnalyses.appendChild(champ3);
+	
+	var champ4 = document.createElement("input");
+	champ4.setAttribute("type", "hidden");
+	champ4.setAttribute("name", 'formeMedicament');
+	champ4.setAttribute("value", formeMedicament);
+	formulaireImprimerDemandesAnalyses.appendChild(champ4);
+	
+	var champ5 = document.createElement("input");
+	champ5.setAttribute("type", "hidden");
+	champ5.setAttribute("name", 'nbMedicament');
+	champ5.setAttribute("value", nbMedicament);
+	formulaireImprimerDemandesAnalyses.appendChild(champ5);
+	
+	var champ6 = document.createElement("input");
+	champ6.setAttribute("type", "hidden");
+	champ6.setAttribute("name", 'quantiteMedicament');
+	champ6.setAttribute("value", quantiteMedicament);
+	formulaireImprimerDemandesAnalyses.appendChild(champ6);
+	
+	 */
+	
+	$("#imprimerExamensDemandesPopup").trigger('click'); 
+}
+
+
+function imprimerUnExamenDemandePop(idLigneExamen){
+	
+	alert(idLigneExamen);
+	var k = idLigneExamen;
+	var motifExamenDem = $('#motifExamenDem_'+k).val();
+	
+	//alert($('#motifExamenDem_'+k).val());
+	
+}
 
 
 

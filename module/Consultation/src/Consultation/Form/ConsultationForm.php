@@ -994,11 +994,12 @@ class ConsultationForm extends Form {
 								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
 								'1' => iconv ( 'ISO-8859-1', 'UTF-8', 'Normal' ),
 								'2' => iconv ( 'ISO-8859-1', 'UTF-8', "Douleur de l'HCD" ),
+								'3' => iconv ( 'ISO-8859-1', 'UTF-8', "Hépatomégalie" ),
 						)
 				),
 				'attributes' => array (
 						'id' => 'examenDuFoieVoieBiliaireDonneesExamen',
-						'style' => 'float:right'
+						'style' => 'float:right; font-size: 12px;'
 				)
 		) );
 		

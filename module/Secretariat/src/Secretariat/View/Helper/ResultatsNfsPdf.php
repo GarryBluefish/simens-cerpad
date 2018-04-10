@@ -78,16 +78,16 @@ class ResultatsNfsPdf
 	    
  		$imageHeader = ZendPdf\Image::imageWithPath($tabURI[0].'public/images_icons/CERPAD_UGB_LOGO_M.png');
 		$this->_page->drawImage($imageHeader, 440, //-x
-				$this->_pageHeight - 110, //-y
+				$this->_pageHeight - 100, //-y
 				535, //+x
-				787); //+y
+				802); //+y
 		
 		$this->_page->setFont($this->_newTime, 10);
 		$this->_page->drawText('République du Sénégal',
 				$this->_leftMargin,
 				$this->_pageHeight - 50);
 		$this->_page->setFont($this->_newTime, 10);
-		$this->_page->drawText('Université Gaston Berger / UFR 2S',
+		$this->_page->drawText('Université Gaston Berger de Saint-Louis / UFR 2S',
 				$this->_leftMargin,
 				$this->_pageHeight - 65);
 		$this->_page->setFont($this->_newTime, 10);
@@ -99,6 +99,7 @@ class ResultatsNfsPdf
 		    $this->_leftMargin,
 		    $this->_pageHeight - 95);
 		
+		/*
 		$font = ZendPdf\Font::fontWithName(ZendPdf\Font::FONT_TIMES_ROMAN);
 		$this->_page->setFont($font, 8);
 		$today = new \DateTime ();
@@ -106,6 +107,7 @@ class ResultatsNfsPdf
 		$this->_page->drawText('Saint-Louis le, ' . $dateNow,
 				450,
 				$this->_pageHeight - 50);
+				*/
 	}
 	
 	
@@ -534,6 +536,13 @@ class ResultatsNfsPdf
 	        $this->_yPosition+10);
 	    
 	    
+	    $aujourdhui = (new \DateTime ())->format ( 'd/m/Y' );
+	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 8);
+	    $this->_page->drawText( ' Imprimé le : '.$aujourdhui,
+	    		$this->_leftMargin+414,
+	    		$this->_yPosition+10);
+	    
+	    
 	    $this->_yPosition -= $noteLineHeight-20; //Allez à la ligne
 	    
 	    $this->_page->setLineColor(new ZendPdf\Color\Html('#999999'));
@@ -851,7 +860,7 @@ class ResultatsNfsPdf
 	     
 	    //------------- valeur en mm3 -------------
 	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10.5);
-	    $this->_page->drawText($this->prixMill($resultats[1]['champ3']),
+	    $this->_page->drawText($resultats[1]['champ3'],
 	        $this->_leftMargin+115,
 	        $this->_yPosition +12);
 	     
@@ -979,7 +988,7 @@ class ResultatsNfsPdf
 	     
 	    //------------- valeur en mm3 -------------
 	    $this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10.5);
-	    $this->_page->drawText($this->prixMill($resultats[1]['champ5']),
+	    $this->_page->drawText($resultats[1]['champ5'],
 	        $this->_leftMargin+115,
 	        $this->_yPosition +12);
 	     

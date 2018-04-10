@@ -802,6 +802,29 @@
     	}
     }
     
+    function getFerSeriqueFormule(){
+    	var fer_serique_ug = $('#fer_serique_ug').val();
+    	var valeur_mmol = null;
+    	
+    	$('#fer_serique_ug').keyup( function () {
+    		fer_serique_ug = $('#fer_serique_ug').val();
+    		if(fer_serique_ug){
+        		valeur_mmol = fer_serique_ug * 0.1791;
+        		$('#fer_serique_mmol').val(valeur_mmol.toFixed(2));
+        	}else{
+        		$('#fer_serique_mmol').val(null);
+        	}
+    	}).change( function(){
+    		fer_serique_ug = $('#fer_serique_ug').val();
+    		if(fer_serique_ug){
+        		valeur_mmol = fer_serique_ug * 0.1791;
+        		$('#fer_serique_mmol').val(valeur_mmol.toFixed(2));
+        	}else{
+        		$('#fer_serique_mmol').val(null);
+        	}
+    	});
+    	
+    }
     
     
     //Resultats d'une seule analyse
@@ -952,6 +975,8 @@
             	     getTestCombsIndirect();
             	     getTestCompatibilite();
             	     getAsatAlatAuto();
+            	     getFerSeriqueFormule();
+            	     ajoutCulotUrinaireAuto(); 
             	     
             	     $("#resultatsAnalyses").dialog('open');
             	     
@@ -1270,6 +1295,105 @@
 	    return tab;
     }
     
+    
+ // GESTION DE L'ANALYSE Culot_urinaire 
+    // GESTION DE L'ANALYSE Culot_urinaire 
+    // GESTION DE L'ANALYSE Culot_urinaire 
+    
+    var tabInfosCulotUrinaire = new Array();
+    tabInfosCulotUrinaire[0] = "";
+    tabInfosCulotUrinaire[1] = "";
+    tabInfosCulotUrinaire[2] = "";
+    tabInfosCulotUrinaire[3] = '<select disabled name="culot_urinaire_val_3" id="culot_urinaire_val_3" style="width: 95%;"> ' +
+    		                   "  <option></option> " +
+    		                   "  <option value=1>Oxalate de potassium | calcium</option> " +
+    		                   "  <option value=2>Phosphate</option> " +
+    		                   "  <option value=3>Cystine</option> " +
+    		                   "  <option value=4>Acide Urique</option> " +
+    		                   "</select>"; 
+    
+    tabInfosCulotUrinaire[4] = '<select disabled name="culot_urinaire_val_4" id="culot_urinaire_val_4" style="width: 95%;"> ' +
+                               "  <option></option> " +
+                               "  <option value=1>Schistoma hematobium</option> " +
+                               "</select>"; 
+    
+    tabInfosCulotUrinaire[5] = '<select disabled name="culot_urinaire_val_5" id="culot_urinaire_val_5" style="width: 95%;"> ' +
+                               "  <option></option> " +
+                               "  <option value=1>Trichomonas vaginale</option> " +
+                               "  <option value=2>Schistosoma hematobium</option> " +
+                               "</select>"; 
+    
+    function listeElemtsCulotUrinaireSelect(indice, val){
+    	$('#culot_urinaire_ligne_'+indice+' .emplaceListeElemtsCUSelect').html(tabInfosCulotUrinaire[val]);
+    }
+    
+    function ajoutCulotUrinaireAuto(){
+    	
+    	$('#culot_urinaire_plus').click(function(){
+	    	var nbLigne = $("#culot_urinaire_tableau tr").length;
+	    	$('#culot_urinaire_moins').toggle(true);
+	    	
+	    	if(nbLigne < 10){
+	    		var html ="<tr id='culot_urinaire_ligne_"+nbLigne+"' class='ligneAnanlyse' style='width: 100%;'>"+
+	    		          "  <td style='width: 40%;'><label class='lab1 listeSelect'><span style='font-weight: bold; '> <select disabled onchange='listeElemtsCulotUrinaireSelect("+nbLigne+",this.value);' name='culot_urinaire_select' id='culot_urinaire_select' > <option value=0>  </option> <option value='1' >Leucocytes</option> <option value='2' >H&eacute;maties</option> <option value='3' >Cristaux</option> <option value='4' >Oeufs</option> <option value='5' >Parasites</option> </select> </span></label></td>"+
+	    	              "  <td style='width: 40%;'><label class='lab2 emplaceListeElemtsCUSelect' style='padding-top: 5px;'>  </label></td>"+
+	    	              "  <td style='width: 20%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> </label></td>"+
+                          "</tr>";
+
+		    	$('#culot_urinaire_ligne_'+(nbLigne-1)).after(html);
+		    	
+		    	if(nbLigne == 9){
+		    		$('#culot_urinaire_plus').toggle(false);
+		    	}
+	    	}
+
+	    });
+    	
+    	$('#culot_urinaire_moins').click(function(){ 
+	    	var nbLigne = $("#culot_urinaire_tableau tr").length;
+	    	
+	    	if(nbLigne > 2){
+		    	$('#culot_urinaire_ligne_'+(nbLigne-1)).remove();
+		    	if(nbLigne == 3){ 
+		    		$('#culot_urinaire_moins').toggle(false);
+		    	}
+		    	
+		    	if(nbLigne == 10){
+		    		$('#culot_urinaire_plus').toggle(true);
+		    	}
+	    	}
+
+	    });
+    	
+    }
+    
+    function getCulotUrinaireListeSelect(){
+    	var tab = [];
+    	var nbLigne = $("#culot_urinaire_tableau tr").length;
+    	var j = 1;
+    	
+    	tab[0] = $('#type_materiel_culot_urinaire').val();
+    	tab[1] = new Array(); 
+    	tab[2] = new Array(); 
+    	for(var i=1 ; i<nbLigne ; i++){
+    		var listeSelect1  = $('#culot_urinaire_ligne_'+i+' .listeSelect select' ).val();
+    		var listeSelect2 = $('#culot_urinaire_ligne_'+i+' .emplaceListeElemtsCUSelect select').val();
+    		tab[1][j]   = listeSelect1;
+    		if(listeSelect2){ 
+    			tab[2][j++] = listeSelect2;
+    		}else{
+    			tab[2][j++] = null;
+    		}
+    	}
+	    tab[3] = $('#conclusion_culot_urinaire_valeur').val();
+	    
+	    return tab;
+    }
+    // FIN DE GESTION DE L'ANALYSE Culot_urinaire 
+    // FIN DE GESTION DE L'ANALYSE Culot_urinaire 
+    // FIN DE GESTION DE L'ANALYSE Culot_urinaire 
+    
+    /*
     function getCulotUrinaire(){
     	var tab = [];
     	tab[1] = $('#type_materiel_culot_urinaire').val();
@@ -1278,6 +1402,7 @@
 	    
 	    return tab;
     }
+    */
     
     function getSerologieChlamydiae(){
     	var tab = [];
@@ -1948,6 +2073,9 @@
             	     getTestCombsIndirect();
             	     getTestCompatibilite();
             	     getAsatAlatAuto();
+            	     getFerSeriqueFormule();
+            	     ajoutCulotUrinaireAuto();
+            	     
             	     $("#resultatsAnalysesDuneDemande").dialog('open');
             }
         });
