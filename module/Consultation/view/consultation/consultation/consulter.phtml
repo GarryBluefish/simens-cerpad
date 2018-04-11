@@ -1757,7 +1757,7 @@ $("#annuler2").click(function() {
 <!-- POP UP pour Ajouter les résultats d'une analyse -->
 <div id="imprimerDesDemandesExamensAvecSaisiMotifs" title="Imprimer les demandes d'examens (Renseigner les motifs des examens)" style="display: none;"  align="center">
     <div id="contenuimprimerDesDemandesExamensAvecSaisiMotifs" style="width: 97%;"> 
-      <table style="height: 50px; width: 100%;" id="contenuExamDemImprime_0">
+      <table style="height: 50px; width: 100%;" id="contenuExamRadioDemImprime_0">
         <tr style="width: 100%">
            <td class="titreZoneInfosStylePop" >
            &#10049; Examens Radiologiques <img onclick="imprimerTousLesExamensDemandesPop();" style="float: right; width: 25px; height: 25px; cursor: pointer;" src="../images_icons/pdf.png"  title="Imprimer tous" >  
@@ -1766,6 +1766,14 @@ $("#annuler2").click(function() {
         </tr>
       </table>
       
+      <table style="height: 50px; width: 100%;" id="contenuExamBioDemImprime_0">
+        <tr style="width: 100%">
+           <td class="titreZoneInfosStylePop" >
+           <span style="font-size: 20px;">&#10049;</span> Examens Biologiques <img onclick="imprimerTousLesExamensBioDemandesPop();" style="float: right; width: 25px; height: 25px; cursor: pointer;" src="../images_icons/pdf.png"  title="Imprimer tous" >  
+           <div style="width: 100%; border: 1px solid green;"> </div>
+           </td>
+        </tr>
+      </table>
       
     </div>
     

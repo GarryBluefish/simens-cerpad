@@ -2042,7 +2042,10 @@ class ResultatsAnalysesDemandeesPdf
 		//-------------PLACER LES LIGNES DES EXAMENS A AFFICHER ---------
 		//-------------PLACER LES LIGNES DES EXAMENS A AFFICHER ---------
 		$j = 28;
-		for($i = 0 ; $i < count($idanalysesBilanHepatique) ; $i++){
+		
+		$nbLigne = count($idanalysesBilanHepatique);
+		
+		for($i = 0 ; $i < $nbLigne ; $i++){
 	
 			if($i%2 == 0){
 				$this->_page->setLineColor(new ZendPdf\Color\Html('#e1e1e1'));
@@ -2064,6 +2067,34 @@ class ResultatsAnalysesDemandeesPdf
 	
 			$j += 19;
 		}
+		
+		
+		//Augmenter la hauteur de la ligne
+		//Augmenter la hauteur de la ligne
+		if(in_array(42, $idanalysesBilanHepatique)){
+				
+				if(($i-1)%2 == 0){
+					$this->_page->setLineColor(new ZendPdf\Color\Html('#e1e1e1'));
+					$this->_page->setLineWidth(21);
+					$this->_page->drawLine($this->_leftMargin,
+							$this->_yPosition -$j,
+							$this->_pageWidth -
+							$this->_leftMargin,
+							$this->_yPosition -$j);
+				}else{
+					$this->_page->setLineColor(new ZendPdf\Color\Html('#f1f1f1'));
+					$this->_page->setLineWidth(21);
+					$this->_page->drawLine($this->_leftMargin,
+							$this->_yPosition -$j,
+							$this->_pageWidth -
+							$this->_leftMargin,
+							$this->_yPosition -$j);
+				}
+		
+				$j += 19;
+		}
+		//FIn augmentation de la hauteur de la ligne
+		//Fin augmentation de la hauteur de la ligne
 			
 		//-----------------------------------------------------------------------
 		//-----------------------------------------------------------------------
@@ -2162,31 +2193,64 @@ class ResultatsAnalysesDemandeesPdf
 	
 		if(in_array(42, $idanalysesBilanHepatique)){
 			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "BILIRUBINE TOTALE ET DIRECTE : " ),
+			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "BILIRUBINE TOTALE : " ),
 					$this->_leftMargin+5,
 					$this->_yPosition+9);
 	
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', " mg : " ),
+			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
+			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $resultats[42]['bilirubine_totale'].' mg/l' ),
+					$this->_leftMargin+115,
+					$this->_yPosition+9);
+	
+			//Notation française avec un chiffre après la virgule et un séparateur pour les milliers
+			$valeurBilTotalAutoFormatee = number_format($resultats[42]['bilirubine_totale_auto'], 2, ',', ' ');
+			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
+			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $valeurBilTotalAutoFormatee.' umol/l' ),
+					$this->_leftMargin+170,
+					$this->_yPosition+9);
+			
+			
+			//*** BILIRUBINE DIRECTE --- BILIRUBINE DIRECTE --- BILIRUBINE DIRECTE --- BILIRUBINE DIRECTE
+			
+			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10);
+			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "BILIRUBINE DIRECTE : " ),
+					$this->_leftMargin+245,
+					$this->_yPosition+9);
+			
+			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
+			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $resultats[42]['bilirubine_directe'].' mg/l' ),
+					$this->_leftMargin+360,
+					$this->_yPosition+9);
+			
+			//Notation française avec un chiffre après la virgule et un séparateur pour les milliers
+			$valeurBilTotalAutoFormatee = number_format($resultats[42]['bilirubine_directe_auto'], 2, ',', ' ');
+			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
+			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $valeurBilTotalAutoFormatee.' umol/l' ),
+					$this->_leftMargin+420,
+					$this->_yPosition+9);
+	
+			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
+			
+			//*** BILIRUBINE INDIRECTE --- BILIRUBINE INDIRECTE --- BILIRUBINE INDIRECTE
+			
+			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES), 10);
+			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "BILIRUBINE INDIRECTE : " ),
+					$this->_leftMargin+5,
+					$this->_yPosition+9);
+	
+			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
+			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $resultats[42]['bilirubine_indirecte'].' mg/l' ),
+					$this->_leftMargin+125,
+					$this->_yPosition+9);
+	
+			//Notation française avec un chiffre après la virgule et un séparateur pour les milliers
+			$valeurBilTotalAutoFormatee = number_format($resultats[42]['bilirubine_indirecte_auto'], 2, ',', ' ');
+			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
+			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $valeurBilTotalAutoFormatee.' umol/l' ),
 					$this->_leftMargin+180,
 					$this->_yPosition+9);
-	
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $resultats[42]['bilirubine_totale_mg'] ),
-					$this->_leftMargin+200,
-					$this->_yPosition+9);
-	
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_ITALIC), 9);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', " umol : " ),
-					$this->_leftMargin+240,
-					$this->_yPosition+9);
-	
-			$this->_page->setFont(Font::fontWithName(ZendPdf\Font::FONT_TIMES_BOLD), 11);
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $resultats[42]['bilirubine_totale_umol'] ),
-					$this->_leftMargin+270,
-					$this->_yPosition+9);
-	
-	
+			
+			
 			$this->_yPosition -= $noteLineHeight-12; //aller a la ligne suivante
 		}
 	

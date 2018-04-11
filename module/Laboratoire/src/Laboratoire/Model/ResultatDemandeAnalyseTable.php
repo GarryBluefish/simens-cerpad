@@ -2472,13 +2472,15 @@ class ResultatDemandeAnalyseTable {
 	
 	    $donnees = array();
 	
-	    if($tab[1]){ $donnees['type_materiel']          = $tab[1]; }else{ $donnees['type_materiel']          = null; }
-	    if($tab[2]){ $donnees['bilirubine_totale_mg']   = $tab[2]; }else{ $donnees['bilirubine_totale_mg']   = null; }
-	    if($tab[3]){ $donnees['bilirubine_totale_umol'] = $tab[3]; }else{ $donnees['bilirubine_totale_umol'] = null; }
-	    if($tab[4]){ $donnees['bilirubine_directe']     = $tab[4]; }else{ $donnees['bilirubine_directe']     = null; }
+	    if($tab[1]){ $donnees['type_materiel']             = $tab[1]; }else{ $donnees['type_materiel']            = null; }
+	    if($tab[2]){ $donnees['bilirubine_totale']         = $tab[2]; }else{ $donnees['bilirubine_totale']        = null; }
+	    if($tab[3]){ $donnees['bilirubine_totale_auto']    = $tab[3]; }else{ $donnees['bilirubine_totale_auto']   = null; }
+	    if($tab[4]){ $donnees['bilirubine_directe']        = $tab[4]; }else{ $donnees['bilirubine_directe']       = null; }
+	    if($tab[5]){ $donnees['bilirubine_directe_auto']   = $tab[5]; }else{ $donnees['bilirubine_directe_auto']  = null; }
+	    if($tab[6]){ $donnees['bilirubine_indirecte']      = $tab[6]; }else{ $donnees['bilirubine_indirecte']     = null; }
+	    if($tab[7]){ $donnees['bilirubine_indirecte_auto'] = $tab[7]; }else{ $donnees['bilirubine_indirecte_auto']= null; }
 	
-	
-	    if($tab[2] || $tab[3] || $tab[4]){ $donneesExiste = 1; }
+	    if($tab[2] || $tab[4]){ $donneesExiste = 1; }
 	
 	    //Si les resultats n y sont pas on les ajoute
 	    if(!$this->getValeursBilirubineTotaleDirecte($iddemande)){

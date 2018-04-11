@@ -1110,28 +1110,64 @@ function affichageDesExamensDemandes(){
 	
 	$('#contenuimprimerDesDemandesExamensAvecSaisiMotifs .contenuExamDemImprime').remove();
 	
-	var examenDemandeAajoute = "";
 	
+	//*** RECUPERATION DES EXAMENS RADIOLOGIQUES --- RECUPERATION DES EXAMENS RADIOLOGIQUES 
+	//*** RECUPERATION DES EXAMENS RADIOLOGIQUES --- RECUPERATION DES EXAMENS RADIOLOGIQUES 
+	var examenRadioDemandeAajoute = "";
 	for(var k=1 ; k<tabExamens.length ; k++){
-		var baliseMere = $('#codePourAjouterDesExamensDemandesAImprimer');
-		baliseMere.addClass('contenuExamDemImprime_'+k);
-		
-		//Creer les attributs name
-		$('.contenuExamDemImprime_'+k+' .textareaBaliseSaisiMotifExamen input').attr('name', 'idExamenDem_'+k);
-		$('.contenuExamDemImprime_'+k+' .textareaBaliseSaisiMotifExamen textarea').attr({'name':'motifExamenDem_'+k, 'id':'motifExamenDem_'+k});
-		
-		//Ajouter les valeurs
-		$('.contenuExamDemImprime_'+k+' .textareaBaliseSaisiMotifExamen input').val(tabIdExamens[k]);
-		$('.contenuExamDemImprime_'+k+' .libelleExamenDemandeAImprimer').html(tabExamens[k]);
-		
-		//Creer l'icone pdf pour imprimer un examens precis
-		$('.contenuExamDemImprime_'+k+' .textareaBaliseSaisiMotifExamen #imageImpressionExamenPopPrecis').html('<img onclick="imprimerUnExamenDemandePop('+k+');" style="float: right; width: 20px; height: 20px; margin-top: 5px; cursor: pointer;" src="../images_icons/pdf.png"  title="Imprimer" >');
-		
-		examenDemandeAajoute += baliseMere.html();
+		var typeExamen = $('.type_analyse_name_'+k+' option:selected').val();
+		if( typeExamen == 6 ){
+			var baliseMere = $('#codePourAjouterDesExamensDemandesAImprimer');
+			baliseMere.addClass('contenuExamDemImprime_'+k);
+			
+			//Creer les attributs name
+			$('.contenuExamDemImprime_'+k+' .textareaBaliseSaisiMotifExamen input').attr('name', 'idExamenDem_'+k);
+			$('.contenuExamDemImprime_'+k+' .textareaBaliseSaisiMotifExamen textarea').attr({'name':'motifExamenDem_'+k, 'id':'motifExamenDem_'+k});
+			
+			//Ajouter les valeurs
+			$('.contenuExamDemImprime_'+k+' .textareaBaliseSaisiMotifExamen input').val(tabIdExamens[k]);
+			$('.contenuExamDemImprime_'+k+' .libelleExamenDemandeAImprimer').html(tabExamens[k]);
+			
+			//Creer l'icone pdf pour imprimer un examens precis
+			$('.contenuExamDemImprime_'+k+' .textareaBaliseSaisiMotifExamen #imageImpressionExamenPopPrecis').html('<img onclick="imprimerUnExamenDemandePop('+k+');" style="float: right; width: 20px; height: 20px; margin-top: 5px; cursor: pointer;" src="../images_icons/pdf.png"  title="Imprimer" >');
+			
+			examenRadioDemandeAajoute += baliseMere.html();
+		}
+	}
+	//A PLACER APRES LA PREMIERE TABLE
+	$('#contenuExamRadioDemImprime_0').after(examenRadioDemandeAajoute);
+
+	
+	//*** RECUPERATION DES EXAMENS BIOLOGIQUES --- RECUPERATION DES EXAMENS BIOLOGIQUES 
+	//*** RECUPERATION DES EXAMENS BIOLOGIQUES --- RECUPERATION DES EXAMENS BIOLOGIQUES 
+	var examenBioDemandeAajoute = "";
+	for(var k=1 ; k<tabExamens.length ; k++){
+		var typeExamen = $('.type_analyse_name_'+k+' option:selected').val();
+		if( typeExamen != 6 ){
+			var baliseMere = $('#codePourAjouterDesExamensDemandesAImprimer');
+			baliseMere.addClass('contenuExamDemImprime_'+k);
+			
+			//Creer les attributs name
+			$('.contenuExamDemImprime_'+k+' .textareaBaliseSaisiMotifExamen input').attr('name', 'idExamenDem_'+k);
+			$('.contenuExamDemImprime_'+k+' .textareaBaliseSaisiMotifExamen textarea').attr({'name':'motifExamenDem_'+k, 'id':'motifExamenDem_'+k});
+			
+			//Ajouter les valeurs
+			$('.contenuExamDemImprime_'+k+' .textareaBaliseSaisiMotifExamen input').val(tabIdExamens[k]);
+			$('.contenuExamDemImprime_'+k+' .libelleExamenDemandeAImprimer').html(tabExamens[k]);
+			
+			//Creer l'icone pdf pour imprimer un examens precis
+			$('.contenuExamDemImprime_'+k+' .textareaBaliseSaisiMotifExamen #imageImpressionExamenPopPrecis').html('<img onclick="imprimerUnExamenDemandePop('+k+');" style="float: right; width: 20px; height: 20px; margin-top: 5px; cursor: pointer;" src="../images_icons/pdf.png"  title="Imprimer" >');
+			
+			examenBioDemandeAajoute += baliseMere.html();
+		}
 	}
 	
+	
 	//A PLACER APRES LA PREMIERE TABLE
-	$('#contenuExamDemImprime_0').after(examenDemandeAajoute);
+	$('#contenuExamBioDemImprime_0').after(examenBioDemandeAajoute);
+	
+	
+	
 }
 
 
@@ -1194,11 +1230,18 @@ function imprimerTousLesExamensDemandesPop(){
 
 function imprimerUnExamenDemandePop(idLigneExamen){
 	
-	alert(idLigneExamen);
+	//alert(idLigneExamen);
 	var k = idLigneExamen;
 	var motifExamenDem = $('#motifExamenDem_'+k).val();
-	
 	//alert($('#motifExamenDem_'+k).val());
+	
+	typeExamen = $('.type_analyse_name_'+k+' option:selected').val(); 
+	idExamen = $('.analyse_name_'+k+' option:selected').val();
+	libelleExamen = $('.analyse_name_'+k+' option:selected').text(); 
+	
+	alert(typeExamen);
+	alert(idExamen);
+	alert(libelleExamen);
 	
 }
 

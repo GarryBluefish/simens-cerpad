@@ -3642,9 +3642,12 @@ class TechnicienController extends AbstractActionController {
 	        $html .=
 	        "<script>
 	            $('#type_materiel_bilirubine_totale_directe').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
-	    	    $('#bilirubine_totale_mg').val('".$resultat['bilirubine_totale_mg']."');
-    	        $('#bilirubine_totale_umol').val('".$resultat['bilirubine_totale_umol']."');
+	    	    $('#bilirubine_totale').val('".$resultat['bilirubine_totale']."');
+    	        $('#bilirubine_totale_auto').val('".$resultat['bilirubine_totale_auto']."');
    	            $('#bilirubine_directe').val('".$resultat['bilirubine_directe']."');
+   	            $('#bilirubine_directe_auto').val('".$resultat['bilirubine_directe_auto']."');
+   	            $('#bilirubine_indirecte').val('".$resultat['bilirubine_indirecte']."');
+   	            $('#bilirubine_indirecte_auto').val('".$resultat['bilirubine_indirecte_auto']."');
 	    	 </script>";
 	    }
 	    return $html;
@@ -7227,22 +7230,22 @@ class TechnicienController extends AbstractActionController {
 	    
 	    $html .= "<table style='width: 100%;'>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 10%;'><label class='lab1'><span style='font-weight: bold; '> </span></label></td>";
-	    $html .= "  <td style='width: 40%;'><label class='lab1'><span style='font-weight: bold; '> Bilirubine totale <input id='bilirubine_totale' type='number' step='any'> mg/l </span></label></td>";
+	    $html .= "  <td style='width: 8%;'><label class='lab1'><span style='font-weight: bold; '> </span></label></td>";
+	    $html .= "  <td style='width: 42%;'><label class='lab1'><span style='font-weight: bold; '> Bilirubine totale <input id='bilirubine_totale' type='number' step='any'> mg/l </span></label></td>";
 	    $html .= "  <td style='width: 30%;'><label class='lab2' style='padding-top: 5px;'><span style='font-weight: bold; '> <input id='bilirubine_totale_auto' type='number' step='any' tabindex='3' readonly> umol/l </span></label></td>";
 	    $html .= "  <td style='width: 20%;'><label class='lab3' style='padding-top: 5px; width: 80%;'>  </label></td>";
 	    $html .= "</tr>";
 	
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 10%;'><label class='lab1'><span style='font-weight: bold; '> </span></label></td>";
-	    $html .= "  <td style='width: 40%;'><label class='lab1'><span style='font-weight: bold; '> Bilirubine directe <input id='bilirubine_directe' type='number' step='any'> mg/l </span></label></td>";
+	    $html .= "  <td style='width: 8%;'><label class='lab1'><span style='font-weight: bold; '> </span></label></td>";
+	    $html .= "  <td style='width: 42%;'><label class='lab1'><span style='font-weight: bold; '> Bilirubine directe <input id='bilirubine_directe' type='number' step='any'> mg/l </span></label></td>";
 	    $html .= "  <td style='width: 30%;'><label class='lab2' style='padding-top: 5px;'><span style='font-weight: bold; '> <input id='bilirubine_directe_auto' type='number' step='any' tabindex='3' readonly> umol/l </span></label></td>";
 	    $html .= "  <td style='width: 20%;'><label class='lab3' style='padding-top: 5px; width: 80%;'>  </label></td>";
 	    $html .= "</tr>";
 	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 10%;'><label class='lab1'><span style='font-weight: bold; '> </span></label></td>";
-	    $html .= "  <td style='width: 40%;'><label class='lab1'><span style='font-weight: bold; '> Bilirubine indirecte <input id='bilirubine_indirecte' type='number' step='any' readonly> mg/l </span></label></td>";
+	    $html .= "  <td style='width: 8%;'><label class='lab1'><span style='font-weight: bold; '> </span></label></td>";
+	    $html .= "  <td style='width: 42%;'><label class='lab1'><span style='font-weight: bold; '> Bilirubine indirecte <input id='bilirubine_indirecte' type='number' step='any' readonly> mg/l </span></label></td>";
 	    $html .= "  <td style='width: 30%;'><label class='lab2' style='padding-top: 5px;'><span style='font-weight: bold; '> <input id='bilirubine_indirecte_auto' type='number' step='any' tabindex='3' readonly> umol/l </span></label></td>";
 	    $html .= "  <td style='width: 20%;'><label class='lab3' style='padding-top: 5px; width: 80%;'>  </label></td>";
 	    $html .= "</tr>";
