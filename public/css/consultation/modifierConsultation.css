@@ -520,13 +520,26 @@ width: 190px; /* la largeur du champ input*/
 	margin-bottom: 15px;
 }
 
-.titreZoneInfosEFStyle, .titreZoneInfosEAFStyle
+.titreZoneInfosEFStyle, .titreZoneInfosEAFStyle, .titreZoneInfosStylePop
 {
 	width: 100%; 
 	font-family: Tempus Sans ITC;  
 	color: green; 
 	font-size: 20px; 
 	padding-bottom: 2px;
+}
+
+
+.contenuZoneInfosStylePopDemExam th:hover
+{
+	background-color: #fdfdfd;
+}
+
+
+.contenuZoneInfosStylePopDemExam
+{
+	height: 45px;
+	margin-bottom: 15px;
 }
 
 

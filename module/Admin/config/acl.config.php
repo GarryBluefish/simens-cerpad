@@ -316,7 +316,9 @@ return array(
             		'liste-patients-consultes-ajax' => 'medecin',
             		'impression-ordonnance' => 'medecin',
             		'impression-examens-demandes' => 'medecin',
-            			
+            		'impression-un-examen-demande' => 'medecin',
+            		'impression-examens-radio-demandes'  => 'medecin',
+            		'impression-examens-bio-demandes'  => 'medecin',
             			
             		'historiques-des-consultations-du-patient-ajax' => 'medecin',
             		'visualisation-historique-consultation' => 'medecin', 	

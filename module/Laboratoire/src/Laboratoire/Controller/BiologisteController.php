@@ -12,6 +12,7 @@ use Secretariat\View\Helper\ResultatsAnalysesDemandeesPdf;
 use Secretariat\View\Helper\DocumentResultatsPdf;
 use Secretariat\View\Helper\ResultatsNfsPdf;
 use Secretariat\View\Helper\ResultatsTypageHemoglobinePdf;
+use Laboratoire\View\Helper\ImprimerResultatsAnalysesDemandees;
 
 class BiologisteController extends AbstractActionController {
 	protected $personneTable;
@@ -1524,6 +1525,7 @@ class BiologisteController extends AbstractActionController {
  	        	$('#type_materiel_goutte_epaisse').val('".str_replace( "'", "\'",$resultat['type_materiel'])."');
 	            $('#goutte_epaisse').val('".$resultat['goutte_epaisse']."');
 	            if('".$resultat['goutte_epaisse']."' == 'Positif'){ $('#goutte_epaisse_positif').toggle(true); $('#densite_parasitaire').val('".$resultat['densite_parasitaire']."'); }
+	            $('.ER_".$iddemande." #commentaire_goutte_epaisse').val('".str_replace( "'", "\'",$resultat['commentaire_goutte_epaisse'])."');		
 	        </script>";
 	    }
 	    return $html;
@@ -1662,6 +1664,7 @@ class BiologisteController extends AbstractActionController {
 	        "<script>
 	        	$('#type_materiel_azotemie').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');		
 	            $('#uree_sanguine').val('".$resultat['valeur']."');
+	            $('#uree_sanguine_mmol').val('".$resultat['valeur_mmol']."');
 	        </script>";
 	    }
 	    return $html;
@@ -1675,6 +1678,7 @@ class BiologisteController extends AbstractActionController {
 	        "<script>
 	        	$('#type_materiel_acide_urique').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	            $('#acide_urique').val('".$resultat['acide_urique']."');
+	            $('#acide_urique_umol').val('".$resultat['acide_urique_umol']."');
 	        </script>";
 	    }
 	    return $html;
@@ -1759,6 +1763,7 @@ class BiologisteController extends AbstractActionController {
 	        "<script>
 	         	$('#type_materiel_calcemie').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');			
 	    	    $('#calcemie').val('".$resultat['calcemie']."');
+	    	    $('#calcemie_mmol').val('".$resultat['calcemie_mmol']."');
 	    	 </script>";
 	    }
 	    return $html;
@@ -1785,6 +1790,7 @@ class BiologisteController extends AbstractActionController {
 	        "<script>
   	            $('#type_materiel_phosphoremie').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');			
 	    	    $('#phosphoremie').val('".$resultat['phosphoremie']."');
+	    	    $('#phosphoremie_mmol').val('".$resultat['phosphoremie_mmol']."');
 	    	 </script>";
 	    }
 	    return $html;
@@ -1975,7 +1981,7 @@ class BiologisteController extends AbstractActionController {
     	        $('#gamma').val('".$resultat['gamma']."');
     	        $('#gamma_abs').val('".$resultat['gamma_abs']."');
     	        $('#proteine_totale').val('".$resultat['proteine_totale']."');
-    	        $('#commentaire_electrophorese_proteine').val('".str_replace( "'", "\'", $resultat['commentaire'])."');
+    	        $('#commentaire_electrophorese_proteine').val('".preg_replace("/(\r\n|\n|\r)/", "\\n", str_replace( "'", "\'", $resultat['commentaire']) )."');
 	    	 </script>";
 	    }
 	    return $html;
@@ -1989,6 +1995,7 @@ class BiologisteController extends AbstractActionController {
 	        "<script>
 	            $('#type_materiel_albuminemie').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	    	    $('#albuminemie').val('".$resultat['albuminemie']."');
+	    	    $('#albuminemie_umol').val('".$resultat['albuminemie_umol']."');
 	    	 </script>";
 	    }
 	    return $html;
@@ -2070,6 +2077,7 @@ class BiologisteController extends AbstractActionController {
 	            $('#type_materiel_hlm_compte_daddis').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	    	    $('#hematies_hlm').val('".$resultat['hematies_hlm']."');
     	        $('#leucocytes_hlm').val('".$resultat['leucocytes_hlm']."');
+    	        $('#commentaire_hlm_compte_daddis').val('".$resultat['commentaire_hlm_compte_daddis']."');
 	    	 </script>";
 	    }
 	    return $html;
@@ -2157,6 +2165,7 @@ class BiologisteController extends AbstractActionController {
 	    	    $('#toxoplasmose_igm_titre').val('".$resultat['toxoplasmose_igm_titre']."');
 	    	    $('#toxoplasmose_igg').val('".$resultat['toxoplasmose_igg']."');
 	    	    $('#toxoplasmose_igg_titre').val('".$resultat['toxoplasmose_igg_titre']."');
+	    	    $('#toxoplasmose_commentaire').val('".$resultat['toxoplasmose_commentaire']."');
 	    	 </script>";
 	    }
 	    return $html;
@@ -2173,6 +2182,7 @@ class BiologisteController extends AbstractActionController {
 	    	    $('#rubeole_igm_titre').val('".$resultat['rubeole_igm_titre']."');
 	    	    $('#rubeole_igg').val('".$resultat['rubeole_igg']."');
 	    	    $('#rubeole_igg_titre').val('".$resultat['rubeole_igg_titre']."');
+	    	    $('#rubeole_commentaire').val('".$resultat['rubeole_commentaire']."');
 	    	 </script>";
 	    }
 	    return $html;
@@ -2188,13 +2198,24 @@ class BiologisteController extends AbstractActionController {
 	    		if($i > 0){
 	    			$html .= "<script> setTimeout(function(){ $('#culot_urinaire_plus').trigger('click'); }, 50); </script>";
 	    		}
-	    		$html .=
-	    		"<script>
-	              setTimeout(function(){
-	                $('#culot_urinaire_ligne_".($i+1)." .listeSelect select').val('".$resultat[$i]['culot_urinaire_1']."').trigger('onchange');
-	                $('#culot_urinaire_ligne_".($i+1)." .emplaceListeElemtsCUSelect select').val('".$resultat[$i]['culot_urinaire_2']."');
-	              }, 50);
-	    	    </script>";
+	    		
+	    		if(in_array($resultat[$i]['culot_urinaire_1'], array(1,2)) ){
+	    			$html .=
+	    			"<script>
+	                  setTimeout(function(){
+	                    $('#culot_urinaire_ligne_".($i+1)." .listeSelect select').val('".$resultat[$i]['culot_urinaire_1']."').trigger('onchange');
+	                    $('#culot_urinaire_ligne_".($i+1)." .emplaceListeElemtsCUSelect input').val('".$resultat[$i]['culot_urinaire_2']."');
+	                  }, 50);
+	    	         </script>";
+	    		}else{
+	    			$html .=
+	    			"<script>
+	                  setTimeout(function(){
+	                    $('#culot_urinaire_ligne_".($i+1)." .listeSelect select').val('".$resultat[$i]['culot_urinaire_1']."').trigger('onchange');
+	                    $('#culot_urinaire_ligne_".($i+1)." .emplaceListeElemtsCUSelect select').val('".$resultat[$i]['culot_urinaire_2']."');
+	                  }, 50);
+	    	         </script>";
+	    		}
 	    	}
 	    	$html .="<script> setTimeout(function(){ $('#conclusion_culot_urinaire_valeur').val('".str_replace( "'", "\'", $resultat[0]['conclusion'])."'); },50); </script>";
 	    
@@ -4055,7 +4076,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td colspan='2' ><label style='height: 80px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_hemogramme' style='max-height: 57px; min-height: 57px; max-width: 400px; min-width: 400px; margin-left: 30px;' > </textarea> </label></td>";
+	    $html .= "  <td colspan='2' ><label style='height: 80px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_hemogramme' style='max-height: 57px; min-height: 57px; max-width: 400px; min-width: 400px; margin-left: 30px;' readonly> </textarea> </label></td>";
 	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 80%; height: 80px; font-size: 14px;'>  </label></td>";
 	    $html .= "</tr>";
 	    
@@ -4352,7 +4373,16 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    
 	    $html .= "<script>  function getDensiteGE(valeur){ if(valeur == 'Positif'){ $('#goutte_epaisse_positif').toggle(true); }else{ $('#goutte_epaisse_positif').toggle(false); } } </script>";
-	
+	    
+	    $html .= "</table>";
+	     
+	    $html .= "<table style='width: 100%;'>";
+	     
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td colspan='2' ><label style='height: 80px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_goutte_epaisse' style='max-height: 57px; min-height: 57px; max-width: 400px; min-width: 400px; margin-left: 30px;' readonly> </textarea> </label></td>";
+	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 80%; height: 80px; font-size: 14px;'>  </label></td>";
+	    $html .= "</tr>";
+	    
 	    $html .= "</table> </td> </tr>";
 	
 	    return $html;
@@ -4806,6 +4836,12 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'> g/l </label></td>";
 	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> N: 0,15 &agrave; 0,45</label></td>";
 	    $html .= "</tr>";
+	    
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 55%;'><label class='lab1' ><span style='font-weight: bold;'>  <input id='uree_sanguine_mmol' type='number' step='any' readonly> </span></label></td>";
+	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'> mmol/l </label></td>";
+	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> ( 2,49 &agrave; 7,49 )</label></td>";
+	    $html .= "</tr>";
 	
 	    $html .= "</table> </td> </tr>";
 	
@@ -4832,9 +4868,16 @@ class BiologisteController extends AbstractActionController {
 	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
 	    $html .= "  <td style='width: 55%;'><label class='lab1' ><span style='font-weight: bold;'> uric&eacute;mie <input id='acide_urique' type='number' step='any' readonly> </span></label></td>";
-	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'> mg/l </label></td>";
-	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 85%;'> N : H= 35  &agrave; 72, F= 26 &agrave; 60 </label></td>";
+	    $html .= "  <td style='width: 12%;'><label class='lab2' style='padding-top: 5px;'> mg/l </label></td>";
+	    $html .= "  <td style='width: 33%;'><label class='lab3' style='padding-top: 5px; width: 85%;'> ( H= 35  &agrave; 72, F= 26 &agrave; 60 ) </label></td>";
 	    $html .= "</tr>";
+	
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 55%;'><label class='lab1' ><span style='font-weight: bold;'> <input id='acide_urique_umol' type='number' step='any' readonly> </span></label></td>";
+	    $html .= "  <td style='width: 12%;'><label class='lab2' style='padding-top: 5px;'> umol/l </label></td>";
+	    $html .= "  <td style='width: 33%;'><label class='lab3' style='padding-top: 5px; width: 85%;'> ( H= 208  &agrave; 428, F= 154 &agrave; 356 ) </label></td>";
+	    $html .= "</tr>";
+	    
 	
 	    $html .= "</table> </td> </tr>";
 	
@@ -5153,12 +5196,22 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_calcemie' readonly> </div> </td>";
 	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
 	    $html .= "</tr>";
+	    
+	    $html .= "</table>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
+	    $html .= "<table style='width: 100%;'>";
+	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 55%;'><label class='lab1' style='height: 40px;'><span style='font-weight: bold; '> calc&eacute;mie <input id='calcemie' type='number' step='any' readonly> </span></label></td>";
-	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;  height: 40px;'> mg/l </label></td>";
-	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%; height: 40px;'> N: Adultes: 86 &agrave; 103  <spa style='padding-left: 18px;'> Enfants: 100 &agrave; 120 </spa> </label></td>";
+	    $html .= "  <td style='width: 45%;'><label class='lab1' ><span style='font-weight: bold;'> Calc&eacute;mie <input id='calcemie' type='number' step='any' readonly> </span></label></td>";
+	    $html .= "  <td style='width: 10%;'><label class='lab2' style='padding-top: 5px;'> mg/l </label></td>";
+	    $html .= "  <td style='width: 45%;'><label class='lab3' style='padding-top: 5px; width: 90%;'> ( Adultes: 86 &agrave; 103 ; Enfants: 100 &agrave; 120 ) </label></td>";
+	    $html .= "</tr>";
+	    
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 45%;'><label class='lab1' ><span style='font-weight: bold;'> Calc&eacute;mie <input id='calcemie_mmol' type='number' step='any' readonly> </span></label></td>";
+	    $html .= "  <td style='width: 10%;'><label class='lab2' style='padding-top: 5px;'> mmol/l </label></td>";
+	    $html .= "  <td style='width: 45%;'><label class='lab3' style='padding-top: 5px; width: 90%; font-size: 13px;'> ( Adultes: 2,14 &agrave; 2,56 ; Enfants: 2,49 &agrave; 2,98 ) </label></td>";
 	    $html .= "</tr>";
 	
 	    $html .= "</table> </td> </tr>";
@@ -5211,12 +5264,22 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_phosphoremie' readonly> </div> </td>";
 	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
 	    $html .= "</tr>";
+	    
+	    $html .= "</table>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
+	     
+	    $html .= "<table style='width: 100%;'>";
 	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 55%;'><label class='lab1' style='height: 40px;'><span style='font-weight: bold; '> phosphor&eacute;mie <input id='phosphoremie' type='number' step='any' readonly> </span></label></td>";
-	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;  height: 40px;'> mg/l </label></td>";
-	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%; height: 40px;'> N: Adultes: 25 &agrave; 50  <spa style='padding-left: 18px;'> Enfants: 40 &agrave; 70 </spa> </label></td>";
+	    $html .= "  <td style='width: 45%;'><label class='lab1' ><span style='font-weight: bold;'> Phosphor&eacute;mie  <input id='phosphoremie' type='number' step='any' readonly> </span></label></td>";
+	    $html .= "  <td style='width: 10%;'><label class='lab2' style='padding-top: 5px;'> mg/l </label></td>";
+	    $html .= "  <td style='width: 45%;'><label class='lab3' style='padding-top: 5px; width: 90%;'> ( Adultes: 25 &agrave; 50 ;  Enfants: 40 &agrave; 70 ) </label></td>";
+	    $html .= "</tr>";
+	     
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 45%;'><label class='lab1' ><span style='font-weight: bold;'> <input id='phosphoremie_mmol' type='number' step='any' readonly> </span></label></td>";
+	    $html .= "  <td style='width: 10%;'><label class='lab2' style='padding-top: 5px;'> mmol/l </label></td>";
+	    $html .= "  <td style='width: 45%;'><label class='lab3' style='padding-top: 5px; width: 90%;  font-size: 13px;'> ( Adultes: 8,07 &agrave; 16,15 ; Enfants: 12,92 &agrave; 22,61 ) </label></td>";
 	    $html .= "</tr>";
 	
 	    $html .= "</table> </td> </tr>";
@@ -5625,7 +5688,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td colspan='3' ><label style='height: 80px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_electrophorese_proteine' style='max-height: 57px; min-height: 57px; max-width: 400px; min-width: 400px; margin-left: 30px;' tabindex='8'> </textarea> </label></td>";
+	    $html .= "  <td colspan='3' ><label style='height: 80px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_electrophorese_proteine' style='max-height: 57px; min-height: 57px; max-width: 400px; min-width: 400px; margin-left: 30px;' tabindex='8' readonly> </textarea> </label></td>";
 	    $html .= "  <td style='width: 40%;'><label style='padding-top: 5px; width: 80%; height: 80px; font-size: 14px;'>  </label></td>";
 	    $html .= "</tr>";
 	    
@@ -5658,6 +5721,12 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'>N : 35 - 53 </label></td>";
 	    $html .= "</tr>";
 	
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 55%;'><label class='lab1'><span style='font-weight: bold; '>  <input id='albuminemie_umol' type='number' step='any' tabindex='2' readonly> </span></label></td>";
+	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'> umol/l </label></td>";
+	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> ( 507,25 - 768,12 ) </label></td>";
+	    $html .= "</tr>";
+	    
 	    $html .= "</table> </td> </tr>";
 	
 	    return $html;
@@ -5720,12 +5789,14 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "  <td style='width: 45%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_protidemie' tabindex='1' readonly> </div> </td>";
 	    $html .= "  <td colspan='3' style='width: 45%;'> </td>";
 	    $html .= "</tr>";
+	    $html .= "</table>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
+	    $html .= "<table style='width: 100%;'>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 45%;'><label class='lab1'><span style='font-weight: bold; '> Protid&eacute;mie <input id='protidemie' type='number' step='any' tabindex='2' readonly> </span></label></td>";
+	    $html .= "  <td style='width: 42%;'><label class='lab1'><span style='font-weight: bold; '> Protid&eacute;mie <input id='protidemie' type='number' step='any' tabindex='2' readonly> </span></label></td>";
 	    $html .= "  <td style='width: 10%;'><label class='lab2' style='padding-top: 5px;'> g/l </label></td>";
-	    $html .= "  <td style='width: 45%;'><label class='lab3' style='padding-top: 5px; width: 89%; font-size: 13px;'> N: Adultes: 66 &agrave; 83 ; Nouveaux n&eacute;s: 52 &agrave; 91 </label></td>";
+	    $html .= "  <td style='width: 48%;'><label class='lab3' style='padding-top: 5px; width: 89%; font-size: 13px;'> N: Adultes: 66 &agrave; 83 ; Nouveaux n&eacute;s: 52 &agrave; 91 </label></td>";
 	    $html .= "</tr>";
 	
 	    $html .= "</table> </td> </tr>";
@@ -5792,6 +5863,15 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> N < 2000 </label></td>";
 	    $html .= "</tr>";
 	
+	    $html .= "</table>";
+	    
+	    $html .= "<table style='width: 100%;'>";
+	    
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td colspan='2' ><label style='height: 80px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_hlm_compte_daddis' style='max-height: 57px; min-height: 57px; max-width: 400px; min-width: 400px; margin-left: 30px;' readonly> </textarea> </label></td>";
+	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 80%; height: 80px; font-size: 14px;'>  </label></td>";
+	    $html .= "</tr>";
+	    
 	    $html .= "</table> </td> </tr>";
 	
 	    return $html;
@@ -5816,7 +5896,7 @@ class BiologisteController extends AbstractActionController {
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 55%;'><label class='lab1'><span style='font-weight: bold; '> B&eacute;ta HCG <input id='beta_hcg_plasmatique' type='number' step='any' tabindex='2' readonly > </span></label></td>";
+	    $html .= "  <td style='width: 55%;'><label class='lab1'><span style='font-weight: bold; '> B&eacute;ta HCG <select name='beta_hcg_plasmatique' id='beta_hcg_plasmatique' disabled> <option >  </option> <option value='Positif' >Positif</option> <option value='Negatif' >N&eacute;gatif</option> </select>  </span></label></td>";
 	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'>  </label></td>";
 	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'>  </label></td>";
 	    $html .= "</tr>";
@@ -5990,6 +6070,15 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'>  </label></td>";
 	    $html .= "</tr>";
 	    
+	    $html .= "</table>";
+	    
+	    $html .= "<table style='width: 100%;'>";
+	    
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td colspan='2' ><label style='height: 80px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='toxoplasmose_commentaire' style='max-height: 57px; min-height: 57px; max-width: 400px; min-width: 400px; margin-left: 30px;' readonly> </textarea> </label></td>";
+	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 80%; height: 80px; font-size: 14px;'>  </label></td>";
+	    $html .= "</tr>";
+	    
 	    $html .= "</table> </td> </tr>";
 	   
 	    return $html;
@@ -6024,6 +6113,15 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "  <td style='width: 40%;'><label class='lab1'><span style='font-weight: bold; '> IGG <select name='rubeole_igg' id='rubeole_igg' disabled> <option>  </option> <option value='Positif' >Positif</option> <option value='Negatif' >N&eacute;gatif</option> </select>  </span></label></td>";
 	    $html .= "  <td style='width: 30%;'><label class='lab2' style='padding-top: 5px;'><span style='font-weight: bold; '> Titre <input id='rubeole_igg_titre' type='number' step='any' tabindex='3' readonly> </span></label></td>";
 	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'>  </label></td>";
+	    $html .= "</tr>";
+	    
+	    $html .= "</table>";
+	    
+	    $html .= "<table style='width: 100%;'>";
+	    
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td colspan='2' ><label style='height: 80px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='rubeole_commentaire' style='max-height: 57px; min-height: 57px; max-width: 400px; min-width: 400px; margin-left: 30px;' readonly> </textarea> </label></td>";
+	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 80%; height: 80px; font-size: 14px;'>  </label></td>";
 	    $html .= "</tr>";
 	    
 	    $html .= "</table> </td> </tr>";
@@ -6127,15 +6225,15 @@ class BiologisteController extends AbstractActionController {
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 55%;'><label class='lab1'><span style='font-weight: bold; '> RPR  <select name='serologie_syphilitique_rpr' id='serologie_syphilitique_rpr' > <option>  </option> <option value='Positif' >Positif</option> <option value='Negatif' >N&eacute;gatif</option> </select> </span></label></td>";
+	    $html .= "  <td style='width: 55%;'><label class='lab1'><span style='font-weight: bold; '> RPR  <select name='serologie_syphilitique_rpr' id='serologie_syphilitique_rpr' disabled> <option>  </option> <option value='Positif' >Positif</option> <option value='Negatif' >N&eacute;gatif</option> </select> </span></label></td>";
 	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'>  </label></td>";
 	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'>  </label></td>";
 	    $html .= "</tr>";
 	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 55%;'><label class='lab1'><span style='font-weight: bold; '> TPHA  <select name='serologie_syphilitique_tpha' id='serologie_syphilitique_tpha' > <option>  </option> <option value='Positif' >Positif</option> <option value='Negatif' >N&eacute;gatif</option> </select> </span></label></td>";
+	    $html .= "  <td style='width: 55%;'><label class='lab1'><span style='font-weight: bold; '> TPHA  <select name='serologie_syphilitique_tpha' id='serologie_syphilitique_tpha' disabled> <option>  </option> <option value='Positif' >Positif</option> <option value='Negatif' >N&eacute;gatif</option> </select> </span></label></td>";
 	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'> </label></td>";
-	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> Titre <input class='serologie_syphilitique_tpha_titre' id='serologie_syphilitique_tpha_titre' type='text' style='height: 23px; margin-top: -1px; padding-left: 4px; text-align: left;' > </label></td>";
+	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> Titre <input class='serologie_syphilitique_tpha_titre' id='serologie_syphilitique_tpha_titre' type='text' style='height: 23px; margin-top: -1px; padding-left: 4px; text-align: left;' readonly> </label></td>";
 	    $html .= "</tr>";
 	
 	    $html .= "</table> </td> </tr>";
@@ -6253,7 +6351,7 @@ class BiologisteController extends AbstractActionController {
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 55%;'><label class='lab1'><span style='font-weight: bold; '> Ag Hbs  <select name='ag_hbs' id='ag_hbs' > <option>  </option> <option value='Positif' >Positif</option> <option value='Negatif' >N&eacute;gatif</option> </select> </span></label></td>";
+	    $html .= "  <td style='width: 55%;'><label class='lab1'><span style='font-weight: bold; '> Ag Hbs  <select name='ag_hbs' id='ag_hbs' disabled> <option>  </option> <option value='Positif' >Positif</option> <option value='Negatif' >N&eacute;gatif</option> </select> </span></label></td>";
 	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'>  </label></td>";
 	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> Qualitatif </label></td>";
 	    $html .= "</tr>";
@@ -6413,8 +6511,11 @@ class BiologisteController extends AbstractActionController {
 	    return $html;
 	}
 	
+	/**
+	 * ANCIENNE FONCTION D'IMPRESSION AVEC ZEND PDF
+	 */
 	
-	
+	/*
 	public function impressionResultatsAnalysesDemandeesAction()
 	{
 		$service = $this->layout()->user['NomService'];
@@ -6974,5 +7075,639 @@ class BiologisteController extends AbstractActionController {
 		}
 		
 	}
+	*/
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * NOUVELLE FONCTION D'IMPRESSION AVEC fpdf
+	 */
+	public function impressionResultatsAnalysesDemandeesAction()
+	{
+		$nomService = $this->layout()->user['NomService'];
+		$iddemande = $this->params()->fromPost( 'iddemande' );
+		
+		$idpatient = $this->getPatientTable()->getDemandeAnalysesAvecIddemande($iddemande)['idpatient'];
+		$personne  = $this->getPersonneTable()->getPersonne($idpatient);
+		$patient   = $this->getPatientTable()->getPatient($idpatient);
+		$depistage = $this->getPatientTable()->getDepistagePatient($idpatient);
+			
+		//Recuperation de la liste des analyses pour lesquelles les résultats sont déjà renseignés et validés
+		$listeResultats = $this->getResultatDemandeAnalyseTable()->getListeResultatsAnalysesDemandeesImpSecretaire($iddemande);
+			
+	
+		$analysesDemandees = array();
+		$analysesNFS = array();
+		$analysesImmunoHemato = array();
+		$analysesCytologie = array();
+		$analysesHemostase = array();
+		$analysesMetabolismeGlucidique = array();
+		$analysesBilanLipidique = array();
+		$analysesBilanHepatique = array();
+		$analysesBilanRenal = array();
+		$analysesSerologie = array();
+		$analysesTypageHemoProteine = array();
+		$analysesTypageHemoglobine = array();
+		$analysesMetabolismeProtidique = array();
+		$analysesMetabolismeFer = array();
+		$analysesBilanElectrolyte = array();
+		
+	
+		$resultatsAnalysesDemandees = array();
+	
+		$anteriorite_nfs = array();
+		for($j = 0 , $i = 0 ; $i < count($listeResultats) ; $i++ ){
+			$idanalyse = $listeResultats[$i]['idanalyse'];
+			$iddemande = $listeResultats[$i]['iddemande'];
+	
+			//NFS  ---  NFS  ---  NFS  ---  NFS  ---  NFS  ---  NFS
+			//NFS  ---  NFS  ---  NFS  ---  NFS  ---  NFS  ---  NFS
+			if($idanalyse == 1){ //NFS
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesNFS [] = 1;
+				$resultatsAnalysesDemandees[1] = $this->getResultatDemandeAnalyseTable()->getValeursNfs($iddemande);
+					
+				//Recupération des antériorites  ----- Récupération des antériorités
+				$analysesAvecResult = $this->getResultatDemandeAnalyseTable()->getListeAnalysesNFSDemandeesAyantResultats($idpatient, $iddemande);
+					
+				if($analysesAvecResult){
+					$anteriorite_nfs['demande']  = $analysesAvecResult[0];
+					$anteriorite_nfs['resultat'] = $this->getResultatDemandeAnalyseTable()->getValeursNfs($analysesAvecResult[0]['iddemande']);
+				}
+			}
+			//=========================================================
+			//=========================================================
+				
+				
+			//IMMUNO_HEMATO  ---  IMMUNO_HEMATO  ---  IMMUNO_HEMATO
+			//IMMUNO_HEMATO  ---  IMMUNO_HEMATO  ---  IMMUNO_HEMATO
+			//IMMUNO_HEMATO  ---  IMMUNO_HEMATO  ---  IMMUNO_HEMATO
+			elseif($idanalyse == 2){ //GSRH - GROUPAGE RESHUS
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesImmunoHemato [] = 2;
+				$resultatsAnalysesDemandees[2] = $this->getResultatDemandeAnalyseTable()->getValeursGsrhGroupage($iddemande);
+			}
+				
+			elseif($idanalyse == 3){ //RECHERCHE DE L'ANTIGENE D FAIBLE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesImmunoHemato [] = 3;
+				$resultatsAnalysesDemandees[3] = $this->getResultatDemandeAnalyseTable()->getValeursRechercheAntigene($iddemande);
+			}
+				
+			elseif($idanalyse == 4){ //TEST DE COOMBS DIRECT
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesImmunoHemato [] = 4;
+				$resultatsAnalysesDemandees[4] = $this->getResultatDemandeAnalyseTable()->getValeursTestCombsDirect($iddemande);
+			}
+				
+			elseif($idanalyse == 5){ //TEST DE COOMBS INDIRECT
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesImmunoHemato [] = 5;
+				$resultatsAnalysesDemandees[5] = $this->getResultatDemandeAnalyseTable()->getValeursTestCombsIndirect($iddemande);
+			}
+				
+			elseif($idanalyse == 6){ //TEST DE COMPATIBILITE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesImmunoHemato [] = 6;
+				$resultatsAnalysesDemandees[6] = $this->getResultatDemandeAnalyseTable()->getValeursTestCompatibilite($iddemande);
+			}
+			//=========================================================
+			//=========================================================
+				
+				
+				
+			//CYTOLOGIE  ---  CYTOLOGIE  ---  CYTOLOGIE  ---  CYTOLOGIE
+			//CYTOLOGIE  ---  CYTOLOGIE  ---  CYTOLOGIE  ---  CYTOLOGIE
+			//CYTOLOGIE  ---  CYTOLOGIE  ---  CYTOLOGIE  ---  CYTOLOGIE
+			elseif($idanalyse == 7){ //VITESSE SE SEDIMENTATION (VS)
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesCytologie [] = 7;
+				$resultatsAnalysesDemandees[7] = $this->getResultatDemandeAnalyseTable()->getValeursVitesseSedimentation($iddemande);
+			}
+				
+			elseif($idanalyse == 8){ //TEST D'EMMEL (TE)
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesCytologie [] = 8;
+				$resultatsAnalysesDemandees[8] = $this->getResultatDemandeAnalyseTable()->getValeursTestDemmel($iddemande);
+			}
+				
+			elseif($idanalyse == 50){ //HLM (COMPTE D'ADDIS)
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesCytologie [] = 50;
+				$resultatsAnalysesDemandees[50] = $this->getResultatDemandeAnalyseTable()->getValeursHlmCompteDaddis($iddemande);
+			}
+				
+			elseif($idanalyse == 58){ //CULOT URINAIRE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesCytologie [] = 58;
+				$resultatsAnalysesDemandees[58] = $this->getResultatDemandeAnalyseTable()->getValeursCulotUrinaire($iddemande);
+			}
+			//=========================================================
+			//=========================================================
+				
+				
+				
+			//HEMOSTASE  ---  HEMOSTASE  ---  HEMOSTASE  --- HEMOSTASE
+			//HEMOSTASE  ---  HEMOSTASE  ---  HEMOSTASE  --- HEMOSTASE
+			//HEMOSTASE  ---  HEMOSTASE  ---  HEMOSTASE  --- HEMOSTASE
+			elseif($idanalyse == 14){ //TP - INR
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesHemostase [] = 14;
+				$resultatsAnalysesDemandees[14] = $this->getResultatDemandeAnalyseTable()->getValeursTpInr($iddemande);
+			}
+				
+			elseif($idanalyse == 15){ //TCA
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesHemostase [] = 15;
+				$resultatsAnalysesDemandees[15] = $this->getResultatDemandeAnalyseTable()->getValeursTca($iddemande);
+			}
+				
+			elseif($idanalyse == 16){ //FIBRINEMIE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesHemostase [] = 16;
+				$resultatsAnalysesDemandees[16] = $this->getResultatDemandeAnalyseTable()->getValeursFibrinemie($iddemande);
+			}
+				
+			elseif($idanalyse == 17){ //TEMPS DE SAIGNEMENT
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesHemostase [] = 17;
+				$resultatsAnalysesDemandees[17] = $this->getResultatDemandeAnalyseTable()->getValeursTempsSaignement($iddemande);
+			}
+				
+			elseif($idanalyse == 18){ //FACTEUR 8
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesHemostase [] = 18;
+				$resultatsAnalysesDemandees[18] = $this->getResultatDemandeAnalyseTable()->getValeursFacteur8($iddemande);
+			}
+				
+			elseif($idanalyse == 19){ //FACTEUR 9
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesHemostase [] = 19;
+				$resultatsAnalysesDemandees[19] = $this->getResultatDemandeAnalyseTable()->getValeursFacteur9($iddemande);
+			}
+				
+			elseif($idanalyse == 20){ //D-DIMERES
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesHemostase [] = 20;
+				$resultatsAnalysesDemandees[20] = $this->getResultatDemandeAnalyseTable()->getValeursDDimeres($iddemande);
+			}
+			//=========================================================
+			//=========================================================
+				
+				
+			//METABOLISME GLUCIDIQUE --- METABOLISME GLUCIDIQUE --- METABOLISME GLUCIDIQUE
+			//METABOLISME GLUCIDIQUE --- METABOLISME GLUCIDIQUE --- METABOLISME GLUCIDIQUE
+			//METABOLISME GLUCIDIQUE --- METABOLISME GLUCIDIQUE --- METABOLISME GLUCIDIQUE
+			elseif($idanalyse == 21){ //Glycemie
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesMetabolismeGlucidique [] = 21;
+				$resultatsAnalysesDemandees[21] = $this->getResultatDemandeAnalyseTable()->getValeursGlycemie($iddemande);
+			}
+			elseif($idanalyse == 43){ //Hemoglobine glyquee
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesMetabolismeGlucidique [] = 43;
+				$resultatsAnalysesDemandees[43] = $this->getResultatDemandeAnalyseTable()->getValeursHemoglobineGlyqueeHBAC($iddemande);
+			}
+				
+			//=========================================================
+			//=========================================================
+				
+				
+			//BILAN LIPIDIQUE --- BILAN LIPIDIQUE --- BILAN LIPIDIQUE
+			//BILAN LIPIDIQUE --- BILAN LIPIDIQUE --- BILAN LIPIDIQUE
+			//BILAN LIPIDIQUE --- BILAN LIPIDIQUE --- BILAN LIPIDIQUE
+			elseif($idanalyse == 25){ //CHOLESTEROL TOTAL
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanLipidique  [] = 25;
+				$resultatsAnalysesDemandees[25] = $this->getResultatDemandeAnalyseTable()->getValeursCholesterolTotal($iddemande);
+			}
+			elseif($idanalyse == 26){ //TRIGLYCERIDES
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanLipidique  [] = 26;
+				$resultatsAnalysesDemandees[26] = $this->getResultatDemandeAnalyseTable()->getValeursTriglycerides($iddemande);
+			}
+			elseif($idanalyse == 27){ //CHOLESTEROL HDL
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanLipidique  [] = 27;
+				$resultatsAnalysesDemandees[27] = $this->getResultatDemandeAnalyseTable()->getValeursCholesterolHDL($iddemande);
+			}
+			elseif($idanalyse == 28){ //CHOLESTEROL LDL
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanLipidique  [] = 28;
+				$resultatsAnalysesDemandees[28] = $this->getResultatDemandeAnalyseTable()->getValeursCholesterolLDL($iddemande);
+			}
+			elseif($idanalyse == 29){ //CHOLESTEROL (TOTAL - HDL - LDL) Triglyceride
+	
+				//CHOLESTEROL TOTAL
+				$analysesBilanLipidique  [] = 25;
+				$resultatsAnalysesDemandees[25] = $this->getResultatDemandeAnalyseTable()->getValeursCholesterolTotal($iddemande);
+					
+				//TRIGLYCERIDES
+				$analysesBilanLipidique  [] = 26;
+				$resultatsAnalysesDemandees[26] = $this->getResultatDemandeAnalyseTable()->getValeursTriglycerides($iddemande);
+					
+				//CHOLESTEROL HDL
+				$analysesBilanLipidique  [] = 27;
+				$resultatsAnalysesDemandees[27] = $this->getResultatDemandeAnalyseTable()->getValeursCholesterolHDL($iddemande);
+					
+				//CHOLESTEROL LDL
+				$analysesBilanLipidique  [] = 28;
+				$resultatsAnalysesDemandees[28] = $this->getResultatDemandeAnalyseTable()->getValeursCholesterolLDL($iddemande);
+					
+			}
+			elseif($idanalyse == 30){ //LIPIDES - TOTAUX
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanLipidique  [] = 30;
+				$resultatsAnalysesDemandees[30] = $this->getResultatDemandeAnalyseTable()->getValeursLipidesTotaux($iddemande);
+			}
+			//=========================================================
+			//=========================================================
+				
+				
+			//BILAN HEPATIQUE --- BILAN HEPATIQUE --- BILAN HEPATIQUE
+			//BILAN HEPATIQUE --- BILAN HEPATIQUE --- BILAN HEPATIQUE
+			//BILAN HEPATIQUE --- BILAN HEPATIQUE --- BILAN HEPATIQUE
+			elseif($idanalyse == 37){ //TRANSAMINASES (ASAT/ALAT)
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanHepatique  [] = 37;
+				$resultatsAnalysesDemandees[37][1] = $this->getResultatDemandeAnalyseTable()->getValeursTgoAsat($iddemande);
+				$resultatsAnalysesDemandees[37][2] = $this->getResultatDemandeAnalyseTable()->getValeursTgpAlat($iddemande);
+			}
+				
+			elseif($idanalyse == 38){ //PHOSPHATAGE ALCALINE (PAL)
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanHepatique  [] = 38;
+				$resultatsAnalysesDemandees[38] = $this->getResultatDemandeAnalyseTable()->getValeursPhosphatageAlcaline($iddemande);
+			}
+				
+			elseif($idanalyse == 39){ //GAMA GT = YGT
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanHepatique  [] = 39;
+				$resultatsAnalysesDemandees[39] = $this->getResultatDemandeAnalyseTable()->getValeursGamaGtYgt($iddemande);
+			}
+				
+			elseif($idanalyse == 42){ //BILIRUBINE TOTALE ET DIRECTE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanHepatique  [] = 42;
+				$resultatsAnalysesDemandees[42] = $this->getResultatDemandeAnalyseTable()->getValeursBilirubineTotaleDirecte($iddemande);
+			}
+			//=========================================================
+			//=========================================================
+				
+				
+				
+			//BILAN RENAL  ---  BILAN RENAL  ---  BILAN RENAL
+			//BILAN RENAL  ---  BILAN RENAL  ---  BILAN RENAL
+			//BILAN RENAL  ---  BILAN RENAL  ---  BILAN RENAL
+			elseif($idanalyse == 22){ //CREATININEMIE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanRenal  [] = 22;
+				$resultatsAnalysesDemandees[22] = $this->getResultatDemandeAnalyseTable()->getValeursCreatininemie($iddemande);
+			}
+				
+			elseif($idanalyse == 23){ //AZOTEMIE = UREE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanRenal  [] = 23;
+				$resultatsAnalysesDemandees[23] = $this->getResultatDemandeAnalyseTable()->getValeursAzotemie($iddemande);
+			}
+	
+			elseif($idanalyse == 46){ //ALBUMINEMIE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanRenal  [] = 46;
+				$resultatsAnalysesDemandees[46] = $this->getResultatDemandeAnalyseTable()->getValeursAlbuminemie($iddemande);
+			}
+				
+			elseif($idanalyse == 24){ //URICEMIE = ACIDE URIQUE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanRenal  [] = 24;
+				$resultatsAnalysesDemandees[24] = $this->getResultatDemandeAnalyseTable()->getValeursAcideUrique($iddemande);
+			}
+			
+			elseif($idanalyse == 47){ //ALBUMINE URINAIRE (BANDELETTES)
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanRenal [] = 47;
+				$resultatsAnalysesDemandees[47] = $this->getResultatDemandeAnalyseTable()->getValeursAlbumineUrinaire($iddemande);
+			}
+			//=========================================================
+			//=========================================================
+				
+				
+			//SEROLOGIE  ---  SEROLOGIE  ---  SEROLOGIE
+			//SEROLOGIE  ---  SEROLOGIE  ---  SEROLOGIE
+			//SEROLOGIE  ---  SEROLOGIE  ---  SEROLOGIE
+			elseif($idanalyse == 10){ //GOUTE EPAISSE / GE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 10;
+				$resultatsAnalysesDemandees[10] = $this->getResultatDemandeAnalyseTable()->getValeursGoutteEpaisse($iddemande);
+			}
+			
+			elseif($idanalyse == 51){ //BETA HCG PLASMATIQUE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 51;
+				$resultatsAnalysesDemandees[51] = $this->getResultatDemandeAnalyseTable()->getValeursBetaHcgPlasmatique($iddemande);
+			}
+			
+			elseif($idanalyse == 52){ //PSA
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 52;
+				$resultatsAnalysesDemandees[52] = $this->getResultatDemandeAnalyseTable()->getValeursPsa($iddemande);
+			}
+				
+			elseif($idanalyse == 53){ //CRP ou C. Protéine Réactive 
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 53;
+				$resultatsAnalysesDemandees[53] = $this->getResultatDemandeAnalyseTable()->getValeursCrp($iddemande);
+			}
+			
+			elseif($idanalyse == 54){ //Facteurs Rhumatoides
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 54;
+				$resultatsAnalysesDemandees[54] = $this->getResultatDemandeAnalyseTable()->getValeursFacteursRhumatoides($iddemande);
+			}
+				
+			elseif($idanalyse == 55){ //RF Waaler Rose
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 55;
+				$resultatsAnalysesDemandees[55] = $this->getResultatDemandeAnalyseTable()->getValeursRfWaalerRose($iddemande);
+			}
+				
+			elseif($idanalyse == 56){ //TOXOPLASMOSE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 56;
+				$resultatsAnalysesDemandees[56] = $this->getResultatDemandeAnalyseTable()->getValeursToxoplasmose($iddemande);
+			}
+				
+			elseif($idanalyse == 57){ //RUBEOLE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 57;
+				$resultatsAnalysesDemandees[57] = $this->getResultatDemandeAnalyseTable()->getValeursRubeole($iddemande);
+			}
+				
+			elseif($idanalyse == 60){ //Serologie Syphilitique
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 60;
+				$resultatsAnalysesDemandees[60] = $this->getResultatDemandeAnalyseTable()->getValeursSerologieSyphilitique($iddemande);
+			}
+				
+			elseif($idanalyse == 61){ //ASLO
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 61;
+				$resultatsAnalysesDemandees[61] = $this->getResultatDemandeAnalyseTable()->getValeursAslo($iddemande);
+			}
+				
+			elseif($idanalyse == 62){ //WIDAL
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 62;
+				$resultatsAnalysesDemandees[62] = $this->getResultatDemandeAnalyseTable()->getValeursWidal($iddemande);
+			}
+				
+			elseif($idanalyse == 63){ //Ag HBS
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 63;
+				$resultatsAnalysesDemandees[63] = $this->getResultatDemandeAnalyseTable()->getValeursAgHbs($iddemande);
+			}
+			
+			
+			
+			//=========================================================
+			//=========================================================
+				
+				
+			//TYPAGE DE L'HEMOGLOBINE (Avec ELECTROPHORESE DE L'HEMOGLOBINE et DES PROTEINES)
+			//TYPAGE DE L'HEMOGLOBINE (Avec ELECTROPHORESE DE L'HEMOGLOBINE et DES PROTEINES)
+			//TYPAGE DE L'HEMOGLOBINE (Avec ELECTROPHORESE DE L'HEMOGLOBINE et DES PROTEINES)
+			elseif($idanalyse == 44){ //ELECTROPHORESE DE HEMOGLOBINE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesTypageHemoProteine[44] = 44;
+				$resultatsAnalysesDemandees[44] = $this->getResultatDemandeAnalyseTable()->getValeursElectrophoreseHemoglobine($iddemande);
+			}
+	
+			//=========================================================
+			//=========================================================
+				
+	
+			//METABOLISME PROTIDIQUE  ---  METABOLISME PROTIDIQUE
+			//METABOLISME PROTIDIQUE  ---  METABOLISME PROTIDIQUE
+			//METABOLISME PROTIDIQUE  ---  METABOLISME PROTIDIQUE
+			elseif($idanalyse == 45){ //ELECTROPHORESE DES PROTEINES
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesMetabolismeProtidique[45] = 45;
+				$resultatsAnalysesDemandees[45] = $this->getResultatDemandeAnalyseTable()->getValeursElectrophoreseProteines($iddemande);
+			}
+	
+			elseif($idanalyse == 48){ //PROTEINES TOTAL (PROTIDEMIE)
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesMetabolismeProtidique[48] = 48;
+				$resultatsAnalysesDemandees[48] = $this->getResultatDemandeAnalyseTable()->getValeursProtidemie($iddemande);
+			}
+	
+			elseif($idanalyse == 49){ //PROTEINURIE DES 24H (PU 24H)
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesMetabolismeProtidique [49] = 49;
+				$resultatsAnalysesDemandees[49] = $this->getResultatDemandeAnalyseTable()->getValeursProteinurie($iddemande);
+			}
+			//=========================================================
+			//=========================================================
+				
+				
+			//METABOLISME DU FER --- METABOLISME DU FER
+			//METABOLISME DU FER --- METABOLISME DU FER
+			//METABOLISME DU FER --- METABOLISME DU FER
+			elseif($idanalyse == 40){ //FER SERIQUE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesMetabolismeFer[40] = 40;
+				$resultatsAnalysesDemandees[40] = $this->getResultatDemandeAnalyseTable()->getValeursFerSerique($iddemande);
+			}
+			elseif($idanalyse == 41){ //FERRITININE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesMetabolismeFer[41] = 41;
+				$resultatsAnalysesDemandees[41] = $this->getResultatDemandeAnalyseTable()->getValeursFerritinine($iddemande);
+			}
+			//=========================================================
+			//=========================================================
+				
+			
+			//BILAN D'ELECTROLYTE --- BILAN D'ELECTROLYTE
+			//BILAN D'ELECTROLYTE --- BILAN D'ELECTROLYTE
+			//BILAN D'ELECTROLYTE --- BILAN D'ELECTROLYTE
+			elseif($idanalyse == 31){ //IONOGRAMME
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanElectrolyte[31] = 31;
+				$resultatsAnalysesDemandees[31] = $this->getResultatDemandeAnalyseTable()->getValeursIonogramme($iddemande);
+			}
+			elseif($idanalyse == 32){ //CALCEMIE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanElectrolyte[32] = 32;
+				$resultatsAnalysesDemandees[32] = $this->getResultatDemandeAnalyseTable()->getValeursCalcemie($iddemande);
+			}
+			elseif($idanalyse == 33){ //MAGNESEMIE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanElectrolyte[33] = 33;
+				$resultatsAnalysesDemandees[33] = $this->getResultatDemandeAnalyseTable()->getValeursMagnesemie($iddemande);
+			}
+			elseif($idanalyse == 34){ //PHOSPHOREMIE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanElectrolyte[34] = 34;
+				$resultatsAnalysesDemandees[34] = $this->getResultatDemandeAnalyseTable()->getValeursPhosphoremie($iddemande);
+			}
+			//=========================================================
+			//=========================================================
+			
+			
+				
+			//TYPAGE DE L'HEMOGLOBINE  ---  TYPAGE DE L'HEMOGLOBINE
+			//TYPAGE DE L'HEMOGLOBINE  ---  TYPAGE DE L'HEMOGLOBINE
+			//TYPAGE DE L'HEMOGLOBINE  ---  TYPAGE DE L'HEMOGLOBINE
+			elseif($idanalyse == 68){ //TYPAGE DE L'HEMOGLOBINE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesTypageHemoglobine [] = 68;
+				$resultatsAnalysesDemandees[68] = $this->getResultatDemandeAnalyseTable()->getValeursTypageHemoglobineLibelle($iddemande);
+			}
+			//=========================================================
+			//=========================================================
+				
+		}
+	
+		//******************************************************
+		//******************************************************
+		//************** Création de l'imprimé pdf *************
+		//******************************************************
+		//******************************************************
+		//Créer le document
+		$pdf = new ImprimerResultatsAnalysesDemandees();
+		$pdf->SetMargins(12.5,11.5,12.5);
+		
+		//Ajout d'informations sur le service et le patient
+		$pdf->setNomService($nomService);
+		$pdf->setInfosPatients($personne);
+		$pdf->setPatient($patient);
+		$pdf->setDepistage($depistage);
+		
+		//Liste de toutes les informations sur les analyses à imprimer
+		$pdf->setAnalysesDemandees($analysesDemandees);
+		
+		//Liste des analyses à imprimer
+		$pdf->setResultatsAnalysesDemandees($resultatsAnalysesDemandees);
+		
+		//========= Créaton de la page 1 ========
+		//========= Créaton de la page 1 ========
+		//========= Créaton de la page 1 ========
+		if($analysesNFS){
+			$pdf->setAnterioriteNfs($anteriorite_nfs);
+			
+			/*
+			 * Envoie des données pour affichage
+			*/
+			$pdf->affichageResultatAnalyseNFS();
+		}
+	
+		//========= Créaton des autres pages ========
+		//========= Créaton des autres pages ========
+		//========= Créaton des autres pages ========
+		if($analysesImmunoHemato || $analysesCytologie || $analysesHemostase || $analysesMetabolismeGlucidique ||
+		$analysesBilanLipidique || $analysesBilanHepatique || $analysesBilanRenal || $analysesSerologie || $analysesTypageHemoProteine ||
+		$analysesMetabolismeFer || $analysesMetabolismeProtidique){
+		    
+			//GESTION DES ANALYSES DE L'IMMUNO_HEMATO
+			$pdf->setAnalysesImmunoHemato($analysesImmunoHemato);
+		
+		    //GESTION DES ANALYSES DE LA CYTOLOGIE
+		    $pdf->setAnalysesCytologie($analysesCytologie);
+		    
+		    //GESTION DES ANALYSES DE L'HEMOSTASE 
+		    $pdf->setAnalysesHemostase($analysesHemostase);
+		    
+		    //GESTION DES ANALYSES DE SEROLOGIE
+		    $pdf->setAnalysesSerologie($analysesSerologie);
+		    
+		    //GESTION DES ANALYSES DU BILAN HEPATIQUE
+		    $pdf->setAnalysesBilanHepatique($analysesBilanHepatique);
+		    
+		    //GESTION DES ANALYSES DU BILAN RENAL
+		    $pdf->setAnalysesBilanRenal($analysesBilanRenal);
+		    
+		    //GESTION DES ANALYSES DU METABOLISME GLUCIDIQUE
+		    $pdf->setAnalysesMetabolismeGlucidique($analysesMetabolismeGlucidique);
+		    
+		    //GESTION DES ANALYSES DU BILAN LIPIDIQUE
+		    $pdf->setAnalysesBilanLipidique($analysesBilanLipidique);
+		    
+		    //GESTION DES ANALYSES DE METABOLISME DU FER
+		    $pdf->setAnalysesMetabolismeFer($analysesMetabolismeFer);
+		    
+		    //GESTION DES ANALYSES DU BILAN D'ELECTROLYTE
+		    $pdf->setAnalysesBilanElectrolyte($analysesBilanElectrolyte);
+		    
+		    //GESTION DES ANALYSES DU TYPAGE (Helectrophorèse)
+		    $pdf->setAnalysesTypageHemoProteine($analysesTypageHemoProteine);
+		    
+		    //GESTION DES ANALYSES DE METABOLISME PROTIDIQUE
+		    $pdf->setAnalysesMetabolismeProtidique($analysesMetabolismeProtidique);
+		    
+		    
+		    /*
+		     * Envoie des données pour affichage
+		    */
+		    $pdf->affichageResultatsAnalysesDemandees();
+		}
+		
+		
+		//========= Créaton de la dernière page ========
+		//========= Créaton de la dernière page ========
+		//========= Créaton de la dernière page ========
+		if($analysesTypageHemoglobine){
+				
+			$pdf->setAnalysesTypageHemoglobine($analysesTypageHemoglobine);
+			
+			/*
+			 * Envoie des données pour affichage
+			 */
+			$pdf->affichageResultatsTypageHemoglobine();
+		}
+	
+		
+		//Afficher le document contenant les différentes pages
+		//Afficher le document contenant les différentes pages
+		//Afficher le document contenant les différentes pages
+		$pdf->Output('I');
+			
+		
+		
+	
+	}
+	
+	
 	
 }

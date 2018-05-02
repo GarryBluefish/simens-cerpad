@@ -3264,6 +3264,7 @@ class TechnicienController extends AbstractActionController {
  	        	$('.ER_".$iddemande." #type_materiel_goutte_epaisse').val('".str_replace( "'", "\'",$resultat['type_materiel'])."');
 	            $('.ER_".$iddemande." #goutte_epaisse').val('".$resultat['goutte_epaisse']."');
 	            if('".$resultat['goutte_epaisse']."' == 'Positif'){ $('.ER_".$iddemande." #goutte_epaisse_positif').toggle(true); $('.ER_".$iddemande." #densite_parasitaire').val('".$resultat['densite_parasitaire']."'); }
+	            $('.ER_".$iddemande." #commentaire_goutte_epaisse').val('".str_replace( "'", "\'",$resultat['commentaire_goutte_epaisse'])."');		
 	        </script>";
 	    }
 	    return $html;
@@ -3401,6 +3402,7 @@ class TechnicienController extends AbstractActionController {
 	        "<script>
 	        	$('#type_materiel_azotemie').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');	
 	            $('#uree_sanguine').val('".$resultat['valeur']."');
+	            $('#uree_sanguine_mmol').val('".$resultat['valeur_mmol']."');
 	        </script>";
 	    }
 	    return $html;
@@ -3414,6 +3416,7 @@ class TechnicienController extends AbstractActionController {
 	        "<script>
         		$('#type_materiel_acide_urique').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	            $('#acide_urique').val('".$resultat['acide_urique']."');
+	            $('#acide_urique_umol').val('".$resultat['acide_urique_umol']."');
 	        </script>";
 	    }
 	    return $html;
@@ -3498,6 +3501,7 @@ class TechnicienController extends AbstractActionController {
 	        "<script>
    	            $('#type_materiel_calcemie').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');			
 	    	    $('#calcemie').val('".$resultat['calcemie']."');
+	    	    $('#calcemie_mmol').val('".$resultat['calcemie_mmol']."');
 	    	 </script>";
 	    }
 	    return $html;
@@ -3524,6 +3528,7 @@ class TechnicienController extends AbstractActionController {
 	        "<script>
    	            $('#type_materiel_phosphoremie').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');			
 	    	    $('#phosphoremie').val('".$resultat['phosphoremie']."');
+	    	    $('#phosphoremie_mmol').val('".$resultat['phosphoremie_mmol']."');
 	    	 </script>";
 	    }
 	    return $html;
@@ -3725,6 +3730,7 @@ class TechnicienController extends AbstractActionController {
 	        "<script>
 	            $('#type_materiel_albuminemie').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	    	    $('#albuminemie').val('".$resultat['albuminemie']."');
+	    	    $('#albuminemie_umol').val('".$resultat['albuminemie_umol']."');
 	    	 </script>";
 	    }
 	    return $html;
@@ -3810,6 +3816,7 @@ class TechnicienController extends AbstractActionController {
 	            $('#type_materiel_hlm_compte_daddis').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	    	    $('#hematies_hlm').val('".$resultat['hematies_hlm']."');
     	        $('#leucocytes_hlm').val('".$resultat['leucocytes_hlm']."');
+    	        $('#commentaire_hlm_compte_daddis').val('".$resultat['commentaire_hlm_compte_daddis']."');
 	    	 </script>";
 	    }
 	    return $html;
@@ -3896,6 +3903,7 @@ class TechnicienController extends AbstractActionController {
 	    	    $('#toxoplasmose_igm_titre').val('".$resultat['toxoplasmose_igm_titre']."');
 	    	    $('#toxoplasmose_igg').val('".$resultat['toxoplasmose_igg']."');
 	    	    $('#toxoplasmose_igg_titre').val('".$resultat['toxoplasmose_igg_titre']."');
+	    	    $('#toxoplasmose_commentaire').val('".$resultat['toxoplasmose_commentaire']."');
 	    	 </script>";
 	    }
 	    return $html;
@@ -3912,6 +3920,7 @@ class TechnicienController extends AbstractActionController {
 	    	    $('#rubeole_igm_titre').val('".$resultat['rubeole_igm_titre']."');
 	    	    $('#rubeole_igg').val('".$resultat['rubeole_igg']."');
 	    	    $('#rubeole_igg_titre').val('".$resultat['rubeole_igg_titre']."');
+	    	    $('#rubeole_commentaire').val('".$resultat['rubeole_commentaire']."');
 	    	 </script>";
 	    }
 	    return $html;
@@ -3927,13 +3936,25 @@ class TechnicienController extends AbstractActionController {
 	    		if($i > 0){
 	    			$html .= "<script> setTimeout(function(){ $('#culot_urinaire_plus').trigger('click'); }, 50); </script>";
 	    		}
-	    		$html .=
-	    		"<script>
-	              setTimeout(function(){
-	                $('#culot_urinaire_ligne_".($i+1)." .listeSelect select').val('".$resultat[$i]['culot_urinaire_1']."').trigger('onchange');
-	                $('#culot_urinaire_ligne_".($i+1)." .emplaceListeElemtsCUSelect select').val('".$resultat[$i]['culot_urinaire_2']."');
-	              }, 50);
-	    	    </script>";
+	    		
+	    		if(in_array($resultat[$i]['culot_urinaire_1'], array(1,2)) ){
+	    			$html .=
+	    			"<script>
+	                  setTimeout(function(){
+	                    $('#culot_urinaire_ligne_".($i+1)." .listeSelect select').val('".$resultat[$i]['culot_urinaire_1']."').trigger('onchange');
+	                    $('#culot_urinaire_ligne_".($i+1)." .emplaceListeElemtsCUSelect input').val('".$resultat[$i]['culot_urinaire_2']."');
+	                  }, 50);
+	    	         </script>";
+	    		}else{
+	    			$html .=
+	    			"<script>
+	                  setTimeout(function(){
+	                    $('#culot_urinaire_ligne_".($i+1)." .listeSelect select').val('".$resultat[$i]['culot_urinaire_1']."').trigger('onchange');
+	                    $('#culot_urinaire_ligne_".($i+1)." .emplaceListeElemtsCUSelect select').val('".$resultat[$i]['culot_urinaire_2']."');
+	                  }, 50);
+	    	         </script>";
+	    		}
+	    		
 	    	}
 	    	$html .="<script> setTimeout(function(){ $('#conclusion_culot_urinaire_valeur').val('".str_replace( "'", "\'", $resultat[0]['conclusion'])."'); },50); </script>";
 	    
@@ -6142,6 +6163,14 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'>  </label></td>";
 	    $html .= "</tr>";
 	    
+	    $html .= "</table>";
+	    
+	    $html .= "<table style='width: 100%;'>";
+	    
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td colspan='2' ><label style='height: 80px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_goutte_epaisse' style='max-height: 57px; min-height: 57px; max-width: 400px; min-width: 400px; margin-left: 30px;' > </textarea> </label></td>";
+	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 80%; height: 80px; font-size: 14px;'>  </label></td>";
+	    $html .= "</tr>";
 	    	
 	    $html .= "</table> </td> </tr>";
 	
@@ -6596,6 +6625,12 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'> g/l </label></td>";
 	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> N: 0,15 &agrave; 0,45</label></td>";
 	    $html .= "</tr>";
+	    
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 55%;'><label class='lab1' ><span style='font-weight: bold;'>  <input id='uree_sanguine_mmol' type='number' step='any' readonly> </span></label></td>";
+	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'> mmol/l </label></td>";
+	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> ( 2,49 &agrave; 7,49 )</label></td>";
+	    $html .= "</tr>";
 	
 	    $html .= "</table> </td> </tr>";
 	
@@ -6622,10 +6657,16 @@ class TechnicienController extends AbstractActionController {
 	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
 	    $html .= "  <td style='width: 55%;'><label class='lab1' ><span style='font-weight: bold;'> uric&eacute;mie <input id='acide_urique' type='number' step='any'> </span></label></td>";
-	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'> mg/l </label></td>";
-	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 85%;'> N : H= 35  &agrave; 72, F= 26 &agrave; 60 </label></td>";
+	    $html .= "  <td style='width: 12%;'><label class='lab2' style='padding-top: 5px;'> mg/l </label></td>";
+	    $html .= "  <td style='width: 33%;'><label class='lab3' style='padding-top: 5px; width: 85%;'> ( H= 35  &agrave; 72, F= 26 &agrave; 60 ) </label></td>";
 	    $html .= "</tr>";
 	
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 55%;'><label class='lab1' ><span style='font-weight: bold;'> <input id='acide_urique_umol' type='number' step='any' readonly> </span></label></td>";
+	    $html .= "  <td style='width: 12%;'><label class='lab2' style='padding-top: 5px;'> umol/l </label></td>";
+	    $html .= "  <td style='width: 33%;'><label class='lab3' style='padding-top: 5px; width: 85%;'> ( H= 208  &agrave; 428, F= 154 &agrave; 356 ) </label></td>";
+	    $html .= "</tr>";
+	    
 	    $html .= "</table> </td> </tr>";
 	
 	    return $html;
@@ -6939,14 +6980,24 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_calcemie' > </div> </td>";
 	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
 	    $html .= "</tr>";
+	    
+	    $html .= "</table>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
+	    $html .= "<table style='width: 100%;'>";
+	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 55%;'><label class='lab1' style='height: 40px;'><span style='font-weight: bold; '> calc&eacute;mie <input id='calcemie' type='number' step='any'> </span></label></td>";
-	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;  height: 40px;'> mg/l </label></td>";
-	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%; height: 40px;'> N: Adultes: 86 &agrave; 103  <spa style='padding-left: 18px;'> Enfants: 100 &agrave; 120 </spa> </label></td>";
+	    $html .= "  <td style='width: 45%;'><label class='lab1' ><span style='font-weight: bold;'> Calc&eacute;mie <input id='calcemie' type='number' step='any'> </span></label></td>";
+	    $html .= "  <td style='width: 10%;'><label class='lab2' style='padding-top: 5px;'> mg/l </label></td>";
+	    $html .= "  <td style='width: 45%;'><label class='lab3' style='padding-top: 5px; width: 90%;'> ( Adultes: 86 &agrave; 103 ; Enfants: 100 &agrave; 120 ) </label></td>";
 	    $html .= "</tr>";
-	
+	    
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 45%;'><label class='lab1' ><span style='font-weight: bold;'> Calc&eacute;mie <input id='calcemie_mmol' type='number' step='any' readonly> </span></label></td>";
+	    $html .= "  <td style='width: 10%;'><label class='lab2' style='padding-top: 5px;'> mmol/l </label></td>";
+	    $html .= "  <td style='width: 45%;'><label class='lab3' style='padding-top: 5px; width: 90%; font-size: 13px;'> ( Adultes: 2,14 &agrave; 2,56 ; Enfants: 2,49 &agrave; 2,98 ) </label></td>";
+	    $html .= "</tr>";
+	    
 	    $html .= "</table> </td> </tr>";
 	
 	    return $html;
@@ -6997,14 +7048,25 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_phosphoremie' > </div> </td>";
 	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
 	    $html .= "</tr>";
+	    
+	    $html .= "</table>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
+	    $html .= "<table style='width: 100%;'>";
+	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 55%;'><label class='lab1' style='height: 40px;'><span style='font-weight: bold; '> phosphor&eacute;mie <input id='phosphoremie' type='number' step='any'> </span></label></td>";
-	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;  height: 40px;'> mg/l </label></td>";
-	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%; height: 40px;'> N: Adultes: 25 &agrave; 50  <spa style='padding-left: 18px;'> Enfants: 40 &agrave; 70 </spa> </label></td>";
+	    $html .= "  <td style='width: 45%;'><label class='lab1' ><span style='font-weight: bold;'> Phosphor&eacute;mie  <input id='phosphoremie' type='number' step='any'> </span></label></td>";
+	    $html .= "  <td style='width: 10%;'><label class='lab2' style='padding-top: 5px;'> mg/l </label></td>";
+	    $html .= "  <td style='width: 45%;'><label class='lab3' style='padding-top: 5px; width: 90%;'> ( Adultes: 25 &agrave; 50 ;  Enfants: 40 &agrave; 70 ) </label></td>";
 	    $html .= "</tr>";
-	
+	     
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 45%;'><label class='lab1' ><span style='font-weight: bold;'> <input id='phosphoremie_mmol' type='number' step='any' readonly> </span></label></td>";
+	    $html .= "  <td style='width: 10%;'><label class='lab2' style='padding-top: 5px;'> mmol/l </label></td>";
+	    $html .= "  <td style='width: 45%;'><label class='lab3' style='padding-top: 5px; width: 90%;  font-size: 13px;'> ( Adultes: 8,07 &agrave; 16,15 ; Enfants: 12,92 &agrave; 22,61 ) </label></td>";
+	    $html .= "</tr>";
+	    
+	    
 	    $html .= "</table> </td> </tr>";
 	
 	    return $html;
@@ -7442,7 +7504,13 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
 	    $html .= "  <td style='width: 55%;'><label class='lab1'><span style='font-weight: bold; '> Albumin&eacute;mie <input id='albuminemie' type='number' step='any' tabindex='2'> </span></label></td>";
 	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'> g/l </label></td>";
-	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'>N : 35 - 53 </label></td>";
+	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'>( 35 - 53 )</label></td>";
+	    $html .= "</tr>";
+	    
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 55%;'><label class='lab1'><span style='font-weight: bold; '>  <input id='albuminemie_umol' type='number' step='any' tabindex='2' readonly> </span></label></td>";
+	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'> umol/l </label></td>";
+	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> ( 507,25 - 768,12 ) </label></td>";
 	    $html .= "</tr>";
 	
 	    $html .= "</table> </td> </tr>";
@@ -7578,7 +7646,16 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'> /min </label></td>";
 	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> N < 2000 </label></td>";
 	    $html .= "</tr>";
+	    
+	    $html .= "</table>";
 	
+	    $html .= "<table style='width: 100%;'>";
+	     
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td colspan='2' ><label style='height: 80px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_hlm_compte_daddis' style='max-height: 57px; min-height: 57px; max-width: 400px; min-width: 400px; margin-left: 30px;' > </textarea> </label></td>";
+	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 80%; height: 80px; font-size: 14px;'>  </label></td>";
+	    $html .= "</tr>";
+	    
 	    $html .= "</table> </td> </tr>";
 	
 	    return $html;
@@ -7603,7 +7680,7 @@ class TechnicienController extends AbstractActionController {
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 55%;'><label class='lab1'><span style='font-weight: bold; '> B&eacute;ta HCG <input id='beta_hcg_plasmatique' type='number' step='any' tabindex='2'> </span></label></td>";
+	    $html .= "  <td style='width: 55%;'><label class='lab1'><span style='font-weight: bold; '> B&eacute;ta HCG <select name='beta_hcg_plasmatique' id='beta_hcg_plasmatique' > <option >  </option> <option value='Positif' >Positif</option> <option value='Negatif' >N&eacute;gatif</option> </select> </span></label></td>";
 	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'>  </label></td>";
 	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'>  </label></td>";
 	    $html .= "</tr>";
@@ -7778,6 +7855,15 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'>  </label></td>";
 	    $html .= "</tr>";
 	
+	    $html .= "</table>";
+	     
+	    $html .= "<table style='width: 100%;'>";
+	     
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td colspan='2' ><label style='height: 80px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='toxoplasmose_commentaire' style='max-height: 57px; min-height: 57px; max-width: 400px; min-width: 400px; margin-left: 30px;' > </textarea> </label></td>";
+	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 80%; height: 80px; font-size: 14px;'>  </label></td>";
+	    $html .= "</tr>";
+	    
 	    $html .= "</table> </td> </tr>";
 	
 	    return $html;
@@ -7812,6 +7898,15 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "  <td style='width: 40%;'><label class='lab1'><span style='font-weight: bold; '> IgG <select name='rubeole_igg' id='rubeole_igg' > <option>  </option> <option value='Positif' >Positif</option> <option value='Negatif' >N&eacute;gatif</option> </select>  </span></label></td>";
 	    $html .= "  <td style='width: 30%;'><label class='lab2' style='padding-top: 5px;'><span style='font-weight: bold; '> Titre <input id='rubeole_igg_titre' type='number' step='any' tabindex='3'> </span></label></td>";
 	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'>  </label></td>";
+	    $html .= "</tr>";
+	    
+	    $html .= "</table>";
+	     
+	    $html .= "<table style='width: 100%;'>";
+	     
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td colspan='2' ><label style='height: 80px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='rubeole_commentaire' style='max-height: 57px; min-height: 57px; max-width: 400px; min-width: 400px; margin-left: 30px;' > </textarea> </label></td>";
+	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 80%; height: 80px; font-size: 14px;'>  </label></td>";
 	    $html .= "</tr>";
 	    
 	    $html .= "</table> </td> </tr>";

@@ -6,6 +6,7 @@ use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Predicate\In;
 use Zend\Crypt\PublicKey\Rsa\PublicKey;
+use Infirmerie\View\Helper\DateHelper;
 
 class FacturationTable {
 	protected $tableGateway;
@@ -306,4 +307,149 @@ class FacturationTable {
  	}
  	
  	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	//Utiliser dans le module de la consultation
+ 	//Utiliser dans le module de la consultation
+ 	public function deleteMotifsExamensRadio($idcons){
+ 		$db = $this->tableGateway->getAdapter();
+ 		$sql = new Sql($db);
+ 		$sQuery = $sql->delete()->from('motif_examens_radio_demandes')->where(array('idcons' => $idcons));
+ 		$sql->prepareStatementForSqlObject($sQuery)->execute();
+ 	}
+ 	
+ 	
+ 	public function addMotifsExamensRadioDemandes($tabDonnees, $idemploye){
+ 		$this->deleteMotifsExamensRadio($tabDonnees['idcons']);
+ 		
+ 		$db = $this->tableGateway->getAdapter();
+ 		$sql = new Sql($db);
+ 		$nbExamenRadio = $tabDonnees['nbExamenRadio'];
+ 		
+ 		for($i = 0 ; $i < $nbExamenRadio ;  $i++){
+ 			$donnee = array('idcons' => $tabDonnees['idcons'], 'idexamen' => $tabDonnees['idExamenRadio_'.$i], 'motif' => $tabDonnees['motifExamenRadio_'.$i], 'idemploye' => $idemploye);
+ 			$sQuery = $sql->insert()->into('motif_examens_radio_demandes')->values($donnee);
+ 			$sql->prepareStatementForSqlObject($sQuery)->execute();
+ 		}
+ 	
+ 	}
+ 	
+ 	
+ 	public function deleteMotifsExamensBio($idcons){
+ 		$db = $this->tableGateway->getAdapter();
+ 		$sql = new Sql($db);
+ 		$sQuery = $sql->delete()->from('motif_examens_bio_demandes')->where(array('idcons' => $idcons));
+ 		$sql->prepareStatementForSqlObject($sQuery)->execute();
+ 	}
+ 	
+ 	
+ 	public function addMotifsExamensBioDemandes($tabDonnees, $idemploye){
+ 		$this->deleteMotifsExamensBio($tabDonnees['idcons']);
+ 		
+ 		$db = $this->tableGateway->getAdapter();
+ 		$sql = new Sql($db);
+ 		$nbExamenBio = $tabDonnees['nbExamenBio'];
+ 			
+ 		for($i = 0 ; $i < $nbExamenBio ;  $i++){
+ 			$donnee = array('idcons' => $tabDonnees['idcons'], 'idexamen' => $tabDonnees['idExamenBio_'.$i], 'motif' => $tabDonnees['motifExamenBio_'.$i], 'idemploye' => $idemploye);
+ 			$sQuery = $sql->insert()->into('motif_examens_bio_demandes')->values($donnee);
+ 			$sql->prepareStatementForSqlObject($sQuery)->execute();
+ 		}
+ 	
+ 	}
+ 	
+ 	
+ 	public function getMotifsExamensRadioDemandes($idcons){
+ 		$db = $this->tableGateway->getAdapter();
+ 		$sql = new Sql($db);
+ 		$sQuery = $sql->select()->from('motif_examens_radio_demandes')->where(array('idcons' => $idcons));
+ 		$resultat = $sql->prepareStatementForSqlObject($sQuery)->execute();
+ 		
+ 		$listeMotifs = array();
+ 		foreach ($resultat as $result){
+ 			$listeMotifs[] = array($result['idexamen'], $result['motif']);
+ 		}
+ 		return $listeMotifs;
+ 	}
+ 	
+ 	
+ 	public function getMotifsExamensBioDemandes($idcons){
+ 		$db = $this->tableGateway->getAdapter();
+ 		$sql = new Sql($db);
+ 		$sQuery = $sql->select()->from('motif_examens_bio_demandes')->where(array('idcons' => $idcons));
+ 		$resultat = $sql->prepareStatementForSqlObject($sQuery)->execute();
+ 			
+ 		$listeMotifs = array();
+ 		foreach ($resultat as $result){
+ 			$listeMotifs[] = array($result['idexamen'], $result['motif']);
+ 		}
+ 		return $listeMotifs;
+ 	}
+ 	
+ 	
+ 	public function deleteRendezVous($idcons){
+ 		$db = $this->tableGateway->getAdapter();
+ 		$sql = new Sql($db);
+ 		$sQuery = $sql->delete()->from('rendez_vous_cons')->where(array('idcons' => $idcons));
+ 		$sql->prepareStatementForSqlObject($sQuery)->execute();
+ 	}
+ 	
+ 	
+ 	public function addRendezVous($tabDonnees, $idemploye){
+
+ 		$dateRendezvous = $tabDonnees['dateHeureRendezVous'];
+ 		$Convert = new DateHelper();
+ 		$DateRv = $Convert->convertDateInAnglais($Convert->decouperDateInDatepicker($dateRendezvous));
+ 		$HeureRv = $Convert->decouperHeureInDatepicker($dateRendezvous);
+ 		$motifRendezVous = $tabDonnees['motifRendezVous'];
+ 		
+ 		$donneesRV = array(
+ 				'idcons'    => $tabDonnees['idcons'], 
+ 				'dateRv'    => $DateRv,
+ 				'heureRv'   => $HeureRv,
+ 				'motifRv'   => $motifRendezVous,
+ 				'idemploye' => $idemploye,
+ 		);
+ 		
+ 		$this->deleteRendezVous($tabDonnees['idcons']);
+ 		
+ 		$db = $this->tableGateway->getAdapter();
+ 		$sql = new Sql($db);
+ 		$sQuery = $sql->insert()->into('rendez_vous_cons')->values($donneesRV);
+ 		$sql->prepareStatementForSqlObject($sQuery)->execute();
+ 	}
+ 	
+ 	
 }
+

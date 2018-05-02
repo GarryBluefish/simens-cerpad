@@ -587,6 +587,129 @@
     	
     }
     
+    function getAzotemieFormule(){ 
+    	var uree_sanguine = $('#uree_sanguine').val();
+    	var valeur_mmol = null;
+    	
+    	$('#uree_sanguine').keyup( function () { 
+    		uree_sanguine = $('#uree_sanguine').val(); 
+    		if(uree_sanguine){
+        		valeur_mmol = uree_sanguine * 16.65;
+        		$('#uree_sanguine_mmol').val(valeur_mmol.toFixed(2));
+        	}else{
+        		$('#uree_sanguine_mmol').val(null);
+        	}
+    	}).change( function(){
+    		uree_sanguine = $('#uree_sanguine').val(); 
+    		if(uree_sanguine){
+        		valeur_mmol = uree_sanguine * 16.65;
+        		$('#uree_sanguine_mmol').val(valeur_mmol.toFixed(2));
+        	}else{
+        		$('#uree_sanguine_mmol').val(null);
+        	}
+    	});
+    	
+    }
+    
+    function getAcideUriqueFormule(){ 
+    	var acide_urique = $('#acide_urique').val();
+    	var valeur_umol = null;
+    	
+    	$('#acide_urique').keyup( function () { 
+    		acide_urique = $('#acide_urique').val(); 
+    		if(acide_urique){
+        		valeur_umol = acide_urique * 5.949;
+        		$('#acide_urique_umol').val(valeur_umol.toFixed(0));
+        	}else{
+        		$('#acide_urique_umol').val(null);
+        	}
+    	}).change( function(){
+    		acide_urique = $('#acide_urique').val(); 
+    		if(acide_urique){
+        		valeur_umol = acide_urique * 5.949;
+        		$('#acide_urique_umol').val(valeur_umol.toFixed(0));
+        	}else{
+        		$('#acide_urique_umol').val(null);
+        	}
+    	});
+    	
+    }
+    
+    
+    function getCalcemieFormule(){ 
+    	var calcemie = $('#calcemie').val();
+    	var valeur_mmol = null;
+    	
+    	$('#calcemie').keyup( function () { 
+    		calcemie = $('#calcemie').val(); 
+    		if(calcemie){
+        		valeur_mmol = calcemie * 0.0249;
+        		$('#calcemie_mmol').val(valeur_mmol.toFixed(2));
+        	}else{
+        		$('#calcemie_mmol').val(null);
+        	}
+    	}).change( function(){
+    		calcemie = $('#calcemie').val(); 
+    		if(calcemie){
+        		valeur_mmol = calcemie * 0.0249;
+        		$('#calcemie_mmol').val(valeur_mmol.toFixed(2));
+        	}else{
+        		$('#calcemie_mmol').val(null);
+        	}
+    	});
+    	
+    }
+    
+    
+    function getPhosphoremieFormule(){ 
+    	var phosphoremie = $('#phosphoremie').val();
+    	var valeur_mmol = null;
+    	
+    	$('#phosphoremie').keyup( function () { 
+    		phosphoremie = $('#phosphoremie').val(); 
+    		if(phosphoremie){
+        		valeur_mmol = phosphoremie * 0.323;
+        		$('#phosphoremie_mmol').val(valeur_mmol.toFixed(2));
+        	}else{
+        		$('#phosphoremie_mmol').val(null);
+        	}
+    	}).change( function(){
+    		phosphoremie = $('#phosphoremie').val(); 
+    		if(phosphoremie){
+        		valeur_mmol = phosphoremie * 0.323;
+        		$('#phosphoremie_mmol').val(valeur_mmol.toFixed(2));
+        	}else{
+        		$('#phosphoremie_mmol').val(null);
+        	}
+    	});
+    	
+    }
+    
+    
+    function getAlbuminemieFormule(){ 
+    	var albuminemie = $('#albuminemie').val();
+    	var valeur_umol = null;
+    	
+    	$('#albuminemie').keyup( function () { 
+    		albuminemie = $('#albuminemie').val(); 
+    		if(albuminemie){
+        		valeur_umol = albuminemie * 14.493;
+        		$('#albuminemie_umol').val(valeur_umol.toFixed(2));
+        	}else{
+        		$('#albuminemie_umol').val(null);
+        	}
+    	}).change( function(){
+    		albuminemie = $('#albuminemie').val(); 
+    		if(albuminemie){
+        		valeur_umol = albuminemie * 14.493;
+        		$('#albuminemie_umol').val(valeur_umol.toFixed(2));
+        	}else{
+        		$('#albuminemie_umol').val(null);
+        	}
+    	});
+    	
+    }
+    
     
     // GESTION DE L'ANALYSE Culot_urinaire 
     // GESTION DE L'ANALYSE Culot_urinaire 
@@ -594,8 +717,8 @@
     
     var tabInfosCulotUrinaire = new Array();
     tabInfosCulotUrinaire[0] = "";
-    tabInfosCulotUrinaire[1] = "";
-    tabInfosCulotUrinaire[2] = "";
+    tabInfosCulotUrinaire[1] = '<input type="text" name="culot_urinaire_val_1" id="culot_urinaire_val_1" style="width:95%; text-align: left; padding-left: 3px;">';
+    tabInfosCulotUrinaire[2] = '<input type="text" name="culot_urinaire_val_2" id="culot_urinaire_val_2" style="width:95%; text-align: left; padding-left: 3px;">';
     tabInfosCulotUrinaire[3] = '<select name="culot_urinaire_val_3" id="culot_urinaire_val_3" style="width: 95%;"> ' +
     		                   "  <option></option> " +
     		                   "  <option value=1>Oxalate de potassium | calcium</option> " +
@@ -674,7 +797,7 @@
     		if(listeSelect2){ 
     			tab[2][j++] = listeSelect2;
     		}else{
-    			tab[2][j++] = null;
+    			tab[2][j++] = $('#culot_urinaire_ligne_'+i+' .emplaceListeElemtsCUSelect input').val();;
     		}
     	}
 	    tab[3] = $('#conclusion_culot_urinaire_valeur').val();
@@ -777,7 +900,8 @@
     	var tab = [];
     	tab[1] = $('#uree_sanguine').val(); 
 		tab[2] = $('#type_materiel_azotemie').val();
-    	
+		tab[3] = $('#uree_sanguine_mmol').val();
+		
     	return tab;
     }
     
@@ -811,7 +935,7 @@
        				else if(idanalyse ==  7) { tab    = vitesseSedimentation(); }
     				else if(idanalyse ==  8) { tab    = testDemmel(); }
     				else if(idanalyse ==  9) { tab[1] = $('#taux_reticulocyte').val(); tab[2] = $('#type_materiel_taux_reticulocytes').val(); } 
-    				else if(idanalyse == 10) { tab[1] = $('#goutte_epaisse').val(); tab[2] = $('#densite_parasitaire').val(); tab[3] = $('#type_materiel_goutte_epaisse').val(); }
+    				else if(idanalyse == 10) { tab[1] = $('#goutte_epaisse').val(); tab[2] = $('#densite_parasitaire').val(); tab[3] = $('#type_materiel_goutte_epaisse').val(); tab[4] = $('#commentaire_goutte_epaisse').val(); }
     				     
     				else if(idanalyse == 14) { tab    = getTpInr(); }
     				else if(idanalyse == 15) { tab    = getTca(); }
@@ -823,7 +947,7 @@
     				else if(idanalyse == 21) { tab[1] = $('#glycemie_1').val(); tab[2] = $('#glycemie_2').val(); tab[3] = $('#type_materiel_glycemie').val();}
     				else if(idanalyse == 22) { tab[1] = $('#creatininemie').val(); tab[2] = $('#type_materiel_creatininemie').val(); }
     				else if(idanalyse == 23) { tab    = azotemie(); }
-    				else if(idanalyse == 24) { tab[1] = $('#acide_urique').val(); tab[2] = $('#type_materiel_acide_urique').val(); }
+    				else if(idanalyse == 24) { tab[1] = $('#acide_urique').val(); tab[2] = $('#type_materiel_acide_urique').val(); tab[3] = $('#acide_urique_umol').val(); }
     				else if(idanalyse == 25) { tab[1] = $('#cholesterol_total_1').val(); tab[2] = $('#cholesterol_total_2').val(); tab[3] = $('#type_materiel_cholesterol_total').val(); } 
     				else if(idanalyse == 26) { tab[1] = $('#triglycerides_1').val(); tab[2] = $('#triglycerides_2').val(); tab[3] = $('#type_materiel_triglycerides').val(); }
     				else if(idanalyse == 27) { tab[1] = $('#cholesterol_HDL_1').val(); tab[2] = $('#cholesterol_HDL_2').val(); tab[3] = $('#type_materiel_cholesterol_HDL').val(); }
@@ -836,9 +960,9 @@
     				}
     				else if(idanalyse == 30) { tab = getLipidesTotaux(); }   
     				else if(idanalyse == 31) { tab = getIonogramme(); }     
-    				else if(idanalyse == 32) { tab[1] = $('#calcemie').val(); tab[2] = $('#type_materiel_calcemie').val(); }
+    				else if(idanalyse == 32) { tab[1] = $('#calcemie').val(); tab[2] = $('#type_materiel_calcemie').val(); tab[3] = $('#calcemie_mmol').val(); }
     				else if(idanalyse == 33) { tab[1] = $('#magnesemie').val(); tab[2] = $('#type_materiel_magnesemie').val(); }
-    				else if(idanalyse == 34) { tab[1] = $('#phosphoremie').val(); tab[2] = $('#type_materiel_phosphoremie').val(); }     
+    				else if(idanalyse == 34) { tab[1] = $('#phosphoremie').val(); tab[2] = $('#type_materiel_phosphoremie').val(); tab[3] = $('#phosphoremie_mmol').val(); }     
     				else if(idanalyse == 35) { tab = getAsat(); } 
     				else if(idanalyse == 36) { tab = getAlat(); }  
     				else if(idanalyse == 37) { tab = getAsatAlat(); }
@@ -925,6 +1049,11 @@
             	     getElectroHemo();
             	     getAsatAlatAuto();
             	     getFerSeriqueFormule();
+            	     getAzotemieFormule();
+            	     getAcideUriqueFormule();
+            	     getCalcemieFormule();
+            	     getPhosphoremieFormule();
+            	     getAlbuminemieFormule();
             	     
             	     ajoutCulotUrinaireAuto();
             	     getBilirubineTotaleDirecteAuto();
@@ -957,6 +1086,7 @@
     	tab[1] = $('#goutte_epaisse').val();
     	tab[2] = $('#densite_parasitaire').val();
     	tab[3] = $('#type_materiel_goutte_epaisse').val();
+    	tab[4] = $('#commentaire_goutte_epaisse').val();
     	
     	return tab;
     }
@@ -1276,6 +1406,7 @@
     	var tab = [];
     	tab[1] = $('#type_materiel_albuminemie').val();
     	tab[2] = $('#albuminemie').val();
+    	tab[3] = $('#albuminemie_umol').val();
 	    
 	    return tab;
     }
@@ -1323,6 +1454,7 @@
     	tab[1] = $('#type_materiel_hlm_compte_daddis').val();
     	tab[2] = $('#hematies_hlm').val();
     	tab[3] = $('#leucocytes_hlm').val();
+    	tab[4] = $('#commentaire_hlm_compte_daddis').val();
 	    
 	    return tab;
     }
@@ -1387,6 +1519,7 @@
     	tab[3] = $('#toxoplasmose_igm_titre').val();
     	tab[4] = $('#toxoplasmose_igg').val();
     	tab[5] = $('#toxoplasmose_igg_titre').val();
+    	tab[6] = $('#toxoplasmose_commentaire').val();
 	    
 	    return tab;
     }
@@ -1398,6 +1531,7 @@
     	tab[3] = $('#rubeole_igm_titre').val();
     	tab[4] = $('#rubeole_igg').val();
     	tab[5] = $('#rubeole_igg_titre').val();
+    	tab[6] = $('#rubeole_commentaire').val();
 	    
 	    return tab;
     }
@@ -1724,7 +1858,7 @@
     		triglycerides_1 = $('#triglycerides_1').val();
     		if(triglycerides_1){
         		valeur_mmol = triglycerides_1 * 1.143;
-        		$('#triglycerides_2').val(valeur_mmol.toFixed(3));
+        		$('#triglycerides_2').val(valeur_mmol.toFixed(2));
         	}else{
         		$('#triglycerides_2').val(null);
         	}
@@ -1994,7 +2128,7 @@
     				else if(idanalyse == 21) { tab [21] = getGlycemie(); }
     				else if(idanalyse == 22) { tab [22] = new Array("", $('#creatininemie').val(), $('#type_materiel_creatininemie').val()); }
     				else if(idanalyse == 23) { tab [23] = azotemie(); }
-    				else if(idanalyse == 24) { tab [24] = new Array("", $('#acide_urique').val(), $('#type_materiel_acide_urique').val()); }
+    				else if(idanalyse == 24) { tab [24] = new Array("", $('#acide_urique').val(), $('#type_materiel_acide_urique').val(), $('#acide_urique_umol').val()); }
     				else if(idanalyse == 25) { tab [25] = getCholesterolTotal(); }
     				else if(idanalyse == 26) { tab [26] = new Array("", $('#triglycerides_1').val(), $('#triglycerides_2').val(), $('#type_materiel_triglycerides').val()); }
     				else if(idanalyse == 27) { tab [27] = new Array("", $('#cholesterol_HDL_1').val(), $('#cholesterol_HDL_2').val(), $('#type_materiel_cholesterol_HDL').val()); }
@@ -2002,9 +2136,9 @@
     				else if(idanalyse == 29) { tab [29] = getChol_Total_HDL_LDL_Trigly(tabIdDemande[29]); }
     				else if(idanalyse == 30) { tab [30] = getLipidesTotaux(); } 
     			    else if(idanalyse == 31) { tab [31] = getIonogramme(); }
-    				else if(idanalyse == 32) { tab [32] = new Array("", $('#calcemie').val(), $('#type_materiel_calcemie').val()); } 
+    				else if(idanalyse == 32) { tab [32] = new Array("", $('#calcemie').val(), $('#type_materiel_calcemie').val(), $('#calcemie_mmol').val()); } 
     				else if(idanalyse == 33) { tab [33] = new Array("", $('#magnesemie').val(), $('#type_materiel_magnesemie').val()); }
-    				else if(idanalyse == 34) { tab [34] = new Array("", $('#phosphoremie').val(), $('#type_materiel_phosphoremie').val()); }
+    				else if(idanalyse == 34) { tab [34] = new Array("", $('#phosphoremie').val(), $('#type_materiel_phosphoremie').val(), $('#phosphoremie_mmol').val());  }
     				else if(idanalyse == 35) { tab [35] = getAsat(); }
     				else if(idanalyse == 36) { tab [36] = getAlat(); }
     				else if(idanalyse == 37) { tab [37] = getAsatAlat(); }
@@ -2100,6 +2234,11 @@
             	     getElectroHemo();
             	     getAsatAlatAuto();
             	     getFerSeriqueFormule();
+            	     getAzotemieFormule();
+            	     getAcideUriqueFormule();
+            	     getCalcemieFormule();
+            	     getPhosphoremieFormule();
+            	     getAlbuminemieFormule();
             	     
             	     ajoutCulotUrinaireAuto();
             	     getBilirubineTotaleDirecteAuto();
@@ -2351,6 +2490,7 @@
     	tab[1] = $('.ER_'+id+' #goutte_epaisse').val();
     	tab[2] = $('.ER_'+id+' #densite_parasitaire').val();
     	tab[3] = $('.ER_'+id+' #type_materiel_goutte_epaisse').val();
+    	tab[4] = $('.ER_'+id+' #commentaire_goutte_epaisse').val();
     	
     	return tab;
     }
@@ -2507,6 +2647,7 @@
     	
     	tab[1] = $('.ER_'+id+' #uree_sanguine').val(); 
 		tab[2] = $('.ER_'+id+' #type_materiel_azotemie').val();
+		tab[3] = $('.ER_'+id+' #uree_sanguine_mmol').val();
     	
     	return tab;
     }
@@ -2522,6 +2663,7 @@
     	
     	tab[1] = $('.ER_'+id+' #acide_urique').val(); 
     	tab[2] = $('.ER_'+id+' #type_materiel_acide_urique').val(); 
+    	tab[3] = $('.ER_'+id+' #acide_urique_umol').val(); 
     	
     	return tab;
     }
@@ -2651,6 +2793,7 @@
     	
     	tab[1] = $('.ER_'+id+' #calcemie').val();
     	tab[2] = $('.ER_'+id+' #type_materiel_calcemie').val();
+    	tab[3] = $('.ER_'+id+' #calcemie_mmol').val();
     	
     	return tab;
     }
@@ -2897,6 +3040,7 @@
     	
     	tab[1] = $('.ER_'+id+' #type_materiel_albuminemie').val();
     	tab[2] = $('.ER_'+id+' #albuminemie').val();
+    	tab[3] = $('.ER_'+id+' #albuminemie_umol').val();
 	    
 	    return tab;
     }
@@ -2972,6 +3116,7 @@
     	tab[1] = $('.ER_'+id+' #type_materiel_hlm_compte_daddis').val();
     	tab[2] = $('.ER_'+id+' #hematies_hlm').val();
     	tab[3] = $('.ER_'+id+' #leucocytes_hlm').val();
+    	tab[4] = $('.ER_'+id+' #commentaire_hlm_compte_daddis').val();
 	    
 	    return tab;
     }

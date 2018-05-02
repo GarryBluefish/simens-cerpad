@@ -17,6 +17,7 @@ class DemandeAnalyseTable {
  			$select->join('patient' , 'patient.idpersonne = depistage.idpatient' , array('*'));
  			$select->join('personne' , 'personne.idpersonne = patient.idpersonne' , array('date_naissance'));
  			$select->order('date_naissance asc');
+ 			$select->where(array('demande_analyse.idanalyse' => 68));
  		})->toArray();
  	}
  	
@@ -29,6 +30,7 @@ class DemandeAnalyseTable {
  			$select->where(array(
 					'date_naissance >= ?' => $date_debut,
 					'date_naissance <= ?' => $date_fin,
+ 					'demande_analyse.idanalyse' => 68
 			));
  		})->toArray();
  	}
@@ -39,6 +41,7 @@ class DemandeAnalyseTable {
  			$select->join('patient' , 'patient.idpersonne = depistage.idpatient' , array('*'));
  			$select->join('personne' , 'personne.idpersonne = patient.idpersonne' , array('date_naissance'));
  			$select->order('date_naissance asc');
+ 			$select->where(array('demande_analyse.idanalyse' => 68));
  		})->toArray();
  		
  		$tabDateNaissance = array();

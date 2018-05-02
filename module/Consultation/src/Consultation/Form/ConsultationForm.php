@@ -1150,5 +1150,96 @@ class ConsultationForm extends Form {
 				)
 		) );
 		
+		
+		
+		/**Autres (Transfert / Hospitalisation / Rendez-Vous) ---  **/
+		/**Autres (Transfert / Hospitalisation / Rendez-Vous) ---  **/
+		
+		/**
+		 * Rendez-Vous --- Rendez-Vous 
+		 * Rendez-Vous --- Rendez-Vous
+		 */
+		$this->add ( array (
+				'name' => 'dateHeureRendezVous',
+				'type' => 'Zend\Form\Element\Text',
+				'options' => array (
+						'label' => 'Date & Heure'
+				),
+				'attributes' => array (
+						'id' => 'dateHeureRendezVous',
+						'style' => 'font-weight: bold; font-size: 17px;'
+				)
+		) );
+		
+		$this->add ( array (
+				'name' => 'motifRendezVous',
+				'type' => 'Zend\Form\Element\Textarea',
+				'attributes' => array (
+						'id' => 'motifRendezVous',
+						'style' => 'height: 135px; min-height: 135px; max-height: 135px;'
+				)
+		) );
+		
+		
+		/**
+		 * Hospitalisation --- Hospitalisation
+		 * Hospitalisation --- Hospitalisation
+		 */
+		$this->add ( array (
+				'name' => 'motifHospitalisation',
+				'type' => 'Zend\Form\Element\Textarea',
+				'options' => array (
+						'label' => 'Motif'
+				),
+				'attributes' => array (
+						'id' => 'motifHospitalisation',
+						'style' => 'height: 135px; min-height: 135px; max-height: 135px;'
+				)
+		) );
+		
+		
+		/**
+		 * Transfert --- Transfert --- Transfert
+		 * Transfert --- Transfert --- Transfert
+		 */
+		
+		$this->add ( array (
+				'name' => 'motifTransfert',
+				'type' => 'Zend\Form\Element\Textarea',
+				'options' => array (
+						'label' => 'Motif'
+				),
+				'attributes' => array (
+						'id' => 'motifTransfert',
+						'style' => 'height: 135px; min-height: 135px; max-height: 135px;'
+				)
+		) );
+		
+		$this->add ( array (
+				'name' => 'hopitalAccueil',
+				'type' => 'Zend\Form\Element\Text',
+				'options' => array (
+						'label' => 'Hopital'
+				),
+				'attributes' => array (
+						'id' => 'hopitalAccueil',
+						'style' => 'font-weight: bold; font-size: 17px;'
+				)
+		) );
+		
+		
+		$this->add ( array (
+				'name' => 'serviceAccueil',
+				'type' => 'Zend\Form\Element\Text',
+				'options' => array (
+						'label' => 'Service'
+				),
+				'attributes' => array (
+						'id' => 'serviceAccueil',
+						'style' => 'font-weight: bold; font-size: 17px;'
+				)
+		) );
+		
+		
 	}
 }

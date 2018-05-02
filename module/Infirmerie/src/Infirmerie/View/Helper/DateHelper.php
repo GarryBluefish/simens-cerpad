@@ -41,6 +41,17 @@ class DateHelper extends AbstractHelper{
 		$time = substr($dateTime, 11, 8);
 		return $time;
 	}
+	
+	public function decouperDateInDatepicker ($dateTime) {
+		$time = substr($dateTime, 0, 10);
+		return $time;
+	}
+	
+	public function decouperHeureInDatepicker ($dateTime) {
+		$time = substr($dateTime, 13, 5);
+		return $time;
+	}
+	
 	/*
 	 * La date est au format : dd/MM/yyyy
 	*/

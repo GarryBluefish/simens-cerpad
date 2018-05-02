@@ -1412,8 +1412,8 @@
     
     var tabInfosCulotUrinaire = new Array();
     tabInfosCulotUrinaire[0] = "";
-    tabInfosCulotUrinaire[1] = "";
-    tabInfosCulotUrinaire[2] = "";
+    tabInfosCulotUrinaire[1] = '<input disabled type="text" name="culot_urinaire_val_1" id="culot_urinaire_val_1" style="width:95%; text-align: left; padding-left: 3px;">';
+    tabInfosCulotUrinaire[2] = '<input disabled type="text" name="culot_urinaire_val_2" id="culot_urinaire_val_2" style="width:95%; text-align: left; padding-left: 3px;">';
     tabInfosCulotUrinaire[3] = '<select disabled name="culot_urinaire_val_3" id="culot_urinaire_val_3" style="width: 95%;"> ' +
     		                   "  <option></option> " +
     		                   "  <option value=1>Oxalate de potassium | calcium</option> " +

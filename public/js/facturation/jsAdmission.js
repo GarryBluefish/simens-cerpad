@@ -191,6 +191,9 @@ $('#precedent').click(function(){
 
 }
 
+
+var entreeValidation = 0;
+
 function admettre(idpatient){ 
 	
 	$("#termineradmission").replaceWith("<button id='termineradmission' style='height:35px;'>Terminer</button>");
@@ -224,6 +227,26 @@ function admettre(idpatient){
         	     $('#contenu').animate({
         	         height : 'toggle'
         	     },1000);
+        	     
+        	     
+        	     
+        	     
+        	     if(entreeValidation == 0){
+        	    	 entreeValidation = 1;
+                     $('.termineradmission button').click(function(){
+                    	 
+                    	 if($('#formulairePrincipal')[0].checkValidity() == true){
+                    		 //formulaire valide et envoi des données
+                    		 $('.termineradmission button').attr('disabled', true);
+                    		 $('#envoyerDonneesAdmission').trigger('click');
+            	    	 }else{
+            	    		 
+            	    		 $('#envoyerDonneesAdmission').trigger('click');
+            	    	 }
+            	    
+                     });
+        	     }
+
         	     
         },
         error:function(e){console.log(e);alert("Une erreur interne est survenue!");},

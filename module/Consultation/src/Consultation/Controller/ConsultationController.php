@@ -11,6 +11,9 @@ use Consultation\View\Helper\DocumentPdf;
 use Consultation\View\Helper\DemandeAnalysePdf;
 use Consultation\View\Helper\imprimerOrdonnance;
 use Consultation\View\Helper\imprimerDemandesExamens;
+use Consultation\View\Helper\ImprimerUnExamenDemande;
+use Consultation\View\Helper\ImprimerExamensRadioDemandes;
+use Consultation\View\Helper\ImprimerExamensBioDemandes;
 
 class ConsultationController extends AbstractActionController {
 	
@@ -762,7 +765,7 @@ class ConsultationController extends AbstractActionController {
 	{
 		$liste_select = "";
 		foreach($this->getExamenTable()->getListeDesExamens() as $listeExamens){
-			$liste_select.= "<option value='0,".$listeExamens['idexamen']."'>".$listeExamens['designation']."</option>";
+			$liste_select.= "<option id='examen_".$listeExamens['idexamen']."' value='0,".$listeExamens['idexamen']."'>".$listeExamens['designation']."</option>";
 		}
 		return $liste_select;
 	}
@@ -773,7 +776,7 @@ class ConsultationController extends AbstractActionController {
 		$liste_select = "";
 		if($id == 6){
 			foreach($this->getPatientTable()->getListeDesExamenImagerie() as $listeExamens){
-				$liste_select.= "<option id='examen_".$listeExamens['idexamen']."'  value='0,".$listeExamens['idexamen']."'>".$listeExamens['designation']."</option>";
+				$liste_select.= "<option id='examen_".$listeExamens['idexamen']."' value='0,".$listeExamens['idexamen']."'>".$listeExamens['designation']."</option>";
 			}
 		}else{
 			foreach($this->getPatientTable()->getListeDesAnalyses($id) as $listeAnalyses){
@@ -935,11 +938,18 @@ class ConsultationController extends AbstractActionController {
 		$idmedecin = $this->layout()->user['idemploye'];
 		
 		$tabDonnees = $this->params ()->fromPost();
+		
+		/**
+		 * RENDEZ-VOUS --- RENDEZ-VOUS --- RENDEZ-VOUS
+		 * RENDEZ-VOUS --- RENDEZ-VOUS --- RENDEZ-VOUS
+		 */
+		$this->getFacturationTable()->addRendezVous($tabDonnees, $idmedecin);
+		var_dump($tabDonnees); exit();
+
 		/**
 		 *ANTECEDENT FAMILIAUX --- ANTECEDENTS FAMILIAUX
 		 *ANTECEDENT FAMILIAUX --- ANTECEDENTS FAMILIAUX
 		 */
-		//var_dump($tabDonnees); exit();
 		$this->getAntecedentsFamiliauxTable()->insertAntecedentsFamiliaux($tabDonnees);
 		$this->getAntecedentsFamiliauxTable()->insertStatutDrepanocytoseEnfant($tabDonnees);
 		
@@ -982,6 +992,14 @@ class ConsultationController extends AbstractActionController {
 		}
 		
 		//var_dump($listeDemandesAnalyses); exit();
+		
+		/**
+		 * MOTIFS DES DEMANDES D'EXAMENS --- MOTIFS DES DEMANDES D'EXAMENS
+		 * MOTIFS DES DEMANDES D'EXAMENS --- MOTIFS DES DEMANDES D'EXAMENS
+		 */
+		$this->getFacturationTable()->addMotifsExamensRadioDemandes($tabDonnees, $idmedecin);
+		$this->getFacturationTable()->addMotifsExamensBioDemandes($tabDonnees, $idmedecin);
+		
 		
 		
 		/**
@@ -1315,6 +1333,27 @@ class ConsultationController extends AbstractActionController {
     	}
     	
     	
+    	
+    	/**
+    	 * Recupérer les demandes d'analyses
+    	 */
+    	/*
+    	 * MOTIFS DES DEMANDES D'EXAMENS 
+    	 */
+    	$motifsExamensRadioDemandes = $this->getFacturationTable()->getMotifsExamensRadioDemandes($idcons);
+    	$motifsExamensBioDemandes   = $this->getFacturationTable()->getMotifsExamensBioDemandes($idcons);
+    	
+    	
+    	//var_dump($motifsExamensRadioDemandes); exit();
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
     	//var_dump($form); exit();
 		
 		
@@ -1346,6 +1385,9 @@ class ConsultationController extends AbstractActionController {
 				
 				'infosComplicationsAigues' => $infosComplicationsAigues,
 				'infosComplicationsChroniques' => $infosComplicationsChroniques,
+				
+				'motifsExamensRadioDemandes' => $motifsExamensRadioDemandes,
+				'motifsExamensBioDemandes' => $motifsExamensBioDemandes,
 
 		);
 
@@ -1359,6 +1401,8 @@ class ConsultationController extends AbstractActionController {
 		 *ANTECEDENT FAMILIAUX --- ANTECEDENTS FAMILIAUX
 		 *ANTECEDENT FAMILIAUX --- ANTECEDENTS FAMILIAUX
 		*/
+		
+		//var_dump($tabDonnees); exit();
 		
 		$this->getAntecedentsFamiliauxTable()->insertAntecedentsFamiliaux($tabDonnees);
 		$this->getAntecedentsFamiliauxTable()->insertStatutDrepanocytoseEnfant($tabDonnees);
@@ -1408,7 +1452,12 @@ class ConsultationController extends AbstractActionController {
 			$this->facturationAnalysesDemandees($tabDonnees, $idmedecin, $listeDemandesAnalyses);
 		}
 		
-		
+		/**
+		 * MOTIFS DES DEMANDES D'EXAMENS --- MOTIFS DES DEMANDES D'EXAMENS
+		 * MOTIFS DES DEMANDES D'EXAMENS --- MOTIFS DES DEMANDES D'EXAMENS
+		 */
+		$this->getFacturationTable()->addMotifsExamensRadioDemandes($tabDonnees, $idmedecin);
+		$this->getFacturationTable()->addMotifsExamensBioDemandes($tabDonnees, $idmedecin);
 		
 		
 		//var_dump($tabDonnees); exit();
@@ -1936,7 +1985,66 @@ class ConsultationController extends AbstractActionController {
 	/**
 	 * IMPRESSION DES EXAMENS DEMANDES DU Popup --- IMPRESSION DES EXAMENS DEMANDES DU Popup
 	 */
-	public function impressionExamensDemandesAction() {
+	
+	public function impressionUnExamenDemandeAction() {
+		$nomService = $this->layout()->user['NomService'];
+		$idpatient = $this->params()->fromPost( 'idpatient' );
+		$personne = $this->getPersonneTable()->getPersonne($idpatient);
+		$patient = $this->getPatientTable()->getPatient($idpatient);
+		$depistage = $this->getPatientTable()->getDepistagePatient($idpatient);
+		
+		$motifExamenDem = $this->params()->fromPost( 'motifExamenDem' );
+		$typeExamen = $this->params()->fromPost( 'typeExamen' );
+		$idExamen = $this->params()->fromPost( 'idExamen' );
+		$libelleExamen = $this->params()->fromPost( 'libelleExamen' );
+		
+		$pdf = new ImprimerUnExamenDemande('L','mm',array(210,150));
+		$pdf->SetMargins(13.5,13.5,13.5);
+		$pdf->setNomService($nomService);
+		$pdf->setInfosPatients($personne);
+		
+		$pdf->setMotifExamenDem($motifExamenDem);
+		$pdf->setTypeExamen($typeExamen);
+		$pdf->setIdExamen($idExamen);
+		$pdf->setLibelleExamen($libelleExamen);
+		
+		$pdf->impressionUnExamenDemande();
+		$pdf->Output('I');
+		
+	}
+	
+	
+	public function impressionExamensRadioDemandesAction() {
+	
+		$nomService = $this->layout()->user['NomService'];
+		$idpatient = $this->params()->fromPost( 'idpatient' );
+		$personne = $this->getPersonneTable()->getPersonne($idpatient);
+		$patient = $this->getPatientTable()->getPatient($idpatient);
+		$depistage = $this->getPatientTable()->getDepistagePatient($idpatient);
+
+		$motifExamenDem = $this->params()->fromPost( 'tabMotifExamenDem' );
+		$typeExamen = $this->params()->fromPost( 'tabTypesExamens' );
+		$idExamen = $this->params()->fromPost( 'tabIdExamens' );
+		$libelleExamen = $this->params()->fromPost( 'tabExamens' );
+		
+		$pdf = new ImprimerExamensRadioDemandes('L','mm',array(210,150));
+		$pdf->SetMargins(13.5,13.5,13.5);
+		$pdf->setNomService($nomService);
+		$pdf->setInfosPatients($personne);
+		
+		$pdf->setMotifExamenDem($motifExamenDem);
+		$pdf->setTypeExamen($typeExamen);
+		$pdf->setIdExamen($idExamen);
+		$pdf->setLibelleExamen($libelleExamen);
+		
+		$pdf->impressionExamensRadioDemandes();
+		
+		$pdf->Output('I');
+	
+	}
+	
+	
+	public function impressionExamensBioDemandesAction() {
 	
 		$nomService = $this->layout()->user['NomService'];
 		$idpatient = $this->params()->fromPost( 'idpatient' );
@@ -1944,45 +2052,26 @@ class ConsultationController extends AbstractActionController {
 		$patient = $this->getPatientTable()->getPatient($idpatient);
 		$depistage = $this->getPatientTable()->getDepistagePatient($idpatient);
 	
-		
-		var_dump($idpatient); exit();
-		
-		
-		
-		//$idcons = $this->params()->fromPost( 'idcons' );
 	
-		/*
-		$medicamentLibelle = explode( "," , $this->params()->fromPost( 'medicamentLibelle' ));
-		$formeMedicament = explode( "," , $this->params()->fromPost( 'formeMedicament' ));
-		$nbMedicament = explode( "," , $this->params()->fromPost( 'nbMedicament' ));
-		$quantiteMedicament = explode( "," , $this->params()->fromPost( 'quantiteMedicament' ));
+		$motifExamenDem = $this->params()->fromPost( 'tabMotifExamenDem' );
+		$typeExamen = $this->params()->fromPost( 'tabTypesExamens' );
+		$idExamen = $this->params()->fromPost( 'tabIdExamens' );
+		$libelleExamen = $this->params()->fromPost( 'tabExamens' );
 	
-		//var_dump($medicamentLibelle); exit();
-	
-		/*
-		$pdf = new imprimerOrdonnance();
+		$pdf = new ImprimerExamensBioDemandes('L','mm',array(210,150));
 		$pdf->SetMargins(13.5,13.5,13.5);
 		$pdf->setNomService($nomService);
 		$pdf->setInfosPatients($personne);
 	
-		$pdf->setMedicamentLibelle($medicamentLibelle);
-		$pdf->setFormeMedicament($formeMedicament);
-		$pdf->setNbMedicament($nbMedicament);
-		$pdf->setQuantiteMedicament($quantiteMedicament);
+		$pdf->setMotifExamenDem($motifExamenDem);
+		$pdf->setTypeExamen($typeExamen);
+		$pdf->setIdExamen($idExamen);
+		$pdf->setLibelleExamen($libelleExamen);
 	
-		$pdf->impressionOrdonnance();
+		$pdf->impressionExamensBioDemandes();
 		$pdf->Output('I');
-		*/
 	
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	

@@ -233,6 +233,10 @@ function chargementModificationAnalyses (listeAnalysesDemandees, tabListeAnalyse
 			$("#SelectAnalyse_"+(index+1)+" option[value='0,"+idanalyse+"']").attr('selected','selected');
 
 			$("#tarifActe"+(index+1)).val('___');
+			
+			//AutoAjout des champs de saisi des résultats
+			ajoutAutomatiqueChampsResultats(index+1);
+			
 		}else{
 			var idanalyse = listeAnalysesDemandees[index]['idanalyse'];
 			//SÃ©lection des analyses sur les listes 

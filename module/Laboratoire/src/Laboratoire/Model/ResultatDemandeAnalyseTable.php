@@ -621,7 +621,9 @@ class ResultatDemandeAnalyseTable {
 	    $donnees = array();
 	    $donnees['goutte_epaisse'] = $tab[1];
 	    if($tab[2]){ $donnees['densite_parasitaire'] = $tab[2]; } else { $donnees['densite_parasitaire'] = null; }
-	     
+	    if($tab[4]){ $donnees['commentaire_goutte_epaisse'] = $tab[4]; }else{ $donnees['commentaire_goutte_epaisse'] = null; } 
+	    
+	    
 	    if( $donnees['goutte_epaisse'] ){ $donneesExiste = 1; $donnees['type_materiel'] = $tab[3]; }
 	
 	    //Si les resultats n y sont pas on les ajoute
@@ -1188,6 +1190,7 @@ class ResultatDemandeAnalyseTable {
 	    $donnees = array();
 	    $donnees['valeur'] = $tab[1];
 	    $donnees['type_materiel'] = $tab[2];
+	    $donnees['valeur_mmol'] = $tab[3];
 	
 	    if($donnees['valeur']){ $donneesExiste = 1; }
 	
@@ -1243,6 +1246,7 @@ class ResultatDemandeAnalyseTable {
 	
 	    $donnees = array();
 	    $donnees['acide_urique'] = $tab[1];
+	    $donnees['acide_urique_umol'] = $tab[3];
 	
 	    if($donnees['acide_urique']){ $donneesExiste = 1;  $donnees['type_materiel'] = $tab[2];}
 	
@@ -1775,8 +1779,13 @@ class ResultatDemandeAnalyseTable {
 	     
 	    $donnees = array();
 	    $donnees['calcemie'] = $tab[1];
+	    
 	
-	    if($donnees['calcemie']){ $donneesExiste = 1; $donnees['type_materiel'] = $tab[2];}
+	    if($donnees['calcemie']){ 
+	    	$donneesExiste = 1; 
+	    	$donnees['type_materiel'] = $tab[2];
+	    	$donnees['calcemie_mmol'] = $tab[3];
+	    }
 	     
 	    //Si les resultats n y sont pas on les ajoute
 	    if(!$this->getValeursCalcemie($iddemande)){
@@ -1885,7 +1894,11 @@ class ResultatDemandeAnalyseTable {
 	    $donnees = array();
 	    $donnees['phosphoremie'] = $tab[1];
 	
-	    if($donnees['phosphoremie']){ $donneesExiste = 1; $donnees['type_materiel'] = $tab[2];}
+	    if($donnees['phosphoremie']){ 
+	    	$donneesExiste = 1; 
+	    	$donnees['type_materiel'] = $tab[2];
+	    	$donnees['phosphoremie_mmol'] = $tab[3];
+	    }
 	
 	    //Si les resultats n y sont pas on les ajoute
 	    if(!$this->getValeursPhosphoremie($iddemande)){
@@ -2720,6 +2733,7 @@ class ResultatDemandeAnalyseTable {
 	
 	    if($tab[1]){ $donnees['type_materiel'] = $tab[1]; }else{ $donnees['type_materiel'] = null; }
 	    if($tab[2]){ $donnees['albuminemie']   = $tab[2]; }else{ $donnees['albuminemie']   = null; }
+	    if($tab[3]){ $donnees['albuminemie_umol'] = $tab[3]; }else{ $donnees['albuminemie_umol'] = null; }
 	
 	    if($tab[2]){ $donneesExiste = 1; }
 	
@@ -2987,6 +3001,7 @@ class ResultatDemandeAnalyseTable {
 	    if($tab[1]){ $donnees['type_materiel'] = $tab[1]; }else{ $donnees['type_materiel'] = null; }
 	    if($tab[2]){ $donnees['hematies_hlm']  = $tab[2]; }else{ $donnees['hematies_hlm']  = null; }
 	    if($tab[3]){ $donnees['leucocytes_hlm']= $tab[3]; }else{ $donnees['leucocytes_hlm']= null; }
+	    if($tab[4]){ $donnees['commentaire_hlm_compte_daddis']= $tab[4]; }else{ $donnees['commentaire_hlm_compte_daddis']= null; }
 	
 	    if($tab[2] || $tab[3]){ $donneesExiste = 1; }
 	
@@ -3332,6 +3347,7 @@ class ResultatDemandeAnalyseTable {
 	    if($tab[3]){ $donnees['toxoplasmose_igm_titre'] = $tab[3]; }else{ $donnees['toxoplasmose_igm_titre'] = null; }
 	    if($tab[4]){ $donnees['toxoplasmose_igg']       = $tab[4]; }else{ $donnees['toxoplasmose_igg']       = null; }
 	    if($tab[5]){ $donnees['toxoplasmose_igg_titre'] = $tab[5]; }else{ $donnees['toxoplasmose_igg_titre'] = null; }
+	    if($tab[6]){ $donnees['toxoplasmose_commentaire'] = $tab[6]; }else{ $donnees['toxoplasmose_commentaire'] = null; }
 	
 	    if($tab[2] || $tab[4]){ $donneesExiste = 1; }
 	
@@ -3392,8 +3408,9 @@ class ResultatDemandeAnalyseTable {
 	    if($tab[3]){ $donnees['rubeole_igm_titre'] = $tab[3]; }else{ $donnees['rubeole_igm_titre'] = null; }
 	    if($tab[4]){ $donnees['rubeole_igg']       = $tab[4]; }else{ $donnees['rubeole_igg']       = null; }
 	    if($tab[5]){ $donnees['rubeole_igg_titre'] = $tab[5]; }else{ $donnees['rubeole_igg_titre'] = null; }
-	    
+	    if($tab[6]){ $donnees['rubeole_commentaire'] = $tab[6]; }else{ $donnees['rubeole_commentaire'] = null; }
 	
+	    
 	    if($tab[2] || $tab[4]){ $donneesExiste = 1; }
 	
 	    //Si les resultats n y sont pas on les ajoute
@@ -3903,8 +3920,10 @@ class ResultatDemandeAnalyseTable {
 		$select->join(array('t'=>'type_analyse') ,'t.idtype = a.idtype_analyse', array('Libelle'=>'libelle'));
 		$select->join(array('r'=>'resultat_demande_analyse'), 'd.iddemande = r.iddemande_analyse', array('DateEnregistrementResultat'=>'date'));
 		$select->join(array('p'=>'personne'), 'p.idpersonne = r.idemploye', array('Nom'=>'nom', 'Prenom'=>'prenom'));
-
 		$select->join(array('p2'=>'personne'), 'p2.idpersonne = r.valider_par', array('NomValidateur'=>'nom', 'PrenomValidateur'=>'prenom'));
+		
+		$select->join(array('f'=>'facturation_demande_analyse'), 'f.iddemande_analyse = d.iddemande', array('IdFacturation'=>'idfacturation'));
+		$select->join(array('b'=>'bilan_prelevement'), 'b.idfacturation = f.idfacturation', array('DateHeurePrelevement'=>'date_heure', 'DatePrelevement'=>'date_prelevement'));
 		
 		$select->where(array('d.date' => $dateDemande['date'], 'd.idpatient' => $dateDemande['idpatient'], 'r.valide' => 1));
 		$select->order(array('idanalyse' => 'ASC', 'idtype' =>'ASC'));
