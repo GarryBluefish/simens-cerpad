@@ -207,8 +207,35 @@ function initialisationScript(agePatient) {
 	$( "#terminerCons" ).click(function(){
 		affichageDesExamensDemandes();
 		envoyerLesDonneesASauvegarder();
+		sauverInfosCrisesVasOcclusivePopup();
 	});
 	
+	$( "#annulerCons" ).click(function(){
+		
+		$( "#confirmationAnnulation" ).dialog({
+			resizable: false,
+		    height:180,
+		    width:520,
+		    autoOpen: false,
+		    modal: true,
+		    buttons: {
+		    	"Non": function() {
+		        	$( this ).dialog( "close" );
+		        },
+		        
+		        "Oui": function() {
+		        	$( this ).dialog( "close" );
+		    		$(location).attr("href",tabUrl[0]+"public/consultation/liste-consultations");
+		        },
+		   }
+		});
+		
+		$("#confirmationAnnulation").dialog('open');
+		
+		return false;
+	});
+	
+		
 	//APPLICATION DE LA POSOLOGIE AUTOMATIQUEMENT POUR LE CAS "DOULEUR"
 	//APPLICATION DE LA POSOLOGIE AUTOMATIQUEMENT POUR LE CAS "DOULEUR"
 	var poidsPatient = 0;
@@ -615,16 +642,211 @@ function initialisationScript(agePatient) {
 
 $("#labelSuiviDesTraitementsPre, #labelMisesAJourDesVaccinsPre, .hospitalisationClassHM, .hospitalisationNombreClassHM, #labelDonneesExamenTaille, #labelPrecisionExamenDesPoumonsDE, #labelPrecisionExamenDuCoeurDE").toggle(false);
 
+var entreIconAutreCrises = 0;
+$('#ajoutInfosAutresCrisesIcon').toggle(false);
+
 $(".criseInfo div").toggle(false);
 function getInfoCrise(id){
 
 	if(id == 1){
 		$(".criseInfo div").fadeIn();
+		if(entreIconAutreCrises == 0){ 
+			affichageIconAutresCrises(); 
+			
+			/** typeHM --- typeHm --- typeHM **/
+			$("#typeHM").keyup(function(){ 
+				$("#typeHM_List_1").val($(this).val());
+				tabInfosListCrisesHMType[1] = $(this).val();
+			}).change(function(){ 
+				$("#typeHM_List_1").val($(this).val());
+				tabInfosListCrisesHMType[1] = $(this).val();
+			});
+			/*==================================*/
+			
+			/** dureeHM --- dureeHM --- dureeHM **/
+			$("#dureeHM").keyup(function(){ 
+				$("#dureeHM_List_1").val($(this).val());
+				tabInfosListCrisesHMDuree[1] = $(this).val();
+			}).change(function(){ 
+				$("#dureeHM_List_1").val($(this).val());
+				tabInfosListCrisesHMDuree[1] = $(this).val();
+			});
+			/*==================================*/
+			
+			/** facteurDelclenchantHM --- facteurDelclenchantHM **/
+			$("#facteur_declenchantHM").keyup(function(){ 
+				$("#facteur_declenchantHM_List_1").val($(this).val());
+				tabInfosListCrisesHMFacteurDeclenchant[1] = $(this).val();
+			}).change(function(){ 
+				$("#facteur_declenchantHM_List_1").val($(this).val());
+				tabInfosListCrisesHMFacteurDeclenchant[1] = $(this).val();
+			});
+			/*===================================================*/
+			
+			entreIconAutreCrises = 1; 
+		}
 	}else if(id == -1 || id == ''){
 		$(".criseInfo div").fadeOut(false);
 	}
 	
 }
+/*Affichage de l'interface renseignement de plusieurs crises*/
+var hauteurPopUpInfosCrisesVaso = 240;
+function ajouterInfosAutresCrises(){
+	
+	$( "#autresInfosCrisesVasOcclusives" ).dialog({
+		resizable: false,
+	    height:hauteurPopUpInfosCrisesVaso,
+	    width:820,
+	    autoOpen: false,
+	    modal: true,
+	    buttons: {
+	        "Terminer": function() {
+	        	$( this ).dialog( "close" );
+	        },
+	   }
+	});
+	
+	$("#autresInfosCrisesVasOcclusives").dialog('open');
+}
+/*Affichage de l'icone de l'interface de renseignement de plusieurs crises*/
+function affichageIconAutresCrises(){
+	$('#nombre_criseHM').keyup(function(){
+		if($(this).val() > 1){
+			$('#ajoutInfosAutresCrisesIcon').toggle(true);
+			if($(this).val() > 20){ $(this).val(1); }
+			affichageLigneCrisesVasOcclusives($(this).val());
+		}else{
+			$('#ajoutInfosAutresCrisesIcon').toggle(false);
+		}
+		
+	}).change(function(){
+		if($(this).val() > 1){
+			$('#ajoutInfosAutresCrisesIcon').toggle(true);
+			if($(this).val() > 20){ $(this).val(1); }
+			affichageLigneCrisesVasOcclusives($(this).val());
+		}else{
+			$('#ajoutInfosAutresCrisesIcon').toggle(false);
+		}
+		
+	});
+}
+
+var tabInfosListCrisesHMType = new Array();
+var tabInfosListCrisesHMDuree = new Array();
+var tabInfosListCrisesHMFacteurDeclenchant = new Array();
+
+/*Afficher le nombre de ligne de crises vaso-occlusives*/
+function affichageLigneCrisesVasOcclusives(nbCrises){
+	
+	hauteurPopUpInfosCrisesVaso = 240;
+	var uneCriseVasOc ="";
+
+	for(var i=1 ; i<=nbCrises ; i++){
+		 uneCriseVasOc +=""+
+		  '<table style="width:100%;">'+
+		    '<tr style="height:40px; width:100%;" class="designHistoireMaladie">'+
+			  
+		    
+		      //GESTION DES CRISES --- GESTION DES CRISES --- GESTION DES CRISES
+			  '<th style="width:15%; padding-right: 15px;" class="criseInfo" >'+ 
+	            '<div style="float:left; width: 100%; background: gree;"><label style="width: 100%; height:30px; font-size: 14px; "> <i style="float:left; padding-top: 4px;">'+i+')</i> Type  <input type="text" id="typeHM_List_'+i+'" style="width:120px; font-size: 14px;"></label></div>'+ 
+			  '</th>'+
+			  //Script de sauvegarde des types de crises renseignés
+			  '<script>'+
+			    '$("#typeHM_List_'+i+'").keyup(function(){'+
+			       'tabInfosListCrisesHMType['+i+'] = $(this).val();'+
+			       '$("#typeHM").val(tabInfosListCrisesHMType[1]);'+
+			    '});'+
+			    '$("#typeHM_List_'+i+'").val(tabInfosListCrisesHMType['+i+']);'+
+			  '</script>'+
+			  //***************************************************
+			  
+			  
+			  //GESTION DES DUREES --- GESTION DES DUREES --- GESTION DES DUREES
+			  '<th style="width:18%; padding-right: 15px;" class="criseInfo" >'+ 
+	            '<div style="float:left; width: 100%; background: yello;">'+
+	               '<label style="width: 100%; height:30px; font-size: 14px;">Dur&eacute;e (j)  '+ 
+	                 '<select id="dureeHM_List_'+i+'" style="width:120px; font-size: 14px;">'+
+	                    '<option value=""></option>'+
+	                    '<option value="< 24h">< 24h</option>'+
+	                    '<option value="24h a 48h"> 24h &agrave; 48h </option>'+
+	                    '<option value=">= 72h"> >= 72h </option>'+
+	                    '<option value="72h a 7j"> 72h &agrave; 7j </option>'+
+	                    '<option value="> 7j"> > 7j </option>'+
+	                 '</select>'+
+	               '</label>'+
+	            '</div>'+ 
+			  '</th>'+
+			  //Script de sauvegarde des durees des crises renseignées
+			  '<script>'+
+			    '$("#dureeHM_List_'+i+'").keyup(function(){'+
+			       'tabInfosListCrisesHMDuree['+i+'] = $(this).val();'+
+			       '$("#dureeHM").val(tabInfosListCrisesHMDuree[1]);'+
+			    '})'+
+			    '.change(function(){'+
+			       'tabInfosListCrisesHMDuree['+i+'] = $(this).val();'+
+			       '$("#dureeHM").val(tabInfosListCrisesHMDuree[1]);'+
+			    '});'+
+			    '$("#dureeHM_List_'+i+'").val(tabInfosListCrisesHMDuree['+i+']);'+
+			  '</script>'+
+			  //***************************************************
+			  
+			  
+			  //GESTION DES FACTEURS DECLENCHANT --- GESTION DES FACTEURS DECLENCHANT
+			  '<th style="width:28%; padding-right: 25px;" class="criseInfo">'+
+	            '<div style="float:left; width: 100%; background: indig;">'+
+	               '<label style="width: 100%; height:30px; font-size: 14px;" >Facteur d&eacute;clenchant   '+
+	                  '<select id="facteur_declenchantHM_List_'+i+'" style="width:150px; font-size: 14px;">'+
+	                    '<option value=""></option>'+
+	                    '<option value="1">Fi&egrave;vre</option>'+
+	                    '<option value="2">Refroidissement</option>'+
+	                    '<option value="3">Activit&eacute; intense</option>'+
+	                    '<option value="-1">N&eacute;ant</option>'+
+	                    '<option value="-2">Autre</option>'+
+	                 '</select>'+
+	               '</label>'+
+	            '</div>'+ 
+		      '</th>'+
+		      //Script de sauvegarde des facteurs déclenchants des crises renseignés
+			  '<script>'+
+			    '$("#facteur_declenchantHM_List_'+i+'").keyup(function(){'+
+			       'tabInfosListCrisesHMFacteurDeclenchant['+i+'] = $(this).val();'+
+			       '$("#facteur_declenchantHM").val(tabInfosListCrisesHMFacteurDeclenchant[1]);'+
+			    '})'+
+			    '.change(function(){'+
+			       'tabInfosListCrisesHMFacteurDeclenchant['+i+'] = $(this).val();'+
+			       '$("#facteur_declenchantHM").val(tabInfosListCrisesHMFacteurDeclenchant[1]);'+
+			    '});'+
+			    '$("#facteur_declenchantHM_List_'+i+'").val(tabInfosListCrisesHMFacteurDeclenchant['+i+']);'+
+			  '</script>'+
+			  //********************************************************************
+		      
+		      
+	       '</tr>'+
+	     '</table>';
+		 
+		 hauteurPopUpInfosCrisesVaso+=20;
+	}
+	
+	var hauteurContenuLigne = 45*nbCrises;
+	$('.zoneInfosCrisesVasOcclusives').css({'height':hauteurContenuLigne});
+	
+	$('#popupInfosCrisesVasOcclusives').html(uneCriseVasOc);
+	
+	
+}
+
+function sauverInfosCrisesVasOcclusivePopup(){
+	
+	var scriptInfosCrisesVasOcclusiveAEnvoyer ="";
+	scriptInfosCrisesVasOcclusiveAEnvoyer +="<input type='hidden' name='tabInfosListCrisesHMType' value='"+tabInfosListCrisesHMType+"' >";
+	scriptInfosCrisesVasOcclusiveAEnvoyer +="<input type='hidden' name='tabInfosListCrisesHMDuree' value='"+tabInfosListCrisesHMDuree+"' >";
+	scriptInfosCrisesVasOcclusiveAEnvoyer +="<input type='hidden' name='tabInfosListCrisesHMFacteurDeclenchant' value='"+tabInfosListCrisesHMFacteurDeclenchant+"' >";
+	$('#sauverLesInfosDesCrisesvasoOcclusivesPopup').html(scriptInfosCrisesVasOcclusiveAEnvoyer);
+}
+
+
 
 $(".episodeFievreClassHM div").toggle(false);
 function getInfoEpisodeFievre(id){
@@ -1596,6 +1818,60 @@ function supprimerDiagnosticComplicationChronique(id){
 }
 
 
+/**
+ * choix du diagnostic -- choix du diagnostic -- choix du diagnostic
+ */
+function choixConclusionDiagnostic(id){
+	if(id == 0){
+		$("#choixAutresConclusionDiagnostic").toggle(false);
+		
+		var boutons = $('#choixAutresConclusionDiagnostic input[name=choix_diag_complications_aigues]');
+		if( boutons[0].checked){ $("#choixAutresDiagComplicationsAigues").html('Complications aigues').css({'color':'black', 'font-weight':'normal'}); $('#affichageChoixAutresDiagComplicationsAigues').toggle(false); boutons.trigger('click'); }
+		
+		var boutons = $('#choixAutresConclusionDiagnostic input[name=choix_diag_complications_chroniques]');
+		if( boutons[0].checked){ $("#choixAutresDiagComplicationsChroniques").html('Complications chroniques').css({'color':'black', 'font-weight':'normal'}); $('#affichageChoixAutresDiagComplicationsChroniques').toggle(false); boutons.trigger('click'); }
+		
+		var boutons = $('#choixAutresConclusionDiagnostic input[name=choix_diag_autres_a_signaler]');
+		if( boutons[0].checked){ $("#choixAutresDiagComplicationsASignaler").html('Autres &agrave; signaler').css({'color':'black', 'font-weight':'normal'}); $('#affichageChoixAutresDiagAutresASignaler').toggle(false); boutons.trigger('click'); }
+		
+	}else{
+		$("#choixAutresConclusionDiagnostic").toggle(true);
+		prepareScriptChoixDiagnosticConclusion();
+	}
+}
+
+function prepareScriptChoixDiagnosticConclusion(){
+	
+	/** Diagnostic consultation du jour --- DIagnostic consultation du jour**/
+	$('#choixAutresConclusionDiagnostic input[name=choix_diag_complications_aigues]').click(function(){
+		var boutons = $(this); 
+		if( boutons[0].checked){ $("#choixAutresDiagComplicationsAigues").html('<span style="color: red;">&#10003;</span> Complications aigues').css({'color':'green', 'font-weight':'bold'}); $('#affichageChoixAutresDiagComplicationsAigues').toggle(true); }
+		if(!boutons[0].checked){ $("#choixAutresDiagComplicationsAigues").html('Complications aigues').css({'color':'black', 'font-weight':'normal'}); $('#affichageChoixAutresDiagComplicationsAigues').toggle(false);}
+	});
+	
+	$('#choixAutresConclusionDiagnostic input[name=choix_diag_complications_chroniques]').click(function(){
+		var boutons = $(this); 
+		if( boutons[0].checked){ $("#choixAutresDiagComplicationsChroniques").html('<span style="color: red;">&#10003;</span> Complications chroniques').css({'color':'green', 'font-weight':'bold'}); $('#affichageChoixAutresDiagComplicationsChroniques').toggle(true); }
+		if(!boutons[0].checked){ $("#choixAutresDiagComplicationsChroniques").html('Complications chroniques').css({'color':'black', 'font-weight':'normal'}); $('#affichageChoixAutresDiagComplicationsChroniques').toggle(false);}
+	});
+	
+	$('#choixAutresConclusionDiagnostic input[name=choix_diag_autres_a_signaler]').click(function(){
+		var boutons = $(this); 
+		if( boutons[0].checked){ $("#choixAutresDiagComplicationsASignaler").html('<span style="color: red;">&#10003;</span> Autres &agrave; signaler').css({'color':'green', 'font-weight':'bold'}); $('#affichageChoixAutresDiagAutresASignaler').toggle(true); }
+		if(!boutons[0].checked){ $("#choixAutresDiagComplicationsASignaler").html('Autres &agrave; signaler').css({'color':'black', 'font-weight':'normal'}); $('#affichageChoixAutresDiagAutresASignaler').toggle(false);}
+	});
+	
+}
+
+
+
+
+
+
+
+
+
+
 
 //TRAITEMENT MEDICAMENTEUX --- TRAITEMENT MEDICAMENTEUX
 //TRAITEMENT MEDICAMENTEUX --- TRAITEMENT MEDICAMENTEUX
@@ -1776,3 +2052,21 @@ function initChampDateTimeEtMotifRendezVousForm()
 	$('#rendervousLabelVSInput').trigger('click');
 	$('#rendervousLabelVSInput').trigger('click');
 }
+
+
+function infos_parentales()
+{
+	
+	$('#infos_parentales_patient').w2overlay({ html: "" +
+		"" +
+		"<div style='border-bottom:1px solid green; height: 30px; background: #f9f9f9; width: 600px; text-align:center; padding-top: 10px; font-size: 13px; color: green; font-weight: bold;'><img style='padding-right: 10px;' src='"+tabUrl[0]+"public/images_icons/Infos_parentales.png' >Informations parentales</div>" +
+		"<div style='height: 245px; width: 600px; padding-top:10px; text-align:center;'>" +
+		"<div style='height: 77%; width: 95%; max-height: 77%; max-width: 95%; ' class='infos_parentales' align='left'>  </div>" +
+		"</div>"+
+		"<script> $('.infos_parentales').html( $('#infos_parentales_tampon').html() ); </script>" 
+	});
+	
+}
+
+
+

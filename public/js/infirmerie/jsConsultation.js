@@ -590,3 +590,22 @@ $(document).ready(function() {
 
 });
 
+
+
+
+
+
+function infos_parentales()
+{
+	
+	$('#infos_parentales_patient').w2overlay({ html: "" +
+		"" +
+		"<div style='border-bottom:1px solid green; height: 30px; background: #f9f9f9; width: 600px; text-align:center; padding-top: 10px; font-size: 13px; color: green; font-weight: bold;'><img style='padding-right: 10px;' src='"+tabUrl[0]+"public/images_icons/Infos_parentales.png' >Informations parentales</div>" +
+		"<div style='height: 245px; width: 600px; padding-top:10px; text-align:center;'>" +
+		"<div style='height: 77%; width: 95%; max-height: 77%; max-width: 95%; ' class='infos_parentales' align='left'>  </div>" +
+		"</div>"+
+		"<script> $('.infos_parentales').html( $('#infos_parentales_tampon').html() ); </script>" 
+	});
+	
+}
+

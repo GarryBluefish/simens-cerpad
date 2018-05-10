@@ -133,6 +133,75 @@ class ExamenTable {
 
 	}
 	
+	
+	
+	
+	public function getResultatExamenRadiologique($idcons){
+		$db = $this->tableGateway->getAdapter();
+		$sql = new Sql($db);
+		$sQuery = $sql->select()->from('resultat_examen_radio_cons')->where(array('idcons' => $idcons));
+		$resultat = $sql->prepareStatementForSqlObject($sQuery)->execute();
+	
+		$listeResultatExamenRadio = array();
+		foreach ($resultat as $result){
+			$listeResultatExamenRadio[] = $result;
+		}
+		return $listeResultatExamenRadio;
+	}
+	
+	
+	function getResultatExamenRadioParIdconsIdexamen($idcons, $idexamen){
+		$sql = new Sql($this->tableGateway->getAdapter());
+		$sQuery = $sql->select() ->from('resultat_examen_radio_cons')->where( array('idcons' => $idcons, 'idexamen' => $idexamen) );
+		return $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
+	}
+	
+	function deleteResultatExamenRadio($idcons){
+		$sql = new Sql($this->tableGateway->getAdapter());
+		$sQuery = $sql->delete() ->from('resultat_examen_radio_cons')->where( array('idcons' => $idcons) );
+		$sql->prepareStatementForSqlObject($sQuery)->execute();
+	}
+	
+	
+	/**
+	 * Inserer les résultats des examens (radiologiques)
+	 */
+	public function insertResultatExamenRadiologique($tabDonnees, $idmedecin){
+		$idcons = $tabDonnees['idcons'];
+		$this->deleteResultatExamenRadio($idcons);
+	
+	
+		for($i = 1 ; $i <= $tabDonnees['nbDemandeExamenComplementaire'] ; $i++){
+			$tabResultatExamenRadio = array();
+				
+			$idTypeAnalyse = $tabDonnees['type_analyse_name_'.$i];
+	
+			if($idTypeAnalyse && $idTypeAnalyse == 6){
+	
+				$idexamen = explode(",", $tabDonnees['analyse_name_'.$i])[1];
+				$resultatExamenRadio = $tabDonnees['resultatExamenRadio_'.$idexamen];
+				
+				if($idexamen && !$this->getResultatExamenRadioParIdconsIdexamen($idcons, $idexamen)){
+						
+					$tabResultatExamenRadio['idexamen']  = $idexamen;
+					$tabResultatExamenRadio['idcons']    = $idcons;
+					$tabResultatExamenRadio['idemploye'] = $idmedecin;
+					$tabResultatExamenRadio['resultatExamenRadio'] = $resultatExamenRadio;
+						
+					$sql = new Sql($this->tableGateway->getAdapter());
+					$sQuery = $sql->insert() ->into('resultat_examen_radio_cons')->values($tabResultatExamenRadio);
+					$sql->prepareStatementForSqlObject($sQuery)->execute();
+				}
+			
+			}
+		}
+	
+	}
+	
+	
+	
+	
+	
 	/*
 	 * CRUD ANALYSE BIOLOGIQUE --- CRUD ANALYSE BIOLOGIQUE
 	 */

@@ -2942,8 +2942,10 @@ class ResultatDemandeAnalyseTable {
 	
 	    $donnees = array();
 	
-	    if($tab[1]){ $donnees['type_materiel'] = $tab[1]; }else{ $donnees['type_materiel'] = null; }
-	    if($tab[2]){ $donnees['proteinurie']   = $tab[2]; }else{ $donnees['proteinurie']   = null; }
+	    if($tab[1]){ $donnees['type_materiel']    = $tab[1]; }else{ $donnees['type_materiel']    = null; }
+	    if($tab[2]){ $donnees['proteinurie_1']    = $tab[2]; }else{ $donnees['proteinurie_1']    = null; }
+	    if($tab[3]){ $donnees['proteinurie_2']    = $tab[3]; }else{ $donnees['proteinurie_2']    = null; }
+	    if($tab[4]){ $donnees['proteinurie_g24h'] = $tab[4]; }else{ $donnees['proteinurie_g24h'] = null; }
 	
 	    if($tab[2]){ $donneesExiste = 1; }
 	
@@ -3804,9 +3806,120 @@ class ResultatDemandeAnalyseTable {
 	    return $donneesExiste;
 	}
 	
+	//****************************************************************************************************
+	//****************************************************************************************************
+	public function getValeursHIV($iddemande){
+		$db = $this->tableGateway->getAdapter();
+		$sql = new Sql($db);
+		$sQuery = $sql->select()
+		->from(array('va' => 'valeurs_hiv'))->columns(array('*'))
+		->where(array('idresultat_demande_analyse' => $iddemande));
+	
+		return $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
+	}
+	
+	public function addValeursHIV($tab, $iddemande){
+		$db = $this->tableGateway->getAdapter();
+		$sql = new Sql($db);
+		$donneesExiste = 0;
+	
+		$donnees = array();
+	
+		if($tab[1]){ $donnees['type_materiel'] = $tab[1]; }else{ $donnees['type_materiel'] = null; }
+		if($tab[2]){ $donnees['hiv']           = $tab[2]; }else{ $donnees['hiv']           = null; }
+		if($tab[3]){ $donnees['hiv_typage']    = $tab[3]; }else{ $donnees['hiv_typage']    = null; }
+	
+		
+		if($tab[2]){ $donneesExiste = 1; }
+	
+		//Si les resultats n y sont pas on les ajoute
+		if(!$this->getValeursHIV($iddemande)){
+	
+			if($donneesExiste == 0){
+				$this->tableGateway->delete ( array ( 'iddemande_analyse' => $iddemande ) );
+				$this->setResultDemandeNonEffectuee($iddemande);
+			}else{
+				$donnees['idresultat_demande_analyse'] = $iddemande;
+				$sQuery = $sql->insert() ->into('valeurs_hiv') ->values( $donnees );
+				$sql->prepareStatementForSqlObject($sQuery)->execute();
+				$this->setResultDemandeEffectuee($iddemande);
+			}
+	
+		}
+		//Sinon on effectue des mises a jours
+		else {
+	
+			if($donneesExiste == 0){
+				$this->tableGateway->delete ( array ( 'iddemande_analyse' => $iddemande ) );
+				$this->setResultDemandeNonEffectuee($iddemande);
+			}else{
+				$sQuery = $sql->update() ->table('valeurs_hiv') ->set( $donnees )
+				->where(array('idresultat_demande_analyse' => $iddemande ));
+				$sql->prepareStatementForSqlObject($sQuery)->execute();
+				$this->setResultDemandeEffectuee($iddemande);
+			}
+	
+		}
+	
+		return $donneesExiste;
+	}
+	
+	//****************************************************************************************************
+	//****************************************************************************************************
+	public function getValeursLDH($iddemande){
+		$db = $this->tableGateway->getAdapter();
+		$sql = new Sql($db);
+		$sQuery = $sql->select()
+		->from(array('va' => 'valeurs_ldh'))->columns(array('*'))
+		->where(array('idresultat_demande_analyse' => $iddemande));
+	
+		return $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
+	}
+	
+	public function addValeursLDH($tab, $iddemande){
+		$db = $this->tableGateway->getAdapter();
+		$sql = new Sql($db);
+		$donneesExiste = 0;
+	
+		$donnees = array();
+	
+		if($tab[1]){ $donnees['type_materiel'] = $tab[1]; }else{ $donnees['type_materiel'] = null; }
+		if($tab[2]){ $donnees['valeur_ldh']   = $tab[2]; }else{ $donnees['valeur_ldh']   = null; }
 	
 	
+		if($tab[2]){ $donneesExiste = 1; }
 	
+		//Si les resultats n y sont pas on les ajoute
+		if(!$this->getValeursLDH($iddemande)){
+	
+			if($donneesExiste == 0){
+				$this->tableGateway->delete ( array ( 'iddemande_analyse' => $iddemande ) );
+				$this->setResultDemandeNonEffectuee($iddemande);
+			}else{
+				$donnees['idresultat_demande_analyse'] = $iddemande;
+				$sQuery = $sql->insert() ->into('valeurs_ldh') ->values( $donnees );
+				$sql->prepareStatementForSqlObject($sQuery)->execute();
+				$this->setResultDemandeEffectuee($iddemande);
+			}
+	
+		}
+		//Sinon on effectue des mises a jours
+		else {
+	
+			if($donneesExiste == 0){
+				$this->tableGateway->delete ( array ( 'iddemande_analyse' => $iddemande ) );
+				$this->setResultDemandeNonEffectuee($iddemande);
+			}else{
+				$sQuery = $sql->update() ->table('valeurs_ldh') ->set( $donnees )
+				->where(array('idresultat_demande_analyse' => $iddemande ));
+				$sql->prepareStatementForSqlObject($sQuery)->execute();
+				$this->setResultDemandeEffectuee($iddemande);
+			}
+	
+		}
+	
+		return $donneesExiste;
+	}
 	
 	
 	

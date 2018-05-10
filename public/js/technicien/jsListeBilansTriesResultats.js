@@ -710,6 +710,34 @@
     	
     }
     
+    function getProteinurieFormule(){ 
+    	var proteinurie_1 = $('#proteinurie_1').val();
+    	var valeur_g24h = null;
+    	
+    	$('#proteinurie_1, #proteinurie_2').keyup( function () { 
+    		proteinurie_1 = $('#proteinurie_1').val(); 
+    		proteinurie_2 = $('#proteinurie_2').val(); 
+    		valeur_g24h = proteinurie_1*proteinurie_2;
+    		
+    		if(valeur_g24h){
+        		$('#proteinurie_g24h').val(valeur_g24h.toFixed(2));
+        	}else{
+        		$('#proteinurie_g24h').val(null);
+        	}
+    	}).change( function(){
+    		proteinurie_1 = $('#proteinurie_1').val(); 
+    		proteinurie_2 = $('#proteinurie_2').val(); 
+    		valeur_g24h = proteinurie_1*proteinurie_2;
+    		
+    		if(valeur_g24h){
+        		$('#proteinurie_g24h').val(valeur_g24h.toFixed(2));
+        	}else{
+        		$('#proteinurie_g24h').val(null);
+        	}
+    	});
+    	
+    }
+    
     
     // GESTION DE L'ANALYSE Culot_urinaire 
     // GESTION DE L'ANALYSE Culot_urinaire 
@@ -992,10 +1020,13 @@
     				else if(idanalyse == 61) { tab = getAslo(); } 
     				else if(idanalyse == 62) { tab = getWidal(); } 
     				else if(idanalyse == 63) { tab = getAgHbs(); } 
-    				     
+    				else if(idanalyse == 64) { tab = getHIV(); }      
     				     
     				     
     				else if(idanalyse == 68) { tab = getTypageHemoglobine(); }
+    				     
+    				else if(idanalyse == 70) { tab = getLDH(); }     
+    				     
     				     
     				$( this ).dialog( "close" );
 
@@ -1054,6 +1085,7 @@
             	     getCalcemieFormule();
             	     getPhosphoremieFormule();
             	     getAlbuminemieFormule();
+            	     getProteinurieFormule();
             	     
             	     ajoutCulotUrinaireAuto();
             	     getBilirubineTotaleDirecteAuto();
@@ -1444,7 +1476,9 @@
     function getProteinurie(){
     	var tab = [];
     	tab[1] = $('#type_materiel_proteinurie').val();
-    	tab[2] = $('#proteinurie').val();
+    	tab[2] = $('#proteinurie_1').val();
+    	tab[3] = $('#proteinurie_2').val();
+    	tab[4] = $('#proteinurie_g24h').val();
 	    
 	    return tab;
     }
@@ -1607,6 +1641,23 @@
     	var tab = [];
     	tab[1] = $('#type_materiel_ag_hbs').val();
     	tab[2] = $('#ag_hbs').val();
+	    
+	    return tab;
+    }
+    
+    function getHIV(){
+    	var tab = [];
+    	tab[1] = $('#type_materiel_hiv').val();
+    	tab[2] = $('#hiv').val();
+    	tab[3] = $('#hiv_typage').val();
+	    
+	    return tab;
+    }
+    
+    function getLDH(){
+    	var tab = [];
+    	tab[1] = $('#type_materiel_ldh').val();
+    	tab[2] = $('#valeur_ldh').val();
 	    
 	    return tab;
     }
@@ -2168,10 +2219,13 @@
     				else if(idanalyse == 61) { tab [61] = getAslo(); } 
     				else if(idanalyse == 62) { tab [62] = getWidal(); } 
     				else if(idanalyse == 63) { tab [63] = getAgHbs(); } 
+    				else if(idanalyse == 64) { tab [64] = getHIV(); }      
   	    			     
   	    			     
   	    			     
     				else if(idanalyse == 68) { tab [68] = getTypageHemoglobine(); }
+  	    			     
+    				else if(idanalyse == 70) { tab [70] = getLDH(); }     
   	    		}
   	    		
   	        	$( this ).dialog( "close" );
@@ -2239,6 +2293,7 @@
             	     getCalcemieFormule();
             	     getPhosphoremieFormule();
             	     getAlbuminemieFormule();
+            	     getProteinurieFormule();
             	     
             	     ajoutCulotUrinaireAuto();
             	     getBilirubineTotaleDirecteAuto();
@@ -3099,7 +3154,9 @@
     	var tab = new Array();
     	
     	tab[1] = $('.ER_'+id+' #type_materiel_proteinurie').val();
-    	tab[2] = $('.ER_'+id+' #proteinurie').val();
+    	tab[2] = $('.ER_'+id+' #proteinurie_1').val();
+    	tab[3] = $('.ER_'+id+' #proteinurie_2').val();
+    	tab[4] = $('.ER_'+id+' #proteinurie_g24h').val();
 	    
 	    return tab;
     }
@@ -3357,7 +3414,15 @@
      * Analyse_64
      * tampon
      */
-    
+    function getHIV_TAD(id){
+    	var tab = new Array();
+    	
+    	tab[1] = $('.ER_'+id+' #type_materiel_hiv').val();
+    	tab[2] = $('.ER_'+id+' #hiv').val();
+    	tab[3] = $('.ER_'+id+' #hiv_typage').val();
+	    
+	    return tab;
+    }
     
     
     
@@ -3376,6 +3441,21 @@
     	return tab;
     }
     
+    
+    
+    
+    /*
+     * Analyse_70
+     */
+    var tamponLDH = new Array();
+    
+    function getLDH_TAD(id){
+    	var tab = new Array();
+    	tab[1] = $('.ER_'+id+' #type_materiel_ldh').val();
+    	tab[2] = $('.ER_'+id+' #valeur_ldh').val();
+	    
+	    return tab;
+    }
     
     //Resultats des analyses demandées pour un type et/ou une date donnée
     //Resultats des analyses demandées pour un type et/ou une date donnée

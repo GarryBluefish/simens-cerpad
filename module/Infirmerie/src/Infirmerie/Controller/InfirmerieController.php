@@ -2033,6 +2033,7 @@ class InfirmerieController extends AbstractActionController {
 		$idpatient = $this->params ()->fromQuery ( 'idpatient' , 0);
 		$idfacturation = $this->params ()->fromQuery ( 'idfacturation' , 0);
 		$patient = $this->getPatientTable()->getPatient($idpatient);
+		$informations_parentales = $this->getPersonneTable()->getInfosParentales($idpatient);
 		
 		//---- GESTION DU TYPE DE PATIENT ----
 		//---- GESTION DU TYPE DE PATIENT ----
@@ -2166,6 +2167,7 @@ class InfirmerieController extends AbstractActionController {
 				'typage' => $type.' '.$typage,
 				'form' => $form,
 				'patient' => $patient,
+				'informations_parentales' => $informations_parentales,
 		);
 	}
 	
@@ -2203,6 +2205,7 @@ class InfirmerieController extends AbstractActionController {
 		$idpatient = $this->params ()->fromQuery ( 'idpatient' , 0);
 		$idcons = $this->params ()->fromQuery ( 'idcons' , 0);
 		$patient = $this->getPatientTable()->getPatient($idpatient);
+		$informations_parentales = $this->getPersonneTable()->getInfosParentales($idpatient);
 		
 		//---- GESTION DU TYPE DE PATIENT ----
 		//---- GESTION DU TYPE DE PATIENT ----
@@ -2380,7 +2383,7 @@ class InfirmerieController extends AbstractActionController {
 				
 				'mDouleur' => $mDouleur,
 				'listeVoieAdministration' => $listeVoieAdministration,
-				
+				'informations_parentales' => $informations_parentales,
 		);
 		
 	}

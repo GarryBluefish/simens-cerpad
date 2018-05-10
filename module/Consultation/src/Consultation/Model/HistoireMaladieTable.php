@@ -40,41 +40,76 @@ class HistoireMaladieTable {
 	
 	function insertCriseVasoOcclusiveHm($tabDonnees, $idmedecin){
 		$criseVasoOcclusiveHm = array();
-		$criseVasoOcclusiveHm['idcons'] = $tabDonnees['idcons'];
-		$criseVasoOcclusiveHm['nombre_criseHM'] = $tabDonnees['nombre_criseHM'];
-		$criseVasoOcclusiveHm['dureeHM'] = $tabDonnees['dureeHM'];
-		$criseVasoOcclusiveHm['facteur_declenchantHM'] = $tabDonnees['facteur_declenchantHM'];
+		$criseVasoOcclusiveHm['idcons'] =  (! empty ( $tabDonnees['idcons'] )) ? $tabDonnees['idcons'] : null ;
+		$criseVasoOcclusiveHm['nombre_criseHM'] = (! empty ( $tabDonnees['nombre_criseHM'] )) ? $tabDonnees['nombre_criseHM'] : null ;
+		$criseVasoOcclusiveHm['typeHM'] = (! empty ( $tabDonnees['typeHM'] )) ? $tabDonnees['typeHM'] : null ;
+		$criseVasoOcclusiveHm['dureeHM'] = (! empty ( $tabDonnees['dureeHM'] )) ? $tabDonnees['dureeHM'] : null ;
+		$criseVasoOcclusiveHm['facteur_declenchantHM'] = (! empty ( $tabDonnees['facteur_declenchantHM'] )) ? $tabDonnees['facteur_declenchantHM'] : null ;
 		$criseVasoOcclusiveHm['idmedecin'] = $idmedecin;
 		
-		$sql = new Sql($this->tableGateway->getAdapter());
-		$sQuery = $sql->insert() ->into('crise_vaso_occlusive_hm')->values($criseVasoOcclusiveHm);
-		$sql->prepareStatementForSqlObject($sQuery)->execute();
+		if($criseVasoOcclusiveHm['idcons']){
+			$sql = new Sql($this->tableGateway->getAdapter());
+			$sQuery = $sql->insert() ->into('crise_vaso_occlusive_hm')->values($criseVasoOcclusiveHm);
+			$sql->prepareStatementForSqlObject($sQuery)->execute();
+			
+			//Ajout de la liste des crises vasocclusives s'il y en a
+			//Ajout de la liste des crises vasocclusives s'il y en a
+			$nombreCriseHM = $tabDonnees['nombre_criseHM'];
+			if($nombreCriseHM > 1){
+				$tabInfosListCrisesHMType = explode(',', $tabDonnees['tabInfosListCrisesHMType']);
+				$tabInfosListCrisesHMDuree = explode(',', $tabDonnees['tabInfosListCrisesHMDuree']);
+				$tabInfosListCrisesHMFacteurDeclenchant = explode(',', $tabDonnees['tabInfosListCrisesHMFacteurDeclenchant']);
+				
+				for($i=1 ; $i<count($tabInfosListCrisesHMType) ; $i++){
+					if($tabInfosListCrisesHMType[$i]){
+						$criseVasOcclusive = array(
+								'idcons'  => $tabDonnees['idcons'],
+								'typeHM'  => $tabInfosListCrisesHMType[$i],
+								'dureeHM' => $tabInfosListCrisesHMDuree[$i],
+								'facteur_declenchantHM' => $tabInfosListCrisesHMFacteurDeclenchant[$i],
+						);
+						
+						$sql = new Sql($this->tableGateway->getAdapter());
+						$sQuery = $sql->insert() ->into('crise_vaso_occlusive_liste_hm')->values($criseVasOcclusive);
+						$sql->prepareStatementForSqlObject($sQuery)->execute();
+					}
+				}
+				
+			}
+			 
+		}
+
 	}
 	
 	function insertEpisodeFievreHm($tabDonnees, $idmedecin){
 		$episodeFievreHm = array();
 		$episodeFievreHm['idcons'] = $tabDonnees['idcons'];
-		$episodeFievreHm['episodeFievreSiOuiHM'] = $tabDonnees['episodeFievreSiOuiHM'];
+		$episodeFievreHm['episodeFievreSiOuiHM'] = (! empty ( $tabDonnees['episodeFievreSiOuiHM'] )) ? $tabDonnees['episodeFievreSiOuiHM'] : null ;
 		$episodeFievreHm['idmedecin'] = $idmedecin;
 		
-		$sql = new Sql($this->tableGateway->getAdapter());
-		$sQuery = $sql->insert() ->into('episode_fievre_hm')->values($episodeFievreHm);
-		$sql->prepareStatementForSqlObject($sQuery)->execute();
+		if($episodeFievreHm['idcons']){
+			$sql = new Sql($this->tableGateway->getAdapter());
+			$sQuery = $sql->insert() ->into('episode_fievre_hm')->values($episodeFievreHm);
+			$sql->prepareStatementForSqlObject($sQuery)->execute();
+		}
 	}
 	
 	function insertHospitalisationHm($tabDonnees, $idmedecin){
 		$hospitalisationHm = array();
 		$hospitalisationHm['idcons'] = $tabDonnees['idcons'];
-		$hospitalisationHm['dateHospitalisationHM'] = $tabDonnees['dateHospitalisationHM'];
-		$hospitalisationHm['dureeHospitalisationHM'] = $tabDonnees['dureeHospitalisationHM'];
-		$hospitalisationHm['motifHospitalisationHM'] = $tabDonnees['motifHospitalisationHM'];
-		$hospitalisationHm['priseEnChargeHospitalisationHM'] = $tabDonnees['priseEnChargeHospitalisationHM'];
-		$hospitalisationHm['nombreHospitalisationHM'] = $tabDonnees['nombreHospitalisationHM'];
+		$hospitalisationHm['dateHospitalisationHM'] = (! empty ( $tabDonnees['dateHospitalisationHM'] )) ? $tabDonnees['dateHospitalisationHM'] : null ;
+		$hospitalisationHm['dureeHospitalisationHM'] = (! empty ( $tabDonnees['dureeHospitalisationHM'] )) ? $tabDonnees['dureeHospitalisationHM'] : null ;
+		$hospitalisationHm['motifHospitalisationHM'] = (! empty ( $tabDonnees['motifHospitalisationHM'] )) ? $tabDonnees['motifHospitalisationHM'] : null ;
+		$hospitalisationHm['priseEnChargeHospitalisationHM'] = (! empty ( $tabDonnees['priseEnChargeHospitalisationHM'] )) ? $tabDonnees['priseEnChargeHospitalisationHM'] : null ;
+		$hospitalisationHm['nombreHospitalisationHM'] = (! empty ( $tabDonnees['nombreHospitalisationHM'] )) ? $tabDonnees['nombreHospitalisationHM'] : null ;
 		$hospitalisationHm['idmedecin'] = $idmedecin;
 		
-		$sql = new Sql($this->tableGateway->getAdapter());
-		$sQuery = $sql->insert() ->into('hospitalisation_hm')->values($hospitalisationHm);
-		$sql->prepareStatementForSqlObject($sQuery)->execute();
+		if($hospitalisationHm['idcons']){
+			$sql = new Sql($this->tableGateway->getAdapter());
+			$sQuery = $sql->insert() ->into('hospitalisation_hm')->values($hospitalisationHm);
+			$sql->prepareStatementForSqlObject($sQuery)->execute();
+		}
+
 	}
 	
 	function insertHistoireMaladie($tabDonnees, $idmedecin){
@@ -123,7 +158,11 @@ class HistoireMaladieTable {
 		return $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
 	}
 	
-	
+	function getCriseVasoOcclusiveListeHm($idcons){
+		$sql = new Sql($this->tableGateway->getAdapter());
+		$sQuery = $sql->select() ->from('crise_vaso_occlusive_liste_hm')->where( array('idcons' => $idcons) );
+		return $sql->prepareStatementForSqlObject($sQuery)->execute();
+	}
 	
 	
 	//GESTION DES INTERROGATOIRE (Description des symptomes)

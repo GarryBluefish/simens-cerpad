@@ -17,6 +17,7 @@ use Secretariat\View\Helper\ResultatsAnalysesDemandeesPdf;
 use Secretariat\View\Helper\DocumentResultatsPdf;
 use Secretariat\View\Helper\ResultatsNfsPdf;
 use Secretariat\View\Helper\ResultatsTypageHemoglobinePdf;
+use Laboratoire\View\Helper\ImprimerResultatsAnalysesDemandees;
 
 class SecretariatController extends AbstractActionController {
 	protected $personneTable;
@@ -2157,6 +2158,11 @@ class SecretariatController extends AbstractActionController {
 	
 	
 
+	//ANCIENNE FONCTION D'IMPRESSION DES RESULTATS
+	//ANCIENNE FONCTION D'IMPRESSION DES RESULTATS
+	//ANCIENNE FONCTION D'IMPRESSION DES RESULTATS
+	
+	/*
 	public function impressionResultatsAnalysesDemandeesAction()
 	{
 		$service = $this->layout()->user['NomService'];
@@ -2705,6 +2711,636 @@ class SecretariatController extends AbstractActionController {
 		}
 		
 	}
+	*/
+	
+	
+	/**
+	 * NOUVELLE FONCTION D'IMPRESSION AVEC fpdf
+	 */
+	public function impressionResultatsAnalysesDemandeesAction()
+	{
+		$nomService = $this->layout()->user['NomService'];
+		$iddemande = $this->params()->fromPost( 'iddemande' );
+	
+		$idpatient = $this->getPatientTable()->getDemandeAnalysesAvecIddemande($iddemande)['idpatient'];
+		$personne  = $this->getPersonneTable()->getPersonne($idpatient);
+		$patient   = $this->getPatientTable()->getPatient($idpatient);
+		$depistage = $this->getPatientTable()->getDepistagePatient($idpatient);
+			
+		//Recuperation de la liste des analyses pour lesquelles les résultats sont déjà renseignés et validés
+		$listeResultats = $this->getResultatDemandeAnalyseTable()->getListeResultatsAnalysesDemandeesImpSecretaire($iddemande);
+			
+	
+		$analysesDemandees = array();
+		$analysesNFS = array();
+		$analysesImmunoHemato = array();
+		$analysesCytologie = array();
+		$analysesHemostase = array();
+		$analysesMetabolismeGlucidique = array();
+		$analysesBilanLipidique = array();
+		$analysesBilanHepatique = array();
+		$analysesBilanRenal = array();
+		$analysesSerologie = array();
+		$analysesTypageHemoProteine = array();
+		$analysesTypageHemoglobine = array();
+		$analysesMetabolismeProtidique = array();
+		$analysesMetabolismeFer = array();
+		$analysesBilanElectrolyte = array();
+		$analysesSerologieHIV = array();
+	
+		$resultatsAnalysesDemandees = array();
+	
+		$anteriorite_nfs = array();
+		for($j = 0 , $i = 0 ; $i < count($listeResultats) ; $i++ ){
+			$idanalyse = $listeResultats[$i]['idanalyse'];
+			$iddemande = $listeResultats[$i]['iddemande'];
+	
+			//NFS  ---  NFS  ---  NFS  ---  NFS  ---  NFS  ---  NFS
+			//NFS  ---  NFS  ---  NFS  ---  NFS  ---  NFS  ---  NFS
+			if($idanalyse == 1){ //NFS
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesNFS [] = 1;
+				$resultatsAnalysesDemandees[1] = $this->getResultatDemandeAnalyseTable()->getValeursNfs($iddemande);
+					
+				//Recupération des antériorites  ----- Récupération des antériorités
+				$analysesAvecResult = $this->getResultatDemandeAnalyseTable()->getListeAnalysesNFSDemandeesAyantResultats($idpatient, $iddemande);
+					
+				if($analysesAvecResult){
+					$anteriorite_nfs['demande']  = $analysesAvecResult[0];
+					$anteriorite_nfs['resultat'] = $this->getResultatDemandeAnalyseTable()->getValeursNfs($analysesAvecResult[0]['iddemande']);
+				}
+			}
+			//=========================================================
+			//=========================================================
+	
+	
+			//IMMUNO_HEMATO  ---  IMMUNO_HEMATO  ---  IMMUNO_HEMATO
+			//IMMUNO_HEMATO  ---  IMMUNO_HEMATO  ---  IMMUNO_HEMATO
+			//IMMUNO_HEMATO  ---  IMMUNO_HEMATO  ---  IMMUNO_HEMATO
+			elseif($idanalyse == 2){ //GSRH - GROUPAGE RESHUS
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesImmunoHemato [] = 2;
+				$resultatsAnalysesDemandees[2] = $this->getResultatDemandeAnalyseTable()->getValeursGsrhGroupage($iddemande);
+			}
+	
+			elseif($idanalyse == 3){ //RECHERCHE DE L'ANTIGENE D FAIBLE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesImmunoHemato [] = 3;
+				$resultatsAnalysesDemandees[3] = $this->getResultatDemandeAnalyseTable()->getValeursRechercheAntigene($iddemande);
+			}
+	
+			elseif($idanalyse == 4){ //TEST DE COOMBS DIRECT
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesImmunoHemato [] = 4;
+				$resultatsAnalysesDemandees[4] = $this->getResultatDemandeAnalyseTable()->getValeursTestCombsDirect($iddemande);
+			}
+	
+			elseif($idanalyse == 5){ //TEST DE COOMBS INDIRECT
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesImmunoHemato [] = 5;
+				$resultatsAnalysesDemandees[5] = $this->getResultatDemandeAnalyseTable()->getValeursTestCombsIndirect($iddemande);
+			}
+	
+			elseif($idanalyse == 6){ //TEST DE COMPATIBILITE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesImmunoHemato [] = 6;
+				$resultatsAnalysesDemandees[6] = $this->getResultatDemandeAnalyseTable()->getValeursTestCompatibilite($iddemande);
+			}
+			//=========================================================
+			//=========================================================
+	
+	
+	
+			//CYTOLOGIE  ---  CYTOLOGIE  ---  CYTOLOGIE  ---  CYTOLOGIE
+			//CYTOLOGIE  ---  CYTOLOGIE  ---  CYTOLOGIE  ---  CYTOLOGIE
+			//CYTOLOGIE  ---  CYTOLOGIE  ---  CYTOLOGIE  ---  CYTOLOGIE
+			elseif($idanalyse == 7){ //VITESSE SE SEDIMENTATION (VS)
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesCytologie [] = 7;
+				$resultatsAnalysesDemandees[7] = $this->getResultatDemandeAnalyseTable()->getValeursVitesseSedimentation($iddemande);
+			}
+	
+			elseif($idanalyse == 8){ //TEST D'EMMEL (TE)
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesCytologie [] = 8;
+				$resultatsAnalysesDemandees[8] = $this->getResultatDemandeAnalyseTable()->getValeursTestDemmel($iddemande);
+			}
+	
+			elseif($idanalyse == 50){ //HLM (COMPTE D'ADDIS)
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesCytologie [] = 50;
+				$resultatsAnalysesDemandees[50] = $this->getResultatDemandeAnalyseTable()->getValeursHlmCompteDaddis($iddemande);
+			}
+	
+			elseif($idanalyse == 58){ //CULOT URINAIRE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesCytologie [] = 58;
+				$resultatsAnalysesDemandees[58] = $this->getResultatDemandeAnalyseTable()->getValeursCulotUrinaire($iddemande);
+			}
+			//=========================================================
+			//=========================================================
+	
+	
+	
+			//HEMOSTASE  ---  HEMOSTASE  ---  HEMOSTASE  --- HEMOSTASE
+			//HEMOSTASE  ---  HEMOSTASE  ---  HEMOSTASE  --- HEMOSTASE
+			//HEMOSTASE  ---  HEMOSTASE  ---  HEMOSTASE  --- HEMOSTASE
+			elseif($idanalyse == 14){ //TP - INR
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesHemostase [] = 14;
+				$resultatsAnalysesDemandees[14] = $this->getResultatDemandeAnalyseTable()->getValeursTpInr($iddemande);
+			}
+	
+			elseif($idanalyse == 15){ //TCA
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesHemostase [] = 15;
+				$resultatsAnalysesDemandees[15] = $this->getResultatDemandeAnalyseTable()->getValeursTca($iddemande);
+			}
+	
+			elseif($idanalyse == 16){ //FIBRINEMIE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesHemostase [] = 16;
+				$resultatsAnalysesDemandees[16] = $this->getResultatDemandeAnalyseTable()->getValeursFibrinemie($iddemande);
+			}
+	
+			elseif($idanalyse == 17){ //TEMPS DE SAIGNEMENT
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesHemostase [] = 17;
+				$resultatsAnalysesDemandees[17] = $this->getResultatDemandeAnalyseTable()->getValeursTempsSaignement($iddemande);
+			}
+	
+			elseif($idanalyse == 18){ //FACTEUR 8
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesHemostase [] = 18;
+				$resultatsAnalysesDemandees[18] = $this->getResultatDemandeAnalyseTable()->getValeursFacteur8($iddemande);
+			}
+	
+			elseif($idanalyse == 19){ //FACTEUR 9
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesHemostase [] = 19;
+				$resultatsAnalysesDemandees[19] = $this->getResultatDemandeAnalyseTable()->getValeursFacteur9($iddemande);
+			}
+	
+			elseif($idanalyse == 20){ //D-DIMERES
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesHemostase [] = 20;
+				$resultatsAnalysesDemandees[20] = $this->getResultatDemandeAnalyseTable()->getValeursDDimeres($iddemande);
+			}
+			//=========================================================
+			//=========================================================
+	
+	
+			//METABOLISME GLUCIDIQUE --- METABOLISME GLUCIDIQUE --- METABOLISME GLUCIDIQUE
+			//METABOLISME GLUCIDIQUE --- METABOLISME GLUCIDIQUE --- METABOLISME GLUCIDIQUE
+			//METABOLISME GLUCIDIQUE --- METABOLISME GLUCIDIQUE --- METABOLISME GLUCIDIQUE
+			elseif($idanalyse == 21){ //Glycemie
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesMetabolismeGlucidique [] = 21;
+				$resultatsAnalysesDemandees[21] = $this->getResultatDemandeAnalyseTable()->getValeursGlycemie($iddemande);
+			}
+			elseif($idanalyse == 43){ //Hemoglobine glyquee
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesMetabolismeGlucidique [] = 43;
+				$resultatsAnalysesDemandees[43] = $this->getResultatDemandeAnalyseTable()->getValeursHemoglobineGlyqueeHBAC($iddemande);
+			}
+	
+			//=========================================================
+			//=========================================================
+	
+	
+			//BILAN LIPIDIQUE --- BILAN LIPIDIQUE --- BILAN LIPIDIQUE
+			//BILAN LIPIDIQUE --- BILAN LIPIDIQUE --- BILAN LIPIDIQUE
+			//BILAN LIPIDIQUE --- BILAN LIPIDIQUE --- BILAN LIPIDIQUE
+			elseif($idanalyse == 25){ //CHOLESTEROL TOTAL
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanLipidique  [] = 25;
+				$resultatsAnalysesDemandees[25] = $this->getResultatDemandeAnalyseTable()->getValeursCholesterolTotal($iddemande);
+			}
+			elseif($idanalyse == 26){ //TRIGLYCERIDES
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanLipidique  [] = 26;
+				$resultatsAnalysesDemandees[26] = $this->getResultatDemandeAnalyseTable()->getValeursTriglycerides($iddemande);
+			}
+			elseif($idanalyse == 27){ //CHOLESTEROL HDL
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanLipidique  [] = 27;
+				$resultatsAnalysesDemandees[27] = $this->getResultatDemandeAnalyseTable()->getValeursCholesterolHDL($iddemande);
+			}
+			elseif($idanalyse == 28){ //CHOLESTEROL LDL
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanLipidique  [] = 28;
+				$resultatsAnalysesDemandees[28] = $this->getResultatDemandeAnalyseTable()->getValeursCholesterolLDL($iddemande);
+			}
+			elseif($idanalyse == 29){ //CHOLESTEROL (TOTAL - HDL - LDL) Triglyceride
+	
+				//CHOLESTEROL TOTAL
+				$analysesBilanLipidique  [] = 25;
+				$resultatsAnalysesDemandees[25] = $this->getResultatDemandeAnalyseTable()->getValeursCholesterolTotal($iddemande);
+					
+				//TRIGLYCERIDES
+				$analysesBilanLipidique  [] = 26;
+				$resultatsAnalysesDemandees[26] = $this->getResultatDemandeAnalyseTable()->getValeursTriglycerides($iddemande);
+					
+				//CHOLESTEROL HDL
+				$analysesBilanLipidique  [] = 27;
+				$resultatsAnalysesDemandees[27] = $this->getResultatDemandeAnalyseTable()->getValeursCholesterolHDL($iddemande);
+					
+				//CHOLESTEROL LDL
+				$analysesBilanLipidique  [] = 28;
+				$resultatsAnalysesDemandees[28] = $this->getResultatDemandeAnalyseTable()->getValeursCholesterolLDL($iddemande);
+					
+			}
+			elseif($idanalyse == 30){ //LIPIDES - TOTAUX
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanLipidique  [] = 30;
+				$resultatsAnalysesDemandees[30] = $this->getResultatDemandeAnalyseTable()->getValeursLipidesTotaux($iddemande);
+			}
+			//=========================================================
+			//=========================================================
+	
+	
+			//BILAN HEPATIQUE --- BILAN HEPATIQUE --- BILAN HEPATIQUE
+			//BILAN HEPATIQUE --- BILAN HEPATIQUE --- BILAN HEPATIQUE
+			//BILAN HEPATIQUE --- BILAN HEPATIQUE --- BILAN HEPATIQUE
+			elseif($idanalyse == 37){ //TRANSAMINASES (ASAT/ALAT)
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanHepatique  [] = 37;
+				$resultatsAnalysesDemandees[37][1] = $this->getResultatDemandeAnalyseTable()->getValeursTgoAsat($iddemande);
+				$resultatsAnalysesDemandees[37][2] = $this->getResultatDemandeAnalyseTable()->getValeursTgpAlat($iddemande);
+			}
+	
+			elseif($idanalyse == 38){ //PHOSPHATAGE ALCALINE (PAL)
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanHepatique  [] = 38;
+				$resultatsAnalysesDemandees[38] = $this->getResultatDemandeAnalyseTable()->getValeursPhosphatageAlcaline($iddemande);
+			}
+	
+			elseif($idanalyse == 39){ //GAMA GT = YGT
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanHepatique  [] = 39;
+				$resultatsAnalysesDemandees[39] = $this->getResultatDemandeAnalyseTable()->getValeursGamaGtYgt($iddemande);
+			}
+	
+			elseif($idanalyse == 42){ //BILIRUBINE TOTALE ET DIRECTE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanHepatique  [] = 42;
+				$resultatsAnalysesDemandees[42] = $this->getResultatDemandeAnalyseTable()->getValeursBilirubineTotaleDirecte($iddemande);
+			}
+				
+			elseif($idanalyse == 70){ //LDH
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanHepatique  [] = 70;
+				$resultatsAnalysesDemandees[70] = $this->getResultatDemandeAnalyseTable()->getValeursLDH($iddemande);
+			}
+			//=========================================================
+			//=========================================================
+	
+	
+	
+			//BILAN RENAL  ---  BILAN RENAL  ---  BILAN RENAL
+			//BILAN RENAL  ---  BILAN RENAL  ---  BILAN RENAL
+			//BILAN RENAL  ---  BILAN RENAL  ---  BILAN RENAL
+			elseif($idanalyse == 22){ //CREATININEMIE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanRenal  [] = 22;
+				$resultatsAnalysesDemandees[22] = $this->getResultatDemandeAnalyseTable()->getValeursCreatininemie($iddemande);
+			}
+	
+			elseif($idanalyse == 23){ //AZOTEMIE = UREE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanRenal  [] = 23;
+				$resultatsAnalysesDemandees[23] = $this->getResultatDemandeAnalyseTable()->getValeursAzotemie($iddemande);
+			}
+	
+			elseif($idanalyse == 24){ //URICEMIE = ACIDE URIQUE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanRenal  [] = 24;
+				$resultatsAnalysesDemandees[24] = $this->getResultatDemandeAnalyseTable()->getValeursAcideUrique($iddemande);
+			}
+				
+			elseif($idanalyse == 47){ //ALBUMINE URINAIRE (BANDELETTES)
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanRenal [] = 47;
+				$resultatsAnalysesDemandees[47] = $this->getResultatDemandeAnalyseTable()->getValeursAlbumineUrinaire($iddemande);
+			}
+				
+			elseif($idanalyse == 49){ //PROTEINURIE DES 24H (PU 24H)
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanRenal [] = 49;
+				$resultatsAnalysesDemandees[49] = $this->getResultatDemandeAnalyseTable()->getValeursProteinurie($iddemande);
+			}
+			//=========================================================
+			//=========================================================
+	
+	
+			//SEROLOGIE  ---  SEROLOGIE  ---  SEROLOGIE
+			//SEROLOGIE  ---  SEROLOGIE  ---  SEROLOGIE
+			//SEROLOGIE  ---  SEROLOGIE  ---  SEROLOGIE
+			elseif($idanalyse == 10){ //GOUTE EPAISSE / GE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 10;
+				$resultatsAnalysesDemandees[10] = $this->getResultatDemandeAnalyseTable()->getValeursGoutteEpaisse($iddemande);
+			}
+				
+			elseif($idanalyse == 51){ //BETA HCG PLASMATIQUE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 51;
+				$resultatsAnalysesDemandees[51] = $this->getResultatDemandeAnalyseTable()->getValeursBetaHcgPlasmatique($iddemande);
+			}
+				
+			elseif($idanalyse == 52){ //PSA
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 52;
+				$resultatsAnalysesDemandees[52] = $this->getResultatDemandeAnalyseTable()->getValeursPsa($iddemande);
+			}
+	
+			elseif($idanalyse == 53){ //CRP ou C. Protéine Réactive
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 53;
+				$resultatsAnalysesDemandees[53] = $this->getResultatDemandeAnalyseTable()->getValeursCrp($iddemande);
+			}
+				
+			elseif($idanalyse == 54){ //Facteurs Rhumatoides
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 54;
+				$resultatsAnalysesDemandees[54] = $this->getResultatDemandeAnalyseTable()->getValeursFacteursRhumatoides($iddemande);
+			}
+	
+			elseif($idanalyse == 55){ //RF Waaler Rose
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 55;
+				$resultatsAnalysesDemandees[55] = $this->getResultatDemandeAnalyseTable()->getValeursRfWaalerRose($iddemande);
+			}
+	
+			elseif($idanalyse == 56){ //TOXOPLASMOSE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 56;
+				$resultatsAnalysesDemandees[56] = $this->getResultatDemandeAnalyseTable()->getValeursToxoplasmose($iddemande);
+			}
+	
+			elseif($idanalyse == 57){ //RUBEOLE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 57;
+				$resultatsAnalysesDemandees[57] = $this->getResultatDemandeAnalyseTable()->getValeursRubeole($iddemande);
+			}
+	
+			elseif($idanalyse == 60){ //Serologie Syphilitique
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 60;
+				$resultatsAnalysesDemandees[60] = $this->getResultatDemandeAnalyseTable()->getValeursSerologieSyphilitique($iddemande);
+			}
+	
+			elseif($idanalyse == 61){ //ASLO
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 61;
+				$resultatsAnalysesDemandees[61] = $this->getResultatDemandeAnalyseTable()->getValeursAslo($iddemande);
+			}
+	
+			elseif($idanalyse == 62){ //WIDAL
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 62;
+				$resultatsAnalysesDemandees[62] = $this->getResultatDemandeAnalyseTable()->getValeursWidal($iddemande);
+			}
+	
+			elseif($idanalyse == 63){ //Ag HBS
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologie  [] = 63;
+				$resultatsAnalysesDemandees[63] = $this->getResultatDemandeAnalyseTable()->getValeursAgHbs($iddemande);
+			}
+				
+				
+				
+			//=========================================================
+			//=========================================================
+	
+	
+			//TYPAGE DE L'HEMOGLOBINE (Avec ELECTROPHORESE DE L'HEMOGLOBINE et DES PROTEINES)
+			//TYPAGE DE L'HEMOGLOBINE (Avec ELECTROPHORESE DE L'HEMOGLOBINE et DES PROTEINES)
+			//TYPAGE DE L'HEMOGLOBINE (Avec ELECTROPHORESE DE L'HEMOGLOBINE et DES PROTEINES)
+			elseif($idanalyse == 44){ //ELECTROPHORESE DE HEMOGLOBINE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesTypageHemoProteine[44] = 44;
+				$resultatsAnalysesDemandees[44] = $this->getResultatDemandeAnalyseTable()->getValeursElectrophoreseHemoglobine($iddemande);
+			}
+	
+			//=========================================================
+			//=========================================================
+	
+	
+			//METABOLISME PROTIDIQUE  ---  METABOLISME PROTIDIQUE
+			//METABOLISME PROTIDIQUE  ---  METABOLISME PROTIDIQUE
+			//METABOLISME PROTIDIQUE  ---  METABOLISME PROTIDIQUE
+			elseif($idanalyse == 45){ //ELECTROPHORESE DES PROTEINES
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesMetabolismeProtidique[45] = 45;
+				$resultatsAnalysesDemandees[45] = $this->getResultatDemandeAnalyseTable()->getValeursElectrophoreseProteines($iddemande);
+			}
+	
+			elseif($idanalyse == 48){ //PROTEINES TOTAL (PROTIDEMIE)
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesMetabolismeProtidique[48] = 48;
+				$resultatsAnalysesDemandees[48] = $this->getResultatDemandeAnalyseTable()->getValeursProtidemie($iddemande);
+			}
+	
+			elseif($idanalyse == 46){ //ALBUMINEMIE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesMetabolismeProtidique  [46] = 46;
+				$resultatsAnalysesDemandees[46] = $this->getResultatDemandeAnalyseTable()->getValeursAlbuminemie($iddemande);
+			}
+			//=========================================================
+			//=========================================================
+	
+	
+			//METABOLISME DU FER --- METABOLISME DU FER
+			//METABOLISME DU FER --- METABOLISME DU FER
+			//METABOLISME DU FER --- METABOLISME DU FER
+			elseif($idanalyse == 40){ //FER SERIQUE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesMetabolismeFer[40] = 40;
+				$resultatsAnalysesDemandees[40] = $this->getResultatDemandeAnalyseTable()->getValeursFerSerique($iddemande);
+			}
+			elseif($idanalyse == 41){ //FERRITININE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesMetabolismeFer[41] = 41;
+				$resultatsAnalysesDemandees[41] = $this->getResultatDemandeAnalyseTable()->getValeursFerritinine($iddemande);
+			}
+			//=========================================================
+			//=========================================================
+	
+				
+			//BILAN D'ELECTROLYTE --- BILAN D'ELECTROLYTE
+			//BILAN D'ELECTROLYTE --- BILAN D'ELECTROLYTE
+			//BILAN D'ELECTROLYTE --- BILAN D'ELECTROLYTE
+			elseif($idanalyse == 31){ //IONOGRAMME
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanElectrolyte[31] = 31;
+				$resultatsAnalysesDemandees[31] = $this->getResultatDemandeAnalyseTable()->getValeursIonogramme($iddemande);
+			}
+			elseif($idanalyse == 32){ //CALCEMIE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanElectrolyte[32] = 32;
+				$resultatsAnalysesDemandees[32] = $this->getResultatDemandeAnalyseTable()->getValeursCalcemie($iddemande);
+			}
+			elseif($idanalyse == 33){ //MAGNESEMIE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanElectrolyte[33] = 33;
+				$resultatsAnalysesDemandees[33] = $this->getResultatDemandeAnalyseTable()->getValeursMagnesemie($iddemande);
+			}
+			elseif($idanalyse == 34){ //PHOSPHOREMIE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesBilanElectrolyte[34] = 34;
+				$resultatsAnalysesDemandees[34] = $this->getResultatDemandeAnalyseTable()->getValeursPhosphoremie($iddemande);
+			}
+			//=========================================================
+			//=========================================================
+				
+				
+			//SEROLOGIE HIV --- SEROLOGIE HIV --- SEROLOGIE HIV
+			//SEROLOGIE HIV --- SEROLOGIE HIV --- SEROLOGIE HIV
+			//SEROLOGIE HIV --- SEROLOGIE HIV --- SEROLOGIE HIV
+			elseif($idanalyse == 64){ //HIV
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesSerologieHIV [] = 64;
+				$resultatsAnalysesDemandees[64] = $this->getResultatDemandeAnalyseTable()->getValeursHIV($iddemande);
+			}
+			//=========================================================
+			//=========================================================
+				
+	
+			//TYPAGE DE L'HEMOGLOBINE  ---  TYPAGE DE L'HEMOGLOBINE
+			//TYPAGE DE L'HEMOGLOBINE  ---  TYPAGE DE L'HEMOGLOBINE
+			//TYPAGE DE L'HEMOGLOBINE  ---  TYPAGE DE L'HEMOGLOBINE
+			elseif($idanalyse == 68){ //TYPAGE DE L'HEMOGLOBINE
+				$analysesDemandees  [$j++] = $listeResultats[$i];
+				$analysesTypageHemoglobine [] = 68;
+				$resultatsAnalysesDemandees[68] = $this->getResultatDemandeAnalyseTable()->getValeursTypageHemoglobineLibelle($iddemande);
+			}
+			//=========================================================
+			//=========================================================
+				
+				
+				
+	
+		}
+	
+		//******************************************************
+		//******************************************************
+		//************** Création de l'imprimé pdf *************
+		//******************************************************
+		//******************************************************
+		//Créer le document
+		$pdf = new ImprimerResultatsAnalysesDemandees();
+		$pdf->SetMargins(12.5,11.5,12.5);
+	
+		//Ajout d'informations sur le service et le patient
+		$pdf->setNomService($nomService);
+		$pdf->setInfosPatients($personne);
+		$pdf->setPatient($patient);
+		$pdf->setDepistage($depistage);
+	
+		//Liste de toutes les informations sur les analyses à imprimer
+		$pdf->setAnalysesDemandees($analysesDemandees);
+	
+		//Liste des analyses à imprimer
+		$pdf->setResultatsAnalysesDemandees($resultatsAnalysesDemandees);
+	
+		//========= Créaton de la page 1 ========
+		//========= Créaton de la page 1 ========
+		//========= Créaton de la page 1 ========
+		if($analysesNFS){
+			$pdf->setAnterioriteNfs($anteriorite_nfs);
+				
+			/*
+			 * Envoie des données pour affichage
+			*/
+			$pdf->affichageResultatAnalyseNFS();
+		}
+	
+		//========= Créaton des autres pages ========
+		//========= Créaton des autres pages ========
+		//========= Créaton des autres pages ========
+		if($analysesImmunoHemato || $analysesCytologie || $analysesHemostase || $analysesMetabolismeGlucidique ||
+		$analysesBilanLipidique || $analysesBilanHepatique || $analysesBilanRenal || $analysesSerologie || $analysesTypageHemoProteine ||
+		$analysesMetabolismeFer || $analysesMetabolismeProtidique){
+	
+			//GESTION DES ANALYSES DE L'IMMUNO_HEMATO
+			$pdf->setAnalysesImmunoHemato($analysesImmunoHemato);
+	
+			//GESTION DES ANALYSES DE LA CYTOLOGIE
+			$pdf->setAnalysesCytologie($analysesCytologie);
+	
+			//GESTION DES ANALYSES DE L'HEMOSTASE
+			$pdf->setAnalysesHemostase($analysesHemostase);
+	
+			//GESTION DES ANALYSES DE SEROLOGIE
+			$pdf->setAnalysesSerologie($analysesSerologie);
+	
+			//GESTION DES ANALYSES DU BILAN HEPATIQUE
+			$pdf->setAnalysesBilanHepatique($analysesBilanHepatique);
+	
+			//GESTION DES ANALYSES DU BILAN RENAL
+			$pdf->setAnalysesBilanRenal($analysesBilanRenal);
+	
+			//GESTION DES ANALYSES DU METABOLISME GLUCIDIQUE
+			$pdf->setAnalysesMetabolismeGlucidique($analysesMetabolismeGlucidique);
+	
+			//GESTION DES ANALYSES DU BILAN LIPIDIQUE
+			$pdf->setAnalysesBilanLipidique($analysesBilanLipidique);
+	
+			//GESTION DES ANALYSES DE METABOLISME DU FER
+			$pdf->setAnalysesMetabolismeFer($analysesMetabolismeFer);
+	
+			//GESTION DES ANALYSES DU BILAN D'ELECTROLYTE
+			$pdf->setAnalysesBilanElectrolyte($analysesBilanElectrolyte);
+	
+			//GESTION DES ANALYSES DU TYPAGE (Helectrophorèse)
+			$pdf->setAnalysesTypageHemoProteine($analysesTypageHemoProteine);
+	
+			//GESTION DES ANALYSES DE METABOLISME PROTIDIQUE
+			$pdf->setAnalysesMetabolismeProtidique($analysesMetabolismeProtidique);
+	
+	
+			/*
+			 * Envoie des données pour affichage
+			*/
+			$pdf->affichageResultatsAnalysesDemandees();
+		}
+	
+		//========= Créaton de la page Sérologie HIV ========
+		//========= Créaton de la page Sérologie HIV ========
+		//========= Créaton de la page Sérologie HIV ========
+		if($analysesSerologieHIV){
+	
+			$pdf->setAnalysesSerologieHIV($analysesSerologieHIV);
+	
+			/*
+			 * Envoie des données pour affichage
+			*/
+			$pdf->affichageResultatsSerologieHIV();
+		}
+	
+	
+		//========= Créaton de la dernière page ========
+		//========= Créaton de la dernière page ========
+		//========= Créaton de la dernière page ========
+		if($analysesTypageHemoglobine){
+	
+			$pdf->setAnalysesTypageHemoglobine($analysesTypageHemoglobine);
+				
+			/*
+			 * Envoie des données pour affichage
+			*/
+			$pdf->affichageResultatsTypageHemoglobine();
+		}
+	
+	
+		//Afficher le document contenant les différentes pages
+		//Afficher le document contenant les différentes pages
+		//Afficher le document contenant les différentes pages
+		$pdf->Output('I');
+			
+	}
+	
 	
 	
 	public function listeNonConformiteAjaxAction() {

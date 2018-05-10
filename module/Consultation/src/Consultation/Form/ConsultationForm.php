@@ -565,6 +565,20 @@ class ConsultationForm extends Form {
 				),
 				'attributes' => array (
 						'id' => 'nombre_criseHM',
+						'style' => 'width:45px; font-size: 16px;',
+						'max' => 20,
+						'min' => 1,
+				)
+		) );
+		
+		$this->add ( array (
+				'name' => 'typeHM',
+				'type' => 'text',
+				'options' => array (
+				),
+				'attributes' => array (
+						'id' => 'typeHM',
+						'style' => 'width:90px; font-size: 14px;',
 				)
 		) );
 		
@@ -583,7 +597,7 @@ class ConsultationForm extends Form {
 				),
 				'attributes' => array (
 						'id' => 'dureeHM',
-						'style' => 'width:120px',
+						'style' => 'width:100px; font-size: 14px;',
 				)
 		) );
 		
@@ -602,7 +616,7 @@ class ConsultationForm extends Form {
 				),
 				'attributes' => array (
 						'id' => 'facteur_declenchantHM',
-						'style' => 'width:170px;font-size: 16px;',
+						'style' => 'width:140px; font-size: 14px;',
 				)
 		) );
 		
@@ -1016,7 +1030,7 @@ class ConsultationForm extends Form {
 				),
 				'attributes' => array (
 						'id' => 'examenHancheDonneesExamen',
-						'style' => 'float:right'
+						'style' => 'float:right; font-size: 16px; '
 				)
 		) );
 		

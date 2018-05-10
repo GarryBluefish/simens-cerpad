@@ -479,6 +479,7 @@ class ConsultationController extends AbstractActionController {
 		$idpatient = $this->params ()->fromQuery ( 'idpatient', 0 );
 		$idcons = $this->params ()->fromQuery ( 'idcons' );
 		$patient = $this->getPatientTable()->getPatient($idpatient);
+		$informations_parentales = $this->getPersonneTable()->getInfosParentales($idpatient);
 	
 		//---- GESTION DU TYPE DE PATIENT ----
 		//---- GESTION DU TYPE DE PATIENT ----
@@ -705,6 +706,7 @@ class ConsultationController extends AbstractActionController {
 				'listeFormeMedicament' => $listeForme,
 				'listeTypeQuantiteMedicament'  => $listetypeQuantiteMedicament,
 				
+				'informations_parentales' => $informations_parentales,
 		);
 
 	}
@@ -939,13 +941,8 @@ class ConsultationController extends AbstractActionController {
 		
 		$tabDonnees = $this->params ()->fromPost();
 		
-		/**
-		 * RENDEZ-VOUS --- RENDEZ-VOUS --- RENDEZ-VOUS
-		 * RENDEZ-VOUS --- RENDEZ-VOUS --- RENDEZ-VOUS
-		 */
-		$this->getFacturationTable()->addRendezVous($tabDonnees, $idmedecin);
-		var_dump($tabDonnees); exit();
-
+		//var_dump($tabDonnees); exit();
+		
 		/**
 		 *ANTECEDENT FAMILIAUX --- ANTECEDENTS FAMILIAUX
 		 *ANTECEDENT FAMILIAUX --- ANTECEDENTS FAMILIAUX
@@ -991,7 +988,10 @@ class ConsultationController extends AbstractActionController {
 			$this->facturationAnalysesDemandees($tabDonnees, $idmedecin, $listeDemandesAnalyses);			
 		}
 		
-		//var_dump($listeDemandesAnalyses); exit();
+		/** Résultats des examens complémentaires (Examens radiologiques) **/
+		$this->getExamenTable()->insertResultatExamenRadiologique($tabDonnees, $idmedecin);
+		
+		
 		
 		/**
 		 * MOTIFS DES DEMANDES D'EXAMENS --- MOTIFS DES DEMANDES D'EXAMENS
@@ -1017,11 +1017,29 @@ class ConsultationController extends AbstractActionController {
 		
 		
 		
-		//var_dump($tabDonnees); exit();
 		
+		/**
+		 * HOSPITALISATION --- HOSPITALISATION --- HOSPITALISATION
+		 * HOSPITALISATION --- HOSPITALISATION --- HOSPITALISATION
+		 */
+		$this->getFacturationTable()->addHospitalisation($tabDonnees, $idmedecin);
+		
+		/**
+		 * RENDEZ-VOUS --- RENDEZ-VOUS --- RENDEZ-VOUS
+		 * RENDEZ-VOUS --- RENDEZ-VOUS --- RENDEZ-VOUS
+		 */
+		$this->getFacturationTable()->addRendezVous($tabDonnees, $idmedecin);
+		
+		
+		
+		
+		
+
 		return $this->redirect ()->toRoute ('consultation', array ('action' => 'liste-consultations' ));
 	}
  
+	
+	
     public function modifierConsultationAction(){
     	
     	
@@ -1041,6 +1059,7 @@ class ConsultationController extends AbstractActionController {
 		$idpatient = $this->params ()->fromQuery ( 'idpatient', 0 );
 		$idcons = $this->params ()->fromQuery ( 'idcons' );
 		$patient = $this->getPatientTable()->getPatient($idpatient);
+		$informations_parentales = $this->getPersonneTable()->getInfosParentales($idpatient);
 	
 		//---- GESTION DU TYPE DE PATIENT ----
 		//---- GESTION DU TYPE DE PATIENT ----
@@ -1254,11 +1273,14 @@ class ConsultationController extends AbstractActionController {
 		 * HISTOIRE DE LA MALADIE --- HITOIRE DE LA MALADIE
 		 */
 		$infosHistoireMaladie = $this->getHistoireMaladieTable()->getHistoireMaladie($idcons);
+		$listeCrisesVasOcclusivesHM = null;
 		if($infosHistoireMaladie){ 
 			$form->populateValues($infosHistoireMaladie[0]); 
 			if($infosHistoireMaladie[0]['criseHM'] == 1){ 
 				$infosCriseVasoOcclusiveHm = $this->getHistoireMaladieTable()->getCriseVasoOcclusiveHm($idcons); 
 				$form->populateValues($infosCriseVasoOcclusiveHm);
+				
+				$listeCrisesVasOcclusivesHM = $this->getHistoireMaladieTable()->getCriseVasoOcclusiveListeHm($idcons);
 			}
 			if($infosHistoireMaladie[0]['episodeFievreHM'] == 1){
 				$infosEpisodeFievreHm = $this->getHistoireMaladieTable()->getEpisodeFievreHm($idcons);
@@ -1311,10 +1333,15 @@ class ConsultationController extends AbstractActionController {
     	 * Recuperer le diagnostic
     	 */
     	/*
+    	 * INFOS SUR LE DIAGNOSTIC DU JOUR
+    	 */
+    	$tabInfosDiagnosticDuJour = array(1=>0, 2=>0, 3=>0);
+    	
+    	/*
     	 * DIAGNOSTIC DU JOUR
     	 */
     	$infosDiagnosticConsultation = $this->getDiagnosticConsultationTable()->getDiagnosticConsultation($idcons);
-    	if($infosDiagnosticConsultation){ $form->populateValues($infosDiagnosticConsultation[0]); }
+    	if($infosDiagnosticConsultation){ $form->populateValues($infosDiagnosticConsultation[0]); $tabInfosDiagnosticDuJour[3] = 1; }
     	/*
     	 * COMPLICATIONS AIGUES
     	 */
@@ -1322,6 +1349,7 @@ class ConsultationController extends AbstractActionController {
     	if($infosComplicationsAigues->count() != 0){ 
     		$nbDiagnosticComplicationsAigues = array('nbDiagnosticComplicationsAigues' => $infosComplicationsAigues->count());
     		$form->populateValues($nbDiagnosticComplicationsAigues); 
+    		$tabInfosDiagnosticDuJour[1] = 1;
     	}
     	/*
     	 * COMPLICATIONS CHRONIQUES
@@ -1330,6 +1358,7 @@ class ConsultationController extends AbstractActionController {
     	if($infosComplicationsChroniques->count() != 0){
     		$nbDiagnosticComplicationsChroniques = array('nbDiagnosticComplicationsChroniques' => $infosComplicationsChroniques->count());
     		$form->populateValues($nbDiagnosticComplicationsChroniques);
+    		$tabInfosDiagnosticDuJour[2] = 1;
     	}
     	
     	
@@ -1344,7 +1373,16 @@ class ConsultationController extends AbstractActionController {
     	$motifsExamensBioDemandes   = $this->getFacturationTable()->getMotifsExamensBioDemandes($idcons);
     	
     	
-    	//var_dump($motifsExamensRadioDemandes); exit();
+    	 
+    	
+    	
+    	/**
+    	 * Récupérer les résultats des demandes d'analyses radiologiques 
+    	 */
+    	/*
+    	 * RESULTATS DES EXAMENS RADIOLOGIQUES
+    	 */
+    	$resultatExamenRadio = $this->getExamenTable()->getResultatExamenRadiologique($idcons);
     	
     	
     	
@@ -1353,8 +1391,60 @@ class ConsultationController extends AbstractActionController {
     	
     	
     	
+    	/**
+    	 * Recupérer les Autres (Transfert/Hospitalisation/ Rendez-Vous )
+    	 */
+    	/*
+    	 * TRANSFERT
+    	 */
+    	$transfert = $this->getFacturationTable()->getTransfert($idcons);
+    	if($transfert){
+    		
+    	}
     	
-    	//var_dump($form); exit();
+    	/*
+    	 * HOSPITALISATION
+    	 */
+    	$hospitalisation = $this->getFacturationTable()->getHospitalisation($idcons);
+    	//var_dump($hospitalisation); exit();
+    	
+    	if($hospitalisation){
+    		$donneesHospitalisation = array(
+    				'motifHospitalisation' => $hospitalisation['motifHospitalisation'],
+    		);
+    		$form->populateValues($donneesHospitalisation);
+    	}
+    	
+    	/*
+    	 * RENDEZ-VOUS
+    	 */
+    	$rendezVous = $this->getFacturationTable()->getRendezVous($idcons);
+    	$motifRendezVous = null;
+    	if($rendezVous){
+    		$donneesRendezVous = array(
+    				'dateHeureRendezVous' => (new DateHelper())->convertDate($rendezVous['dateRv']).' - '.substr($rendezVous['heureRv'], 0, 5),
+    		);
+    		$motifRendezVous = $rendezVous['motifRv'];
+    		$form->populateValues($donneesRendezVous);
+    		
+    	}
+    	
+    	
+    	//var_dump($rendezVous); exit();
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	/*
+    	 * TRAITEMENT MEDICAMENTEUX --- TRAITEMENT MEDICAMENTEUX
+    	*/
+    	$listeMedicament = $this->getConsultationModConsTable()->listeDeTousLesMedicaments();
+    	$listeForme = $this->getConsultationModConsTable()->formesMedicaments();
+    	$listetypeQuantiteMedicament = $this->getConsultationModConsTable()->typeQuantiteMedicaments();
+    	
 		
 		
 		//FIN --- FIN --- FIN --- FIN --- FIN --- FIN --- FIN
@@ -1385,9 +1475,20 @@ class ConsultationController extends AbstractActionController {
 				
 				'infosComplicationsAigues' => $infosComplicationsAigues,
 				'infosComplicationsChroniques' => $infosComplicationsChroniques,
+				'tabInfosDiagnosticDuJour' => $tabInfosDiagnosticDuJour,
 				
 				'motifsExamensRadioDemandes' => $motifsExamensRadioDemandes,
 				'motifsExamensBioDemandes' => $motifsExamensBioDemandes,
+				
+				'listeCrisesVasOcclusivesHM' => $listeCrisesVasOcclusivesHM,
+				'motifRendezVous' => $motifRendezVous,
+				
+				'listeMedicament' => $listeMedicament,
+				'listeFormeMedicament' => $listeForme,
+				'listeTypeQuantiteMedicament'  => $listetypeQuantiteMedicament,
+				
+				'informations_parentales' => $informations_parentales,
+				'resultatExamenRadio' => $resultatExamenRadio,
 
 		);
 
@@ -1401,11 +1502,11 @@ class ConsultationController extends AbstractActionController {
 		 *ANTECEDENT FAMILIAUX --- ANTECEDENTS FAMILIAUX
 		 *ANTECEDENT FAMILIAUX --- ANTECEDENTS FAMILIAUX
 		*/
-		
-		//var_dump($tabDonnees); exit();
-		
+				
 		$this->getAntecedentsFamiliauxTable()->insertAntecedentsFamiliaux($tabDonnees);
 		$this->getAntecedentsFamiliauxTable()->insertStatutDrepanocytoseEnfant($tabDonnees);
+
+		//var_dump($tabDonnees); exit();
 		
 		/**
 		 * CONSULTATION DU JOUR --- CONSULTATION DU JOUR
@@ -1414,27 +1515,26 @@ class ConsultationController extends AbstractActionController {
 		/** Histoire de la maladie **/
 		$this->getHistoireMaladieTable()->insertHistoireMaladie($tabDonnees, $idmedecin);
 		
+		/** Interrogatoire (description des symptomes) **/
+		$this->getHistoireMaladieTable()->insertInterrogatoireMotif($tabDonnees, $idmedecin);
+		
+		/** Suivi des traitements **/
+		$this->getHistoireMaladieTable()->insertSuiviDesTraitements($tabDonnees, $idmedecin);
+		
+		/** Mise à jour des vaccins**/
+		$this->getHistoireMaladieTable()->insertMiseAJourVaccin($tabDonnees, $idmedecin);
+		
+		/** Données de l'examen **/
+		$this->getDonneesExamenTable()->insertDonneesExamen($tabDonnees, $idmedecin);
+		
+		/** Synthèse de la consultation du jour **/
+		$this->getDonneesExamenTable()->insertSyntheseConsultation($tabDonnees, $idmedecin);
 		
 		
 		
 		
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+				
 		
 		/**
 		 * EXAMENS COMPLEMENTAIRES --- EXAMENS COMPLEMENTAIRES --- EXAMENS COMPLEMENTAIRES
@@ -1458,6 +1558,41 @@ class ConsultationController extends AbstractActionController {
 		 */
 		$this->getFacturationTable()->addMotifsExamensRadioDemandes($tabDonnees, $idmedecin);
 		$this->getFacturationTable()->addMotifsExamensBioDemandes($tabDonnees, $idmedecin);
+		
+		/**
+		 * Résultats des examens complémentaires (Examens radiologiques)
+		 */
+		$this->getExamenTable()->insertResultatExamenRadiologique($tabDonnees, $idmedecin);
+		 
+		
+		/**
+		 * DIAGNOSTIC --- DIAGNOSTIC --- DIAGNOSTIC
+		 * DIAGNOSTIC --- DIAGNOSTIC --- DIAGNOSTIC
+		 */
+		/** Diagnostics du jour **/
+		$this->getDiagnosticConsultationTable()->insertDiagnosticConsultation($tabDonnees, $idmedecin);
+		
+		/** Complications aigues **/
+		$this->getDiagnosticConsultationTable()->insertComplicationsAigues($tabDonnees, $idmedecin);
+		
+		/** Complications chroniques **/
+		$this->getDiagnosticConsultationTable()->insertComplicationsChroniques($tabDonnees, $idmedecin);
+		
+		
+		/**
+		 * HOSPITALISATION --- HOSPITALISATION --- HOSPITALISATION
+		 * HOSPITALISATION --- HOSPITALISATION --- HOSPITALISATION
+		 */
+		$this->getFacturationTable()->addHospitalisation($tabDonnees, $idmedecin);
+		
+		/**
+		 * RENDEZ-VOUS --- RENDEZ-VOUS --- RENDEZ-VOUS
+		 * RENDEZ-VOUS --- RENDEZ-VOUS --- RENDEZ-VOUS
+		*/
+		$this->getFacturationTable()->addRendezVous($tabDonnees, $idmedecin);
+		
+		
+		
 		
 		
 		//var_dump($tabDonnees); exit();

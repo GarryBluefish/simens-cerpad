@@ -117,12 +117,91 @@ echo $this->form()->openTag($form); ?>
 			   	</td>
 			   	
 			   	<td style='display:"block";  font-family: police1;font-size: 12px;'>
-			   		<div id="aa"><a style="text-decoration: underline;">Type</a><br><p style='font-weight: bold;font-size: 19px;'><?php echo $this->typage;?></p></div>
+			   	   <div id="a"><a style="text-decoration: underline;">Type</a><br>
+			   	     <p style='font-weight: bold;font-size: 19px;'><?php echo $this->typage;?>
+			   		 
+			   		    <?php if($this->informations_parentales){ ?>
+			   		      <img onclick='infos_parentales();' id='infos_parentales_patient' style='float: right; cursor: pointer; ' src='../images_icons/Infos_parentales.png' />
+			   		    <?php } ?>
+			   		 
+			   		 </p>
+			   	   </div>
 			   	</td>
 			   	
 			 </tr>
 			  
          </table>
+         
+         
+         
+                 <!-- GESTION DES INFORMATIONS PARENTALES -->
+	    <!-- GESTION DES INFORMATIONS PARENTALES -->
+	   
+	    <?php if($this->informations_parentales){ ?>
+	   
+	     <div id='infos_parentales_tampon' style='display: none;'>
+	       <table style='width: 100%' class='infos_parentales_tab'>
+	         <tr style='width: 100%'>
+	             <td colspan='3' style='width: 100%;' > <div class='titreParentLab' > <div class='titreParents' > </div> INFOS MATERNELLES </div> </td>
+	         </tr>
+	         <tr>
+	             <td style='width: 44%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' style='padding-left: 7px;' ><a style='text-decoration: underline; color: black; '>Pr&eacute;nom & Nom</a><br><p style='font-weight: bold; font-size: 17px; color: green; height: 25px;'> <?php echo $this->informations_parentales[0]['prenom'].' '.$this->informations_parentales[0]['nom']; ?> </p></div>
+	             </td>
+	             <td style='width: 28%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' ><a style='text-decoration: underline; color: black; '>T&eacute;l&eacute;phone</a><br><p style='font-weight: bold;font-size: 17px; color: green; height: 25px;'> <?php echo $this->informations_parentales[0]['telephone']; ?> </p></div>
+	             </td>
+   			     <td style='width: 28%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' ><a style='text-decoration: underline; color: black; '>Fax</a><br><p style='font-weight: bold;font-size: 17px; color: green; height: 25px; '> <?php echo $this->informations_parentales[0]['fax']; ?> </p></div>
+	             </td>
+	         </tr>
+	       
+	         <tr>
+	             <td style='width: 44%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' style='padding-left: 7px; margin-bottom: 10px;' ><a style='text-decoration: underline; color: black; '>Profession</a><br><p style='font-weight: bold; font-size: 17px; color: green; height: 25px;'> <?php echo $this->informations_parentales[0]['profession']; ?> </p></div>
+	             </td>
+	             <td colspan='2' style='width: 56%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' ><a style='text-decoration: underline; color: black; '>@-Email</a><br><p style='font-weight: bold;font-size: 17px; color: green; height: 25px;'> <?php echo $this->informations_parentales[0]['email']; ?> </p></div>
+	             </td>
+	         </tr>
+	       
+
+   			   		    
+   	         <tr style='width: 100%;'>
+	             <td colspan='3' style='width: 100%;' > <div class='titreParentLab' > <div class='titreParents' > </div> INFOS PATERNELLES </div> </td>
+	         </tr>
+	         <tr>
+	             <td style='width: 44%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' style='padding-left: 7px;' ><a style='text-decoration: underline; color: black; '>Pr&eacute;nom & Nom</a><br><p style='font-weight: bold; font-size: 17px; color: green; height: 25px;'> <?php echo $this->informations_parentales[1]['prenom'].' '.$this->informations_parentales[1]['nom']; ?></p></div>
+	             </td>
+	             <td style='width: 28%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' ><a style='text-decoration: underline; color: black; '>T&eacute;l&eacute;phone</a><br><p style='font-weight: bold;font-size: 17px; color: green; height: 25px;'><?php echo $this->informations_parentales[1]['telephone']; ?> </p></div>
+	             </td>
+   			     <td style='width: 28%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' ><a style='text-decoration: underline; color: black; '>Fax</a><br><p style='font-weight: bold;font-size: 17px; color: green; height: 25px; '> <?php echo $this->informations_parentales[1]['fax']; ?> </p></div>
+	             </td>
+	         </tr>
+	       
+	         <tr>
+	             <td style='width: 44%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' style='padding-left: 7px; margin-bottom: 10px;' ><a style='text-decoration: underline; color: black; '>Profession</a><br><p style='font-weight: bold; font-size: 17px; color: green; height: 25px;'>  <?php echo $this->informations_parentales[1]['profession']; ?> </p></div>
+	             </td>
+	             <td colspan='2' style='width: 56%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' ><a style='text-decoration: underline; color: black; '>@-Email</a><br><p style='font-weight: bold;font-size: 17px; color: green; height: 25px;'> <?php echo $this->informations_parentales[1]['email']; ?> </p></div>
+	             </td>
+	         </tr>
+	       
+	         
+	       </table>
+	       
+	     </div>  
+	       
+	   
+	   <?php } ?>
+         
+         
+         
+         
            <div id="barre"></div>
            <div style='color: white; opacity: 1; width:95px; height:40px; float:right'>
              <img  src='<?php echo $this->basePath().'/images_icons/fleur1.jpg'?>'  alt="fleur1" />

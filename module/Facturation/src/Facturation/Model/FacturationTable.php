@@ -444,12 +444,82 @@ class FacturationTable {
  		
  		$this->deleteRendezVous($tabDonnees['idcons']);
  		
- 		$db = $this->tableGateway->getAdapter();
- 		$sql = new Sql($db);
- 		$sQuery = $sql->insert()->into('rendez_vous_cons')->values($donneesRV);
- 		$sql->prepareStatementForSqlObject($sQuery)->execute();
+ 		if($dateRendezvous){
+ 			$db = $this->tableGateway->getAdapter();
+ 			$sql = new Sql($db);
+ 			$sQuery = $sql->insert()->into('rendez_vous_cons')->values($donneesRV);
+ 			$sql->prepareStatementForSqlObject($sQuery)->execute();
+ 		}
+
  	}
  	
  	
+ 	public function getRendezVous($idcons){
+ 		$db = $this->tableGateway->getAdapter();
+ 		$sql = new Sql($db);
+ 		$sQuery = $sql->select()->from('rendez_vous_cons')->where(array('idcons' => $idcons));
+ 		return $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
+ 	}
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	public function getHospitalisation($idcons){
+ 		$db = $this->tableGateway->getAdapter();
+ 		$sql = new Sql($db);
+ 		$sQuery = $sql->select()->from('hospitalisation_cons')->where(array('idcons' => $idcons));
+ 		return $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
+ 	}
+ 	
+ 	public function deleteHospitalisation($idcons){
+ 		$db = $this->tableGateway->getAdapter();
+ 		$sql = new Sql($db);
+ 		$sQuery = $sql->delete()->from('hospitalisation_cons')->where(array('idcons' => $idcons));
+ 		$sql->prepareStatementForSqlObject($sQuery)->execute();
+ 	}
+ 	
+ 	public function addHospitalisation($tabDonnees, $idemploye){
+ 		$this->deleteHospitalisation($tabDonnees['idcons']);
+ 		
+ 		$motifHospitalisation = $tabDonnees['motifHospitalisation'];
+ 		$donneesHospitalisation = array(
+ 				'idcons' => $tabDonnees['idcons'],
+ 				'motifHospitalisation' => $motifHospitalisation,
+ 				'idemploye' => $idemploye,
+ 		);
+ 			
+ 		if($motifHospitalisation){
+ 			$db = $this->tableGateway->getAdapter();
+ 			$sql = new Sql($db);
+ 			$sQuery = $sql->insert()->into('hospitalisation_cons')->values($donneesHospitalisation);
+ 			$sql->prepareStatementForSqlObject($sQuery)->execute();
+ 		}
+ 	
+ 	}
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	public function getTransfert($idcons){
+ 		$db = $this->tableGateway->getAdapter();
+ 		$sql = new Sql($db);
+ 		$sQuery = $sql->select()->from('rendez_vous_cons')->where(array('idcons' => $idcons));
+ 		return $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
+ 	}
 }
 

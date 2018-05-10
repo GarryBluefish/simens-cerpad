@@ -551,6 +551,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 	protected $analysesMetabolismeProtidique;
 	protected $analysesBilanElectrolyte;
 	protected $analysesTypageHemoglobine;
+	protected $analysesSerologieHIV;
 	
 
 	public function setAnalysesImmunoHemato($analysesImmunoHemato){
@@ -657,6 +658,13 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		return $this->analysesTypageHemoglobine;
 	}
 	
+	public function setAnalysesSerologieHIV($analysesSerologieHIV){
+		$this->analysesSerologieHIV = $analysesSerologieHIV;
+	}
+	
+	public function getAnalysesSerologieHIV(){
+		return $this->analysesSerologieHIV;
+	}
 	
 	//Premiere page NFS --- NFS --- NFS
 	//Premiere page NFS --- NFS --- NFS
@@ -677,6 +685,15 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		$this->AfficherAutreResultatAnalyse();
 	}
 
+	//Dernière page Sérologie HIV
+	//Dernière page Sérologie HIV
+	function affichageResultatsSerologieHIV()
+	{
+		$this->AddPage();
+		$this->EnTetePage();
+		$this->AfficherResultatsSerologieHIV();
+	}
+	
 	//Dernière page Typage hémoglobine (Profil du patient au dépistage)
 	//Dernière page Typage hémoglobine (Profil du patient au dépistage)
 	function affichageResultatsTypageHemoglobine()
@@ -1684,17 +1701,21 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		$resultats = $this->getResultatsAnalysesDemandees();
 		$listeAnalysesDemandees = $this->getAnalysesDemandees();
 		$infosAnalyseDemande = array();
+		$tabIdanalyse = array();
 		
 		for($i = 0 ; $i < count($listeAnalysesDemandees) ; $i++){
 			$idanalyse = $listeAnalysesDemandees[$i]['idanalyse'];
-
-	 	    if($idanalyse == 1){
-	 	    	$analyses[$idanalyse]            = $listeAnalysesDemandees[$i]['Designation'];
-	 	    	$idAnalyses[$idanalyse]          = $idanalyse;
-	 	    	$typesAnalyses[$idanalyse]       = $listeAnalysesDemandees[$i]['Libelle'];
-	 	    	$infosAnalyseDemande[$idanalyse] = $listeAnalysesDemandees[$i];
-	 	    }
+			$tabIdanalyse [] = $idanalyse;
+			$infosAnalyseDemande[$idanalyse] = $listeAnalysesDemandees[$i];
 		}
+		
+		//Date de prelèvement
+		$datePrelevement = $infosAnalyseDemande[$tabIdanalyse[0]]['DateHeurePrelevement'];
+		
+		$this->SetFont('times','',8);
+		$this->Cell(45,-1,'Prélèvement effectué le : '.$datePrelevement,'',0,'L',0);
+		
+		$this->Cell(90,-1,'','',1,'L',0);
 		
 		
 		/**
@@ -3357,6 +3378,31 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 				$this->Cell(22,5,'( < 10,26 )','B',1,'C',1);
 				
 			}
+			
+			//LDH --- LDH --- LDH --- LDH --- LDH --- LDH --- LDH
+			if(in_array(70, $idAnalysesBilanHepatique)){
+					
+				if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249); }
+					
+				$this->Ln(0.5);
+				$this->SetFont('zap','',11.3);
+				$this->Cell(5,6,' +','BT',0,'C',1);
+				$this->SetFont('times','',9);
+				$this->Cell(40,6,'LDH : ','BT',0,'L',1);
+					
+				$this->SetFont('times','B',11);
+				$this->Cell(25,6,number_format($resultats[70]['valeur_ldh'], 0, ',', ' ').' UI/l','BT',0,'L',1);
+					
+				$this->SetFont('times','I',8);
+				$this->Cell(30,6,'( 324 - 1029 )','BT',0,'L',1);
+					
+				$this->SetFont('times','I',7);
+				$this->Cell(40,6,'','BT',0,'L',1);
+					
+				$this->SetFont('times','I',7);
+				$this->Cell(45,6,'','BT',1,'L',1);
+			}
+			
 		
 		}
 		
@@ -3471,35 +3517,6 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 					
 			}
 			
-			//ALBUMINEMIE --- ALBUMINEMIE --- ALBUMINEMIE --- ALBUMINEMIE
-			if(in_array(46, $idAnalysesBilanRenal)){
-					
-				if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249); }
-					
-				$this->Ln(0.5);
-				$this->SetFont('zap','',11.3);
-				$this->Cell(5,6,' +','BT',0,'C',1);
-				$this->SetFont('times','',9);
-				$this->Cell(55,6,'ALBUMINEMIE : ','BT',0,'L',1);
-					
-				$this->SetFont('times','B',11);
-				$this->Cell(25,6,$resultats[46]['albuminemie'].' g/l','BT',0,'L',1);
-					
-				$this->SetFont('times','I',7);
-				$this->Cell(30,6,'( 35 - 53 )','BT',0,'L',1);
-					
-				$this->SetFont('times','I',9);
-				$this->Cell(20,6,'','BT',0,'R',1);
-					
-				$this->SetFont('times','B',11);
-				$this->Cell(20,6,'','BT',0,'L',1);
-					
-				$this->SetFont('times','I',7);
-				$this->Cell(30,6,'','BT',1,'L',1);
-					
-			}
-			
-			
 			//ALBUMINE URINAIRE (BANDELETTES) --- ALBUMINE URINAIRE (BANDELETTES) --- 
 			if(in_array(47, $idAnalysesBilanRenal)){
 					
@@ -3575,6 +3592,38 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 				
 			}
 			
+			
+			//PROTEINURIE DES 24H --- PROTEINURIE DES 24H --- PROTEINURIE DES 24H
+			if(in_array(49, $idAnalysesBilanRenal)){
+					
+				if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249); }
+					
+				$this->Ln(0.5);
+				$this->SetFont('zap','',11.3);
+				$this->Cell(5,6,' +','BT',0,'C',1);
+				$this->SetFont('times','',9);
+				$this->Cell(50,6,'PROTEINURIE DES 24H : ','BT',0,'L',1);
+					
+				$this->SetFont('times','',10);
+				$this->Cell(25,6,number_format($resultats[49]['proteinurie_1'], 2, ',', ' ').'  g/l','BT',0,'L',1);
+					
+				$this->SetFont('timesi','',11);
+				$this->Cell(16,6,'Diurèse :','BT',0,'L',1);
+			
+				$valeurProteinurie = $resultats[49]['proteinurie_2'];
+				if(fmod($valeurProteinurie, 1) !== 0.00){$valeurProteinurie = number_format($valeurProteinurie, 1, ',', ' ');}
+				$this->SetFont('times','B',11);
+				$this->Cell(29,6,$valeurProteinurie.'  l','BT',0,'L',1);
+					
+				$valeurProteinurie24h = $resultats[49]['proteinurie_g24h'];
+				if(fmod($valeurProteinurie24h, 1) !== 0.00){$valeurProteinurie24h = number_format($valeurProteinurie24h, 2, ',', ' ');}
+				$this->SetFont('times','B',11);
+				$this->Cell(35,6,$valeurProteinurie24h.'  g/24h','BT',0,'L',1);
+					
+				$this->SetFont('times','I',8);
+				$this->Cell(25,6,'( < 0,15 g/24H )','BT',1,'L',1);
+			
+			}
 			
 			
 		}
@@ -4358,8 +4407,8 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 			}
 			
 			
-			//PROTEINURIE DES 24H --- PROTEINURIE DES 24H --- PROTEINURIE DES 24H
-			if(in_array(49, $idAnalysesMetabolismeProtidique)){
+			//ALBUMINEMIE --- ALBUMINEMIE --- ALBUMINEMIE --- ALBUMINEMIE
+			if(in_array(46, $idAnalysesMetabolismeProtidique)){
 					
 				if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249); }
 					
@@ -4367,19 +4416,21 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 				$this->SetFont('zap','',11.3);
 				$this->Cell(5,6,' +','BT',0,'C',1);
 				$this->SetFont('times','',9);
-				$this->Cell(60,6,'PROTEINURIE DES 24H : ','BT',0,'L',1);
+				$this->Cell(45,6,'ALBUMINEMIE : ','BT',0,'L',1);
 					
 				$this->SetFont('times','B',11);
-				$this->Cell(25,6,number_format($resultats[49]['proteinurie'], 2, ',', ' ').'  g/24H','BT',0,'L',1);
+				$this->Cell(25,6,$resultats[46]['albuminemie'].' g/l','BT',0,'L',1);
 					
 				$this->SetFont('times','I',7);
-				$this->Cell(50,6,'( < 0,15 g/24H )','BT',0,'L',1);
+				$this->Cell(40,6,'( 35 - 53 )','BT',0,'L',1);
 					
 				$this->SetFont('times','B',11);
-				$this->Cell(45,6,'','BT',1,'L',1);
+				$this->Cell(40,6,number_format($resultats[46]['albuminemie_umol'],2, ',', ' ').' umol/l','BT',0,'L',1);
+					
+				$this->SetFont('times','I',7);
+				$this->Cell(30,6,'( 507,25 - 768,12 )','BT',1,'L',1);
 					
 			}
-			
 			
 			
 			
@@ -4481,6 +4532,102 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 	
 	
 	
+	function AfficherResultatsSerologieHIV(){
+		$controle = new DateHelper();
+		$this->AddFont('symb','','symbol.php');
+		$this->AddFont('zap','','zapfdingbats.php');
+		$this->AddFont('timesb','','timesb.php');
+		$this->AddFont('timesi','','timesi.php');
+		$this->AddFont('times','','times.php');
+	
+		$resultats = $this->getResultatsAnalysesDemandees();
+		$listeAnalysesDemandees = $this->getAnalysesDemandees();
+		$infosAnalyseDemande = array();
+	
+		for($i = 0 ; $i < count($listeAnalysesDemandees) ; $i++){
+			$idanalyse = $listeAnalysesDemandees[$i]['idanalyse'];
+	
+			if($idanalyse == 64){
+				$analyses[$idanalyse]            = $listeAnalysesDemandees[$i]['Designation'];
+				$idAnalyses[$idanalyse]          = $idanalyse;
+				$typesAnalyses[$idanalyse]       = $listeAnalysesDemandees[$i]['Libelle'];
+				$infosAnalyseDemande[$idanalyse] = $listeAnalysesDemandees[$i];
+			}
+		}
+	
+		//Date de prelèvement
+		$datePrelevement = $infosAnalyseDemande[64]['DateHeurePrelevement'];
+	
+		//Affichage des infos sur le biologiste et le technicien
+		$dateEnregistrement  =  $controle->convertDateTime($infosAnalyseDemande[64]['DateEnregistrementResultat']);
+		$prenomNomTechnicien = $infosAnalyseDemande[64]['Prenom'].' '.$infosAnalyseDemande[64]['Nom'];
+		$prenomNomBiologiste = $infosAnalyseDemande[64]['PrenomValidateur'].' '.$infosAnalyseDemande[64]['NomValidateur'];
+	
+		$this->SetFont('times','',8);
+		//$this->Cell(45,-1,'Enregistré le : '.$dateEnregistrement,'',0,'L',0);
+		$this->Cell(45,-1,'Prélèvement effectué le : '.$datePrelevement,'',0,'L',0);
+	
+		//$this->Cell(90,-1,'par : '.$prenomNomTechnicien.' ; validé par : '.$prenomNomBiologiste,'',1,'L',0);
+		$this->Cell(90,-1,'','',1,'L',0);
+	
+		$this->Ln(5);
+	
+		//AFFICHAGE DE L'EN TETE DU TEXTE
+		//AFFICHAGE DE L'EN TETE DU TEXTE
+		$this->SetFillColor(249,249,249);
+		$this->SetDrawColor(220,220,220);
+	
+		$this->SetFont('times','I',9);
+		$this->Cell(35,7,'','',0,'L',0);
+		$this->SetFont('times','U',10);
+		$this->Cell(115,7,"SEROLOGIE HIV",'',0,'C',0);
+		$this->Cell(35,7,'','',1,'C',0);
+	
+		$this->Ln(3);
+	
+		//matériel utilisé --- matériel utilisé --- matériel utilisé
+		$this->SetFont('zap','',11.3);
+		$this->Cell(4,6,' ^','BT',0,'C',1);
+		$this->SetFont('times','',11);
+		$this->Cell(181,6,'Type de matériel utilisé : '.$resultats[64]['type_materiel'],'BT',1,'L',1);
+	
+		$this->Ln(4);
+	
+		$indice = 0;
+		$this->Ln(1);
+	
+		$idAnalysesSerologieHIV = $this->getAnalysesSerologieHIV();
+		if(in_array(64, $idAnalysesSerologieHIV)){
+	
+			if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249); }
+	
+			$this->Ln(0.5);
+			$this->SetFont('zap','',11.3);
+			$this->Cell(45,6,' +','BT',0,'R',1);
+			$this->SetFont('times','',11);
+			$this->Cell(35,6,'Résultat : ','BT',0,'L',1);
+	
+			$resultatHiv = 'Positif';
+			if($resultats[64]['hiv'] == 'Negatif'){ $resultatHiv = 'Négatif'; }
+			$this->SetFont('times','B',11);
+			$this->Cell(20,6,$resultatHiv,'BT',0,'L',1);
+			
+			$this->SetFont('times','I',11);
+			$this->Cell(20,6,'Typage :','BT',0,'R',1);
+	
+			
+			$typageHiv = '';
+			if($resultats[64]['hiv_typage']){ 
+				$typageHiv = $resultats[64]['hiv_typage']; 
+				if($typageHiv == 'indetermine'){ $typageHiv = 'Indéterminé'; }
+			}
+			$this->SetFont('times','B',11);
+			$this->Cell(65,6,$typageHiv,'BT',0,'L',1);
+	
+		}
+	
+	
+	}
 	
 	
 	

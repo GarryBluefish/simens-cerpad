@@ -22,6 +22,8 @@ echo $this->headLink()->appendStylesheet($this->basePath().'/css/consultation/mo
 echo $this->headLink()->appendStylesheet($this->basePath().'/css/monstyle.css');
 ?>
       
+<?php echo $this->headLink()->appendStylesheet($this->basePath().'/js/plugins/dateTimePicker/jquery-ui-timepicker-addon.css');?>
+<?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/dateTimePicker/jquery-ui-timepicker-addon.js');?>
 
 <script>
 //POUR LE MENU GAUCHE dans -elementgauche.phtml
@@ -135,10 +137,85 @@ echo $this->form()->openTag($form); ?>
 			   	</td>
 			   	
 			   	<td style='display:"block";  font-family: police1;font-size: 12px;'>
-			   		<div id="aa"><a style="text-decoration: underline;">Type</a><br><p style='font-weight: bold;font-size: 19px;'><?php echo $this->typage;?></p></div>
+			   	    <div id="a"><a style="text-decoration: underline;">Type</a><br>
+			   		  <p style='font-weight: bold;font-size: 19px;'><?php echo $this->typage;?> 
+			   		  
+			   		    <?php if($this->informations_parentales){ ?>
+			   		      <img onclick='infos_parentales();' id='infos_parentales_patient' style='float: right; cursor: pointer; ' src='../images_icons/Infos_parentales.png' />
+			   		    <?php } ?>
+			   		  </p>
+			   	    </div>
 			   	</td>
 			  </tr>
          </table>
+         
+         
+         <!-- GESTION DES INFORMATIONS PARENTALES -->
+	     <!-- GESTION DES INFORMATIONS PARENTALES -->
+	   
+	   <?php if($this->informations_parentales){ ?>
+	   
+	     <div id='infos_parentales_tampon' style='display: none;'>
+	       <table style='width: 100%' class='infos_parentales_tab'>
+	         <tr style='width: 100%'>
+	             <td colspan='3' style='width: 100%;' > <div class='titreParentLab' > <div class='titreParents' > </div> INFOS MATERNELLES </div> </td>
+	         </tr>
+	         <tr>
+	             <td style='width: 44%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' style='padding-left: 7px;' ><a style='text-decoration: underline; color: black; '>Pr&eacute;nom & Nom</a><br><p style='font-weight: bold; font-size: 17px; color: green; height: 25px;'> <?php echo $this->informations_parentales[0]['prenom'].' '.$this->informations_parentales[0]['nom']; ?> </p></div>
+	             </td>
+	             <td style='width: 28%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' ><a style='text-decoration: underline; color: black; '>T&eacute;l&eacute;phone</a><br><p style='font-weight: bold;font-size: 17px; color: green; height: 25px;'> <?php echo $this->informations_parentales[0]['telephone']; ?> </p></div>
+	             </td>
+   			     <td style='width: 28%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' ><a style='text-decoration: underline; color: black; '>Fax</a><br><p style='font-weight: bold;font-size: 17px; color: green; height: 25px; '> <?php echo $this->informations_parentales[0]['fax']; ?> </p></div>
+	             </td>
+	         </tr>
+	       
+	         <tr>
+	             <td style='width: 44%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' style='padding-left: 7px; margin-bottom: 10px;' ><a style='text-decoration: underline; color: black; '>Profession</a><br><p style='font-weight: bold; font-size: 17px; color: green; height: 25px;'> <?php echo $this->informations_parentales[0]['profession']; ?> </p></div>
+	             </td>
+	             <td colspan='2' style='width: 56%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' ><a style='text-decoration: underline; color: black; '>@-Email</a><br><p style='font-weight: bold;font-size: 17px; color: green; height: 25px;'> <?php echo $this->informations_parentales[0]['email']; ?> </p></div>
+	             </td>
+	         </tr>
+	       
+
+   			   		    
+   	         <tr style='width: 100%;'>
+	             <td colspan='3' style='width: 100%;' > <div class='titreParentLab' > <div class='titreParents' > </div> INFOS PATERNELLES </div> </td>
+	         </tr>
+	         <tr>
+	             <td style='width: 44%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' style='padding-left: 7px;' ><a style='text-decoration: underline; color: black; '>Pr&eacute;nom & Nom</a><br><p style='font-weight: bold; font-size: 17px; color: green; height: 25px;'> <?php echo $this->informations_parentales[1]['prenom'].' '.$this->informations_parentales[1]['nom']; ?></p></div>
+	             </td>
+	             <td style='width: 28%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' ><a style='text-decoration: underline; color: black; '>T&eacute;l&eacute;phone</a><br><p style='font-weight: bold;font-size: 17px; color: green; height: 25px;'><?php echo $this->informations_parentales[1]['telephone']; ?> </p></div>
+	             </td>
+   			     <td style='width: 28%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' ><a style='text-decoration: underline; color: black; '>Fax</a><br><p style='font-weight: bold;font-size: 17px; color: green; height: 25px; '> <?php echo $this->informations_parentales[1]['fax']; ?> </p></div>
+	             </td>
+	         </tr>
+	       
+	         <tr>
+	             <td style='width: 44%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' style='padding-left: 7px; margin-bottom: 10px;' ><a style='text-decoration: underline; color: black; '>Profession</a><br><p style='font-weight: bold; font-size: 17px; color: green; height: 25px;'>  <?php echo $this->informations_parentales[1]['profession']; ?> </p></div>
+	             </td>
+	             <td colspan='2' style='width: 56%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' ><a style='text-decoration: underline; color: black; '>@-Email</a><br><p style='font-weight: bold;font-size: 17px; color: green; height: 25px;'> <?php echo $this->informations_parentales[1]['email']; ?> </p></div>
+	             </td>
+	         </tr>
+	       
+	         
+	       </table>
+	       
+	     </div>  
+	       
+	   
+	   <?php } ?>
+         
+         
          
 		 
            <div id="barre"></div>
@@ -585,7 +662,8 @@ echo $this->form()->openTag($form); ?>
                                 <span style="font-weight: bold;"><span style='font-size: 12px;'>&#11166;</span> Statut dr&eacute;panocytose enfants </span> 
                                 <span id="choixNombreStatutDrepano" style="margin-left: 20px;"> 
                                   <span id="choixStatutEnfant_0"> </span>  
-                                  <img id="ajoutChoixStatutDrepanoEnfants" style="cursor: pointer; margin-bottom: 5px; margin-left: 5px;" src="<?php echo $this->basepath().'/images_icons/Add14X14.png'?>" />
+                                  <img id="supprimeChoixStatutDrepanoEnfants" style="cursor: pointer; margin-bottom: 5px; margin-left: 5px; width: 12px; display: none;" src="<?php echo $this->basepath().'/images_icons/moin-green1.png'?>" />
+                                  <img id="ajoutChoixStatutDrepanoEnfants" style="cursor: pointer; margin-bottom: 5px; margin-left: 5px; width: 12px;" src="<?php echo $this->basepath().'/images_icons/Add14X14.png'?>" />
                                 </span> 
                                 
                                 
@@ -871,17 +949,22 @@ echo $this->form()->openTag($form); ?>
                       <div style="float:left; width: 100%;"><label style="width: 100%; height:30px; text-align:left; "><span style='font-size: 12px;'>&#11166; </span>Crise vaso-occlusive <?php echo $this->formRow($form->get('criseHM'));?></label></div> 
 				  </th>
 				  
-				  <th style="width:15%; padding-right: 15px;" class="criseInfo">
-                      <div style="float:left; width: 100%;"><label style="width: 100%; height:30px; ">Nombre  <?php echo $this->formRow($form->get('nombre_criseHM'));?></label></div> 
+				  <th style="width:14%; padding-right: 15px;" class="criseInfo">
+                      <div style="float:left; width: 100%; background: re; "><label style="width: 100%; height:30px; ">Nombre  <?php echo $this->formRow($form->get('nombre_criseHM'));?><span onclick='ajouterInfosAutresCrises();' id='ajoutInfosAutresCrisesIcon' style='float: right; color: red; padding-left: 5px; padding-top: 2px; font-weight: bold; font-size: 14px;' title='Ajouter les autres crises'>&#10070;</span></label></div> 
 				  </th>
 				  
-				  <th style="width:23%; padding-right: 15px;" class="criseInfo" > 
-                      <div style="float:left; width: 100%;"><label style="width: 100%; height:30px; ">Dur&eacute;e (j)  <?php echo $this->formRow($form->get('dureeHM'));?></label></div> 
+				  <th style="width:15%; padding-right: 15px;" class="criseInfo" > 
+                      <div style="float:left; width: 100%; background: gree;"><label style="width: 100%; height:30px; font-size: 12px; ">Type  <?php echo $this->formRow($form->get('typeHM'));?></label></div> 
 				  </th>
 				  
-				  <th style="width:37%; padding-right: 25px;" class="criseInfo">
-                      <div style="float:left; width: 100%;"><label style="width: 100%; height:30px; " >Facteur d&eacute;clenchant  <?php echo $this->formRow($form->get('facteur_declenchantHM'));?></label></div> 
+				  <th style="width:18%; padding-right: 15px;" class="criseInfo" > 
+                      <div style="float:left; width: 100%; background: yello;"><label style="width: 100%; height:30px; font-size: 12px;">Dur&eacute;e (j)  <?php echo $this->formRow($form->get('dureeHM'));?></label></div> 
+				  </th>
+				  
+				  <th style="width:28%; padding-right: 25px;" class="criseInfo">
+                      <div style="float:left; width: 100%; background: indig;"><label style="width: 100%; height:30px; font-size: 12px;" >Facteur d&eacute;clenchant  <?php echo $this->formRow($form->get('facteur_declenchantHM'));?> </label></div> 
 			      </th>
+			      
 			   </tr>
             </table>
                 
@@ -1399,25 +1482,54 @@ echo $this->form()->openTag($form); ?>
      <div style='max-height: 400px;'>
         
         <table style="width:100%;">
+        
+           
+           
+           <tr style="width: 100%;" class="designHistoireMaladie"> 
+             <th colspan="3" class='zoneInfosStyle' style="width: 100%; height: 30px; background: re;"> 
+             
+             <div style="float:left; width: 90%;">
+             
+                <label style="width: 21%; height:30px; text-align:left; float: left;">
+                    <span style='font-size: 12px;'>&#11166; </span> Conclusion : 
+	                <select id="choixConclusionDiagnosticRO" onchange='choixConclusionDiagnostic(this.value);' > 
+	                   <option> </option> 
+	                   <option value=0> RAS </option> 
+	                   <option value=1> OUI </option> 
+	                </select>
+                </label>
+                
+                <div style="display: none;" id="choixAutresConclusionDiagnostic">
+	                <label style="width: 25%; height:30px; text-align:left; float: left;">
+	                    <span id="choixAutresDiagComplicationsAigues"> Complications aigues </span>
+		                <input type="checkbox" id="choix_diag_complications_aigues" name="choix_diag_complications_aigues">
+	                </label>
+	                
+	                
+	                <label style="width: 27%; height:30px; text-align:left; float: left;">
+	                    <span id="choixAutresDiagComplicationsChroniques"> Complications chroniques </span>
+		                <input type="checkbox" id="choix_diag_complications_chroniques" name="choix_diag_complications_chroniques">
+	                </label>
+	                
+	                
+	                <label style="width: 18%; height:30px; text-align:left; float: left;">
+	                    <span id="choixAutresDiagComplicationsASignaler"> Autres &agrave; signaler </span>
+		                <input type="checkbox" id="choix_diag_autres_a_signaler" name="choix_diag_autres_a_signaler">
+	                </label>
+                </div>
+                
+             </div>
+              
+             </th> 
+           </tr>
+           
+        
            <tr style="width: 100%;">
-              <td style="width: 29%; background: re; padding-right: 25px; vertical-align: top;">
-                 <div class="titreZoneInfosStyle">&#10049; Diagnostic du jour </div>
-                 
-                 <div class="zoneInfosStyle titreDiagnosticDuJourStyle">
-                   <table style="width:100%;">
-			         <tr style="width:100%;" class="designHistoireMaladie">
-			           <th style="width:100%; padding-right: 8px; vertical-align: top;" > 
-                         <?php echo $this->formRow($form->get('diagnosticDuJourConsultation'));?>
-				       </th>
-		             </tr>
-                   </table>
-                 </div>
-              </td>
-              
-              <td style="width: 2%;"><div class="zoneInfosStyle barreVerticaleSeparateur"> </div></td>
-              
+           
+                            
               <td style="width: 69%; background: gree; vertical-align: top;">
               
+                 <div style="display: none;" id="affichageChoixAutresDiagComplicationsAigues">
                  <div class="titreZoneInfosStyle">&#10049; Complications aigues </div>
                  <div class="zoneInfosStyle contenuComplicationsAiguesStyle">
                    <table style="width:100%;">
@@ -1488,8 +1600,10 @@ echo $this->form()->openTag($form); ?>
 				   <?php }?>
                  </div>
                  
+                 </div>
                  
                  
+                 <div style="display: none;" id="affichageChoixAutresDiagComplicationsChroniques">
                  <div class="titreZoneInfosStyle">&#10049; Complications chroniques </div>
                  <div class="zoneInfosStyle contenuComplicationsChroniquesStyle">
                  
@@ -1560,10 +1674,51 @@ echo $this->form()->openTag($form); ?>
 				       <script> listeInfosComplicationsChroniques[icc++] = '<?php echo $infosComplicationsChroniques['complication_chronique']; ?>'; </script>
 				   <?php }?>
                  </div>
+               </div>   
                     
               </td>
+              
+              
+              <td style="width: 2%;"><div class="zoneInfosStyle barreVerticaleSeparateur"> </div></td>
+              
+              
+              <td style="width: 29%; background: re; padding-left: 25px; vertical-align: top;">
+                <div style="display: none;" id="affichageChoixAutresDiagAutresASignaler">
+                  <div class="titreZoneInfosStyle">&#10049; Autres &agrave; signaler </div>
+                 
+                  <div class="zoneInfosStyle titreDiagnosticDuJourStyle">
+                   <table style="width:100%;">
+			         <tr style="width:100%;" class="designHistoireMaladie">
+			           <th style="width:100%; padding-right: 8px; vertical-align: top;" > 
+                         <?php echo $this->formRow($form->get('diagnosticDuJourConsultation'));?>
+				       </th>
+		             </tr>
+                   </table>
+                  </div>
+                </div>  
+              </td>
+              
+              
+              
            </tr>
         </table>
+        
+        <?php $tabInfosDiagnosticDuJour = $this->tabInfosDiagnosticDuJour; ?>
+        <?php if(in_array(1, $tabInfosDiagnosticDuJour)){ ?>
+           <script> $("#choixConclusionDiagnosticRO").val(1).trigger('change'); </script>
+        <?php } ?>
+        
+        <?php if($tabInfosDiagnosticDuJour[1] == 1){ ?>
+           <script> $('#choixAutresConclusionDiagnostic input[name=choix_diag_complications_aigues]').trigger('click'); </script>
+        <?php } ?>
+        
+        <?php if($tabInfosDiagnosticDuJour[2] == 1){ ?>
+           <script> $('#choixAutresConclusionDiagnostic input[name=choix_diag_complications_chroniques]').trigger('click'); </script>
+        <?php } ?>
+        
+        <?php if($tabInfosDiagnosticDuJour[3] == 1){ ?>
+           <script> $('#choixAutresConclusionDiagnostic input[name=choix_diag_autres_a_signaler]').trigger('click'); </script>
+        <?php } ?>
         
      </div>
      
@@ -1581,14 +1736,12 @@ echo $this->form()->openTag($form); ?>
 
               <!-- ************** Traitement Mï¿½dical **************** -->
               <!-- **1** -->
-              <!--div style='font-family: police2;font-size: 17px; font-weight: bold;'> M&eacute;dicamenteux</div>
-              <div style='max-height: 370px;'-->
-                          
+              
               <!--******* ======= MENU MENU MENU =======  ******-->
               <!--******* ======= MENU MENU MENU =======  ******-->
               <div style=" padding-bottom:0px; margin-bottom: 5px; border-bottom: 2px solid green; margin-left: 0px;"></div>
               <div class="ordonnance">
-                 <img style='cursor: pointer; float: right;' src='../images_icons/pdf.png' />
+                 <img onclick='imprimerTraitementMedicamenteux();' style='cursor: pointer; float: right;' src='../images_icons/pdf.png' />
               </div>
               <!-- LE CHAMP POUR LA DUREE DU TRAITEMENT DE L'ORDONNANCE-->
               <div id="duree_traitement" >
@@ -1652,29 +1805,30 @@ echo $this->form()->openTag($form); ?>
                  <!--********************* CHARGEMENT DES DONNEES  ************************-->
                  
                  <script> 
-                   //ValiderOrdonnance();
+                  //ValiderOrdonnance();
 
-                   var myArrayMedicament = [''];
-                   var myArrayForme = [''];
-                   var myArrayTypeQuantiteMedicament = [''];
-                   <?php /* ?>
-                    var j = 0;
-                    <?php foreach($this->liste_med as $Liste) {?>
-                           myArrayMedicament[j++] = "<?php echo $Liste['INTITULE']; ?>"; 
-                    <?php } ?>
-                    
-                    var j = 0;
-                    <?php foreach($this->listeForme as $ListeForme) {?>
-                           myArrayForme[j++] = "<?php echo $ListeForme['libelleForme']; ?>"; 
-                    <?php } ?>
+                  var myArrayMedicament = [''];
+                  var myArrayForme = [''];
+                  var myArrayTypeQuantiteMedicament = [''];
+                 
+                  var j = 0;
+                  <?php foreach($this->listeMedicament as $Liste) {?>
+                         myArrayMedicament[j++] = "<?php echo $Liste['INTITULE']; ?>"; 
+                  <?php } ?>
+                  
+                  var j = 0;
+                  <?php foreach($this->listeFormeMedicament as $ListeForme) {?>
+                         myArrayForme[j++] = "<?php echo $ListeForme['libelleForme']; ?>"; 
+                  <?php } ?>
 
-                    var j = 0;
-                    <?php foreach($this->listetypeQuantiteMedicament as $listetypeQuantiteMedicament) {?>
-                           myArrayTypeQuantiteMedicament[j++] = "<?php echo $listetypeQuantiteMedicament['libelleQuantite']; ?>"; 
-                    <?php } ?>
-                   <?php */ ?>  
-                    partDefautMedicament(myArrayMedicament, myArrayForme, myArrayTypeQuantiteMedicament, 1);
-                    
+                  var j = 0;
+                  <?php foreach($this->listeTypeQuantiteMedicament as $listetypeQuantiteMedicament) {?>
+                         myArrayTypeQuantiteMedicament[j++] = "<?php echo $listetypeQuantiteMedicament['libelleQuantite']; ?>"; 
+                  <?php } ?>
+
+                  partDefautMedicament(myArrayMedicament, myArrayForme, myArrayTypeQuantiteMedicament, 1);
+
+                  
                  </script>
      		     
      		     
@@ -1687,7 +1841,7 @@ echo $this->form()->openTag($form); ?>
 
      <!--*7*-->
      <div style='font-family: police2;font-size: 17px; font-weight: bold;'>Autres (Transfert / Hospitalisation / Rendez-Vous)</div>
-       <div style="max-height: 480px;">
+       <div style="max-height: 430px;">
 
 
          <!--  **************** NOUVELLE ACCORDEON *********************  -->
@@ -1697,14 +1851,27 @@ echo $this->form()->openTag($form); ?>
          <!-- **1** -->
            <div style='font-family: police2;font-size: 17px; font-weight: bold;'> Transfert </div>
            <div>
+           
+              <table id="transfert" style="width: 100%;">
+                 <tr class="form-transfert" style="width: 100%;">
+                    <th style="width: 45%;"><?php echo $this->formRow($form->get('motifTransfert'));?></th>
+                    <th style="width: 27%;"><?php echo $this->formRow($form->get('hopitalAccueil'));?></th>
+                    <th style="width: 28%;"><?php echo $this->formRow($form->get('serviceAccueil'));?></th>
+                 </tr>
+              </table>
 
            </div>
 
          <!-- ************** Hospitalisation **************** -->
          <!-- **2** -->
-           <div style='font-family: police2;font-size: 17px; font-weight: bold;'> Hospitalisation</div>
+           <div style='font-family: police2;font-size: 17px; font-weight: bold;'> Hospitalisation du jour</div>
            <div style="max-height:300px;">
-                               
+             
+             <table id="hospitalisation" style="width: 73%;">
+               <tr>
+                  <th class="form-hospitalisation" style="width: 60%;"> <?php echo $this->formRow($form->get('motifHospitalisation'));?> </th>
+               </tr>
+             </table>   
                                     
            </div>
                                 
@@ -1714,6 +1881,47 @@ echo $this->form()->openTag($form); ?>
            <div style='font-family: police2;font-size: 17px; font-weight: bold;'> Rendez-vous</div>
            <div>
 
+              <table id="rendezvous" style="width: 100%;">
+               <tr class="form-rendezvous" style="width: 100%; vertical-align: top; " >
+                 
+                 <th class="form-rendezvous" style="width: 27%;"> <?php echo $this->formRow($form->get('dateHeureRendezVous')); ?> </th>
+                 <th style="width: 7%;"> </th>
+                 
+                 <th style="width: 56%;"> 
+                   <table style="width: 100%;">
+                     <tr style="width: 100%;">
+                       <td> <label>Motif</label> </td>
+                     </tr>
+                     <tr style="width: 100%;">
+                       <td style="width: 100%; border-top-right-radius: 10px;"> 
+                         <table id="rendezvousPreciserVSS" style="width: 90%; background: #eeeeee;"> 
+                           <tr style="height: 35px; font-size: 14px; border-top-right-radius: 10px; font-family: times new roman;">
+                             <td style="width: 50%; padding-left: 10px;" ><input id="rendervousLabelVSInput" type= "radio"  name="rendezvousPreciserVSSoin" value="1"> <span id="rendervousLabelVS" style="cursor: pointer; margin-top: 10px;"> Visite syst&eacute;matique </span> </td>
+                             <td style="width: 25%; padding-left: 10px;" ><input id="rendervousLabelSInput"  type= "radio"  name="rendezvousPreciserVSSoin" value="2"> <span id="rendervousLabelS"  style="cursor: pointer;"> Soin  </span></td>
+                             <td style="width: 25%; padding-left: 10px;" ><input id="rendervousLabelAInput"  type= "radio"  name="rendezvousPreciserVSSoin" value="3"> <span id="rendervousLabelA"  style="cursor: pointer;"> Autre </span></td>
+                           </tr>
+                         </table>
+                       </td>
+                     </tr>
+                     <tr style="width: 100%;">
+                       <td> <?php echo $this->formRow($form->get('motifRendezVous'));?> </td>
+                     </tr>
+                   </table>
+                 </th>
+
+                 <th style="width: 10%;"><th>
+                 
+                 <script> initChampDateTimeEtMotifRendezVousForm(); </script>
+                 
+                 <?php $motifRendezVous = $this->motifRendezVous; ?>
+                 <?php if($motifRendezVous){ ?>
+                     <script> $('#rendervousLabelA').trigger('click');  </script>
+                     <script> $('#motifRendezVous').val("<?php echo $motifRendezVous; ?>").trigger('keyup'); </script>
+                 <?php }?>
+               </tr>
+                                        
+             </table>
+              
            </div>
          </div>
 
@@ -1726,8 +1934,8 @@ echo $this->form()->openTag($form); ?>
          <tr>
             <td style="background-color: #eeeeee; height: 40px;width: 100%; ">
               <p style="text-align: center;"> 
-                <button id="annuler2" style="font-family: police2;font-size: 18px; font-weight: bold;"> Annuler </button>
-                <button name="terminerCons" id="terminerCons" style="font-family: police2;font-size: 18px; font-weight: bold;"> Terminer </button> 
+                <button id="annulerCons" style="font-family: police2; font-size: 18px; font-weight: bold;"> Annuler </button>
+                <button id="terminerCons" style="font-family: police2; font-size: 18px; font-weight: bold;"> Terminer </button> 
               </p>
             </td>
          </tr>
@@ -1735,7 +1943,7 @@ echo $this->form()->openTag($form); ?>
 
           
       <!-- POP UP pour Confirmation Annulation -->
-      <div id="confirmation2" title="Confirmation de l'annulation" style="display:none;">
+      <div id="confirmationAnnulation" title="Confirmation de l'annulation" style="display:none;">
         <p style="font-size: 16px;">
           <span style="float:left; margin:0 0px 20px 0; ">
             <img src="<?php echo $this->basePath().'/images_icons/warning_16.png';?>" />
@@ -1758,17 +1966,42 @@ echo $this->form()->openTag($form); ?>
       
       <div id="sauverLesInfosDesExamensRadioBioSaisisPopup" style="display: none;"></div>
       
+      
+      <?php $listeCrisesVasOcclusivesHM = $this->listeCrisesVasOcclusivesHM; ?>
+      <script> var indiceListeHM=1; </script>
+      <?php foreach ($listeCrisesVasOcclusivesHM as $uneCriseVasOcclusiveHM){ ?>
+      <script> tabInfosListCrisesHMType[indiceListeHM]  = "<?php echo $uneCriseVasOcclusiveHM['typeHM']; ?>"; </script>
+      <script> tabInfosListCrisesHMDuree[indiceListeHM] = "<?php echo $uneCriseVasOcclusiveHM['dureeHM']; ?>"; </script>
+      <script> tabInfosListCrisesHMFacteurDeclenchant[indiceListeHM++] = "<?php echo $uneCriseVasOcclusiveHM['facteur_declenchantHM']; ?>"; </script>
+      <?php } ?>
+      
+      <script> 
+      if(indiceListeHM>1){ 
+    	  $('#ajoutInfosAutresCrisesIcon').toggle(true); 
+          setTimeout(function(){ 
+              $('#nombre_criseHM').trigger('change'); 
+          },1000);
+      }
+      </script>
+      <div id="sauverLesInfosDesCrisesvasoOcclusivesPopup" style="display: none;"></div>
+      
+      
+      <?php for($i=0 ; $i<count($this->resultatExamenRadio) ; $i++){ ?>
+                 <script> tabInfosResultatsExamensRadio[<?php echo $this->resultatExamenRadio[$i]['idexamen']; ?>] = "<?php echo $this->resultatExamenRadio[$i]['resultatExamenRadio']; ?>"; </script>
+      <?php } ?>
+      
 <?php echo $this->form()->closeTag();?>
 </div>
 
-<script>
-$("#annuler2").click(function() {
-	confirmation(); 
-    $("#confirmation2").dialog('open');
-    
-    return false;
-}); 
-</script>
+
+<!-- POP UP pour Ajouter les autres crises vaso-occlusives -->
+<div id="autresInfosCrisesVasOcclusives" title="Autres crises vaso-occlusives" style="display: none;" align="center" >
+    <div id="popupInfosCrisesVasOcclusives" class="zoneInfosStyle zoneInfosCrisesVasOcclusives" style="width: 98%; background: re;"> 
+       
+    </div>
+</div>
+
+
 
 
 <!-- POP UP pour Ajouter les résultats d'une analyse -->

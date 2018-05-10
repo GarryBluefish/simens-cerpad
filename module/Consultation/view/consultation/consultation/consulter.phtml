@@ -69,9 +69,11 @@ echo $this->form()->openTag($form); ?>
 
        <p style='color: white; opacity: 0.09;'>
          <img id="faces" src='<?php echo $this->basePath().'/img/photos_patients/identite.jpg'?>'  alt="Jonathan Verrecchia" style='float:right; margin-right:15px; width:95px; height:95px;'/>
-        </p>
-                 <span style="position: absolute; right: 63px; top: 150px; color: green; font-family: time new roman; font-size: 17px; "> <?php echo $this->patient->numero_dossier; ?> </span>
-         <table id="etat_civil">
+       </p>
+       
+       <span style="position: absolute; right: 63px; top: 150px; color: green; font-family: time new roman; font-size: 17px; "> <?php echo $this->patient->numero_dossier; ?> </span>
+       
+       <table id="etat_civil">
              <tr>
 			   	<td style='width:27%; font-family: police1;font-size: 12px;'>
 			   		<div id="aa"><a style="text-decoration: underline;">Pr&eacute;nom</a><br><p style='font-weight: bold;font-size: 19px;'><?php echo $this->lesdetails->prenom;?></p></div>
@@ -136,10 +138,82 @@ echo $this->form()->openTag($form); ?>
 			   	</td>
 			   	
 			   	<td style='display:"block";  font-family: police1;font-size: 12px;'>
-			   		<div id="aa"><a style="text-decoration: underline;">Type</a><br><p style='font-weight: bold;font-size: 19px;'><?php echo $this->typage;?></p></div>
+			   	    <div id="a"><a style="text-decoration: underline;">Type</a><br>
+			   		  <p style='font-weight: bold;font-size: 19px;'><?php echo $this->typage;?> 
+			   		  
+			   		    <?php if($this->informations_parentales){ ?>
+			   		      <img onclick='infos_parentales();' id='infos_parentales_patient' style='float: right; cursor: pointer; ' src='../images_icons/Infos_parentales.png' />
+			   		    <?php } ?>
+			   		  </p>
+			   	    </div>
 			   	</td>
 			  </tr>
-         </table>
+       </table>
+       
+       <!-- GESTION DES INFORMATIONS PARENTALES -->
+	   <!-- GESTION DES INFORMATIONS PARENTALES -->
+	   
+	   <?php if($this->informations_parentales){ ?>
+	   
+	     <div id='infos_parentales_tampon' style='display: none;'>
+	       <table style='width: 100%' class='infos_parentales_tab'>
+	         <tr style='width: 100%'>
+	             <td colspan='3' style='width: 100%;' > <div class='titreParentLab' > <div class='titreParents' > </div> INFOS MATERNELLES </div> </td>
+	         </tr>
+	         <tr>
+	             <td style='width: 44%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' style='padding-left: 7px;' ><a style='text-decoration: underline; color: black; '>Pr&eacute;nom & Nom</a><br><p style='font-weight: bold; font-size: 17px; color: green; height: 25px;'> <?php echo $this->informations_parentales[0]['prenom'].' '.$this->informations_parentales[0]['nom']; ?> </p></div>
+	             </td>
+	             <td style='width: 28%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' ><a style='text-decoration: underline; color: black; '>T&eacute;l&eacute;phone</a><br><p style='font-weight: bold;font-size: 17px; color: green; height: 25px;'> <?php echo $this->informations_parentales[0]['telephone']; ?> </p></div>
+	             </td>
+   			     <td style='width: 28%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' ><a style='text-decoration: underline; color: black; '>Fax</a><br><p style='font-weight: bold;font-size: 17px; color: green; height: 25px; '> <?php echo $this->informations_parentales[0]['fax']; ?> </p></div>
+	             </td>
+	         </tr>
+	       
+	         <tr>
+	             <td style='width: 44%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' style='padding-left: 7px; margin-bottom: 10px;' ><a style='text-decoration: underline; color: black; '>Profession</a><br><p style='font-weight: bold; font-size: 17px; color: green; height: 25px;'> <?php echo $this->informations_parentales[0]['profession']; ?> </p></div>
+	             </td>
+	             <td colspan='2' style='width: 56%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' ><a style='text-decoration: underline; color: black; '>@-Email</a><br><p style='font-weight: bold;font-size: 17px; color: green; height: 25px;'> <?php echo $this->informations_parentales[0]['email']; ?> </p></div>
+	             </td>
+	         </tr>
+	       
+
+   			   		    
+   	         <tr style='width: 100%;'>
+	             <td colspan='3' style='width: 100%;' > <div class='titreParentLab' > <div class='titreParents' > </div> INFOS PATERNELLES </div> </td>
+	         </tr>
+	         <tr>
+	             <td style='width: 44%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' style='padding-left: 7px;' ><a style='text-decoration: underline; color: black; '>Pr&eacute;nom & Nom</a><br><p style='font-weight: bold; font-size: 17px; color: green; height: 25px;'> <?php echo $this->informations_parentales[1]['prenom'].' '.$this->informations_parentales[1]['nom']; ?></p></div>
+	             </td>
+	             <td style='width: 28%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' ><a style='text-decoration: underline; color: black; '>T&eacute;l&eacute;phone</a><br><p style='font-weight: bold;font-size: 17px; color: green; height: 25px;'><?php echo $this->informations_parentales[1]['telephone']; ?> </p></div>
+	             </td>
+   			     <td style='width: 28%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' ><a style='text-decoration: underline; color: black; '>Fax</a><br><p style='font-weight: bold;font-size: 17px; color: green; height: 25px; '> <?php echo $this->informations_parentales[1]['fax']; ?> </p></div>
+	             </td>
+	         </tr>
+	       
+	         <tr>
+	             <td style='width: 44%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' style='padding-left: 7px; margin-bottom: 10px;' ><a style='text-decoration: underline; color: black; '>Profession</a><br><p style='font-weight: bold; font-size: 17px; color: green; height: 25px;'>  <?php echo $this->informations_parentales[1]['profession']; ?> </p></div>
+	             </td>
+	             <td colspan='2' style='width: 56%; font-family: police1;font-size: 13px; padding-top: 5px;' >
+   			   		<div class='zoneColor' ><a style='text-decoration: underline; color: black; '>@-Email</a><br><p style='font-weight: bold;font-size: 17px; color: green; height: 25px;'> <?php echo $this->informations_parentales[1]['email']; ?> </p></div>
+	             </td>
+	         </tr>
+	       
+	         
+	       </table>
+	       
+	     </div>  
+	       
+	   
+	   <?php } ?>
          
 		 
            <div id="barre"></div>
@@ -879,17 +953,23 @@ echo $this->form()->openTag($form); ?>
                       <div style="float:left; width: 100%;"><label style="width: 100%; height:30px; text-align:left; "><span style='font-size: 12px;'>&#11166; </span>Crise vaso-occlusive <?php echo $this->formRow($form->get('criseHM'));?></label></div> 
 				  </th>
 				  
-				  <th style="width:15%; padding-right: 15px;" class="criseInfo">
-                      <div style="float:left; width: 100%;"><label style="width: 100%; height:30px; ">Nombre  <?php echo $this->formRow($form->get('nombre_criseHM'));?></label></div> 
+				  <th style="width:14%; padding-right: 15px;" class="criseInfo">
+                      <div style="float:left; width: 100%; background: re; "><label style="width: 100%; height:30px; ">Nombre  <?php echo $this->formRow($form->get('nombre_criseHM'));?><span onclick='ajouterInfosAutresCrises();' id='ajoutInfosAutresCrisesIcon' style='float: right; color: red; padding-left: 5px; padding-top: 2px; font-weight: bold; font-size: 14px;' title='Ajouter les autres crises'>&#10070;</span></label></div> 
 				  </th>
 				  
-				  <th style="width:23%; padding-right: 15px;" class="criseInfo" > 
-                      <div style="float:left; width: 100%;"><label style="width: 100%; height:30px; ">Dur&eacute;e (j)  <?php echo $this->formRow($form->get('dureeHM'));?></label></div> 
+				  <th style="width:15%; padding-right: 15px;" class="criseInfo" > 
+                      <div style="float:left; width: 100%; background: gree;"><label style="width: 100%; height:30px; font-size: 12px; ">Type  <?php echo $this->formRow($form->get('typeHM'));?></label></div> 
 				  </th>
 				  
-				  <th style="width:37%; padding-right: 25px;" class="criseInfo">
-                      <div style="float:left; width: 100%;"><label style="width: 100%; height:30px; " >Facteur d&eacute;clenchant  <?php echo $this->formRow($form->get('facteur_declenchantHM'));?></label></div> 
+				  <th style="width:18%; padding-right: 15px;" class="criseInfo" > 
+                      <div style="float:left; width: 100%; background: yello;"><label style="width: 100%; height:30px; font-size: 12px;">Dur&eacute;e (j)  <?php echo $this->formRow($form->get('dureeHM'));?></label></div> 
+				  </th>
+				  
+				  <th style="width:28%; padding-right: 25px;" class="criseInfo">
+                      <div style="float:left; width: 100%; background: indig;"><label style="width: 100%; height:30px; font-size: 12px;" >Facteur d&eacute;clenchant  <?php echo $this->formRow($form->get('facteur_declenchantHM'));?> </label></div> 
 			      </th>
+			      
+			      
 			   </tr>
             </table>
                 
@@ -1406,160 +1486,211 @@ echo $this->form()->openTag($form); ?>
      <div style='max-height: 400px;'>
         
         <table style="width:100%;">
-           <tr style="width: 100%;">
-              <td style="width: 29%; background: re; padding-right: 25px; vertical-align: top;">
-                 <div class="titreZoneInfosStyle">&#10049; Diagnostic du jour </div>
-                 
-                 <div class="zoneInfosStyle titreDiagnosticDuJourStyle">
-                   <table style="width:100%;">
-			         <tr style="width:100%;" class="designHistoireMaladie">
-			           <th style="width:100%; padding-right: 8px; vertical-align: top;" > 
-                         <?php echo $this->formRow($form->get('diagnosticDuJourConsultation'));?>
-				       </th>
-		             </tr>
-                   </table>
-                 </div>
-              </td>
+        
+           <tr style="width: 100%;" class="designHistoireMaladie"> 
+             <th colspan="3" class='zoneInfosStyle' style="width: 100%; height: 30px; background: re;"> 
+             
+             <div style="float:left; width: 90%;">
+             
+                <label style="width: 21%; height:30px; text-align:left; float: left;">
+                    <span style='font-size: 12px;'>&#11166; </span> Conclusion : 
+	                <select onchange='choixConclusionDiagnostic(this.value);' > 
+	                   <option> </option> 
+	                   <option value=0> RAS </option> 
+	                   <option value=1> OUI </option> 
+	                </select>
+                </label>
+                
+                <div style="display: none;" id="choixAutresConclusionDiagnostic">
+	                <label style="width: 25%; height:30px; text-align:left; float: left;">
+	                    <span id="choixAutresDiagComplicationsAigues"> Complications aigues </span>
+		                <input type="checkbox" id="choix_diag_complications_aigues" name="choix_diag_complications_aigues">
+	                </label>
+	                
+	                
+	                <label style="width: 27%; height:30px; text-align:left; float: left;">
+	                    <span id="choixAutresDiagComplicationsChroniques"> Complications chroniques </span>
+		                <input type="checkbox" id="choix_diag_complications_chroniques" name="choix_diag_complications_chroniques">
+	                </label>
+	                
+	                
+	                <label style="width: 18%; height:30px; text-align:left; float: left;">
+	                    <span id="choixAutresDiagComplicationsASignaler"> Autres &agrave; signaler </span>
+		                <input type="checkbox" id="choix_diag_autres_a_signaler" name="choix_diag_autres_a_signaler">
+	                </label>
+                </div>
+                
+             </div>
               
-              <td style="width: 2%;"><div class="zoneInfosStyle barreVerticaleSeparateur"> </div></td>
+             </th> 
+           </tr>
+           
+           <tr style="width: 100%;">
+              
               
               <td style="width: 69%; background: gree; vertical-align: top;">
               
-                 <div class="titreZoneInfosStyle">&#10049; Complications aigues </div>
-                 <div class="zoneInfosStyle contenuComplicationsAiguesStyle">
-                   <table style="width:100%;">
-			         <tr style="width:100%;" class="diagnosticComplicationsAigues">
-				       
-				       <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
-                          <div style="float:left; width: 100%;" id="diagnosticComplicationsAiguesChamp_1"></div> 
-				       </th>
-				       
-				       <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
-                          <div style="float:left; width: 100%;" id="diagnosticComplicationsAiguesChamp_2"></div> 
-				       </th>
-				       
-				       <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
-                          <div style="float:left; width: 100%;" id="diagnosticComplicationsAiguesChamp_3"></div> 
-				       </th>
-				       
-		             </tr>
-		             
-		             <tr style="width:100%;" class="diagnosticComplicationsAigues">
-		               
-		               <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
-                          <div style="float:left; width: 100%;" id="diagnosticComplicationsAiguesChamp_4"></div> 
-				       </th>
-				       
-				       <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
-                          <div style="float:left; width: 100%;" id="diagnosticComplicationsAiguesChamp_5"></div> 
-				       </th>
-				       
-				       <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
-                          <div style="float:left; width: 100%;" id="diagnosticComplicationsAiguesChamp_6"></div> 
-				       </th>
-				       
-		             </tr>
-		             
-		             <tr style="width:100%;" class="diagnosticComplicationsAigues">
-		             
-		               <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
-                          <div style="float:left; width: 100%;" id="diagnosticComplicationsAiguesChamp_7"></div> 
-				       </th>
-				       
-				       <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
-                          <div style="float:left; width: 100%;" id="diagnosticComplicationsAiguesChamp_8"></div> 
-				       </th>
-				       
-				       <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
-                          <div style="float:left; width: 100%;" id="diagnosticComplicationsAiguesChamp_9"></div> 
-				       </th>
-				       
-		             </tr>
-		             
-                   </table>
-                   <table style="width:100%;">
-			         <tr style="width:100%;">
-				       <th style="width:33%; height: 10px;"> 
-				         <img style='cursor: pointer; float: left; margin-right: 10px;' onclick="enleverComplicationAigue();" id="enleverComplicationAigueBouton" src='../images_icons/moin-green.png' />
-				         <img style='cursor: pointer; float: left;' onclick="ajouterComplicationAigue();" id="ajouterComplicationAigueBouton" src='../images_icons/plus-green.png' />
-				       </th>
-				     </tr>
-				   </table>
-				   <?php echo $this->formRow($form->get('nbDiagnosticComplicationsAigues'));?>
-				   <script> var nbChampDiagComplicationsAigues = 0; ajouterComplicationAigue();</script>
-                 </div>
-                 
-                 
-                 
-                 <div class="titreZoneInfosStyle">&#10049; Complications chroniques </div>
-                 <div class="zoneInfosStyle contenuComplicationsChroniquesStyle">
-                 
-                    <table style="width:100%;">
-			         <tr style="width:100%;">
-				       
-				       <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
-                          <div style="float:left; width: 100%;" id="diagnosticComplicationsChroniquesChamp_1"></div> 
-				       </th>
-				       
-				       <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
-                          <div style="float:left; width: 100%;" id="diagnosticComplicationsChroniquesChamp_2"></div> 
-				       </th>
-				       
-				       <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
-                          <div style="float:left; width: 100%;" id="diagnosticComplicationsChroniquesChamp_3"></div> 
-				       </th>
-				       
-		             </tr>
-		             
-		             <tr style="width:100%;">
-		               
-		               <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
-                          <div style="float:left; width: 100%;" id="diagnosticComplicationsChroniquesChamp_4"></div> 
-				       </th>
-				       
-				       <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
-                          <div style="float:left; width: 100%;" id="diagnosticComplicationsChroniquesChamp_5"></div> 
-				       </th>
-				       
-				       <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
-                          <div style="float:left; width: 100%;" id="diagnosticComplicationsChroniquesChamp_6"></div> 
-				       </th>
-				       
-		             </tr>
-		             
-		             <tr style="width:100%;">
-		             
-		               <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
-                          <div style="float:left; width: 100%;" id="diagnosticComplicationsChroniquesChamp_7"></div> 
-				       </th>
-				       
-				       <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
-                          <div style="float:left; width: 100%;" id="diagnosticComplicationsChroniquesChamp_8"></div> 
-				       </th>
-				       
-				       <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
-                          <div style="float:left; width: 100%;" id="diagnosticComplicationsChroniquesChamp_9"></div> 
-				       </th>
-				       
-		             </tr>
-		             
-                   </table>
-                   <table style="width:100%;">
-			         <tr style="width:100%;">
-				       <th style="width:33%; height: 10px;"> 
-				         <img style='cursor: pointer; float: left; margin-right: 10px;' onclick="enleverComplicationChronique();" id="enleverComplicationChroniqueBouton" src='../images_icons/moin-green.png' />
-				         <img style='cursor: pointer; float: left;' onclick="ajouterComplicationChronique();" id="ajouterComplicationChroniqueBouton" src='../images_icons/plus-green.png' />
-				       </th>
-				     </tr>
-				   </table>
-				   <?php echo $this->formRow($form->get('nbDiagnosticComplicationsChroniques'));?>
-				   <script> var nbChampDiagComplicationsChroniques = 0; ajouterComplicationChronique();</script>
-                 
-                 
+                 <div style="display: none;" id="affichageChoixAutresDiagComplicationsAigues">
+	                 <div class="titreZoneInfosStyle">&#10049; Complications aigues </div>
+	                 <div class="zoneInfosStyle contenuComplicationsAiguesStyle">
+	                   <table style="width:100%;">
+				         <tr style="width:100%;" class="diagnosticComplicationsAigues">
+					       
+					       <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
+	                          <div style="float:left; width: 100%;" id="diagnosticComplicationsAiguesChamp_1"></div> 
+					       </th>
+					       
+					       <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
+	                          <div style="float:left; width: 100%;" id="diagnosticComplicationsAiguesChamp_2"></div> 
+					       </th>
+					       
+					       <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
+	                          <div style="float:left; width: 100%;" id="diagnosticComplicationsAiguesChamp_3"></div> 
+					       </th>
+					       
+			             </tr>
+			             
+			             <tr style="width:100%;" class="diagnosticComplicationsAigues">
+			               
+			               <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
+	                          <div style="float:left; width: 100%;" id="diagnosticComplicationsAiguesChamp_4"></div> 
+					       </th>
+					       
+					       <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
+	                          <div style="float:left; width: 100%;" id="diagnosticComplicationsAiguesChamp_5"></div> 
+					       </th>
+					       
+					       <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
+	                          <div style="float:left; width: 100%;" id="diagnosticComplicationsAiguesChamp_6"></div> 
+					       </th>
+					       
+			             </tr>
+			             
+			             <tr style="width:100%;" class="diagnosticComplicationsAigues">
+			             
+			               <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
+	                          <div style="float:left; width: 100%;" id="diagnosticComplicationsAiguesChamp_7"></div> 
+					       </th>
+					       
+					       <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
+	                          <div style="float:left; width: 100%;" id="diagnosticComplicationsAiguesChamp_8"></div> 
+					       </th>
+					       
+					       <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
+	                          <div style="float:left; width: 100%;" id="diagnosticComplicationsAiguesChamp_9"></div> 
+					       </th>
+					       
+			             </tr>
+			             
+	                   </table>
+	                   <table style="width:100%;">
+				         <tr style="width:100%;">
+					       <th style="width:33%; height: 10px;"> 
+					         <img style='cursor: pointer; float: left; margin-right: 10px;' onclick="enleverComplicationAigue();" id="enleverComplicationAigueBouton" src='../images_icons/moin-green.png' />
+					         <img style='cursor: pointer; float: left;' onclick="ajouterComplicationAigue();" id="ajouterComplicationAigueBouton" src='../images_icons/plus-green.png' />
+					       </th>
+					     </tr>
+					   </table>
+					   <?php echo $this->formRow($form->get('nbDiagnosticComplicationsAigues'));?>
+					   <script> var nbChampDiagComplicationsAigues = 0; ajouterComplicationAigue();</script>
+	                 </div>
                  
                  </div>
+                 
+                 
+                 <div style="display: none;" id="affichageChoixAutresDiagComplicationsChroniques">
+	                 <div class="titreZoneInfosStyle">&#10049; Complications chroniques </div>
+	                 <div class="zoneInfosStyle contenuComplicationsChroniquesStyle">
+	                 
+	                    <table style="width:100%;">
+				         <tr style="width:100%;">
+					       
+					       <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
+	                          <div style="float:left; width: 100%;" id="diagnosticComplicationsChroniquesChamp_1"></div> 
+					       </th>
+					       
+					       <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
+	                          <div style="float:left; width: 100%;" id="diagnosticComplicationsChroniquesChamp_2"></div> 
+					       </th>
+					       
+					       <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
+	                          <div style="float:left; width: 100%;" id="diagnosticComplicationsChroniquesChamp_3"></div> 
+					       </th>
+					       
+			             </tr>
+			             
+			             <tr style="width:100%;">
+			               
+			               <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
+	                          <div style="float:left; width: 100%;" id="diagnosticComplicationsChroniquesChamp_4"></div> 
+					       </th>
+					       
+					       <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
+	                          <div style="float:left; width: 100%;" id="diagnosticComplicationsChroniquesChamp_5"></div> 
+					       </th>
+					       
+					       <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
+	                          <div style="float:left; width: 100%;" id="diagnosticComplicationsChroniquesChamp_6"></div> 
+					       </th>
+					       
+			             </tr>
+			             
+			             <tr style="width:100%;">
+			             
+			               <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
+	                          <div style="float:left; width: 100%;" id="diagnosticComplicationsChroniquesChamp_7"></div> 
+					       </th>
+					       
+					       <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
+	                          <div style="float:left; width: 100%;" id="diagnosticComplicationsChroniquesChamp_8"></div> 
+					       </th>
+					       
+					       <th style="width:33%; padding-right: 5px; vertical-align: top;"> 
+	                          <div style="float:left; width: 100%;" id="diagnosticComplicationsChroniquesChamp_9"></div> 
+					       </th>
+					       
+			             </tr>
+			             
+	                   </table>
+	                   <table style="width:100%;">
+				         <tr style="width:100%;">
+					       <th style="width:33%; height: 10px;"> 
+					         <img style='cursor: pointer; float: left; margin-right: 10px;' onclick="enleverComplicationChronique();" id="enleverComplicationChroniqueBouton" src='../images_icons/moin-green.png' />
+					         <img style='cursor: pointer; float: left;' onclick="ajouterComplicationChronique();" id="ajouterComplicationChroniqueBouton" src='../images_icons/plus-green.png' />
+					       </th>
+					     </tr>
+					   </table>
+					   <?php echo $this->formRow($form->get('nbDiagnosticComplicationsChroniques'));?>
+					   <script> var nbChampDiagComplicationsChroniques = 0; ajouterComplicationChronique();</script>
+	                 
+	                 </div>
+                 
+                 </div>
+                 
                     
               </td>
+              
+              
+              <td style="width: 2%;"><div class="zoneInfosStyle barreVerticaleSeparateur"> </div></td>
+              
+              
+              <td style="width: 29%; background: re; padding-left: 25px; vertical-align: top;">
+                 <div style="display: none;" id="affichageChoixAutresDiagAutresASignaler">
+	                 <div class="titreZoneInfosStyle">&#10049; Autres &agrave; signaler </div>
+	                 
+	                 <div class="zoneInfosStyle titreDiagnosticDuJourStyle">
+	                   <table style="width:100%;">
+				         <tr style="width:100%;" class="designHistoireMaladie">
+				           <th style="width:100%; padding-right: 8px; vertical-align: top;" > 
+	                         <?php echo $this->formRow($form->get('diagnosticDuJourConsultation'));?>
+					       </th>
+			             </tr>
+	                   </table>
+	                 </div>
+                 </div>
+              </td>
+              
+              
            </tr>
         </table>
         
@@ -1647,7 +1778,6 @@ echo $this->form()->openTag($form); ?>
                  <!--********************* CHARGEMENT DES DONNEES  ************************-->
                  
                  <script> 
-                   //ValiderOrdonnance();
 
                    var myArrayMedicament = [''];
                    var myArrayForme = [''];
@@ -1682,7 +1812,7 @@ echo $this->form()->openTag($form); ?>
 
      <!--*7*-->
      <div style='font-family: police2;font-size: 17px; font-weight: bold;'>Autres (Transfert / Hospitalisation / Rendez-Vous)</div>
-       <div style="max-height: 480px;">
+       <div style="max-height: 430px;">
 
 
          <!--  **************** NOUVELLE ACCORDEON *********************  -->
@@ -1770,8 +1900,8 @@ echo $this->form()->openTag($form); ?>
          <tr>
             <td style="background-color: #eeeeee; height: 40px;width: 100%; ">
               <p style="text-align: center;"> 
-                <button id="annuler2" style="font-family: police2;font-size: 18px; font-weight: bold;"> Annuler </button>
-                <button name="terminerCons" id="terminerCons" style="font-family: police2;font-size: 18px; font-weight: bold;"> Terminer </button> 
+                <button id="annulerCons"  style="font-family: police2; font-size: 18px; font-weight: bold;"> Annuler  </button>
+                <button id="terminerCons" style="font-family: police2; font-size: 18px; font-weight: bold;"> Terminer </button> 
               </p>
             </td>
          </tr>
@@ -1779,7 +1909,7 @@ echo $this->form()->openTag($form); ?>
 
           
 <!-- POP UP pour Confirmation Annulation -->
-<div id="confirmation2" title="Confirmation de l'annulation" style="display:none;">
+<div id="confirmationAnnulation" title="Confirmation de l'annulation" style="display:none;">
    <p style="font-size: 16px;">
    <span style="float:left; margin:0 0px 20px 0; ">
       <img src="<?php echo $this->basePath().'/images_icons/warning_16.png';?>" />
@@ -1789,21 +1919,18 @@ echo $this->form()->openTag($form); ?>
 </div>
 
 <div id="sauverLesInfosDesExamensRadioBioSaisisPopup" style="display: none;"></div>
+<div id="sauverLesInfosDesCrisesvasoOcclusivesPopup" style="display: none;"></div>
 
 <?php echo $this->form()->closeTag();?>
 </div>
 
-<script>
-$("#annuler2").click(function() {
-	confirmation(); 
-    $("#confirmation2").dialog('open');
-    
-    return false;
-}); 
-</script>
 
-
-
+<!-- POP UP pour Ajouter les autres crises vaso-occlusives -->
+<div id="autresInfosCrisesVasOcclusives" title="Autres crises vaso-occlusives" style="display: none;" align="center" >
+    <div id="popupInfosCrisesVasOcclusives" class="zoneInfosStyle zoneInfosCrisesVasOcclusives" style="width: 98%; background: re;"> 
+       
+    </div>
+</div>
 
 
 

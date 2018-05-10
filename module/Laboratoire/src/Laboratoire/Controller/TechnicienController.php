@@ -3614,6 +3614,19 @@ class TechnicienController extends AbstractActionController {
 	    return $html;
 	}
 	
+	protected function getResultatsLDH($iddemande){
+		$resultat = $this->getResultatDemandeAnalyseTable()->getValeursLDH($iddemande);
+		$html ="";
+		if($resultat){
+			$html .=
+			"<script>
+	    	    $('#type_materiel_ldh').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
+	    	    $('#valeur_ldh').val('".$resultat['valeur_ldh']."');
+	    	 </script>";
+		}
+		return $html;
+	}
+	
 	protected function getResultatsLipidesTotaux($iddemande){
 	    $resultat = $this->getResultatDemandeAnalyseTable()->getValeursLipidesTotaux($iddemande);
 	    $html ="";
@@ -3801,7 +3814,9 @@ class TechnicienController extends AbstractActionController {
 	        $html .=
 	        "<script>
 	            $('#type_materiel_proteinurie').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
-	    	    $('#proteinurie').val('".$resultat['proteinurie']."');
+	    	    $('#proteinurie_1').val('".$resultat['proteinurie_1']."');
+	    	    $('#proteinurie_2').val('".$resultat['proteinurie_2']."');
+	    	    $('#proteinurie_g24h').val('".$resultat['proteinurie_g24h']."');				
 	    	 </script>";
 	    }
 	    return $html;
@@ -4038,6 +4053,20 @@ class TechnicienController extends AbstractActionController {
 	    return $html;
 	}
 	
+	protected function getResultatsHIV($iddemande){
+		$resultat = $this->getResultatDemandeAnalyseTable()->getValeursHIV($iddemande);
+		$html ="";
+		if($resultat){
+			$html .=
+			"<script>
+	            $('#type_materiel_hiv').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
+	    	    $('#hiv').val('".$resultat['hiv']."');
+	    	    $('#hiv_typage').val('".$resultat['hiv_typage']."');
+	    	 </script>";
+		}
+		return $html;
+	}
+	
 	//***************** ========== RECUPERER UNE ANALYSE ========== ***************
 	//***************** ========== RECUPERER UNE ANALYSE ========== ***************
 	//***************** ========== RECUPERER UNE ANALYSE ========== ***************
@@ -4132,11 +4161,13 @@ class TechnicienController extends AbstractActionController {
 		if($analyse['Idanalyse'] == 61){ $html .= $this->aslo_61(); $html .= $this->getResultatsAslo($iddemande); }
 		if($analyse['Idanalyse'] == 62){ $html .= $this->widal_62(); $html .= $this->getResultatsWidal($iddemande); }
 		if($analyse['Idanalyse'] == 63){ $html .= $this->ag_hbs_63(); $html .= $this->getResultatsAgHbs($iddemande); }
-		if($analyse['Idanalyse'] == 64){ $html .= $this->hiv_64(); }
+		if($analyse['Idanalyse'] == 64){ $html .= $this->hiv_64(); $html .= $this->getResultatsHIV($iddemande); }
 		if($analyse['Idanalyse'] == 65){ $html .= $this->pv_65(); }
 		if($analyse['Idanalyse'] == 66){ $html .= $this->ecbu_66(); }
 		if($analyse['Idanalyse'] == 67){ $html .= $this->pus_67(); }
 		if($analyse['Idanalyse'] == 68){ $html .= $this->typage_hemoglobine_68();  $html .= $this->getResultatsTypageHemoglobine($iddemande); }
+		
+		if($analyse['Idanalyse'] == 70){ $html .= $this->ldh_70();  $html .= $this->getResultatsLDH($iddemande); }
 		
 		
 		$html .= "</table>";
@@ -4465,6 +4496,15 @@ class TechnicienController extends AbstractActionController {
 	            $this->getResultatDemandeAnalyseTable()->addResultatDemandeAnalyse($iddemande, $idemploye);
 	            $donneesExiste = $this->getResultatDemandeAnalyseTable()->addValeursAgHbs($tab, $iddemande);
 	    }
+	    else
+	        if($idanalyse == 64){
+	        	$this->getResultatDemandeAnalyseTable()->addResultatDemandeAnalyse($iddemande, $idemploye);
+	        	$donneesExiste = $this->getResultatDemandeAnalyseTable()->addValeursHIV($tab, $iddemande);
+	    }
+	    
+	    
+	    
+	    
 	    
 	    
 	    
@@ -4474,8 +4514,15 @@ class TechnicienController extends AbstractActionController {
 	        if($idanalyse == 68){
 	            $this->getResultatDemandeAnalyseTable()->addResultatDemandeAnalyse($iddemande, $idemploye);
 	            $donneesExiste = $this->getResultatDemandeAnalyseTable()->addValeursTypageHemoglobine($tab, $iddemande);
-	        }
+	    }
 	    
+
+	    else
+	        if($idanalyse == 70){
+	        	$this->getResultatDemandeAnalyseTable()->addResultatDemandeAnalyse($iddemande, $idemploye);
+	        	$donneesExiste = $this->getResultatDemandeAnalyseTable()->addValeursLDH($tab, $iddemande);
+	    }
+	        
 	    $donnees = array($iddemande, $donneesExiste);
 	    $this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );
 	    return $this->getResponse ()->setContent ( Json::encode ( $donnees ) );
@@ -4589,11 +4636,13 @@ class TechnicienController extends AbstractActionController {
 			if($liste['Idanalyse'] == 61){ $html .= $this->aslo_61();  $html .= $this->getResultatsAslo($liste['iddemande']); }
 			if($liste['Idanalyse'] == 62){ $html .= $this->widal_62(); $html .= $this->getResultatsWidal($liste['iddemande']); }
 			if($liste['Idanalyse'] == 63){ $html .= $this->ag_hbs_63(); $html .= $this->getResultatsAgHbs($liste['iddemande']); }
-			if($liste['Idanalyse'] == 64){ $html .= $this->hiv_64(); }
+			if($liste['Idanalyse'] == 64){ $html .= $this->hiv_64(); $html .= $this->getResultatsHIV($liste['iddemande']); }
 			if($liste['Idanalyse'] == 65){ $html .= $this->pv_65(); }
 			if($liste['Idanalyse'] == 66){ $html .= $this->ecbu_66(); }
 			if($liste['Idanalyse'] == 67){ $html .= $this->pus_67(); }
 			if($liste['Idanalyse'] == 68){ $html .= $this->typage_hemoglobine_68();  $html .= $this->getResultatsTypageHemoglobine($liste['iddemande']); }
+			
+			if($liste['Idanalyse'] == 70){ $html .= $this->ldh_70();  $html .= $this->getResultatsLDH($liste['iddemande']); }
 			
 			
 			$tabAnalyses[] = $liste['Idanalyse'];
@@ -4989,7 +5038,12 @@ class TechnicienController extends AbstractActionController {
 	                $this->getResultatDemandeAnalyseTable()->addResultatDemandeAnalyse($iddemande, $idemploye);
 	                $donneesExiste = $this->getResultatDemandeAnalyseTable()->addValeursAgHbs($tab, $iddemande);
 	        }
-	        
+	        else
+	            if($idanalyse == 64){
+	            	$tab = $tableau[$idanalyse];
+	            	$this->getResultatDemandeAnalyseTable()->addResultatDemandeAnalyse($iddemande, $idemploye);
+	            	$donneesExiste = $this->getResultatDemandeAnalyseTable()->addValeursHIV($tab, $iddemande);
+	        }
 	        
 	        
 	        
@@ -5000,6 +5054,13 @@ class TechnicienController extends AbstractActionController {
 	                $tab = $tableau[$idanalyse];
 	                $this->getResultatDemandeAnalyseTable()->addResultatDemandeAnalyse($iddemande, $idemploye);
 	                $donneesExiste = $this->getResultatDemandeAnalyseTable()->addValeursTypageHemoglobine($tab, $iddemande);
+	        }
+	        
+	        else
+	            if($idanalyse == 70){
+	            	$tab = $tableau[$idanalyse];
+	            	$this->getResultatDemandeAnalyseTable()->addResultatDemandeAnalyse($iddemande, $idemploye);
+	            	$donneesExiste = $this->getResultatDemandeAnalyseTable()->addValeursLDH($tab, $iddemande);
 	        }
 	        
 	    }
@@ -5144,6 +5205,8 @@ class TechnicienController extends AbstractActionController {
 	                if($tableauDonnees[$j]['Idanalyse'] == 66){ $html .= $this->ecbu_66(); }
 	                if($tableauDonnees[$j]['Idanalyse'] == 67){ $html .= $this->pus_67(); }
 	                if($tableauDonnees[$j]['Idanalyse'] == 68){ $html .= $this->typage_hemoglobine_68(); } 
+	                
+	                if($tableauDonnees[$j]['Idanalyse'] == 70){ $html .= $this->ldh_70(); }
 	                
 					
 	                $html .="</table></td></tr>";
@@ -5356,6 +5419,7 @@ class TechnicienController extends AbstractActionController {
 	                if($tableauDonnees[$j]['Idanalyse'] == 67){ $html .= $this->pus_67(); }
 	                if($tableauDonnees[$j]['Idanalyse'] == 68){ $html .= $this->typage_hemoglobine_68(); }
 	                 
+	                if($tableauDonnees[$j]['Idanalyse'] == 70){ $html .= $this->ldh_70(); }
 	                
 	                
 	                $html .="</table></td></tr>";
@@ -5586,6 +5650,7 @@ class TechnicienController extends AbstractActionController {
 	                    if($tableauDonnees[$j]['Idanalyse'] == 67){ $html .= $this->pus_67(); }
 	                    if($tableauDonnees[$j]['Idanalyse'] == 68){ $html .= $this->typage_hemoglobine_68(); }
 	                     
+	                    if($tableauDonnees[$j]['Idanalyse'] == 70){ $html .= $this->ldh_70(); }
 	                    
 	                    
 	                    $html .="</table></td></tr>";
@@ -7607,7 +7672,13 @@ class TechnicienController extends AbstractActionController {
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 55%;'><label class='lab1'><span style='font-weight: bold; '> Prot&eacute;inurie <input id='proteinurie' type='number' step='any' tabindex='2'> </span></label></td>";
+	    $html .= "  <td style='width: 55%;'><label class='lab1'><span style=''> <input id='proteinurie_1' style='margin-right: 5px;' type='number' step='any' tabindex='2'> g/l <input id='proteinurie_2' style='margin-left: 30px;' type='number' step='any' tabindex='2'> </span></label></td>";
+	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'> l </label></td>";
+	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'>  </label></td>";
+	    $html .= "</tr>";
+	    
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 55%;'><label class='lab1'><span style='font-weight: bold; '> <input id='proteinurie_g24h' type='number' step='any' tabindex='2' readonly> </span></label></td>";
 	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'> g/24H </label></td>";
 	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> <  0,15 g/24H </label></td>";
 	    $html .= "</tr>";
@@ -8166,9 +8237,9 @@ class TechnicienController extends AbstractActionController {
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    	  
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 55%;'><label class='lab1'><span style='font-weight: bold; '> HIV <select id='hiv' > <option >  </option> <option value='positif' >Positif</option> <option value='negatif' >N&eacute;gatif</option> </select> </span></label></td>";
-	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'>  </label></td>";
-	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'>  </label></td>";
+	    $html .= "  <td style='width: 35%;'><label class='lab1'><span style='font-weight: bold; '> HIV <select id='hiv' > <option >  </option> <option value='Positif' >Positif</option> <option value='Negatif' >N&eacute;gatif</option> </select> </span></label></td>";
+	    $html .= "  <td style='width: 35%;'><label class='lab2' style='padding-top: 5px;'> <span style='float: left; '> Typage </span> <select id='hiv_typage' style='width: 120px;'> <option >  </option> <option value='hiv_1' >HIV 1</option> <option value='hiv_2' >HIV 2</option>  <option value='indetermine' >Ind&eacute;termin&eacute;</option> </select> </label></td>";
+	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 40%;'>  </label></td>";
 	    $html .= "</tr>";
 	
 	    $html .= "</table> </td> </tr>";
@@ -8295,6 +8366,35 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "</table> </td> </tr>";
 	
 	    return $html;
+	}
+	
+	/**
+	 * analyse 70
+	 */
+	public function ldh_70(){
+		$html  = "<tr> <td align='center'>";
+		$html .= "<table style='width: 100%;'>";
+	
+		//POUR LE NOM DU TYPE DE MATERIEL UTILISE
+		$html .= "<tr class='ligneAnanlyse labelTypeMateriel' style='width: 100%; font-family: times new roman; font-size: 15px; margin-top: -45px;'>";
+		$html .= "  <td style='width: 55%;'> <label> Mat&eacute;riel utilis&eacute;</label> </td>";
+		$html .= "  <td colspan='2' style='width: 35%;'> </td>";
+		$html .= "</tr>";
+		$html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
+		$html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_ldh' > </div> </td>";
+		$html .= "  <td colspan='2' style='width: 45%;'> </td>";
+		$html .= "</tr>";
+		//POUR LE NOM DU TYPE DE MATERIEL UTILISE
+		 
+		$html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+		$html .= "  <td style='width: 55%;'><label class='lab1' ><span style='font-weight: bold; '> ldh <input id='valeur_ldh' type='number' step='any'> </span></label></td>";
+		$html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'> UI/l </label></td>";
+		$html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> (324 - 1029)  </label></td>";
+		$html .= "</tr>";
+	
+		$html .= "</table> </td> </tr>";
+	
+		return $html;
 	}
 	
 	

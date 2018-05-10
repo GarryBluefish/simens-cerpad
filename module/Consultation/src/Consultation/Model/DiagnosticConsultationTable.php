@@ -34,7 +34,7 @@ class DiagnosticConsultationTable {
 		$diagnosticConsultation = array();
 		$diagnosticConsultation['diagnosticDuJourConsultation'] = $tabDonnees['diagnosticDuJourConsultation'];
 		
-		if(!$this->array_empty($diagnosticConsultation)){
+		if(!$this->array_empty($diagnosticConsultation) && array_key_exists('choix_diag_autres_a_signaler', $tabDonnees)){
 			$diagnosticConsultation['idcons'] = $tabDonnees['idcons'];
 			$diagnosticConsultation['idmedecin'] = $idmedecin;
 			$this->tableGateway->insert($diagnosticConsultation);
@@ -55,7 +55,9 @@ class DiagnosticConsultationTable {
 			
 			$idcomplicationaigue = $tabDonnees['diagnosticComplicationsAiguesChamp_'.$i];
 			
-			if($idcomplicationaigue && !$this->getComplicationsAiguesAvecIdconsIdcomp($tabDonnees['idcons'], $idcomplicationaigue)){
+			if(     $idcomplicationaigue 
+			    && !$this->getComplicationsAiguesAvecIdconsIdcomp($tabDonnees['idcons'], $idcomplicationaigue) 
+			    &&  array_key_exists('choix_diag_complications_aigues', $tabDonnees)){
 				$complicationsAigues = array();
 				$complicationsAigues['idcons'] = $tabDonnees['idcons'];
 				$complicationsAigues['idmedecin'] = $idmedecin;
@@ -100,7 +102,9 @@ class DiagnosticConsultationTable {
 				
 			$idcomplicationchronique = $tabDonnees['diagnosticComplicationsChroniquesChamp_'.$i];
 				
-			if($idcomplicationchronique && !$this->getComplicationsChroniquesAvecIdconsIdcomp($tabDonnees['idcons'], $idcomplicationchronique)){
+			if(     $idcomplicationchronique 
+			    && !$this->getComplicationsChroniquesAvecIdconsIdcomp($tabDonnees['idcons'], $idcomplicationchronique)
+		        &&  array_key_exists('choix_diag_complications_chroniques', $tabDonnees) ){
 				$complicationsChroniques = array();
 				$complicationsChroniques['idcons'] = $tabDonnees['idcons'];
 				$complicationsChroniques['idmedecin'] = $idmedecin;
