@@ -32,6 +32,8 @@ class ConsultationController extends AbstractActionController {
 	protected $examenTable;
 	protected $facturationTable;
 	protected $codagePrelevement;
+	protected $ordonnanceTable;
+	protected $ordonConsommableTable;
 	
 	public function getConsultationTable() {
 		if (! $this->consultation) {
@@ -153,6 +155,21 @@ class ConsultationController extends AbstractActionController {
 		return $this->codagePrelevement;
 	}
 	
+	public function getOrdonnanceTable() {
+		if (! $this->ordonnanceTable) {
+			$sm = $this->getServiceLocator ();
+			$this->ordonnanceTable = $sm->get ( 'Consultation\Model\OrdonnanceTable' );
+		}
+		return $this->ordonnanceTable;
+	}
+	
+	public function getOrdonConsommableTable() {
+		if (! $this->ordonConsommableTable) {
+			$sm = $this->getServiceLocator ();
+			$this->ordonConsommableTable = $sm->get ( 'Consultation\Model\OrdonConsommableTable' );
+		}
+		return $this->ordonConsommableTable;
+	}
 	//=============================================================================================
 	//---------------------------------------------------------------------------------------------
 	//=============================================================================================
@@ -1015,8 +1032,71 @@ class ConsultationController extends AbstractActionController {
 		/** Complications chroniques **/
 		$this->getDiagnosticConsultationTable()->insertComplicationsChroniques($tabDonnees, $idmedecin);
 		
+
 		
 		
+				
+		/**
+		 *POUR LES TRAITEMENTS MEDICAMENTEUX --- POUR LES TRAITEMENTS MEDICAMENTEUX
+		 *POUR LES TRAITEMENTS MEDICAMENTEUX --- POUR LES TRAITEMENTS MEDICAMENTEUX
+		 *POUR LES TRAITEMENTS MEDICAMENTEUX --- POUR LES TRAITEMENTS MEDICAMENTEUX
+		 */
+		
+		/**** MEDICAUX ****/
+		/**** MEDICAUX ****/
+		$dureeTraitement = $this->params()->fromPost('duree_traitement_ord');
+		$donnees = array('id_cons' => $tabDonnees['idcons'], 'duree_traitement' => $dureeTraitement);
+		
+		$Consommable = $this->getOrdonConsommableTable();
+		$tab = array();
+		$j = 1;
+		
+		$nomMedicament = "";
+		$formeMedicament = "";
+		$quantiteMedicament = "";
+		for($i = 1 ; $i < 10 ; $i++ ){
+			if($this->params()->fromPost("medicament_0".$i)){
+		
+				$nomMedicament = $this->params()->fromPost("medicament_0".$i);
+				$formeMedicament = $this->params()->fromPost("forme_".$i);
+				$quantiteMedicament = $this->params()->fromPost("quantite_".$i);
+		
+				if($this->params()->fromPost("medicament_0".$i)){
+		
+					$result = $Consommable->getMedicamentByName($this->params()->fromPost("medicament_0".$i))['ID_MATERIEL'];
+		
+					if($result){
+						$tab[$j++] = $result;
+						$tab[$j++] = $formeMedicament; $Consommable->addFormes($formeMedicament);
+						$tab[$j++] = $this->params()->fromPost("nb_medicament_".$i);
+						$tab[$j++] = $quantiteMedicament; $Consommable->addQuantites($quantiteMedicament);
+					} else {
+						$idMedicaments = $Consommable->addMedicaments($nomMedicament);
+						$tab[$j++] = $idMedicaments;
+						$tab[$j++] = $formeMedicament; $Consommable->addFormes($formeMedicament);
+						$tab[$j++] = $this->params()->fromPost("nb_medicament_".$i);
+						$tab[$j++] = $quantiteMedicament; $Consommable->addQuantites($quantiteMedicament);
+					}
+				}
+		
+			}
+		}
+		
+		/*Mettre a jour la duree du traitement de l'ordonnance*/
+		$idOrdonnance = $this->getOrdonnanceTable()->updateOrdonnance($tab, $donnees);
+		
+		/*Mettre a jour les medicaments*/
+		$resultat = $Consommable->updateOrdonConsommable($tab, $idOrdonnance, $nomMedicament);
+			
+		/*si aucun médicament n'est ajouté ($resultat = false) on supprime l'ordonnance*/
+		if($resultat == false){ $this->getOrdonnanceTable()->deleteOrdonnance($idOrdonnance);}
+		
+		/**
+		 * FIN FIN FIN POUR LES TRAITEMENTS MEDICAMENTEUX --- POUR LES TRAITEMENTS MEDICAMENTEUX
+		 * FIN FIN FIN POUR LES TRAITEMENTS MEDICAMENTEUX --- POUR LES TRAITEMENTS MEDICAMENTEUX
+		 */
+		
+				
 		
 		/**
 		 * HOSPITALISATION --- HOSPITALISATION --- HOSPITALISATION
@@ -1032,9 +1112,6 @@ class ConsultationController extends AbstractActionController {
 		
 		
 		
-		
-		
-
 		return $this->redirect ()->toRoute ('consultation', array ('action' => 'liste-consultations' ));
 	}
  
@@ -1329,6 +1406,28 @@ class ConsultationController extends AbstractActionController {
     	$infosSyntheseConsultation = $this->getDonneesExamenTable()->getSyntheseConsultation($idcons);
     	if($infosSyntheseConsultation){ $form->populateValues($infosSyntheseConsultation); }
     	
+    	
+
+    	/**
+    	 * Recupérer les demandes d'analyses
+    	 */
+    	/*
+    	 * MOTIFS DES DEMANDES D'EXAMENS
+    	*/
+    	$motifsExamensRadioDemandes = $this->getFacturationTable()->getMotifsExamensRadioDemandes($idcons);
+    	$motifsExamensBioDemandes   = $this->getFacturationTable()->getMotifsExamensBioDemandes($idcons);
+    	 
+    	 
+    	 
+    	/**
+    	 * Récupérer les résultats des demandes d'analyses radiologiques
+    	*/
+    	/*
+    	 * RESULTATS DES EXAMENS RADIOLOGIQUES
+    	*/
+    	$resultatExamenRadio = $this->getExamenTable()->getResultatExamenRadiologique($idcons);
+    	
+    	
     	/**
     	 * Recuperer le diagnostic
     	 */
@@ -1362,29 +1461,35 @@ class ConsultationController extends AbstractActionController {
     	}
     	
     	
-    	
     	/**
-    	 * Recupérer les demandes d'analyses
+    	 * Récupérer les informations sur le traitement médicamenteux
     	 */
+    	 
     	/*
-    	 * MOTIFS DES DEMANDES D'EXAMENS 
-    	 */
-    	$motifsExamensRadioDemandes = $this->getFacturationTable()->getMotifsExamensRadioDemandes($idcons);
-    	$motifsExamensBioDemandes   = $this->getFacturationTable()->getMotifsExamensBioDemandes($idcons);
-    	
-    	
+    	 * TRAITEMENT MEDICAMENTEUX --- TRAITEMENT MEDICAMENTEUX
+    	*/
+    	$listeMedicament = $this->getConsultationModConsTable()->listeDeTousLesMedicaments();
+    	$listeForme = $this->getConsultationModConsTable()->formesMedicaments();
+    	$listetypeQuantiteMedicament = $this->getConsultationModConsTable()->typeQuantiteMedicaments();
     	 
     	
-    	
-    	/**
-    	 * Récupérer les résultats des demandes d'analyses radiologiques 
-    	 */
     	/*
-    	 * RESULTATS DES EXAMENS RADIOLOGIQUES
-    	 */
-    	$resultatExamenRadio = $this->getExamenTable()->getResultatExamenRadiologique($idcons);
-    	
-    	
+    	 * INSTANTIATION DE L'ORDONNANCE
+    	*/
+    	$infoOrdonnance = $this->getOrdonnanceTable()->getOrdonnance($idcons);
+    	 
+    	if($infoOrdonnance) {
+    		$idOrdonnance = $infoOrdonnance->id_document;
+    		$duree_traitement = $infoOrdonnance->duree_traitement;
+    		//LISTE DES MEDICAMENTS PRESCRITS
+    		$listeMedicamentsPrescrits = $this->getOrdonnanceTable()->getMedicamentsParIdOrdonnance($idOrdonnance);
+    		$nbMedPrescrit = $listeMedicamentsPrescrits->count();
+    	}else{
+    		$nbMedPrescrit = null;
+    		$listeMedicamentsPrescrits =null;
+    		$duree_traitement = null;
+    	}
+    	 
     	
     	
     	
@@ -1434,18 +1539,6 @@ class ConsultationController extends AbstractActionController {
     	
     	
     	
-    	
-    	
-    	
-    	
-    	/*
-    	 * TRAITEMENT MEDICAMENTEUX --- TRAITEMENT MEDICAMENTEUX
-    	*/
-    	$listeMedicament = $this->getConsultationModConsTable()->listeDeTousLesMedicaments();
-    	$listeForme = $this->getConsultationModConsTable()->formesMedicaments();
-    	$listetypeQuantiteMedicament = $this->getConsultationModConsTable()->typeQuantiteMedicaments();
-    	
-		
 		
 		//FIN --- FIN --- FIN --- FIN --- FIN --- FIN --- FIN
 		//$timeend = microtime(true);
@@ -1489,7 +1582,10 @@ class ConsultationController extends AbstractActionController {
 				
 				'informations_parentales' => $informations_parentales,
 				'resultatExamenRadio' => $resultatExamenRadio,
-
+				
+				'nb_med_prescrit' => $nbMedPrescrit,
+				'liste_med_prescrit' => $listeMedicamentsPrescrits,
+				'duree_traitement' => $duree_traitement,
 		);
 
 	}
@@ -1577,6 +1673,70 @@ class ConsultationController extends AbstractActionController {
 		
 		/** Complications chroniques **/
 		$this->getDiagnosticConsultationTable()->insertComplicationsChroniques($tabDonnees, $idmedecin);
+		
+		
+		
+		/**
+		 *POUR LES TRAITEMENTS MEDICAMENTEUX --- POUR LES TRAITEMENTS MEDICAMENTEUX
+		 *POUR LES TRAITEMENTS MEDICAMENTEUX --- POUR LES TRAITEMENTS MEDICAMENTEUX
+		 *POUR LES TRAITEMENTS MEDICAMENTEUX --- POUR LES TRAITEMENTS MEDICAMENTEUX
+		 */
+		
+		/**** MEDICAUX ****/
+		/**** MEDICAUX ****/
+		$dureeTraitement = $this->params()->fromPost('duree_traitement_ord');
+		$donnees = array('id_cons' => $tabDonnees['idcons'], 'duree_traitement' => $dureeTraitement);
+		
+		$Consommable = $this->getOrdonConsommableTable();
+		$tab = array();
+		$j = 1;
+		
+		$nomMedicament = "";
+		$formeMedicament = "";
+		$quantiteMedicament = "";
+		for($i = 1 ; $i < 10 ; $i++ ){
+			if($this->params()->fromPost("medicament_0".$i)){
+		
+				$nomMedicament = $this->params()->fromPost("medicament_0".$i);
+				$formeMedicament = $this->params()->fromPost("forme_".$i);
+				$quantiteMedicament = $this->params()->fromPost("quantite_".$i);
+		
+				if($this->params()->fromPost("medicament_0".$i)){
+		
+					$result = $Consommable->getMedicamentByName($this->params()->fromPost("medicament_0".$i))['ID_MATERIEL'];
+		
+					if($result){
+						$tab[$j++] = $result;
+						$tab[$j++] = $formeMedicament; $Consommable->addFormes($formeMedicament);
+						$tab[$j++] = $this->params()->fromPost("nb_medicament_".$i);
+						$tab[$j++] = $quantiteMedicament; $Consommable->addQuantites($quantiteMedicament);
+					} else {
+						$idMedicaments = $Consommable->addMedicaments($nomMedicament);
+						$tab[$j++] = $idMedicaments;
+						$tab[$j++] = $formeMedicament; $Consommable->addFormes($formeMedicament);
+						$tab[$j++] = $this->params()->fromPost("nb_medicament_".$i);
+						$tab[$j++] = $quantiteMedicament; $Consommable->addQuantites($quantiteMedicament);
+					}
+				}
+		
+			}
+		}
+		
+		/*Mettre a jour la duree du traitement de l'ordonnance*/
+		$idOrdonnance = $this->getOrdonnanceTable()->updateOrdonnance($tab, $donnees);
+		
+		/*Mettre a jour les medicaments*/
+		$resultat = $Consommable->updateOrdonConsommable($tab, $idOrdonnance, $nomMedicament);
+			
+		/*si aucun médicament n'est ajouté ($resultat = false) on supprime l'ordonnance*/
+		if($resultat == false){ $this->getOrdonnanceTable()->deleteOrdonnance($idOrdonnance);}
+		
+		/**
+		 * POUR LES TRAITEMENTS MEDICAMENTEUX --- POUR LES TRAITEMENTS MEDICAMENTEUX
+		 * POUR LES TRAITEMENTS MEDICAMENTEUX --- POUR LES TRAITEMENTS MEDICAMENTEUX
+		 */
+		
+		
 		
 		
 		/**

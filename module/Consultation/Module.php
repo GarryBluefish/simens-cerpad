@@ -25,6 +25,10 @@ use Consultation\Model\ConsultationTable;
 use Consultation\Model\Consultation;
 use Consultation\Model\ExamenTable;
 use Consultation\Model\Examen;
+use Consultation\Model\OrdonnanceTable;
+use Consultation\Model\OrdonConsommableTable;
+use Consultation\Model\Ordonnance;
+use Consultation\Model\OrdonConsommable;
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface, ViewHelperProviderInterface {
 
@@ -152,6 +156,29 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 							return new TableGateway ( 'examen_imagerie', $dbAdapter, null, $resultSetPrototype );
 						},
 						
+						'Consultation\Model\OrdonnanceTable' => function ($sm) {
+							$tableGateway = $sm->get ( 'OrdonnanceTableGateway' );
+							$table = new OrdonnanceTable($tableGateway);
+							return $table;
+						},
+						'OrdonnanceTableGateway' => function ($sm) {
+							$dbAdapter = $sm->get ( 'Zend\Db\Adapter\Adapter' );
+							$resultSetPrototype = new ResultSet();
+							$resultSetPrototype->setArrayObjectPrototype ( new Ordonnance());
+							return new TableGateway ( 'ordonnance', $dbAdapter, null, $resultSetPrototype );
+						},
+						
+						'Consultation\Model\OrdonConsommableTable' => function ($sm) {
+							$tableGateway = $sm->get ( 'OrdonConsommableTableGateway' );
+							$table = new OrdonConsommableTable($tableGateway);
+							return $table;
+						},
+						'OrdonConsommableTableGateway' => function ($sm) {
+							$dbAdapter = $sm->get ( 'Zend\Db\Adapter\Adapter' );
+							$resultSetPrototype = new ResultSet();
+							$resultSetPrototype->setArrayObjectPrototype ( new OrdonConsommable());
+							return new TableGateway ( 'ordon_consommable', $dbAdapter, null, $resultSetPrototype );
+						},
 				)
 		);
 	}

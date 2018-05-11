@@ -1716,16 +1716,16 @@ function ajouterComplicationAigue(){
 	
 	$("#diagnosticComplicationsAiguesChamp_"+i).html("<label style='width: 100%; height:30px; text-align:left;'>" +
 			                                          " " +
-			                                          "<select name='diagnosticComplicationsAiguesChamp_"+i+"' style='font-size: 14.5px; width: 95%; margin-left: 5px;'>" +
+			                                          "<select name='diagnosticComplicationsAiguesChamp_"+i+"' class='diagnostCompAiguesSelectAD  diagnostCompAiguesSelectAD_"+i+"' onchange='desactActiveDiagComplicationsAiguesSelect(this.value);' style='font-size: 14.5px; width: 95%; margin-left: 5px;'>" +
 			                     					  "<option value=''></option>" +
-			                     					  "<option value='1'>An&eacute;mie aigue</option>" +
-			                     					  "<option value='2'>Pneumonie</option>" +
-			                     					  "<option value='3'>M&eacute;ningite</option>" +
-			                     					  "<option value='4'>Septic&eacute;mie</option>" +
-			                     					  "<option value='5'>Infection ost&eacute;o-articulaire</option>" +
-			                     					  "<option value='6'>Syndrome thoracique aigu</option>" +
-			                     					  "<option value='7'>Priapisme</option>" +
-			                     					  "<option value='8'>Vasculopathie C&eacute;r&eacute;brale</option>" +
+			                     					  "<option value='1' class='diagCA_1'>An&eacute;mie aigue</option>" +
+			                     					  "<option value='2' class='diagCA_2'>Pneumonie</option>" +
+			                     					  "<option value='3' class='diagCA_3'>M&eacute;ningite</option>" +
+			                     					  "<option value='4' class='diagCA_4'>Septic&eacute;mie</option>" +
+			                     					  "<option value='5' class='diagCA_5'>Infection ost&eacute;o-articulaire</option>" +
+			                     					  "<option value='6' class='diagCA_6'>Syndrome thoracique aigu</option>" +
+			                     					  "<option value='7' class='diagCA_7'>Priapisme</option>" +
+			                     					  "<option value='8' class='diagCA_8'>Vasculopathie C&eacute;r&eacute;brale</option>" +
 			                     					  "</select>" +
 			                     					  "<div style='color: green; font-size: 8px; font-weight: bold; float: right; margin-top: -13px; height: 10px;' title='supprimer' onclick='supprimerDiagnosticComplicationAigue("+i+")'> X </div>" +
 			                                         "</label>");
@@ -1763,6 +1763,8 @@ function supprimerDiagnosticComplicationAigue(id){
 	enleverComplicationAigue();
 }
 
+
+function desactActiveDiagComplicationsAiguesSelect(id){}
 
 /**
  * Complications chroniques
