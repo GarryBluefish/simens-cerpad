@@ -229,6 +229,7 @@
    }
     
     
+   var entreeValidation = 0;
    function nouvelUtilisateur(id){ 
 	
 		$("#titre").replaceWith("<div id='titre' style='font-family: police2; color: green; font-size: 20px; font-weight: bold; padding-left:20px;'><iS style='font-size: 25px;'>&curren;</iS> NOUVEL UTILISATEUR</div>");
@@ -248,6 +249,25 @@
 	        	     $('#listeRecherche').animate({
 	        	         height : 'toggle'
 	        	     },1000);
+	        	     
+	        	     
+	        	     
+	        	     
+	        	     if(entreeValidation == 0){
+            	    	 entreeValidation = 1;
+                         $('#enregistrer').click(function(){
+                        	 
+                        	 if($('#formListeUtilisateurs')[0].checkValidity() == true){
+                        		 //formulaire valide et envoi des données
+                        		 
+                        		 $('#enregistrer').attr('disabled', true); 
+                        		 $('#envoyerDonneesFormulaire').trigger('click');
+                	    	 }
+                	    
+                         });
+            	     }
+	        	     
+	        	     
 	        },
 	        error:function(e){console.log(e);alert("Une erreur interne est survenue!");},
 	        dataType: "html"

@@ -78,6 +78,7 @@ $(window).load(function () {
     <?php
     $form = $this->formUtilisateur;
     $form->setAttribute ( 'action', $this->url ( 'admin', array ('action' => 'utilisateurs') ));
+    $form->setAttribute('id','formListeUtilisateurs');
     $form->prepare ();
     echo $this->form ()->openTag ( $form );
     ?>
@@ -169,6 +170,7 @@ $(window).load(function () {
          <td style="width: 31%; padding-left: 30px;"> 
             <?php echo $this->formSubmit($form->get('annuler')); ?>
             <?php echo $this->formSubmit($form->get('enregistrer')); ?>
+            <button id="envoyerDonneesFormulaire" style="visibility: hidden;"></button> 
          </td> 
       </tr>
       
