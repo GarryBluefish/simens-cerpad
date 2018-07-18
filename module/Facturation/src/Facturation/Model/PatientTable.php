@@ -245,7 +245,7 @@ class PatientTable {
 		->from(array('pat' => 'patient')) ->columns(array('*'))
 		->join(array('pers' => 'personne'), 'pers.idpersonne = pat.idpersonne', array('Nom'=>'nom','Prenom'=>'prenom','Datenaissance'=>'date_naissance','Sexe'=>'sexe','Adresse'=>'adresse','Nationalite'=>'nationalite_actuelle', 'id'=>'idpersonne','Idpatient'=>'idpersonne'))
 		->join(array('dep' => 'depistage'), 'dep.idpatient = pat.idpersonne', array('*'))
-		->where( array ('typepatient' => 1, new NotIn ( 'pat.idpersonne', $subselect ) ) )
+		->where( array ('typepatient' => 1, 'valide' => 1, new NotIn ( 'pat.idpersonne', $subselect ) ) )
 		->order('nom ASC');
 		 
 		/* Data set length after filtering */
@@ -1246,36 +1246,6 @@ class PatientTable {
 			
 		$aColumns = array('numero_dossier','Nom','Prenom','Datenaissance','Adresse', 'Date', 'id', 'Idfacturation');
 			
-		/* Indexed column (used for fast and accurate table cardinality) */
-		$sIndexColumn = "id";
-			
-		/*
-		 * Paging
-		*/
-		$sLimit = array();
-		if ( isset( $_GET['iDisplayStart'] ) && $_GET['iDisplayLength'] != '-1' )
-		{
-			$sLimit[0] = $_GET['iDisplayLength'];
-			$sLimit[1] = $_GET['iDisplayStart'];
-		}
-			
-		/*
-		 * Ordering
-		*/
-		if ( isset( $_GET['iSortCol_0'] ) )
-		{
-			$sOrder = array();
-			$j = 0;
-			for ( $i=0 ; $i<intval( $_GET['iSortingCols'] ) ; $i++ )
-			{
-				if ( $_GET[ 'bSortable_'.intval($_GET['iSortCol_'.$i]) ] == "true" )
-				{
-					$sOrder[$j++] = $aColumns[ intval( $_GET['iSortCol_'.$i] ) ]."
-								 	".$_GET['sSortDir_'.$i];
-				}
-			}
-		}
-			
 		/*
 		 * SQL queries
 		* Liste des patients admis pour lesquels les demandes facturées ont déjà un bilan
@@ -1354,8 +1324,12 @@ class PatientTable {
 						$html .="<img style='display: inline; margin-right: 10%;' src='".$tabURI[0]."public/images_icons/voir2.png' title='d&eacute;tails'></a></infoBulleVue>";
 							
 						if(!$this->verifierExistanceDansTriPrelevement($aRow['Idbilan'])){
-							$html .= "<infoBulleVue> <a href='javascript:modifierBilan(".$aRow[ 'Idfacturation' ].");'>";
-							$html .="<img style='display: inline; margin-right: 10%;' src='".$tabURI[0]."public/images_icons/pencil_16.png' title='Modifier'></a></infoBulleVue>";
+							$html .="<a href='javascript:modifierBilan(".$aRow[ 'Idfacturation' ].");'>";
+							$html .="<img style='display: inline; margin-right: 15%;' src='".$tabURI[0]."public/images_icons/pencil_16.png' title='Modifier'></a>";
+							
+
+							$html .="<a id='suppBilan_".$aRow['Idbilan']."' href='javascript:supprimerBilan(".$aRow['Idbilan'].");'>";
+							$html .="<img src='".$tabURI[0]."public/images_icons/symbol_supprimer.png' title='Supprimer'></a>";
 						}
 							
 						//if(!$this->verifierExisteResultatFacturation($aRow[ 'Idfacturation' ])){
@@ -1881,6 +1855,112 @@ class PatientTable {
 		return $output;
 	}
 	
+	
+	//********** RECUPERER LA LISTE DES HISTORIQUES DES CONSULTATIONS  *********
+	//********** RECUPERER LA LISTE DES HISTORIQUES DES CONSULTATIONS  *********
+	public function getListeHistoriquesConsultations(){
+	
+		$db = $this->tableGateway->getAdapter();
+			
+		$aColumns = array('numero_dossier', 'Nom','Prenom','Datenaissance','Sexe', 'Adresse', 'id');
+			
+		$dateDuJour = (new \DateTime ("now"))->format ( 'Y-m-d' );
+	
+		/*
+		 * SQL queries
+		* Liste des patients admis deja consultés les jours précédents par l'infirmier
+		*/
+		$sql = new Sql($db);
+		$sQuery = $sql->select()
+		->from(array('pat' => 'patient'))->columns(array('*'))
+		->join(array('pers' => 'personne'), 'pers.idpersonne = pat.idpersonne' , array('Nom'=>'nom','Prenom'=>'prenom','Datenaissance'=>'date_naissance','Sexe'=>'sexe','Adresse'=>'adresse','Nationalite'=>'nationalite_actuelle', 'id'=>'idpersonne', 'id2'=>'idpersonne') )
+		->join(array('cons' => 'consultation'), 'cons.idpatient = pat.idpersonne', array('Idcons' => 'idcons', 'Date' => 'date') )
+		->where(array('cons.date < ?' => $dateDuJour) )
+		->order('idcons ASC');
+			
+		/* Data set length after filtering */
+		$stat = $sql->prepareStatementForSqlObject($sQuery);
+		$rResultFt = $stat->execute();
+		$iFilteredTotal = count($rResultFt);
+			
+		$rResult = $rResultFt;
+
+		$output = array(
+				//"sEcho" => intval($_GET['sEcho']),
+				//"iTotalRecords" => $iTotal,
+				//"iTotalDisplayRecords" => $iFilteredTotal,
+				
+				"aaData" => array()
+		);
+		
+		/*
+		 * ADRESSE URL RELATIF
+		*/
+		$baseUrl = $_SERVER['REQUEST_URI'];
+		$tabURI  = explode('public', $baseUrl);
+			
+		/*
+		 * $Control pour convertir la date en franï¿½ais
+		*/
+		$Control = new DateHelper();
+		
+		/*
+		 * Prï¿½parer la liste
+		*/
+		foreach ( $rResult as $aRow )
+		{
+			$row = array();
+			for ( $i=0 ; $i<count($aColumns) ; $i++ )
+			{
+				if ( $aColumns[$i] != ' ' )
+				{
+					/* General output */
+					if ($aColumns[$i] == 'Nom'){
+						$row[] = "<div id='nomMaj'>".$aRow[ $aColumns[$i]]."</div>";
+					}
+	
+					else if ($aColumns[$i] == 'Prenom'){
+						$row[] = "<div>".$aRow[ $aColumns[$i]]."</div>";
+					}
+	
+					else if ($aColumns[$i] == 'Datenaissance') {
+							
+						$date_naissance = $aRow[ $aColumns[$i] ];
+						if($date_naissance){ $row[] = $Control->convertDate($aRow[ $aColumns[$i] ]); }else{ $row[] = null;}
+	
+					}
+	
+					else if ($aColumns[$i] == 'Adresse') {
+						$row[] = "<div class='adresseText' >".$aRow[ $aColumns[$i] ]."</div>";
+					}
+	
+					else if ($aColumns[$i] == 'Date') {
+						$row[] = $Control->convertDateTimeHm($aRow[ 'date_enregistrement' ]);
+					}
+	
+					else if ($aColumns[$i] == 'id') {
+						$html  ="<infoBulleVue>";
+						$html .="<img style='opacity: 0.2; margin-right: 12%;' src='".$tabURI[0]."public/images_icons/surveillante.png' ></infoBulleVue>";
+							
+						$html .="<infoBulleVue> <a href='".$tabURI[0]."public/infirmerie/visualiser-historique-consultation?idpatient=".$aRow[ 'id' ]."&idcons=".$aRow[ 'Idcons' ]."'>";
+						$html .="<img style='display: inline; margin-right: 17%;' src='".$tabURI[0]."public/images_icons/11modif.png' title='Modifier'></a></infoBulleVue>";
+	
+						$html .="<infoBulleVue>";
+						$html .="<img style='display: inline;  margin-left: 5%; margin-right: 5%;' src='".$tabURI[0]."public/images_icons/tick_16.png' ></infoBulleVue>";
+							
+						$row[] = $html;
+					}
+	
+					else {
+						$row[] = $aRow[ $aColumns[$i] ];
+					}
+	
+				}
+			}
+			$output['aaData'][] = $row;
+		}
+		return $output;
+	}
 	
 	//FONCTION UTIOLISEE DANS LE MODULE DU BIOLOGISTE
 	//FONCTION UTIOLISEE DANS LE MODULE DU BIOLOGISTE

@@ -78,20 +78,6 @@ class BiologisteController extends AbstractActionController {
 	public function listeResultatsAnalysesAction() {
 	    $this->layout ()->setTemplate ( 'layout/biologiste' );
 	
- 	    //$info = $this->getResultatDemandeAnalyseTable()->getDemandeAnalysesAvecIddemande(768);
-// 	    $depistage = $this->getPatientTable()->getDepistagePatient(66);
-//  	    if($depistage->current()){
-//  	    	if($depistage->current()['typepatient'] == 1){
-//  	    		$infoPatient = $this->getPatientTable()->getPatient(66);
-//  	    		$codepatient = str_replace('E', 'I', $infoPatient->codepatient);
- 	    		
-//  	    		if($codepatient){ $this->getPatientTable()->updatePatientCodePatient(66, $codepatient); }else{ $this->getPatientTable()->updatePatientCodePatient(66, null); }
- 	    		
-//  	    		var_dump($codepatient); exit();
- 	    		
-//  	    	}
-//  	    }
-	    
 	    return new ViewModel ( );
 	}
 	
@@ -1387,6 +1373,11 @@ class BiologisteController extends AbstractActionController {
 	        }
 	        $html .= "<script> $('#type_materiel_nfs').val('".str_replace( "'", "\'",$resultat['type_materiel'] )."'); </script>";
 	        $html .= "<script> $('#commentaire_hemogramme').val('".str_replace( "'", "\'", $resultat['commentaire'] )."'); </script>";
+	    
+	        $html .=
+	        "<script>
+   	   	        $('.iconeValidationInterfaceVisual_1').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
+	        </script>";
 	    }
 	    return $html;
 	}
@@ -1400,6 +1391,8 @@ class BiologisteController extends AbstractActionController {
 	        	$('#type_materiel_gsrh_groupage').val('".str_replace( "'", "\'",$resultat['type_materiel'])."');	
 	            $('#groupe').val('".$resultat['groupe']."'); 
 	            $('#rhesus').val('".$resultat['rhesus']."');
+	            		
+   	   	        $('.iconeValidationInterfaceVisual_2').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	        </script>";
 	    }
 	    return $html;
@@ -1414,6 +1407,8 @@ class BiologisteController extends AbstractActionController {
 	            $('#type_materiel_recherche_antigene').val('".str_replace( "'", "\'",$resultat['type_materiel'])."');
 	            $('#antigene_d_faible').val('".$resultat['antigene_d_faible']."');
 	            $('#conclusion_antigene_d_faible').val('".str_replace( "'", "\'",$resultat['conclusion_antigene_d_faible'])."');
+	            		
+  	   	        $('.iconeValidationInterfaceVisual_3').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	        </script>";
 		}
 		return $html;
@@ -1433,6 +1428,8 @@ class BiologisteController extends AbstractActionController {
 	                   $('#titre_combs_direct').val('".$resultat['titre']."'); 
 	                }); 
 	            }
+	                   		
+  	   	        $('.iconeValidationInterfaceVisual_4').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	        </script>";
 	    }
 	    return $html;
@@ -1452,6 +1449,8 @@ class BiologisteController extends AbstractActionController {
 	                   $('#titre_combs_indirect').val('".$resultat['titre']."'); 
 	                }); 
 	            }
+	                   		
+  	   	        $('.iconeValidationInterfaceVisual_5').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	        </script>";
 	    }
 	    return $html;
@@ -1465,6 +1464,8 @@ class BiologisteController extends AbstractActionController {
 			"<script>
 	        	$('#type_materiel_test_demmel').val('".str_replace( "'", "\'",$resultat['type_materiel'])."');
 	            $('#test_demmel').val('".$resultat['valeur']."');
+	            		
+   	   	        $('.iconeValidationInterfaceVisual_8').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	        </script>";
 		}
 		return $html;
@@ -1484,6 +1485,8 @@ class BiologisteController extends AbstractActionController {
 	                 $('#titre_test_compatibilite').val('".$resultat['poche']."'); 
 	              }); 
 	            }
+	                 		
+     	        $('.iconeValidationInterfaceVisual_6').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	        </script>";
 	    }
 	    return $html;
@@ -1497,7 +1500,9 @@ class BiologisteController extends AbstractActionController {
 			"<script>
 	        	$('#type_materiel_vitesse_sedimentation').val('".str_replace( "'", "\'",$resultat['type_materiel'])."');
 	            $('#vitesse_sedimentation').val('".$resultat['valeur1']."');
-	            $('#vitesse_sedimentation_2').val('".$resultat['valeur2']."');		
+	            $('#vitesse_sedimentation_2').val('".$resultat['valeur2']."');	
+
+       	        $('.iconeValidationInterfaceVisual_7').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	        </script>";
 		}
 		return $html;
@@ -1511,6 +1516,8 @@ class BiologisteController extends AbstractActionController {
 	        "<script>
    	        	$('#type_materiel_taux_reticulocytes').val('".str_replace( "'", "\'",$resultat['type_materiel'])."');
 	            $('#taux_reticulocyte').val('".$resultat['taux_reticulocyte']."');
+	            		
+       	        $('.iconeValidationInterfaceVisual_9').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	        </script>";
 	    }
 	    return $html;
@@ -1526,7 +1533,9 @@ class BiologisteController extends AbstractActionController {
 	            $('#goutte_epaisse').val('".$resultat['goutte_epaisse']."');
 	            if('".$resultat['goutte_epaisse']."' == 'Positif'){ $('#goutte_epaisse_positif').toggle(true); $('#densite_parasitaire').val('".$resultat['densite_parasitaire']."'); }
 	            $('.ER_".$iddemande." #commentaire_goutte_epaisse').val('".str_replace( "'", "\'",$resultat['commentaire_goutte_epaisse'])."');		
-	        </script>";
+	        
+      	        $('.iconeValidationInterfaceVisual_10').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
+	         </script>";
 	    }
 	    return $html;
 	}
@@ -1542,6 +1551,8 @@ class BiologisteController extends AbstractActionController {
 	            $('#temps_quick_patient').val('".$resultat['temps_quick_patient']."');
 	            $('#taux_prothrombine_patient').val('".$resultat['taux_prothrombine_patient']."');
 	            $('#inr_patient').val('".$resultat['inr_patient']."');
+	            		
+      	        $('.iconeValidationInterfaceVisual_14').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	        </script>";
 	    }
 	    return $html;
@@ -1557,6 +1568,8 @@ class BiologisteController extends AbstractActionController {
 	        	$('#type_materiel_tca').val('".str_replace( "'", "\'",$resultat['type_materiel'])."');		
 	            $('#tca_patient').val('".$resultat['tca_patient']."');
 	            $('#temoin_patient').val('".$resultat['temoin_patient']."');
+	            		
+      	        $('.iconeValidationInterfaceVisual_15').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	        </script>";
 	    }
 	    return $html;
@@ -1571,6 +1584,8 @@ class BiologisteController extends AbstractActionController {
 	        "<script>
 	        	$('#type_materiel_fibrinemie').val('".str_replace( "'", "\'",$resultat['type_materiel'])."');		
 	            $('#fibrinemie').val('".$resultat['fibrinemie']."');
+	            		
+      	        $('.iconeValidationInterfaceVisual_16').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	        </script>";
 	    }
 	    return $html;
@@ -1584,6 +1599,8 @@ class BiologisteController extends AbstractActionController {
 	        "<script>
 	        	$('#type_materiel_temps_saignement').val('".str_replace( "'", "\'",$resultat['type_materiel'])."');		
 	            $('#temps_saignement').val('".$resultat['temps_saignement']."');
+	            		
+     	        $('.iconeValidationInterfaceVisual_17').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	        </script>";
 	    }
 	    return $html;
@@ -1597,6 +1614,8 @@ class BiologisteController extends AbstractActionController {
 			"<script>
 	            $('#type_materiel_facteur_8').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	    	    $('#facteur_8').val('".$resultat['facteur_8']."');
+	    	    		
+    	        $('.iconeValidationInterfaceVisual_18').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 		}
 		return $html;
@@ -1610,6 +1629,8 @@ class BiologisteController extends AbstractActionController {
 			"<script>
 	            $('#type_materiel_facteur_9').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	    	    $('#facteur_9').val('".$resultat['facteur_9']."');
+	    	    		
+    	        $('.iconeValidationInterfaceVisual_19').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 		}
 		return $html;
@@ -1623,6 +1644,8 @@ class BiologisteController extends AbstractActionController {
 			"<script>
 	            $('#type_materiel_dimeres').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	    	    $('#d_dimeres').val('".$resultat['d_dimeres']."');
+	    	    		
+	    	    $('.iconeValidationInterfaceVisual_20').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 		}
 		return $html;
@@ -1638,6 +1661,8 @@ class BiologisteController extends AbstractActionController {
                 $('#type_materiel_glycemie').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	            $('#glycemie_1').val('".$resultat['glycemie_1']."');
      	        $('#glycemie_2').val('".$resultat['glycemie_2']."');
+     	        		
+     	        $('.iconeValidationInterfaceVisual_21').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	        </script>";
 	    }
 	    return $html;
@@ -1651,6 +1676,8 @@ class BiologisteController extends AbstractActionController {
 	        "<script>
                 $('#type_materiel_creatininemie').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	            $('#creatininemie').val('".$resultat['creatininemie']."');
+	            		
+	   	        $('.iconeValidationInterfaceVisual_22').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	        </script>";
 	    }
 	    return $html;
@@ -1665,6 +1692,8 @@ class BiologisteController extends AbstractActionController {
 	        	$('#type_materiel_azotemie').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');		
 	            $('#uree_sanguine').val('".$resultat['valeur']."');
 	            $('#uree_sanguine_mmol').val('".$resultat['valeur_mmol']."');
+	            		
+	   	        $('.iconeValidationInterfaceVisual_23').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	        </script>";
 	    }
 	    return $html;
@@ -1679,6 +1708,8 @@ class BiologisteController extends AbstractActionController {
 	        	$('#type_materiel_acide_urique').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	            $('#acide_urique').val('".$resultat['acide_urique']."');
 	            $('#acide_urique_umol').val('".$resultat['acide_urique_umol']."');
+	            		
+	   	        $('.iconeValidationInterfaceVisual_24').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	        </script>";
 	    }
 	    return $html;
@@ -1693,6 +1724,8 @@ class BiologisteController extends AbstractActionController {
 	            $('.ER_".$iddemande." #type_materiel_cholesterol_total').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	            $('.ER_".$iddemande." #cholesterol_total_1').val('".$resultat['cholesterol_total_1']."');
                 $('.ER_".$iddemande." #cholesterol_total_2').val('".$resultat['cholesterol_total_2']."');
+                		
+    	        $('.ER_".$iddemande." .iconeValidationInterfaceVisual_25').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	        </script>";
 		}
 		return $html;
@@ -1707,6 +1740,8 @@ class BiologisteController extends AbstractActionController {
 	        	$('.ER_".$iddemande." #type_materiel_triglycerides').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	    	    $('.ER_".$iddemande." #triglycerides_1').val('".$resultat['triglycerides_1']."');
 	    	    $('.ER_".$iddemande." #triglycerides_2').val('".$resultat['triglycerides_2']."');
+	    	    		
+    	        $('.ER_".$iddemande." .iconeValidationInterfaceVisual_26').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	</script>";
 		}
 		return $html;
@@ -1721,6 +1756,8 @@ class BiologisteController extends AbstractActionController {
 	        	$('.ER_".$iddemande." #type_materiel_cholesterol_HDL').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	    	    $('.ER_".$iddemande." #cholesterol_HDL_1').val('".$resultat['cholesterol_HDL_1']."');
 	    	    $('.ER_".$iddemande." #cholesterol_HDL_2').val('".$resultat['cholesterol_HDL_2']."');
+	    	    		
+     	        $('.ER_".$iddemande." .iconeValidationInterfaceVisual_27').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	</script>";
 		}
 		return $html;
@@ -1735,6 +1772,8 @@ class BiologisteController extends AbstractActionController {
 	        	$('.ER_".$iddemande." #type_materiel_cholesterol_LDL').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	    	    $('.ER_".$iddemande." #cholesterol_LDL_1').val('".$resultat['cholesterol_LDL_1']."');
 	    	    $('.ER_".$iddemande." #cholesterol_LDL_2').val('".$resultat['cholesterol_LDL_2']."');
+	    	    		
+    	        $('.ER_".$iddemande." .iconeValidationInterfaceVisual_28').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 		}
 		return $html;
@@ -1750,6 +1789,8 @@ class BiologisteController extends AbstractActionController {
 	    	    $('#sodium_sanguin').val('".$resultat['sodium_sanguin']."');
 	    	    $('#potassium_sanguin').val('".$resultat['potassium_sanguin']."');
 	    	    $('#chlore_sanguin').val('".$resultat['chlore_sanguin']."');
+	    	    		
+    	        $('.ER_".$iddemande." .iconeValidationInterfaceVisual_31').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -1764,6 +1805,8 @@ class BiologisteController extends AbstractActionController {
 	         	$('#type_materiel_calcemie').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');			
 	    	    $('#calcemie').val('".$resultat['calcemie']."');
 	    	    $('#calcemie_mmol').val('".$resultat['calcemie_mmol']."');
+	    	    		
+    	        $('.iconeValidationInterfaceVisual_32').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -1777,6 +1820,8 @@ class BiologisteController extends AbstractActionController {
 	        "<script>
   	            $('#type_materiel_magnesemie').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');			
 	    	    $('#magnesemie').val('".$resultat['magnesemie']."');
+	    	    		
+    	        $('.iconeValidationInterfaceVisual_33').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -1791,6 +1836,8 @@ class BiologisteController extends AbstractActionController {
   	            $('#type_materiel_phosphoremie').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');			
 	    	    $('#phosphoremie').val('".$resultat['phosphoremie']."');
 	    	    $('#phosphoremie_mmol').val('".$resultat['phosphoremie_mmol']."');
+	    	    		
+    	        $('.iconeValidationInterfaceVisual_34').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -1804,6 +1851,8 @@ class BiologisteController extends AbstractActionController {
 	        "<script>
 	            $('.ER_".$iddemande." #type_materiel_tgo_asat').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	    	    $('.ER_".$iddemande." #tgo_asat').val('".$resultat['tgo_asat']."');
+	    	    		
+     	        $('.ER_".$iddemande." .iconeValidationInterfaceVisual_35').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -1817,6 +1866,8 @@ class BiologisteController extends AbstractActionController {
 	        "<script>
 	            $('.ER_".$iddemande." #type_materiel_tgp_alat').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	    	    $('.ER_".$iddemande." #tgp_alat').val('".$resultat['tgp_alat']."');
+	    	    		
+     	        $('.ER_".$iddemande." .iconeValidationInterfaceVisual_36').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -1830,6 +1881,8 @@ class BiologisteController extends AbstractActionController {
 	        "<script>
 	        	$('#type_materiel_phosphatage_alcaline').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');		
 	    	    $('#phosphatage_alcaline').val('".$resultat['valeur']."');
+	    	    		
+    	        $('.iconeValidationInterfaceVisual_38').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -1843,6 +1896,8 @@ class BiologisteController extends AbstractActionController {
 	        "<script>
 	        	$('#type_materiel_gama_gt_ygt').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');		
 	    	    $('#gama_gt').val('".$resultat['valeur']."');
+	    	    		
+     	        $('.iconeValidationInterfaceVisual_39').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -1857,6 +1912,8 @@ class BiologisteController extends AbstractActionController {
 	        	$('#type_materiel_fer_serique').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');	
 	    	    $('#fer_serique_ug').val('".$resultat['valeur_ug']."');
 	    	    $('#fer_serique_umol').val('".$resultat['valeur_umol']."');
+	    	    		
+     	        $('.iconeValidationInterfaceVisual_40').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -1872,7 +1929,7 @@ class BiologisteController extends AbstractActionController {
 	    	    $('#typage_hemoglobine').val('".$resultat['valeur']."');
 	    	    $('#autre_typage_hemoglobine').val('".$resultat['valeur_Hbarts']."');
 	    	   
-	    	    $('.iconeValidationInterfaceVisual').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
+	    	    $('.iconeValidationInterfaceVisual_68').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    
@@ -1887,6 +1944,8 @@ class BiologisteController extends AbstractActionController {
 			"<script>
 	    	    $('#type_materiel_ldh').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	    	    $('#valeur_ldh').val('".$resultat['valeur_ldh']."');
+	    	    		
+    	        $('.iconeValidationInterfaceVisual_70').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 		}
 		return $html;
@@ -1900,6 +1959,8 @@ class BiologisteController extends AbstractActionController {
 	        "<script>
 	            $('#type_materiel_lipides_totaux').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	    	    $('#lipides_totaux').val('".$resultat['lipides_totaux']."');
+	    	    		
+    	        $('.iconeValidationInterfaceVisual_30').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -1913,6 +1974,8 @@ class BiologisteController extends AbstractActionController {
 	        "<script>
 	            $('#type_materiel_ferritinine').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	    	    $('#ferritinine').val('".$resultat['ferritinine']."');
+	    	    		
+    	        $('.iconeValidationInterfaceVisual_41').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -1931,6 +1994,8 @@ class BiologisteController extends AbstractActionController {
    	            $('#bilirubine_directe_auto').val('".$resultat['bilirubine_directe_auto']."');
    	            $('#bilirubine_indirecte').val('".$resultat['bilirubine_indirecte']."');
    	            $('#bilirubine_indirecte_auto').val('".$resultat['bilirubine_indirecte_auto']."');
+   	            		
+    	        $('.iconeValidationInterfaceVisual_42').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -1945,6 +2010,8 @@ class BiologisteController extends AbstractActionController {
 	            $('#type_materiel_hemo_gly_hbac').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	    	    $('#hemoglobine_glyquee_hbac').val('".$resultat['hemoglobine_glyquee_hbac']."');
     	        $('#hemoglobine_glyquee_hbac_mmol').val('".$resultat['hemoglobine_glyquee_hbac_mmol']."');
+    	        		
+    	        $('.iconeValidationInterfaceVisual_43').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -1966,6 +2033,8 @@ class BiologisteController extends AbstractActionController {
 	                $('#electro_hemo_label_".($i+1)."').val('".$resultat[$i]['libelle']."').attr('readonly',true);
 	                $('#electro_hemo_valeur_".($i+1)."').val('".$resultat[$i]['valeur']."').attr('readonly',true);
 	              }, 50);
+	                		
+       	          $('.iconeValidationInterfaceVisual_44').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	    </script>";
 	        }
 	        
@@ -1995,6 +2064,8 @@ class BiologisteController extends AbstractActionController {
     	        $('#gamma_abs').val('".$resultat['gamma_abs']."');
     	        $('#proteine_totale').val('".$resultat['proteine_totale']."');
     	        $('#commentaire_electrophorese_proteine').val('".preg_replace("/(\r\n|\n|\r)/", "\\n", str_replace( "'", "\'", $resultat['commentaire']) )."');
+    	        		
+    	        $('.iconeValidationInterfaceVisual_45').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -2009,6 +2080,8 @@ class BiologisteController extends AbstractActionController {
 	            $('#type_materiel_albuminemie').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	    	    $('#albuminemie').val('".$resultat['albuminemie']."');
 	    	    $('#albuminemie_umol').val('".$resultat['albuminemie_umol']."');
+	    	    		
+    	        $('.iconeValidationInterfaceVisual_46').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -2024,6 +2097,8 @@ class BiologisteController extends AbstractActionController {
 	    	    $('#albumine_urinaire').val('".$resultat['albumine_urinaire']."');
 	    	    $('#sucre_urinaire').val('".$resultat['sucre_urinaire']."');
 	    	    $('#corps_cetonique_urinaire').val('".$resultat['corps_cetonique_urinaire']."');
+	    	    		
+      	        $('.iconeValidationInterfaceVisual_47').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	        
 	        if($resultat['albumine_urinaire'] == 'positif'){
@@ -2063,6 +2138,8 @@ class BiologisteController extends AbstractActionController {
 	        "<script>
 	            $('#type_materiel_protidemie').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	    	    $('#protidemie').val('".$resultat['protidemie']."');
+	    	    		
+      	        $('.iconeValidationInterfaceVisual_48').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -2078,6 +2155,8 @@ class BiologisteController extends AbstractActionController {
 	    	    $('#proteinurie_1').val('".$resultat['proteinurie_1']."');
 	    	    $('#proteinurie_2').val('".$resultat['proteinurie_2']."');
 	    	    $('#proteinurie_g24h').val('".$resultat['proteinurie_g24h']."');
+	    	    		
+      	        $('.iconeValidationInterfaceVisual_49').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -2093,6 +2172,8 @@ class BiologisteController extends AbstractActionController {
 	    	    $('#hematies_hlm').val('".$resultat['hematies_hlm']."');
     	        $('#leucocytes_hlm').val('".$resultat['leucocytes_hlm']."');
     	        $('#commentaire_hlm_compte_daddis').val('".$resultat['commentaire_hlm_compte_daddis']."');
+    	        		
+      	        $('.iconeValidationInterfaceVisual_50').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -2106,6 +2187,8 @@ class BiologisteController extends AbstractActionController {
 	        "<script>
 	            $('#type_materiel_beta_hcg').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	    	    $('#beta_hcg_plasmatique').val('".$resultat['beta_hcg_plasmatique']."');
+	    	    		
+      	        $('.iconeValidationInterfaceVisual_51').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -2120,6 +2203,8 @@ class BiologisteController extends AbstractActionController {
 	            $('#type_materiel_psa').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	    	    $('#psa').val('".$resultat['psa']."');
    	    		$('#psa_qualitatif').val('".$resultat['psa_qualitatif']."');
+   	    				
+      	        $('.iconeValidationInterfaceVisual_52').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -2135,7 +2220,10 @@ class BiologisteController extends AbstractActionController {
 	    	    $('#optionResultatCrp').val('".$resultat['optionResultatCrp']."');
 	    	    $('#crpValeurResultat').val('".$resultat['crpValeurResultat']."');
 	    	    $('#optionResultatCrp').trigger('change');
-	    	    setTimeout(function(){ $('#optionResultatCrp').attr('disabled', true); });			
+	    	    setTimeout(function(){ $('#optionResultatCrp').attr('disabled', true); });	
+
+     	        $('.iconeValidationInterfaceVisual_53').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
+	    	    		
 	    	 </script>";
 	    }
 	    return $html;
@@ -2150,6 +2238,8 @@ class BiologisteController extends AbstractActionController {
 	            $('#type_materiel_facteurs_rhumatoides').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	    	    $('#facteurs_rhumatoides').val('".$resultat['facteurs_rhumatoides']."');
 	    	    $('#facteurs_rhumatoides_titre').val('".$resultat['facteurs_rhumatoides_titre']."');
+	    	    		
+     	        $('.iconeValidationInterfaceVisual_54').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -2164,6 +2254,8 @@ class BiologisteController extends AbstractActionController {
 	            $('#type_materiel_rf_waaler_rose').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	    	    $('#rf_waaler_rose').val('".$resultat['rf_waaler_rose']."');
 	    	    $('#rf_waaler_rose_titre').val('".$resultat['rf_waaler_rose_titre']."');
+	    	    		
+    	        $('.iconeValidationInterfaceVisual_55').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -2181,6 +2273,8 @@ class BiologisteController extends AbstractActionController {
 	    	    $('#toxoplasmose_igg').val('".$resultat['toxoplasmose_igg']."');
 	    	    $('#toxoplasmose_igg_titre').val('".$resultat['toxoplasmose_igg_titre']."');
 	    	    $('#toxoplasmose_commentaire').val('".$resultat['toxoplasmose_commentaire']."');
+	    	    		
+  	   	        $('.iconeValidationInterfaceVisual_56').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -2198,6 +2292,8 @@ class BiologisteController extends AbstractActionController {
 	    	    $('#rubeole_igg').val('".$resultat['rubeole_igg']."');
 	    	    $('#rubeole_igg_titre').val('".$resultat['rubeole_igg_titre']."');
 	    	    $('#rubeole_commentaire').val('".$resultat['rubeole_commentaire']."');
+	    	    		
+    	        $('.iconeValidationInterfaceVisual_57').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -2232,7 +2328,11 @@ class BiologisteController extends AbstractActionController {
 	    	         </script>";
 	    		}
 	    	}
-	    	$html .="<script> setTimeout(function(){ $('#conclusion_culot_urinaire_valeur').val('".str_replace( "'", "\'", $resultat[0]['conclusion'])."'); },50); </script>";
+	    	$html .="<script> 
+	    			  setTimeout(function(){ $('#conclusion_culot_urinaire_valeur').val('".str_replace( "'", "\'", $resultat[0]['conclusion'])."'); },50); 
+
+  	    	          $('.iconeValidationInterfaceVisual_58').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
+	    			 </script>";
 	    
 	    }
 	    
@@ -2247,6 +2347,8 @@ class BiologisteController extends AbstractActionController {
 	        "<script>
 	            $('#type_materiel_serologie_chlamydiae').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	    	    $('#serologie_chlamydiae').val('".$resultat['serologie_chlamydiae']."');
+	    	    		
+    	        $('.iconeValidationInterfaceVisual_59').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -2261,7 +2363,9 @@ class BiologisteController extends AbstractActionController {
 	            $('#type_materiel_serologie_syphilitique').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	    	    $('#serologie_syphilitique_rpr').val('".$resultat['serologie_syphilitique_rpr']."');
 	    	    $('#serologie_syphilitique_tpha').val('".$resultat['serologie_syphilitique_tpha']."');
-	    	    $('#serologie_syphilitique_tpha_titre').val('".$resultat['serologie_syphilitique_tpha_titre']."');				
+	    	    $('#serologie_syphilitique_tpha_titre').val('".$resultat['serologie_syphilitique_tpha_titre']."');
+
+    	        $('.iconeValidationInterfaceVisual_60').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -2276,6 +2380,8 @@ class BiologisteController extends AbstractActionController {
 	            $('#type_materiel_aslo').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	    	    $('#aslo_select').val('".$resultat['aslo']."');
    	    		$('#aslo_titre').val('".$resultat['titre']."');
+   	    				
+    	        $('.iconeValidationInterfaceVisual_61').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -2296,6 +2402,8 @@ class BiologisteController extends AbstractActionController {
         	    $('#widal_bh').val('".$resultat['widal_bh']."'); $('#widal_titre_bh').val('".$resultat['widal_titre_bh']."');
         	    $('#widal_co').val('".$resultat['widal_co']."'); $('#widal_titre_co').val('".$resultat['widal_titre_co']."');
         	    $('#widal_ch').val('".$resultat['widal_ch']."'); $('#widal_titre_ch').val('".$resultat['widal_titre_ch']."');
+        	    		
+    	        $('.iconeValidationInterfaceVisual_62').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -2309,6 +2417,8 @@ class BiologisteController extends AbstractActionController {
 	        "<script>
 	            $('#type_materiel_ag_hbs').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	    	    $('#ag_hbs').val('".$resultat['ag_hbs']."');
+	    	    		
+    	        $('.iconeValidationInterfaceVisual_63').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 	    }
 	    return $html;
@@ -2323,6 +2433,8 @@ class BiologisteController extends AbstractActionController {
 	            $('#type_materiel_hiv').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
 	    	    $('#hiv').val('".$resultat['hiv']."');
 	    	    $('#hiv_typage').val('".$resultat['hiv_typage']."');
+	    	    		
+    	        $('.iconeValidationInterfaceVisual_64').html('<span  class=\'resultat_existe_interface_visual_".$iddemande."\' > <img id=\'resultat_existe_interface_visual_".$iddemande."\' onclick=\'validerResultatAnalyseInterfaceVisual(".$iddemande.");\' style=\'float: right; padding-right: 10px; cursor: pointer;\' src=\'../images_icons/74bis.png\' > </span>');
 	    	 </script>";
 		}
 		return $html;
@@ -3923,7 +4035,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_nfs' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_1'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -4151,7 +4263,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_gsrh_groupage' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_2'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -4187,7 +4299,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_recherche_antigene' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_3'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -4224,7 +4336,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_test_combs_direct' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_4'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -4254,7 +4366,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_test_combs_indirect' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_5'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -4284,7 +4396,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_test_compatibilite' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_6'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -4314,7 +4426,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_vitesse_sedimentation' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_7'> </td>";
 	    $html .= "</tr>";
 	    $html .= "</table>";
 	    
@@ -4347,7 +4459,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_test_demmel' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_8'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -4377,7 +4489,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_taux_reticulocytes' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_9'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -4406,7 +4518,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_goutte_epaisse' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_10'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -4452,7 +4564,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_adenogramme' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_11'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -4481,7 +4593,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_medulodramme' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_12'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -4510,7 +4622,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_cytochimie_myeloperoxydase' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_13'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -4540,7 +4652,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_tp_inr' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_14'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -4615,7 +4727,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_tca' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_15'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -4657,7 +4769,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_fibrinemie' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_16'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -4687,7 +4799,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_temps_saignement' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_17'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -4717,7 +4829,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px; '>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_facteur_8' style='padding-left: 8px;' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_18'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -4746,7 +4858,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px; '>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_facteur_9' style='padding-left: 8px;' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_19'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -4776,7 +4888,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px; '>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_dimeres' style='padding-left: 8px;' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_20'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -4806,7 +4918,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px; '>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_glycemie' style='padding-left: 8px;' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;' class='iconeValidationInterfaceVisual_21' > </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -4842,7 +4954,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px; '>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_creatininemie' style='padding-left: 8px;' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;' class='iconeValidationInterfaceVisual_22' > </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -4877,7 +4989,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px; '>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_azotemie' style='padding-left: 8px;' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_23'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	
@@ -4912,7 +5024,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px; '>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_acide_urique' style='padding-left: 8px;' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;' class='iconeValidationInterfaceVisual_24'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -4948,7 +5060,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px; '>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_cholesterol_total' style='padding-left: 8px;' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_25'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	
@@ -5000,7 +5112,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px; '>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_triglycerides' style='padding-left: 8px;' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_26'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -5035,7 +5147,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px; '>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_cholesterol_HDL' style='padding-left: 8px;' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_27'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -5111,7 +5223,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px; '>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_cholesterol_LDL' style='padding-left: 8px;' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_28'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    	  
@@ -5169,7 +5281,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_lipides_totaux' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_30'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -5203,7 +5315,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_ionogramme' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_31'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -5244,7 +5356,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_calcemie' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;' class='iconeValidationInterfaceVisual_32'> </td>";
 	    $html .= "</tr>";
 	    
 	    $html .= "</table>";
@@ -5283,7 +5395,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_magnesemie' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;' class='iconeValidationInterfaceVisual_33'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -5312,7 +5424,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_phosphoremie' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;' class='iconeValidationInterfaceVisual_34'> </td>";
 	    $html .= "</tr>";
 	    
 	    $html .= "</table>";
@@ -5351,7 +5463,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_tgo_asat' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;' class='iconeValidationInterfaceVisual_35'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -5380,7 +5492,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_tgp_alat' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;' class='iconeValidationInterfaceVisual_36'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -5409,7 +5521,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_phosphatage_alcaline' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;' class='iconeValidationInterfaceVisual_38'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -5438,7 +5550,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_gama_gt_ygt' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;' class='iconeValidationInterfaceVisual_39'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -5467,7 +5579,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_fer_serique' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;' class='iconeValidationInterfaceVisual_40'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -5502,7 +5614,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_ferritinine' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;' class='iconeValidationInterfaceVisual_41'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -5550,7 +5662,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_bilirubine_totale_directe' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;' class='iconeValidationInterfaceVisual_42'> </td>";
 	    $html .= "</tr>";
 	    $html .= "</table>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
@@ -5596,7 +5708,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_hemo_gly_hbac' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;' class='iconeValidationInterfaceVisual_43'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -5631,7 +5743,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_electro_hemo' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;' class='iconeValidationInterfaceVisual_44'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -5681,7 +5793,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 35%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_electro_proteine' tabindex='1' readonly> </div> </td>";
-	    $html .= "  <td colspan='3' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='3' style='width: 45%;' class='iconeValidationInterfaceVisual_45'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -5761,7 +5873,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 45%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_albuminemie' tabindex='1' readonly> </div> </td>";
-	    $html .= "  <td colspan='3' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='3' style='width: 45%;' class='iconeValidationInterfaceVisual_46'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -5796,7 +5908,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_albumine_urinaire' tabindex='1' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;' class='iconeValidationInterfaceVisual_47'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -5837,7 +5949,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 45%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_protidemie' tabindex='1' readonly> </div> </td>";
-	    $html .= "  <td colspan='3' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='3' style='width: 45%;' class='iconeValidationInterfaceVisual_48'> </td>";
 	    $html .= "</tr>";
 	    $html .= "</table>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
@@ -5868,7 +5980,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 45%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_proteinurie' tabindex='1' readonly > </div> </td>";
-	    $html .= "  <td colspan='3' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='3' style='width: 45%;' class='iconeValidationInterfaceVisual_49'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -5903,7 +6015,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 45%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_hlm_compte_daddis' tabindex='1' readonly> </div> </td>";
-	    $html .= "  <td colspan='3' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='3' style='width: 45%;' class='iconeValidationInterfaceVisual_50'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -5947,7 +6059,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 45%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_beta_hcg' tabindex='1' readonly> </div> </td>";
-	    $html .= "  <td colspan='3' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='3' style='width: 45%;' class='iconeValidationInterfaceVisual_51'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -5976,7 +6088,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 45%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_psa' tabindex='1' readonly> </div> </td>";
-	    $html .= "  <td colspan='3' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='3' style='width: 45%;' class='iconeValidationInterfaceVisual_52'> </td>";
 	    $html .= "</tr>";
 	    $html .= "</table>";
 	     
@@ -6007,7 +6119,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 45%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_crp' tabindex='1' readonly> </div> </td>";
-	    $html .= "  <td colspan='3' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='3' style='width: 45%;'  class='iconeValidationInterfaceVisual_53'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -6042,7 +6154,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 45%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_facteurs_rhumatoides' tabindex='1' readonly> </div> </td>";
-	    $html .= "  <td colspan='3' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='3' style='width: 45%;' class='iconeValidationInterfaceVisual_54'> </td>";
 	    $html .= "</tr>";
 	    $html .= "</table>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
@@ -6074,7 +6186,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 45%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_rf_waaler_rose' tabindex='1' readonly> </div> </td>";
-	    $html .= "  <td colspan='3' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='3' style='width: 45%;' class='iconeValidationInterfaceVisual_55'> </td>";
 	    $html .= "</tr>";
 	    $html .= "</table>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
@@ -6107,7 +6219,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 45%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_toxoplasmose' tabindex='1' readonly> </div> </td>";
-	    $html .= "  <td colspan='3' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='3' style='width: 45%;'  class='iconeValidationInterfaceVisual_56'> </td>";
 	    $html .= "</tr>";
 	    
 	    $html .= "</table>";
@@ -6154,7 +6266,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 45%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_rubeole' tabindex='1' readonly> </div> </td>";
-	    $html .= "  <td colspan='3' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='3' style='width: 45%;'  class='iconeValidationInterfaceVisual_57'> </td>";
 	    $html .= "</tr>";
 	     $html .= "</table>";
 	  
@@ -6199,7 +6311,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input disabled type='text' id='type_materiel_culot_urinaire' tabindex='1' > </div> </td>";
-	    $html .= "  <td style='width: 45%;'> </td>";
+	    $html .= "  <td style='width: 45%;'  class='iconeValidationInterfaceVisual_58'> </td>";
 	    $html .= "</tr>";
 	    $html .= "</table> </td> </tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
@@ -6247,7 +6359,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 45%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_serologie_chlamydiae' tabindex='1' readonly> </div> </td>";
-	    $html .= "  <td colspan='3' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='3' style='width: 45%;'  class='iconeValidationInterfaceVisual_59'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -6276,7 +6388,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 45%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_serologie_syphilitique' tabindex='1' readonly> </div> </td>";
-	    $html .= "  <td colspan='3' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='3' style='width: 45%;'  class='iconeValidationInterfaceVisual_60'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -6311,7 +6423,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_aslo' tabindex='1' readonly> </div> </td>";
-	    $html .= "  <td colspan='3' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='3' style='width: 45%;'  class='iconeValidationInterfaceVisual_61'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -6339,7 +6451,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_widal' tabindex='1' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_62'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	
@@ -6402,7 +6514,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_ag_hbs' tabindex='1' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_63'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -6431,7 +6543,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_hiv' tabindex='1' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_64'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    	  
@@ -6460,7 +6572,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_pv' tabindex='1' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_65'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	
@@ -6489,7 +6601,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_ecbu' tabindex='1' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;' class='iconeValidationInterfaceVisual_66'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    	  
@@ -6518,7 +6630,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_pus' tabindex='1' readonly> </div> </td>";
-	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_67'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    	  
@@ -6552,7 +6664,7 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%;'><div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_typage_hemoglobine' readonly> </div></td>";
-	    $html .= "  <td colspan='2' style='width: 45%;' class='iconeValidationInterfaceVisual' > </td>";
+	    $html .= "  <td colspan='2' style='width: 45%;' class='iconeValidationInterfaceVisual_68' > </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    
@@ -6581,7 +6693,7 @@ class BiologisteController extends AbstractActionController {
 		$html .= "</tr>";
 		$html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 		$html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_ldh' readonly> </div> </td>";
-		$html .= "  <td colspan='2' style='width: 45%;'> </td>";
+		$html .= "  <td colspan='2' style='width: 45%;'  class='iconeValidationInterfaceVisual_70'> </td>";
 		$html .= "</tr>";
 		//POUR LE NOM DU TYPE DE MATERIEL UTILISE
 			

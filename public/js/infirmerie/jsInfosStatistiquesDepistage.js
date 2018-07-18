@@ -30,7 +30,8 @@ function getInfosStatistiquesParDefaut(){
 		success : function(data) {
 			var result = jQuery.parseJSON(data); 
 			$('.affichageInfosTotalDepistage').toggle(true);
-			result +="<script>$('.champOP1 input, .champOP2 input').val('').trigger('change'); </script>";
+			//result +="<script>$('.champOP1 input, .champOP2 input').trigger('change'); </script>";
+			
 			$('.zoneResultatsInfosStatiquesDepistage').html(result);
 		}
 	});

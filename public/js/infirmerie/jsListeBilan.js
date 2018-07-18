@@ -6,25 +6,48 @@
     /**********************************************************************************/
     /**********************************************************************************/
 
-	$(function(){
-		setTimeout(function() {
-			infoBulle();
-		}, 1000);
-	});
-
-	function infoBulle(){
-	
-		/***
-		 * INFO BULLE DE LA LISTE
-		 */
-
-		var tooltips = $( 'table tbody tr td infoBulleVue' ).tooltip({show: {effect: 'slideDown', delay: 250}});
-		tooltips.tooltip( 'close' );
-		$('table tbody tr td infoBulleVue').mouseenter(function(){
-			var tooltips = $( 'table tbody tr td infoBulleVue' ).tooltip({show: {effect: 'slideDown', delay: 250}});
-			tooltips.tooltip( 'open' );
+	function supprimerBilan(id){
+		
+		$( "#confirmationSuppression" ).dialog({
+		    resizable: false,
+		    height:170,
+		    width:435,
+		    autoOpen: false,
+		    modal: true,
+		    buttons: {
+		        "Oui": function() {
+		            $( this ).dialog( "close" ); 
+		            
+		            var chemin = tabUrl[0]+'public/infirmerie/supprimer-un-bilan';
+		            $.ajax({
+		                type: 'POST',
+		                url: chemin ,
+		                data:{ 'idbilan':id },
+		                success: function(data) {
+		                	var result = jQuery.parseJSON(data);  
+		                	
+		                	if(result == 1){
+		                		alert('impossible le tri du prelevement est deja fait');
+		                		$(location).attr("href",tabUrl[0]+"public/infirmerie/liste-bilan");
+		                	}else {
+		                		$("#suppBilan_"+id).parent().parent().fadeOut(function(){ 
+		                			$(location).attr("href",tabUrl[0]+"public/infirmerie/liste-bilan");
+		                		});
+		                	}
+		                }
+		            });
+		    	     
+		        },
+		        "Non": function() {
+	                $( this ).dialog( "close" );
+	            }
+		    }
 		});
+		
+		$("#confirmationSuppression").dialog('open');
 	}
+	
+	
 	
     var  oTable;
     function initialisation(){	

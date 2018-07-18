@@ -937,10 +937,10 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		/*4) Quatrième colonne ===== pour les antériorités*/
 		$this->Cell(0.8,6,'','L',0,'R',0);
 		if($infoAnteriorite){ 
-			$this->Cell(19.2,6,$infoAnteriorite['leucocytes'],'L',0,'R',1);
-			$this->Cell(8,6,'/mm','L',0,'L',1);
+			$this->Cell(24.2,6,number_format($infoAnteriorite['leucocytes'],0,',', ' '),'L',0,'R',1);
+			$this->Cell(8,6,'','L',0,'L',1); //$this->Cell(8,6,'/mm','L',0,'L',1);
 			$this->SetFont('times','B',15.5);
-			$this->Cell(12,6,'³','L',0,'L',1);
+			$this->Cell(7,6,'','L',1,'L',1); //$this->Cell(7,6,'³','L',1,'L',1);
 		}else{ 
 			$this->Cell(39.2,6,'','L',1,'L',1);
 		}
@@ -966,7 +966,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		$this->SetFont('times','',15.5);
 		$this->Cell(6.7,6,'³','',0,'L',1);
 		$this->SetFont('times','',10.5);
-		$this->Cell(10,6,$resultats[1]['champ7'],'',0,'R',1);
+		$this->Cell(10,6,number_format($resultats[1]['champ7'],1,',', ' '),'',0,'R',1);
 		$this->Cell(10,6,'%','',0,'L',1);
 		
 		/*3) Troisième colonne ===== pour les références */
@@ -976,10 +976,10 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		/*4) Quatrième colonne ===== pour les antériorités*/
 		$this->Cell(0.8,6,'','L',0,'R',0);
 		if($infoAnteriorite){
-			$this->Cell(19.2,6,$infoAnteriorite['p_neutrophiles'],'L',0,'R',1);
-			$this->Cell(8,6,'/mm','L',0,'L',1);
+			$this->Cell(24.2,6,number_format($infoAnteriorite['p_neutrophiles'],0,',', ' '),'L',0,'R',1);
+			$this->Cell(8,6,'','',0,'L',1);
 			$this->SetFont('times','',15.5);
-			$this->Cell(12,6,'³','L',0,'L',1);
+			$this->Cell(7,6,'','',1,'L',1);
 		}else{
 			$this->Cell(39.2,6,'','L',1,'L',1);
 		}
@@ -1005,7 +1005,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		$this->SetFont('times','',15.5);
 		$this->Cell(6.7,6,'³','',0,'L',1);
 		$this->SetFont('times','',10.5);
-		$this->Cell(10,6,$resultats[1]['champ8'],'',0,'R',1);
+		$this->Cell(10,6,number_format($resultats[1]['champ8'],1,',', ' '),'',0,'R',1);
 		$this->Cell(10,6,'%','',0,'L',1);
 		
 		/*3) Troisième colonne ===== pour les références */
@@ -1015,10 +1015,10 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		/*4) Quatrième colonne ===== pour les antériorités*/
 		$this->Cell(0.8,6,'','L',0,'R',0);
 		if($infoAnteriorite){
-			$this->Cell(19.2,6,$infoAnteriorite['p_eosinophiles'],'L',0,'R',1);
-			$this->Cell(8,6,'/mm','L',0,'L',1);
+			$this->Cell(24.2,6,number_format($infoAnteriorite['p_eosinophiles'],0,',', ' '),'L',0,'R',1);
+			$this->Cell(8,6,'','',0,'L',1);
 			$this->SetFont('times','',15.5);
-			$this->Cell(12,6,'³','L',0,'L',1);
+			$this->Cell(7,6,'','',1,'L',1);
 		}else{
 			$this->Cell(39.2,6,'','L',1,'L',1);
 		}
@@ -1044,7 +1044,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		$this->SetFont('times','',15.5);
 		$this->Cell(6.7,6,'³','',0,'L',1);
 		$this->SetFont('times','',10.5);
-		$this->Cell(10,6,$resultats[1]['champ9'],'',0,'R',1);
+		$this->Cell(10,6,number_format($resultats[1]['champ9'],1,',', ' '),'',0,'R',1);
 		$this->Cell(10,6,'%','',0,'L',1);
 		
 		/*3) Troisième colonne ===== pour les références */
@@ -1054,10 +1054,10 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		/*4) Quatrième colonne ===== pour les antériorités*/
 		$this->Cell(0.8,6,'','L',0,'R',0);
 		if($infoAnteriorite){
-			$this->Cell(19.2,6,$infoAnteriorite['p_basophiles'],'L',0,'R',1);
-			$this->Cell(8,6,'/mm','L',0,'L',1);
+			$this->Cell(24.2,6,number_format($infoAnteriorite['p_basophiles'],0,',', ' '),'L',0,'R',1);
+			$this->Cell(8,6,'','',0,'L',1);
 			$this->SetFont('times','',15.5);
-			$this->Cell(12,6,'³','L',0,'L',1);
+			$this->Cell(7,6,'','',1,'L',1);
 		}else{
 			$this->Cell(39.2,6,'','L',1,'L',1);
 		}
@@ -1083,7 +1083,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		$this->SetFont('times','',15.5);
 		$this->Cell(6.7,6,'³','',0,'L',1);
 		$this->SetFont('times','',10.5);
-		$this->Cell(10,6,$resultats[1]['champ10'],'',0,'R',1);
+		$this->Cell(10,6,number_format($resultats[1]['champ10'],1,',', ' '),'',0,'R',1);
 		$this->Cell(10,6,'%','',0,'L',1);
 		
 		/*3) Troisième colonne ===== pour les références */
@@ -1093,10 +1093,10 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		/*4) Quatrième colonne ===== pour les antériorités*/
 		$this->Cell(0.8,6,'','L',0,'R',0);
 		if($infoAnteriorite){
-			$this->Cell(19.2,6,$infoAnteriorite['lymphocytes'],'L',0,'R',1);
-			$this->Cell(8,6,'/mm','L',0,'L',1);
+			$this->Cell(24.2,6,number_format($infoAnteriorite['lymphocytes'],0,',', ' '),'L',0,'R',1);
+			$this->Cell(8,6,'','',0,'L',1);
 			$this->SetFont('times','',15.5);
-			$this->Cell(12,6,'³','L',0,'L',1);
+			$this->Cell(7,6,'','',1,'L',1);
 		}else{
 			$this->Cell(39.2,6,'','L',1,'L',1);
 		}
@@ -1119,11 +1119,11 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		
 		/*2) Deuxième colonne ==== Pour les résultats*/
 		$this->Cell(20,6,number_format($resultats[1]['champ6'],0,',', ' '),'',0,'R',1);
-		$this->Cell(8.3,6,'/mm','',0,'L',1);
+		$this->Cell(8.3,6,'','',0,'L',1);
 		$this->SetFont('times','',15.5);
-		$this->Cell(6.7,6,'³','',0,'L',1);
+		$this->Cell(6.7,6,'','',0,'L',1);
 		$this->SetFont('times','',10.5);
-		$this->Cell(10,6,$resultats[1]['champ11'],'',0,'R',1);
+		$this->Cell(10,6,number_format($resultats[1]['champ11'],1,',', ' '),'',0,'R',1);
 		$this->Cell(10,6,'%','',0,'L',1);
 		
 		/*3) Troisième colonne ===== pour les références */
@@ -1133,10 +1133,10 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		/*4) Quatrième colonne ===== pour les antériorités*/
 		$this->Cell(0.8,6,'','L',0,'R',0);
 		if($infoAnteriorite){
-			$this->Cell(19.2,6,$infoAnteriorite['monocytes'],'L',0,'R',1);
-			$this->Cell(8,6,'/mm','L',0,'L',1);
+			$this->Cell(24.2,6,number_format($infoAnteriorite['monocytes'],0,',', ' '),'L',0,'R',1);
+			$this->Cell(8,6,'','',0,'L',1);
 			$this->SetFont('times','',15.5);
-			$this->Cell(12,6,'³','L',0,'L',1);
+			$this->Cell(7,6,'','',1,'L',1);
 		}else{
 			$this->Cell(39.2,6,'','L',1,'L',1);
 		}
@@ -1161,7 +1161,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		$this->Cell(35,6,'Hématies','',0,'L',1);
 		
 		/*2) Deuxième colonne ==== Pour les résultats*/
-		$this->Cell(20,6,number_format($resultats[1]['champ12'],0,',', ' '),'',0,'R',1);
+		$this->Cell(20,6,number_format($resultats[1]['champ12'],2,',', ' '),'',0,'R',1);
 		
 		$this->Cell(5.3,6,'10','',0,'L',1);
 		$this->SetFont('times','B',9.5);
@@ -1185,10 +1185,10 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		/*4) Quatrième colonne ===== pour les antériorités*/
 		$this->Cell(0.8,6,'','L',0,'R',0);
 		if($infoAnteriorite){
-			$this->Cell(19.2,6,$infoAnteriorite['hematies'],'L',0,'R',1);
-			$this->Cell(8,6,'','L',0,'L',1);
+			$this->Cell(24.2,6,number_format($infoAnteriorite['hematies'],2,',', ' '),'L',0,'R',1);
+			$this->Cell(8,6,'','',0,'L',1);
 			$this->SetFont('times','B',15.5);
-			$this->Cell(12,6,'','L',0,'L',1);
+			$this->Cell(7,6,'','',1,'L',1);
 		}else{
 			$this->Cell(39.2,6,'','L',1,'L',1);
 		}
@@ -1209,7 +1209,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		$this->Cell(35,6,'Hémoglobine','',0,'L',1);
 		
 		/*2) Deuxième colonne ==== Pour les résultats*/
-		$this->Cell(20,6,number_format($resultats[1]['champ13'],0,',', ' '),'',0,'R',1);
+		$this->Cell(20,6,number_format($resultats[1]['champ13'],1,',', ' '),'',0,'R',1);
 		$this->Cell(19,6,'g/dl','',0,'L',1);
 		
 		$this->SetFont('times','',10.5);
@@ -1223,10 +1223,10 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		/*4) Quatrième colonne ===== pour les antériorités*/
 		$this->Cell(0.8,6,'','L',0,'R',0);
 		if($infoAnteriorite){
-			$this->Cell(19.2,6,$infoAnteriorite['hemoglobines'],'L',0,'R',1);
-			$this->Cell(8,6,'','L',0,'L',1);
+			$this->Cell(24.2,6,number_format($infoAnteriorite['hemoglobines'],1,',', ' '),'L',0,'R',1);
+			$this->Cell(8,6,'','',0,'L',1);
 			$this->SetFont('times','B',15.5);
-			$this->Cell(12,6,'','L',0,'L',1);
+			$this->Cell(7,6,'','',1,'L',1);
 		}else{
 			$this->Cell(39.2,6,'','L',1,'L',1);
 		}
@@ -1247,7 +1247,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		$this->Cell(35,6,'Hématocrite','',0,'L',1);
 		
 		/*2) Deuxième colonne ==== Pour les résultats*/
-		$this->Cell(20,6,number_format($resultats[1]['champ14'],0,',', ' '),'',0,'R',1);
+		$this->Cell(20,6,number_format($resultats[1]['champ14'],1,',', ' '),'',0,'R',1);
 		$this->Cell(19,6,'%','',0,'L',1);
 		
 		$this->SetFont('times','',10.5);
@@ -1261,10 +1261,10 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		/*4) Quatrième colonne ===== pour les antériorités*/
 		$this->Cell(0.8,6,'','L',0,'R',0);
 		if($infoAnteriorite){
-			$this->Cell(19.2,6,$infoAnteriorite['hematocrites'],'L',0,'R',1);
-			$this->Cell(8,6,'','L',0,'L',1);
+			$this->Cell(24.2,6,number_format($infoAnteriorite['hematocrites'],1,',', ' '),'L',0,'R',1);
+			$this->Cell(8,6,'','',0,'L',1);
 			$this->SetFont('times','',15.5);
-			$this->Cell(12,6,'','L',0,'L',1);
+			$this->Cell(7,6,'','',1,'L',1);
 		}else{
 			$this->Cell(39.2,6,'','L',1,'L',1);
 		}
@@ -1299,10 +1299,10 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		/*4) Quatrième colonne ===== pour les antériorités*/
 		$this->Cell(0.8,6,'','L',0,'R',0);
 		if($infoAnteriorite){
-			$this->Cell(19.2,6,$infoAnteriorite['vgm'],'L',0,'R',1);
-			$this->Cell(8,6,'','L',0,'L',1);
+			$this->Cell(24.2,6,number_format($infoAnteriorite['vgm'],0,',', ' '),'L',0,'R',1);
+			$this->Cell(8,6,'','',0,'L',1);
 			$this->SetFont('times','',15.5);
-			$this->Cell(12,6,'','L',0,'L',1);
+			$this->Cell(7,6,'','',1,'L',1);
 		}else{
 			$this->Cell(39.2,6,'','L',1,'L',1);
 		}
@@ -1337,10 +1337,10 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		/*4) Quatrième colonne ===== pour les antériorités*/
 		$this->Cell(0.8,6,'','L',0,'R',0);
 		if($infoAnteriorite){
-			$this->Cell(19.2,6,$infoAnteriorite['tcmh'],'L',0,'R',1);
-			$this->Cell(8,6,'','L',0,'L',1);
+			$this->Cell(24.2,6,number_format($infoAnteriorite['tcmh'],0,',', ' '),'L',0,'R',1);
+			$this->Cell(8,6,'','',0,'L',1);
 			$this->SetFont('times','',15.5);
-			$this->Cell(12,6,'','L',0,'L',1);
+			$this->Cell(7,6,'','',1,'L',1);
 		}else{
 			$this->Cell(39.2,6,'','L',1,'L',1);
 		}
@@ -1376,10 +1376,10 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		/*4) Quatrième colonne ===== pour les antériorités*/
 		$this->Cell(0.8,6,'','L',0,'R',0);
 		if($infoAnteriorite){
-			$this->Cell(19.2,6,$infoAnteriorite['ccmh'],'L',0,'R',1);
-			$this->Cell(8,6,'','L',0,'L',1);
+			$this->Cell(24.2,6,number_format($infoAnteriorite['ccmh'],0,',', ' '),'L',0,'R',1);
+			$this->Cell(8,6,'','',0,'L',1);
 			$this->SetFont('times','',15.5);
-			$this->Cell(12,6,'','L',0,'L',1);
+			$this->Cell(7,6,'','',1,'L',1);
 		}else{
 			$this->Cell(39.2,6,'','L',1,'L',1);
 		}
@@ -1400,7 +1400,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		$this->Cell(35,6,'IDR-CV','',0,'L',1);
 		
 		/*2) Deuxième colonne ==== Pour les résultats*/
-		$this->Cell(20,6,number_format($resultats[1]['champ18'],0,',', ' '),'',0,'R',1);
+		$this->Cell(20,6,number_format($resultats[1]['champ18'],1,',', ' '),'',0,'R',1);
 		$this->Cell(19,6,'%','',0,'L',1);
 		
 		$this->SetFont('times','',10.5);
@@ -1414,10 +1414,10 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		/*4) Quatrième colonne ===== pour les antériorités*/
 		$this->Cell(0.8,6,'','L',0,'R',0);
 		if($infoAnteriorite){
-			$this->Cell(19.2,6,$infoAnteriorite['idr_cv'],'L',0,'R',1);
-			$this->Cell(8,6,'','L',0,'L',1);
+			$this->Cell(24.2,6,number_format($infoAnteriorite['idr_cv'],1,',', ' '),'L',0,'R',1);
+			$this->Cell(8,6,'','',0,'L',1);
 			$this->SetFont('times','',15.5);
-			$this->Cell(12,6,'','L',0,'L',1);
+			$this->Cell(7,6,'','',1,'L',1);
 		}else{
 			$this->Cell(39.2,6,'','L',1,'L',1);
 		}
@@ -1452,10 +1452,10 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		/*4) Quatrième colonne ===== pour les antériorités*/
 		$this->Cell(0.8,6,'','L',0,'R',0);
 		if($infoAnteriorite){
-			$this->Cell(19.2,6,$infoAnteriorite['idr_ds'],'L',0,'R',1);
-			$this->Cell(8,6,'','L',0,'L',1);
+			$this->Cell(24.2,6,number_format($infoAnteriorite['idr_ds'],0,',', ' '),'L',0,'R',1);
+			$this->Cell(8,6,'','',0,'L',1);
 			$this->SetFont('times','',15.5);
-			$this->Cell(12,6,'','L',0,'L',1);
+			$this->Cell(7,6,'','',1,'L',1);
 		}else{
 			$this->Cell(39.2,6,'','L',1,'L',1);
 		}
@@ -1482,11 +1482,11 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		/*2) Deuxième colonne ==== Pour les résultats*/
 		$this->Cell(20,6,number_format($resultats[1]['champ20'],0,',', ' '),'',0,'R',1);
 		
-		$this->Cell(5.3,6,'10','',0,'L',1);
-		$this->SetFont('times','B',9.5);
-		$this->Cell(2.7,6,'','',0,'T',1);
-		$x = $this->GetX(); $y = $this->GetY();
-		$this->Text($x-2.5, $y+3, '6');
+		$this->Cell(5,6,'10','',0,'L',1);
+		$this->SetFont('times','B',15.5);
+		$this->Cell(3,6,'³','',0,'L',1);
+		//$x = $this->GetX(); $y = $this->GetY();
+		//$this->Text($x-2.5, $y+3, '');
 		
 		$this->SetFont('times','B',10.5);
 		$this->Cell(8,6,'/mm','',0,'L',1);
@@ -1504,10 +1504,10 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		/*4) Quatrième colonne ===== pour les antériorités*/
 		$this->Cell(0.8,6,'','L',0,'R',0);
 		if($infoAnteriorite){
-			$this->Cell(19.2,6,$infoAnteriorite['plaquettes'],'L',0,'R',1);
-			$this->Cell(8,6,'','L',0,'L',1);
+			$this->Cell(24.2,6,number_format($infoAnteriorite['plaquettes'],0,',', ' '),'L',0,'R',1);
+			$this->Cell(8,6,'','',0,'L',1);
 			$this->SetFont('times','B',15.5);
-			$this->Cell(12,6,'','L',0,'L',1);
+			$this->Cell(7,6,'','',1,'L',1);
 		}else{
 			$this->Cell(39.2,6,'','L',1,'L',1);
 		}
@@ -1528,7 +1528,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		$this->Cell(35,6,'VMP','',0,'L',1);
 		
 		/*2) Deuxième colonne ==== Pour les résultats*/
-		$this->Cell(20,6,number_format($resultats[1]['champ21'],0,',', ' '),'',0,'R',1);
+		$this->Cell(20,6,number_format($resultats[1]['champ21'],1,',', ' '),'',0,'R',1);
 		$this->Cell(19,6,'fl','',0,'L',1);
 		
 		$this->SetFont('times','',10.5);
@@ -1542,10 +1542,10 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		/*4) Quatrième colonne ===== pour les antériorités*/
 		$this->Cell(0.8,6,'','L',0,'R',0);
 		if($infoAnteriorite){
-			$this->Cell(19.2,6,$infoAnteriorite['vmp'],'L',0,'R',1);
-			$this->Cell(8,6,'','L',0,'L',1);
+			$this->Cell(24.2,6,number_format($infoAnteriorite['vmp'],1,',', ' '),'L',0,'R',1);
+			$this->Cell(8,6,'','',0,'L',1);
 			$this->SetFont('times','',15.5);
-			$this->Cell(12,6,'','L',0,'L',1);
+			$this->Cell(7,6,'','',1,'L',1);
 		}else{
 			$this->Cell(39.2,6,'','L',1,'L',1);
 		}
@@ -1580,10 +1580,10 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		/*4) Quatrième colonne ===== pour les antériorités*/
 		$this->Cell(0.8,6,'','L',0,'R',0);
 		if($infoAnteriorite){
-			$this->Cell(19.2,6,$infoAnteriorite['idp'],'L',0,'R',1);
-			$this->Cell(8,6,'','L',0,'L',1);
+			$this->Cell(24.2,6,number_format($infoAnteriorite['idp'],0,',', ' '),'L',0,'R',1);
+			$this->Cell(8,6,'','',0,'L',1);
 			$this->SetFont('times','',15.5);
-			$this->Cell(12,6,'','L',0,'L',1);
+			$this->Cell(7,6,'','',1,'L',1);
 		}else{
 			$this->Cell(39.2,6,'','L',1,'L',1);
 		}
@@ -1604,7 +1604,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		$this->Cell(35,6,'PCT','',0,'L',1);
 		
 		/*2) Deuxième colonne ==== Pour les résultats*/
-		$this->Cell(20,6,number_format($resultats[1]['champ23'],2,',', ' '),'',0,'R',1);
+		$this->Cell(20,6,number_format($resultats[1]['champ23'],3,',', ' '),'',0,'R',1);
 		$this->Cell(19,6,'%','',0,'L',1);
 		
 		$this->SetFont('times','',10.5);
@@ -1618,10 +1618,10 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		/*4) Quatrième colonne ===== pour les antériorités*/
 		$this->Cell(0.8,6,'','L',0,'R',0);
 		if($infoAnteriorite){
-			$this->Cell(19.2,6,$infoAnteriorite['pct'],'L',0,'R',1);
-			$this->Cell(8,6,'','L',0,'L',1);
+			$this->Cell(24.2,6,number_format($infoAnteriorite['pct'],3,',', ' '),'L',0,'R',1);
+			$this->Cell(8,6,'','',0,'L',1);
 			$this->SetFont('times','',15.5);
-			$this->Cell(12,6,'','L',0,'L',1);
+			$this->Cell(7,6,'','',1,'L',1);
 		}else{
 			$this->Cell(39.2,6,'','L',1,'L',1);
 		}
@@ -1662,10 +1662,10 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 			/*4) Quatrième colonne ===== pour les antériorités*/
 			$this->Cell(0.8,6,'','L',0,'R',0);
 			if($infoAnteriorite){
-				$this->Cell(19.2,6,$infoAnteriorite['reticulocytes'],'L',0,'R',1);
-				$this->Cell(8,6,'','L',0,'L',1);
+				$this->Cell(24.2,6,number_format($infoAnteriorite['reticulocytes'],0,',', ' '),'L',0,'R',1);
+				$this->Cell(8,6,'','',0,'L',1);
 				$this->SetFont('times','B',15.5);
-				$this->Cell(12,6,'','L',0,'L',1);
+				$this->Cell(7,6,'','',1,'L',1);
 			}else{
 				$this->Cell(39.2,6,'','L',1,'L',1);
 			}
@@ -4185,7 +4185,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 					$this->Text($x+8.5, $y+4, ' : ');
 					
 					$this->SetFont('times','B',11);
-					$this->Text($x+10.5, $y+4, '  '.$resultats[44][$i]['valeur']);
+					$this->Text($x+10.5, $y+4, '  '.number_format($resultats[44][$i]['valeur'], 1, ',', ' '));
 					$x+=25;
 					
 					

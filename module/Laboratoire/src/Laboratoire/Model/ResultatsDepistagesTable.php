@@ -4,6 +4,8 @@ namespace Laboratoire\Model;
 
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Sql\Select;
+use Zend\Db\Sql\Sql;
+use Zend\Db\Sql\Predicate\NotIn;
 
 class ResultatsDepistagesTable {
 	protected $tableGateway;
@@ -11,8 +13,8 @@ class ResultatsDepistagesTable {
  		$this->tableGateway = $tableGateway;
  	}
  	
- 	//LES REQUETTES POUR LA GESTION DES STATISTIQUES A L'INTERFACE DU technicien et du biologiste
- 	//LES REQUETTES POUR LA GESTION DES STATISTIQUES A L'INTERFACE DU technicien et du biologiste
+ 	//LES REQUETTES POUR LA GESTION DES STATISTIQUES SUR L'INTERFACE DU technicien et du biologiste
+ 	//LES REQUETTES POUR LA GESTION DES STATISTIQUES SUR L'INTERFACE DU technicien et du biologiste
  	/**
  	 * Liste des patients dépistés ayant déjà un résultat (renseigné par un technicien)
  	 * validé ou non-validé par un biologiste
@@ -27,10 +29,38 @@ class ResultatsDepistagesTable {
  			$select->join('facturation_demande_analyse' , 'facturation_demande_analyse.iddemande_analyse = demande_analyse.iddemande' , array('*'));
  			$select->join('bilan_prelevement' , 'bilan_prelevement.idfacturation = facturation_demande_analyse.idfacturation' , array('date_heure'));                  
  			$select->order('date_heure desc');
+ 			
  			$select->where(array('demande_analyse.idanalyse' => 68));
  			
  		})->toArray();
  	}
+ 	
+ 	/**
+ 	 * Liste des patients dépistés n'ayant pas de résultat (renseigné par un technicien)
+ 	 */
+ 	public function getPatientsDepistagesSansResultat(){
+ 		
+ 		$sql = new Sql ($this->tableGateway->getAdapter());
+ 		$subselect = $sql->select ();
+ 		$subselect->from ( array ( 'rda' => 'resultat_demande_analyse' ) );
+ 		$subselect->columns (array ( 'iddemande_analyse' ) );
+ 		$resultat = $sql->prepareStatementForSqlObject($subselect)->execute();
+ 		$donneesResultat = array();
+ 		foreach ($resultat as $result){ $donneesResultat[] = $result['iddemande_analyse']; }
+ 		
+ 		
+ 		return $this->tableGateway->select(function (Select $select) use ($donneesResultat){
+ 			$select->join('patient' , 'patient.idpersonne = demande_analyse.idpatient' , array('*'));
+ 			$select->join('depistage' , 'depistage.idpatient = patient.idpersonne' , array('*'));
+ 	
+ 			$select->join('facturation_demande_analyse' , 'facturation_demande_analyse.iddemande_analyse = demande_analyse.iddemande' , array('*'));
+ 			$select->join('bilan_prelevement' , 'bilan_prelevement.idfacturation = facturation_demande_analyse.idfacturation' , array('date_heure'));
+ 			$select->where(array('demande_analyse.idanalyse' => 68,  new NotIn ( 'demande_analyse.iddemande', $donneesResultat )));
+ 			$select->order('date_heure desc');
+ 			
+ 		})->toArray();
+ 	}
+ 	
  	/**
  	 * Liste des patients dépistés ayant déjà un résultat (renseigné par un technicien)
  	 * validé ou non-validé par un biologiste pour une période donnée

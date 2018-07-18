@@ -264,6 +264,50 @@
    	    } );
 
     }
+    
+    
+    function supprimerTriDesPrelevementsDesAnalyses(idbilan){
+
+    	$( "#confirmationSuppression" ).dialog({
+		    resizable: false,
+		    height:190,
+		    width: 500,
+		    autoOpen: false,
+		    modal: true,
+		    buttons: {
+		        "Oui": function() {
+		            $( this ).dialog( "close" ); 
+		            
+		            var chemin = tabUrl[0]+'public/technicien/supprimer-un-tri';
+		            $.ajax({
+		                type: 'POST',
+		                url: chemin ,
+		                data:{ 'idbilan':idbilan },
+		                success: function(data) {
+		                	var result = jQuery.parseJSON(data);  
+		                	
+		                	if(result == 0){
+		                		alert('impossible ! au moin une analyse a deja un resultat');
+		                		$(location).attr("href",tabUrl[0]+"public/technicien/liste-bilans-tries");
+		                	}else {
+		                		$('#boutonAnnulerTerminer .boutonAnnuler').trigger('click');
+	                			$(location).attr("href",tabUrl[0]+"public/technicien/liste-bilans-tries");
+		                	}
+		                }
+		            });
+		    	     
+		        },
+		        "Non": function() {
+	                $( this ).dialog( "close" );
+	            }
+		    }
+		});
+		
+		$("#confirmationSuppression").dialog('open');
+	
+    	
+    }
+    
 	
     function trierPrelevementRepris(idpatient, idfacturation)
     {

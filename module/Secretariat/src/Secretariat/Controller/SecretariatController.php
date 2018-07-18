@@ -25,6 +25,7 @@ class SecretariatController extends AbstractActionController {
 	protected $analyseTable;
 	protected $resultatDemandeAnalyseTable;
 	protected $listeRechercheTable;
+	protected $listeDossierPatientTable;
 	
 	public function getPersonneTable() {
 		if (! $this->personneTable) {
@@ -64,6 +65,14 @@ class SecretariatController extends AbstractActionController {
 			$this->listeRechercheTable = $sm->get ( 'Secretariat\Model\listeRechercheTable' );
 		}
 		return $this->listeRechercheTable;
+	}
+	
+	public function getListeDossierPatientTable() {
+		if (! $this->listeDossierPatientTable) {
+			$sm = $this->getServiceLocator ();
+			$this->listeDossierPatientTable = $sm->get ( 'Secretariat\Model\listeDossierPatientTable' );
+		}
+		return $this->listeDossierPatientTable;
 	}
 	
 /*****************************************************************************************************************************/
@@ -160,7 +169,8 @@ class SecretariatController extends AbstractActionController {
 	
 	public function listePatientsAjaxAction() {
 	
-		$output = $this->getPatientTable ()->listePatientsAjax();
+		//$output = $this->getPatientTable ()->listePatientsAjax();
+		$output = $this->getListeDossierPatientTable()->fetchAll();
 		return $this->getResponse ()->setContent ( Json::encode ( $output, array (
 				'enableJsonExprFinder' => true
 		) ) );
@@ -189,8 +199,19 @@ class SecretariatController extends AbstractActionController {
 	public function listePatientAction() {
 		$this->layout ()->setTemplate ( 'layout/secretariat' );
 		
-		//$list = $this->getPatientTable()->getListeDepistagePatient();
-		//var_dump($list); exit();
+		$timestart = microtime(true);
+		
+		//$output = $this->getPatientTable ()->listePatientsAjax();
+		//var_dump($output); exit();
+		
+		//$listeDossierPatient = $this->getListeDossierPatientTable()->fetchAll();
+		//var_dump($listeDossierPatient); exit();
+		
+		$timeend = microtime(true);
+		$time = $timeend-$timestart;
+		
+		//var_dump(number_format($time,3)); exit();
+		
 		
 		return new ViewModel ( );
 	}
@@ -618,8 +639,10 @@ class SecretariatController extends AbstractActionController {
 		//$timestart = microtime(true);
 		
 		//$output = $this->getPatientTable ()->listeRecherchePatientAjax();
-		
 		//$liste = $this->getListeRechercheTable()->fetchAll();
+		//var_dump($liste); exit();
+		//$listeDossierPatient = $this->getListeDossierPatientTable()->fetchAll();
+		//var_dump($listeDossierPatient); exit();
 		
 		//$timeend = microtime(true);
 		//$time = $timeend-$timestart;

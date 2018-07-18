@@ -184,6 +184,14 @@ class TriPrelevementTable {
  			
  	}
  	
+ 	public function deleteTriPrelevement($idbilan) {
+ 		$sql = new Sql($this->tableGateway->getAdapter());
+ 		$sQuery = $sql->delete()
+ 		->from('tri_prelevement')
+ 		->where(array('idbilan'=>$idbilan));
+ 		$sql->prepareStatementForSqlObject($sQuery)->execute();
+ 	}
+ 	
  	
 }
 

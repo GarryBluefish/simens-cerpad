@@ -25,6 +25,10 @@
 		});
 	}
 		
+	function triSelectValeurToutConforme(){
+    	$('.conformitePrelevTousConforme').val(1).trigger('change');
+    }
+	
     var  oTable;
     function initialisation(){	
     	
@@ -310,7 +314,7 @@
     }
 	
     
-    function getConformite(val, id){ 
+    function getConformite(val, id){
     	
     	if(val == ''){ 
     		$('#noteConformite_'+id).html('');

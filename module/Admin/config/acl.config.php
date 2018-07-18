@@ -216,6 +216,10 @@ return array(
             		'infos-statistiques-resultats-depistages' => 'technicien',
             		'infos-statistiques-resultats-depistages-optionnelles' => 'technicien',
             		'imprimer-informations-statistiques-depistages' => 'technicien',
+            			
+            		'supprimer-un-tri' => 'technicien',
+            			
+            		'infos-statistiques-depistages-nayant-pas-resultat' => 'technicien',
             	),	
             		
             		
@@ -293,6 +297,13 @@ return array(
             		'infos-statistiques-depistage-mensuel' => 'infirmier',
             		'infos-statistiques-optionnelles-depistage-mensuel' => 'infirmier',	
             		'imprimer-informations-statistiques-depistages' => 'infirmier',
+            		
+            		
+            		'liste-patients-consultes' => 'infirmier',
+            		'liste-patients-consultes-ajax' => 'infirmier',
+            		'visualiser-historique-consultation' => 'infirmier',
+            			
+            		'supprimer-un-bilan' => 'infirmier',
             	),
                 
                 

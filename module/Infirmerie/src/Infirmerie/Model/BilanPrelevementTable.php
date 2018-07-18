@@ -38,6 +38,23 @@ class BilanPrelevementTable {
  		return $row;
  	}
  	
+ 	public function getTriBilan($idbilan){
+ 		$sql = new Sql($this->tableGateway->getAdapter());
+ 		$sQuery = $sql->select()
+ 		->from('tri_prelevement')
+ 		->where(array('idbilan'=>$idbilan));
+ 		return $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
+ 	}
+ 	
+ 	public function deleteBilanPrelevement($idbilan) {
+ 		if($this->getTriBilan($idbilan)){
+ 			return 1;
+ 		}else{
+ 			$this->tableGateway->delete(array('idbilan'=>$idbilan));
+ 		}
+ 	}
+ 	
+ 	
  	
  	public function updateBilanPrelevement($donnees, $idfacturation) {
  		
@@ -474,38 +491,6 @@ class BilanPrelevementTable {
  	
  		$aColumns = array('numero_dossier', 'Nom', 'Prenom', 'Datenaissance', 'Adresse', 'DateEnregistrementTri', 'id', 'Idfacturation');
  	
- 		/* Indexed column (used for fast and accurate table cardinality) */
- 		$sIndexColumn = "id";
- 	
- 		/*
- 		 * Paging
- 		*/
- 		$sLimit = array();
- 		if ( isset( $_GET['iDisplayStart'] ) && $_GET['iDisplayLength'] != '-1' )
- 		{
- 			$sLimit[0] = $_GET['iDisplayLength'];
- 			$sLimit[1] = $_GET['iDisplayStart'];
- 		}
- 	
- 		/*
- 		 * Ordering
- 		*/
- 		if ( isset( $_GET['iSortCol_0'] ) )
- 		{
- 			$sOrder = array();
- 			$j = 0;
- 			for ( $i=0 ; $i<intval( $_GET['iSortingCols'] ) ; $i++ )
- 			{
- 				if ( $_GET[ 'bSortable_'.intval($_GET['iSortCol_'.$i]) ] == "true" )
- 				{
- 					$sOrder[$j++] = $aColumns[ intval( $_GET['iSortCol_'.$i] ) ]."
-								 	".$_GET['sSortDir_'.$i];
- 				}
- 			}
- 		}
- 	
- 		
-
  		/*
  		 * SQL queries
  		 * Liste des patients pour lesquels le bilan est repris et le tris est refais pour les analyses reprises 
@@ -993,62 +978,6 @@ class BilanPrelevementTable {
  		return $tab;
  			
  	}
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	function pourCorrection(){
- 		$liste_prelevement = $this->tableGateway->select()->toArray();
- 		/**
- 		 * Commenter le var_dump pour corriger la BD
- 		 */
- 		var_dump($liste_prelevement); exit();
- 		
- 		for($i=0; $i<count($liste_prelevement); $i++){
- 			$date_convertie = (new DateHelper())->convertDateInAnglais( substr($liste_prelevement[$i]['date_heure'], 0, 10) );
- 			$this->tableGateway->update(array('date_prelevement' => $date_convertie), array('idbilan' => $liste_prelevement[$i]['idbilan']) );
- 		}
- 		
- 		return $this->tableGateway->select()->toArray();
- 	} 
  	
  	
 }

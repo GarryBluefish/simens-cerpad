@@ -19,6 +19,8 @@ use Infirmerie\Model\MotifAdmissionTable;
 use Infirmerie\Model\MotifAdmission;
 use Infirmerie\Model\DemandeAnalyseTable;
 use Infirmerie\Model\DemandeAnalyse;
+use Infirmerie\Model\ListeBilanPrelevementTable;
+use Infirmerie\Model\ListeBilanPrelevement;
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface, ViewHelperProviderInterface {
 
@@ -104,6 +106,17 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 							$resultSetPrototype = new ResultSet();
 							$resultSetPrototype->setArrayObjectPrototype ( new DemandeAnalyse());
 							return new TableGateway ( 'demande_analyse', $dbAdapter, null, $resultSetPrototype );
+						},
+						'Infirmerie\Model\ListeBilanPrelevementTable' => function ($sm) {
+							$tableGateway = $sm->get ( 'ListeBilanPrelevementTableGateway' );
+							$table = new ListeBilanPrelevementTable($tableGateway);
+							return $table;
+						},
+						'ListeBilanPrelevementTableGateway' => function ($sm) {
+							$dbAdapter = $sm->get ( 'Zend\Db\Adapter\Adapter' );//vue_test_liste_bilans_15000
+							$resultSetPrototype = new ResultSet(); //vue_liste_bilan_infirmerie
+							$resultSetPrototype->setArrayObjectPrototype ( new ListeBilanPrelevement());
+							return new TableGateway ( 'vue_liste_bilan_infirmerie', $dbAdapter, null, $resultSetPrototype );
 						},
 				)
 		);

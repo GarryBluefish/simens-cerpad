@@ -17,9 +17,9 @@
 	border: 2px solid #cccccc;
     box-shadow: 0pt 0pt 10px rgba(0, 0, 0, 0.5);
 	height: 35px;
-	width: 90%;
+	width: 75%;
 	padding-left: 10px;
-	font-size: 18px;
+	font-size: 19px;
 }
 
 .optionsPeriodePath{
@@ -38,7 +38,7 @@
 .champOP2 .typeTR{
 	font-family: times new roman;
 	position: absolute;
-	right: 90px;
+	right: 150px;
 	top: 10px;
 	color: #C8C6C6;
 	cursor: pointer;
@@ -47,7 +47,7 @@
 .champOP2 .typeRV{
 	font-family: times new roman;	
 	position: absolute;
-	right: 60px;
+	right: 120px;
 	top: 10px;
 	color: #C8C6C6;
 	cursor: pointer;
@@ -56,10 +56,24 @@
 .champOP2 .typeRNV{
 	font-family: times new roman;
 	position: absolute;
-	right: 30px;
+	right: 90px;
 	top: 10px;
 	color: #C8C6C6;
 	cursor: pointer;
+}
+
+.champOP2 .typePasR{
+	font-family: times new roman;
+	position: absolute;
+	right: 30px;
+	top: 10px;
+	color: green;
+	border: 1px solid white;
+	border-radius: 50%;
+	font-size: 12px;
+	cursor: pointer;
+	background: #f38d13;
+	/* text-shadow: 1px 0px 2px green; */
 }
 
 
@@ -90,7 +104,7 @@
 	visibility: visible;
 }
 
-#affichageInfosStatistiques .titreTableauInfosStatistiques{
+#affichageInfosStatistiques .titreTableauInfosStatistiques, #affichageInfosDepistesPasEncoreResultats .titreTableauInfosStatistiquesDNPR{
 	padding-bottom: 5px;
     padding-top : 13px;
 	width: 100%;
@@ -100,13 +114,13 @@
 }
 
 
-#affichageInfosStatistiques .ligneTitreTableauInfos:hover{
+#affichageInfosStatistiques .ligneTitreTableauInfos:hover, #affichageInfosDepistesPasEncoreResultats .ligneTitreTableauInfosDNPR:hover{
 	background: #f1f1f1;
 	border-top-left-radius: 10px;
 	border-top-right-radius: 10px;
 }
 
-#affichageInfosStatistiques .ligneTitreTableauInfos{
+#affichageInfosStatistiques .ligneTitreTableauInfos, #affichageInfosDepistesPasEncoreResultats .ligneTitreTableauInfosDNPR{
 	width: 100%;
 	border-bottom: 2px solid #cccccc;
 	font-size: 14px;
@@ -114,17 +128,17 @@
 	font-weight: bold;
 }
 
-#affichageInfosStatistiques .ligneTitreTableauInfos td{
+#affichageInfosStatistiques .ligneTitreTableauInfos td, #affichageInfosDepistesPasEncoreResultats .ligneTitreTableauInfosDNPR td{
 	padding-left: 10px;
 }
 
-#affichageInfosStatistiques .tableauInfosStatistiques{
+#affichageInfosStatistiques .tableauInfosStatistiques, #affichageInfosDepistesPasEncoreResultats .tableauInfosStatistiquesDNPR{
     padding-bottom: 5px;
     padding-top : 13px;
 	width: 100%;
 }
 
-#affichageInfosStatistiques .tableauInfosStatistiques td{
+#affichageInfosStatistiques .tableauInfosStatistiques td, #affichageInfosDepistesPasEncoreResultats .tableauInfosStatistiquesDNPR td{
 	border-top: 1px solid #cccccc;
 	border-left: 1px solid #cccccc;
 }
@@ -142,7 +156,7 @@
 	border-top-right-radius: 10px;
 }
 
-#listeTableauInfosStatistiques{
+#listeTableauInfosStatistiques, #listeTableauInfosStatistiquesDNPR{
 	max-height: 400px; 
 	overflow-y: auto;
 }
@@ -217,3 +231,28 @@
 
 
 
+
+
+#affichageInfosDepistesPasEncoreResultats .ligneTitreTableauInfosDNPR td{
+	padding-top: 11px;
+	padding-left: 10px;
+}
+
+#affichageInfosDepistesPasEncoreResultats .tableauInfosStatistiquesDNPR td{
+	padding-top: 8px;
+}
+
+
+#affichageInfosDepistesPasEncoreResultats .zoneaffichageInfosDepistesPasEncoreResultats{
+	width: 99%;
+	margin-top: 10px;
+	min-height: 10px;
+	border-top: 2px solid #cccccc; 
+	border-left: 2px solid #cccccc;
+	border-right: 2px solid #cccccc; 
+	border-bottom: 1px solid #fff;
+    box-shadow: 0pt 0pt 12px rgba(0, 0, 0, 0.5);
+	
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+}

@@ -2,6 +2,7 @@
 namespace Consultation\View\Helper;
 
 use Consultation\View\Helper\fpdf181\fpdf;
+use Infirmerie\View\Helper\DateHelper;
 
 class imprimerOrdonnance extends fpdf
 {
@@ -219,13 +220,23 @@ class imprimerOrdonnance extends fpdf
 		$this->quantiteMedicament = $quantiteMedicament;
 	}
 	
+	protected function nbJours($debut, $fin) {
+		//60 secondes X 60 minutes X 24 heures dans une journee
+		$nbSecondes = 60*60*24;
+	
+		$debut_ts = strtotime($debut);
+		$fin_ts = strtotime($fin);
+		$diff = $fin_ts - $debut_ts;
+		return ($diff / $nbSecondes);
+	}
+	
 	function EnTetePage()
 	{
 		$this->SetFont('Times','',10.3);
 		$this->SetTextColor(0,0,0);
 		$this->Cell(0,4,"République du Sénégal");
 		$this->SetFont('Times','',8.5);
-		$this->Cell(0,4,"Saint-Louis, le ".$this->getInfosComp()['dateDuJour'],0,0,'R');
+		$this->Cell(0,4,"",0,0,'R');
 		$this->SetFont('Times','',10.3);
 		$this->Ln(5.4);
 		$this->Cell(100,4,"Ministère de la santé et de l'action sociale");
@@ -252,7 +263,7 @@ class imprimerOrdonnance extends fpdf
 		// EMPLACEMENT DU LOGO
 		$baseUrl = $_SERVER['SCRIPT_FILENAME'];
 		$tabURI  = explode('public', $baseUrl);
-		$this->Image($tabURI[0].'public/images_icons/CERPAD_UGB_LOGO_M.png', 162, 20, 35, 18);
+		$this->Image($tabURI[0].'public/images_icons/CERPAD_UGB_LOGO_M.png', 162, 12, 35, 22);
 		
 		// EMPLACEMENT DES INFORMATIONS SUR LE PATIENT
 		// EMPLACEMENT DES INFORMATIONS SUR LE PATIENT
@@ -271,12 +282,39 @@ class imprimerOrdonnance extends fpdf
 		$this->SetFont('Times','',11);
 		if($infoPatients){ $this->Cell(92,4,iconv ('UTF-8' , 'windows-1252', $infoPatients->sexe),0,0,'L'); }
 		
+		
+		//GESTION DES AGES
+		//GESTION DES AGES
+		$age = $infoPatients->age;
+		$aujourdhui = (new \DateTime() ) ->format('Y-m-d');
+		if(!$age){
+		
+			$age_jours = $this->nbJours($infoPatients->date_naissance, $aujourdhui);
+			if($age_jours < 31) {
+				$age = $age_jours." jours";
+			}
+			else
+			if($age_jours >= 31) {
+				$nb_mois = (int)($age_jours/30);
+				$nb_jours = $age_jours - ($nb_mois*30);
+				$age = $nb_mois."m ".$nb_jours."j";
+			}
+		
+		}else{
+		
+			$age = $age." ans";
+		
+		}
+		
+		$convertDate = new DateHelper();
+		
+		
 		$this->SetFont('Times','B',8.5);
 		$this->SetTextColor(0,0,0);
 		$this->Ln(5);
 		$this->Cell(90,4,"AGE :",0,0,'R',false);
 		$this->SetFont('Times','',11);
-		if($infoPatients){ $this->Cell(92,4,$infoPatients->age.' ans',0,0,'L'); }
+		if($infoPatients){ $this->Cell(92,4,$convertDate->convertDate($infoPatients->date_naissance).' ('.$age.')',0,0,'L'); }
 		
 		$this->SetFont('Times','B',8.5);
 		$this->SetTextColor(0,0,0);
@@ -289,7 +327,10 @@ class imprimerOrdonnance extends fpdf
 		$this->SetFillColor(0,128,0);
 		$this->Cell(0,0.3,"",0,1,'C',true);
 		
-		$this->Ln(1);
+		$this->Ln(2);
+		$this->AddFont('timesi','','timesi.php');
+		$this->SetFont('timesi','',8);
+		$this->Cell(183,1,"Imprimé le : ".$convertDate->convertDate($aujourdhui),0,1,'R');
 	}
 	
 	public function moisEnLettre($mois){

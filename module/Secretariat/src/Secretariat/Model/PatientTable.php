@@ -1051,7 +1051,7 @@ class PatientTable {
 	}
 	
 	
-	//Recuperer la liste des analyses demandees ayant des resultats pour la demande $iddemande
+	//Recuperer la liste des analyses demandees ayant des resultats non valides pour la demande $iddemande
 	public function getListeAnalysesDemandeesResultats($iddemande){
 		$dateDemande = $this->getDemandeAnalysesAvecIddemande($iddemande);
 	

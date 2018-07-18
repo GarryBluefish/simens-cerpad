@@ -109,11 +109,15 @@ $(window).load(function () {
 
 
 <!-- POP UP pour Confirmation Suppression -->
-<div id="confirmation" title="Confirmation de la suppression" style="display:none;">
+<div id="confirmationSuppression" title="Confirmation de la suppression" style="display:none;">
   <p style="font-size: 19px;">
      <span style="float:left; margin:0 0px 20px 0; ">
      <img src="<?php echo $this->basePath().'/images_icons/warning_16.png';?>" />
-     Etes-vous s&ucirc;r de vouloir annuler l'admission ?</span>
+      Etes-vous s&ucirc;r de vouloir annuler le tri ? <br>
+      
+     <i style='font-size: 16px;'>Si oui : Retournez sur la 'liste des bilans' pour effectuer un nouveau tri</i>
+     
+     </span>
   </p>
 </div>
 

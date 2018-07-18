@@ -17,6 +17,8 @@ use Secretariat\Model\AnalyseTable;
 use Secretariat\Model\Analyse;
 use Secretariat\Model\listeRecherche;
 use Secretariat\Model\listeRechercheTable;
+use Secretariat\Model\listeDossierPatientTable;
+use Secretariat\Model\listeDossierPatient;
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface, ViewHelperProviderInterface {
 
@@ -92,7 +94,20 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 							$resultSetPrototype = new ResultSet ();
 							$resultSetPrototype->setArrayObjectPrototype ( new listeRecherche() );
 							return new TableGateway ( 'personne', $dbAdapter, null, $resultSetPrototype );
-						}
+						},
+						
+						'Secretariat\Model\listeDossierPatientTable' => function ($sm) {
+							$tableGateway = $sm->get ( 'listeDossierPatientTableGateway' );
+							$table = new listeDossierPatientTable ( $tableGateway );
+							return $table;
+						},
+						'listeDossierPatientTableGateway' => function ($sm) {
+							$dbAdapter = $sm->get ( 'Zend\Db\Adapter\Adapter' );
+							$resultSetPrototype = new ResultSet ();
+							$resultSetPrototype->setArrayObjectPrototype ( new listeDossierPatient() );
+							return new TableGateway ( 'personne', $dbAdapter, null, $resultSetPrototype );
+						},
+						
 
 				)
 		);

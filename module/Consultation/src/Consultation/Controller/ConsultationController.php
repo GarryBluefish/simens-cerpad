@@ -578,7 +578,7 @@ class ConsultationController extends AbstractActionController {
 						if($nb_jours == 0){
 							$age ="<span style='font-size:18px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$nb_mois."m </span>";
 						}else{
-							$html .="<span style='font-size:17px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$nb_mois."m ".$nb_jours."j </span>";
+							$age ="<span style='font-size:17px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$nb_mois."m ".$nb_jours."j </span>";
 						}
 							
 					}else{
@@ -690,7 +690,7 @@ class ConsultationController extends AbstractActionController {
 		$listeMedicament = $this->getConsultationModConsTable()->listeDeTousLesMedicaments();
 		$listeForme = $this->getConsultationModConsTable()->formesMedicaments();
 		$listetypeQuantiteMedicament = $this->getConsultationModConsTable()->typeQuantiteMedicaments();
-		
+		//var_dump($data); exit();
 		
 		//var_dump($listeChoixStatutDrepanoEnfant->current()); exit();
 		//FIN --- FIN --- FIN --- FIN --- FIN --- FIN --- FIN
@@ -1218,7 +1218,7 @@ class ConsultationController extends AbstractActionController {
 						if($nb_jours == 0){
 							$age ="<span style='font-size:18px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$nb_mois."m </span>";
 						}else{
-							$html .="<span style='font-size:17px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$nb_mois."m ".$nb_jours."j </span>";
+							$age ="<span style='font-size:17px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$nb_mois."m ".$nb_jours."j </span>";
 						}
 							
 					}else{
@@ -1800,7 +1800,16 @@ class ConsultationController extends AbstractActionController {
 		
 		/**
 		 * UTILISER LA MEME FONCTION UTILISEE DANS 'modifier-consultation' 
+		 * 
+		 * la seule chose qui change pour le moment
+		 * POUR LE MENU GAUCHE dans -elementgauche.phtml
 		 */
+		 
+
+
+
+		//$listeAnalysesDemandees = $this->getAnalyseTable()->getListeAnalysesDemandeesDansConsDP('c_130218_123059', 744);
+		//var_dump($listeAnalysesDemandees); exit();
 		 
 		//DEBUT --- DEBUT --- DEBUT
 		$timestart = microtime(true);
@@ -1815,6 +1824,7 @@ class ConsultationController extends AbstractActionController {
 		$idpatient = $this->params ()->fromQuery ( 'idpatient', 0 );
 		$idcons = $this->params ()->fromQuery ( 'idcons' );
 		$patient = $this->getPatientTable()->getPatient($idpatient);
+		$informations_parentales = $this->getPersonneTable()->getInfosParentales($idpatient);
 		
 		//---- GESTION DU TYPE DE PATIENT ----
 		//---- GESTION DU TYPE DE PATIENT ----
@@ -1896,7 +1906,7 @@ class ConsultationController extends AbstractActionController {
 						if($nb_jours == 0){
 							$age ="<span style='font-size:18px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$nb_mois."m </span>";
 						}else{
-							$html .="<span style='font-size:17px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$nb_mois."m ".$nb_jours."j </span>";
+							$age ="<span style='font-size:17px; font-family: time new romans; color: green; font-weight: bold;'> ".$age_annees."an ".$nb_mois."m ".$nb_jours."j </span>";
 						}
 							
 					}else{
@@ -1980,7 +1990,7 @@ class ConsultationController extends AbstractActionController {
 		$donneesExamensEffectues = $this->getAnalyseAFaireTable()->getAnalyseEffectuees($idpatient);
 		
 		
-		
+		//var_dump($donneesExamensEffectues); exit();
 		
 		
 		
@@ -2028,11 +2038,14 @@ class ConsultationController extends AbstractActionController {
 		 * HISTOIRE DE LA MALADIE --- HITOIRE DE LA MALADIE
 		*/
 		$infosHistoireMaladie = $this->getHistoireMaladieTable()->getHistoireMaladie($idcons);
+		$listeCrisesVasOcclusivesHM = null;
 		if($infosHistoireMaladie){
 			$form->populateValues($infosHistoireMaladie[0]);
 			if($infosHistoireMaladie[0]['criseHM'] == 1){
 				$infosCriseVasoOcclusiveHm = $this->getHistoireMaladieTable()->getCriseVasoOcclusiveHm($idcons);
 				$form->populateValues($infosCriseVasoOcclusiveHm);
+		
+				$listeCrisesVasOcclusivesHM = $this->getHistoireMaladieTable()->getCriseVasoOcclusiveListeHm($idcons);
 			}
 			if($infosHistoireMaladie[0]['episodeFievreHM'] == 1){
 				$infosEpisodeFievreHm = $this->getHistoireMaladieTable()->getEpisodeFievreHm($idcons);
@@ -2081,14 +2094,41 @@ class ConsultationController extends AbstractActionController {
 		$infosSyntheseConsultation = $this->getDonneesExamenTable()->getSyntheseConsultation($idcons);
 		if($infosSyntheseConsultation){ $form->populateValues($infosSyntheseConsultation); }
 		 
+		 
+		
+		/**
+		 * Recupérer les demandes d'analyses
+		 */
+		/*
+		 * MOTIFS DES DEMANDES D'EXAMENS
+		*/
+		$motifsExamensRadioDemandes = $this->getFacturationTable()->getMotifsExamensRadioDemandes($idcons);
+		$motifsExamensBioDemandes   = $this->getFacturationTable()->getMotifsExamensBioDemandes($idcons);
+		
+		
+		
+		/**
+		 * Récupérer les résultats des demandes d'analyses radiologiques
+		*/
+		/*
+		 * RESULTATS DES EXAMENS RADIOLOGIQUES
+		*/
+		$resultatExamenRadio = $this->getExamenTable()->getResultatExamenRadiologique($idcons);
+		 
+		 
 		/**
 		 * Recuperer le diagnostic
-		 */
+		*/
+		/*
+		 * INFOS SUR LE DIAGNOSTIC DU JOUR
+		*/
+		$tabInfosDiagnosticDuJour = array(1=>0, 2=>0, 3=>0);
+		 
 		/*
 		 * DIAGNOSTIC DU JOUR
 		*/
 		$infosDiagnosticConsultation = $this->getDiagnosticConsultationTable()->getDiagnosticConsultation($idcons);
-		if($infosDiagnosticConsultation){ $form->populateValues($infosDiagnosticConsultation[0]); }
+		if($infosDiagnosticConsultation){ $form->populateValues($infosDiagnosticConsultation[0]); $tabInfosDiagnosticDuJour[3] = 1; }
 		/*
 		 * COMPLICATIONS AIGUES
 		*/
@@ -2096,6 +2136,7 @@ class ConsultationController extends AbstractActionController {
 		if($infosComplicationsAigues->count() != 0){
 			$nbDiagnosticComplicationsAigues = array('nbDiagnosticComplicationsAigues' => $infosComplicationsAigues->count());
 			$form->populateValues($nbDiagnosticComplicationsAigues);
+			$tabInfosDiagnosticDuJour[1] = 1;
 		}
 		/*
 		 * COMPLICATIONS CHRONIQUES
@@ -2104,11 +2145,88 @@ class ConsultationController extends AbstractActionController {
 		if($infosComplicationsChroniques->count() != 0){
 			$nbDiagnosticComplicationsChroniques = array('nbDiagnosticComplicationsChroniques' => $infosComplicationsChroniques->count());
 			$form->populateValues($nbDiagnosticComplicationsChroniques);
+			$tabInfosDiagnosticDuJour[2] = 1;
 		}
 		 
 		 
-		//var_dump($form); exit();
+		/**
+		 * Récupérer les informations sur le traitement médicamenteux
+		 */
 		
+		/*
+		 * TRAITEMENT MEDICAMENTEUX --- TRAITEMENT MEDICAMENTEUX
+		*/
+		$listeMedicament = $this->getConsultationModConsTable()->listeDeTousLesMedicaments();
+		$listeForme = $this->getConsultationModConsTable()->formesMedicaments();
+		$listetypeQuantiteMedicament = $this->getConsultationModConsTable()->typeQuantiteMedicaments();
+		
+		 
+		/*
+		 * INSTANTIATION DE L'ORDONNANCE
+		*/
+		$infoOrdonnance = $this->getOrdonnanceTable()->getOrdonnance($idcons);
+		
+		if($infoOrdonnance) {
+			$idOrdonnance = $infoOrdonnance->id_document;
+			$duree_traitement = $infoOrdonnance->duree_traitement;
+			//LISTE DES MEDICAMENTS PRESCRITS
+			$listeMedicamentsPrescrits = $this->getOrdonnanceTable()->getMedicamentsParIdOrdonnance($idOrdonnance);
+			$nbMedPrescrit = $listeMedicamentsPrescrits->count();
+		}else{
+			$nbMedPrescrit = null;
+			$listeMedicamentsPrescrits =null;
+			$duree_traitement = null;
+		}
+		
+		 
+		 
+		 
+		 
+		 
+		 
+		/**
+		 * Recupérer les Autres (Transfert/Hospitalisation/ Rendez-Vous )
+		 */
+		/*
+		 * TRANSFERT
+		*/
+		$transfert = $this->getFacturationTable()->getTransfert($idcons);
+		if($transfert){
+		
+		}
+		 
+		/*
+		 * HOSPITALISATION
+		*/
+		$hospitalisation = $this->getFacturationTable()->getHospitalisation($idcons);
+		//var_dump($hospitalisation); exit();
+		 
+		if($hospitalisation){
+			$donneesHospitalisation = array(
+					'motifHospitalisation' => $hospitalisation['motifHospitalisation'],
+			);
+			$form->populateValues($donneesHospitalisation);
+		}
+		 
+		/*
+		 * RENDEZ-VOUS
+		*/
+		$rendezVous = $this->getFacturationTable()->getRendezVous($idcons);
+		$motifRendezVous = null;
+		if($rendezVous){
+			$donneesRendezVous = array(
+					'dateHeureRendezVous' => (new DateHelper())->convertDate($rendezVous['dateRv']).' - '.substr($rendezVous['heureRv'], 0, 5),
+			);
+			$motifRendezVous = $rendezVous['motifRv'];
+			$form->populateValues($donneesRendezVous);
+		
+		}
+		 
+		 
+		//var_dump($rendezVous); exit();
+		 
+		 
+		 
 		
 		//FIN --- FIN --- FIN --- FIN --- FIN --- FIN --- FIN
 		//$timeend = microtime(true);
@@ -2138,8 +2256,27 @@ class ConsultationController extends AbstractActionController {
 		
 				'infosComplicationsAigues' => $infosComplicationsAigues,
 				'infosComplicationsChroniques' => $infosComplicationsChroniques,
+				'tabInfosDiagnosticDuJour' => $tabInfosDiagnosticDuJour,
 		
+				'motifsExamensRadioDemandes' => $motifsExamensRadioDemandes,
+				'motifsExamensBioDemandes' => $motifsExamensBioDemandes,
+		
+				'listeCrisesVasOcclusivesHM' => $listeCrisesVasOcclusivesHM,
+				'motifRendezVous' => $motifRendezVous,
+		
+				'listeMedicament' => $listeMedicament,
+				'listeFormeMedicament' => $listeForme,
+				'listeTypeQuantiteMedicament'  => $listetypeQuantiteMedicament,
+		
+				'informations_parentales' => $informations_parentales,
+				'resultatExamenRadio' => $resultatExamenRadio,
+		
+				'nb_med_prescrit' => $nbMedPrescrit,
+				'liste_med_prescrit' => $listeMedicamentsPrescrits,
+				'duree_traitement' => $duree_traitement,
 		);
+		
+		
 		
 	}
 	

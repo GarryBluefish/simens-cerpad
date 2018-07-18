@@ -2,19 +2,19 @@
 var base_url = window.location.toString();
 var tabUrl = base_url.split("public");
 //POUR LE MENU GAUCHE dans -elementgauche.phtml
-$('#plus_menu_infirmerie').toggle(true);
-$("#menu_infirmerie").replaceWith("<li id='menu_infirmerie' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='"+tabUrl[0]+"public/images_icons/moin-green2.png' alt='Liste' /> Pr&eacute;l&egrave;vements </span></a></li>");
-dep_menu_infirmerie1();
-$('#admission_style_infirm').css({'font-weight':'bold','color':'white','font-size':'22px'});
+$('#plus_menu_consultations').toggle(true);
+$("#menu_consultations").replaceWith("<li id='menu_consultations' style='background:#4a5765;'><a href=''><span style='margin-left:0px; color: #ffffff; font-weight:bold; font-size:20px; font-family:Times New Roman;'> <img style='display: inline;' src='"+tabUrl[0]+"public/images_icons/moin-green2.png' /> Consultations </span></a></li>");
+dep_menu_consultation1();
+$('#menu_historique_consultation_style').css({'font-weight':'bold','color':'white','font-size':'22px'});
 </script>
 
 <!-- MES STYLES -->
-<?php echo $this->headLink()->appendStylesheet($this->basePath().'/css/infirmier/styleListePatientAdmis.css');?>
+<?php echo $this->headLink()->appendStylesheet($this->basePath().'/css/infirmier/styleListeConsultations.css');?>
 <?php echo $this->headLink()->appendStylesheet($this->basePath().'/js/plugins/dateTimePicker/jquery-ui-timepicker-addon.css');?>
 
 
 <!-- MES JS -->
-<?php echo $this->headScript()->appendFile($this->basePath().'/js/infirmerie/jsListepatient.js');?>
+<?php echo $this->headScript()->appendFile($this->basePath().'/js/infirmerie/jsListeHistoriqueConsultations.js');?>
 <?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/dateTimePicker/jquery-ui-timepicker-addon.js');?>
 
 
@@ -42,13 +42,13 @@ $(window).load(function () {
 
 		<table class="table table-bordered tab_list_mini" id="patientAdmis">
 			<thead>
-				<tr style="height:50px; width:100%;">
-				    <th id="sexe" style='cursor: pointer;'>N&deg; dossier</th>
+				<tr style="height:45px; width:100%;">
+				    <th id="numero" align="center">N&deg; dossier</th>
 					<th id="nom" align="center">Nom</th>
 					<th id="prenom" align="center">Prenom</th>
-					<th id="date" align="center" style="font-size: 13px;">Date naiss..</th>
+					<th id="date" align="center" >Date naiss.</th>
+					<th id="sexe" align="center" >Sexe</th>
 					<th id="adresse" align="center" >Adresse</th>
-					<th id="nationalite" align="center" >Date & heure</th>
 					<th id="effectuer" align="center">Options</th>
 				</tr>
 			</thead>
@@ -61,12 +61,12 @@ $(window).load(function () {
 
 			<tfoot id="foot" class="foot_style">
 				<tr>
-				    <th id="sexe_" style='width: 14%;'><input type="text" name="search_browser"	value=" N&deg; dossier" class="search_init" /></th>
+					<th id="numero_" style="width: 15%;"><input type="text" name="search_browser" value=" N&deg; dossier" class="search_init" /></th>
 					<th id="nom_" style="width: 13%;"><input type="text" name="search_browser" value=" Nom" class="search_init" /></th>
-					<th id="prenom_" style="width: 15%;"><input type="text" name="search_browser" value=" Pr&eacute;nom" class="search_init" /></th>
-					<th id="date_" style="width: 10%;"><input type="text" name="search_browser" value=" Date naiss.." class="search_init" /></th>
-					<th id="adresse_" style="width: 22%;"><input type="text" name="search_browser" value=" Adresse" class="search_init" /></th>
-					<th id="nationalite_" style="width: 16%;"><input type="text" name="search_browser" value=" Date & heure" class="search_init" /></th>
+					<th id="prenom_" style="width: 18%;"><input type="text" name="search_browser" value=" Prenom" class="search_init" /></th>
+					<th id="date_" style="width: 12%;"><input type="text" name="search_browser" value=" Date naissance" class="search_init" /></th>
+					<th id="sexe_" style="width: 7%;"><input type="text" name="search_browser" value=" Sexe" class="search_init" /></th>
+					<th id="adresse_" style="width: 25%;"><input type="text" name="search_browser" value=" Adresse" class="search_init" /></th>
 					<th id="effectuer_" style="width: 10%;"><input type="hidden" name="search_browser" value="" class="" /></th>
 
 				</tr>
@@ -113,13 +113,13 @@ $(window).load(function () {
 <div style='display: none;' class='infos_parentales_tampon'> <!-- à ne pas supprimer *** pour les infos parentales --> </div>
 
 
-<div id="context-menu">
+<!-- div id="context-menu">
     <ul class="dropdown-menu" >
          <li><a style="cursor: pointer;" ><img id="visualiserCTX" style='margin-right: 10px; width: 19px; height: 16px;' src='../images_icons/voir2.png'>Visualiser</a></li>
          <li class="divider"></li>
          <li><a id="quitterCTX"  style="cursor: pointer;">Quitter</a></li>
     </ul>
-</div>
+</div-->
 
 
 
@@ -134,6 +134,5 @@ $(function(){
 	initialisation();
 });
 $("#interfaceListeFactures").toggle(false);
-//imprimerFacture();
 </script>
 
