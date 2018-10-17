@@ -2062,5 +2062,19 @@ class PatientTable {
 		$this->tableGateway->update($data, array('idpersonne' => $idpersonne) );
 	}
 	
+	/**
+	 * Liste des ethnies des patients dépistés
+	 * @return \Zend\Db\Adapter\Driver\ResultInterface
+	 */
+	public function getListeEthniesPatientsDepistes()
+	{
+		$db = $this->tableGateway->getAdapter();
+		$sql = new Sql($db);
+		$sQuery = $sql->select()
+		->from(array('dep' => 'depistage'))->columns(array('*'))
+		->group('ethnie');
+		return $sql->prepareStatementForSqlObject($sQuery)->execute();
+	}
+	
 	
 }

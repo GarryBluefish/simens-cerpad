@@ -28,7 +28,7 @@ $(window).load(function () {
 </script>
 
 
-<div id="titre" style='font-family: police2; text-decoration:none; color: green; font-size: 18px; font-weight: bold; padding-left: 20px;'><iS style='font-size: 25px;'>&curren;</iS> <span id="menu_infos"> MENU INFOS </span></div>
+<div id="titre" style='font-family: police2; text-decoration:none; color: green; font-size: 18px; font-weight: bold; padding-left: 20px;'><iS style='font-size: 25px;'>&curren;</iS> <span id="menu_infos"> MENU </span></div>
 <div id="wait" style="color: gray; font-size: 20px; text-align: center; margin-top: 80px;" > <span> Chargement ... </span> </div>
 <div id="contenuInterface" >
 
@@ -40,6 +40,7 @@ $(window).load(function () {
 
 
     <script type="text/javascript"> 
+    
      var ordonnees = [];
      var abcisses  = [];
      var i = 1;
@@ -53,9 +54,39 @@ $(window).load(function () {
    	     ordonnees [i++] = '<?php echo $typages; ?>';
       	  abcisses [j++] = <?php echo $this->typagesPatientsInternes[1][$typages]; ?>; 
 
-     <?php
-   		  }
-   	 ?>
+     <?php } ?>
+
+     //===============================================================================
+     
+     var ordEthnie = [];
+     var absEthnie = [];
+     var iabsEth = 1;
+     var jabsEth = 1;
+     <?php 
+       for( $i = 0 ; $i < count($this->peresNouveauNesSelonEthnies[0]) ; $i++){ 
+       $ethnie = $this->peresNouveauNesSelonEthnies[0][$i];
+     ?>
+        absEthnie [iabsEth++] = "<?php echo $ethnie;?>";
+        ordEthnie [jabsEth++] =  <?php echo $this->peresNouveauNesSelonEthnies[1][$ethnie]; ?>;
+
+     <?php }?>
+
+     //=================================================================================
+     
+     var ordTypeHemo = [];
+     var absTypeHemo = [];
+     var iabsTH = 1;
+     var jabsTH = 1;
+     <?php 
+       for( $i = 0 ; $i < count($this->differentsTypesProfils[0]) ; $i++){ 
+       $typageHemo = $this->differentsTypesProfils[0][$i];
+     ?>
+        absTypeHemo [iabsTH++] = "<?php echo $typageHemo;?>";
+        ordTypeHemo [jabsTH++] =  <?php echo $this->differentsTypesProfils[1][$typageHemo]; ?>;
+
+     <?php }?>
+
+     //==================================================================================
 
     </script>
     
@@ -74,6 +105,8 @@ $(window).load(function () {
     //Patients depistÈs
 	function patientsDepistes() {
 		var patientsDepistes = new CanvasJS.Chart("patientsDepistes", {
+			animationEnabled: true,
+			animationDuration: 2000,
 			data: [{
 				type: "column",
 				dataPoints: [
@@ -92,6 +125,8 @@ $(window).load(function () {
 	//Patients internes
 	function patientsInternes() {
 		var patientsInternes = new CanvasJS.Chart("patientsInternes", {
+			animationEnabled: true,
+			animationDuration: 2000,
 			data: [{
 				type: "pie",
 				dataPoints: [
@@ -118,6 +153,9 @@ $(window).load(function () {
 
 	function typagePatientsInternes() {
 		var typagePatientsInternes = new CanvasJS.Chart("typagePatientsInternes", {
+
+			animationEnabled: true,
+			animationDuration: 2000,
 			data: [{
 				type: "bar",
 				dataPoints: Pile
@@ -127,10 +165,85 @@ $(window).load(function () {
 		typagePatientsInternes.render();
 	}
 
+
+
+	//La repartition selon les ethnies
+	//La repartition selon les ethnies
+	var PileEthnie = [];
+
+	for(var ke = 1 ; ke < ordEthnie.length ; ke++){ 
+		var tabDonnee = { y : ordEthnie[ke] , label : absEthnie[ke] };
+		PileEthnie.push(tabDonnee);
+	}
+
+	function repartitionSelonEthnies() {
+		var repartitionSelonEthnies = new CanvasJS.Chart("repartitionSelonEthniesPie", {
+			data: [{
+				type: "pie",
+				dataPoints: PileEthnie
+			}]
+
+		});
+		repartitionSelonEthnies.render();
+
+		var repartitionSelonEthnies = new CanvasJS.Chart("repartitionSelonEthnies", {
+			data: [{
+				type: "column",
+				dataPoints: PileEthnie
+			}]
+
+		});
+		repartitionSelonEthnies.render();
+	}
+
+
+	//Les diffÈrents types d'hÈmogobine rencontrÈs
+	//Les diffÈrents types d'hÈmogobine rencontrÈs
+	var PileDiffTypeHemo = [];
+
+	for(var kh = 1 ; kh < ordTypeHemo.length ; kh++){ 
+		var tabDonnees = { y : ordTypeHemo[kh] , label : absTypeHemo[kh] };
+		PileDiffTypeHemo.push(tabDonnees);
+	}
+
+	function lesDifferentsTypesHemoglobineRencontres() {
+		var lesDifferentsTypesHemoglobineRencontresColumn = new CanvasJS.Chart("lesDifferentsTypesHemoglobineRencontresColumn", {
+			data: [{
+				type: "column",
+				dataPoints: PileDiffTypeHemo
+			}]
+
+		});
+		lesDifferentsTypesHemoglobineRencontresColumn.render();
+
+		var lesDifferentsTypesHemoglobineRencontresPie = new CanvasJS.Chart("lesDifferentsTypesHemoglobineRencontresPie", {
+			data: [{
+				type: "pie",
+				dataPoints: PileDiffTypeHemo
+			}]
+
+		});
+		lesDifferentsTypesHemoglobineRencontresPie.render();
+	}
+
+
+
+	//RÈpartition des diffÈrents types d'hÈmoglobine selon l'ethnie
+	//RÈpartition des diffÈrents types d'hÈmoglobine selon l'ethnie
+
+	
+
+
+
+
+	
+	
 	//APPEL DES FONCTIONS
 	patientsDepistes();
 	patientsInternes();
 	typagePatientsInternes();
+	repartitionSelonEthnies();
+	lesDifferentsTypesHemoglobineRencontres();
 
     });
 
@@ -240,8 +353,11 @@ $(window).load(function () {
 	     <table style="width: 100%; border-left: 2px solid #cccccc;">
 	       <tr style="width: 100%; ">
 	         <td style="width: 100%; height: 40px; font-family: Goudy Old Style; text-align: center;">
-	           <?php /*echo ''.$this->nbPatientDP.' patients - ';*/ ?>
-	           <?php echo $formeGraves ?> profils de sympt&ocirc;me dr√©panocitaire majeur 
+	           <?php if (in_array('CC', $this->typagesPatientsInternes[0])){ ?>
+	           <?php echo $formeGraves-1; ?> profils de sympt&ocirc;me dr√©panocitaire majeur & un statut CC
+	           <?php }else{?>
+	           <?php echo $formeGraves ?> profils de sympt&ocirc;me dr√©panocitaire majeur
+	           <?php }?>
 	         </td>
 	       </tr>
 	       
@@ -288,18 +404,334 @@ $(window).load(function () {
 	
 </div>
 
-<!-- LA PREMIERE PAGE POUR INFOS 1 -->
-<!-- LA PREMIERE PAGE POUR INFOS 1 -->
-<!-- LA PREMIERE PAGE POUR INFOS 1 -->
+<!-- LA DEUXIEME PAGE POUR INFOS 2 -->
+<!-- LA DEUXIEME PAGE POUR INFOS 2 -->
+<!-- LA DEUXIEME PAGE POUR INFOS 2 -->
 <div id="contenuPageB" >
     <table style="width: 100%; height: 20%;">
-	 <tr style="background: white; width: 100%; vertical-align: top;"><td colspan="3"> <img id="retourPageBMenuInfos" style="width: 16px;position: absolute; height: 16px; float: left; cursor: pointer; " src='../images_icons/72.png' > <!--a style='float: right; position: absolute; right: 50px; text-decoration: none;' href="javascript:captureImage();" title=""> &#9775; </a--> </td></tr>
-	 
+	  <tr style="background: white; width: 100%; vertical-align: top; height: 5px;"><td> <img id="retourPageBMenuInfos" style="width: 16px;position: absolute; height: 16px; float: left; cursor: pointer; " src='../images_icons/72.png' > <!--a style='float: right; position: absolute; right: 50px; text-decoration: none;' href="javascript:captureImage();" title=""> &#9775; </a--> </td></tr>
+      
+      <tr style="width: 100%; vertical-align: top; background: yello; ">
+	    <td align="center" style="width: 100%;">
+	      <div style="width: 100%; background: re;">
+	        
+	        <table style="width: 100%;">
+	          <tr style="width: 100%;"> 
+	          
+	            <!-- PREMIERE COLONNE -->
+	            <!-- PREMIERE COLONNE -->
+	            <td style="width: 33%; height: 250px; background: indig; text-align: center; border-right: 2px solid #cccccc; vertical-align: top;">
+	              
+	              <div style="width: 100%; font-family: Goudy Old Style; font-size: 21px; font-weight: normal;"> 
+	                  <span style="font-size: 16px; color: green; font-weight: bold;">&#9883;</span> nouveau-n&eacute;s d√©pist√©s avec sexe ratio  
+	              </div>
+	              
+	              <div style="width: 100%; margin-top: 10px; font-family: Goudy Old Style; font-size: 19px; font-weight: normal;"> 
+	                  <?php echo ($this->nbPatientDVSM + $this->nbPatientDVSF); ?> d√©pist√©s :
+	              </div>
+	              
+	              <div style="width: 100%; height: 20px; margin-top: 5px; margin-bottom: 15px; font-family: Goudy Old Style; background: re;" align="center">
+	             
+	                <table style="height: 36px; border: 1px solid #cccccc;">
+	                  <tr style="height: 18px; border: 1px solid #cccccc;">
+	                    <td style=" border: 2px solid #cccccc; padding-left: 6px; padding-right: 6px;"> Masculin </td>
+	                    <td style=" border: 2px solid #cccccc; padding-left: 10px; padding-right: 5px; text-align: right; min-width: 50px;"> <?php echo $this->nbPatientDVSM; ?> </td>
+	                    <?php if( count($this->pourcentageDepistagesValides) == 2){ ?>
+    	                  <td style=" border: 2px solid #cccccc; padding-left: 10px; padding-right: 5px; text-align: right;"> <?php echo $this->pourcentageDepistagesValides[0]." %"; ?> </td>
+	                    <?php } ?>
+	                  </tr>
+	                  <tr style="width: 100%; height: 18px; border: 1px solid #cccccc;">
+	                    <td style=" border: 2px solid #cccccc; padding-left: 6px; padding-right: 6px;"> F√©minin </td>
+	                    <td style=" border: 2px solid #cccccc; padding-left: 10px; padding-right: 5px; text-align: right; min-width: 50px;"> <?php echo $this->nbPatientDVSF; ?> </td>
+	                    <?php if( count($this->pourcentageDepistagesValides) == 2){ ?>
+    	                  <td style=" border: 2px solid #cccccc; padding-left: 10px; padding-right: 5px; text-align: right;"> <?php echo $this->pourcentageDepistagesValides[1]." %"; ?> </td>
+	                    <?php } ?>
+	                  </tr>
+	                
+	                </table>
+	             
+	              </div>
+	              
+	              <div style="width: 100%; margin-top: 60px; font-family: Goudy Old Style; font-size: 19px; font-weight: normal;"> 
+	                  <span style="font-weight: bold; font-size: 22px;"> sex-ratio = </span>  <?php echo $this->nbPatientDVSM."/".$this->nbPatientDVSF; ?> = <?php echo number_format(($this->nbPatientDVSM / $this->nbPatientDVSF),2,',', ' '); ?>
+	              </div>
+	              
+	            </td>
+	            
+	            
+	            <!-- DEUXIEME COLONNE -->
+	            <!-- DEUXIEME COLONNE -->
+	            <td style="width: 67%; height: 10px; background: gree; text-align: center; vertical-align: top;">
+	              
+	              <!-- Les diffÈrents types d'hÈmogobine rencontrÈs -->
+   	              <!-- Les diffÈrents types d'hÈmogobine rencontrÈs -->
+	              <div style="width: 100%; font-family: Goudy Old Style; font-size: 21px; font-weight: normal;"> 
+	                <span style="font-size: 16px; color: green; font-weight: bold;">&#9883;</span> Les diff&eacute;rents types d'h&eacute;mogobine rencontr&eacute;s 
+	              </div>
+	              
+	              <div style="width: 100%; margin-top: 5px; margin-left: 10px; max-width: 720px; overflow: auto; margin-bottom: 15px; font-family: Goudy Old Style; background: re;" align="center">
+	                <table style="height: 36px; border: 1px solid #cccccc;">
+	                  <tr style="height: 18px; border: 1px solid #cccccc;">
+	                    <?php for( $i = 0 ; $i < count($this->differentsTypesProfils[0]) ; $i++){ ?>
+    	                  <td style="min-width: 90px; border: 2px solid #cccccc; padding-left: 10px; padding-right: 5px; font-weight: bold; text-align: center;"> <?php echo $this->differentsTypesProfils[0][$i]; ?> </td>
+	                    <?php } ?>
+	                  </tr>
+	                  
+	                  <tr style="height: 18px; border: 1px solid #cccccc;">
+	                    <?php for( $i = 0 ; $i < count($this->differentsTypesProfils[0]) ; $i++){ ?>
+    	                  <td style="border: 2px solid #cccccc; padding-left: 10px; text-align: center;"> 
+    	                    <span style="font-weight: bold;"><?php echo $this->differentsTypesProfils[1][$this->differentsTypesProfils[0][$i]].' '; ?> </span>
+    	                    <?php echo ' - ('.$this->pourcentageDifferentsTypesProfils[$i].'%)'; ?>
+    	                  </td>
+	                    <?php } ?>
+	                  </tr>
+	                  
+	                </table>
+	              </div>
+	            
+	              <div style="width: 100%; font-family: Goudy Old Style; font-size: 21px; font-weight: normal;">
+	                <div id="lesDifferentsTypesHemoglobineRencontresPie" style="height: 225px; width: 50%; float: left; "></div>
+	                <div id="lesDifferentsTypesHemoglobineRencontresColumn" style="height: 225px; width: 50%; float: left; "></div>
+	              </div>
+	              
+	            </td>
+	            
+	            
+	          </tr>
+	          
+	          
+	          
+	          <tr style="width: 100%;"> 
+	          
+	            <!-- PREMIERE COLONNE -->
+	            <!-- PREMIERE COLONNE -->
+	            <td colspan="2" style="width: 100%; height: 250px; background: indig; text-align: center; border-top: 2px solid #cccccc; vertical-align: top; ">
+	             
+	              <!-- RÈpartition des nouveau-nÈs selon leurs ethnies -->
+	              <!-- RÈpartition des nouveau-nÈs selon leurs ethnies -->
+	              
+	              <div style="width: 100%; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; margin-top: 10px;"> 
+	                <span style="font-size: 16px; color: green; font-weight: bold;">&#9883;</span> R&eacute;partition des nouveau-n&eacute;s selon leurs ethnies  
+	              </div>
+	            
+	              <div style="width: 100%;" align="center">
+	               <div style="width: 100%; margin-top: 5px; max-width: 1090px; overflow: auto; margin-bottom: 15px; font-family: Goudy Old Style;" >
+	                <table style="height: 36px; border: 1px solid #cccccc;">
+	                  <tr style="height: 18px; border: 1px solid #cccccc;">
+	                    <?php for( $i = 0 ; $i < count($this->peresNouveauNesSelonEthnies[0]) ; $i++){ ?>
+    	                  <td style="min-width: 90px; border: 2px solid #cccccc; padding-left: 10px; padding-right: 5px; font-weight: bold; text-align: center;"> <?php echo $this->peresNouveauNesSelonEthnies[0][$i]; ?> </td>
+	                    <?php } ?>
+	                  </tr>
+	                  
+	                  <tr style="height: 18px; border: 1px solid #cccccc;">
+	                    <?php for( $i = 0 ; $i < count($this->peresNouveauNesSelonEthnies[0]) ; $i++){ ?>
+    	                  <td style="border: 2px solid #cccccc; padding-left: 10px; text-align: center;"> 
+    	                    <span style="font-weight: bold;"><?php echo $this->peresNouveauNesSelonEthnies[1][$this->peresNouveauNesSelonEthnies[0][$i]].' '; ?> </span>
+    	                    <?php echo ' - ('.$this->pourcentagePeresNouveauNesSelonEthnies[$i].'%)'; ?>
+    	                  </td>
+	                    <?php } ?>
+	                  </tr>
+	                  
+	                </table>
+	               </div>
+	              </div>
+	              
+	              <div style="width: 100%; font-family: Goudy Old Style; font-size: 21px; font-weight: normal;">
+	                <div id="repartitionSelonEthniesPie" style="height: 225px; width: 30%; float: left;"></div>
+	                <div style="height: 225px; width: 5%; float: left;"></div>
+	                <div id="repartitionSelonEthnies" style="height: 225px; width: 65%; float: left;"></div>
+	              </div>
+	              
+	              
+	            </td>
+	             
+	          </tr>  
+	          
+	          <tr style="width: 100%;"> 
+	          
+	            <!-- PREMIERE COLONNE -->
+	            <!-- PREMIERE COLONNE -->
+	            <td colspan="2" style="width: 100%; height: 250px; background: indig; text-align: center; border-top: 2px solid #cccccc; vertical-align: top; ">
+	             
+	              <!-- RÈpartition des diffÈrents types d'hÈmoglibine rencontrÈs selon leurs ethnies -->
+	              <!-- RÈpartition des diffÈrents types d'hÈmoglibine rencontrÈs selon leurs ethnies -->
+	              
+	              <div style="width: 100%; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; margin-top: 10px;"> 
+	                <span style="font-size: 16px; color: green; font-weight: bold;">&#9883;</span> R&eacute;partition des diff&eacute;rents types d'h&eacute;moglobine selon l'ethnie
+	              </div>
+	            
+	              <div style="width: 100%;" align="left">
+	              
+	               <div style="width: 2.5%; margin-top: 5px; margin-bottom: 15px; font-family: Goudy Old Style; float: left; background: re;" >
+	                 <table style="height: 36px; border: 1px solid #cccccc;">
+	                   <tr style="height: 18px; border: 1px solid #cccccc;">
+	                     <td style="width: 100%; border: 2px solid #cccccc; padding-left: 5px; padding-right: 5px; text-align: center;"> St </td>
+	                   </tr>
+	                   <?php for( $i = 0 ; $i < count($this->repartitionTypesProfilsSelonEthnies[0]) ; $i++){ ?>
+	                     <tr style="height: 18px; border: 1px solid #cccccc;">
+    	                   <td style="min-width: 15px; border: 2px solid #cccccc; text-align: center; font-weight: bold;"> 
+    	                     <?php echo $this->repartitionTypesProfilsSelonEthnies[0][$i]; ?>
+    	                   </td>
+	                     </tr>
+	                 <?php } ?>
+	                 </table>
+	               </div>
+	               
+	               
+	               
+	               <div style="width: 97.5%; margin-top: 5px; max-width: 1090px; overflow: auto; margin-bottom: 15px; font-family: Goudy Old Style; float: left;" >
+	                <table style="height: 36px; border: 1px solid #cccccc;">
+	                  <tr style="height: 18px; border: 1px solid #cccccc;">
+	                    <?php for( $i = 0 ; $i < count($this->repartitionTypesProfilsSelonEthnies[1]) ; $i++ ){ ?>
+    	                  <td style="min-width: 90px; border: 2px solid #cccccc; padding-left: 10px; padding-right: 5px; font-weight: bold; text-align: center;"> <?php echo $this->repartitionTypesProfilsSelonEthnies[1][$i]; ?> </td>
+	                    <?php } ?>
+	                  </tr>
+	                  
+	                  <?php  
+	                     for($i = 0 ; $i < count($this->repartitionTypesProfilsSelonEthnies[0]) ; $i++){
+                             $profil = $this->repartitionTypesProfilsSelonEthnies[0][$i];
+                      ?>
+                      <tr style="height: 18px; border: 1px solid #cccccc;">
+                      <?php 
+	                       for($j = 0 ; $j < count($this->repartitionTypesProfilsSelonEthnies[1]) ; $j++){ 
+	                           $ethnie = $this->repartitionTypesProfilsSelonEthnies[1][$j];
+	                           $tousLesProfils = $this->repartitionTypesProfilsSelonEthnies[2][$ethnie];
+	                           $nbParProfils =  array_count_values($tousLesProfils);
+	                  ?>
+	                           
+    	                         <td style="min-width: 15px; border: 2px solid #cccccc; padding-left: 10px; text-align: center; font-weight: bold;"> 
+    	                           <?php 
+    	                           if (in_array($profil, $tousLesProfils)){
+                                         echo $nbParProfils[$profil];
+                                   }else{
+                                         echo '-';
+                                   }
+                                   ?>
+    	                         </td>
+	                           
+	                  <?php } ?> 
+                           </tr>
+                      <?php } ?>
+	                  
+	                </table>
+	               </div>
+	               
+	              </div>
+	              
+	              <!--div style="width: 100%; font-family: Goudy Old Style; font-size: 21px; font-weight: normal;">
+	                <div id="repartitionDesDifferentsProfilsSelonEthniesPie" style="height: 225px; width: 30%; float: left;"></div>
+	                <div style="height: 225px; width: 5%; float: left;"></div>
+	                <div id="repartitionDesDifferentsProfilsSelonEthnies" style="height: 225px; width: 65%; float: left;"></div>
+	              </div-->
+	              
+	              
+	            </td>
+	             
+	          </tr>  
+	          
+	          
+	          
+	          <tr style="width: 100%;"> 
+	          
+	            <!-- PREMIERE COLONNE -->
+	            <!-- PREMIERE COLONNE -->
+	            <td colspan="2" style="width: 100%; height: 150px; background: indig; text-align: center; border-top: 2px solid #cccccc; vertical-align: top; ">
+	             
+	              <!-- Les professions rencontrÈes chez les mËres et chez les pËres -->
+	              <!-- Les professions rencontrÈes chez les mËres et chez les pËres -->
+	              
+	              <div style="width: 100%; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; margin-top: 10px;"> 
+	                <span style="font-size: 16px; color: green; font-weight: bold;">&#9883;</span> Les professions rencontr&eacute;es chez les m&egrave;res  
+	              </div>
+	            
+	              <div style="width: 100%;" align="center">
+	               <div style="width: 100%; margin-top: 5px; max-width: 1090px; overflow: auto; margin-bottom: 15px; font-family: Goudy Old Style;" >
+	                <table style="height: 36px; border: 1px solid #cccccc;">
+	                  <tr style="height: 18px; border: 1px solid #cccccc;">
+	                    <?php for( $i = 0 ; $i < count($this->repartitionProfessionChezLesMeres[0]) ; $i++){ ?>
+    	                  <td style="min-width: 90px; border: 2px solid #cccccc; padding-left: 10px; padding-right: 5px; font-weight: bold; text-align: center;"> <?php echo $this->repartitionProfessionChezLesMeres[0][$i]; ?> </td>
+	                    <?php } ?>
+	                  </tr>
+	                  
+	                  <tr style="height: 18px; border: 1px solid #cccccc;">
+	                    <?php for( $i = 0 ; $i < count($this->repartitionProfessionChezLesMeres[0]) ; $i++){ ?>
+    	                  <td style="border: 2px solid #cccccc; padding-left: 10px; text-align: center;"> 
+    	                    <span style="font-weight: bold;"><?php echo $this->repartitionProfessionChezLesMeres[1][$this->repartitionProfessionChezLesMeres[0][$i]].' '; ?> </span>
+    	                    <?php echo ' - ('.$this->pourcentageDifferentsProfessionMeres[$i].'%)'; ?>
+    	                  </td>
+	                    <?php } ?>
+	                  </tr>
+	                  
+	                </table>
+	               </div>
+	              </div>
+	              
+	            </td>
+	             
+	          </tr>  
+	          
+	          
+	          
+	          <tr style="width: 100%;"> 
+	          
+	            <!-- PREMIERE COLONNE -->
+	            <!-- PREMIERE COLONNE -->
+	            <td colspan="2" style="width: 100%; height: 150px; background: indig; text-align: center;  vertical-align: top; ">
+	             
+	              <!-- Les professions rencontrÈes chez les mËres et chez les pËres -->
+	              <!-- Les professions rencontrÈes chez les mËres et chez les pËres -->
+	              
+	              <div style="width: 100%; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; margin-top: 10px;"> 
+	                <span style="font-size: 16px; color: green; font-weight: bold;">&#9883;</span> Les professions rencontr&eacute;es chez les p&egrave;res  
+	              </div>
+	            
+	              <div style="width: 100%;" align="center">
+	               <div style="width: 100%; margin-top: 5px; max-width: 1090px; overflow: auto; margin-bottom: 15px; font-family: Goudy Old Style;" >
+	                <table style="height: 36px; border: 1px solid #cccccc;">
+	                  <tr style="height: 18px; border: 1px solid #cccccc;">
+	                    <?php for( $i = 0 ; $i < count($this->repartitionProfessionChezLesPeres[0]) ; $i++){ ?>
+    	                  <td style="min-width: 90px; border: 2px solid #cccccc; padding-left: 10px; padding-right: 5px; font-weight: bold; text-align: center;"> <?php echo $this->repartitionProfessionChezLesPeres[0][$i]; ?> </td>
+	                    <?php } ?>
+	                  </tr>
+	                  
+	                  <tr style="height: 18px; border: 1px solid #cccccc;">
+	                    <?php for( $i = 0 ; $i < count($this->repartitionProfessionChezLesPeres[0]) ; $i++){ ?>
+    	                  <td style="border: 2px solid #cccccc; padding-left: 10px; text-align: center;"> 
+    	                    <span style="font-weight: bold;"><?php echo $this->repartitionProfessionChezLesPeres[1][$this->repartitionProfessionChezLesPeres[0][$i]].' '; ?> </span>
+    	                    <?php echo ' - ('.$this->pourcentageDifferentsProfessionPeres[$i].'%)'; ?>
+    	                  </td>
+	                    <?php } ?>
+	                  </tr>
+	                  
+	                </table>
+	               </div>
+	              </div>
+	              
+	            </td>
+	             
+	          </tr>  
+	          
+	          
+	        </table>
+	       
+	      </div> 
+	    </td>
+	  </tr>	 
+      
 	</table>
 
 </div>
 
+<!-- LA DEUXIEME PAGE POUR INFOS 3 -->
+<!-- LA DEUXIEME PAGE POUR INFOS 3 -->
+<!-- LA DEUXIEME PAGE POUR INFOS 3 -->
+<div id="contenuPageC" >
+    <table style="width: 100%; height: 20%;">
+	 <tr style="background: white; width: 100%; vertical-align: top;"><td colspan="3"> <img id="retourPageCMenuInfos" style="width: 16px;position: absolute; height: 16px; float: left; cursor: pointer; " src='../images_icons/72.png' > <!--a style='float: right; position: absolute; right: 50px; text-decoration: none;' href="javascript:captureImage();" title=""> &#9775; </a--> </td></tr>
 
+	 </table>
+
+</div>
 
 
 
@@ -355,7 +787,7 @@ $(window).load(function () {
 		             <th style="border-radius: 50%; ">
 		               <div>
 		                 <section>
-   		                   <img style="width: 40px; height: 40px; margin-top: -15px;" src='../images_icons/tableau-graphique-ligne.png' /> PARAM&Eacute;TRABLE
+   		                   <img style="width: 40px; height: 40px; margin-top: -15px;" src='../images_icons/autres infos.png' /> AUTRES INFOS
 		                 </section>
 		               </div>
 		             </th>
@@ -373,7 +805,7 @@ $(window).load(function () {
 		             <th style="border-radius: 50%; ">
 		               <div>
 		                 <section>
-		                   <img src='../images_icons/Table16X16.png' > INFOS 3 - <span style="color: red;"> No</span> 
+		                   <img style="width: 40px; height: 40px; margin-top: -15px;" src='../images_icons/param 2.png' /> PARAM&Eacute;TRABLE
 		                 </section>
 		               </div>
 		             </th>
@@ -411,6 +843,6 @@ $(window).load(function () {
 
 
 <script>
-    setTimeout(function(){ $('#contenuPageA, #contenuPageB').toggle(false); });
+    setTimeout(function(){ $('#contenuPageA, #contenuPageB, #contenuPageC').toggle(false); });
     initialisation();
 </script>

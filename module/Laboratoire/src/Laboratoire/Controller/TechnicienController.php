@@ -1685,6 +1685,53 @@ class TechnicienController extends AbstractActionController {
 	
 	public function listePatientsAction (){
 		$this->layout ()->setTemplate ( 'layout/technicien' );
+		
+		//6 - 2017 - AC - 2017-04-25 - 2018-06-19
+		/*
+		$moisDateDebut = (int)substr('2017-04-25', 5, 2);
+		$moisDateFin   = (int)substr('2018-06-19', 5, 2);
+		
+		$jourDateDebut = (int)substr('2017-04-25', 8, 2);
+		$jourDateFin   = (int)substr('2018-06-19', 8, 2);
+		
+		if($moisDateDebut == '6'){ $dateDebut = '2017'.'-'.'6'.'-'.$jourDateDebut; }
+		else{ $dateDebut = '2017'.'-'.'6'.'-'.'01'; }
+		
+		if($moisDateFin == '6'){ $dateFin = '2017'.'-'.'6'.'-'.$jourDateFin; }
+		else{
+			$dernierJourMois = cal_days_in_month(CAL_GREGORIAN, '6', '2017');
+			$dateFin = '2017'.'-'.'6'.'-'.$dernierJourMois; 
+		}
+		*/
+		//var_dump($dateDebut.' - '.$dateFin); exit();
+		
+		
+		/*
+		$dateDebutChamp = '2017-04-25';
+		$dateFinChamp = '2018-06-19';
+		
+		$mois = '6';
+		$annee = '2017';
+		if($mois<10){ $mois = '0'.$mois; }
+		$dernierJourMois = cal_days_in_month(CAL_GREGORIAN, $mois, $annee);
+		$dateDebut = $annee.'-'.$mois.'-'.'01';
+		$dateFin = $annee.'-'.$mois.'-'.$dernierJourMois;
+
+		if($dateDebut < $dateDebutChamp){ 
+			$jourDateDebutChamp = (int)substr($dateDebutChamp, 8, 2);
+			$dateDebut = $annee.'-'.$mois.'-'.$jourDateDebutChamp;
+		}
+		
+		if($dateFin > $dateFinChamp){
+			$jourDateFinChamp = (int)substr($dateFinChamp, 8, 2);
+			$dateFin = $annee.'-'.$mois.'-'.$jourDateFinChamp;
+		}
+		
+		$listeNumeroDossier = $this->getResultatsDepistagesTable()->getListeNumeroDossierPatientsDepistagesAvecResultat('AC', $dateDebut, $dateFin);
+		
+		var_dump($listeNumeroDossier); exit();
+		*/
+		
 		return new ViewModel ( );
 	}
 	
@@ -8672,7 +8719,7 @@ class TechnicienController extends AbstractActionController {
  							//Pourcentage pour chaque valeur
  							$pourValeur = $this->item_percentage($listeProfils[$leProfil], $tabDonneesAnnee[$mois]);
  							
- 							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; color: green;">'.$listeProfils[$leProfil].'<span class="valPourcentage" style="font-size: 13px; color: black;">  ('.$pourValeur.'%)</span></td>';
+ 							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; color: green;">'.$listeProfils[$leProfil].'<span class="valPourcentage" style="font-size: 13px; color: black;">  ('.$pourValeur.'%)</span><span class="voirPlusNumDossierSTAT voirPlusNumDossierSTAT_'.$i.''.$ij.''.$iProf.'" onclick="voirPlusNumeroDossierStatInfo('.$i.','.$ij.','.$iProf.','.$mois.','.$annee.',\''.$leProfil.'\',\''.$intervalleDate[0].'\',\''.$intervalleDate[1].'\');" style="position: relative; margin-right: -15px; cursor: pointer; color: red;">&#11206;</span></td>';
  							$totalCol[$iProf] += $listeProfils[$leProfil];
  						}else{
 							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal;">0</td>';
@@ -8697,7 +8744,7 @@ class TechnicienController extends AbstractActionController {
  							//Pourcentage pour chaque valeur
  							$pourValeur = $this->item_percentage($listeProfils[$leProfil], $tabDonneesAnnee[$mois]);
  							
- 							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; color: green;">'.$listeProfils[$leProfil].'<span class="valPourcentage" style="font-size: 13px; color: black;">  ('.$pourValeur.'%)</span></td>';
+ 							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; color: green;">'.$listeProfils[$leProfil].'<span class="valPourcentage" style="font-size: 13px; color: black;">  ('.$pourValeur.'%)</span><span class="voirPlusNumDossierSTAT voirPlusNumDossierSTAT_'.$i.''.$ij.''.$iProf.'" onclick="voirPlusNumeroDossierStatInfo('.$i.','.$ij.','.$iProf.','.$mois.','.$annee.',\''.$leProfil.'\',\''.$intervalleDate[0].'\',\''.$intervalleDate[1].'\');" style="position: relative; margin-right: -15px; cursor: pointer; color: red;">&#11206;</span></td>';
  							$totalCol[$iProf] += $listeProfils[$leProfil];
  						}else{
 							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal;">0</td>';
@@ -8888,7 +8935,7 @@ class TechnicienController extends AbstractActionController {
 							//Pourcentage pour chaque valeur
 							$pourValeur = $this->item_percentage($listeProfils[$leProfil], $tabDonneesAnnee[$mois]);
 							
-							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; color: green;">'.$listeProfils[$leProfil].'<span class="valPourcentage" style="font-size: 13px; color: black;">  ('.$pourValeur.'%)</span></td>';
+							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; color: green;">'.$listeProfils[$leProfil].'<span class="valPourcentage" style="font-size: 13px; color: black;">  ('.$pourValeur.'%)</span><span class="voirPlusNumDossierSTAT voirPlusNumDossierSTAT_'.$i.''.$ij.''.$iProf.'" onclick="voirPlusNumeroDossierStatInfo('.$i.','.$ij.','.$iProf.','.$mois.','.$annee.',\''.$leProfil.'\',\''.$date_debut.'\',\''.$date_fin.'\');" style="position: relative; margin-right: -15px; cursor: pointer; color: red;">&#11206;</span></td>';
 							$totalCol[$iProf] += $listeProfils[$leProfil];
 						}else{
 							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal;">0</td>';
@@ -8913,7 +8960,7 @@ class TechnicienController extends AbstractActionController {
 							//Pourcentage pour chaque valeur
 							$pourValeur = $this->item_percentage($listeProfils[$leProfil], $tabDonneesAnnee[$mois]);
 							
-							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; color: green;">'.$listeProfils[$leProfil].'<span class="valPourcentage" style="font-size: 13px; color: black;">  ('.$pourValeur.'%)</span></td>';
+							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; color: green;">'.$listeProfils[$leProfil].'<span class="valPourcentage" style="font-size: 13px; color: black;">  ('.$pourValeur.'%)</span><span class="voirPlusNumDossierSTAT voirPlusNumDossierSTAT_'.$i.''.$ij.''.$iProf.'" onclick="voirPlusNumeroDossierStatInfo('.$i.','.$ij.','.$iProf.','.$mois.','.$annee.',\''.$leProfil.'\',\''.$date_debut.'\',\''.$date_fin.'\');" style="position: relative; margin-right: -15px; cursor: pointer; color: red;">&#11206;</span></td>';
 							
 							$totalCol[$iProf] += $listeProfils[$leProfil];
 						}else{
@@ -9293,4 +9340,41 @@ class TechnicienController extends AbstractActionController {
 		return $this->getResponse ()->setContent ( Json::encode ( $html ) );
 	}
 	
+	
+	
+	
+	public function infosStatistiquesVoirPlusNumeroDossierAction(){
+		$typeInfos = $this->params ()->fromPost ( 'typeInfos' );
+		$date_debut = $this->params ()->fromPost ( 'date_debut' );
+		$date_fin = $this->params ()->fromPost ( 'date_fin' );
+		$profil = $this->params ()->fromPost ( 'profil' );
+		$annee = $this->params ()->fromPost ( 'annee' );
+		$mois = $this->params ()->fromPost ( 'mois' );
+		
+		$dateDebutChamp = $date_debut;
+		$dateFinChamp = $date_fin;
+		
+		if($mois<10){ $mois = '0'.$mois; }
+		$dernierJourMois = cal_days_in_month(CAL_GREGORIAN, $mois, $annee);
+		$dateDebut = $annee.'-'.$mois.'-'.'01';
+		$dateFin = $annee.'-'.$mois.'-'.$dernierJourMois;
+		
+		if($dateDebut < $dateDebutChamp){
+			$jourDateDebutChamp = (int)substr($dateDebutChamp, 8, 2);
+			$dateDebut = $annee.'-'.$mois.'-'.$jourDateDebutChamp;
+		}
+		
+		if($dateFin > $dateFinChamp){
+			$jourDateFinChamp = (int)substr($dateFinChamp, 8, 2);
+			$dateFin = $annee.'-'.$mois.'-'.$jourDateFinChamp;
+		}
+		
+		
+		$listeNumeroDossier = $this->getResultatsDepistagesTable()->getListeNumeroDossierPatientsDepistagesAvecResultat($profil, $dateDebut, $dateFin, $typeInfos);
+		
+		$this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );
+		return $this->getResponse ()->setContent ( Json::encode ( $listeNumeroDossier ) );
+	}
+
+
 }

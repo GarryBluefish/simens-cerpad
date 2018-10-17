@@ -958,8 +958,6 @@ class ConsultationController extends AbstractActionController {
 		
 		$tabDonnees = $this->params ()->fromPost();
 		
-		//var_dump($tabDonnees); exit();
-		
 		/**
 		 *ANTECEDENT FAMILIAUX --- ANTECEDENTS FAMILIAUX
 		 *ANTECEDENT FAMILIAUX --- ANTECEDENTS FAMILIAUX
@@ -1008,7 +1006,7 @@ class ConsultationController extends AbstractActionController {
 		/** Résultats des examens complémentaires (Examens radiologiques) **/
 		$this->getExamenTable()->insertResultatExamenRadiologique($tabDonnees, $idmedecin);
 		
-		
+		//var_dump($tabDonnees); exit();
 		
 		/**
 		 * MOTIFS DES DEMANDES D'EXAMENS --- MOTIFS DES DEMANDES D'EXAMENS
@@ -1033,7 +1031,6 @@ class ConsultationController extends AbstractActionController {
 		$this->getDiagnosticConsultationTable()->insertComplicationsChroniques($tabDonnees, $idmedecin);
 		
 
-		
 		
 				
 		/**
@@ -1096,7 +1093,6 @@ class ConsultationController extends AbstractActionController {
 		 * FIN FIN FIN POUR LES TRAITEMENTS MEDICAMENTEUX --- POUR LES TRAITEMENTS MEDICAMENTEUX
 		 */
 		
-				
 		
 		/**
 		 * HOSPITALISATION --- HOSPITALISATION --- HOSPITALISATION
@@ -2556,7 +2552,7 @@ class ConsultationController extends AbstractActionController {
 	function item_percentage($item, $total){
 	
 		if($total){
-			return number_format(($item * 100 / $total), 1);
+			return number_format(($item * 100 / $total), 1,',', ' ');
 		}else{
 			return 0;
 		}
@@ -2576,6 +2572,10 @@ class ConsultationController extends AbstractActionController {
 	public function informationsStatistiquesAction() {
 		$this->layout ()->setTemplate ( 'layout/consultation' );
 		
+		/*
+		 * INFOS GENERAL --- INFOS GENERAL --- INFOS GENERAL
+		 * INFOS GENERAL --- INFOS GENERAL --- INFOS GENERAL
+		 */
 		$nbPatientD   = $this->getDepistageTable()->getNbPatientsDepistes();
 		$nbPatientDN  = $this->getDepistageTable()->getNbPatientsDepistesNegatifs();
 		$nbPatientDP  = $this->getDepistageTable()->getNbPatientsDepistesPositifs();
@@ -2602,6 +2602,76 @@ class ConsultationController extends AbstractActionController {
 		$pourcentageProfilsPatientsInterne = $this->pourcentage_element_tab($tableau, $totalProfilsPatientsInterne);
 		
 		
+		/*
+		 * AUTRES INFOS --- AUTRES INFOS --- AUTRES INFOS
+		 * AUTRES INFOS --- AUTRES INFOS --- AUTRES INFOS
+		 */
+		/**
+		  Nouveau-nés dépistés avec sex-ratio
+		  Nouveau-nés dépistés avec sex-ratio
+		  Nouveau-nés dépistés avec sex-ratio*/
+		$nbPatientDVSF = $this->getDepistageTable()->getNbPatientsDepistesValidesSexeFeminin();
+		$nbPatientDVSM = $this->getDepistageTable()->getNbPatientsDepistesValidesSexeMasculin();
+		
+		$nbPatientDnVSF = $this->getDepistageTable()->getNbPatientsDepistesNonValidesSexeFeminin(); 
+		$nbPatientDnVSM = $this->getDepistageTable()->getNbPatientsDepistesNonValidesSexeMasculin(); 
+
+		//Pourcentage des dépistages validés
+		//Pourcentage des dépistages validés
+		$tabNbDepistagesValides = array($nbPatientDVSM, $nbPatientDVSF);
+		$pourcentageDepistagesValides = $this->pourcentage_element_tab($tabNbDepistagesValides, ($nbPatientDVSM+$nbPatientDVSF));
+		
+		
+		/**
+		 Répartition des nouveau-nés selon leurs ethnies
+		 Répartition des nouveau-nés selon leurs ethnies
+		 Répartition des nouveau-nés selon leurs ethnies*/
+		$peresNouveauNesSelonEthnies = $this->getDepistageTable()->getRepartitionDesPeresSelonEthnies();
+		$totalNouveauNes = array_sum($peresNouveauNesSelonEthnies[1]);
+		$tableauNouveauNes = array_values($peresNouveauNesSelonEthnies[1]);
+		
+		$pourcentagePeresNouveauNesSelonEthnies = $this->pourcentage_element_tab($tableauNouveauNes, $totalNouveauNes);
+		
+		/**
+		  Les différents types d'hémoglobine rencontrés
+		  Les différents types d'hémoglobine rencontrés
+		  Les différents types d'hémoglobine rencontrés*/
+		$differentsTypesProfils = $this->getDepistageTable()->getDifferentsTypesProfils();
+		$totalDifferentsTypages = array_sum($differentsTypesProfils[1]);
+		$tableauDifferentsTypages = array_values($differentsTypesProfils[1]);
+		
+		$pourcentageDifferentsTypesProfils = $this->pourcentage_element_tab($tableauDifferentsTypages, $totalDifferentsTypages);
+		
+		/**
+		 * Répartition des différents types d'hémoglobine selon les ethnies
+		 * Répartition des différents types d'hémoglobine selon les ethnies
+		 * Répartition des différents types d'hémoglobine selon les ethnies*/
+		
+		$repartitionTypesProfilsSelonEthnies = $this->getDepistageTable()->getRepartitionTypesProfilsSelonEthnies();
+		
+		
+		/**
+		 * Les professions rencontrées chez les mères et chez les pères
+		 * Les professions rencontrées chez les mères et chez les pères
+		 * Les professions rencontrées chez les mères et chez les pères*/
+		/** Mères --- Mères*/
+		$repartitionProfessionChezLesMeres = $this->getDepistageTable()->getRepartitionProfessionChezLesMeres();
+		$totalDifferentsProfessionMeres = array_sum($repartitionProfessionChezLesMeres[1]);
+		$tableauDifferentsProfessionMeres = array_values($repartitionProfessionChezLesMeres[1]);
+		
+		$pourcentageDifferentsProfessionMeres = $this->pourcentage_element_tab($tableauDifferentsProfessionMeres, $totalDifferentsProfessionMeres);
+		
+		/** Pères --- Pères */
+		$repartitionProfessionChezLesPeres = $this->getDepistageTable()->getRepartitionProfessionChezLesPeres();
+		$totalDifferentsProfessionPeres = array_sum($repartitionProfessionChezLesPeres[1]);
+		$tableauDifferentsProfessionPeres = array_values($repartitionProfessionChezLesPeres[1]);
+		
+		$pourcentageDifferentsProfessionPeres = $this->pourcentage_element_tab($tableauDifferentsProfessionPeres, $totalDifferentsProfessionPeres);
+		
+		//var_dump($pourcentageDifferentsProfessionMeres); exit();
+		
+		
+		
 		return array (
 				'nbPatientD'   => $nbPatientD,
 				'nbPatientDN'  => $nbPatientDN,
@@ -2611,8 +2681,24 @@ class ConsultationController extends AbstractActionController {
 				'pourcentageDepister' => $pourcentageDepister,
 				'pourcentageDepisterPositif' => $pourcentageDepisterPositif,
 				'pourcentageProfilsPatientsInterne' => $pourcentageProfilsPatientsInterne,
-				
 				'typagesPatientsInternes' => $typagesPatientsInternes,
+				
+				
+				'nbPatientDVSF' => $nbPatientDVSF,
+				'nbPatientDVSM' => $nbPatientDVSM,
+				'pourcentageDepistagesValides' => $pourcentageDepistagesValides,
+				'peresNouveauNesSelonEthnies' => $peresNouveauNesSelonEthnies,
+				'pourcentagePeresNouveauNesSelonEthnies' => $pourcentagePeresNouveauNesSelonEthnies,
+				
+				'differentsTypesProfils' => $differentsTypesProfils,
+				'pourcentageDifferentsTypesProfils' => $pourcentageDifferentsTypesProfils,
+				'repartitionTypesProfilsSelonEthnies' => $repartitionTypesProfilsSelonEthnies,
+				
+				'repartitionProfessionChezLesMeres' => $repartitionProfessionChezLesMeres,
+				'pourcentageDifferentsProfessionMeres' => $pourcentageDifferentsProfessionMeres,
+				
+				'repartitionProfessionChezLesPeres' => $repartitionProfessionChezLesPeres,
+				'pourcentageDifferentsProfessionPeres' => $pourcentageDifferentsProfessionPeres,
 		);
 		
 	}

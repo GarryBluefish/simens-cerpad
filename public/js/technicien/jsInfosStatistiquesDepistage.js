@@ -72,6 +72,7 @@ var typeInfos = 0;
 
 function afficherTousLesResultats(){
 	typeInfos = 0;
+	tamponChaineProfil = new Array();
 	$('.champOP2 .typeRV, .champOP2 .typeRNV').css({'color':'#C8C6C6', 'text-shadow':'0px 0px 0px #C8C6C6', 'font-size':'15px'});
 	$('.champOP2 .typeTR').css({'color':'green', 'text-shadow':'1px 0px 2px green', 'font-size':'18px'});
 	var date_debut = $('.champOP1 input').val();
@@ -105,6 +106,7 @@ function afficherTousLesResultats(){
 
 function afficherLesResultatsValides(){
 	typeInfos = 1;
+	tamponChaineProfil = new Array();
 	$('.champOP2 .typeTR, .champOP2 .typeRNV').css({'color':'#C8C6C6', 'text-shadow':'0px 0px 0px #C8C6C6', 'font-size':'15px'});
 	$('.champOP2 .typeRV').css({'color':'green', 'text-shadow':'1px 0px 2px green', 'font-size':'18px'});
 	var date_debut = $('.champOP1 input').val();
@@ -137,6 +139,7 @@ function afficherLesResultatsValides(){
 
 function afficherLesResultatsNonValides(){
 	typeInfos = 2;
+	tamponChaineProfil = new Array();
 	$('.champOP2 .typeTR, .champOP2 .typeRV').css({'color':'#C8C6C6', 'text-shadow':'0px 0px 0px #C8C6C6', 'font-size':'15px'});
 	$('.champOP2 .typeRNV').css({'color':'green', 'text-shadow':'1px 0px 2px green', 'font-size':'18px'});
 	var date_debut = $('.champOP1 input').val();
@@ -218,9 +221,9 @@ function voirPlusNumeroDossier(iannee,jmois,listeNumDossierChaine)
 	
 	for(var ik=0 ; ik<listeNumDossierTab.length-1 ; ik++){
 		if(ik%2 == 0){
-			listeNumDossierTabStyle += "<tr style='width: 100%; background: #e9e9e9;'><td style='width: 100%; height: 40px; text-align: center; padding-right: 15px; font-family: Goudy Old Style; font-size: 18px; font-weight: normal; color: green;'>"+listeNumDossierTab[ik]+"</td></tr>";			
+			listeNumDossierTabStyle += "<tr style='width: 100%; background: #e9e9e9;'><td style='width: 100%; height: 40px; text-align: center; padding-right: 15px; font-family: Goudy Old Style; font-size: 18px; font-weight: normal; color: green;'><i style='font-size: 10px; color: black; margin-left:-10px;'>"+(ik+1)+" -  </i>"+listeNumDossierTab[ik]+"</td></tr>";			
 		}else{
-			listeNumDossierTabStyle += "<tr style='width: 100%; '><td style='width: 100%; height: 40px; text-align: center; padding-right: 15px; font-family: Goudy Old Style; font-size: 18px; font-weight: normal; color: green;'>"+listeNumDossierTab[ik]+"</td></tr>";			
+			listeNumDossierTabStyle += "<tr style='width: 100%; '><td style='width: 100%; height: 40px; text-align: center; padding-right: 15px; font-family: Goudy Old Style; font-size: 18px; font-weight: normal; color: green;'><i style='font-size: 10px; color: black; margin-left:-10px;'>"+(ik+1)+" -  </i>"+listeNumDossierTab[ik]+"</td></tr>";			
 		}
 
 	}
@@ -234,6 +237,67 @@ function voirPlusNumeroDossier(iannee,jmois,listeNumDossierChaine)
 	});
 	
 }
+
+var tamponChaineProfil = new Array();
+
+function voirPlusNumeroDossierStatInfo(i,j,iprof,mois,annee,profil,date_debut,date_fin)
+{
+	var chaineChargementOuPofil = '<div align="center" style="width: 100%; "> <img style="margin-left: 10px; margin-top: 15px; width: 50px; height: 50px;" src="../images/loading/Chargement_1.gif"></div>';
+	if(tamponChaineProfil[i+''+j+''+iprof]){ chaineChargementOuPofil = tamponChaineProfil[i+''+j+''+iprof]; }
+	
+	$('.voirPlusNumDossierSTAT_'+i+''+j+''+iprof).w2overlay({ html: "" +
+		"<div style='height: 245px; width: 170px; padding-top:10px; text-align:center;'>" +
+		"<div style='height: 99%; width: 100%; max-height: 99%; max-width: 100%; overflow: auto;' class='listeNumDossierVoirPlusSTATINFO' align='right'> "+chaineChargementOuPofil+" </div>" +
+		"</div>"+
+		"<style> .w2ui-overlay:before{left: 7px;  border: 1px solid green; top: 2px; border-bottom: 0px solid transparent; border-left:1px solid transparent;}  .w2ui-overlay{margin-left: -100px; margin-top:5px; border: 1px solid green; } </style>"+
+		"<style> .w2ui-overlay:after { border: 1px solid green; bottom: -8px; border-bottom: 0px solid transparent; border-left:1px solid transparent;} </style>"
+	});
+	
+	if(!tamponChaineProfil[i+''+j+''+iprof]){
+		$.ajax({
+			type : 'POST',
+			url : tabUrl[0] + 'public/technicien/infos-statistiques-voir-plus-numero-dossier',
+			data : {'mois':mois, 'annee':annee, 'profil':profil, 'date_debut':date_debut, 'date_fin':date_fin, 'typeInfos':typeInfos },
+			success : function(data) {
+				var listeNumDossierChaine = jQuery.parseJSON(data); 
+				
+				//PREPARATION DE LA LISTE --- PREPARATION DE LA LISTE
+				var listeNumDossierTab = listeNumDossierChaine.split(',');
+				var listeNumDossierTabStyle = "<table class='table table-bordered tab_list_mini' style='width: 100%;'>";
+				
+				for(var ik=0 ; ik<listeNumDossierTab.length-1 ; ik++){
+					if(ik%2 == 0){
+						listeNumDossierTabStyle += "<tr style='width: 100%; background: #e9e9e9;'><td style='width: 100%; height: 40px; text-align: center; padding-right: 15px; font-family: Goudy Old Style; font-size: 18px; font-weight: normal; color: green;'><i style='font-size: 10px; color: black; margin-left:-10px;'>"+(ik+1)+" -  </i>"+listeNumDossierTab[ik]+"</td></tr>";			
+					}else{
+						listeNumDossierTabStyle += "<tr style='width: 100%; '><td style='width: 100%; height: 40px; text-align: center; padding-right: 15px; font-family: Goudy Old Style; font-size: 18px; font-weight: normal; color: green;'><i style='font-size: 10px; color: black; margin-left:-10px;'>"+(ik+1)+" -  </i>"+listeNumDossierTab[ik]+"</td></tr>";			
+					}
+				}
+				listeNumDossierTabStyle += "</table>";
+				
+				//fin PREPARATION DE LA LISTE --- fin PREPARATION DE LA LISTE
+				tamponChaineProfil[i+''+j+''+iprof] = listeNumDossierTabStyle;
+				$(".listeNumDossierVoirPlusSTATINFO").html(listeNumDossierTabStyle);
+			}
+		});
+	}
+
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

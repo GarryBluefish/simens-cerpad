@@ -369,7 +369,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		$date_naissance = $infoPatients->date_naissance;
 		if($date_naissance){ $date_naissance = $convertDate->convertDate($date_naissance); } else {$date_naissance = null; }
 		if($date_naissance){
-			$this->Cell(90,4,"DATE DE NAISSANCE :",0,0,'R',false);
+			$this->Cell(90,4,"AGE  :",0,0,'R',false);
 			$this->SetFont('Times','',11);
 			
 			$age = $infoPatients->age;

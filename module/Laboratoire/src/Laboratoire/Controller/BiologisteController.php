@@ -69,6 +69,7 @@ class BiologisteController extends AbstractActionController {
 	public function listeResultatsAnalysesAjaxAction() {
 	
 	    $output = $this->getPatientTable ()->getListeResultatsAnalysesPourValidation();
+	    
 	    return $this->getResponse ()->setContent ( Json::encode ( $output, array (
 	        'enableJsonExprFinder' => true
 	    ) ) );
@@ -77,7 +78,7 @@ class BiologisteController extends AbstractActionController {
 	
 	public function listeResultatsAnalysesAction() {
 	    $this->layout ()->setTemplate ( 'layout/biologiste' );
-	
+	    
 	    return new ViewModel ( );
 	}
 	
@@ -4238,7 +4239,11 @@ class BiologisteController extends AbstractActionController {
 	    $html .= "</tr>";
 	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td colspan='2' ><label style='height: 80px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_hemogramme' style='max-height: 57px; min-height: 57px; max-width: 400px; min-width: 400px; margin-left: 30px;' readonly> </textarea> </label></td>";
+	    if($this->layout()->user['role'] == 'biologiste'){
+	    	$html .= "  <td colspan='2' ><label style='height: 80px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_hemogramme' style='max-height: 57px; min-height: 57px; max-width: 400px; min-width: 400px; margin-left: 30px;' > </textarea> </label></td>";
+	    }else{
+	    	$html .= "  <td colspan='2' ><label style='height: 80px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_hemogramme' style='max-height: 57px; min-height: 57px; max-width: 400px; min-width: 400px; margin-left: 30px;' readonly> </textarea> </label></td>";	    	
+	    }
 	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 80%; height: 80px; font-size: 14px;'>  </label></td>";
 	    $html .= "</tr>";
 	    

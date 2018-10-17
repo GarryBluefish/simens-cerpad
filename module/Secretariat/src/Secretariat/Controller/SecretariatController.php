@@ -161,9 +161,12 @@ class SecretariatController extends AbstractActionController {
 		$data = array('nationalite_origine' => 'Sénégal', 'nationalite_actuelle' => 'Sénégal');
 		$form->populateValues($data);
 		
+		$listeEthniesDepistes = $this->getPatientTable()->getListeEthniesPatientsDepistes();
+		
 		return new ViewModel ( array (
 				'form' => $form,
 		        'formParent' => $formParent,
+				'listeEthniesDepistes' => $listeEthniesDepistes,
 		) );
 	}
 	

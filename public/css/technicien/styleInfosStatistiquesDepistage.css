@@ -72,7 +72,8 @@
 	border-radius: 50%;
 	font-size: 12px;
 	cursor: pointer;
-	background: #f38d13;
+	background: #64FE2E;
+	font-weight: bold;
 	/* text-shadow: 1px 0px 2px green; */
 }
 
@@ -255,4 +256,14 @@
 	
 	border-top-left-radius: 10px;
 	border-top-right-radius: 10px;
+}
+
+#listeTableauInfosStatistiques .tableauInfosStatistiques td .voirPlusNumDossierSTAT{
+	opacity: 0.01;
+	font-size: 14px;
+}
+
+#listeTableauInfosStatistiques .tableauInfosStatistiques td:hover > .voirPlusNumDossierSTAT{
+	opacity: 1;
+	font-size: 14px;
 }

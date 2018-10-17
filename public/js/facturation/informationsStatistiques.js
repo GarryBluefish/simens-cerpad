@@ -21,7 +21,7 @@ function initialisation (){
 		    //$(location).attr("href",vart);
 		}else{ 
 			$('#contenuPageA').fadeOut(function(){
-				$('#menu_infos').html('MENU INFOS');
+				$('#menu_infos').html('MENU');
 				$('#menuGeneral').fadeIn();
 			});
 		}
@@ -31,9 +31,8 @@ function initialisation (){
 	//GESTION DE LA PAGE INFOS 2
 	$('#menuOption2').click(function(){
 		$('#menuGeneral').fadeOut(function(){
-			$('#menu_infos').html('INFOS STATISTIQUES OPTIONNELLES');
+			$('#menu_infos').html('AUTRES INFOS (concerne les d&eacute;pistages valid&eacute;s)');
 			$('#contenuPageB').fadeIn();
-			$('#iconeInfosPremiereIntervention').css({'visibility' : 'visible'});
 		});
 	});
 
@@ -43,7 +42,7 @@ function initialisation (){
 		    //$(location).attr("href",vart);
 		}else{
 			$('#contenuPageB').fadeOut(function(){
-				$('#menu_infos').html('MENU INFOS');
+				$('#menu_infos').html('MENU');
 				$('#menuGeneral').fadeIn();
 				$('#iconeInfosPremiereIntervention').css({'visibility' : 'hidden'});
 			});
@@ -51,30 +50,29 @@ function initialisation (){
 	});
 	
 	
-	/*
+	
 	//GESTION DE LA PAGE INFOS 3
 	//GESTION DE LA PAGE INFOS 3
 	$('#menuOption3').click(function(){
 		$('#menuGeneral').fadeOut(function(){
-			$('#menu_infos').html('INFOS STATISTIQUES - GENERER DES RAPPORTS');
+			$('#menu_infos').html('INFOS STATISTIQUES OPTIONNELLES');
 			$('#contenuPageC').fadeIn();
-			$('#iconeInfosPremiereIntervention').css({'visibility' : 'visible'});
 		});
 	});
 	
 	$('#retourPageCMenuInfos').click(function(){
 		if(saveStatOption3 == 1){
-			vart = tabUrl[0]+'public/facturation/informations-statistiques';
-		    $(location).attr("href",vart);
+			//vart = tabUrl[0]+'public/facturation/informations-statistiques';
+		    //$(location).attr("href",vart);
 		}else{
 			$('#contenuPageC').fadeOut(function(){
-				$('#menu_infos').html('MENU INFOS');
+				$('#menu_infos').html('MENU');
 				$('#menuGeneral').fadeIn();
 				$('#iconeInfosPremiereIntervention').css({'visibility' : 'hidden'});
 			});
 		}
 	});
-	*/
+	
 
 	
 	

@@ -220,6 +220,7 @@ return array(
             		'supprimer-un-tri' => 'technicien',
             			
             		'infos-statistiques-depistages-nayant-pas-resultat' => 'technicien',
+            		'infos-statistiques-voir-plus-numero-dossier' => 'technicien',	
             	),	
             		
             		
@@ -257,7 +258,7 @@ return array(
                 	'vue-infos-patients-admission-consultation' => 'facturation',	
 
                 		
-                		
+                	'get-nb-patient-admis' => 'facturation',	
                 		
 
                 ),
@@ -304,6 +305,7 @@ return array(
             		'visualiser-historique-consultation' => 'infirmier',
             			
             		'supprimer-un-bilan' => 'infirmier',
+            		'get-nb-patient-admis' => 'infirmier',
             	),
                 
                 

@@ -10,7 +10,8 @@ function confirmation(id){
     modal: true,
     buttons: {
         "Terminer": function() {
-            $( this ).dialog( "close" );             	     
+            $( this ).dialog( "close" );    
+            deplierFormulaireAdmission = 0;
             return false;
         }
    }
@@ -18,6 +19,7 @@ function confirmation(id){
 }
 
 function visualiser(id){ 
+  	 deplierFormulaireAdmission = 1;
 	 confirmation(id);
 	 var cle = id;
      var chemin = tabUrl[0]+'public/facturation/vue-popup';
@@ -33,8 +35,8 @@ function visualiser(id){
          	     $("#confirmation").dialog('open'); //Appel du POPUP
          	       
          },
-         error:function(e){console.log(e);alert("Une erreur interne est survenue!");},
-         dataType: "html"
+         //error:function(e){console.log(e);alert("Une erreur interne est survenue!");},
+         //dataType: "html"
      });
 }
 
@@ -56,7 +58,8 @@ function infoBulle(){
 	  });
 }
 
-var  oTable
+var  oTable;
+var nbDemandes;
 function initialisation(){
     
 	var asInitVals = new Array();
@@ -118,6 +121,32 @@ function initialisation(){
 	} );
 
 	$('#patient thead th').unbind('click');
+	
+	
+	raffraichirListeDemandeAdmission();
+	
+}
+
+var deplierFormulaireAdmission = 0;
+function raffraichirListeDemandeAdmission() {
+	setTimeout(function(){
+		//alert(nbDemandes);
+		$.ajax({
+	        type: 'POST',
+	        url: tabUrl[0]+'public/facturation/get-nb-patient-admis',
+	        data: {'id':1},
+	        success: function(data) {    
+	        	var result = jQuery.parseJSON(data);  
+	        	//alert(result);
+	        	if(result > nbDemandes){
+	        		if(deplierFormulaireAdmission == 0){
+			        	$(location).attr("href",tabUrl[0]+"public/facturation/admission");
+	        		}
+	        	}
+	        	raffraichirListeDemandeAdmission();
+	        }
+		});
+	},30000);
 }
 
 
@@ -163,6 +192,7 @@ function animation(){
 $('#info_facturation').toggle(false);
 
 $('#precedent').click(function(){
+	deplierFormulaireAdmission = 0;
 	$("#titre2").replaceWith("<div id='titre' style='font-family: police2; color: green; font-size: 18px; font-weight: bold; padding-left: 35px;'><iS style='font-size: 25px;'>&curren;</iS> LISTE DES DEMANDES D\'ANALYSES PAR PATIENT </div>");	
     
 	
@@ -195,7 +225,7 @@ $('#precedent').click(function(){
 var entreeValidation = 0;
 
 function admettre(idpatient){ 
-	
+	deplierFormulaireAdmission = 1;
 	$("#termineradmission").replaceWith("<button id='termineradmission' style='height:35px;'>Terminer</button>");
     $("#titre").replaceWith("<div id='titre2' style='font-family: police2; color: green; font-size: 18px; font-weight: bold; padding-left: 35px;'><iS style='font-size: 25px;'>&curren;</iS> ADMISSION </div>");	
 
@@ -249,8 +279,8 @@ function admettre(idpatient){
 
         	     
         },
-        error:function(e){console.log(e);alert("Une erreur interne est survenue!");},
-        dataType: "html"
+        //error:function(e){console.log(e);alert("Une erreur interne est survenue!");},
+        //dataType: "html"
     });
     
     //Annuler l'admission
@@ -546,8 +576,8 @@ function afficherLaListeDesAnalysesDelaDemande(idpatient, date, numOrdre){
         	    $('#listeDesAnalysesTableau').html(result);
         },
         
-        error:function(e){console.log(e);alert("Une erreur interne est survenue!");},
-        dataType: "html"
+        //error:function(e){console.log(e);alert("Une erreur interne est survenue!");},
+        //dataType: "html"
 	});
         	
 }

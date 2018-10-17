@@ -211,5 +211,126 @@ class ResultatsDepistagesTable {
  	
  	
  	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	/**
+ 	 * Liste des patients dépistés ayant déja un résultat (renseigné par un technicien)
+ 	 * pour un profil et une période donné
+ 	 */
+ 	public function getListeNumeroDossierPatientsDepistagesAvecResultat($profil, $date_debut, $date_fin, $typeInfos){
+ 			
+ 		if($typeInfos == 0){
+ 			return $this->getListeNumeroDossierPatientsDepistagesTR($profil, $date_debut, $date_fin);
+ 		}else if($typeInfos == 1){
+ 			return $this->getListeNumeroDossierPatientsDepistagesRV($profil, $date_debut, $date_fin);
+ 		}else if($typeInfos == 2){
+ 			return $this->getListeNumeroDossierPatientsDepistagesRX($profil, $date_debut, $date_fin);
+ 		}
+ 	}
+ 	
+ 	
+ 	/*
+ 	 * Liste des patients dépistés ayant déja un résultat (TR)
+ 	 */
+ 	public function getListeNumeroDossierPatientsDepistagesTR($profil, $date_debut, $date_fin){
+ 	
+ 		$result = $this->tableGateway->select(function (Select $select) use ($profil, $date_debut, $date_fin){
+ 			$select->join('patient' , 'patient.idpersonne = demande_analyse.idpatient' , array('*'));
+ 			$select->join('depistage' , 'depistage.idpatient = patient.idpersonne' , array('*'));
+ 			$select->join('typage_hemoglobine' , 'typage_hemoglobine.idtypage = depistage.typage' , array('*'));
+ 	
+ 			$select->join('facturation_demande_analyse' , 'facturation_demande_analyse.iddemande_analyse = demande_analyse.iddemande' , array('*'));
+ 			$select->join('bilan_prelevement' , 'bilan_prelevement.idfacturation = facturation_demande_analyse.idfacturation' , array('date_heure'));
+ 			$select->where(array(
+ 					'date_prelevement >= ?' => $date_debut,
+ 					'date_prelevement <= ?' => $date_fin,
+ 					'designation_stat' => $profil,
+ 					'demande_analyse.idanalyse' => 68
+ 			));
+ 			$select->order('demande_analyse.idpatient asc');
+ 	
+ 		})->toArray();
+ 			
+ 		$numDossierChaine = "";
+ 		for($i=0 ; $i<count($result) ; $i++){
+ 			$numDossierChaine .= $result[$i]['numero_dossier'].",";
+ 		}
+ 			
+ 		return $numDossierChaine;
+ 	}
+ 	
+ 	/*
+ 	 * Liste des patients dépistés ayant déja un résultat (RV)
+  	 */
+ 	public function getListeNumeroDossierPatientsDepistagesRV($profil, $date_debut, $date_fin){
+ 	
+ 		$result = $this->tableGateway->select(function (Select $select) use ($profil, $date_debut, $date_fin){
+ 			$select->join('patient' , 'patient.idpersonne = demande_analyse.idpatient' , array('*'));
+ 			$select->join('depistage' , 'depistage.idpatient = patient.idpersonne' , array('*'));
+ 			$select->join('typage_hemoglobine' , 'typage_hemoglobine.idtypage = depistage.typage' , array('*'));
+ 	
+ 			$select->join('facturation_demande_analyse' , 'facturation_demande_analyse.iddemande_analyse = demande_analyse.iddemande' , array('*'));
+ 			$select->join('bilan_prelevement' , 'bilan_prelevement.idfacturation = facturation_demande_analyse.idfacturation' , array('date_heure'));
+ 			$select->where(array(
+ 					'valide' => 1,
+ 					'date_prelevement >= ?' => $date_debut,
+ 					'date_prelevement <= ?' => $date_fin,
+ 					'designation_stat' => $profil,
+ 					'demande_analyse.idanalyse' => 68
+ 			));
+ 			$select->order('demande_analyse.idpatient asc');
+ 	
+ 		})->toArray();
+ 	
+ 		$numDossierChaine = "";
+ 		for($i=0 ; $i<count($result) ; $i++){
+ 			$numDossierChaine .= $result[$i]['numero_dossier'].",";
+ 		}
+ 	
+ 		return $numDossierChaine;
+ 	}
+ 	
+ 	/*
+ 	 * Liste des patients dépistés ayant déja un résultat (RX)
+ 	 */
+ 	public function getListeNumeroDossierPatientsDepistagesRX($profil, $date_debut, $date_fin){
+ 	
+ 		$result = $this->tableGateway->select(function (Select $select) use ($profil, $date_debut, $date_fin){
+ 			$select->join('patient' , 'patient.idpersonne = demande_analyse.idpatient' , array('*'));
+ 			$select->join('depistage' , 'depistage.idpatient = patient.idpersonne' , array('*'));
+ 			$select->join('typage_hemoglobine' , 'typage_hemoglobine.idtypage = depistage.typage' , array('*'));
+ 	
+ 			$select->join('facturation_demande_analyse' , 'facturation_demande_analyse.iddemande_analyse = demande_analyse.iddemande' , array('*'));
+ 			$select->join('bilan_prelevement' , 'bilan_prelevement.idfacturation = facturation_demande_analyse.idfacturation' , array('date_heure'));
+ 			$select->where(array(
+ 					'valide' => 0,
+ 					'date_prelevement >= ?' => $date_debut,
+ 					'date_prelevement <= ?' => $date_fin,
+ 					'designation_stat' => $profil,
+ 					'demande_analyse.idanalyse' => 68
+ 			));
+ 			$select->order('demande_analyse.idpatient asc');
+ 	
+ 		})->toArray();
+ 	
+ 		$numDossierChaine = "";
+ 		for($i=0 ; $i<count($result) ; $i++){
+ 			$numDossierChaine .= $result[$i]['numero_dossier'].",";
+ 		}
+ 	
+ 		return $numDossierChaine;
+ 	}
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
 }
 

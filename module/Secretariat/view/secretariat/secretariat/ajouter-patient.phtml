@@ -6,7 +6,7 @@
 echo $this->headScript ()->appendFile ( $this->basePath () . '/js/secretariat/jsSecretariatAjouterPatient.js' );
 echo $this->headLink ()->appendStylesheet ( $this->basePath () . '/css/Facturation/DatePicker.css' );
 ?>
-
+    
 <script>
 controle_saisie();
 
@@ -38,12 +38,12 @@ $(window).load(function () {
 </style>
 
 
-
 <?php
 $form = $this->form;
 $formParent = $this->formParent;
 $form->setAttribute ( 'action', $this->url ( 'secretariat', array ('action' => 'ajouter-patient') ) );
 $form->setAttribute ('enctype','multipart/form-data');
+$form->setAttribute ('id','formAjoutPatient');
 $this->form->prepare ();
 echo $this->form ()->openTag ( $form );
 ?>
@@ -83,7 +83,16 @@ echo $this->form ()->openTag ( $form );
                      <td > <?php echo $this->formRow($this->form->get('nom'));?></td>
                      <td > <?php echo $this->formRow($this->form->get('telephone'));?></td>
                      <td > <?php echo $this->formRow($this->form->get('situation_matrimoniale'));?></td>
-                     <td style='display: none;'> <?php echo $this->formRow($this->form->get('ethnie'));?></td>
+                     <td style='display: none;'> 
+                       <?php echo $this->formRow($this->form->get('ethnie'));?>
+                       <script> 
+                         var listeDesEthnies = [];
+                         var iEth = 0;
+                         <?php foreach($this->listeEthniesDepistes as $Liste) {?>
+                           listeDesEthnies[iEth++] = "<?php echo $Liste['ethnie']; ?>"; 
+                         <?php } ?>
+                       </script>
+                     </td>
                   </tr>
 
                   <tr class="comment-form-patient">
@@ -303,6 +312,8 @@ echo $this->form ()->openTag ( $form );
 	     return false;
 	});
 
+    $( "#ethnie" ).autocomplete({ source: listeDesEthnies });
+    
     //Envoyer le formulaire
     //Envoyer le formulaire
     $('#terminer').click(function(){ 
@@ -428,3 +439,34 @@ echo $this->form ()->openTag ( $form );
     });
     
 </script>
+
+
+
+<script>
+/*
+var reconnaissance = new (window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
+    reconnaissance.lang = 'fr-FR';
+    //reconnaissance.continuous = true;
+    reconnaissance.start();
+
+    reconnaissance.onresult = function(event) { alert(12);
+    	//inputText.value = event.results[0][0].transcript;
+
+    	alert(event.results[0][0].transcript);
+    }
+
+    reconnaissance.onerror = function(event) {
+    	alert(event.error);
+    }
+    */
+
+    /*
+    reconnaissance.onaudiostart = function() {
+    	alert(589);
+    }
+    */
+
+</script>
+
+
+

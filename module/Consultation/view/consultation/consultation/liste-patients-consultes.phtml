@@ -16,7 +16,7 @@ $('#menu_historique_consultation_style').css({'font-weight':'bold','color':'whit
 <!-- MES JS -->
 <?php echo $this->headScript()->appendFile($this->basePath().'/js/consultation/jsListePatientsConsultes.js');?>
 <?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/dateTimePicker/jquery-ui-timepicker-addon.js');?>
-
+<?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/sendMail.js');?>
 
 
 <?php use Facturation\View\Helper\DateHelper;
@@ -134,6 +134,18 @@ $(function(){
 	initialisation();
 });
 $("#interfaceListeFactures").toggle(false);
-imprimerFacture();
+
+/*
+Email.send ("alhassimdiallobe@gmail.com",
+		 "alhassimdiallobe@gmail.com",
+		 "Salutation 26-09-18",
+		 "Salut  hassim diallo 26-09-18",
+		 "smtp.elasticemail.com",
+		 "alhassimdiallobe@gmail.com",
+		 "7f0b69ce-f08b-4323-a116-0f1ac31b51b9",
+		 function done(message){ alert("envoyé") }
+); 
+*/
+		 
 </script>
 

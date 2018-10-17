@@ -225,9 +225,21 @@ class FacturationController extends AbstractActionController {
 		 
  		$formAdmission->get ( 'organisme' )->setValueOptions ( $listeOrganisme );
 		
+ 		$output = $this->getPatientTable ()->getListeDemandesDesPatients();
+ 		$nbDemandes = count($output['aaData']);
+ 		
 		return array (
-				'form' => $formAdmission
+				'form' => $formAdmission,
+				'nbDemandes' => $nbDemandes,
 		);
+	}
+	
+	public function getNbPatientAdmisAction() {
+		$output = $this->getPatientTable ()->getListeDemandesDesPatients();
+		$nbDemandes = count($output['aaData']);
+		
+		$this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );
+		return $this->getResponse ()->setContent ( Json::encode ( $nbDemandes ) );
 	}
     
 	protected function nbJours($debut, $fin) {

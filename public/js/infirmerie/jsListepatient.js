@@ -77,6 +77,7 @@
     }
     	
     var  oTable;
+    var nbDemandes;
     function initialisation(){	
     	
      var asInitVals = new Array();
@@ -151,8 +152,31 @@
     $(".boutonAnnuler").html('<button type="submit" id="terminer" style=" font-family: police2; font-size: 17px; font-weight: bold;"> Annuler </button>');
     $(".boutonTerminer").html('<button type="submit" id="terminer" style=" font-family: police2; font-size: 17px; font-weight: bold;"> Valider </button>');
 
+    
+    //raffraichirListeDemandeAdmission();
     }
     
+    var deplierFormulaireAdmission = 0;
+    function raffraichirListeDemandeAdmission() {
+    	setTimeout(function(){
+    		//alert(nbDemandes);
+    		$.ajax({
+    	        type: 'POST',
+    	        url: tabUrl[0]+'public/infirmerie/get-nb-patient-admis',
+    	        data: {'id':1},
+    	        success: function(data) {    
+    	        	var result = jQuery.parseJSON(data);  
+    	        	//alert(result);
+    	        	if(result > nbDemandes){
+    	        		if(deplierFormulaireAdmission == 0){
+    			        	$(location).attr("href",tabUrl[0]+"public/infirmerie/liste-patient");
+    	        		}
+    	        	}
+    	        	raffraichirListeDemandeAdmission();
+    	        }
+    		});
+    	},30000);
+    }
     
     function clickRowHandler() 
     {
