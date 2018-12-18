@@ -29,6 +29,16 @@ use Consultation\Model\OrdonnanceTable;
 use Consultation\Model\OrdonConsommableTable;
 use Consultation\Model\Ordonnance;
 use Consultation\Model\OrdonConsommable;
+use Consultation\Model\TransfusionTable;
+use Consultation\Model\Transfusion;
+use Consultation\Model\AntecedentsPersAntenatauxTable;
+use Consultation\Model\AntecedentsPersAntenataux;
+use Consultation\Model\AntecedentsPersPerinataux;
+use Consultation\Model\AntecedentsPersPerinatauxTable;
+use Consultation\Model\AntecedentsPersAlimentationTable;
+use Consultation\Model\AntecedentsPersAlimentation;
+use Consultation\Model\AntecedentsPersScolariteTable;
+use Consultation\Model\AntecedentsPersScolarite;
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface, ViewHelperProviderInterface {
 
@@ -178,6 +188,69 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 							$resultSetPrototype = new ResultSet();
 							$resultSetPrototype->setArrayObjectPrototype ( new OrdonConsommable());
 							return new TableGateway ( 'ordon_consommable', $dbAdapter, null, $resultSetPrototype );
+						},
+						
+						'Consultation\Model\TransfusionTable' => function ($sm) {
+							$tableGateway = $sm->get ( 'TransfusionTableGateway' );
+							$table = new TransfusionTable($tableGateway);
+							return $table;
+						},
+						'TransfusionTableGateway' => function ($sm) {
+							$dbAdapter = $sm->get ( 'Zend\Db\Adapter\Adapter' );
+							$resultSetPrototype = new ResultSet();
+							$resultSetPrototype->setArrayObjectPrototype ( new Transfusion());
+							return new TableGateway ( 'infos_transfusion', $dbAdapter, null, $resultSetPrototype );
+						},
+						
+						'Consultation\Model\AntecedentsPersAntenatauxTable' => function ($sm) {
+							$tableGateway = $sm->get ( 'AntecedentsPersAntenatauxTableGateway' );
+							$table = new AntecedentsPersAntenatauxTable($tableGateway);
+							return $table;
+						},
+						'AntecedentsPersAntenatauxTableGateway' => function ($sm) {
+							$dbAdapter = $sm->get ( 'Zend\Db\Adapter\Adapter' );
+							$resultSetPrototype = new ResultSet();
+							$resultSetPrototype->setArrayObjectPrototype ( new AntecedentsPersAntenataux());
+							return new TableGateway ( 'antecedents_pers_antenataux', $dbAdapter, null, $resultSetPrototype );
+						},
+						
+						
+						'Consultation\Model\AntecedentsPersPerinatauxTable' => function ($sm) {
+							$tableGateway = $sm->get ( 'AntecedentsPersPerinatauxTableGateway' );
+							$table = new AntecedentsPersPerinatauxTable($tableGateway);
+							return $table;
+						},
+						'AntecedentsPersPerinatauxTableGateway' => function ($sm) {
+							$dbAdapter = $sm->get ( 'Zend\Db\Adapter\Adapter' );
+							$resultSetPrototype = new ResultSet();
+							$resultSetPrototype->setArrayObjectPrototype ( new AntecedentsPersPerinataux());
+							return new TableGateway ( 'antecedents_pers_perinataux', $dbAdapter, null, $resultSetPrototype );
+						},
+						
+						
+						'Consultation\Model\AntecedentsPersAlimentationTable' => function ($sm) {
+							$tableGateway = $sm->get ( 'AntecedentsPersAlimentationTableGateway' );
+							$table = new AntecedentsPersAlimentationTable($tableGateway);
+							return $table;
+						},
+						'AntecedentsPersAlimentationTableGateway' => function ($sm) {
+							$dbAdapter = $sm->get ( 'Zend\Db\Adapter\Adapter' );
+							$resultSetPrototype = new ResultSet();
+							$resultSetPrototype->setArrayObjectPrototype ( new AntecedentsPersAlimentation());
+							return new TableGateway ( 'antecedents_pers_alimentation', $dbAdapter, null, $resultSetPrototype );
+						},
+						
+
+						'Consultation\Model\AntecedentsPersScolariteTable' => function ($sm) {
+							$tableGateway = $sm->get ( 'AntecedentsPersScolariteTableGateway' );
+							$table = new AntecedentsPersScolariteTable($tableGateway);
+							return $table;
+						},
+						'AntecedentsPersScolariteTableGateway' => function ($sm) {
+							$dbAdapter = $sm->get ( 'Zend\Db\Adapter\Adapter' );
+							$resultSetPrototype = new ResultSet();
+							$resultSetPrototype->setArrayObjectPrototype ( new AntecedentsPersScolarite());
+							return new TableGateway ( 'antecedents_pers_scolarite', $dbAdapter, null, $resultSetPrototype );
 						},
 				)
 		);

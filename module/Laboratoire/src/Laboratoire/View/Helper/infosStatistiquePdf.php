@@ -15,7 +15,7 @@ class infosStatistiquePdf extends fpdf
 		$this->Cell(0,0.3,"",0,1,'C',true);
 		$this->SetTextColor(0,0,0);
 		$this->SetFont('Times','',9.5);
-		$this->Cell(125,5,'Téléphone: 33 000 00 00 ',0,0,'L',0);
+		$this->Cell(125,5,'Téléphone: 77 680 69 69 ',0,0,'L',0);
 		$this->SetTextColor(128);
 		$this->SetFont('Times','I',9);
 		$this->Cell(20,8,'Page '.$this->PageNo(),0,0,'C',false);

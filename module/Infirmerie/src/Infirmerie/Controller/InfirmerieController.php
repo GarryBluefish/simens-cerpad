@@ -468,7 +468,7 @@ class InfirmerieController extends AbstractActionController {
 				<td style='width: 10%;' >
 				  <span style='color: white; '>
                     <img src='".$this->baseUrl()."public/img/photos_patients/".$personne->photo."' style='width:105px; height:105px; opacity: 0.09; margin-top: -20px;'/>
-                    <div style='margin-top: 20px; margin-right: 0px; font-size:17px; font-family: Iskoola Pota; color: green; float: right; font-style: itali; opacity: 1;'> ".$patient->numero_dossier." </div>
+                    <div style='margin-top: 20px; margin-right: 0px; font-size:16px; font-family: Iskoola Pota; color: green; float: right; font-style: itali; opacity: 1;'> ".$patient->numero_dossier." </div>
                   </span>
 				</td>
 	  
@@ -2177,6 +2177,15 @@ class InfirmerieController extends AbstractActionController {
 		//---- FIN Gestion des AGES ---- ----
 		//---- FIN Gestion des AGES ---- ----
 		
+		
+		//---- GESTION DU GROUPAGE --- ---
+		//---- GESTION DU GROUPAGE --- ---
+		//---- GESTION DU GROUPAGE --- ---
+		$groupeSanguin = $this->getPatientTable()->getGroupeSanguinPatient($idpatient);
+		//---- FIN Gestion DU GROUPAGE ---- ----
+		//---- FIN Gestion DU GROUPAGE ---- ----
+		//---- FIN Gestion DU GROUPAGE ---- ----
+		
 		$user = $this->layout()->user;
 		$idinfirmier = $user['idemploye'];
 		
@@ -2209,6 +2218,7 @@ class InfirmerieController extends AbstractActionController {
 				'form' => $form,
 				'patient' => $patient,
 				'informations_parentales' => $informations_parentales,
+				'groupeSanguin' => $groupeSanguin,
 		);
 	}
 	
@@ -2412,6 +2422,15 @@ class InfirmerieController extends AbstractActionController {
 		$listeVoieAdministration = $this->getConsultationTable()->getVoieAdministration($idcons);
 		
 		
+		//---- GESTION DU GROUPAGE --- ---
+		//---- GESTION DU GROUPAGE --- ---
+		//---- GESTION DU GROUPAGE --- ---
+		$groupeSanguin = $this->getPatientTable()->getGroupeSanguinPatient($idpatient);
+		//---- FIN Gestion DU GROUPAGE ---- ----
+		//---- FIN Gestion DU GROUPAGE ---- ----
+		//---- FIN Gestion DU GROUPAGE ---- ----
+		
+		
 		return array(
 				'idcons' => $idcons,
 				'lesdetails' => $personne,
@@ -2425,6 +2444,8 @@ class InfirmerieController extends AbstractActionController {
 				'mDouleur' => $mDouleur,
 				'listeVoieAdministration' => $listeVoieAdministration,
 				'informations_parentales' => $informations_parentales,
+				
+				'groupeSanguin' => $groupeSanguin,
 		);
 		
 	}

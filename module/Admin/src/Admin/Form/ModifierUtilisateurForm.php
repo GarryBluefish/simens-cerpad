@@ -156,7 +156,7 @@ class ModifierUtilisateurForm extends Form
 		
 		$this->add(array(
 				'name' => 'role',
-				'type' => 'Zend\Form\Element\radio',
+				'type' => 'Radio',
 				'options' => array (
 						'label' => 'Role',
 						'value_options' => array(
@@ -179,7 +179,7 @@ class ModifierUtilisateurForm extends Form
 		
 		$this->add(array(
 				'name' => 'enregistrer',
-				'type' => 'button',
+				'type' => 'Button',
 				'attributes' => array(
 						'value' => 'Enregistrer',
 						'id' => 'enregistrer',
@@ -188,7 +188,7 @@ class ModifierUtilisateurForm extends Form
 		
 		$this->add(array(
 				'name' => 'annuler',
-				'type' => 'button',
+				'type' => 'Button',
 				'attributes' => array(
 						'value' => 'Annuler',
 						'id' => 'annuler',

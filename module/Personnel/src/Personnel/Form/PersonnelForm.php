@@ -32,7 +32,7 @@ class PersonnelForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'civilite',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'label' => 'Civilite',
 						'value_options' => array (
@@ -76,7 +76,7 @@ class PersonnelForm extends Form {
 
 		$this->add ( array (
 				'name' => 'sexe',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'label' => 'Sexe',
 						'value_options' => array (
@@ -121,7 +121,7 @@ class PersonnelForm extends Form {
 
 		$this->add ( array (
 				'name' => 'situation_matrimoniale',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'label' => iconv ( 'ISO-8859-1', 'UTF-8','Situation matrimoniale'),
 						'value_options' => array (
@@ -137,7 +137,7 @@ class PersonnelForm extends Form {
 				) );
 		$this->add ( array (
 				'name' => 'nationalite',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'label' => iconv ( 'ISO-8859-1', 'UTF-8','Nationalité'),
 				),
@@ -169,7 +169,7 @@ class PersonnelForm extends Form {
 				)
 		) );
 		$this->add ( array (
-				'type' => 'Zend\Form\Element\Email',
+				'type' => 'Email',
 				'name' => 'email',
 				'options' => array (
 						'label' => 'Email'
@@ -199,7 +199,7 @@ class PersonnelForm extends Form {
 // 		<!--**************************************-->
 		$this->add ( array (
 				'name' => 'type_personnel',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'label' => 'Type Personnel',
 				),
@@ -493,7 +493,7 @@ class PersonnelForm extends Form {
 
 		$this->add ( array (
 				'name' => 'service_accueil',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'label' => 'Service'
 				),

@@ -27,21 +27,37 @@ class DiagnosticConsultationTable {
 		$this->tableGateway->delete( array('idcons' => $idcons) );
 	}
 	
-	function insertDiagnosticConsultation($tabDonnees, $idmedecin){
-		
-		$this->deleteDiagnosticConsultation($tabDonnees['idcons']);
-		
-		$diagnosticConsultation = array();
-		$diagnosticConsultation['diagnosticDuJourConsultation'] = $tabDonnees['diagnosticDuJourConsultation'];
-		
-		if(!$this->array_empty($diagnosticConsultation) && array_key_exists('choix_diag_autres_a_signaler', $tabDonnees)){
-			$diagnosticConsultation['idcons'] = $tabDonnees['idcons'];
-			$diagnosticConsultation['idmedecin'] = $idmedecin;
-			$this->tableGateway->insert($diagnosticConsultation);
-		}
-		
+	
+	//Choix conclusion diagnostic --- Choix conclusion diagnostic
+	//Choix conclusion diagnostic --- Choix conclusion diagnostic
+	//Choix conclusion diagnostic --- Choix conclusion diagnostic
+	
+	function deleteChoixConclusionDiagnostic($idcons){
+		$sql = new Sql($this->tableGateway->getAdapter());
+		$sQuery = $sql->delete() ->from('choix_conclusion_diagnostic')->where( array('idcons' => $idcons) );
+		$sql->prepareStatementForSqlObject($sQuery)->execute();
 	}
 	
+	function insertChoixConclusionDiagnostic($tabDonnees){
+		$this->deleteChoixConclusionDiagnostic($tabDonnees['idcons']);
+		
+		$choixDiagnosticConsultation['idcons'] = $tabDonnees['idcons'];
+		$choixDiagnosticConsultation['choix']  = $tabDonnees['choixConclusionDiagnosticSelect'];
+		
+		$sql = new Sql($this->tableGateway->getAdapter());
+		$sQuery = $sql->insert() ->into('choix_conclusion_diagnostic')->values($choixDiagnosticConsultation);
+		$sql->prepareStatementForSqlObject($sQuery)->execute();
+		
+		return $choixDiagnosticConsultation['choix'];
+	}
+	
+	function getChoixConsultationDiagnostic($idcons){
+		$sql = new Sql($this->tableGateway->getAdapter());
+		$sQuery = $sql->select() ->from('choix_conclusion_diagnostic')->where( array('idcons' => $idcons) );
+		$resultat = $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
+		
+		return $resultat['choix'];
+	}
 	
 	//COMPLICATION AIGUES --- COMPLICATIONS AIGUES
 	//COMPLICATION AIGUES --- COMPLICATIONS AIGUES
@@ -134,6 +150,27 @@ class DiagnosticConsultationTable {
 		$sQuery = $sql->select() ->from('complications_chroniques_consultation')->where( array('idcons' => $idcons, 'complication_chronique' => $idcomplicationchronique) );
 		return $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
 	}
+	
+	
+	
+	//Autres à signaler --- Autres à signaler --- Autres à signaler
+	//Autres à signaler --- Autres à signaler --- Autres à signaler
+	//Autres à signaler --- Autres à signaler --- Autres à signaler
+	function insertDiagnosticConsultation($tabDonnees, $idmedecin){
+	
+		$this->deleteDiagnosticConsultation($tabDonnees['idcons']);
+	
+		$diagnosticConsultation = array();
+		$diagnosticConsultation['diagnosticDuJourConsultation'] = $tabDonnees['diagnosticDuJourConsultation'];
+	
+		if(!$this->array_empty($diagnosticConsultation)){
+			$diagnosticConsultation['idcons'] = $tabDonnees['idcons'];
+			$diagnosticConsultation['idmedecin'] = $idmedecin;
+			$this->tableGateway->insert($diagnosticConsultation);
+		}
+	
+	}
+	
 	
 }
 

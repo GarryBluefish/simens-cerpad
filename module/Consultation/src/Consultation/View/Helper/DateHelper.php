@@ -1,10 +1,23 @@
 <?php
-namespace Facturation\View\Helper;
+namespace Consultation\View\Helper;
 
 use Zend\View\Helper\AbstractHelper;
 
 class DateHelper extends AbstractHelper{
 
+	/**
+	 * Trouver une date future
+	 * @param $date = date actuelle
+	 * @param $jour = nombre de jour
+	 * @return string
+	 */
+	function getDateProchaine($date,$jour){ // la date doit avoir cette format 'Y-m-d'
+		list($y,$m,$d)= explode("-",$date);
+		$date = mktime(0,0,0,$m,$d+$jour,$y);
+		$date = gmdate("Y-m-d", $date);
+		return $date;
+	}
+	
 	public function convertDate($date){
 		$nouv_date = substr($date, 8, 2).'/'.substr($date, 5, 2).'/'.substr($date, 0, 4);
 		return $nouv_date;

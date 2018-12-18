@@ -77,7 +77,7 @@ class ActeForm extends Form
 		/*Buttons --- Buttons --- Buttons --- Buttons*/
 		$this->add(array(
 				'name' => 'terminer',
-				'type' => 'submit',
+				'type' => 'Submit',
 				'attributes' => array(
 						'value' => 'Terminer',
 						'id' => 'terminer',
@@ -86,7 +86,7 @@ class ActeForm extends Form
 		
 		$this->add(array(
 				'name' => 'enregistrer',
-				'type' => 'submit',
+				'type' => 'Submit',
 				'attributes' => array(
 						'value' => 'Enregistrer',
 						'id' => 'enregistrer',
@@ -95,7 +95,7 @@ class ActeForm extends Form
 		
 		$this->add(array(
 				'name' => 'annuler',
-				'type' => 'submit',
+				'type' => 'Submit',
 				'attributes' => array(
 						'value' => 'Annuler',
 						'id' => 'annuler',

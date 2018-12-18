@@ -48,6 +48,30 @@ class FacturationTable {
  	
  	}
  	
+ 	public function reglementFacturation($infosPriseencharge){
+ 		$db = $this->tableGateway->getAdapter();
+ 		$sql = new Sql($db);
+ 	
+ 		$sQuery = $sql->insert()->into('organisme_pec_regle')->values($infosPriseencharge);
+ 		$sql->prepareStatementForSqlObject($sQuery)->execute();
+ 	}
+ 	
+ 	public function annulerReglementFacturation($idfacturation){
+ 			
+ 		$db = $this->tableGateway->getAdapter();
+ 		$sql = new Sql($db);
+ 		$sQuery = $sql->delete()->from('organisme_pec_regle')->where(array('idfacturation' => $idfacturation));
+ 		$sql->prepareStatementForSqlObject ( $sQuery )->execute ();
+ 	}
+ 	
+ 	public function getReglementFacturation($idfacturation){
+ 	
+ 		$db = $this->tableGateway->getAdapter();
+ 		$sql = new Sql($db);
+ 		$sQuery = $sql->select()->from('organisme_pec_regle')->where(array('idfacturation' => $idfacturation));
+ 		return $sql->prepareStatementForSqlObject ( $sQuery )->execute ()->current();
+ 	}
+ 	
  	public function getDerniereFacturation(){
  		$db = $this->tableGateway->getAdapter();
 		$sql = new Sql($db);
@@ -484,9 +508,12 @@ class FacturationTable {
  		$this->deleteHospitalisation($tabDonnees['idcons']);
  		
  		$motifHospitalisation = $tabDonnees['motifHospitalisation'];
+ 		$diagnosticRetenuHospitalisation = $tabDonnees['diagnosticRetenuHospitalisation'];
+ 		
  		$donneesHospitalisation = array(
  				'idcons' => $tabDonnees['idcons'],
  				'motifHospitalisation' => $motifHospitalisation,
+ 				'diagnosticRetenuHospitalisation' => $diagnosticRetenuHospitalisation,
  				'idemploye' => $idemploye,
  		);
  			

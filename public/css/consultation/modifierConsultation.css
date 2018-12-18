@@ -473,6 +473,37 @@ width: 190px; /* la largeur du champ input*/
 	margin-bottom: 15px;
 }
 
+
+.titreInfosTransfusionStyle
+{
+	height: 90px;
+	margin-bottom: 15px;
+}
+
+.titreAntenatauxStyle
+{
+	height: 45px;
+	margin-bottom: 15px;
+}
+
+.titrePerinatauxStyle
+{
+	height: 180px;
+	margin-bottom: 15px;
+}
+
+.titreAlimentationStyle
+{
+	height: 135px;
+	margin-bottom: 15px;
+}
+
+.titreScolariteStyle
+{
+	height: 45px;
+	margin-bottom: 15px;
+}
+
 .titreMajVaccinStyle
 {
 	height: 45px;

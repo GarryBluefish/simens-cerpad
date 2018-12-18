@@ -473,6 +473,36 @@ width: 190px; /* la largeur du champ input*/
 	margin-bottom: 15px;
 }
 
+.titreInfosTransfusionStyle
+{
+	height: 90px;
+	margin-bottom: 15px;
+}
+
+.titreAntenatauxStyle
+{
+	height: 45px;
+	margin-bottom: 15px;
+}
+
+.titrePerinatauxStyle
+{
+	height: 180px;
+	margin-bottom: 15px;
+}
+
+.titreAlimentationStyle
+{
+	height: 135px;
+	margin-bottom: 15px;
+}
+
+.titreScolariteStyle
+{
+	height: 45px;
+	margin-bottom: 15px;
+}
+
 .titreMajVaccinStyle
 {
 	height: 45px;
@@ -647,4 +677,59 @@ width: 190px; /* la largeur du champ input*/
 {
 	height: 45px;
 	margin-bottom: 15px;
+}
+
+/*10/12/2018 - dans le fichier consulter.js*/
+
+.popInfEnTeteProg
+{
+	font-size: 12px; 
+	font-family: time new roman; 
+	font-style: italic; 
+	text-align: center;
+	background: #e1e1e1;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	box-shadow: 1px 2px 2px rgba(204, 204, 204, 0.9);
+	margin-bottom: 3px;
+}
+
+.dateDemProgPop img
+{
+	padding-top: 5px;
+	cursor: pointer;
+}
+
+.popInfContenuProg div span
+{
+	font-family: Tempus Sans ITC; 
+	font-size: 14px;
+}
+
+.popInfContenuProg
+{
+	padding-top: 3px;
+	background: #f5f5f5;
+}
+
+.popInfContenuProg div
+{
+	height: 20px;
+}
+
+.popInfEnTeteInterfaceProg
+{
+	font-size: 12px; 
+	font-family: time new roman; 
+	font-style: italic; 
+	text-align: center;
+	background: #f1f1f1;
+	border: 1px solid #cccccc; 
+	box-shadow: 1px 2px 8px rgba(204, 204, 204, 1);
+}
+
+.iconeAlertRougeOrange li {
+	display: block;
+	list-style: none; /* pour enlever les puces sur IE7 */
+	margin-top: 0px;
 }

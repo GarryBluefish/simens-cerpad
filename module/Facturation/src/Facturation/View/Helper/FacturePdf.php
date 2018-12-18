@@ -204,7 +204,7 @@ class FacturePdf
 	
 	public function setListeAnalysesDemndees($listeAnalysesDemndees) {
 		$this->_listeAnalysesDemndees = $listeAnalysesDemndees;
-	} 
+	}
 	
 	protected function nbJours($debut, $fin) {
 		//60 secondes X 60 minutes X 24 heures dans une journee
@@ -841,7 +841,12 @@ class FacturePdf
 					$this->_yPosition);
 			
 			$this->getStyle();
+			/*
 			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "Taux de la majoration : "),
+					$this->_leftMargin+5,
+					$this->_yPosition);
+			*/
+			$this->_page->drawText("Taux à régler : ",
 					$this->_leftMargin+5,
 					$this->_yPosition);
 				
@@ -861,6 +866,7 @@ class FacturePdf
 			
 			//-----------------------------------------------
 			//-----------------------------------------------
+			/*
 			$this->_page->drawLine($this->_leftMargin,
 					$this->_yPosition,
 					$this->_pageWidth -
@@ -878,7 +884,7 @@ class FacturePdf
 					$this->_yPosition);
 			
 			$this->_yPosition -= $noteLineHeight;
-			
+			*/
 			//-----------------------------------------------
 			//-----------------------------------------------
 			$this->_page->drawLine($this->_leftMargin,
@@ -888,7 +894,7 @@ class FacturePdf
 					$this->_yPosition);
 			
 			$this->getStyle();
-			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "Tarif avec majoration : "),
+			$this->_page->drawText("Montant à régler : ",
 					$this->_leftMargin+5,
 					$this->_yPosition);
 			
@@ -904,9 +910,88 @@ class FacturePdf
 			$this->_yPosition -= $noteLineHeight;
 		}
 		
+		if($this->_infos['priseencharge'] == 1 || $this->_infos['historiquePEC'] == 1){
+				
+			$this->_page->drawLine($this->_leftMargin,
+					$this->_yPosition,
+					$this->_pageWidth -
+					$this->_leftMargin,
+					$this->_yPosition);
+			$this->_yPosition -= $noteLineHeight;
+				
+		
+			$this->_page->setLineColor(new ZendPdf\Color\Html('#efefef'));
+			$this->_page->setLineWidth(0);
+				
+			//-----------------------------------------------
+			//-----------------------------------------------
+			$this->_page->drawLine($this->_leftMargin,
+					$this->_yPosition - 2,
+					$this->_pageWidth -
+					$this->_leftMargin,
+					$this->_yPosition - 2);
+				
+			$this->getStyle();
+			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "Taux prise en charge : "),
+					$this->_leftMargin+5,
+					$this->_yPosition);
+				
+			$tauxPrieenCharge = (100-$this->_infos['taux']);
+			$this->getNewTime();
+			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $tauxPrieenCharge.' %'),
+					$this->_leftMargin+160,
+					$this->_yPosition);
+				
+			$this->_yPosition -= $noteLineHeight;
+			
+			$this->getStyle();
+			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "Montant prise en charge : "),
+					$this->_leftMargin+5,
+					$this->_yPosition);
+			
+			$montantPriseencharge = ( $this->_infos['montant'] - $this->_infos['montant_avec_majoration']);
+			$this->getNewTimeBold();
+			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $this->prixMill("$montantPriseencharge")),
+					$this->_leftMargin+160,
+					$this->_yPosition);
+			$this->getNewTime();
+			$this->_page->drawText('  FCFA',
+					$this->_leftMargin+200,
+					$this->_yPosition);
+			
+			if($this->_infos['historiquePEC'] == 1){
+				
+				$this->_yPosition -= $noteLineHeight;
+				$this->_yPosition -= $noteLineHeight;
+					
+				$this->getStyle();
+				$this->_page->drawText("Facture réglée le : ",
+						$this->_leftMargin+5,
+						$this->_yPosition);
+					
+				$dateHeureReglement = $Control->convertDate($this->_infos['factureReglee']['date_reglement']).'  -  '.$this->_infos['factureReglee']['heure_reglement'];
+				$typeReglement = $this->_infos['factureReglee']['type_reglement'];
+				if($typeReglement == 'espece'){ $typeReglement = ' en espèce'; }
+				elseif ($typeReglement == 'cheque'){ $typeReglement = ' par chèque'; }
+				elseif ($typeReglement == 'virement'){ $typeReglement = ' par virement'; }
+				
+				
+				$this->getNewTimeBold();
+				$this->_page->drawText($dateHeureReglement.' '.$typeReglement,
+						$this->_leftMargin+160,
+						$this->_yPosition);
+				$this->getNewTime();
+				$this->_page->drawText('  ',
+						$this->_leftMargin+200,
+						$this->_yPosition);
+				
+			}
+			
+		}
+		
 		//-----------------------------------------------
 		//-----------------------------------------------
-	} 
+	}
 	
 	public function getPiedPage(){
 		$this->_page->setlineColor(new ZendPdf\Color\Html('green'));
@@ -919,18 +1004,18 @@ class FacturePdf
 				90);
 		
 		$this->_page->setFont($this->_newTime, 10);
-		$this->_page->drawText('Téléphone: 33 726 25 36   BP: 24000',
+		$this->_page->drawText('Téléphone: 77 680 69 69   -  Email: cerpad@ugb.edu.sn',
 				$this->_leftMargin,
 				$this->_pageWidth - ( 100 + 420));
 		
 		$this->_page->setFont($this->_newTime, 10);
-		$this->_page->drawText('SIMENS+: ',
+		$this->_page->drawText('',
 				$this->_leftMargin + 355,
 				$this->_pageWidth - ( 100 + 420));
-		$this->_page->setFont($this->_newTimeGras, 11);
+		$this->_page->setFont($this->_newTimeGras, 8);
 		$this->_page->drawText('www.simens.sn',
-				$this->_leftMargin + 405,
-				$this->_pageWidth - ( 100 + 420));
+				$this->_leftMargin + 440,
+				$this->_pageWidth - ( 100 + 415));
 	}
 	
 }

@@ -3,6 +3,7 @@ namespace Consultation\Model;
 
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Sql\Sql;
+use Zend\Db\Sql\Where;
 
 class DepistageTable {
 
@@ -316,7 +317,7 @@ class DepistageTable {
  	
  	
  	/**
- 	 * Les professions rencontrées chez les mères et chez les mères
+ 	 * Les professions rencontrées chez les mères
  	 */
  	public function getRepartitionProfessionChezLesMeres(){
  		$adapter = $this->tableGateway->getAdapter();
@@ -354,7 +355,7 @@ class DepistageTable {
  	
  	
  	/**
- 	 * Les professions rencontrées chez les mères et chez les pères
+ 	 * Les professions rencontrées chez les pères
  	 */
  	public function getRepartitionProfessionChezLesPeres(){
  		$adapter = $this->tableGateway->getAdapter();
@@ -392,6 +393,118 @@ class DepistageTable {
  	
  	
  	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	/**
+ 	 * Les nouveaux dépistés de j=0 à j=8
+ 	 */
+ 	public function getEffectifPatientDepistesAges0_8(){
+ 		$adapter = $this->tableGateway->getAdapter();
+ 		$sql = new Sql($adapter);
+ 		$select = $sql->select();
+ 		$select->from(array('p' => 'patient'));
+ 		$select->join(array('pers' => 'personne') ,'pers.idpersonne = p.idpersonne');
+ 		$select->join(array('d' => 'depistage') ,'d.idpatient = p.idpersonne');
+ 		$select->join(array('th' => 'typage_hemoglobine') ,'th.idtypage = d.typage');
+ 		$select->join(array('fda' => 'facturation_demande_analyse') , 'fda.iddemande_analyse = d.iddemande_analyse' , array('*'));
+ 		$select->join(array('bp' => 'bilan_prelevement') , 'bp.idfacturation = fda.idfacturation' , array('date_prelevement'));
+ 	
+ 		$select->where(array('date_prelevement >=?' => '2017-04-25', 'date_prelevement <=?' => '2018-04-24'));
+ 		$select->group('d.idpatient');
+ 		$resultat = $sql->prepareStatementForSqlObject($select)->execute();
+ 	
+ 		$listeAgesPatients = array();
+ 		foreach ($resultat as $result){
+ 			$date_naissance = $result['date_naissance'];
+ 			$date_prelevement = $result['date_prelevement'];
+ 			
+ 			$ageJour = $this->nbJours($date_naissance, $date_prelevement);
+ 			if($ageJour >= 0 && $ageJour <= 8){
+ 				$listeAgesPatients [] = $ageJour;
+ 			}
+ 		}
+ 	
+ 		$effectifPatientsDepistesParAge = array_count_values($listeAgesPatients); 
+ 		ksort($effectifPatientsDepistesParAge);
+ 		$listeDesAges = array_values(array_flip($effectifPatientsDepistesParAge));
+ 		
+ 		return array(array_values($effectifPatientsDepistesParAge), array_sum($effectifPatientsDepistesParAge), $effectifPatientsDepistesParAge, $listeDesAges);
+ 	}
+ 	
+ 	
+ 	protected function nbJours($debut, $fin) {
+ 		$jourSecondes = 60*60*24;
+ 		$debut_ts = strtotime($debut);
+ 		$fin_ts = strtotime($fin);
+ 		$diff = $fin_ts - $debut_ts;
+ 		
+ 		return (int)($diff/$jourSecondes);
+ 	}
+ 	
+ 	
+ 	
+ 	/**
+ 	 * Répartition suivant les adresses des nouveaux dépistés
+ 	 */
+ 	public function getRepartitionPatientDepistesParAdresses(){
+ 		$adapter = $this->tableGateway->getAdapter();
+ 		$sql = new Sql($adapter);
+ 		$select = $sql->select();
+ 		$select->from(array('p' => 'patient'));
+ 		$select->join(array('pers' => 'personne') ,'pers.idpersonne = p.idpersonne');
+ 		$select->join(array('d' => 'depistage') ,'d.idpatient = p.idpersonne');
+ 		$select->join(array('th' => 'typage_hemoglobine') ,'th.idtypage = d.typage');
+ 		$select->join(array('fda' => 'facturation_demande_analyse') , 'fda.iddemande_analyse = d.iddemande_analyse' , array('*'));
+ 		$select->join(array('bp' => 'bilan_prelevement') , 'bp.idfacturation = fda.idfacturation' , array('date_prelevement'));
+ 	
+ 		$select->where(array('date_prelevement >=?' => '2017-04-25', 'date_prelevement <=?' => '2018-04-24'));
+ 		$select->group('d.idpatient');
+ 		$resultat = $sql->prepareStatementForSqlObject($select)->execute();
+ 	
+ 		$listeAdressesPatientsDepistes = array();
+ 		$diffAdressesPatientsDepistes = array();
+ 		foreach ($resultat as $result){
+ 			$adresse = $result['adresse'];
+ 			
+ 			($adresse) ? $listeAdressesPatientsDepistes [] = $adresse: null;
+ 			
+ 			if(!in_array($adresse, $diffAdressesPatientsDepistes)){
+ 				($adresse) ? $diffAdressesPatientsDepistes[] = $adresse: null;
+ 			}
+ 		}
+ 	
+ 		$effectifPatientsDepistesParAdresse = array_count_values($listeAdressesPatientsDepistes);
+ 			
+ 		return array($diffAdressesPatientsDepistes, $effectifPatientsDepistesParAdresse);
+ 	}
  	
  	
  	

@@ -91,7 +91,17 @@ echo $this->form()->openTag($form); ?>
 			   	</td>
 
 			   	<td style=' font-family: police1;font-size: 12px;'>
-			   		<div id="aa"><a style="text-decoration: underline;">Profession</a><br><p style='font-weight: bold;font-size: 19px;'><?php echo $this->lesdetails->profession;?></p></div>
+			   		<div><a style="text-decoration: underline;">GSRh</a><br>
+			   		  <p style='font-weight: bold; font-size: 19px;'>
+			   		    <?php 
+			   		      $groupe = $this->groupeSanguin['groupe']; 
+			   		      $rhesus = $this->groupeSanguin['rhesus'];
+			   		      
+			   		      if($rhesus == 'Rh+'){ echo $groupe.'<sup style="font-weight: bold; font-size: 15px;">+</sup>'; }else{ echo $groupe.'<span style="font-weight: bold; font-size: 20px;">&#8315;</span>'; }
+			   		      
+			   		    ?>
+			   		  </p>
+			   		</div>
 			   	</td>
 
 			 </tr>

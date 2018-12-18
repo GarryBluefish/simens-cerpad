@@ -360,7 +360,7 @@ class TechnicienController extends AbstractActionController {
 				<td style='width: 10%;' >
 				  <span style='color: white; '>
                     <img src='".$this->baseUrl()."public/img/photos_patients/".$personne->photo."' style='width:105px; height:105px; opacity: 0.09; margin-top: -20px;'/>
-                    <div style='margin-top: 20px; margin-right: 0px; font-size:17px; font-family: Iskoola Pota; color: green; float: right; font-style: italic; opacity: 1;'> ".$patient->numero_dossier." </div>
+                    <div style='margin-top: 20px; margin-right: 0px; font-size:16px; font-family: Iskoola Pota; color: green; float: right; font-style: italic; opacity: 1;'> ".$patient->numero_dossier." </div>
                   </span>
 				</td>
 	 
@@ -3219,12 +3219,27 @@ class TechnicienController extends AbstractActionController {
 	    $html ="";
 	    if($resultat){
 	        for($i = 1 ; $i<=25 ; $i++){
-	            $html .= "<script> $('#champ".$i."').val('".$resultat['champ'.$i]."'); </script>";
+	            $html .= "<script> $('.ER_".$iddemande." #champ".$i."').val('".$resultat['champ'.$i]."'); </script>";
 	        }
-	        $html .= "<script> $('#type_materiel_nfs').val('".str_replace( "'", "\'",$resultat['type_materiel'] )."'); </script>";
-	        $html .= "<script> $('#commentaire_hemogramme').val('".str_replace( "'", "\'", $resultat['commentaire'] )."'); </script>";
+	        $html .= "<script> $('.ER_".$iddemande." #type_materiel_nfs').val('".str_replace( "'", "\'",$resultat['type_materiel'] )."'); </script>";
+	        $html .= "<script> $('.ER_".$iddemande." #commentaire_hemogramme').val('".str_replace( "'", "\'", $resultat['commentaire'] )."'); </script>";
 	    }
+	    
 	    return $html;
+	}
+	
+	protected function getResultatsNfsTR($iddemande){
+		$resultat = $this->getResultatDemandeAnalyseTable()->getValeursNfs($iddemande);
+		$html ="";
+		if($resultat){
+			for($i = 1 ; $i<=25 ; $i++){
+				$html .= "<script> $('.ER_".$iddemande." #champ".$i."').val('".$resultat['champ'.$i]."'); </script>";
+			}
+			$html .= "<script> $('.ER_".$iddemande." #type_materiel_nfs').val('".str_replace( "'", "\'",$resultat['type_materiel'] )."'); </script>";
+			$html .= "<script> $('.ER_".$iddemande." #commentaire_hemogramme').val('".str_replace( "'", "\'", $resultat['commentaire'] )."'); </script>";
+		}
+		 
+		return $html;
 	}
 	
 	protected function getResultatsGsrhGroupage($iddemande){
@@ -3276,20 +3291,31 @@ class TechnicienController extends AbstractActionController {
 	
 	protected function getResultatsTestCombsIndirect($iddemande){
 	    $resultat = $this->getResultatDemandeAnalyseTable()->getValeursTestCombsIndirect($iddemande);
-	    $html ="<script>$('.ER_".$iddemande." #test_combs_indirect').attr('onchange', 'getTestCombsIndirect(this.value,".$iddemande.")');</script>";
+	    $html ="<script>$('#test_combs_indirect_1').attr('onchange', 'getTestCombsIndirectBlocTitre(1)'); </script>";
+
 	    if($resultat){
-	        $html .=
-	        "<script>
-	        	$('.ER_".$iddemande." #type_materiel_test_combs_indirect').val('".str_replace( "'", "\'",$resultat['type_materiel'])."');	
-	            $('.ER_".$iddemande." #test_combs_indirect').val('".$resultat['valeur']."');
-	            if('".$resultat['valeur']."' == 'Positif'){ 
-	                setTimeout(function(){ 
-	                   $('.ER_".$iddemande." .titre_combs_indirect').toggle(true); 
-	                   $('.ER_".$iddemande." #titre_combs_indirect').val('".$resultat['titre']."'); 
-	                }); 
-	            }
-	        </script>";
+	    	$html .="<script> var time = 0; setTimeout(function(){ $('#type_materiel_test_combs_indirect').val('".str_replace( "'", "\'", $resultat[0]['type_materiel'])."'); },50); </script>";
+	    	
+	    	for($i = 0 ; $i < count($resultat) ; $i++){
+	    		if($i > 0){
+	    			$html .= "<script> time = time+10; setTimeout(function(){ $('#test_combs_indirect_plus').trigger('click'); }, time); </script>";
+	    		}
+	    		
+	    		$html .=
+	    		"<script>
+	              setTimeout(function(){
+	                $('#test_combs_indirect_".($i+1)."').val('".$resultat[$i]['valeur']."');
+	                $('#titre_combs_indirect_".($i+1)."').val('".$resultat[$i]['titre']."');
+              		$('#titre_combs_temperature_".($i+1)."').val('".$resultat[$i]['temperature']."');
+	              }, time);
+	    	    </script>";
+	    		
+	    			$html .= "<script>setTimeout(function(){ $('#test_combs_indirect_".($i+1)."').trigger('change'); }, time)</script>";
+	    	}
+	    	$html .="<script> setTimeout(function(){ $('#commentaire_test_combs_indirect').val('".str_replace( "'", "\'", $resultat[0]['commentaire'])."'); },100); </script>";
+	    
 	    }
+	    
 	    return $html;
 	}
 	
@@ -4265,7 +4291,7 @@ class TechnicienController extends AbstractActionController {
 		if($analyse['Idanalyse'] == 68){ $html .= $this->typage_hemoglobine_68();  $html .= $this->getResultatsTypageHemoglobine($iddemande); }
 		
 		if($analyse['Idanalyse'] == 70){ $html .= $this->ldh_70();  $html .= $this->getResultatsLDH($iddemande); }
-		
+		if($analyse['Idanalyse'] == 71){ $html .= $this->nfs_tr_71(); $html .= $this->getResultatsNfsTR($iddemande); }
 		
 		$html .= "</table>";
 		
@@ -4619,6 +4645,12 @@ class TechnicienController extends AbstractActionController {
 	        	$this->getResultatDemandeAnalyseTable()->addResultatDemandeAnalyse($iddemande, $idemploye);
 	        	$donneesExiste = $this->getResultatDemandeAnalyseTable()->addValeursLDH($tab, $iddemande);
 	    }
+
+	    else 
+	        if($idanalyse == 71){
+	        	$this->getResultatDemandeAnalyseTable()->addResultatDemandeAnalyse($iddemande, $idemploye);
+	        	$donneesExiste = $this->getResultatDemandeAnalyseTable()->addValeursNfs($tab, $iddemande);
+	    }
 	        
 	    $donnees = array($iddemande, $donneesExiste);
 	    $this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );
@@ -4740,7 +4772,7 @@ class TechnicienController extends AbstractActionController {
 			if($liste['Idanalyse'] == 68){ $html .= $this->typage_hemoglobine_68();  $html .= $this->getResultatsTypageHemoglobine($liste['iddemande']); }
 			
 			if($liste['Idanalyse'] == 70){ $html .= $this->ldh_70();  $html .= $this->getResultatsLDH($liste['iddemande']); }
-			
+			if($liste['Idanalyse'] == 71){ $html .= $this->nfs_tr_71(); $html .= $this->getResultatsNfsTR($liste['iddemande']); }
 			
 			$tabAnalyses[] = $liste['Idanalyse'];
 			$tabDemandes[] = $liste['iddemande'];
@@ -5158,6 +5190,12 @@ class TechnicienController extends AbstractActionController {
 	            	$tab = $tableau[$idanalyse];
 	            	$this->getResultatDemandeAnalyseTable()->addResultatDemandeAnalyse($iddemande, $idemploye);
 	            	$donneesExiste = $this->getResultatDemandeAnalyseTable()->addValeursLDH($tab, $iddemande);
+	        }
+	        else 
+	        	if($idanalyse == 71){
+	        		$tab = $tableau[$idanalyse];
+	        		$this->getResultatDemandeAnalyseTable()->addResultatDemandeAnalyse($iddemande, $idemploye);
+	        		$this->getResultatDemandeAnalyseTable()->addValeursNfs($tab, $iddemande);
 	        }
 	        
 	    }
@@ -5996,39 +6034,14 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> 0, 108 - 0, 282 </label></td>";
 	    $html .= "</tr>";
 	    
-	    
-	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
 	    $html .= "  <td style='width: 55%; height: 20px; '> </td>";
 	    $html .= "  <td style='width: 15%;'></td>";
 	    $html .= "  <td style='width: 30%;'></td>";
 	    $html .= "</tr>";
-	    
-	    $html .="<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .=" <td colspan='2' style='width: 55%;'>";
-	    $html .="   <label class='formule_leucocytaire' >";
-	    $html .="     <table style='width: 100%; height: 3px; font-weight: bold;' >";
-	    $html .="       <tr>";
-	    $html .="         <td style='width: 20%; height: 3px; text-align:right; padding-top: 3px;'> R&eacute;ticulocytes </td>";
-	    $html .="         <td style='width: 35%; '> <input id='champ24' type='number' readonly='true'  step='any'> /mm<sup>3</sup> </td>";
-	    $html .="         <td style='width: 35%; '> <input id='champ25' type='number' step='any'  min='0' max='100'> % </td>";
-	    $html .="       </tr>";
-	    $html .="     </table>";
-	    $html .="   </label>";
-	    $html .=" </td>";
-	    $html .=" <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> <div style='width:65%; float:left; font-weight: bold; font-size: 13px;'>(25000 - 80000)</div> <div style='width: 35%; float:left;  font-size: 13px; font-weight: bold;'>(0,5 - 1,5)</div> </label></td>";
-	    $html .="</tr>";
-	    
-	    
-	    
-	    $html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
-	    $html .= "  <td style='width: 55%; height: 20px; '> </td>";
-	    $html .= "  <td style='width: 15%;'></td>";
-	    $html .= "  <td style='width: 30%;'></td>";
-	    $html .= "</tr>";
-	    
+
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td colspan='2' ><label style='height: 80px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_hemogramme' style='max-height: 57px; min-height: 57px; max-width: 400px; min-width: 400px; margin-left: 30px;' > </textarea> </label></td>";
+	    $html .= "  <td colspan='2' ><label style='height: 80px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_hemogramme' style='max-height: 57px; min-height: 57px; max-width: 400px; min-width: 400px; margin-left: 30px;' readonly> </textarea> </label></td>";
 	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 80%; height: 80px; font-size: 14px;'>  </label></td>";
 	    $html .= "</tr>";
 	    
@@ -6038,6 +6051,234 @@ class TechnicienController extends AbstractActionController {
 	    return $html;
 	}
 	
+	/**
+	 * analyse 71
+	 */
+	public function nfs_tr_71(){
+		 
+		$html  = "<tr> <td align='center'>";
+		$html .= "<table style='width: 100%;'>";
+		$html .= "<input id='nfs_1' type='hidden' value='1'>";
+		 
+		//POUR LE NOM DU TYPE DE MATERIEL UTILISE
+		$html .= "<tr class='ligneAnanlyse labelTypeMateriel' style='width: 100%; font-family: times new roman; font-size: 15px; margin-top: -45px;'>";
+		$html .= "  <td style='width: 55%;'> <label> Mat&eacute;riel utilis&eacute;</label> </td>";
+		$html .= "  <td colspan='2' style='width: 35%;'> </td>";
+		$html .= "</tr>";
+		$html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
+		$html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_nfs' > </div> </td>";
+		$html .= "  <td colspan='2' style='width: 45%;'> </td>";
+		$html .= "</tr>";
+		//POUR LE NOM DU TYPE DE MATERIEL UTILISE
+		 
+		$html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+		$html .= "  <td style='width: 55%;'><label class='lab1' style='font-weight:bold;'><span> Leucocytes <input id='champ1' type='number' step='any' min='1000'  max='20000'> </span></label></td>";
+		$html .= "  <td style='width: 15%;'><label class='lab2' style='font-weight:bold; padding-top: 5px;'> /mm<sup>3</sup> </label></td>";
+		$html .= "  <td style='width: 30%;'><label class='lab3' style='font-weight:bold; padding-top: 5px; width: 80%;'> (4 000 - 10 000) </label></td>";
+		$html .= "</tr>";
+	
+		$html .="<tr class='ligneAnanlyse' style='width: 100%;'>";
+		$html .=" <td colspan='2' style='width: 55%; background: re;'>";
+		$html .="   <label class='formule_leucocytaire' >";
+		$html .="     <table style='width: 100%; height: 3px;' >";
+		$html .="       <tr>";
+		$html .="         <td style='width: 20%; height: 3px; text-align:right; padding-top: 3px; font-size: 15px;'> P. Neutrophiles </td>";
+		$html .="         <td style='width: 35%;'> <input id='champ2' type='number' readonly='true'  step='any'> /mm<sup>3</sup> </td>";
+		$html .="         <td style='width: 35%;'>  <input id='champ7' type='number' step='any'  min='0' max='100'> % </td>";
+		$html .="       </tr>";
+		$html .="     </table>";
+		$html .="   </label>";
+		$html .=" </td>";
+		$html .=" <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'><div style='width:65%; float:left; '>(2000 - 7000)</div> <div style='width: 35%; float:left;'>(45 - 70)</div> </label></td>";
+		$html .="</tr>";
+		 
+		$html .="<tr class='ligneAnanlyse' style='width: 100%;'>";
+		$html .=" <td colspan='2' style='width: 55%;'>";
+		$html .="   <label class='formule_leucocytaire' >";
+		$html .="     <table style='width: 100%; height: 3px;' >";
+		$html .="       <tr>";
+		$html .="         <td style='width: 20%; height: 3px; text-align:right; padding-top: 3px;  font-size: 15px;'> P. Eosinophiles </td>";
+		$html .="         <td style='width: 35%; '> <input id='champ3' type='number' readonly='true'  step='any'> /mm<sup>3</sup> </td>";
+		$html .="         <td style='width: 35%;'>  <input id='champ8' type='number' step='any'  min='0' max='100'> % </td>";
+		$html .="       </tr>";
+		$html .="     </table>";
+		$html .="   </label>";
+		$html .=" </td>";
+		$html .=" <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> <div style='width:65%; float:left; '>(20 - 500)</div> <div style='width: 35%; float:left;'>(0 - 5)</div> </label></td>";
+		$html .="</tr>";
+		 
+		$html .="<tr class='ligneAnanlyse' style='width: 100%;'>";
+		$html .=" <td colspan='2' style='width: 55%;'>";
+		$html .="   <label class='formule_leucocytaire' >";
+		$html .="     <table style='width: 100%; height: 3px;' >";
+		$html .="       <tr>";
+		$html .="         <td style='width: 20%; height: 3px; text-align:right; padding-top: 3px;'> P. Basophiles </td>";
+		$html .="         <td style='width: 35%; '> <input id='champ4' type='number' readonly='true'  step='any'> /mm<sup>3</sup> </td>";
+		$html .="         <td style='width: 35%;'>  <input id='champ9' type='number' step='any'  min='0' max='100'> % </td>";
+		$html .="       </tr>";
+		$html .="     </table>";
+		$html .="   </label>";
+		$html .=" </td>";
+		$html .=" <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> <div style='width:65%; float:left; '>(0 - 100)</div> <div style='width: 35%; float:left;'>(0 - 3)</div> </label></td>";
+		$html .="</tr>";
+		 
+		$html .="<tr class='ligneAnanlyse' style='width: 100%;'>";
+		$html .=" <td colspan='2' style='width: 55%;'>";
+		$html .="   <label class='formule_leucocytaire' >";
+		$html .="     <table style='width: 100%; height: 3px;' >";
+		$html .="       <tr>";
+		$html .="         <td style='width: 20%; height: 3px; text-align:right; padding-top: 3px;'> Lymphocytes </td>";
+		$html .="         <td style='width: 35%; '> <input id='champ5' type='number' readonly='true'  step='any'> /mm<sup>3</sup> </td>";
+		$html .="         <td style='width: 35%;'>  <input id='champ10' type='number' step='any'  min='0' max='100'> % </td>";
+		$html .="       </tr>";
+		$html .="     </table>";
+		$html .="   </label>";
+		$html .=" </td>";
+		$html .=" <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> <div style='width:65%; float:left; '>(800 - 4000)</div> <div style='width: 35%; float:left;'>(20 - 40)</div> </label></td>";
+		$html .="</tr>";
+		 
+		$html .="<tr class='ligneAnanlyse' style='width: 100%;'>";
+		$html .=" <td colspan='2' style='width: 55%;'>";
+		$html .="   <label class='formule_leucocytaire' >";
+		$html .="     <table style='width: 100%; height: 3px;' >";
+		$html .="       <tr>";
+		$html .="         <td style='width: 20%; height: 3px; text-align:right; padding-top: 3px;'> Monocytes </td>";
+		$html .="         <td style='width: 35%; '> <input id='champ6' type='number' readonly='true'  step='any'> /mm<sup>3</sup> </td>";
+		$html .="         <td style='width: 35%;'>  <input id='champ11' type='number' step='any'  min='0' max='100'> % </td>";
+		$html .="       </tr>";
+		$html .="     </table>";
+		$html .="   </label>";
+		$html .=" </td>";
+		$html .=" <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> <div style='width:65%; float:left; '>(120 - 1200)</div> <div style='width: 35%; float:left;'>(3 - 15)</div> </label></td>";
+		$html .="</tr>";
+	
+		$html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
+		$html .= "  <td style='width: 55%; height: 20px; '> </td>";
+		$html .= "  <td style='width: 15%;'></td>";
+		$html .= "  <td style='width: 30%;'></td>";
+		$html .= "</tr>";
+		 
+		$html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+		$html .= "  <td style='width: 55%;'><label class='lab1' style='font-weight:bold;'><span> H&eacute;maties <input id='champ12' type='number' step='any'  min='0' max='10'> </span></label></td>";
+		$html .= "  <td style='width: 15%;'><label class='lab2' style='font-weight:bold; padding-top: 5px;'> 10<sup>6</sup>/mm<sup>3</sup> </label></td>";
+		$html .= "  <td style='width: 30%;'><label class='lab3' style='font-weight:bold; padding-top: 5px; width: 80%;'> (3,5 - 5,0) </label></td>";
+		$html .= "</tr>";
+		 
+		$html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+		$html .= "  <td style='width: 55%;'><label class='lab1' style='font-weight:bold;' ><span> H&eacute;moglobine <input id='champ13' type='number' step='any'  min='0' max='30'> </span></label></td>";
+		$html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px; font-weight:bold;' > g/dl </label></td>";
+		$html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px;  font-weight:bold; width: 80%;'> (11 - 15) </label></td>";
+		$html .= "</tr>";
+		 
+		$html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+		$html .= "  <td style='width: 55%;'><label class='lab1' ><span> H&eacute;matocrite <input id='champ14' type='number' step='any'  min='0' max='100'> </span></label></td>";
+		$html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'> % </label></td>";
+		$html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> (37 - 50) </label></td>";
+		$html .= "</tr>";
+		 
+		$html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+		$html .= "  <td style='width: 55%;'><label class='lab1' ><span> V.G.M <input id='champ15' type='number' step='any'  min='0' max='200'> </span></label></td>";
+		$html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'> fl </label></td>";
+		$html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> (80 - 100) </label></td>";
+		$html .= "</tr>";
+		 
+		$html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+		$html .= "  <td style='width: 55%;'><label class='lab1' ><span> T.C.M.H <input id='champ16' type='number' step='any'  min='0' max='100'> </span></label></td>";
+		$html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'> pg </label></td>";
+		$html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> (27 - 34) </label></td>";
+		$html .= "</tr>";
+		 
+		$html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+		$html .= "  <td style='width: 55%;'><label class='lab1' ><span> C.C.M.H <input id='champ17' type='number' step='any'  min='0' max='100'> </span></label></td>";
+		$html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'> g/dl </label></td>";
+		$html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> (32 - 36) </label></td>";
+		$html .= "</tr>";
+		 
+		$html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+		$html .= "  <td style='width: 55%;'><label class='lab1' ><span> IDR - CV <input id='champ18' type='number' step='any'  min='0' max='50'> </span></label></td>";
+		$html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'> % </label></td>";
+		$html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> (11 - 16) </label></td>";
+		$html .= "</tr>";
+		 
+		$html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+		$html .= "  <td style='width: 55%;'><label class='lab1' ><span> IDR - DS <input id='champ19' type='number' step='any'  min='0' max='100'> </span></label></td>";
+		$html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'> fl </label></td>";
+		$html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> (35 - 56) </label></td>";
+		$html .= "</tr>";
+		 
+		 
+		 
+		$html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
+		$html .= "  <td style='width: 55%; height: 20px; '> </td>";
+		$html .= "  <td style='width: 15%;'></td>";
+		$html .= "  <td style='width: 30%;'></td>";
+		$html .= "</tr>";
+		 
+		$html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+		$html .= "  <td style='width: 55%;'><label class='lab1' style='font-weight:bold;'><span> Plaquettes <input id='champ20' type='number' step='any'  min='0' max='1000'> </span></label></td>";
+		$html .= "  <td style='width: 15%;'><label class='lab2' style='font-weight:bold; padding-top: 5px;'> 10<sup>3</sup>/mm<sup>3</sup> </label></td>";
+		$html .= "  <td style='width: 30%;'><label class='lab3' style='font-weight:bold; padding-top: 5px; width: 80%;'> (150 - 450) </label></td>";
+		$html .= "</tr>";
+		 
+		$html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+		$html .= "  <td style='width: 55%;'><label class='lab1' ><span> VMP <input id='champ21' type='number' step='any'  min='0' max='50'> </span></label></td>";
+		$html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'> fl </label></td>";
+		$html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> 6, 5 - 12, 0 </label></td>";
+		$html .= "</tr>";
+		 
+		$html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+		$html .= "  <td style='width: 55%;'><label class='lab1' ><span> IDP <input id='champ22' type='number' step='any'  min='0' max='50'> </span></label></td>";
+		$html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'> g/dl </label></td>";
+		$html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> 9, 0 - 17, 0 </label></td>";
+		$html .= "</tr>";
+		 
+		$html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+		$html .= "  <td style='width: 55%;'><label class='lab1' ><span> PCT <input id='champ23' type='number' step='any'  min='0' max='2'> </span></label></td>";
+		$html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'> % </label></td>";
+		$html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> 0, 108 - 0, 282 </label></td>";
+		$html .= "</tr>";
+		 
+		 
+		 
+		$html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
+		$html .= "  <td style='width: 55%; height: 20px; '> </td>";
+		$html .= "  <td style='width: 15%;'></td>";
+		$html .= "  <td style='width: 30%;'></td>";
+		$html .= "</tr>";
+	
+		$html .="<tr class='ligneAnanlyse' style='width: 100%;'>";
+		$html .=" <td colspan='2' style='width: 55%;'>";
+		$html .="   <label class='formule_leucocytaire' >";
+		$html .="     <table style='width: 100%; height: 3px; font-weight: bold;' >";
+		$html .="       <tr>";
+		$html .="         <td style='width: 20%; height: 3px; text-align:right; padding-top: 3px;'> R&eacute;ticulocytes </td>";
+		$html .="         <td style='width: 35%; '> <input id='champ24' type='number' readonly='true'  step='any'> /mm<sup>3</sup> </td>";
+		$html .="         <td style='width: 35%; '> <input id='champ25' type='number' step='any'  min='0' max='100'> % </td>";
+		$html .="       </tr>";
+		$html .="     </table>";
+		$html .="   </label>";
+		$html .=" </td>";
+		$html .=" <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> <div style='width:65%; float:left; font-weight: bold; font-size: 13px;'>(25000 - 80000)</div> <div style='width: 35%; float:left;  font-size: 13px; font-weight: bold;'>(0,5 - 1,5)</div> </label></td>";
+		$html .="</tr>";
+		 
+		 
+		 
+		$html .= "<tr class='ligneAnanlyse' style='width: 100%; font-family: times new roman; font-size: 15px;'>";
+		$html .= "  <td style='width: 55%; height: 20px; '> </td>";
+		$html .= "  <td style='width: 15%;'></td>";
+		$html .= "  <td style='width: 30%;'></td>";
+		$html .= "</tr>";
+		 
+		$html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+		$html .= "  <td colspan='2' ><label style='height: 80px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_hemogramme' style='max-height: 57px; min-height: 57px; max-width: 400px; min-width: 400px; margin-left: 30px;' readonly> </textarea> </label></td>";
+		$html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 80%; height: 80px; font-size: 14px;'>  </label></td>";
+		$html .= "</tr>";
+		 
+		$html .= "</table> </td> </tr>";
+		 
+		 
+		return $html;
+	}
 	
 	/**
 	 * analyse 2
@@ -6161,14 +6402,37 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
 	    $html .= "</tr>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
+	    $html .= "</table> </td> </tr>";
+	     
+	     
+	    $html .= "<tr> <td align='center'>";
+	    $html .= "<table id='test_combs_rai' style='width: 100%;'>";
 	    
-	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 55%;'><label class='lab1' ><span style='font-weight: bold;'> Test <select name='test_combs_indirect' id='test_combs_indirect' > <option >  </option> <option value='Positif' >Positif</option> <option value='Negatif' >N&eacute;gatif</option> </select></span></label></td>";
-	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px; text-align: right; '> <span class='titre_combs_indirect' style='display: none;'> Titre </span> </label></td>";
-	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> <input class='titre_combs_indirect' id='titre_combs_indirect' type='text' style='display: none;' > </label></td>";
+	    $html .= "<tr id='test_combs_rai_1' class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 30%;'><label class='lab1' ><span style='font-weight: bold;'> RAI <select name='test_combs_indirect_1' id='test_combs_indirect_1' > <option >  </option> <option value='Positif' >Positif</option> <option value='Negatif' >N&eacute;gatif</option> </select></span></label></td>";
+	    $html .= "  <td style='width: 25%;'><label class='lab2' style='padding-top: 5px; text-align: right; '>  Titre <input class='titre_combs_indirect' id='titre_combs_indirect_1' type='text'> </label></td>";
+	    $html .= "  <td style='width: 45%;'><label class='lab3' style='padding-top: 5px; width: 80%; padding-left: 25px;'> Temp&eacute;rature <input id='titre_combs_temperature_1' type='number' > </label></td>";
 	    $html .= "</tr>";
 	
+	    $html .= "<tr class='ligneAnanlyse' id='test_combs_indirect_mp' style='width: 100%;'>";
+	    $html .= "  <td style='width: 30%;'> <div style='float: left; width: 25%; text-align: center; font-weight: bold; font-size: 25px;'> <div style='float: left; width: 50%; cursor: pointer; color:green;' id='test_combs_indirect_moins'> - </div> <div style=' float: left; width: 45%; cursor: pointer; color:green;'  id='test_combs_indirect_plus'> + </div> </div> </label></td>";
+	    $html .= "  <td style='width: 25%;'></td>";
+	    $html .= "  <td style='width: 45%;'></td>";
+	    $html .= "</tr>";
+	    
+	    $html .= "</table>";
+	    
+	    
+	    $html .= "<table style='width: 100%;'>";
+	     
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td colspan='2' ><label style='height: 80px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_test_combs_indirect' readonly style='max-height: 57px; min-height: 57px; max-width: 400px; min-width: 400px; margin-left: 30px;' > </textarea> </label></td>";
+	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 80%; height: 80px; font-size: 14px;'>  </label></td>";
+	    $html .= "</tr>";
+	    
 	    $html .= "</table> </td> </tr>";
+	    
+	    
 	
 	    return $html;
 	}
@@ -7503,7 +7767,7 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "  <td style='width: 35%;'><label class='lab3' style='padding-top: 5px; width: 89%; font-size: 13px;'> HbA1C DCCT N: 4,27 - 6,07 </label></td>";
 	    $html .= "</tr>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 50%;'><label class='lab1' ><span style='font-weight: bold; '>  <input id='hemoglobine_glyquee_hbac_mmol' type='number' step='any'> </span></label></td>";
+	    $html .= "  <td style='width: 50%;'><label class='lab1' ><span style='font-weight: bold; '>  <input id='hemoglobine_glyquee_hbac_mmol' type='number' step='any' readonly> </span></label></td>";
 	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'> mmol/mol </label></td>";
 	    $html .= "  <td style='width: 35%;'><label class='lab3' style='padding-top: 5px; width: 89%; font-size: 13px;'> HbA1C IFCC N: 23 - 42 </label></td>";
 	    $html .= "</tr>";
@@ -7879,8 +8143,8 @@ class TechnicienController extends AbstractActionController {
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    $html .= "<table style='width: 100%;'>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 40%;'><label class='lab2' style='padding-top: 5px;'><span style='font-weight: bold; '> Titre <input id='psa' type='number' step='any' tabindex='2'> ng/ml </span></label></td>";
 	    $html .= "  <td style='width: 30%;'><label class='lab1'><span style='font-weight: bold; '>  <select name='psa_qualitatif' id='psa_qualitatif' tabindex='3'> <option>  </option> <option value='Positif' >Positif</option> <option value='Negatif' >N&eacute;gatif</option> </select> </span></label></td>";
+	    $html .= "  <td style='width: 40%;'><label class='lab2' style='padding-top: 5px;'><span style='font-weight: bold; '> Titre <input id='psa' type='number' step='any' tabindex='2'> ng/ml </span></label></td>";
 	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> Qualitatif </label></td>";
 	    $html .= "</tr>";
 	     

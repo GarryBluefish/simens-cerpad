@@ -97,21 +97,56 @@ class HistoireMaladieTable {
 	function insertHospitalisationHm($tabDonnees, $idmedecin){
 		$hospitalisationHm = array();
 		$hospitalisationHm['idcons'] = $tabDonnees['idcons'];
+		$hospitalisationHm['nombreHospitalisationHM'] = (! empty ( $tabDonnees['nombreHospitalisationHM'] )) ? $tabDonnees['nombreHospitalisationHM'] : null ;
 		$hospitalisationHm['dateHospitalisationHM'] = (! empty ( $tabDonnees['dateHospitalisationHM'] )) ? $tabDonnees['dateHospitalisationHM'] : null ;
 		$hospitalisationHm['dureeHospitalisationHM'] = (! empty ( $tabDonnees['dureeHospitalisationHM'] )) ? $tabDonnees['dureeHospitalisationHM'] : null ;
 		$hospitalisationHm['motifHospitalisationHM'] = (! empty ( $tabDonnees['motifHospitalisationHM'] )) ? $tabDonnees['motifHospitalisationHM'] : null ;
-		$hospitalisationHm['priseEnChargeHospitalisationHM'] = (! empty ( $tabDonnees['priseEnChargeHospitalisationHM'] )) ? $tabDonnees['priseEnChargeHospitalisationHM'] : null ;
-		$hospitalisationHm['nombreHospitalisationHM'] = (! empty ( $tabDonnees['nombreHospitalisationHM'] )) ? $tabDonnees['nombreHospitalisationHM'] : null ;
 		$hospitalisationHm['idmedecin'] = $idmedecin;
 		
 		if($hospitalisationHm['idcons']){
 			$sql = new Sql($this->tableGateway->getAdapter());
 			$sQuery = $sql->insert() ->into('hospitalisation_hm')->values($hospitalisationHm);
 			$sql->prepareStatementForSqlObject($sQuery)->execute();
+				
+			//Ajout de la liste des autres hospitalisations s'il y en a
+			//Ajout de la liste des autres hospitalisations s'il y en a
+			$nombreHospitalisationHM = $hospitalisationHm['nombreHospitalisationHM'];
+			if($nombreHospitalisationHM >= 1){
+				$tabInfosListAutresHospHMDate  = explode(',', $tabDonnees['tabInfosListAutresHospHMDate']);
+				$tabInfosListAutresHospHMDuree = explode(',', $tabDonnees['tabInfosListAutresHospHMDuree']);
+				$tabInfosListAutresHospHMMotif = explode(',', $tabDonnees['tabInfosListAutresHospHMMotif']);
+				$tabInfosListAutresHospHMPriseEnCharge = explode(',', $tabDonnees['tabInfosListAutresHospHMPriseEnCharge']);
+				$tabInfosListAutresHospHMNombre = explode(',', $tabDonnees['tabInfosListAutresHospHMNombrePerfusion']);
+		
+				for($i=1 ; $i<count($tabInfosListAutresHospHMDate) ; $i++){
+					if($tabInfosListAutresHospHMDate[$i]){
+						$autresHospitalisationsHm = array(
+								'idcons'  => $tabDonnees['idcons'],
+								'dateHospitalisationHM'  => $tabInfosListAutresHospHMDate[$i],
+								'dureeHospitalisationHM' => $tabInfosListAutresHospHMDuree[$i],
+								'motifHospitalisationHM' => $tabInfosListAutresHospHMMotif[$i],
+								'priseEnChargeHospitalisationHM' => $tabInfosListAutresHospHMPriseEnCharge[$i],
+								'nombrePerfusionHospitalisationHM' => (! empty ( $tabInfosListAutresHospHMNombre[$i] )) ? $tabInfosListAutresHospHMNombre[$i] : null ,
+						);
+						
+						$sql = new Sql($this->tableGateway->getAdapter());
+						$sQuery = $sql->insert() ->into('hospitalisation_liste_hm')->values($autresHospitalisationsHm);
+						$sql->prepareStatementForSqlObject($sQuery)->execute();
+						
+					}
+				}
+		
+			}
+		
 		}
-
+		
 	}
 	
+	/**
+	 * Evènements depuis la dernière consultation
+	 * @param $tabDonnees
+	 * @param $idmedecin
+	 */
 	function insertHistoireMaladie($tabDonnees, $idmedecin){
 		
 		$this->deleteHistoireMaladie($tabDonnees['idcons']);
@@ -161,6 +196,12 @@ class HistoireMaladieTable {
 	function getCriseVasoOcclusiveListeHm($idcons){
 		$sql = new Sql($this->tableGateway->getAdapter());
 		$sQuery = $sql->select() ->from('crise_vaso_occlusive_liste_hm')->where( array('idcons' => $idcons) );
+		return $sql->prepareStatementForSqlObject($sQuery)->execute();
+	}
+	
+	function getHospitalisationListeHm($idcons){
+		$sql = new Sql($this->tableGateway->getAdapter());
+		$sQuery = $sql->select() ->from('hospitalisation_liste_hm')->where( array('idcons' => $idcons) );
 		return $sql->prepareStatementForSqlObject($sQuery)->execute();
 	}
 	

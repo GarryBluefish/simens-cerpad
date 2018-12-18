@@ -970,7 +970,6 @@
             	     getTriglycerides();
             	     getGlycemieFormule();
             	     getElectrophoreseProteinesFormule();
-            	     getElectroHemo();
             	     getTestCombsDirect();
             	     getTestCombsIndirect();
             	     getTestCompatibilite();
@@ -980,7 +979,16 @@
             	     
             	     $("#resultatsAnalyses").dialog('open');
             	     
-                 	$('#commentaire_hemogramme').attr('readonly', true);
+                 	 $('#commentaire_hemogramme').attr('readonly', true);
+                 	
+                 	 //Ajouter des lignes
+                 	 //Ajouter des lignes
+           	         getTestCombsIndirectAjout();
+           	         getElectroHemo();
+                 	
+                 	 //Bloquer la saisie sur tous les champs de commentaires
+                 	 //Bloquer la saisie sur tous les champs de commentaires
+                 	 $('.commentaire_protect textarea').attr('readonly', true);
 
             }
         });
@@ -2068,7 +2076,6 @@
             	     getTriglycerides();
             	     getGlycemieFormule();
             	     getElectrophoreseProteinesFormule();
-            	     getElectroHemo();
             	     getTestCombsDirect();
             	     getTestCombsIndirect();
             	     getTestCompatibilite();
@@ -2077,8 +2084,96 @@
             	     ajoutCulotUrinaireAuto();
             	     
             	     $("#resultatsAnalysesDuneDemande").dialog('open');
+            	     
+            	     //Ajouter des lignes
+                 	 //Ajouter des lignes
+           	         getTestCombsIndirectAjout();
+           	         getElectroHemo();
+                 	
+           	         
+            	     
+                 	 //Bloquer la saisie sur tous les champs de commentaires
+                  	 //Bloquer la saisie sur tous les champs de commentaires
+                     $('#commentaire_hemogramme').attr('readonly', true);
+                  	 $('.commentaire_protect textarea').attr('readonly', true);
+                 	
             }
         });
+    }
+    
+    /**
+     * AJOUTER DE PLUSIEURS RESULTAT PAR LES '+' & '-'
+     * AJOUTER DE PLUSIEURS RESULTAT PAR LES '+' & '-'
+     * AJOUTER DE PLUSIEURS RESULTAT PAR LES '+' & '-'
+     */
+    function getTestCombsIndirectAjout(){ 
+    	
+    	$('#test_combs_indirect_moins').toggle(false);
+	    
+    	$('#test_combs_indirect_plus').click(function(){
+	    	var nbLigne = $("#test_combs_rai tr").length;
+	    	$('#test_combs_indirect_moins').toggle(true);
+	    	
+	    	if(nbLigne < 10){
+	    		var html ="<tr id='test_combs_rai_"+nbLigne+"' class='ligneAnanlyse' style='width: 100%;'>"+
+                            
+                            "<td style='width: 30%;'><label class='lab1' ><span style='font-weight: bold;'> RAI <select id='test_combs_indirect_"+nbLigne+"' > <option >  </option> <option value='Positif' >Positif</option> <option value='Negatif' >N&eacute;gatif</option> </select></span></label></td>"+
+                    	    "<td style='width: 25%;'><label class='lab2' style='padding-top: 5px; text-align: right; '>  Titre <input id='titre_combs_indirect_"+nbLigne+"' type='text'> </label></td>"+
+                    	    "<td style='width: 45%;'><label class='lab3' style='padding-top: 5px; width: 80%; padding-left: 25px;'> Temp&eacute;rature <input id='titre_combs_temperature_"+nbLigne+"' type='number' > </label></td>"+
+                            
+                          "</tr>";
+
+		    	$('#test_combs_rai_'+(nbLigne-1)).after(html);
+		    	$('#test_combs_indirect_'+nbLigne).val($('#test_combs_indirect_'+(nbLigne-1)).val());
+		    	
+		    	if(nbLigne == 9){
+		    		$('#test_combs_indirect_plus').toggle(false);
+		    	}
+		    	
+		    	//Blocage du champ titre lorsque la valeur est négative
+			    $('#test_combs_indirect_'+nbLigne).attr('onchange', 'getTestCombsIndirectBlocTitre('+nbLigne+')');
+			    if($('#test_combs_indirect_'+nbLigne).val() == 'Negatif'){ $('#test_combs_indirect_'+nbLigne).trigger('change'); }
+	    	}
+
+	    });
+	    
+	    $('#test_combs_indirect_moins').click(function(){ 
+	    	var nbLigne = $("#test_combs_rai tr").length;
+	    	
+	    	if(nbLigne > 2){
+		    	$('#test_combs_rai_'+(nbLigne-1)).remove();
+		    	if(nbLigne == 3){ 
+		    		$('#test_combs_indirect_moins').toggle(false);
+		    	}
+		    	
+		    	if(nbLigne == 10){
+		    		$('#test_combs_indirect_plus').toggle(true);
+		    	}
+	    	}
+
+	    });
+	    
+	    
+    }
+    
+
+    function testCombsIndirect(){
+    	var tab = [];
+		tab[1] = $('#commentaire_test_combs_indirect').val();
+    	
+    	return tab;
+    }
+    
+
+    function getTestCombsIndirectBlocTitre(nbLigne){
+    	
+    	var val = $('#test_combs_indirect_'+nbLigne).val();
+    	
+    	if(val == 'Negatif'){
+    		$('#titre_combs_indirect_'+nbLigne).val('').attr('readonly',true);
+    	}else{
+    		$('#titre_combs_indirect_'+nbLigne).attr('readonly',false);
+    	}
     }
     
     

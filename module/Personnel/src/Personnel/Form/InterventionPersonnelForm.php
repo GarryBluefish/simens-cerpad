@@ -34,7 +34,7 @@ class InterventionPersonnelForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'type_intervention',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'label' => 'Type intervention',
 						'value_options' => array (
@@ -63,7 +63,7 @@ class InterventionPersonnelForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'id_service',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'label' => 'Service d\'accueil',
 				),
@@ -132,7 +132,7 @@ class InterventionPersonnelForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'hopital_accueil',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'label' => 'Hopital d\'accueil'
 				),
@@ -145,7 +145,7 @@ class InterventionPersonnelForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'id_service_externe',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'label' => 'Service d\'accueil'
 				),

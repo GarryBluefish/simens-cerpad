@@ -457,6 +457,7 @@
     	
     	//Taux de réticulocytes -- Taux de réticulocytes
     	//Taux de réticulocytes -- Taux de réticulocytes
+    	
     	$("#champ12, #champ25").keyup( function () {
     		var champ12 = $("#champ12").val();
     		var champ25 = $("#champ25").val();
@@ -475,12 +476,13 @@
     		}
     		else { $("#champ24").val(null); }
     	} );
+    	
     }
     
     function getChampsNfs(){
     	var tab = new Array();
     	var i;
-    	for(i = 1 ; i <= 25 ; i++){
+    	for(i = 1 ; i <= 23 ; i++){
     		if($('#champ'+i).val()){ tab[i] = $('#champ'+i).val(); }
     		else { tab[i] = null; }
     	}
@@ -854,23 +856,6 @@
     	}
     }
     
-    function testCombsIndirect(){
-    	var tab = [];
-    	tab[1] = $('#test_combs_indirect').val(); 
-		tab[2] = $('#titre_combs_indirect').val();
-		tab[3] = $('#type_materiel_test_combs_indirect').val();
-    	
-    	return tab;
-    }
-    
-    function getTestCombsIndirect(val, iddemande){
-    	if(val == 'Positif'){
-    		$('.ER_'+iddemande+' .titre_combs_indirect').toggle(true);
-    	}else{
-    		$('.ER_'+iddemande+' .titre_combs_indirect').toggle(false).val(null);
-    	}
-    }
-    
     function testCompatibilite(){
     	var tab = [];
     	tab[1] = $('#test_compatibilite').val(); 
@@ -1026,6 +1011,7 @@
     				else if(idanalyse == 68) { tab = getTypageHemoglobine(); }
     				     
     				else if(idanalyse == 70) { tab = getLDH(); }     
+    				else if(idanalyse == 71) { tab = getChampsNfs_TAD(iddemande); }
     				     
     				     
     				$( this ).dialog( "close" );
@@ -1077,7 +1063,6 @@
             	     getTriglyceridesFormule();
             	     getGlycemieFormule();
             	     getElectrophoreseProteinesFormule();
-            	     getElectroHemo();
             	     getAsatAlatAuto();
             	     getFerSeriqueFormule();
             	     getAzotemieFormule();
@@ -1089,6 +1074,11 @@
             	     
             	     ajoutCulotUrinaireAuto();
             	     getBilirubineTotaleDirecteAuto();
+            	     getHemoglobineGlyqueeHbA1cFormule();
+            	     
+            	     //Ajouter des lignes
+            	     getTestCombsIndirectAjout();
+            	     getElectroHemo();
             	     
             	     $("#resultatsAnalyses").dialog('open');
             }
@@ -2131,6 +2121,37 @@
     	
     }
     
+    function getHemoglobineGlyqueeHbA1cFormule(){
+    	
+    	var hemoglobine_glyquee_hbac = $('#hemoglobine_glyquee_hbac').val();
+    	var valeur_mmol = null;
+    	
+    	$('#hemoglobine_glyquee_hbac').keyup( function () {
+    		hemoglobine_glyquee_hbac = $('#hemoglobine_glyquee_hbac').val();
+    		if(hemoglobine_glyquee_hbac){
+        		valeur_mmol = (hemoglobine_glyquee_hbac - 2.152) / 0.09148;
+        		$('#hemoglobine_glyquee_hbac_mmol').val(valeur_mmol.toFixed(1));
+        	}else{
+        		$('#hemoglobine_glyquee_hbac_mmol').val(null);
+        	}
+    	}).change( function(){
+    		hemoglobine_glyquee_hbac = $('#hemoglobine_glyquee_hbac').val();
+    		if(hemoglobine_glyquee_hbac){
+        		valeur_mmol = (hemoglobine_glyquee_hbac - 2.152) / 0.09148;
+        		$('#hemoglobine_glyquee_hbac_mmol').val(valeur_mmol.toFixed(1));
+        	}else{
+        		$('#hemoglobine_glyquee_hbac_mmol').val(null);
+        	}
+    	});
+    	
+    }
+    
+    
+    
+    
+    
+    
+    
     /**
      * ************************************************
      * ------------------------------------------------
@@ -2225,7 +2246,8 @@
   	    			     
     				else if(idanalyse == 68) { tab [68] = getTypageHemoglobine(); }
   	    			     
-    				else if(idanalyse == 70) { tab [70] = getLDH(); }     
+    				else if(idanalyse == 70) { tab [70] = getLDH(); }   
+    				else if(idanalyse == 71) { tab [71] = getChampsNfs_TAD(tabDemandes[i]); }
   	    		}
   	    		
   	        	$( this ).dialog( "close" );
@@ -2250,7 +2272,7 @@
     }
     
     
-    function resultatsDesAnalyses(iddemande){
+    function resultatsDesAnalyses(iddemande){ 
         var chemin = tabUrl[0]+'public/technicien/recuperer-les-analyses-de-la-demande';
         $.ajax({
             type: 'POST',
@@ -2285,7 +2307,6 @@
             	     $('#scriptFormules').html(scriptFormule);
             	    
             	     getElectrophoreseProteinesFormule();
-            	     getElectroHemo();
             	     getAsatAlatAuto();
             	     getFerSeriqueFormule();
             	     getAzotemieFormule();
@@ -2297,6 +2318,11 @@
             	     
             	     ajoutCulotUrinaireAuto();
             	     getBilirubineTotaleDirecteAuto();
+            	     getHemoglobineGlyqueeHbA1cFormule();
+            	     
+            	     //Ajouter des lignes
+            	     getTestCombsIndirectAjout();
+            	     getElectroHemo();
             	     
             	     $("#resultatsAnalysesDuneDemande").dialog('open');
             }
@@ -2304,8 +2330,97 @@
     }
     
     
+    /**
+     * AJOUTER DE PLUSIEURS RESULTAT PAR LES '+' & '-'
+     * AJOUTER DE PLUSIEURS RESULTAT PAR LES '+' & '-'
+     * AJOUTER DE PLUSIEURS RESULTAT PAR LES '+' & '-'
+     */
+    function getTestCombsIndirectAjout(){ 
+    	
+    	$('#test_combs_indirect_moins').toggle(false);
+	    
+    	$('#test_combs_indirect_plus').click(function(){
+	    	var nbLigne = $("#test_combs_rai tr").length;
+	    	$('#test_combs_indirect_moins').toggle(true);
+	    	
+	    	if(nbLigne < 10){
+	    		var html ="<tr id='test_combs_rai_"+nbLigne+"' class='ligneAnanlyse' style='width: 100%;'>"+
+                            
+                            "<td style='width: 30%;'><label class='lab1' ><span style='font-weight: bold;'> RAI <select id='test_combs_indirect_"+nbLigne+"' > <option >  </option> <option value='Positif' >Positif</option> <option value='Negatif' >N&eacute;gatif</option> </select></span></label></td>"+
+                    	    "<td style='width: 25%;'><label class='lab2' style='padding-top: 5px; text-align: right; '>  Titre <input id='titre_combs_indirect_"+nbLigne+"' type='text'> </label></td>"+
+                    	    "<td style='width: 45%;'><label class='lab3' style='padding-top: 5px; width: 80%; padding-left: 25px;'> Temp&eacute;rature <input id='titre_combs_temperature_"+nbLigne+"' type='number' > </label></td>"+
+                            
+                          "</tr>";
+
+		    	$('#test_combs_rai_'+(nbLigne-1)).after(html);
+		    	$('#test_combs_indirect_'+nbLigne).val($('#test_combs_indirect_'+(nbLigne-1)).val());
+		    	
+		    	if(nbLigne == 9){
+		    		$('#test_combs_indirect_plus').toggle(false);
+		    	}
+		    	
+		    	//Blocage du champ titre lorsque la valeur est négative
+			    $('#test_combs_indirect_'+nbLigne).attr('onchange', 'getTestCombsIndirectBlocTitre('+nbLigne+')');
+			    if($('#test_combs_indirect_'+nbLigne).val() == 'Negatif'){ $('#test_combs_indirect_'+nbLigne).trigger('change'); }
+	    	}
+
+	    });
+	    
+	    $('#test_combs_indirect_moins').click(function(){ 
+	    	var nbLigne = $("#test_combs_rai tr").length;
+	    	
+	    	if(nbLigne > 2){
+		    	$('#test_combs_rai_'+(nbLigne-1)).remove();
+		    	if(nbLigne == 3){ 
+		    		$('#test_combs_indirect_moins').toggle(false);
+		    	}
+		    	
+		    	if(nbLigne == 10){
+		    		$('#test_combs_indirect_plus').toggle(true);
+		    	}
+	    	}
+
+	    });
+	    
+	    
+    }
+    
+    function testCombsIndirect(){
+    	var tab = [];
+    	var nbLigne = $("#test_combs_rai tr").length;
+    	var j = 1;
+    	
+    	tab[0] = $('#type_materiel_test_combs_indirect').val();
+    	tab[1] = new Array(); 
+    	tab[2] = new Array(); 
+    	tab[3] = new Array(); 
+    	for(var i=1 ; i<nbLigne ; i++){
+    		var test  = $('#test_combs_indirect_'+i ).val();
+    		var titre = $('#titre_combs_indirect_'+i).val();
+    		var temperature = $('#titre_combs_temperature_'+i).val();
+    		if(test){
+        		tab[1][j]   = test;
+        		tab[2][j] = titre;
+        		tab[3][j++] = temperature;
+    		}
+    	}
+	    tab[4] = $('#commentaire_test_combs_indirect').val();
+	    
+	    return tab;
+    
+    }
     
     
+    function getTestCombsIndirectBlocTitre(nbLigne){
+    	
+    	var val = $('#test_combs_indirect_'+nbLigne).val();
+    	
+    	if(val == 'Negatif'){
+    		$('#titre_combs_indirect_'+nbLigne).val('').attr('readonly',true);
+    	}else{
+    		$('#titre_combs_indirect_'+nbLigne).attr('readonly',false);
+    	}
+    }
     
     
     
@@ -4445,19 +4560,21 @@
             
                                 "var champ12 = $('.ER_"+iddemande+" #champ12').val();"+
                                 "var champ25 = $('.ER_"+iddemande+" #champ25').val();"+
+                                "var champ24 = $('.ER_"+iddemande+" #champ24');"+
                                 "if( champ12 && champ25 ){"+
                                     "var resultatChamp24 = champ12*10000*champ25;"+
-                                    "$('#champ24').val(resultatChamp24);"+
-                                "}else{ $('#champ24').val(null); }"+
+                                    "champ24.val(resultatChamp24);"+
+                                "}else{ champ24.val(null); }"+
 
                                 "}).change( function () {"+
 
                                    "var champ12 = $('.ER_"+iddemande+" #champ12').val();"+
                                    "var champ25 = $('.ER_"+iddemande+" #champ25').val();"+
+                                   "var champ24 = $('.ER_"+iddemande+" #champ24');"+
                                    "if( champ12 && champ25 ){"+
                                        "var resultatChamp24 = champ12*10000*champ25;"+
-                                       "$('#champ24').val(resultatChamp24);"+
-                                   "}else{ $('#champ24').val(null); }"+
+                                       "champ24.val(resultatChamp24);"+
+                                   "}else{ champ24.val(null); }"+
 
                                 "}).trigger('keyup');";
         	

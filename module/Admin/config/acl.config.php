@@ -259,7 +259,13 @@ return array(
 
                 		
                 	'get-nb-patient-admis' => 'facturation',	
+                	'liste-patients-priseencharge' => 'facturation',
+                	'liste-patients-priseencharge-ajax' => 'facturation',
+                	'reglement_priseencharge' => 'facturation',
+                	'annuler_reglement_priseencharge' => 'facturation',
                 		
+                	'historique-patients-priseencharges' => 'facturation',
+               		'historique-patients-priseencharges-ajax' => 'facturation',
 
                 ),
 

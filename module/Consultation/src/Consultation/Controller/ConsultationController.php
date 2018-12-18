@@ -14,6 +14,7 @@ use Consultation\View\Helper\imprimerDemandesExamens;
 use Consultation\View\Helper\ImprimerUnExamenDemande;
 use Consultation\View\Helper\ImprimerExamensRadioDemandes;
 use Consultation\View\Helper\ImprimerExamensBioDemandes;
+use Zend\Server\Method\Prototype;
 
 class ConsultationController extends AbstractActionController {
 	
@@ -34,6 +35,11 @@ class ConsultationController extends AbstractActionController {
 	protected $codagePrelevement;
 	protected $ordonnanceTable;
 	protected $ordonConsommableTable;
+	protected $transfusionTable;
+	protected $antecedantsPersAntenatauxTable;
+	protected $antecedantsPersPerinatauxTable;
+	protected $antecedantsPersAlimentationTable;
+	protected $antecedantsPersScolariteTable;
 	
 	public function getConsultationTable() {
 		if (! $this->consultation) {
@@ -170,6 +176,47 @@ class ConsultationController extends AbstractActionController {
 		}
 		return $this->ordonConsommableTable;
 	}
+	
+	public function getTransfusionTable() {
+		if (! $this->transfusionTable) {
+			$sm = $this->getServiceLocator ();
+			$this->transfusionTable = $sm->get ( 'Consultation\Model\TransfusionTable' );
+		}
+		return $this->transfusionTable;
+	}
+	
+	public function getAntecedentsPersAntenatauxTable() {
+		if (! $this->antecedantsPersAntenatauxTable) {
+			$sm = $this->getServiceLocator ();
+			$this->antecedantsPersAntenatauxTable = $sm->get ( 'Consultation\Model\AntecedentsPersAntenatauxTable' );
+		}
+		return $this->antecedantsPersAntenatauxTable;
+	}
+	
+	public function getAntecedentsPersPerinatauxTable() {
+		if (! $this->antecedantsPersPerinatauxTable) {
+			$sm = $this->getServiceLocator ();
+			$this->antecedantsPersPerinatauxTable = $sm->get ( 'Consultation\Model\AntecedentsPersPerinatauxTable' );
+		}
+		return $this->antecedantsPersPerinatauxTable;
+	}
+	
+	public function getAntecedentsPersAlimentationTable() {
+		if (! $this->antecedantsPersAlimentationTable) {
+			$sm = $this->getServiceLocator ();
+			$this->antecedantsPersAlimentationTable = $sm->get ( 'Consultation\Model\AntecedentsPersAlimentationTable' );
+		}
+		return $this->antecedantsPersAlimentationTable;
+	}
+	
+	public function getAntecedentsPersScolariteTable() {
+		if (! $this->antecedantsPersScolariteTable) {
+			$sm = $this->getServiceLocator ();
+			$this->antecedantsPersScolariteTable = $sm->get ( 'Consultation\Model\AntecedentsPersScolariteTable' );
+		}
+		return $this->antecedantsPersScolariteTable;
+	}
+	
 	//=============================================================================================
 	//---------------------------------------------------------------------------------------------
 	//=============================================================================================
@@ -597,6 +644,13 @@ class ConsultationController extends AbstractActionController {
 		//---- FIN Gestion des AGE ----
 		//---- FIN Gestion des AGE ----
 		
+		//---- GESTION DU GROUPAGE --- ---
+		//---- GESTION DU GROUPAGE --- ---
+		//---- GESTION DU GROUPAGE --- ---
+		$groupeSanguin = $this->getPatientTable()->getGroupeSanguinPatient($idpatient);
+		//---- FIN Gestion DU GROUPAGE ---- ----
+		//---- FIN Gestion DU GROUPAGE ---- ----
+		//---- FIN Gestion DU GROUPAGE ---- ----
 
 		$data = array(
 				'idpatient' => $idpatient,
@@ -655,14 +709,6 @@ class ConsultationController extends AbstractActionController {
 		//RECUPERER LA LISTE DES VOIES ADMINISTRATION DES MEDICAMENTS
 		$listeVoieAdministration = $this->getConsultationTable()->getVoieAdministration($idcons);
 		
-		//RECUPERER LA LISTE DES ACTES
-		$listeActes = $this->getConsultationTable()->getListeDesActes();
-		
-		//RECUPERER LES ANALYSES EFFECTUEES PAR LE PATIENT FAISANT PARTIE DES ANALYSES OBLIGATOIRES A FAIRE 
-		$donneesExamensEffectues = $this->getAnalyseAFaireTable()->getAnalyseEffectuees($idpatient);
-
-		
-		
 		
 		
 		/**
@@ -671,8 +717,23 @@ class ConsultationController extends AbstractActionController {
 		 * Recuperer les historiques et les antecedents du patient
 		 */
 		/*
+		 * ANTECEDENTS PERSONNELS --- ANTECEDENTS PERSONNELS
+		 */
+		$infosAntecedentsPersAntenataux = $this->getAntecedentsPersAntenatauxTable()->getAntecedentsPersAntenatauxParIdpatient($idpatient);
+		if($infosAntecedentsPersAntenataux){ $form->populateValues($infosAntecedentsPersAntenataux[0]); }
+		
+		$infosAntecedentsPersPerinataux = $this->getAntecedentsPersPerinatauxTable()->getAntecedentsPersPerinatauxParIdpatient($idpatient);
+		if($infosAntecedentsPersPerinataux){ $form->populateValues($infosAntecedentsPersPerinataux[0]); }
+		
+		$infosAntecedentsPersAlimentation = $this->getAntecedentsPersAlimentationTable()->getAntecedentsPersAlimentationParIdpatient($idpatient);
+		if($infosAntecedentsPersAlimentation){ $form->populateValues($infosAntecedentsPersAlimentation[0]); }
+
+		$infosAntecedentsPersScolarite = $this->getAntecedentsPersScolariteTable()->getAntecedentsPersScolariteParIdpatient($idpatient);
+		if($infosAntecedentsPersScolarite){ $form->populateValues($infosAntecedentsPersScolarite[0]); }
+		
+		/*
 		 * ANTECEDENTS FAMILIAUX --- ANTECEDENTS FAMILIAUX
-		*/
+		 */
 		$infosAntecedentsFamiliaux = $this->getAntecedentsFamiliauxTable()->getAntecedentsFamilauxParIdpatient($idpatient);
 		$infosAutresMaladiesFamiliales = $this->getAntecedentsFamiliauxTable()->getAutresMaladiesFamiliales($idpatient);
 		if($infosAntecedentsFamiliaux){ $form->populateValues($infosAntecedentsFamiliaux[0]); };
@@ -680,9 +741,30 @@ class ConsultationController extends AbstractActionController {
 		$listeChoixStatutDrepanoEnfant = $this->getAntecedentsFamiliauxTable()->getStatutDrepanocytoseEnfant($idpatient);
 		
 		
+		/**
+		 * Gérer les examens complémentaires - Gérer les examens complémentaires
+		 * Gérer les examens complémentaires - Gérer les examens complémentaires
+		 * Gérer les examens complémentaires - Gérer les examens complémentaires
+		 */
 		
+		/*
+		 * RECUPERER LA LISTE DES ACTES
+		 */
+		$listeActes = $this->getConsultationTable()->getListeDesActes();
 		
+		/*
+		 * RECUPERER LES ANALYSES EFFECTUEES PAR LE PATIENT FAISANT PARTIE DES ANALYSES OBLIGATOIRES A FAIRE
+		 */
+		$donneesExamensEffectues = $this->getAnalyseAFaireTable()->getAnalyseEffectuees($idpatient);
 		
+		$donneesProgrammeAnalysesObligatoires = $this->getAnalyseAFaireTable()->getProgrammeAnalysesObligatoiresEffectuees($idpatient);
+		
+		//var_dump($donneesProgrammeAnalysesObligatoires); exit();
+		/**
+		 * Les traitements médicamenteux - Les traitements médicamenteux
+		 * Les traitements médicamenteux - Les traitements médicamenteux
+		 * Les traitements médicamenteux - Les traitements médicamenteux
+		 */
 		
 		/*
 		 * TRAITEMENT MEDICAMENTEUX --- TRAITEMENT MEDICAMENTEUX
@@ -691,6 +773,8 @@ class ConsultationController extends AbstractActionController {
 		$listeForme = $this->getConsultationModConsTable()->formesMedicaments();
 		$listetypeQuantiteMedicament = $this->getConsultationModConsTable()->typeQuantiteMedicaments();
 		//var_dump($data); exit();
+		
+		
 		
 		//var_dump($listeChoixStatutDrepanoEnfant->current()); exit();
 		//FIN --- FIN --- FIN --- FIN --- FIN --- FIN --- FIN
@@ -712,6 +796,7 @@ class ConsultationController extends AbstractActionController {
 				'form' => $form,
 				'patient' => $patient,
 				'donneesExamensEffectues' => $donneesExamensEffectues,
+				'donneesProgrammeAnalysesObligatoires' => $donneesProgrammeAnalysesObligatoires,
 				
 				'mDouleur' => $mDouleur,
 				'listeVoieAdministration' => $listeVoieAdministration,
@@ -724,6 +809,7 @@ class ConsultationController extends AbstractActionController {
 				'listeTypeQuantiteMedicament'  => $listetypeQuantiteMedicament,
 				
 				'informations_parentales' => $informations_parentales,
+				'groupeSanguin' => $groupeSanguin,
 		);
 
 	}
@@ -959,8 +1045,20 @@ class ConsultationController extends AbstractActionController {
 		$tabDonnees = $this->params ()->fromPost();
 		
 		/**
-		 *ANTECEDENT FAMILIAUX --- ANTECEDENTS FAMILIAUX
-		 *ANTECEDENT FAMILIAUX --- ANTECEDENTS FAMILIAUX
+		 * ANTECEDENT PERSONNELS --- ANTECEDENTS PERSONNELS
+		 * ANTECEDENT PERSONNELS --- ANTECEDENTS PERSONNELS
+		 * ANTECEDENT PERSONNELS --- ANTECEDENTS PERSONNELS
+		 */
+	    $this->getAntecedentsPersAntenatauxTable()->insertAntecedentsPersAntenataux($tabDonnees, $idmedecin);
+	    $this->getAntecedentsPersPerinatauxTable()->insertAntecedentsPersPerinataux($tabDonnees, $idmedecin);
+		$this->getAntecedentsPersAlimentationTable()->insertAntecedentsPersAlimentation($tabDonnees, $idmedecin);
+	    $this->getAntecedentsPersScolariteTable()->insertAntecedentsPersScolarite($tabDonnees, $idmedecin);
+		
+		
+		/**
+		 * ANTECEDENT FAMILIAUX --- ANTECEDENTS FAMILIAUX
+		 * ANTECEDENT FAMILIAUX --- ANTECEDENTS FAMILIAUX
+		 * ANTECEDENT FAMILIAUX --- ANTECEDENTS FAMILIAUX
 		 */
 		$this->getAntecedentsFamiliauxTable()->insertAntecedentsFamiliaux($tabDonnees);
 		$this->getAntecedentsFamiliauxTable()->insertStatutDrepanocytoseEnfant($tabDonnees);
@@ -969,12 +1067,11 @@ class ConsultationController extends AbstractActionController {
 		 * CONSULTATION DU JOUR --- CONSULTATION DU JOUR
 		 * CONSULTATION DU JOUR --- CONSULTATION DU JOUR
 		 */
-		/** Histoire de la maladie **/
-		$this->getHistoireMaladieTable()->insertHistoireMaladie($tabDonnees, $idmedecin);
-		
 		/** Interrogatoire (description des symptomes) **/
 		$this->getHistoireMaladieTable()->insertInterrogatoireMotif($tabDonnees, $idmedecin);
 		
+		/** Evènements depuis la dernière consultation **/
+		$this->getHistoireMaladieTable()->insertHistoireMaladie($tabDonnees, $idmedecin);
 		
 		/** Suivi des traitements **/
 		$this->getHistoireMaladieTable()->insertSuiviDesTraitements($tabDonnees, $idmedecin);
@@ -1021,16 +1118,21 @@ class ConsultationController extends AbstractActionController {
 		 * DIAGNOSTIC --- DIAGNOSTIC --- DIAGNOSTIC 
  		 * DIAGNOSTIC --- DIAGNOSTIC --- DIAGNOSTIC 
 		 */
-		/** Diagnostics du jour **/
-		$this->getDiagnosticConsultationTable()->insertDiagnosticConsultation($tabDonnees, $idmedecin);
 		
-		/** Complications aigues **/
-		$this->getDiagnosticConsultationTable()->insertComplicationsAigues($tabDonnees, $idmedecin);
+		$choix = $this->getDiagnosticConsultationTable()->insertChoixConclusionDiagnostic($tabDonnees);
+		if ($choix == 1) {
+				
+			/** Complications aigues **/
+			$this->getDiagnosticConsultationTable()->insertComplicationsAigues($tabDonnees, $idmedecin);
 		
-		/** Complications chroniques **/
-		$this->getDiagnosticConsultationTable()->insertComplicationsChroniques($tabDonnees, $idmedecin);
+			/** Complications chroniques **/
+			$this->getDiagnosticConsultationTable()->insertComplicationsChroniques($tabDonnees, $idmedecin);
 		
-
+		}else if ($choix == 2) {
+				
+			/** Diagnostics du jour **/
+			$this->getDiagnosticConsultationTable()->insertDiagnosticConsultation($tabDonnees, $idmedecin);
+		}
 		
 				
 		/**
@@ -1099,6 +1201,13 @@ class ConsultationController extends AbstractActionController {
 		 * HOSPITALISATION --- HOSPITALISATION --- HOSPITALISATION
 		 */
 		$this->getFacturationTable()->addHospitalisation($tabDonnees, $idmedecin);
+		
+		/**
+		 * TRANSFUSION --- TRANSFUSION --- TRANSFUSION
+		 * TRANSFUSION --- TRANSFUSION --- TRANSFUSION
+		 */
+		$this->getTransfusionTable()->insertTransfusion($tabDonnees);
+		
 		
 		/**
 		 * RENDEZ-VOUS --- RENDEZ-VOUS --- RENDEZ-VOUS
@@ -1233,6 +1342,13 @@ class ConsultationController extends AbstractActionController {
 		//---- FIN Gestion des AGE ----
 		//---- FIN Gestion des AGE ----
 		
+		//---- GESTION DU GROUPAGE --- ---
+		//---- GESTION DU GROUPAGE --- ---
+		//---- GESTION DU GROUPAGE --- ---
+		$groupeSanguin = $this->getPatientTable()->getGroupeSanguinPatient($idpatient);
+		//---- FIN Gestion DU GROUPAGE ---- ----
+		//---- FIN Gestion DU GROUPAGE ---- ----
+		//---- FIN Gestion DU GROUPAGE ---- ----
 
 		$data = array(
 				'idpatient' => $idpatient,
@@ -1330,6 +1446,22 @@ class ConsultationController extends AbstractActionController {
 		 * Recuperer les historiques et les antecedents du patient
 		 */
 		/*
+		 * ANTECEDENTS PERSONNELS --- ANTECEDENTS PERSONNELS
+		*/
+		$infosAntecedentsPersAntenataux = $this->getAntecedentsPersAntenatauxTable()->getAntecedentsPersAntenatauxParIdpatient($idpatient);
+		if($infosAntecedentsPersAntenataux){ $form->populateValues($infosAntecedentsPersAntenataux[0]); }
+		
+		$infosAntecedentsPersPerinataux = $this->getAntecedentsPersPerinatauxTable()->getAntecedentsPersPerinatauxParIdpatient($idpatient);
+		if($infosAntecedentsPersPerinataux){ $form->populateValues($infosAntecedentsPersPerinataux[0]); }
+		
+		$infosAntecedentsPersAlimentation = $this->getAntecedentsPersAlimentationTable()->getAntecedentsPersAlimentationParIdpatient($idpatient);
+		if($infosAntecedentsPersAlimentation){ $form->populateValues($infosAntecedentsPersAlimentation[0]); }
+		
+		$infosAntecedentsPersScolarite = $this->getAntecedentsPersScolariteTable()->getAntecedentsPersScolariteParIdpatient($idpatient);
+		if($infosAntecedentsPersScolarite){ $form->populateValues($infosAntecedentsPersScolarite[0]); }
+		
+		
+		/*
 		 * ANTECEDENTS FAMILIAUX --- ANTECEDENTS FAMILIAUX 
 		 */
 		$infosAntecedentsFamiliaux = $this->getAntecedentsFamiliauxTable()->getAntecedentsFamilauxParIdpatient($idpatient);
@@ -1346,7 +1478,8 @@ class ConsultationController extends AbstractActionController {
 		 * HISTOIRE DE LA MALADIE --- HITOIRE DE LA MALADIE
 		 */
 		$infosHistoireMaladie = $this->getHistoireMaladieTable()->getHistoireMaladie($idcons);
-		$listeCrisesVasOcclusivesHM = null;
+		$listeCrisesVasOcclusivesHM = array();
+		$listeHospitalisationHm = array();
 		if($infosHistoireMaladie){ 
 			$form->populateValues($infosHistoireMaladie[0]); 
 			if($infosHistoireMaladie[0]['criseHM'] == 1){ 
@@ -1362,6 +1495,8 @@ class ConsultationController extends AbstractActionController {
 			if($infosHistoireMaladie[0]['hospitalisationHM'] == 1){
 				$infosHospitalisationHm = $this->getHistoireMaladieTable()->getHospitalisationHm($idcons);
 				$form->populateValues($infosHospitalisationHm);
+				
+				$listeHospitalisationHm = $this->getHistoireMaladieTable()->getHospitalisationListeHm($idcons);
 			}
 		}
 		
@@ -1430,31 +1565,45 @@ class ConsultationController extends AbstractActionController {
     	/*
     	 * INFOS SUR LE DIAGNOSTIC DU JOUR
     	 */
-    	$tabInfosDiagnosticDuJour = array(1=>0, 2=>0, 3=>0);
+    	$tabInfosDiagnosticDuJour = array(1=>0, 2=>0);
     	
-    	/*
-    	 * DIAGNOSTIC DU JOUR
-    	 */
-    	$infosDiagnosticConsultation = $this->getDiagnosticConsultationTable()->getDiagnosticConsultation($idcons);
-    	if($infosDiagnosticConsultation){ $form->populateValues($infosDiagnosticConsultation[0]); $tabInfosDiagnosticDuJour[3] = 1; }
-    	/*
-    	 * COMPLICATIONS AIGUES
-    	 */
-    	$infosComplicationsAigues = $this->getDiagnosticConsultationTable()->getComplicationsAigues($idcons);
-    	if($infosComplicationsAigues->count() != 0){ 
-    		$nbDiagnosticComplicationsAigues = array('nbDiagnosticComplicationsAigues' => $infosComplicationsAigues->count());
-    		$form->populateValues($nbDiagnosticComplicationsAigues); 
-    		$tabInfosDiagnosticDuJour[1] = 1;
+    	$choixConsultationDiagnostic = $this->getDiagnosticConsultationTable()->getChoixConsultationDiagnostic($idcons);
+    	//var_dump($choixConsultationDiagnostic); exit();
+    	
+    	$infosComplicationsAigues = array();
+    	$infosComplicationsChroniques = array();
+    	if ($choixConsultationDiagnostic == 1){
+    		/*
+    		 * COMPLICATIONS AIGUES
+    		*/
+    		$infosComplicationsAigues = $this->getDiagnosticConsultationTable()->getComplicationsAigues($idcons);
+    		if($infosComplicationsAigues->count() != 0){
+    			$nbDiagnosticComplicationsAigues = array('nbDiagnosticComplicationsAigues' => $infosComplicationsAigues->count());
+    			$form->populateValues($nbDiagnosticComplicationsAigues);
+    			$tabInfosDiagnosticDuJour[1] = 1;
+    		}
+    		/*
+    		 * COMPLICATIONS CHRONIQUES
+    		*/
+    		$infosComplicationsChroniques = $this->getDiagnosticConsultationTable()->getComplicationsChroniques($idcons);
+    		if($infosComplicationsChroniques->count() != 0){
+    			$nbDiagnosticComplicationsChroniques = array('nbDiagnosticComplicationsChroniques' => $infosComplicationsChroniques->count());
+    			$form->populateValues($nbDiagnosticComplicationsChroniques);
+    			$tabInfosDiagnosticDuJour[2] = 1;
+    		}
+    	
+    	}else if ($choixConsultationDiagnostic == 2) {
+    		/*
+    		 * DIAGNOSTIC DU JOUR
+    		*/
+    		$infosDiagnosticConsultation = $this->getDiagnosticConsultationTable()->getDiagnosticConsultation($idcons);
+    		if($infosDiagnosticConsultation){ $form->populateValues($infosDiagnosticConsultation[0]); }
+    		 
     	}
-    	/*
-    	 * COMPLICATIONS CHRONIQUES
-    	 */
-    	$infosComplicationsChroniques = $this->getDiagnosticConsultationTable()->getComplicationsChroniques($idcons);
-    	if($infosComplicationsChroniques->count() != 0){
-    		$nbDiagnosticComplicationsChroniques = array('nbDiagnosticComplicationsChroniques' => $infosComplicationsChroniques->count());
-    		$form->populateValues($nbDiagnosticComplicationsChroniques);
-    		$tabInfosDiagnosticDuJour[2] = 1;
-    	}
+    		
+
+    	
+    	
     	
     	
     	/**
@@ -1507,14 +1656,24 @@ class ConsultationController extends AbstractActionController {
     	 * HOSPITALISATION
     	 */
     	$hospitalisation = $this->getFacturationTable()->getHospitalisation($idcons);
-    	//var_dump($hospitalisation); exit();
     	
     	if($hospitalisation){
     		$donneesHospitalisation = array(
     				'motifHospitalisation' => $hospitalisation['motifHospitalisation'],
+    				'diagnosticRetenuHospitalisation' => $hospitalisation['diagnosticRetenuHospitalisation'],
     		);
     		$form->populateValues($donneesHospitalisation);
     	}
+    	
+    	/*
+    	 * TRANSFUSION
+    	 */
+    	$transfusion = $this->getTransfusionTable()->getTransfusion($idcons);
+    	
+    	if($transfusion){
+    		$form->populateValues($transfusion[0]);
+    	}
+
     	
     	/*
     	 * RENDEZ-VOUS
@@ -1531,11 +1690,15 @@ class ConsultationController extends AbstractActionController {
     	}
     	
     	
-    	//var_dump($rendezVous); exit();
+    	
+    	/*
+    	foreach ($listeHospitalisationHm as $uneHospitalisationHm){
+    		$listeHospitalisaDPKK [] = $uneHospitalisationHm;
+    	}
+    	*/
+    	//var_dump($listeCrisesVasOcclusivesHM); exit();
     	
     	
-    	
-		
 		//FIN --- FIN --- FIN --- FIN --- FIN --- FIN --- FIN
 		//$timeend = microtime(true);
 		//$time = $timeend-$timestart;
@@ -1562,6 +1725,7 @@ class ConsultationController extends AbstractActionController {
 				'listeMotifConsultation' => $listeMotifConsultation,
 				'listeChoixStatutDrepanoEnfant' => $listeChoixStatutDrepanoEnfant,
 				
+				'choixConsultationDiagnostic' => $choixConsultationDiagnostic,
 				'infosComplicationsAigues' => $infosComplicationsAigues,
 				'infosComplicationsChroniques' => $infosComplicationsChroniques,
 				'tabInfosDiagnosticDuJour' => $tabInfosDiagnosticDuJour,
@@ -1570,6 +1734,7 @@ class ConsultationController extends AbstractActionController {
 				'motifsExamensBioDemandes' => $motifsExamensBioDemandes,
 				
 				'listeCrisesVasOcclusivesHM' => $listeCrisesVasOcclusivesHM,
+				'listeHospitalisationHm' => $listeHospitalisationHm,
 				'motifRendezVous' => $motifRendezVous,
 				
 				'listeMedicament' => $listeMedicament,
@@ -1582,6 +1747,8 @@ class ConsultationController extends AbstractActionController {
 				'nb_med_prescrit' => $nbMedPrescrit,
 				'liste_med_prescrit' => $listeMedicamentsPrescrits,
 				'duree_traitement' => $duree_traitement,
+				
+				'groupeSanguin' => $groupeSanguin,
 		);
 
 	}
@@ -1590,11 +1757,23 @@ class ConsultationController extends AbstractActionController {
 		$idmedecin = $this->layout()->user['idemploye'];
 
 		$tabDonnees = $this->params ()->fromPost();
+		
 		/**
-		 *ANTECEDENT FAMILIAUX --- ANTECEDENTS FAMILIAUX
-		 *ANTECEDENT FAMILIAUX --- ANTECEDENTS FAMILIAUX
-		*/
-				
+		 * ANTECEDENT PERSONNELS --- ANTECEDENTS PERSONNELS
+		 * ANTECEDENT PERSONNELS --- ANTECEDENTS PERSONNELS
+		 * ANTECEDENT PERSONNELS --- ANTECEDENTS PERSONNELS
+		 */
+		$this->getAntecedentsPersAntenatauxTable()->insertAntecedentsPersAntenataux($tabDonnees, $idmedecin);
+		$this->getAntecedentsPersPerinatauxTable()->insertAntecedentsPersPerinataux($tabDonnees, $idmedecin);
+		$this->getAntecedentsPersAlimentationTable()->insertAntecedentsPersAlimentation($tabDonnees, $idmedecin);
+		$this->getAntecedentsPersScolariteTable()->insertAntecedentsPersScolarite($tabDonnees, $idmedecin);
+		
+		
+		/**
+		 * ANTECEDENT FAMILIAUX --- ANTECEDENTS FAMILIAUX
+		 * ANTECEDENT FAMILIAUX --- ANTECEDENTS FAMILIAUX
+		 * ANTECEDENT FAMILIAUX --- ANTECEDENTS FAMILIAUX
+		 */
 		$this->getAntecedentsFamiliauxTable()->insertAntecedentsFamiliaux($tabDonnees);
 		$this->getAntecedentsFamiliauxTable()->insertStatutDrepanocytoseEnfant($tabDonnees);
 
@@ -1604,11 +1783,12 @@ class ConsultationController extends AbstractActionController {
 		 * CONSULTATION DU JOUR --- CONSULTATION DU JOUR
 		 * CONSULTATION DU JOUR --- CONSULTATION DU JOUR
 		 */
-		/** Histoire de la maladie **/
-		$this->getHistoireMaladieTable()->insertHistoireMaladie($tabDonnees, $idmedecin);
 		
-		/** Interrogatoire (description des symptomes) **/
+		/** Motif de consultation **/
 		$this->getHistoireMaladieTable()->insertInterrogatoireMotif($tabDonnees, $idmedecin);
+		
+		/** Evènements depuis la dernière consultation **/
+		$this->getHistoireMaladieTable()->insertHistoireMaladie($tabDonnees, $idmedecin);
 		
 		/** Suivi des traitements **/
 		$this->getHistoireMaladieTable()->insertSuiviDesTraitements($tabDonnees, $idmedecin);
@@ -1661,15 +1841,21 @@ class ConsultationController extends AbstractActionController {
 		 * DIAGNOSTIC --- DIAGNOSTIC --- DIAGNOSTIC
 		 * DIAGNOSTIC --- DIAGNOSTIC --- DIAGNOSTIC
 		 */
-		/** Diagnostics du jour **/
-		$this->getDiagnosticConsultationTable()->insertDiagnosticConsultation($tabDonnees, $idmedecin);
 		
-		/** Complications aigues **/
-		$this->getDiagnosticConsultationTable()->insertComplicationsAigues($tabDonnees, $idmedecin);
+		$choix = $this->getDiagnosticConsultationTable()->insertChoixConclusionDiagnostic($tabDonnees);
+		if ($choix == 1) {
 		
-		/** Complications chroniques **/
-		$this->getDiagnosticConsultationTable()->insertComplicationsChroniques($tabDonnees, $idmedecin);
+			/** Complications aigues **/
+			$this->getDiagnosticConsultationTable()->insertComplicationsAigues($tabDonnees, $idmedecin);
 		
+			/** Complications chroniques **/
+			$this->getDiagnosticConsultationTable()->insertComplicationsChroniques($tabDonnees, $idmedecin);
+		
+		}else if ($choix == 2) {
+		
+			/** Diagnostics du jour **/
+			$this->getDiagnosticConsultationTable()->insertDiagnosticConsultation($tabDonnees, $idmedecin);
+		}
 		
 		
 		/**
@@ -1740,6 +1926,13 @@ class ConsultationController extends AbstractActionController {
 		 * HOSPITALISATION --- HOSPITALISATION --- HOSPITALISATION
 		 */
 		$this->getFacturationTable()->addHospitalisation($tabDonnees, $idmedecin);
+		
+		/**
+		 * TRANSFUSION --- TRANSFUSION --- TRANSFUSION
+		 * TRANSFUSION --- TRANSFUSION --- TRANSFUSION
+		 */
+		$this->getTransfusionTable()->insertTransfusion($tabDonnees);
+		
 		
 		/**
 		 * RENDEZ-VOUS --- RENDEZ-VOUS --- RENDEZ-VOUS
@@ -2668,7 +2861,27 @@ class ConsultationController extends AbstractActionController {
 		
 		$pourcentageDifferentsProfessionPeres = $this->pourcentage_element_tab($tableauDifferentsProfessionPeres, $totalDifferentsProfessionPeres);
 		
-		//var_dump($pourcentageDifferentsProfessionMeres); exit();
+		
+		/**
+		 * Répartition des nouveaux nés dépistés de j=0 au j=8
+		 * Répartition des nouveaux nés dépistés de j=0 au j=8
+		 * Répartition des nouveaux nés dépistés de j=0 au j=8*/
+		$effectifPatientDepistesAges = $this->getDepistageTable()->getEffectifPatientDepistesAges0_8();
+		$pourcentageEffectifPatientDepistesAges = $this->pourcentage_element_tab($effectifPatientDepistesAges[0], $effectifPatientDepistesAges[1]);
+		
+		
+		/**
+		 * Répartition des nouveaux nés par adresses
+		 * Répartition des nouveaux nés par adresses
+		 * Répartition des nouveaux nés par adresses
+		 */
+		$repartitionPatientDepistesParAdresses = $this->getDepistageTable()->getRepartitionPatientDepistesParAdresses();
+		$totalPatientDepistesParAdresses = array_sum($repartitionPatientDepistesParAdresses[1]);
+		$tableauPatientDepistesParAdresses = array_values($repartitionPatientDepistesParAdresses[1]);
+		
+		$pourcentagePatientDepistesParAdresses = $this->pourcentage_element_tab($tableauPatientDepistesParAdresses, $totalPatientDepistesParAdresses);
+		
+		//var_dump($repartitionPatientDepistesParAdresses); exit();
 		
 		
 		
@@ -2699,6 +2912,13 @@ class ConsultationController extends AbstractActionController {
 				
 				'repartitionProfessionChezLesPeres' => $repartitionProfessionChezLesPeres,
 				'pourcentageDifferentsProfessionPeres' => $pourcentageDifferentsProfessionPeres,
+				
+				
+				'effectifPatientDepistesAges' => $effectifPatientDepistesAges,
+				'pourcentageEffectifPatientDepistesAges' => $pourcentageEffectifPatientDepistesAges,
+				
+				'repartitionPatientDepistesParAdresses' => $repartitionPatientDepistesParAdresses,
+				'pourcentagePatientDepistesParAdresses' => $pourcentagePatientDepistesParAdresses,
 		);
 		
 	}

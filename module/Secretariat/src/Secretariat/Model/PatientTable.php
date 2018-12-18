@@ -468,8 +468,8 @@ class PatientTable {
 		$select = $sql->select();
 		$select->from(array('a'=>'analyse'));
 		$select->columns(array('*'));
-		$select->where(array('a.idtype_analyse' => $id));
-		$select->order('idanalyse ASC');
+		$select->where(array('a.idtype_analyse' => $id, 'idanalyse != ?' => 9)); //Sauf Taux de Reticulosyte (TR)
+		$select->order('designation ASC');
 		return $sql->prepareStatementForSqlObject($select)->execute();
 	}
 	

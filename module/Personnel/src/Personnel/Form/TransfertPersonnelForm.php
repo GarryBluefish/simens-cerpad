@@ -26,7 +26,7 @@ class TransfertPersonnelForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'type_transfert',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'label' => 'Type transfert',
 						'value_options' => array (
@@ -56,7 +56,7 @@ class TransfertPersonnelForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'service_accueil',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'label' => 'Service d\'accueil',
 				),
@@ -105,7 +105,7 @@ class TransfertPersonnelForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'hopital_accueil',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'label' => 'Hopital d\'accueil'
 				),
@@ -118,7 +118,7 @@ class TransfertPersonnelForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'service_accueil_externe',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'label' => 'Service d\'accueil'
 				),

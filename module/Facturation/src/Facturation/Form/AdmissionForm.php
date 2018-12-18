@@ -2,8 +2,7 @@
 namespace Facturation\Form;
 
 use Zend\Form\Form;
-// use Personnel\Model\Service;
-// use Personnel\Model\ServiceTable;
+
 
 class AdmissionForm extends Form{
 
@@ -90,7 +89,7 @@ class AdmissionForm extends Form{
 		
 		$this->add(array(
 				'name' => 'type_facturation',
-				'type' => 'Zend\Form\Element\radio',
+				'type' => 'Radio',
 				'options' => array (
 						'value_options' => array(
 								1 => 'Normal',
@@ -105,7 +104,7 @@ class AdmissionForm extends Form{
 		
 		$this->add(array(
 				'name' => 'organisme',
-				'type' => 'select',
+				'type' => 'Select',
 				'options' => array (
 						'label' => iconv('ISO-8859-1', 'UTF-8','Organisme')
 				),
@@ -120,9 +119,8 @@ class AdmissionForm extends Form{
 				'options' => array (
 						'label' => iconv('ISO-8859-1', 'UTF-8','Taux (%)'),
 						'value_options' => array(
-								'' => '00',
-								5  => '05',
-								10 => '10',
+								'' => '',
+								20 => '20',
 						),
 				),
 				'attributes' => array(

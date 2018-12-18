@@ -182,8 +182,8 @@ class ConsultationForm extends Form {
 						'label' => 'Poids (kg)'
 				),
 				'attributes' => array (
-						'max' => 500,
-						'min' => 0,
+						'max' => 100,
+						'min' => 1,
 						'id' => 'poids',
 						'class' => 'poids',
 						'required' => true,
@@ -353,6 +353,421 @@ class ConsultationForm extends Form {
 		) );
 		
 		
+		
+		//ANTECEDENTS PERSONNELS --- ANTECEDENTS PERSONNELS --- ANTECEDENTS PERSONNELS
+		//ANTECEDENTS PERSONNELS --- ANTECEDENTS PERSONNELS --- ANTECEDENTS PERSONNELS
+		//ANTENATAUX (GROSSESSE)
+		//ANTENATAUX (GROSSESSE)
+		//ANTENATAUX (GROSSESSE)
+		$this->add ( array (
+				'name' => 'nbFoetusAP',
+				'type' => 'Number',
+				'attributes' => array (
+						'id' => 'nbFoetusAP',
+						'style' => 'width: 60px;',
+						'min' => 1,
+						'max' => 9,
+				)
+		) );
+		
+		$this->add ( array (
+				'name' => 'deroulementAP',
+				'type' => 'Select',
+				'options' => array (
+						'value_options' => array (
+								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
+								 1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Normal' ),
+								 2 => iconv ( 'ISO-8859-1', 'UTF-8', 'Pathologique' ),
+						)
+				),
+				'attributes' => array (
+						'onchange' => 'precisonDeroulementAPVue(this.value)',
+						'id' => 'deroulementAP'
+				)
+		) );
+		
+		$this->add ( array (
+				'name' => 'precisonDeroulementAP',
+				'type' => 'Select',
+				'options' => array (
+						'value_options' => array (
+								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
+								1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Diabète' ),
+								2 => iconv ( 'ISO-8859-1', 'UTF-8', 'HTA' ),
+								3 => iconv ( 'ISO-8859-1', 'UTF-8', 'Infection génitale' ),
+								4 => iconv ( 'ISO-8859-1', 'UTF-8', 'Paludisme' ),
+							   -1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Autres ..' ),
+						)
+				),
+				'attributes' => array (
+						'id' => 'precisonDeroulementAP',
+						'style' => 'width: 40%',
+				)
+		) );
+		
+		
+		//PERINATAUX (ACCOUCHEMENT)
+		//PERINATAUX (ACCOUCHEMENT)
+		//PERINATAUX (ACCOUCHEMENT)
+		$this->add ( array (
+				'name' => 'voieBasseAP',
+				'type' => 'Select',
+				'options' => array (
+						'value_options' => array (
+								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
+								1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Normal' ),
+								2 => iconv ( 'ISO-8859-1', 'UTF-8', 'Dystocique' ),
+						)
+				),
+				'attributes' => array (
+						'id' => 'voieBasseAP',
+						'style' => 'width: 130px; float: right;'
+				)
+		) );
+		
+		$this->add ( array (
+				'name' => 'cesarienneAP',
+				'type' => 'Select',
+				'options' => array (
+						'value_options' => array (
+							   '' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
+								1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Oui' ),
+							   -1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Non' ),
+						)
+				),
+				'attributes' => array (
+						'onchange' => 'motifCesarienneAPVue(this.value)',
+						'id' => 'cesarienneAP'
+				)
+		) );
+		
+		$this->add ( array (
+				'name' => 'motifCesarienneAP',
+				'type' => 'Text',
+				'attributes' => array (
+						'id' => 'motifCesarienneAP',
+						'style' => 'width: 75%;'
+				)
+		) );
+		
+		$this->add ( array (
+				'name' => 'manoeuvreObstetricaleAP',
+				'type' => 'Select',
+				'options' => array (
+						'value_options' => array (
+							   '' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
+								1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Oui' ),
+							   -1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Non' ),
+						)
+				),
+				'attributes' => array (
+						'onchange' => 'motifManoeuvreObstetricaleAPVue(this.value)',
+						'id' => 'manoeuvreObstetricaleAP',
+						'style' => 'float: right;'
+				)
+		) );
+		
+		$this->add ( array (
+				'name' => 'motifManoeuvreObstetricaleAP',
+				'type' => 'Text',
+				'attributes' => array (
+						'id' => 'motifManoeuvreObstetricaleAP',
+						'style' => 'width: 85%;'
+				)
+		) );
+		
+		$this->add ( array (
+				'name' => 'ageGestationnelATermeAP',
+				'type' => 'Select',
+				'options' => array (
+						'value_options' => array (
+							   '' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
+								1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Oui' ),
+							   -1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Non' ),
+						)
+				),
+				'attributes' => array (
+						'onchange' => 'precisonAgeGestationnelATermeAPVue(this.value)',
+						'id' => 'ageGestationnelATermeAP',
+						'style' => 'float: right;',
+				)
+		) );
+		
+		$this->add ( array (
+				'name' => 'precisonAgeGestationnelATermeAP',
+				'type' => 'Select',
+				'options' => array (
+						'value_options' => array (
+								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
+								1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Prématuré' ),
+								2 => iconv ( 'ISO-8859-1', 'UTF-8', 'Postmaturé' ),
+						)
+				),
+				'attributes' => array (
+						'id' => 'precisonAgeGestationnelATermeAP'
+				)
+		) );
+		
+		$this->add ( array (
+				'name' => 'precisonValeurAgeGestationnelAP',
+				'type' => 'Number',
+				'attributes' => array (
+						'id' => 'precisonValeurAgeGestationnelAP',
+						'min' => 25,
+						'max' => 45, 
+						'style' => 'width: 70px; text-align: right;',
+				)
+		) );
+		
+		$this->add ( array (
+				'name' => 'souffranceFoetaleAigueAP',
+				'type' => 'Select',
+				'options' => array (
+						'value_options' => array (
+							   '' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
+								1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Oui' ),
+							   -1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Non' ),
+						)
+				),
+				'attributes' => array (
+						'onchange' => 'precisonReanimationSouffranceFoetaleAPVue(this.value)',
+						'id' => 'souffranceFoetaleAigueAP',
+						'style' => 'float: right;'
+				)
+		) );
+		
+		$this->add ( array (
+				'name' => 'precisonReanimationSouffranceFoetaleAP',
+				'type' => 'Select',
+				'options' => array (
+						'value_options' => array (
+							   '' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
+								1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Oui' ),
+							   -1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Non' ),
+						)
+				),
+				'attributes' => array (
+						'id' => 'precisonReanimationSouffranceFoetaleAP'
+				)
+		) );
+		
+		$this->add ( array (
+				'name' => 'pathologieNeonataleAP',
+				'type' => 'Select',
+				'options' => array (
+						'value_options' => array (
+								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
+								1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Infection' ),
+								2 => iconv ( 'ISO-8859-1', 'UTF-8', 'Hémorragie' ),
+								3 => iconv ( 'ISO-8859-1', 'UTF-8', 'Ictère' ),
+							   -1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Autres...' ),
+						)
+				),
+				'attributes' => array (
+						'id' => 'pathologieNeonataleAP'
+				)
+		) );
+		
+		
+		//ALIMENTATION
+		//ALIMENTATION
+		//ALIMENTATION
+		
+		$this->add ( array (
+				'name' => 'allaitementMatenelExclusifAP',
+				'type' => 'Select',
+				'options' => array (
+						'value_options' => array (
+							   '' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
+								1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Oui' ),
+							   -1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Non' ),
+						)
+				),
+				'attributes' => array (
+						'onchange' => 'typeAllaitementAPVue(this.value)',
+						'id' => 'allaitementMatenelExclusifAP',
+						'style' => 'float: right;'
+				)
+		) );
+		
+		$this->add ( array (
+				'name' => 'typeAllaitementAP',
+				'type' => 'Select',
+				'options' => array (
+						'value_options' => array (
+								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
+								1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Allaitement artificiel seul' ),
+								2 => iconv ( 'ISO-8859-1', 'UTF-8', 'Allaitement mixte' ),
+						)
+				),
+				'attributes' => array (
+						'onchange' => 'nomAllaitementArtificielAPVue(this.value)',
+						'id' => 'typeAllaitementAP',
+						'style' => 'float: right;'
+				)
+		) );
+		
+		$this->add ( array (
+				'name' => 'nomAllaitementArtificielAP',
+				'type' => 'Text',
+				'attributes' => array (
+						'id' => 'nomAllaitementArtificielAP',
+						'style' => 'width: 75%;'
+				)
+		) );
+		
+		
+		$this->add ( array (
+				'name' => 'diversificationAlimentaireAP',
+				'type' => 'Select',
+				'options' => array (
+						'value_options' => array (
+							   '' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
+								1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Oui' ),
+							   -1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Non' ),
+						)
+				),
+				'attributes' => array (
+						'onchange' => 'ageDebutDiversificationAlimentaireAPVue(this.value)',
+						'id' => 'diversificationAlimentaireAP',
+						'style' => 'float: right;'
+				)
+		) );
+		
+		$this->add ( array (
+				'name' => 'ageDebutDiversificationAlimentaireAP',
+				'type' => 'Number',
+				'attributes' => array (
+						'id' => 'ageDebutDiversificationAlimentaireAP',
+						'style' => 'width: 60px; text-align: right;',
+						'min' => 1,
+						'max' => 30
+				)
+		) );
+		
+		//multiselect
+		$this->add ( array (
+				'name' => 'typesAlimentsAP',
+				'type' => 'Select',
+				'options' => array (
+						'value_options' => array (
+								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
+								1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Céréale' ),
+								2 => iconv ( 'ISO-8859-1', 'UTF-8', 'Légumes' ),
+								3 => iconv ( 'ISO-8859-1', 'UTF-8', 'Oeufs' ),
+								4 => iconv ( 'ISO-8859-1', 'UTF-8', 'Poissons' ),
+								5 => iconv ( 'ISO-8859-1', 'UTF-8', 'Viande' ),
+								6 => iconv ( 'ISO-8859-1', 'UTF-8', 'Fruits' ),
+								7 => iconv ( 'ISO-8859-1', 'UTF-8', 'Plat familial' ),
+							   -1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Autres ...' ),
+						)
+				),
+				'attributes' => array (
+						'id' => 'diversificationAlimentaireAP',
+						//'multiple' => 'multiple',
+						'style' => 'width: 70%'
+				)
+		) );
+		
+		
+		$this->add ( array (
+				'name' => 'sevrageAP',
+				'type' => 'Select',
+				'options' => array (
+						'value_options' => array (
+							   '' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
+								1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Oui' ),
+							   -1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Non' ),
+						)
+				),
+				'attributes' => array (
+						'onchange' => 'ageDebutSevrageAPVue(this.value)',
+						'id' => 'sevrageAP',
+						'style' => 'float: right;'
+				)
+		) );
+		
+		
+		$this->add ( array (
+				'name' => 'ageDebutSevrageAP',
+				'type' => 'Number',
+				'attributes' => array (
+						'id' => 'ageDebutSevrageAP',
+						'style' => 'width: 60px; text-align: right;',
+						'min' => 1,
+						'max' => 30
+				)
+		) );
+		
+		
+		//SCOLARITE
+		//SCOLARITE
+		//SCOLARITE
+		$this->add ( array (
+				'name' => 'scolariseAP',
+				'type' => 'Select',
+				'options' => array (
+						'value_options' => array (
+							   '' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
+								1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Oui' ),
+							   -1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Non' ),
+						)
+				),
+				'attributes' => array (
+						'onchange' => 'niveauScolariteAPVue(this.value)',
+						'id' => 'scolariseAP',
+						'style' => 'float: right;'
+				)
+		) );
+		
+		
+		$this->add ( array (
+				'name' => 'niveauScolariteAP',
+				'type' => 'Select',
+				'options' => array (
+						'value_options' => array (
+								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
+								1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Prescolaire' ),
+								2 => iconv ( 'ISO-8859-1', 'UTF-8', 'Primaire' ),
+								3 => iconv ( 'ISO-8859-1', 'UTF-8', 'Moyen-Secondaire' ),
+								5 => iconv ( 'ISO-8859-1', 'UTF-8', 'Supérieur' ),
+						)
+				),
+				'attributes' => array (
+						'id' => 'niveauScolariteAP',
+						'style' => 'width: 70%',
+				)
+		) );
+		
+		$this->add ( array (
+				'name' => 'redoublementAP',
+				'type' => 'Select',
+				'options' => array (
+						'value_options' => array (
+							   '' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
+								1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Oui' ),
+							   -1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Non' ),
+						)
+				),
+				'attributes' => array (
+						'onchange' => 'nombreRedoublementAPVue(this.value)',
+						'id' => 'redoublementAP',
+						'style' => 'float: right;'
+				)
+		) );
+		
+		$this->add ( array (
+				'name' => 'nombreRedoublementAP',
+				'type' => 'Number',
+				'attributes' => array (
+						'id' => 'nombreRedoublementAP',
+						'style' => 'width: 60px; text-align: right;',
+						'min' => 1,
+						'max' => 30
+				)
+		) );
+		
+		
 		//ANTECEDENTS FAMILIAUX --- ANTECEDENTS FAMILIAUX --- ANTECEDENTS FAMILIAUX
 		//ANTECEDENTS FAMILIAUX --- ANTECEDENTS FAMILIAUX --- ANTECEDENTS FAMILIAUX
 		//CONSANGUINITE
@@ -360,7 +775,7 @@ class ConsultationForm extends Form {
 		//CONSANGUINITE
 		$this->add ( array (
 				'name' => 'consanguiniteAF',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'value_options' => array (
 							   '' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
@@ -375,7 +790,7 @@ class ConsultationForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'degreAF',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'value_options' => array (
 								0 => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
@@ -395,7 +810,7 @@ class ConsultationForm extends Form {
 		//STATUT DREPANOCYTOSE PARENTS
 		$this->add ( array (
 				'name' => 'statutDrepanocytoseMereAF',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'value_options' => array (
 								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
@@ -416,7 +831,7 @@ class ConsultationForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'statutDrepanocytosePereAF',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'value_options' => array ('' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
 								'1' => iconv ( 'ISO-8859-1', 'UTF-8', 'AS' ),
@@ -469,7 +884,7 @@ class ConsultationForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'fratrieRangAF',
-				'type' => 'Zend\Form\Element\Number',
+				'type' => 'Number',
 				'attributes' => array (
 						'id' => 'fratrieRangAF',
 						'min' => 1,
@@ -543,7 +958,7 @@ class ConsultationForm extends Form {
 		/**** HISTOIRE DE LA MALADIE ****/
 		$this->add ( array (
 				'name' => 'criseHM',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'value_options' => array (
 								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
@@ -565,7 +980,7 @@ class ConsultationForm extends Form {
 				),
 				'attributes' => array (
 						'id' => 'nombre_criseHM',
-						'style' => 'width:45px; font-size: 16px;',
+						'style' => 'width:42px; font-size: 16px;',
 						'max' => 20,
 						'min' => 1,
 				)
@@ -573,12 +988,18 @@ class ConsultationForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'typeHM',
-				'type' => 'text',
+				'type' => 'Select',
 				'options' => array (
+						'value_options' => array (
+								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
+								1 => iconv ( 'ISO-8859-1', 'UTF-8', 'Abdominale' ),
+								2 => iconv ( 'ISO-8859-1', 'UTF-8', 'Osseux' ),
+								100 => iconv ( 'ISO-8859-1', 'UTF-8', 'Autres..' ),
+						)
 				),
 				'attributes' => array (
 						'id' => 'typeHM',
-						'style' => 'width:90px; font-size: 14px;',
+						'style' => 'width:100px; font-size: 13.5px;',
 				)
 		) );
 		
@@ -623,7 +1044,7 @@ class ConsultationForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'episodeFievreHM',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'value_options' => array (
 								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
@@ -634,13 +1055,13 @@ class ConsultationForm extends Form {
 				'attributes' => array (
 						'onchange' => 'getInfoEpisodeFievre(this.value)',
 						'id' => 'episodeFievreHM',
-						'style' => 'float:right'
+						'style' => 'float:right;'
 				)
 		) );
 		
 		$this->add ( array (
 				'name' => 'episodeFievreSiOuiHM',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'value_options' => array (
 								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
@@ -651,13 +1072,13 @@ class ConsultationForm extends Form {
 				),
 				'attributes' => array (
 						'id' => 'episodeFievreSiOuiHM',
-						'style' => 'float:right'
+						'style' => 'float:right; font-size: 16px;'
 				)
 		) );
 		
 		$this->add ( array (
 				'name' => 'hospitalisationHM',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'value_options' => array (
 								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
@@ -673,11 +1094,24 @@ class ConsultationForm extends Form {
 		) );
 		
 		$this->add ( array (
+				'name' => 'nombreHospitalisationHM',
+				'type' => 'Number',
+				'options' => array (
+				),
+				'attributes' => array (
+						'id' => 'nombreHospitalisationHM',
+						'style' => 'width:42px; font-size: 16px;',
+						'max' => 20,
+						'min' => 1,
+				)
+		) );
+		
+		$this->add ( array (
 				'name' => 'dateHospitalisationHM',
 				'type' => 'Date',
 				'attributes' => array (
 						'id' => 'dateHospitalisationHM',
-						'style' => 'float:right;width: 75%;'
+						'style' => 'width:170px; padding-left: 5px;'
 				)
 		) );
 		
@@ -686,7 +1120,7 @@ class ConsultationForm extends Form {
 				'type' => 'Number',
 				'attributes' => array (
 						'id' => 'dureeHospitalisationHM',
-						'style' => 'float:right;width: 40%;'
+						'style' => 'width:44px;'
 				)
 		) );
 		
@@ -695,35 +1129,23 @@ class ConsultationForm extends Form {
 				'type' => 'Text',
 				'attributes' => array (
 						'id' => 'motifHospitalisationHM',
-						'style' => 'float:right;width: 75%;'
+						'style' => 'width:180px;'
 				)
 		) );
 		
 		$this->add ( array (
 				'name' => 'priseEnChargeHospitalisationHM',
-				'type' => 'Zend\Form\Element\Select',
-				'options' => array (
-						'value_options' => array (
-								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
-								'1' => iconv ( 'ISO-8859-1', 'UTF-8', 'Transfusion' ),
-								'2' => iconv ( 'ISO-8859-1', 'UTF-8', 'Perfusion' ),
-								'3' => iconv ( 'ISO-8859-1', 'UTF-8', 'Antibiotique' ),
-								'-2' => iconv ( 'ISO-8859-1', 'UTF-8', 'Autre..' ),
-						)
-				),
+				'type' => 'Hidden',
 				'attributes' => array (
-						'onchange' => 'getPriseEnChargeHospitalisationHM(this.value)',
 						'id' => 'priseEnChargeHospitalisationHM',
-						'style' => 'float:right;width: 50%;'
 				)
 		) );
 		
 		$this->add ( array (
-				'name' => 'nombreHospitalisationHM',
-				'type' => 'Number',
+				'name' => 'nombrePerfusionHospitalisationHM',
+				'type' => 'Hidden',
 				'attributes' => array (
-						'id' => 'nombreHospitalisationHM',
-						'style' => 'float:right;width: 40%;'
+						'id' => 'nombrePerfusionHospitalisationHM',
 				)
 		) );
 		/*** Interrogatoire (description des symptômes) ***/
@@ -780,7 +1202,7 @@ class ConsultationForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'suiviDesTraitements',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'value_options' => array (
 								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
@@ -812,7 +1234,7 @@ class ConsultationForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'misesAJourDesVaccins',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'value_options' => array (
 								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
@@ -843,7 +1265,7 @@ class ConsultationForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'paleurDonneesExamen',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'value_options' => array (
 								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
@@ -861,7 +1283,7 @@ class ConsultationForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'ictereDonneesExamen',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'value_options' => array (
 								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
@@ -878,7 +1300,7 @@ class ConsultationForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'splenomegalieDonneesExamen',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'value_options' => array (
 								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
@@ -948,7 +1370,7 @@ class ConsultationForm extends Form {
 		/**Examen des poumons**/
 		$this->add ( array (
 				'name' => 'examenDesPoumonsDonneesExamen',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'value_options' => array (
 								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
@@ -965,7 +1387,7 @@ class ConsultationForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'precisionExamenDesPoumonsDonneesExamen',
-				'type' => 'Zend\Form\Element\Text',
+				'type' => 'Text',
 				'attributes' => array (
 						'id' => 'precisionExamenDesPoumonsDonneesExamen',
 						'style' => 'float:right;width:85%;'
@@ -975,7 +1397,7 @@ class ConsultationForm extends Form {
 		/**Examen du coeur**/
 		$this->add ( array (
 				'name' => 'examenDuCoeurDonneesExamen',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'value_options' => array (
 								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
@@ -992,7 +1414,7 @@ class ConsultationForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'precisionExamenDuCoeurDonneesExamen',
-				'type' => 'Zend\Form\Element\Text',
+				'type' => 'Text',
 				'attributes' => array (
 						'id' => 'precisionExamenDuCoeurDonneesExamen',
 						'style' => 'float:right;width:85%;'
@@ -1002,7 +1424,7 @@ class ConsultationForm extends Form {
 		/**Examen du foie et voie biliaire**/
 		$this->add ( array (
 				'name' => 'examenDuFoieVoieBiliaireDonneesExamen',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'value_options' => array (
 								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
@@ -1020,7 +1442,7 @@ class ConsultationForm extends Form {
 		/**Hanche**/
 		$this->add ( array (
 				'name' => 'examenHancheDonneesExamen',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'value_options' => array (
 								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
@@ -1037,7 +1459,7 @@ class ConsultationForm extends Form {
 		/**Epaule**/
 		$this->add ( array (
 				'name' => 'examenEpauleDonneesExamen',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'value_options' => array (
 								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
@@ -1054,7 +1476,7 @@ class ConsultationForm extends Form {
 		/**Jambe**/
 		$this->add ( array (
 				'name' => 'examenJambeDonneesExamen',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'value_options' => array (
 								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
@@ -1071,7 +1493,7 @@ class ConsultationForm extends Form {
 		/**Autres données d'examen**/
 		$this->add ( array (
 				'name' => 'autresDonneesExamen',
-				'type' => 'Zend\Form\Element\Text',
+				'type' => 'Text',
 				'attributes' => array (
 						'id' => 'autresDonneesExamen',
 						'style' => 'float:right;width:78%;'
@@ -1081,7 +1503,7 @@ class ConsultationForm extends Form {
 		/**Synth&eagrave;se de la consultation du jour**/
 		$this->add ( array (
 				'name' => 'syntheseConsultationDuJourDonneesExamen',
-				'type' => 'Zend\Form\Element\Textarea',
+				'type' => 'Textarea',
 				'attributes' => array (
 						'id' => 'syntheseConsultationDuJourDonneesExamen',
 						'style' => 'float:right; width:85%; min-width:85%; max-width:85%; height: 100%; min-height: 100%; max-height: 100%;'
@@ -1104,10 +1526,10 @@ class ConsultationForm extends Form {
 		/**Diagnostic --- Diagnostic --- Diagnostic **/
 		$this->add ( array (
 				'name' => 'diagnosticDuJourConsultation',
-				'type' => 'Zend\Form\Element\Textarea',
+				'type' => 'Textarea',
 				'attributes' => array (
 						'id' => 'diagnosticDuJourConsultation',
-						'style' => 'float:right; width: 305px; min-width:305px; max-width:305px; height: 205px; min-height: 205px; max-height: 205px;'
+						'style' => 'float:left; width: 450px; min-width:450px; max-width:450px; height: 205px; min-height: 205px; max-height: 205px;'
 				)
 		) );
 		
@@ -1116,7 +1538,7 @@ class ConsultationForm extends Form {
 		/**Complications aigues --- Complications aigues **/
 		$this->add ( array (
 				'name' => 'nbDiagnosticComplicationsAigues',
-				'type' => 'Zend\Form\Element\Hidden',
+				'type' => 'Hidden',
 				'attributes' => array (
 						'id' => 'nbDiagnosticComplicationsAigues',
 				)
@@ -1124,7 +1546,7 @@ class ConsultationForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'diagnosticComplicationsAigues',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'value_options' => array (
 								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
@@ -1142,7 +1564,7 @@ class ConsultationForm extends Form {
 		/**Complications chroniques --- Complications chroniques **/
 		$this->add ( array (
 				'name' => 'nbDiagnosticComplicationsChroniques',
-				'type' => 'Zend\Form\Element\Hidden',
+				'type' => 'Hidden',
 				'attributes' => array (
 						'id' => 'nbDiagnosticComplicationsChroniques',
 				)
@@ -1150,7 +1572,7 @@ class ConsultationForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'diagnosticComplicationsChroniques',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'value_options' => array (
 								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
@@ -1175,7 +1597,7 @@ class ConsultationForm extends Form {
 		 */
 		$this->add ( array (
 				'name' => 'dateHeureRendezVous',
-				'type' => 'Zend\Form\Element\Text',
+				'type' => 'Text',
 				'options' => array (
 						'label' => 'Date & Heure'
 				),
@@ -1187,7 +1609,7 @@ class ConsultationForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'motifRendezVous',
-				'type' => 'Zend\Form\Element\Textarea',
+				'type' => 'Textarea',
 				'attributes' => array (
 						'id' => 'motifRendezVous',
 						'style' => 'height: 135px; min-height: 135px; max-height: 135px;'
@@ -1201,12 +1623,24 @@ class ConsultationForm extends Form {
 		 */
 		$this->add ( array (
 				'name' => 'motifHospitalisation',
-				'type' => 'Zend\Form\Element\Textarea',
+				'type' => 'Textarea',
 				'options' => array (
 						'label' => 'Motif'
 				),
 				'attributes' => array (
 						'id' => 'motifHospitalisation',
+						'style' => 'height: 135px; min-height: 135px; max-height: 135px;'
+				)
+		) );
+		
+		$this->add ( array (
+				'name' => 'diagnosticRetenuHospitalisation',
+				'type' => 'Textarea',
+				'options' => array (
+						'label' => 'Diagnostic retenu'
+				),
+				'attributes' => array (
+						'id' => 'diagnosticRetenuHospitalisation',
 						'style' => 'height: 135px; min-height: 135px; max-height: 135px;'
 				)
 		) );
@@ -1219,7 +1653,7 @@ class ConsultationForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'motifTransfert',
-				'type' => 'Zend\Form\Element\Textarea',
+				'type' => 'Textarea',
 				'options' => array (
 						'label' => 'Motif'
 				),
@@ -1231,7 +1665,7 @@ class ConsultationForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'hopitalAccueil',
-				'type' => 'Zend\Form\Element\Text',
+				'type' => 'Text',
 				'options' => array (
 						'label' => 'Hopital'
 				),
@@ -1244,7 +1678,7 @@ class ConsultationForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'serviceAccueil',
-				'type' => 'Zend\Form\Element\Text',
+				'type' => 'Text',
 				'options' => array (
 						'label' => 'Service'
 				),
@@ -1253,6 +1687,127 @@ class ConsultationForm extends Form {
 						'style' => 'font-weight: bold; font-size: 17px;'
 				)
 		) );
+		
+		
+		/**
+		 * Transfusion --- Transfusion --- Transfusion
+		 * Transfusion --- Transfusion --- Transfusion
+		 */
+		
+		$this->add ( array (
+				'name' => 'groupeSanguinTransfusion',
+				'type' => 'Select',
+				'options' => array (
+						'value_options' => array (
+								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
+								'A+' => iconv ( 'ISO-8859-1', 'UTF-8', 'A+' ),
+								'A-' => iconv ( 'ISO-8859-1', 'UTF-8', 'A-' ),
+								'B+' => iconv ( 'ISO-8859-1', 'UTF-8', 'B+' ),
+								'B-' => iconv ( 'ISO-8859-1', 'UTF-8', 'B-' ),
+								'AB+' => iconv ( 'ISO-8859-1', 'UTF-8', 'AB+' ),
+								'AB-' => iconv ( 'ISO-8859-1', 'UTF-8', 'AB-' ),
+								'O+' => iconv ( 'ISO-8859-1', 'UTF-8', 'O+' ),
+								'O-' => iconv ( 'ISO-8859-1', 'UTF-8', 'O-' ),
+						)
+				),
+				'attributes' => array (
+						'id' => 'groupeSanguinTransfusion',
+						'style' => 'font-size: 15px;'
+				)
+		) );
+		
+		$this->add ( array (
+				'name' => 'produitSanguin1',
+				'type' => 'Select',
+				'options' => array (
+						'value_options' => array (
+								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
+								'1' => iconv ( 'ISO-8859-1', 'UTF-8', 'Culot globulaire' ),
+								'2' => iconv ( 'ISO-8859-1', 'UTF-8', 'Sang total' ),
+						)
+				),
+				'attributes' => array (
+						'onchange' => 'getproduitSanguin1Quantite(this.value)',
+						'id' => 'produitSanguin1',
+						'style' => ''
+				)
+		) );
+		
+		$this->add ( array (
+				'name' => 'produitSanguin1Quantite',
+				'type' => 'Number',
+				'attributes' => array (
+						'id' => 'produitSanguin1Quantite',
+						'style' => 'width: 55px;',
+						'min' => 1,
+						'max' => 999
+				)
+		) );
+		
+		$this->add ( array (
+				'name' => 'produitSanguin2',
+				'type' => 'Select',
+				'options' => array (
+						'value_options' => array (
+								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
+								'1' => iconv ( 'ISO-8859-1', 'UTF-8', 'Plaquette' ),
+						)
+				),
+				'attributes' => array (
+						'onchange' => 'getproduitSanguin2Quantite(this.value)',
+						'id' => 'produitSanguin2',
+						'style' => ''
+				)
+		) );
+		
+		$this->add ( array (
+				'name' => 'produitSanguin2Quantite',
+				'type' => 'Number',
+				'attributes' => array (
+						'id' => 'produitSanguin2Quantite',
+						'style' => 'width: 55px;',
+						'min' => 1,
+						'max' => 999
+				)
+		) );
+		
+		
+		$this->add ( array (
+				'name' => 'reactionTransfusionnel',
+				'type' => 'Select',
+				'options' => array (
+						'value_options' => array (
+								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
+								'1' => iconv ( 'ISO-8859-1', 'UTF-8', 'Oui' ),
+						)
+				),
+				'attributes' => array (
+						'onchange' => 'getReactionTransfusionnelSiOui(this.value)',
+						'id' => 'reactionTransfusionnel',
+						'style' => ''
+				)
+		) );
+		
+		$this->add ( array (
+				'name' => 'reactionTransfusionnelValeur',
+				'type' => 'Select',
+				'options' => array (
+						'value_options' => array (
+								'' => iconv ( 'ISO-8859-1', 'UTF-8', '' ),
+								'1' => iconv ( 'ISO-8859-1', 'UTF-8', 'Accident par incompatibilité ABO' ),
+								'2' => iconv ( 'ISO-8859-1', 'UTF-8', 'Accident par incompatibilité Rhésus/Kell' ),
+								'3' => iconv ( 'ISO-8859-1', 'UTF-8', 'Réaction immuno-allergique' ),
+								'-1' => iconv ( 'ISO-8859-1', 'UTF-8', 'Autres...' ),
+						)
+				),
+				'attributes' => array (
+						'id' => 'reactionTransfusionnelValeur',
+						'style' => 'width: 70%;'
+				)
+		) );
+		
+		
+		
 		
 		
 	}

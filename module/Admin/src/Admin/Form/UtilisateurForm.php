@@ -162,7 +162,7 @@ class UtilisateurForm extends Form
 		
 		$this->add(array(
 				'name' => 'role',
-				'type' => 'Zend\Form\Element\radio',
+				'type' => 'Radio',
 				'options' => array (
 						'label' => 'Role',
 						'value_options' => array(
@@ -189,7 +189,7 @@ class UtilisateurForm extends Form
 		//Les roles au niveau du cerpad
 		$this->add(array(
 				'name' => 'rolecerpad',
-				'type' => 'Zend\Form\Element\radio',
+				'type' => 'Radio',
 				'options' => array (
 						'label' => 'Role',
 						'value_options' => array(
@@ -211,7 +211,7 @@ class UtilisateurForm extends Form
 		
 		$this->add(array(
 				'name' => 'enregistrer',
-				'type' => 'button',
+				'type' => 'Button',
 				'attributes' => array(
 						'value' => 'Enregistrer',
 						'id' => 'enregistrer',
@@ -220,7 +220,7 @@ class UtilisateurForm extends Form
 		
 		$this->add(array(
 				'name' => 'annuler',
-				'type' => 'button',
+				'type' => 'Button',
 				'attributes' => array(
 						'value' => 'Annuler',
 						'id' => 'annuler',

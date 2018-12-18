@@ -192,8 +192,8 @@ class ConsultationForm extends Form {
 						'label' => 'Poids (kg)'
 				),
 				'attributes' => array (
-						'max' => 500,
-						'min' => 0,
+						'max' => 100,
+						'min' => 1,
 						'id' => 'poids',
 						'class' => 'poids',
 						'required' => true,
@@ -1068,7 +1068,7 @@ class ConsultationForm extends Form {
 		) );
 		$this->add ( array (
 				'name' => 'type_anesthesie_demande',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'label' => iconv ( 'ISO-8859-1', 'UTF-8', 'Type d\'anesthésie :' ),
 						'value_options' => array (
@@ -1150,7 +1150,7 @@ class ConsultationForm extends Form {
 		/*A))************** Transfert *************/
 		$this->add ( array (
 				'name' => 'hopital_accueil',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'label' => iconv ( 'ISO-8859-1', 'UTF-8', 'Hopital d\'accueil :' ),
 // 						'value_options' => array (
@@ -1165,7 +1165,7 @@ class ConsultationForm extends Form {
 		) );
 		$this->add ( array (
 				'name' => 'service_accueil',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'label' => iconv ( 'ISO-8859-1', 'UTF-8', 'Service d\'accueil :' )
 // 						'value_options' => array (
@@ -1317,7 +1317,7 @@ class ConsultationForm extends Form {
 		) );
 		$this->add ( array (
 				'name' => 'heure_rv',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'label' => 'Heure :',
 						'empty_option' => 'Choisir',
@@ -1567,7 +1567,7 @@ class ConsultationForm extends Form {
 		/*Regularite cycle*/
 		$this->add ( array (
 				'name' => 'RegulariteCycleGO',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'value_options' => array (
 								' ' => '',
@@ -1582,7 +1582,7 @@ class ConsultationForm extends Form {
 		/*Dysmenorrhee cycle*/
 		$this->add ( array (
 				'name' => 'DysmenorrheeCycleGO',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'value_options' => array (
 								' ' => '',

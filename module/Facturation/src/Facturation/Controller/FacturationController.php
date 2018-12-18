@@ -945,11 +945,34 @@ class FacturationController extends AbstractActionController {
  		);
 	}
 	
+	public function listePatientsPriseenchargeAjaxAction() {
+		$output = $this->getPatientTable ()->getListePatientsPriseencharge();
+		return $this->getResponse ()->setContent ( Json::encode ( $output, array (
+				'enableJsonExprFinder' => true
+		) ) );
+	}
+	
+	public function listePatientsPriseenchargeAction() {
+	
+		$this->layout ()->setTemplate ( 'layout/facturation' );
+	
+		$idfacturation = $this->params ()->fromRoute ( 'idfacturation' , 0 );
+	
+		//$output = $this->getPatientTable ()->getListePatientsPriseencharge();
+		//var_dump($output); exit();
+	
+		return  array (
+				'idfacturation' => $idfacturation
+		);
+	}
+	
 	
 	//Liste des analyses facturées n'ayant pas enncore de résultats
 	public function listeAnalysesFactureesAction() {
 	    
 	    $idfacturation = ( int ) $this->params ()->fromPost ( 'idfacturation', 0 );
+	    $priseencharge = ( int ) $this->params ()->fromPost ( 'priseencharge', 0 );
+	    $historiquePEC = ( int ) $this->params ()->fromPost ( 'historiquePEC', 0 );
 	    
 	    $facturation = $this->getFacturationTable()->getFacturation( $idfacturation );
 	    
@@ -1004,35 +1027,108 @@ class FacturationController extends AbstractActionController {
 	    $html .="<div id='titre_info_admis'>Informations sur la facturation <img id='button_pdf' style='width:15px; height:15px; float: right; margin-right: 35px; cursor: pointer;' src='".$this->baseUrl()."public/images_icons/button_pdf.png' title='Imprimer la facture' ></div>";
 	    $html .="<div id='barre_separateur'></div>";
 	    
-	    $html .="<table style='margin-top:10px; margin-left:17.5%; width: 80%; margin-bottom: 60px;'>";
+	    $html .="<table style='margin-top:10px; margin-left:17.5%; width: 80%;'>";
 	    
 	    $html .="<tr style='width: 80%; '>";
 	    $html .="<td style='width: 25%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Num&eacute;ro de la facture </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px;'> ".$facturation['numero']." </p></td>";
 	    $html .="<td style='width: 25%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Date de la facturation </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px;'> ".(new DateHelper())->convertDateTime($facturation['date_enregistrement'])." </p></td>";
-	    $html .="<td style='width: 25%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Tarif (FCFA) </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-weight:bold; font-size:22px;'> ". $this->prixMill($facturation['montant']) ." </p></td>";
+	    $html .="<td style='width: 25%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Tarif total (FCFA) </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-weight:bold; font-size:22px;'> ". $this->prixMill($facturation['montant']) ." </p></td>";
 	    $html .="<td style='width: 25%; vertical-align:top; margin-right:10px;'></td>";
 	    $html .="</tr>";
 	    
+	    $html .="</table>";
 
  	    if($facturation['id_type_facturation'] == 2){
+ 	    	$html .="<table style='margin-top: 5px; margin-left:17.5%; width: 80%;'>";
 
  	    	$organisme = $this->getFacturationTable()->getOrganisme($facturation['organisme']);
  	    	$html .="<tr style='width: 80%; '>";
- 	    	$html .="<td style='width: 25%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Facture prise en charge par  </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px;'> ". $organisme['libelle'] ." </p></td>";
+ 	    	$html .="<td style='width: 50%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Facture prise en charge par  </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px;'> ". $organisme['libelle'] ." </p></td>";
  	     	if($facturation['taux_majoration']){
- 	     		$html .="<td style='width: 25%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Taux (%) </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-weight:bold; font-size:22px;'> ". $facturation['taux_majoration'] ." </p></td>";
+ 	     		$html .="<td style='width: 25%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Taux &agrave; r&eacute;gler (%) </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-weight:bold; font-size:22px;'> ". $facturation['taux_majoration'] ." </p></td>";
  	     	}else {
  	     		$html .="<td style='width: 25%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Taux (%) </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-weight:bold; font-size:22px;'> 0 </p></td>";
  	     	}
  	     	$majoration = ($facturation['montant'] * $facturation['taux_majoration'])/100;
- 	     	$html .="<td style='width: 25%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Majoration (FCFA) </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-weight:bold; font-size:22px;'> ". $this->prixMill("$majoration") ." </p></td>";
- 	     	$html .="<td style='width: 25%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Tarif major&eacute; (FCFA) </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-size:15px; font-weight:bold; font-size:22px;'> ". $this->prixMill( $facturation['montant_avec_majoration'] ) ."  </p></td>";
+ 	     	$html .="<td style='width: 25%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Montant r&eacute;gl&eacute; (FCFA) </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-weight:bold; font-size:22px;'> ". $this->prixMill("$majoration") ." </p></td>";
+ 	     	$html .="<!-- td style='width: 25%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Tarif major&eacute; (FCFA) </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-size:15px; font-weight:bold; font-size:22px;'> ". $this->prixMill( $facturation['montant_avec_majoration'] )  ."  </p></td-->";
  	     	$html .="</tr>";
 
+ 	     	$html .="</table>";
  	    }
 	    
-	    $html .="</table>";
 	    
+	    if($priseencharge == 1){
+	    	$taux = $facturation['taux_majoration'];
+	    	$montantPatient = ($facturation['montant'] * $facturation['taux_majoration'])/100;
+	    	$montantOrganisme = $facturation['montant'] - $montantPatient;
+	    	
+	    	$html .="<table style='margin-top: 5px; margin-left:17.5%; width: 80%;'>";
+	    	
+	    	$html .="<tr style='width: 80%; '>";
+	    	$html .="<td style='width: 25%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Taux prise en charge (%) </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-weight:bold; font-size:22px;'> ". (100 - $taux) ." </p></td>";
+	    	$html .="<td style='width: 25%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Montant &agrave; r&eacute;gler (FCFA) </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-weight:bold; font-size:22px;'> ". $this->prixMill("$montantOrganisme") ." </p></td>";
+	    	
+	    	$factureReglee = $this->getFacturationTable()->getReglementFacturation($idfacturation);
+	    	if($factureReglee){
+	    		
+	    		$html .='<td style="width: 50%;  margin-right:10px;" id="priseenchargeARegler_'.$idfacturation.'"> <table> <tr> <td> <img style="width: 48px; height: 48px;" src="../images_icons/Valider_1.png" /> </td> <td style="padding-left: 6px; color: green; font-style: italic; font-family: time new roman; font-size: 20px;"> Facture r&eacute;gl&eacute;e </td> <td style="width: 100px; padding-left: 6px;"> <img onclick="annulerReglementPriseEnCharge('.$idfacturation.');" style="width: 18px; height: 18px; float: right; cursor: pointer;" src="../images_icons/annuler_reg.png" title="Annuler" /> </td> </tr></table></td>';
+	    		
+	    	}else{
+	    		$html .="<td style='width: 50%;  margin-right:10px;' id='priseenchargeARegler_".$idfacturation."'><img onclick='reglementPriseEnCharge(".$idfacturation.");' style='width: 48px; height: 48px; float: left; cursor: pointer;' src='../images_icons/regler_PeC_2.png' title='r&eacute;gler la prise en charge' /></td>";
+	    	}
+
+	    	
+	    	
+	    	$html .="</tr>";
+	    	
+	    	$html .="</table>";
+	    }
+	    
+	    if($historiquePEC == 1){
+	    	$taux = $facturation['taux_majoration'];
+	    	$montantPatient = ($facturation['montant'] * $facturation['taux_majoration'])/100;
+	    	$montantOrganisme = $facturation['montant'] - $montantPatient;
+	    	
+	    	$html .="<table style='margin-top: 5px; margin-left:17.5%; width: 80%;'>";
+	    	
+	    	$html .="<tr style='width: 80%; '>";
+	    	$html .="<td style='width: 25%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Taux prise en charge (%) </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-weight:bold; font-size:22px;'> ". (100 - $taux) ." </p></td>";
+	    	$html .="<td style='width: 25%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Montant r&eacute;gl&eacute; (FCFA) </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-weight:bold; font-size:22px;'> ". $this->prixMill("$montantOrganisme") ." </p></td>";
+	    	
+	    	
+	    	/*
+	    	$factureReglee = $this->getFacturationTable()->getReglementFacturation($idfacturation);
+	    	if($factureReglee){
+	    		 
+	    		$html .='<td style="width: 50%;  margin-right:10px;" id="priseenchargeARegler_'.$idfacturation.'"> <table> <tr> <td> <img style="width: 48px; height: 48px;" src="../images_icons/Valider_1.png" /> </td> <td style="padding-left: 6px; color: green; font-style: italic; font-family: time new roman; font-size: 20px;"> Facture r&eacute;gl&eacute;e </td> <td style="width: 100px; padding-left: 6px;"> <img onclick="annulerReglementPriseEnCharge('.$idfacturation.');" style="width: 18px; height: 18px; float: right; cursor: pointer;" src="../images_icons/annuler_reg.png" title="Annuler" /> </td> </tr></table></td>';
+	    		 
+	    	}else{
+	    		$html .="<td style='width: 50%;  margin-right:10px;' id='priseenchargeARegler_".$idfacturation."'><img onclick='reglementPriseEnCharge(".$idfacturation.");' style='width: 48px; height: 48px; float: left; cursor: pointer;' src='../images_icons/regler_PeC_2.png' title='r&eacute;gler la prise en charge' /></td>";
+	    	}
+	    	*/
+	    	
+	    	$factureReglee = $this->getFacturationTable()->getReglementFacturation($idfacturation);
+	    	$typeReglement = $factureReglee['type_reglement'];
+	    	if($typeReglement == 'espece'){ $typeReglement = ' en esp&egrave;ce'; }
+	    	elseif ($typeReglement == 'cheque'){ $typeReglement = ' par ch&egrave;que'; }
+	    	elseif ($typeReglement == 'virement'){ $typeReglement = ' par virement'; }
+	    	
+	    	$html .="<td style='width: 50%;  margin-right:10px;'>
+	    			   <table style='width: 100%;' > 
+	    			     <tr style='width: 100%;'> 
+	    			       <td style='width: 100%; padding-left: 6px; color: green; font-style: italic; font-family: time new roman; font-size: 20px;'>R&eacute;gl&eacute; le : <span style=''>".(new DateHelper())->convertDateTime($factureReglee['date_reglement'].' '.$factureReglee['heure_reglement'])." </br> ".$typeReglement."</span></td> 
+	    			     </tr>
+	    			   </table>
+	    		    </td>";
+	    	
+	    	$html .="</tr>";
+	    	
+	    	$html .="</table>";
+	    }
+	    
+	    $html .="<table style='margin-left:17.5%; width: 80%; margin-bottom: 40px;'>";
+	    $html .="</table>";
 
 	    $html .="<div style='color: white; opacity: 1; margin-top: -50px; margin-left:50px; width:95px; height:40px; float:left'>
 	                <img  src='../images_icons/fleur1.jpg' />
@@ -1052,6 +1148,18 @@ class FacturationController extends AbstractActionController {
 				     champ.setAttribute('name', 'idfacturation');
 				     champ.setAttribute('value', ".$idfacturation.");
 				     formulaire.appendChild(champ);
+				     		
+				     var champ2 = document.createElement('input');
+				     champ2.setAttribute('type', 'hidden');
+				     champ2.setAttribute('name', 'priseencharge');
+				     champ2.setAttribute('value', ".$priseencharge.");
+				     formulaire.appendChild(champ2);
+				     		
+				     var champ3 = document.createElement('input');
+				     champ3.setAttribute('type', 'hidden');
+				     champ3.setAttribute('name', 'historiquePEC');
+				     champ3.setAttribute('value', ".$historiquePEC.");
+				     formulaire.appendChild(champ3);
 				  
 				     formulaire.submit();
 	              });
@@ -1072,10 +1180,48 @@ class FacturationController extends AbstractActionController {
 	    return $this->getResponse ()->setContent ( Json::encode ( $html ) );
 	}
 	
+	public function reglementPriseenchargeAction(){
+		$idfacturation = (int)$this->params()->fromPost ('idfacturation');
+		$date_heure_reglement = $this->params()->fromPost ('date_heure_reglement');
+		$type_reglement = $this->params()->fromPost ('type_reglement');
+		
+		$date_reglement = substr($date_heure_reglement,0,10);
+		$heure_reglement = substr($date_heure_reglement,11,5);
+		
+		if($idfacturation != 0 && $date_reglement && $heure_reglement){
+			$user = $this->layout()->user;
+			$idemploye = $user['idemploye'];
+			$infosPriseencharge = array (
+					'idfacturation'   => $idfacturation,
+					'date_reglement'  => $date_reglement,
+					'heure_reglement' => $heure_reglement,
+					'type_reglement'  => $type_reglement,
+					'idemploye' => $idemploye,
+			);
+			$result = 1;
+			$this->getFacturationTable()->reglementFacturation( $infosPriseencharge );
+		}else{
+			$result = 0;
+		}
+		
+		$this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );
+		return $this->getResponse ()->setContent ( Json::encode ( $result ) );
+	}
+	
+	public function annulerReglementPriseenchargeAction(){
+		$idfacturation = (int)$this->params()->fromPost ('idfacturation');
+		$this->getFacturationTable()->annulerReglementFacturation($idfacturation);
+		
+		$this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );
+		return $this->getResponse ()->setContent ( Json::encode () );
+	}
+	
 	
 	public function impressionFactureAction(){
 		$idfacturation = (int)$this->params()->fromPost ('idfacturation');
-	
+		$priseencharge = (int)$this->params()->fromPost ('priseencharge'); 
+		$historiquePEC = (int)$this->params()->fromPost ('historiquePEC');
+		
 		//Informations sur la facturation
 		$facturation = $this->getFacturationTable()->getFacturation($idfacturation);
 		$listeAnalysesDemandees = $this->getFacturationTable()->getListeAnalysesFacturees($idfacturation);
@@ -1094,6 +1240,7 @@ class FacturationController extends AbstractActionController {
 			//******************************************************
 			//******************************************************
 			$lePatient = $this->getPatientTable()->getInfoPatient( $idpatient );
+			$factureReglee = $this->getFacturationTable()->getReglementFacturation($idfacturation);
 				
 			$infos = array(
 					'numero' => $facturation['numero'],
@@ -1103,6 +1250,9 @@ class FacturationController extends AbstractActionController {
 					'type_facturation' => $facturation['id_type_facturation'],
 					'organisme' => $this->getFacturationTable()->getOrganisme( $facturation['organisme'] )['libelle'],
 					'taux' => $facturation['taux_majoration'],
+					'priseencharge' => $priseencharge,
+					'historiquePEC' => $historiquePEC,
+					'factureReglee' => $factureReglee,
 			);
 			
 			
@@ -1328,7 +1478,7 @@ class FacturationController extends AbstractActionController {
 	}
 	
 	
-	public function historiqueListeAnalysesDeLaFactureAction() { 
+	public function historiqueListeAnalysesDeLaFactureAction() {
 		$idfacturation = ( int ) $this->params ()->fromPost ( 'idfacturation', 0 );
 		$numeroFacture = $this->params ()->fromPost ( 'numeroFacture', 0 );
 		
@@ -1399,6 +1549,19 @@ class FacturationController extends AbstractActionController {
 		
 	}
 	
+
+	public function historiquePatientsPriseenchargesAjaxAction() {
+		$output = $this->getPatientTable ()->getListeHistoriquePatientsPriseencharge();
+		return $this->getResponse ()->setContent ( Json::encode ( $output, array (
+				'enableJsonExprFinder' => true
+		) ) );
+	}
+	
+	public function historiquePatientsPriseenchargesAction() {
+		$this->layout ()->setTemplate ( 'layout/facturation' );
+	
+		return  array (	);
+	}
 	
 
 	public function listeAdmissionConsultationAjaxAction() {

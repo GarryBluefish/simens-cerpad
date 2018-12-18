@@ -208,6 +208,7 @@ function initialisationScript(agePatient) {
 		affichageDesExamensDemandes();
 		envoyerLesDonneesASauvegarder();
 		sauverInfosCrisesVasOcclusivePopup();
+		sauverInfosAutresHospitalisationsPopup();
 	});
 	
 	$( "#annulerCons" ).click(function(){
@@ -750,11 +751,27 @@ function affichageLigneCrisesVasOcclusives(nbCrises){
 		    
 		      //GESTION DES CRISES --- GESTION DES CRISES --- GESTION DES CRISES
 			  '<th style="width:15%; padding-right: 15px;" class="criseInfo" >'+ 
-	            '<div style="float:left; width: 100%; background: gree;"><label style="width: 100%; height:30px; font-size: 14px; "> <i style="float:left; padding-top: 4px;">'+i+')</i> Type  <input type="text" id="typeHM_List_'+i+'" style="width:120px; font-size: 14px;"></label></div>'+ 
+	            '<div style="float:left; width: 100%; background: gree;">'+
+	              '<label style="width: 100%; height:30px; font-size: 14px; "> <i style="float:left; padding-top: 4px;">'+i+')</i> Type '+ 
+	              
+	              '<select type="text" id="typeHM_List_'+i+'" style="width:120px; font-size: 14px;">'+
+                    '<option value=""></option>'+
+                    '<option value=1> Abdominale </option>'+
+                    '<option value=2> Osseux </option>'+
+                    '<option value=100> Autres.. </option>'+
+                  '</select>'+
+	              
+	              
+	              '</label>'+
+	            '</div>'+ 
 			  '</th>'+
 			  //Script de sauvegarde des types de crises renseignés
 			  '<script>'+
 			    '$("#typeHM_List_'+i+'").keyup(function(){'+
+			       'tabInfosListCrisesHMType['+i+'] = $(this).val();'+
+			       '$("#typeHM").val(tabInfosListCrisesHMType[1]);'+
+			    '})'+
+			    '.change(function(){'+
 			       'tabInfosListCrisesHMType['+i+'] = $(this).val();'+
 			       '$("#typeHM").val(tabInfosListCrisesHMType[1]);'+
 			    '});'+
@@ -880,18 +897,322 @@ function getMisesAJourDesVaccins(id){
 
 }
 
+$('#ajoutInfosAutresHospitalisationIcon').toggle(false);
+
 function getHospitalisationHM(id){
 	
 	if(id == 1){
-		$(".titreHistoireMaladieStyle").css({'height':'180px'});
+		//$(".titreHistoireMaladieStyle").css({'height':'180px'});
 		$(".hospitalisationClassHM").fadeIn();
+		affichageIconAutresHospitalisations();
+		
+		/** dateHospitalisationHM --- dateHospitalisationHM --- dateHospitalisationHM **/
+		$("#dateHospitalisationHM").keyup(function(){ 
+			$("#dateHospitalisationHM_List_1").val($(this).val());
+			tabInfosListAutresHospHMDate[1] = $(this).val();
+		}).change(function(){ 
+			$("#dateHospitalisationHM_List_1").val($(this).val());
+			tabInfosListAutresHospHMDate[1] = $(this).val();
+		});
+		/*==================================*/
+		
+		
+		/** dureeHospitalisationHM --- dureeHospitalisationHM --- dureeHospitalisationHM **/
+		$("#dureeHospitalisationHM").keyup(function(){
+			$("#dureeHospitalisationHM_List_1").val($(this).val());
+			tabInfosListAutresHospHMDuree[1] = $(this).val();
+		}).change(function(){ 
+			$("#dureeHospitalisationHM_List_1").val($(this).val());
+			tabInfosListAutresHospHMDuree[1] = $(this).val();
+		});
+		/*==================================*/
+		
+		
+		/** motifHospitalisationHM --- motifHospitalisationHM --- motifHospitalisationHM **/
+		$("#motifHospitalisationHM").keyup(function(){
+			$("#motifHospitalisationHM_List_1").val($(this).val());
+			tabInfosListAutresHospHMMotif[1] = $(this).val();
+		}).change(function(){ 
+			$("#motifHospitalisationHM_List_1").val($(this).val());
+			tabInfosListAutresHospHMMotif[1] = $(this).val();
+		});
+		/*==================================*/
+		
+		
+		/** priseEnChargeHospitalisationHM --- priseEnChargeHospitalisationHM --- priseEnChargeHospitalisationHM **/
+		$("#priseEnChargeHospitalisationHM").keyup(function(){
+			$("#priseEnChargeHospitalisationHM_List_1").val($(this).val());
+			tabInfosListAutresHospHMPriseEnCharge[1] = $(this).val();
+		}).change(function(){ 
+			$("#priseEnChargeHospitalisationHM_List_1").val($(this).val());
+			tabInfosListAutresHospHMPriseEnCharge[1] = $(this).val();
+		});
+		/*==================================*/
+		
+		
+		/** nombrePerfusionHospitalisationHM --- nombrePerfusionHospitalisationHM --- nombrePerfusionHospitalisationHM **/
+		$("#nombrePerfusionHospitalisationHM").keyup(function(){
+			$("#nombrePerfusionHospitalisationHM_List_1").val($(this).val());
+			tabInfosListAutresHospHMNombrePerfusion[1] = $(this).val();
+		}).change(function(){ 
+			$("#nombrePerfusionHospitalisationHM_List_1").val($(this).val());
+			tabInfosListAutresHospHMNombrePerfusion[1] = $(this).val();
+		});
+		/*==================================*/
+		
 	}else if(id == -1 || id == ''){
 		$(".hospitalisationClassHM").fadeOut(function(){
-			$(".titreHistoireMaladieStyle").css({'height':'135px'});
+			//$(".titreHistoireMaladieStyle").css({'height':'135px'});
 		});
 	}
 	
 }
+
+/**
+ * NOUVEAU CODE AJOUTE --- NOUVEAU CODE AJOUTE --- NOUVEAU CODE AJOUTE
+ */
+
+/*Affichage de l'interface renseignement de plusieurs autres hospitalisations*/
+var hauteurPopUpInfosAutresHospitalisations = 240;
+function ajouterInfosAutresHospitalisations(){
+	
+	$( "#autresInfosAutresHospitalisations" ).dialog({
+		resizable: false,
+	    height:hauteurPopUpInfosAutresHospitalisations,
+	    width:1050,
+	    autoOpen: false,
+	    modal: true,
+	    buttons: {
+	        "Terminer": function() {
+	        	$( this ).dialog( "close" );
+	        },
+	   }
+	});
+	
+	$("#autresInfosAutresHospitalisations").dialog('open');
+}
+
+
+/*Affichage de l'icone de l'interface de renseignement de plusieurs autres hospitalisations*/
+function affichageIconAutresHospitalisations(){
+	$('#nombreHospitalisationHM').keyup(function(){
+		if($(this).val() >= 1){
+			$('#ajoutInfosAutresHospitalisationIcon').toggle(true);
+			if($(this).val() > 20){ $(this).val(1); }
+			affichageLigneAutresHospitalisations($(this).val());
+		}else{
+			$('#ajoutInfosAutresHospitalisationIcon').toggle(false);
+		}
+		
+	}).change(function(){
+		if($(this).val() >= 1){
+			$('#ajoutInfosAutresHospitalisationIcon').toggle(true);
+			if($(this).val() > 20){ $(this).val(1); }
+			affichageLigneAutresHospitalisations($(this).val());
+		}else{
+			$('#ajoutInfosAutresHospitalisationIcon').toggle(false);
+		}
+		
+	});
+}
+
+var tabInfosListAutresHospHMDate = new Array();
+var tabInfosListAutresHospHMDuree = new Array();
+var tabInfosListAutresHospHMMotif = new Array();
+var tabInfosListAutresHospHMPriseEnCharge = new Array();
+var tabInfosListAutresHospHMNombrePerfusion = new Array();
+
+/*Afficher le nombre de ligne des autrs hospitalisations à ajouter*/
+function affichageLigneAutresHospitalisations(nbHospitalisation){
+	
+    hauteurPopUpInfosAutresHospitalisations = 240;
+	var uneHautreHospitalisation ="";
+
+	for(var i=1 ; i<=nbHospitalisation ; i++){
+		uneHautreHospitalisation +=""+
+		  '<table style="width:100%;">'+
+		    '<tr style="height:40px; width:100%;" class="designHistoireMaladie">'+
+			  
+		    
+		      //1* GESTION DES DATES HOSPITALISATIONS --- GESTION DES DATES HOSPITALISATIONS
+			  '<th style="width:23%; padding-right: 15px;">'+ 
+	            '<div style="float:left; width: 100%; background: gree;">'+
+	              '<label style="width: 100%; height:30px; font-size: 14px; "> <i style="float:left; padding-top: 4px;">'+i+') </i> Date '+ 
+	                '<input type="date" id="dateHospitalisationHM_List_'+i+'" style="width:160px; font-size: 16px; padding-left: 5px;">'+
+	              '</label>'+
+	            '</div>'+ 
+			  '</th>'+
+			  //Script de sauvegarde des types de DATES renseignées
+			  '<script>'+
+			    '$("#dateHospitalisationHM_List_'+i+'").keyup(function(){'+
+			       'tabInfosListAutresHospHMDate['+i+'] = $(this).val();'+
+			       '$("#dateHospitalisationHM").val(tabInfosListAutresHospHMDate[1]);'+
+			    '})'+
+			    '.change(function(){'+
+			       'tabInfosListAutresHospHMDate['+i+'] = $(this).val();'+
+			       '$("#dateHospitalisationHM").val(tabInfosListAutresHospHMDate[1]);'+
+			    '});'+
+			    '$("#dateHospitalisationHM_List_'+i+'").val(tabInfosListAutresHospHMDate['+i+']);'+
+			  '</script>'+
+			  //********************************************************************
+			  
+			  
+			  //2* GESTION DES DUREES HOSPITALISATIONS --- GESTION DES DUREES HOSPITALISATIONS
+			  '<th style="width:12%; padding-right: 15px;">'+ 
+	            '<div style="float:left; width: 100%; background: gree;">'+
+	              '<label style="width: 100%; height:30px; font-size: 14px; "> Dur&eacute;e(j) '+ 
+	              '<input type="number" id="dureeHospitalisationHM_List_'+i+'" style="width:45px; font-size: 16px;" min=1 max=100>'+
+	              '</label>'+
+	            '</div>'+ 
+			  '</th>'+
+			  //Script de sauvegarde des types des DUREES renseignées
+			  '<script>'+
+			    '$("#dureeHospitalisationHM_List_'+i+'").keyup(function(){'+
+			       'tabInfosListAutresHospHMDuree['+i+'] = $(this).val();'+
+			       '$("#dureeHospitalisationHM").val(tabInfosListAutresHospHMDuree[1]);'+
+			    '})'+
+			    '.change(function(){'+
+			       'tabInfosListAutresHospHMDuree['+i+'] = $(this).val();'+
+			       '$("#dureeHospitalisationHM").val(tabInfosListAutresHospHMDuree[1]);'+
+			    '});'+
+			    '$("#dureeHospitalisationHM_List_'+i+'").val(tabInfosListAutresHospHMDuree['+i+']);'+
+			  '</script>'+
+			  //********************************************************************
+			  
+			  
+			  
+			  
+			  //3* GESTION DES MOTIFS HOSPITALISATIONS --- GESTION DES MOTIFS HOSPITALISATIONS
+			  '<th style="width:20%; padding-right: 15px;">'+ 
+	            '<div style="float:left; width: 100%; background: gree;">'+
+	              '<label style="width: 100%; height:30px; font-size: 14px; "> Motif '+ 
+	              '<input type="text" id="motifHospitalisationHM_List_'+i+'" style="width:150px; font-size: 14px;">'+
+	              '</label>'+
+	            '</div>'+ 
+			  '</th>'+
+			  //Script de sauvegarde des types des MOTIFS renseignées
+			  '<script>'+
+			    '$("#motifHospitalisationHM_List_'+i+'").keyup(function(){'+
+			       'tabInfosListAutresHospHMMotif['+i+'] = $(this).val();'+
+			       '$("#motifHospitalisationHM").val(tabInfosListAutresHospHMMotif[1]);'+
+			    '})'+
+			    '.change(function(){'+
+			       'tabInfosListAutresHospHMMotif['+i+'] = $(this).val();'+
+			       '$("#motifHospitalisationHM").val(tabInfosListAutresHospHMMotif[1]);'+
+			    '});'+
+			    '$("#motifHospitalisationHM_List_'+i+'").val(tabInfosListAutresHospHMMotif['+i+']);'+
+			  '</script>'+
+			  //********************************************************************
+			  
+			  
+			  
+			  
+			  //4* GESTION DES Prises en charge --- GESTION DES Prises en charge
+			  '<th style="width:22%; padding-right: 15px;" >'+
+	            '<div style="float:left; width: 100%; background: indig;">'+
+	               '<label style="width: 100%; height:30px; font-size: 14px;" >Prise en charge   '+
+	                  '<select id="priseEnChargeHospitalisationHM_List_'+i+'" style="width:120px; font-size: 16px;" onchange="getNombrePerfusion(this.value,'+i+');">'+
+	                    '<option value=""></option>'+
+	                    '<option value="1">Transfusion</option>'+
+	                    '<option value="2">Perfusion</option>'+
+	                    '<option value="3">Antibiotique</option>'+
+	                    '<option value="-2">Autres..</option>'+
+	                 '</select>'+
+	               '</label>'+
+	            '</div>'+ 
+		      '</th>'+
+		      //Script de sauvegarde des prises En Charge renseignées
+			  '<script>'+
+			    '$("#priseEnChargeHospitalisationHM_List_'+i+'").keyup(function(){'+
+			       'tabInfosListAutresHospHMPriseEnCharge['+i+'] = $(this).val();'+
+			       '$("#priseEnChargeHospitalisationHM").val(tabInfosListAutresHospHMPriseEnCharge[1]);'+
+			    '})'+
+			    '.change(function(){'+
+			       'tabInfosListAutresHospHMPriseEnCharge['+i+'] = $(this).val();'+
+			       '$("#priseEnChargeHospitalisationHM").val(tabInfosListAutresHospHMPriseEnCharge[1]);'+
+			    '});'+
+			    '$("#priseEnChargeHospitalisationHM_List_'+i+'").val(tabInfosListAutresHospHMPriseEnCharge['+i+']);'+
+			  '</script>'+
+			  //********************************************************************
+		      
+		      
+		      
+		      
+		      //5* GESTION DES NOMBRES DE PERFUSION --- GESTION DES NOMBRES DE PERFUSION
+			  '<th style="width:13%; padding-right: 25px;" >'+
+	            '<div style="float:left; width: 100%; background: indig;">'+
+	               '<label style="width: 100%; height:30px; font-size: 14px;" ><span id="renseigneNombrePerfusion'+i+'" style="visibility: hidden;"> Nombre   '+
+	                  '<input type="number" id="nombrePerfusionHospitalisationHM_List_'+i+'" style="width:45px; font-size: 16px;" min=1 max=20></span>'+
+	               '</label>'+
+	            '</div>'+ 
+		      '</th>'+
+		      //Script de sauvegarde des NOMBRES renseignées
+			  '<script>'+
+			    '$("#nombrePerfusionHospitalisationHM_List_'+i+'").keyup(function(){'+
+			       'tabInfosListAutresHospHMNombrePerfusion['+i+'] = $(this).val();'+
+			       '$("#nombrePerfusionHospitalisationHM").val(tabInfosListAutresHospHMNombrePerfusion[1]);'+
+			    '})'+
+			    '.change(function(){'+
+			       'tabInfosListAutresHospHMNombrePerfusion['+i+'] = $(this).val();'+
+			       '$("#nombrePerfusionHospitalisationHM").val(tabInfosListAutresHospHMNombrePerfusion[1]);'+
+			    '});'+
+			    
+			    'if(tabInfosListAutresHospHMNombrePerfusion['+i+']){'+
+			    '$("#renseigneNombrePerfusion'+i+'").css({"visibility":"visible"});'+
+			    '$("#nombrePerfusionHospitalisationHM_List_'+i+'").val(tabInfosListAutresHospHMNombrePerfusion['+i+']);'+
+	            '}'+
+			  '</script>'+
+			  //********************************************************************
+		      
+		      
+		      
+	       '</tr>'+
+	     '</table>';
+		 
+		hauteurPopUpInfosAutresHospitalisations+=20;
+	}
+	
+	var hauteurContenuLigne = 45*nbHospitalisation;
+	$('.zoneInfosAutresHospitalisations').css({'height':hauteurContenuLigne});
+	
+	$('#popupInfosAutresHospitalisations').html(uneHautreHospitalisation);
+	
+	
+}
+
+function getNombrePerfusion(val,i){
+	if(val == 2){
+		$('#renseigneNombrePerfusion'+i).css({'visibility':'visible'});
+	}else{
+		$('#renseigneNombrePerfusion'+i).css({'visibility':'hidden'});
+		$('#renseigneNombrePerfusion'+i+' input').val('');
+		tabInfosListAutresHospHMNombrePerfusion[i] = null;
+	}
+}
+
+
+
+function sauverInfosAutresHospitalisationsPopup(){
+	
+	var scriptInfosAutresHospitalisationsAEnvoyer ="";
+	scriptInfosAutresHospitalisationsAEnvoyer +="<input type='hidden' name='tabInfosListAutresHospHMDate'   value='"+tabInfosListAutresHospHMDate+"' >";
+	scriptInfosAutresHospitalisationsAEnvoyer +="<input type='hidden' name='tabInfosListAutresHospHMDuree'  value='"+tabInfosListAutresHospHMDuree+"' >";
+	scriptInfosAutresHospitalisationsAEnvoyer +="<input type='hidden' name='tabInfosListAutresHospHMMotif'  value='"+tabInfosListAutresHospHMMotif+"' >";
+	scriptInfosAutresHospitalisationsAEnvoyer +="<input type='hidden' name='tabInfosListAutresHospHMPriseEnCharge'  value='"+tabInfosListAutresHospHMPriseEnCharge+"' >";
+	scriptInfosAutresHospitalisationsAEnvoyer +="<input type='hidden' name='tabInfosListAutresHospHMNombrePerfusion' value='"+tabInfosListAutresHospHMNombrePerfusion+"' >";
+	
+	$('#sauverLesInfosDesAutresHospitalisationsPopup').html(scriptInfosAutresHospitalisationsAEnvoyer);
+}
+
+
+/**
+ * ===========================================================
+ * FIN FIN NOUVEAU CODE AJOUTE --- FIN FIN NOUVEAU CODE AJOUTE
+ * ===========================================================
+ */
+
+
+
 
 function getPriseEnChargeHospitalisationHM(id){
 	
@@ -899,7 +1220,6 @@ function getPriseEnChargeHospitalisationHM(id){
 		$(".hospitalisationNombreClassHM").fadeIn();
 	}else {
 		$(".hospitalisationNombreClassHM").fadeOut(false);
-		//$("#nombreHospitalisationHM").val('');
 	}
 	
 }
@@ -963,11 +1283,24 @@ function getExamensEffecutesDansExamComp(nbExamensEffectues,tabIndexAnalyses,tab
 		$('.contenuExamensEffectuesStyle table').html("<tr style='width: 100%'><td style='width: 100%; color: red; padding-top: 7px; text-align: center; font-family: times new roman;'>Aucune analyse effectu&eacute;e</td></tr>");
 	}else{
 		for(var i = 1 ; i < tabAnalyses.length ; i++){
+			
+			var infoExamen = "";
+			if(tabIndexAnalyses[i] == 1 || tabIndexAnalyses[i] == 9){
+				infoExamen = "Chaque 3 mois d&egrave;s la naissance";
+			}else 
+				if(tabIndexAnalyses[i] == 49 || tabIndexAnalyses[i] == 69 || tabIndexAnalyses[i] == 22){
+					infoExamen = "Chaque ann&eacute;e &agrave; partir de 5 ans";
+				}else 
+					if(tabIndexAnalyses[i] == 40 || tabIndexAnalyses[i] == 41 || tabIndexAnalyses[i] == 70){
+						infoExamen = "Chaque ann&eacute;e d&egrave;s la naissance";
+					}
+			
+			
 			$('#idAnalyseExamComp'+i).html("<label style='width: 100%; height:30px; text-align:left;'>" +
 					                       " <span style='font-size: 12px;'>&#11166; </span>" +
 					                       " <span style='font-size: 13px;'>"+tabAnalyses[i]+"</span>" +
 					                       " <span style='color: green;'>&#10003;</span>" +
-					                       " <span style='color: green; font-family: Tempus Sans ITC; float: right;'> "+tabIndexAnalyses[i]+" </span>" +
+					                       " <span style='color: green; font-family: Tempus Sans ITC; float: right;'> <span title='"+infoExamen+"'>&#128712; </span>  </span>" +
 					                       "</label>");
 		}
 	}
@@ -983,8 +1316,8 @@ function getExamensEffecutesDansExamComp(nbExamensEffectues,tabIndexAnalyses,tab
 }
 
 function getExamensNonFaitsDansExamComp(nbExamensNonFaits,tabIndexAnalysesNonFaits,tabAnalysesNonFaits){
-	//Ajout de l'interface d'affichage des analyses effectuées
-	//Ajout de l'interface d'affichage des analyses effectuées
+	//Ajout de l'interface d'affichage des analyses non effectuées
+	//Ajout de l'interface d'affichage des analyses non effectuées
 	var nbLigneAAfficher = parseInt(nbExamensNonFaits/3);
 	if((nbExamensNonFaits%3) != 0){ nbLigneAAfficher += 1; }
 	
@@ -993,17 +1326,26 @@ function getExamensNonFaitsDansExamComp(nbExamensNonFaits,tabIndexAnalysesNonFai
 		$('.contenuExamensAFaireStyle').css('height',hauteur+'px');
 	}
 
-	//Placer les analyses déjà effectuées
-	//Placer les analyses déjà effectuées
+	//Placer les analyses non effectuées
+	//Placer les analyses non effectuées
 	if(tabAnalysesNonFaits.length == 0){
 		$('#demanderLesAnalysesAFaireIcone').toggle(false);
 		$('.contenuExamensAFaireStyle table').html("<tr style='width: 100%'><td style='width: 100%; color: red; padding-top: 7px; text-align: center; font-family: times new roman;'>Aucune analyse &agrave; faire </td></tr>");
 	}else{
 		for(var i = 1 ; i < tabAnalysesNonFaits.length ; i++){
-			$('#idAnalyseAFExamComp'+i).html("<label style='width: 100%; height:30px; text-align:left;'>" +
+			
+			if(tabTypeAlerteAnalysesNonFaites[i] == 0){
+				var infosAlerteIcone = "<img src='../images_icons/non.png' title='Rappel aux parents : "+tabDateAlerteAnalysesNonFaites[i]+"'>";
+			}else{
+				var infosAlerteIcone = "<img src='../images_icons/alertRouge.gif' style='margin-left: 3px; width: 12px; height: 12px;' title='Alerter les parents : "+tabDateAlerteAnalysesNonFaites[i]+"'>";
+			}
+			
+			
+			$('#idAnalyseAFExamComp'+i).html("<label style='width: 100%; height:30px; text-align:left;' class='iconeAlertRougeOrange'>" +
 	                " <span style='font-size: 12px;'>&#11166; </span> <span style='font-size: 13px;'>" +
 	                ""+tabAnalysesNonFaits[i]+"</span> <span style='color: red;'>&#x2717;</span>" +
-	                " <span style='color: green; float: right;' id='iconeIndicateurSelection_"+tabIndexAnalysesNonFaits[i]+"' title='Demande effectu&eacute;e'></span>" +
+	                " <ul style='float: right;'> <li style='margin-top: 2px;'> "+infosAlerteIcone+"</li> <li id='iconeIndicateurSelection_"+tabIndexAnalysesNonFaits[i]+"' title='Demande effectu&eacute;e' style='margin-top: 2px; margin-bottom: -10px; margin-left: 3px;'>  </li></ul>"+
+	                " <span style='color: green; float: right; '></span>" +
 	                "</label>");
 		}
 	}
@@ -1017,6 +1359,259 @@ function getExamensNonFaitsDansExamComp(nbExamensNonFaits,tabIndexAnalysesNonFai
 	},2000);
 	
 }
+
+
+
+//NOUVEAU CODE DU 12/12/18 --- NOUVEAU CODE DU 12/12/18
+//NOUVEAU CODE DU 12/12/18 --- NOUVEAU CODE DU 12/12/18
+var appelPopupProgrammeExamBio = 0;
+function afficherProgrammeDesExamensBiologiques(){
+	
+	$( "#programmeDesExamensBiologiques" ).dialog({
+		resizable: false,
+	    height:670,
+	    width:850,
+	    autoOpen: false,
+	    modal: true,
+	    /* buttons: {
+	        "Terminer": function() {
+	        	$( this ).dialog( "close" );
+	        },
+	    }*/
+	    
+	});
+	
+	$("#programmeDesExamensBiologiques").dialog('open');
+	
+	if(appelPopupProgrammeExamBio == 0){
+		appelPopupProgrammeExamBio = 1;
+		getInfosPopupProgrammeDesExamensBiologiques(nbDonneesProgrammeAnalysesObligatoires, tabIndexAnalyseProgramme, tabNomAnalyseProgramme, tabNombreFoisAnalyseProgramme);
+	}
+
+}
+
+function afficherLabelExamensBiologiques(nbExamen){
+	
+	var labelExamBio = "";
+	for(var i = 1 ; i <= nbExamen ; i++){
+		labelExamBio = ''+
+			'<table style="width:100%;" id="tabLigneExamProgrammeBio_'+i+'"  class="designLabelProgrammeDesExamensBio">'+
+		      '<tr style="height:40px; width:100%;" id="examLabelProgrammeBioLigne'+i+'" >'+
+		          '<th style="width:40%; padding-right: 7px; vertical-align: top;"> '+
+			         '<div class="zoneInfosStyle zoneInfosProgrammeDesExamensBiologiques" style="width: 100%;">'+ 
+	                    '<div style="float:left; width: 100%;" id="idAnalyseAFProgrammeBioComp'+i+'" > </div> '+
+	                 '</div>'+ 
+			      '</th>'+
+				 
+			      '<th style="width:60%; padding-left: 5px; padding-right: 7px; vertical-align: top;"> '+
+			         '<div class="zoneInfosStyle zoneInfosProgrammeDesExamensBiologiques" style="width: 100%;">'+
+	                     '<div style="float:left; width: 100%;" id="idAnalyseAFProgrammeBioInfos'+i+'" >'+ 
+	                      
+	                     
+	                         '<table style="width: 100%; height: 2px;">'+
+	                           '<tr  style="width: 100%; height: 2px;">'+
+	                             '<td  style="width: 33%; vertical-align: top; padding-right: 2px;" id="colonneA_'+i+'">'+
+	                              
+	                                 '<table style="width: 100%; height: 2px;">'+
+		                                '<tr  style="width: 100%; height: 2px;">'+
+		                                  '<td class="popInfEnTeteProg" style="">Infos sur les demandes</td>'+
+		                                '</tr>'+
+		                                '<tr  style="width: 100%; height: 2px;">'+
+		                                  '<td style="width: 100%;" class="col popInfContenuProg"></td>'+
+		                                '</tr>'+
+		                             '</table>'+
+		                           
+	                             '</td>'+
+	                             
+	                             '<td  style="width: 33%; vertical-align: top; padding-right: 2px;" id="colonneB_'+i+'">'+
+	                             
+	                                 '<table style="width: 100%; height: 2px;">'+
+	                                    '<tr  style="width: 100%; height: 2px;">'+
+	                                      '<td class="popInfEnTeteProg" style="">Infos sur les r&eacute;sultat</td>'+
+	                                    '</tr>'+
+	                                    '<tr  style="width: 100%; height: 2px;">'+
+	                                      '<td style="width: 100%;" class="col popInfContenuProg"></td>'+
+	                                    '</tr>'+
+	                                 '</table>'+
+	                             
+	                             '</td>'+
+	                             
+	                             '<td  style="width: 34%; vertical-align: top; padding-right: 4px;" id="colonneC_'+i+'">'+
+	                             
+	                                 '<table style="width: 100%; height: 2px;">'+
+                                        '<tr  style="width: 100%; height: 2px;">'+
+                                          '<td class="popInfEnTeteProg" style="">Prochaine date</td>'+
+                                        '</tr>'+
+                                        '<tr  style="width: 100%; height: 2px;">'+
+                                          '<td style="width: 100%;" class="col popInfContenuProg"></td>'+
+                                        '</tr>'+
+                                     '</table>'+
+	                             
+	                             '</td>'+
+	                           '</tr>'+
+	                         '</table>'+
+	                         
+	                     
+	                     '</div>'+
+	                 '</div>'+
+			      '</th>'+
+				 
+		      '</tr>'+
+		   
+		   '</table>';
+		
+		$('#tabLigneExamProgrammeBio_'+(i-1)).after(labelExamBio);
+	}
+}
+
+function getInfosPopupProgrammeDesExamensBiologiques(nbExamensEffectues,tabIndexAnalyses,tabNomAnalyses,tabNbFoisAnalyses){
+	//Ajout de l'interface d'affichage des analyses effectuées
+	//Ajout de l'interface d'affichage des analyses effectuées
+	afficherLabelExamensBiologiques(nbExamensEffectues);
+	
+	$('.zoneInfosProgrammeDesExamensBiologiques').css({'height':'45px', 'margin-bottom':'10px'});
+
+	//Placer les analyses déjà effectuées 
+	//Placer les analyses déjà effectuées
+	if(tabNomAnalyses.length == 0){
+		//$('.zoneInfosProgrammeDesExamensBiologiques table').html("<tr style='width: 100%'><td style='width: 100%; color: red; padding-top: 7px; text-align: center; font-family: times new roman;'>Aucune analyse effectu&eacute;e</td></tr>");
+	}else{
+		for(var i = 1 ; i < tabNomAnalyses.length ; i++){
+			
+			var infoExamen = "";
+			if(tabIndexAnalyses[i] == 1 || tabIndexAnalyses[i] == 9){
+				infoExamen = "Chaque 3 mois d&egrave;s la naissance";
+			}else 
+				if(tabIndexAnalyses[i] == 49 || tabIndexAnalyses[i] == 69 || tabIndexAnalyses[i] == 22){
+					infoExamen = "Chaque ann&eacute;e &agrave; partir de 5 ans";
+				}else 
+					if(tabIndexAnalyses[i] == 40 || tabIndexAnalyses[i] == 41 || tabIndexAnalyses[i] == 70){
+						infoExamen = "Chaque ann&eacute;e d&egrave;s la naissance";
+					}
+
+			/**
+			 *  Ecrire du nom de l'analyse 
+			 */
+			$('#idAnalyseAFProgrammeBioComp'+i).html("<label style='width: 92%; height:30px; text-align:left;'>" +
+					                       " <span style='font-size: 12px;'>&#11166; </span>" +
+					                       " <span style='font-size: 13px;'>"+tabNomAnalyses[i]+"</span>" +
+					                       " <span style='color: green;'></span>" +
+					                       " <span style='color: green; font-family: Tempus Sans ITC; float: right;'> <span title='"+infoExamen+"'>&#128712; </span>  </span>" +
+					                       "</label>");
+			
+			/**
+			 *  Ecrire les infos sur le nombre de fois 'colonneA_x' 
+			 */
+			var nbFoisAnalyseDemVar = tabNbFoisAnalyses[tabIndexAnalyses[i]];
+			var affCalendarListeDateDemande = "";
+			if(nbFoisAnalyseDemVar != 0){
+				affCalendarListeDateDemande = "<div style='float: left; width: 50%;' id='dateDemandeProgramme_1_"+tabIndexAnalyses[i]+"' class='dateDemProgPop'> <span style='padding-top:15px;' title='Dates des demandes'>date : </span> <img onclick='voirDateDemandeProgramme("+tabIndexAnalyses[i]+",1"+");' src='../images_icons/calendar_16.png' style=''> </div>";
+			}
+			
+			$('#idAnalyseAFProgrammeBioInfos'+i+' #colonneA_'+i+' .col').html(
+					"<div style='float: left; width: 50%;'><span style='' title='Nombre'>nb : </span> <span style='font-family: Time new roman; font-size: 21px; font-weight: bold;'> "+nbFoisAnalyseDemVar+" </span></div>"+
+					affCalendarListeDateDemande+
+					""+
+					""
+					);
+			
+			/**
+			 *  Ecrire les infos sur le nombre de fois 'colonneB_x' 
+			 */
+			var nbFoisAnalyseDemResultVar = tabNombreFoisAnalyseProgrammeAyantResultat[tabIndexAnalyses[i]];
+			var affCalendarListeDateDemandeResult = "";
+			if(nbFoisAnalyseDemResultVar != 0){
+				affCalendarListeDateDemandeResult = "" +
+				"<div style='float: left; width: 50%;'><span style='' title='Nombre'>nb : </span> <span style='font-family: Time new roman; font-size: 21px; font-weight: bold;'> "+nbFoisAnalyseDemResultVar+" </span></div>"+		
+				"<div style='float: left; width: 50%;' id='dateDemandeProgramme_2_"+tabIndexAnalyses[i]+"' class='dateDemProgPop'> <span style='padding-top:15px;' title='R&eacute;sultats'>r&eacute;sult : </span> <img onclick='voirDateDemandeProgramme("+tabIndexAnalyses[i]+",2"+");' src='../images_icons/resultat3.png' style='width: 19px; height: 19px;'> </div>";
+			}
+			if(nbFoisAnalyseDemVar != 0 && nbFoisAnalyseDemResultVar == 0){
+				affCalendarListeDateDemandeResult = "<div style='color: red; font-family: Time new roman; font-size: 14px; padding-top: 2px; text-align: center;'> Aucun </div>";
+			}
+			
+			$('#idAnalyseAFProgrammeBioInfos'+i+' #colonneB_'+i+' .col').html(
+					affCalendarListeDateDemandeResult+
+					""
+					);
+			
+			
+			/**
+			 *  Ecrire les infos sur le nombre de fois 'colonneC_x' 
+			 */
+			$('#idAnalyseAFProgrammeBioInfos'+i+' #colonneC_'+i+' .col').html(
+					"<div style='float: left; width: 100%;'><span style='font-size: 18px; font-weight: normal; color: green;'> "+tabProchaineDateAnalyseProgrammeAyantResultat[tabIndexAnalyses[i]]+" </span></div>"+
+					""
+					);
+			
+		}
+	}
+
+	$('a,img,span').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });
+}
+
+
+
+
+function popupTerminer() {
+	$(null).w2overlay(null);
+}
+
+function voirDateDemandeProgramme(tabIndexAnalyse,col)
+{ 
+	if(col == 1){
+		var listeNumDossierTab = tabDateDemandeAnalyseProgramme[tabIndexAnalyse].split(',');
+	}else{
+		var listeNumDossierTab = tabDateDemandeAnalyseProgrammeAyantResultat[tabIndexAnalyse].split(',');
+	}
+	
+	var listeNumDossierTabStyle = "<table class='' style='width: 100%;'>";
+	
+	for(var ik=0 ; ik<listeNumDossierTab.length-1 ; ik++){
+		if(ik%2 == 0){
+			listeNumDossierTabStyle += "<tr style='width: 100%; background: #e9e9e9;'><td style='width: 100%; height: 23px; text-align: center; padding-right: 5px; font-family: Goudy Old Style; font-size: 18px; font-weight: normal; color: green;'><i style='font-size: 10px; color: black; margin-left:0px;'>"+(ik+1)+" -  </i>"+listeNumDossierTab[ik]+"</td></tr>";			
+		}else{
+			listeNumDossierTabStyle += "<tr style='width: 100%; '><td style='width: 100%; height: 23px; text-align: center; padding-right: 5px; font-family: Goudy Old Style; font-size: 18px; font-weight: normal; color: green;'><i style='font-size: 10px; color: black; margin-left:0px;'>"+(ik+1)+" -  </i>"+listeNumDossierTab[ik]+"</td></tr>";			
+		}
+
+	}
+	listeNumDossierTabStyle += "</table>";
+	
+	var width="150px";
+	if(col == 1){ width="120px"; }
+	
+	$('#dateDemandeProgramme_'+col+'_'+tabIndexAnalyse).w2overlay({ html: "" +
+		"<div style='height: 150px; width: "+width+"; padding-top:10px; text-align:center;'>" +
+		"<div style='height: 99%; width: 100%; max-height: 99%; max-width: 100%; overflow: auto;' class='listeNumDossierVoirPlusDNPR' align='right'> "+listeNumDossierTabStyle+" </div>" +
+		"</div>"+
+		"<style> .w2ui-overlay:before{ border: 1px solid green; top: 2px; border-bottom: 0px solid transparent; border-left:1px solid transparent;}  .w2ui-overlay{margin-left: 0px; border: 1px solid green; margin-top: 1 } </style>"+
+		"<script> $('.affResutlProgIconePop').click(function(){ popupTerminer(); }); </script>"+
+		"<script> $('a,img,span').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } }); </script>"
+	});
+	
+}
+
+//*****************************************************
+//*****************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function gestionAlerteExistanceAnalyseNonFait(nbExamensNonFaits){
@@ -1825,21 +2420,37 @@ function supprimerDiagnosticComplicationChronique(id){
  */
 function choixConclusionDiagnostic(id){
 	if(id == 0){
-		$("#choixAutresConclusionDiagnostic").toggle(false);
+		$("#choixAutresConclusionDiagnostic, #affichageChoixAutresDiagAutresASignaler").toggle(false);
 		
 		var boutons = $('#choixAutresConclusionDiagnostic input[name=choix_diag_complications_aigues]');
-		if( boutons[0].checked){ $("#choixAutresDiagComplicationsAigues").html('Complications aigues').css({'color':'black', 'font-weight':'normal'}); $('#affichageChoixAutresDiagComplicationsAigues').toggle(false); boutons.trigger('click'); }
+		if( boutons[0].checked){ $("#choixAutresDiagComplicationsAigues").html('Aigues').css({'color':'black', 'font-weight':'normal'}); $('#affichageChoixAutresDiagComplicationsAigues').toggle(false); boutons.trigger('click'); }
 		
 		var boutons = $('#choixAutresConclusionDiagnostic input[name=choix_diag_complications_chroniques]');
-		if( boutons[0].checked){ $("#choixAutresDiagComplicationsChroniques").html('Complications chroniques').css({'color':'black', 'font-weight':'normal'}); $('#affichageChoixAutresDiagComplicationsChroniques').toggle(false); boutons.trigger('click'); }
+		if( boutons[0].checked){ $("#choixAutresDiagComplicationsChroniques").html('Chroniques').css({'color':'black', 'font-weight':'normal'}); $('#affichageChoixAutresDiagComplicationsChroniques').toggle(false); boutons.trigger('click'); }
 		
+		/*
 		var boutons = $('#choixAutresConclusionDiagnostic input[name=choix_diag_autres_a_signaler]');
 		if( boutons[0].checked){ $("#choixAutresDiagComplicationsASignaler").html('Autres &agrave; signaler').css({'color':'black', 'font-weight':'normal'}); $('#affichageChoixAutresDiagAutresASignaler').toggle(false); boutons.trigger('click'); }
+		*/
 		
-	}else{
-		$("#choixAutresConclusionDiagnostic").toggle(true);
-		prepareScriptChoixDiagnosticConclusion();
-	}
+	}else
+		if(id == 1){
+			$("#affichageChoixAutresDiagAutresASignaler").toggle(false);
+			$("#choixAutresConclusionDiagnostic").toggle(true);
+			prepareScriptChoixDiagnosticConclusion();
+		}
+	else
+		if(id == 2){
+			$("#choixAutresConclusionDiagnostic").toggle(false);
+			
+			var boutons = $('#choixAutresConclusionDiagnostic input[name=choix_diag_complications_aigues]');
+			if( boutons[0].checked){ $("#choixAutresDiagComplicationsAigues").html('Aigues').css({'color':'black', 'font-weight':'normal'}); $('#affichageChoixAutresDiagComplicationsAigues').toggle(false); boutons.trigger('click'); }
+			
+			var boutons = $('#choixAutresConclusionDiagnostic input[name=choix_diag_complications_chroniques]');
+			if( boutons[0].checked){ $("#choixAutresDiagComplicationsChroniques").html('Chroniques').css({'color':'black', 'font-weight':'normal'}); $('#affichageChoixAutresDiagComplicationsChroniques').toggle(false); boutons.trigger('click'); }
+
+			$("#affichageChoixAutresDiagAutresASignaler").toggle(true);
+		}
 }
 
 function prepareScriptChoixDiagnosticConclusion(){
@@ -1847,21 +2458,23 @@ function prepareScriptChoixDiagnosticConclusion(){
 	/** Diagnostic consultation du jour --- DIagnostic consultation du jour**/
 	$('#choixAutresConclusionDiagnostic input[name=choix_diag_complications_aigues]').click(function(){
 		var boutons = $(this); 
-		if( boutons[0].checked){ $("#choixAutresDiagComplicationsAigues").html('<span style="color: red;">&#10003;</span> Complications aigues').css({'color':'green', 'font-weight':'bold'}); $('#affichageChoixAutresDiagComplicationsAigues').toggle(true); }
-		if(!boutons[0].checked){ $("#choixAutresDiagComplicationsAigues").html('Complications aigues').css({'color':'black', 'font-weight':'normal'}); $('#affichageChoixAutresDiagComplicationsAigues').toggle(false);}
+		if( boutons[0].checked){ $("#choixAutresDiagComplicationsAigues").html('<span style="color: red;">&#10003;</span> Aigues').css({'color':'green', 'font-weight':'bold'}); $('#affichageChoixAutresDiagComplicationsAigues').toggle(true); }
+		if(!boutons[0].checked){ $("#choixAutresDiagComplicationsAigues").html('Aigues').css({'color':'black', 'font-weight':'normal'}); $('#affichageChoixAutresDiagComplicationsAigues').toggle(false);}
 	});
 	
 	$('#choixAutresConclusionDiagnostic input[name=choix_diag_complications_chroniques]').click(function(){
 		var boutons = $(this); 
-		if( boutons[0].checked){ $("#choixAutresDiagComplicationsChroniques").html('<span style="color: red;">&#10003;</span> Complications chroniques').css({'color':'green', 'font-weight':'bold'}); $('#affichageChoixAutresDiagComplicationsChroniques').toggle(true); }
-		if(!boutons[0].checked){ $("#choixAutresDiagComplicationsChroniques").html('Complications chroniques').css({'color':'black', 'font-weight':'normal'}); $('#affichageChoixAutresDiagComplicationsChroniques').toggle(false);}
+		if( boutons[0].checked){ $("#choixAutresDiagComplicationsChroniques").html('<span style="color: red;">&#10003;</span> Chroniques').css({'color':'green', 'font-weight':'bold'}); $('#affichageChoixAutresDiagComplicationsChroniques').toggle(true); }
+		if(!boutons[0].checked){ $("#choixAutresDiagComplicationsChroniques").html('Chroniques').css({'color':'black', 'font-weight':'normal'}); $('#affichageChoixAutresDiagComplicationsChroniques').toggle(false);}
 	});
 	
+	/*
 	$('#choixAutresConclusionDiagnostic input[name=choix_diag_autres_a_signaler]').click(function(){
 		var boutons = $(this); 
 		if( boutons[0].checked){ $("#choixAutresDiagComplicationsASignaler").html('<span style="color: red;">&#10003;</span> Autres &agrave; signaler').css({'color':'green', 'font-weight':'bold'}); $('#affichageChoixAutresDiagAutresASignaler').toggle(true); }
 		if(!boutons[0].checked){ $("#choixAutresDiagComplicationsASignaler").html('Autres &agrave; signaler').css({'color':'black', 'font-weight':'normal'}); $('#affichageChoixAutresDiagAutresASignaler').toggle(false);}
 	});
+	*/
 	
 }
 
@@ -1958,6 +2571,174 @@ function imprimerTraitementMedicamenteux(){
 
 
 
+//ANTECEDENTS PERSONNELS --- ANTECEDENTS PERSONNELS --- ANTECEDENTS PERSONNELS
+//ANTECEDENTS PERSONNELS --- ANTECEDENTS PERSONNELS --- ANTECEDENTS PERSONNELS
+
+//ANTENATAUX
+//ANTENATAUX
+
+$(function(){ 
+	setTimeout(function(){ $('#deroulementAP').trigger('change'); });
+	
+	$('#deroulementPrecicisonAPVue').toggle(false); 
+});
+
+function precisonDeroulementAPVue(id)
+{
+	if(id == 2){
+		$('#deroulementPrecicisonAPVue').toggle(true);
+	}else{
+		$('#deroulementPrecicisonAPVue').toggle(false);
+	}
+	
+}
+
+//PERINATAUX
+//PERINATAUX 
+$(function(){ 
+	setTimeout(function(){ $('#cesarienneAP, #manoeuvreObstetricaleAP, #ageGestationnelATermeAP, #souffranceFoetaleAigueAP').trigger('change'); });
+	
+	
+	$('#motifCesarienneAPVue, #motifManoeuvreObstetricaleAPVue').toggle(false); 
+	$('.precisonAgeGestationnelATermeAPVue, .precisonReanimationSouffranceFoetaleAPVue').toggle(false);
+});
+
+function motifCesarienneAPVue(id)
+{
+	if(id == 1){
+		$('#motifCesarienneAPVue').toggle(true);
+	}else{
+		$('#motifCesarienneAPVue').toggle(false);
+	}
+}
+
+function motifManoeuvreObstetricaleAPVue(id)
+{
+	if(id == 1){
+		$('#motifManoeuvreObstetricaleAPVue').toggle(true);
+	}else{
+		$('#motifManoeuvreObstetricaleAPVue').toggle(false);
+	}
+}
+
+function precisonAgeGestationnelATermeAPVue(id)
+{
+	if(id == -1){
+		$('.precisonAgeGestationnelATermeAPVue').toggle(true);
+	}else{
+		$('.precisonAgeGestationnelATermeAPVue').toggle(false);
+	}
+}
+
+function precisonReanimationSouffranceFoetaleAPVue(id)
+{
+	if(id == 1){
+		$('.precisonReanimationSouffranceFoetaleAPVue').toggle(true);
+		$('.reanimSoufFoetAPVueComp').toggle(false);
+		$('.pathologieNeonataleStyleAP').css({'padding-left':'0px'});
+	}else{
+		$('.precisonReanimationSouffranceFoetaleAPVue').toggle(false);
+		$('.reanimSoufFoetAPVueComp').toggle(true);
+		$('.pathologieNeonataleStyleAP').css({'padding-left':'10px'});
+	}
+}
+
+
+//ALAITEMENT
+//ALAITEMENT
+var nomAllaitementArtificielAPVueTemoin = 0;
+
+$(function(){ 
+	setTimeout(function(){ $('#allaitementMatenelExclusifAP, #typeAllaitementAP, #diversificationAlimentaireAP, #sevrageAP').trigger('change'); });
+	
+	$('.typeAlaitementLaitUtilise, .typeAlaitementNomLaitUtilise, .ageDebutDiversificationAlimentaireAPVue, .ageDebutSevrageAPVue').toggle(false); 
+});
+
+function typeAllaitementAPVue(id)
+{
+	if(id == -1){
+		
+		$('.typeAlaitementLaitUtilise').toggle(true);
+		
+		if(nomAllaitementArtificielAPVueTemoin == 1){
+			$('.typeAlaitementNomLaitUtilise').toggle(true);
+		}else{
+			$('.typeAlaitementNomLaitUtilise').toggle(false);
+		}
+		
+	}else{
+		
+		$('.typeAlaitementLaitUtilise, .typeAlaitementNomLaitUtilise').toggle(false);
+	}
+}
+
+function nomAllaitementArtificielAPVue(id)
+{
+	if(id == 1){
+		$('.typeAlaitementNomLaitUtilise').toggle(true);
+		nomAllaitementArtificielAPVueTemoin = 1;
+	}else{
+		$('.typeAlaitementNomLaitUtilise').toggle(false);
+		nomAllaitementArtificielAPVueTemoin = 0;
+	}
+}
+
+function ageDebutDiversificationAlimentaireAPVue(id)
+{
+	if(id == 1){
+		$('.ageDebutDiversificationAlimentaireAPVue').toggle(true);
+	}else{
+		$('.ageDebutDiversificationAlimentaireAPVue').toggle(false);
+	}
+}
+
+
+function ageDebutSevrageAPVue(id)
+{
+	if(id == 1){
+		$('.ageDebutSevrageAPVue').toggle(true);
+	}else{
+		$('.ageDebutSevrageAPVue').toggle(false);
+	}
+}
+
+
+//SCOLARITE
+//SCOLARITE
+var nombreRedoublementAPVueTemoin = 0;
+
+$(function(){ 
+	setTimeout(function(){ $('#scolariseAP, #redoublementAP').trigger('change'); });
+
+	$('.niveauScolariteAPVue, .nombreRedoublementAPVue').toggle(false); 
+});
+
+function niveauScolariteAPVue(id)
+{
+	if(id == 1){
+		$('.niveauScolariteAPVue').toggle(true);
+		
+		if(nombreRedoublementAPVueTemoin == 1){
+			$('.nombreRedoublementAPVue').toggle(true);
+		}else{
+			$('.nombreRedoublementAPVue').toggle(false);
+		}
+		
+	}else{
+		$('.niveauScolariteAPVue, .nombreRedoublementAPVue').toggle(false);
+	}
+}
+
+function nombreRedoublementAPVue(id)
+{
+	if(id == 1){
+		$('.nombreRedoublementAPVue').toggle(true);
+		nombreRedoublementAPVueTemoin = 1;
+	}else{
+		$('.nombreRedoublementAPVue').toggle(false);
+		nombreRedoublementAPVueTemoin = 0;
+	}
+}
 
 
 
@@ -1975,8 +2756,56 @@ function imprimerTraitementMedicamenteux(){
 
 
 
-//Autres (Transfert / Hospitalisation / Rendez-Vous) --- Autres (Transfert / Hospitalisation / Rendez-Vous)
-//Autres (Transfert / Hospitalisation / Rendez-Vous) --- Autres (Transfert / Hospitalisation / Rendez-Vous)
+
+
+
+
+
+//Autres (Transfert / Hospitalisation / Transfusion / Rendez-Vous) --- //Autres (Transfert / Hospitalisation / Transfusion / Rendez-Vous)
+//Autres (Transfert / Hospitalisation / Transfusion / Rendez-Vous) --- //Autres (Transfert / Hospitalisation / Transfusion / Rendez-Vous)
+
+
+
+//***** Transfusion --- Transfusion --- Transfusion *****/
+//***** Transfusion --- Transfusion --- Transfusion *****/
+
+$(function(){ $("#produitSanguin1ValeurVue, #produitSanguin2ValeurVue, #labelReactionTransfusionnelValeurPre").toggle(false); });
+
+function getproduitSanguin1Quantite(id)
+{
+	if(id==1 || id==2){
+		$("#produitSanguin1ValeurVue").toggle(true);
+	}else{
+		$("#produitSanguin1ValeurVue").toggle(false);
+	}
+}
+
+function getproduitSanguin2Quantite(id)
+{
+	if(id==1){
+		$("#produitSanguin2ValeurVue").toggle(true);
+	}else{
+		$("#produitSanguin2ValeurVue").toggle(false);
+	}
+}
+
+function getReactionTransfusionnelSiOui(id)
+{
+	if(id==1){
+		$("#labelReactionTransfusionnelValeurPre").toggle(true);
+	}else{
+		$("#labelReactionTransfusionnelValeurPre").toggle(false);
+	}
+}
+
+
+
+
+
+
+
+
+
 
 //***** Rendez-Vous --- Rendez-Vous --- Rendez-Vous *****/
 //***** Rendez-Vous --- Rendez-Vous --- Rendez-Vous *****/
@@ -2056,6 +2885,37 @@ function initChampDateTimeEtMotifRendezVousForm()
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function infos_parentales()
 {
 	
@@ -2070,5 +2930,36 @@ function infos_parentales()
 	
 }
 
+function infos_parentales_programme()
+{
+	
+	$('#idPopInfEnTeteInterfaceProg').w2overlay({ html: "" +
+		"" +
+		"<div style='border-bottom:1px solid green; height: 30px; background: #f9f9f9; width: 600px; text-align:center; padding-top: 10px; font-size: 13px; color: green; font-weight: bold;'><img style='padding-right: 10px;' src='"+tabUrl[0]+"public/images_icons/Infos_parentales.png' >Informations parentales</div>" +
+		"<div style='height: 245px; width: 600px; padding-top:10px; text-align:center;'>" +
+		"<div style='height: 77%; width: 95%; max-height: 77%; max-width: 95%; ' class='infos_parentales' align='left'>  </div>" +
+		"</div>"+
+		"<script> $('.infos_parentales').html( $('#infos_parentales_tampon').html() ); </script>"+
+		"<style> .w2ui-overlay:before{ border: 1px solid green; top: 2px; border-bottom: 0px solid transparent; border-left:1px solid transparent;}  .w2ui-overlay{margin-left: 5px; border: 1px solid green; margin-top: 1 } </style>"
+	});
+	
+}
 
+//
+
+
+function infos_patient_programme()
+{
+	
+	$('#idPopInfEnTeteInterfaceProg').w2overlay({ html: "" +
+		"" +
+		"<div style='border-bottom:1px solid green; height: 30px; background: #f9f9f9; width: 300px; text-align:center; padding-top: 10px; font-size: 13px; color: green; font-weight: bold;'><img style='padding-right: 10px; height: 14px;' src='"+tabUrl[0]+"public/images_icons/ajouterphoto.png' >Informations du patient </div>" +
+		"<div style='height: 145px; width: 300px; padding-top:10px; text-align:center;'>" +
+		"<div style='height: 77%; width: 95%; max-height: 77%; max-width: 95%; ' class='infos_patient_popup_prog' align='left'>  </div>" +
+		"</div>"+
+		"<script> $('.infos_patient_popup_prog').html( $('#infos_patient_tampon').html() ); </script>"+
+		"<style> .w2ui-overlay:before{ border: 1px solid green; top: 2px; border-bottom: 0px solid transparent; border-left:1px solid transparent;}  .w2ui-overlay{ margin-left: -15px; border: 1px solid green; margin-top: 1 } </style>"
+	});
+	
+}
 

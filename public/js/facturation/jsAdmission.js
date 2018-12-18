@@ -441,7 +441,8 @@ function reduireFacturation(tarif , iddemande){
 function getTarif(taux){ 
 	var montantMajore;
 	if(tarifFact && taux){
-		montantMajore = tarifFact + (tarifFact*taux)/100;
+		//montantMajore = tarifFact + (tarifFact*taux)/100;
+		montantMajore = (tarifFact*taux)/100;
 		$('#montant_avec_majoration').val(prixMill(montantMajore));
 	} else if(!taux){
 		$('#montant_avec_majoration').val(prixMill(tarifFact));

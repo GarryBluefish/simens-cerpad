@@ -62,7 +62,7 @@ class ServiceForm extends Form
 		
 		$this->add(array(
 				'name' => 'domaine',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'label' =>  iconv ( 'ISO-8859-1', 'UTF-8','Domaine'),
 						'value_options' => array (
@@ -94,7 +94,7 @@ class ServiceForm extends Form
 		/*Buttons --- Buttons --- Buttons --- Buttons*/
 		$this->add(array(
 				'name' => 'terminer',
-				'type' => 'button',
+				'type' => 'Button',
 				'attributes' => array(
 						'value' => 'Terminer',
 						'id' => 'terminer',
@@ -103,7 +103,7 @@ class ServiceForm extends Form
 		
 		$this->add(array(
 				'name' => 'enregistrer',
-				'type' => 'button',
+				'type' => 'Button',
 				'attributes' => array(
 						'value' => 'Enregistrer',
 						'id' => 'enregistrer',
@@ -112,7 +112,7 @@ class ServiceForm extends Form
 		
 		$this->add(array(
 				'name' => 'annuler',
-				'type' => 'button',
+				'type' => 'Button',
 				'attributes' => array(
 						'value' => 'Annuler',
 						'id' => 'annuler',

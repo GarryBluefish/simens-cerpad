@@ -711,7 +711,7 @@
     function getChampsNfs(){
     	var tab = new Array();
     	var i;
-    	for(i = 1 ; i <= 25 ; i++){
+    	for(i = 1 ; i <= 23 ; i++){
     		if($('#champ'+i).val()){ tab[i] = $('#champ'+i).val(); }
     		else { tab[i] = null; }
     	}
@@ -721,6 +721,18 @@
     	return tab;
     }
     
+    function getChampsNfs_TAD(id){
+    	var tab = new Array();
+    	var i;
+    	for(i = 1 ; i <= 25 ; i++){
+    		if($('.ER_'+id+' #champ'+i).val()){ tab[i] = $('.ER_'+id+' #champ'+i).val(); }
+    		else { tab[i] = null; }
+    	}
+    	tab[i] = $('.ER_'+id+' #type_materiel_nfs').val();
+    	tab[i+1] = $('.ER_'+id+' #commentaire_hemogramme').val();
+    	
+    	return tab;
+    }
     
     function getTypageHemoglobine(){
     	var tab = [];
@@ -805,23 +817,6 @@
     		$('.titre_combs_direct').toggle(true);
     	}else{
     		$('.titre_combs_direct').toggle(false).val(null);
-    	}
-    }
-    
-    function testCombsIndirect(){
-    	var tab = [];
-    	tab[1] = $('#test_combs_indirect').val(); 
-		tab[2] = $('#titre_combs_indirect').val();
-		tab[3] = $('#type_materiel_test_combs_indirect').val();
-    	
-    	return tab;
-    }
-    
-    function getTestCombsIndirect(val){
-    	if(val == 'Positif'){
-    		$('.titre_combs_indirect').toggle(true);
-    	}else{
-    		$('.titre_combs_indirect').toggle(false).val(null);
     	}
     }
     
@@ -983,7 +978,7 @@
     				else if(idanalyse == 55) { tab = getRfWaalerRose(); } 
     				else if(idanalyse == 56) { tab = getToxoplasmose(); } 
     				else if(idanalyse == 57) { tab = getRubeole(); } 
-    				else if(idanalyse == 58) { tab = /*getCulotUrinaire();*/ getCulotUrinaireListeSelect(); } 
+    				else if(idanalyse == 58) { tab = getCulotUrinaireListeSelect(); } 
     				else if(idanalyse == 59) { tab = getSerologieChlamydiae(); }
     				else if(idanalyse == 60) { tab = getSerologieSyphilitique(); } 
     				else if(idanalyse == 61) { tab = getAslo(); } 
@@ -993,6 +988,8 @@
     				     
     				     
     				else if(idanalyse == 68) { tab = getTypageHemoglobine(); }
+    				     
+    				else if(idanalyse == 71) { tab = getChampsNfs_TAD(iddemande); }     
     				     
     				     
     				     //alert(tab); return false;
@@ -1059,15 +1056,17 @@
             	     getTriglycerides();
             	     getGlycemieFormule();
             	     getElectrophoreseProteinesFormule();
-            	     getElectroHemo();
             	     getTestCombsDirect();
-            	     getTestCombsIndirect();
             	     getTestCompatibilite();
             	     getAsatAlatAuto();
             	     getFerSeriqueFormule();
             	     ajoutCulotUrinaireAuto();
             	     
             	     $("#resultatsAnalyses").dialog('open');
+            	     
+            	     //Ajouter des lignes
+            	     getTestCombsIndirectAjout();
+            	     getElectroHemo();
             }
         });
     	
@@ -2057,13 +2056,17 @@
   	    autoOpen: false,
   	    modal: true,
   	    buttons: {
-//  	    	"Enregistrer": function() {
-//  	          
-//  	    		var tab = []; 
-//  	    		for(var i = 0 ;  i<tabAnalyses.length ; i++){
-//  	    			var idanalyse = tabAnalyses[i];
-//  	    			
-//  	    			     if(idanalyse ==  1) { tab  [1] = getChampsNfs(); }
+  	    	"Enregistrer": function() {
+  	          
+  	    		var tab = []; 
+  	    		for(var i = 0 ;  i<tabAnalyses.length ; i++){
+  	    			var idanalyse = tabAnalyses[i];
+  	    			var iddemande = tabDemandes[i];
+  	    			
+  	    			     if(idanalyse ==  1) { tab  [1] = getChampsNfs(); }
+  	    			else if(idanalyse == 71) { tab [71] = getChampsNfs_TAD(iddemande); }
+  	    			     
+  	    			     
 //    				else if(idanalyse ==  2) { tab  [2] = getChampsGroupeRhesus(); }
 //    				else if(idanalyse ==  3) { tab  [3] = new Array("", $('#antigene_d_faible').val()); }
 //    				else if(idanalyse ==  4) { tab  [4] = testCombsDirect(); }
@@ -2124,24 +2127,24 @@
 //    				else if(idanalyse == 63) { tab [63] = getAgHbs(); } 
 //  	    			     
 //  	    			     
-//  	    			     
+  	    			     
 //    				else if(idanalyse == 68) { tab [68] = getTypageHemoglobine(); }
-//  	    		}
-//  	    		
-//  	    		
-//  	        	$( this ).dialog( "close" );
-//  	            
-//  	            $.ajax({
-//  	                type: 'POST',
-//  	                url: tabUrl[0]+'public/biologiste/enregistrer-resultats-demande',
-//  	                data:{'tabAnalyses':tabAnalyses, 'tabDemandes':tabDemandes, 'tab':tab},
-//  	                success: function(data) {
-//  	                	     var iddemande = jQuery.parseJSON(data);
-//  	                	     $('.visualiser'+iddemande+' img').trigger('click');
-//  	                }
-//  	            });
-//  	        	
-//  	        },
+  	    		}
+  	    		
+  	    		
+  	        	$( this ).dialog( "close" );
+  	            
+  	            $.ajax({
+  	                type: 'POST',
+  	                url: tabUrl[0]+'public/biologiste/enregistrer-resultats-demande',
+  	                data:{'tabAnalyses':tabAnalyses, 'tabDemandes':tabDemandes, 'tab':tab},
+  	                success: function(data) {
+  	                	     //var iddemande = jQuery.parseJSON(data);
+  	                	     //$('.visualiser'+iddemande+' img').trigger('click');
+  	                }
+  	            });
+  	        	
+  	        },
   	        
   	        "Terminer": function() {
   	        	$(this).dialog( "close" );
@@ -2183,9 +2186,7 @@
             	     getTriglycerides();
             	     getGlycemieFormule();
             	     getElectrophoreseProteinesFormule();
-            	     getElectroHemo();
             	     getTestCombsDirect();
-            	     getTestCombsIndirect();
             	     getTestCompatibilite();
             	     getAsatAlatAuto();
             	     getFerSeriqueFormule();
@@ -2196,6 +2197,12 @@
             	     $('#scriptFormules').html(scriptFormule);
             	     
             	     $("#resultatsAnalysesDuneDemande").dialog('open');
+            	     
+            	     //Ajouter des lignes
+            	     getTestCombsIndirectAjout();
+            	     getElectroHemo();
+            	     
+            	     
             }
         });
     }
@@ -2272,4 +2279,85 @@
     	return scriptFormule;
     
     }
+    
+    
+    
+    
+    
+    /**
+     * AJOUTER DE PLUSIEURS RESULTAT PAR LES '+' & '-'
+     * AJOUTER DE PLUSIEURS RESULTAT PAR LES '+' & '-'
+     * AJOUTER DE PLUSIEURS RESULTAT PAR LES '+' & '-'
+     */
+    function getTestCombsIndirectAjout(){ 
+    	
+    	$('#test_combs_indirect_moins').toggle(false);
+	    
+    	$('#test_combs_indirect_plus').click(function(){
+	    	var nbLigne = $("#test_combs_rai tr").length;
+	    	$('#test_combs_indirect_moins').toggle(true);
+	    	
+	    	if(nbLigne < 10){
+	    		var html ="<tr id='test_combs_rai_"+nbLigne+"' class='ligneAnanlyse' style='width: 100%;'>"+
+                            
+                            "<td style='width: 30%;'><label class='lab1' ><span style='font-weight: bold;'> RAI <select id='test_combs_indirect_"+nbLigne+"' > <option >  </option> <option value='Positif' >Positif</option> <option value='Negatif' >N&eacute;gatif</option> </select></span></label></td>"+
+                    	    "<td style='width: 25%;'><label class='lab2' style='padding-top: 5px; text-align: right; '>  Titre <input id='titre_combs_indirect_"+nbLigne+"' type='text'> </label></td>"+
+                    	    "<td style='width: 45%;'><label class='lab3' style='padding-top: 5px; width: 80%; padding-left: 25px;'> Temp&eacute;rature <input id='titre_combs_temperature_"+nbLigne+"' type='number' > </label></td>"+
+                            
+                          "</tr>";
+
+		    	$('#test_combs_rai_'+(nbLigne-1)).after(html);
+		    	$('#test_combs_indirect_'+nbLigne).val($('#test_combs_indirect_'+(nbLigne-1)).val());
+		    	
+		    	if(nbLigne == 9){
+		    		$('#test_combs_indirect_plus').toggle(false);
+		    	}
+		    	
+		    	//Blocage du champ titre lorsque la valeur est négative
+			    $('#test_combs_indirect_'+nbLigne).attr('onchange', 'getTestCombsIndirectBlocTitre('+nbLigne+')');
+			    if($('#test_combs_indirect_'+nbLigne).val() == 'Negatif'){ $('#test_combs_indirect_'+nbLigne).trigger('change'); }
+	    	}
+
+	    });
+	    
+	    $('#test_combs_indirect_moins').click(function(){ 
+	    	var nbLigne = $("#test_combs_rai tr").length;
+	    	
+	    	if(nbLigne > 2){
+		    	$('#test_combs_rai_'+(nbLigne-1)).remove();
+		    	if(nbLigne == 3){ 
+		    		$('#test_combs_indirect_moins').toggle(false);
+		    	}
+		    	
+		    	if(nbLigne == 10){
+		    		$('#test_combs_indirect_plus').toggle(true);
+		    	}
+	    	}
+
+	    });
+	    
+	    
+    }
+    
+
+    function testCombsIndirect(){
+    	var tab = [];
+		tab[1] = $('#commentaire_test_combs_indirect').val();
+    	
+    	return tab;
+    }
+    
+
+    function getTestCombsIndirectBlocTitre(nbLigne){
+    	
+    	var val = $('#test_combs_indirect_'+nbLigne).val();
+    	
+    	if(val == 'Negatif'){
+    		$('#titre_combs_indirect_'+nbLigne).val('').attr('readonly',true);
+    	}else{
+    		$('#titre_combs_indirect_'+nbLigne).attr('readonly',false);
+    	}
+    }
+    
+    
     

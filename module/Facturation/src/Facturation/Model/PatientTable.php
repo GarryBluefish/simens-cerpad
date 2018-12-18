@@ -696,6 +696,292 @@ class PatientTable {
 	    return $output;
 	}
 	
+	
+	//********** RECUPERER LA LISTE DES PATIENTS PRISES EN CHARGE *********
+	//********** RECUPERER LA LISTE DES PATIENTS PRISES EN CHARGE *********
+	
+	// Cette liste c'est l'ensemble des patients étant prise en charge par un organisme 
+	public function getListePatientsPriseencharge(){
+	
+		$db = $this->tableGateway->getAdapter();
+		 
+		$aColumns = array('numero_dossier','Nom','Prenom','LibelleOrganisme','Date', 'id', 'Idfacturation');
+		 
+		/* Indexed column (used for fast and accurate table cardinality) */
+		$sIndexColumn = "id";
+		 
+		/*
+		 * Paging
+		*/
+		$sLimit = array();
+		if ( isset( $_GET['iDisplayStart'] ) && $_GET['iDisplayLength'] != '-1' )
+		{
+			$sLimit[0] = $_GET['iDisplayLength'];
+			$sLimit[1] = $_GET['iDisplayStart'];
+		}
+		 
+		/*
+		 * Ordering
+		*/
+		if ( isset( $_GET['iSortCol_0'] ) )
+		{
+			$sOrder = array();
+			$j = 0;
+			for ( $i=0 ; $i<intval( $_GET['iSortingCols'] ) ; $i++ )
+			{
+				if ( $_GET[ 'bSortable_'.intval($_GET['iSortCol_'.$i]) ] == "true" )
+				{
+					$sOrder[$j++] = $aColumns[ intval( $_GET['iSortCol_'.$i] ) ]."
+								 	".$_GET['sSortDir_'.$i];
+				}
+			}
+		}
+		 
+		/* PREMIERE LISTE
+		 * SQL queries
+		 * Liste des prises en charge réglées
+		 */
+		
+		$sql2 = new Sql ($db );
+		$subselect = $sql2->select ();
+		$subselect->from ( array ( 'bp' => 'organisme_pec_regle' ) );
+		$subselect->columns (array ( 'idfacturation' ) );
+		 
+		
+		/*
+		 * SQL queries
+		* Liste des patients admis pour lesquels les demandes facturées n'ont pas encore de bilan
+		*/
+		$sql = new Sql($db);
+		$sQuery = $sql->select()
+		->from(array('pat' => 'patient'))->columns(array('*'))
+		->join(array('pers' => 'personne'), 'pers.idpersonne = pat.idpersonne' , array('Nom'=>'nom','Prenom'=>'prenom','Datenaissance'=>'date_naissance','Sexe'=>'sexe','Adresse'=>'adresse','Nationalite'=>'nationalite_actuelle', 'id'=>'idpersonne', 'id2'=>'idpersonne'))
+		->join(array('fact' => 'facturation'), 'fact.idpatient = pat.idpersonne', array('Idfacturation' => 'idfacturation', 'Date' => 'date', 'Heure' => 'heure') )
+		->join(array('org' => 'organisme'), 'org.idorganisme = fact.organisme', array('LibelleOrganisme' => 'libelle') )		
+		->where(array('fact.id_type_facturation' => 2, new NotIn ( 'fact.idfacturation', $subselect )) )
+		->group('fact.idfacturation')
+		->order('fact.idfacturation DESC');
+		 
+		/* Data set length after filtering */
+		$stat = $sql->prepareStatementForSqlObject($sQuery);
+		$rResultFt = $stat->execute();
+		$iFilteredTotal = count($rResultFt);
+		 
+		$rResult = $rResultFt;
+		 
+		$output = array(
+				"iTotalDisplayRecords" => $iFilteredTotal,
+				"aaData" => array()
+		);
+		 
+		/*
+		 * $Control pour convertir la date en franï¿½ais
+		*/
+		$Control = new DateHelper();
+		 
+		/*
+		 * ADRESSE URL RELATIF
+		*/
+		$baseUrl = $_SERVER['REQUEST_URI'];
+		$tabURI  = explode('public', $baseUrl);
+		 
+		foreach ( $rResult as $aRow )
+		{
+			$row = array();
+			for ( $i=0 ; $i<count($aColumns) ; $i++ )
+			{
+				if ( $aColumns[$i] != ' ' )
+				{
+					/* General output */
+					if ($aColumns[$i] == 'Nom'){
+						$row[] = "<div id='nomMaj'>".$aRow[ $aColumns[$i]]."</div>";
+					}
+					 
+					else if ($aColumns[$i] == 'Prenom'){
+						$row[] = "<div>".$aRow[ $aColumns[$i]]."</div>";
+					}
+					 
+					else if ($aColumns[$i] == 'Datenaissance') {
+						 
+						$date_naissance = $aRow[ $aColumns[$i] ];
+						if($date_naissance){ $row[] = $Control->convertDate($aRow[ $aColumns[$i] ]); }else{ $row[] = null;}
+	
+					}
+					 
+					else if ($aColumns[$i] == 'LibelleOrganisme') {
+						$row[] = "<div class='adresseText' >".$aRow[ $aColumns[$i] ]."</div>";
+					}
+					 
+					else if ($aColumns[$i] == 'Date') {
+						$row[] = "<div>".$Control->convertDate($aRow[ $aColumns[$i] ]).' - '.$Control->decouperTimeHm($aRow[ 'Heure' ])."</div>";
+					}
+					 
+					else if ($aColumns[$i] == 'id') {
+						$html ="<infoBulleVue> <a id='".$aRow[ $aColumns[$i] ]."' href='javascript:listeAnalysesFacturees(".$aRow[ 'Idfacturation' ].");'>";
+						$html .="<img style='display: inline; margin-right: 10%;' src='".$tabURI[0]."public/images_icons/voir2.png' title='d&eacute;tails'></a></infoBulleVue>";
+						 
+						$html .= "<infoBulleVue id='priseencharge_".$aRow[ 'Idfacturation' ]."'>";
+						$html .= "<!-- img src='".$tabURI[0]."public/images_icons/symbol_supprimer.png' title='Annuler' --></infoBulleVue>";
+						 
+						$row[] = $html;
+					}
+					 
+					else {
+						$row[] = $aRow[ $aColumns[$i] ];
+					}
+					 
+				}
+			}
+			$output['aaData'][] = $row;
+		}
+		
+		return $output;
+	}
+	
+	
+	//********** RECUPERER L'HISTORIQUE DE LA LISTE DES PATIENTS PRISES EN CHARGE *********
+	//********** RECUPERER L'HISTORIQUE DE LA LISTE DES PATIENTS PRISES EN CHARGE *********
+	
+	// Cette liste c'est l'ensemble des patients étant prise en charge par un organisme
+	public function getListeHistoriquePatientsPriseencharge(){
+	
+		$db = $this->tableGateway->getAdapter();
+			
+		$aColumns = array('numero_dossier','Nom','Prenom','LibelleOrganisme','Date', 'id', 'Idfacturation');
+			
+		/* Indexed column (used for fast and accurate table cardinality) */
+		$sIndexColumn = "id";
+			
+		/*
+		 * Paging
+		*/
+		$sLimit = array();
+		if ( isset( $_GET['iDisplayStart'] ) && $_GET['iDisplayLength'] != '-1' )
+		{
+			$sLimit[0] = $_GET['iDisplayLength'];
+			$sLimit[1] = $_GET['iDisplayStart'];
+		}
+			
+		/*
+		 * Ordering
+		*/
+		if ( isset( $_GET['iSortCol_0'] ) )
+		{
+			$sOrder = array();
+			$j = 0;
+			for ( $i=0 ; $i<intval( $_GET['iSortingCols'] ) ; $i++ )
+			{
+				if ( $_GET[ 'bSortable_'.intval($_GET['iSortCol_'.$i]) ] == "true" )
+				{
+					$sOrder[$j++] = $aColumns[ intval( $_GET['iSortCol_'.$i] ) ]."
+								 	".$_GET['sSortDir_'.$i];
+				}
+			}
+		}
+			
+		/* PREMIERE LISTE
+		 * SQL queries
+		* Liste des prises en charge réglées
+		*/
+	
+		$sql2 = new Sql ($db );
+		$subselect = $sql2->select ();
+		$subselect->from ( array ( 'bp' => 'organisme_pec_regle' ) );
+		$subselect->columns (array ( 'idfacturation' ) );
+			
+	
+		/*
+		 * SQL queries
+		* Liste des patients admis pour lesquels les demandes facturées n'ont pas encore de bilan
+		*/
+		$sql = new Sql($db);
+		$sQuery = $sql->select()
+		->from(array('pat' => 'patient'))->columns(array('*'))
+		->join(array('pers' => 'personne'), 'pers.idpersonne = pat.idpersonne' , array('Nom'=>'nom','Prenom'=>'prenom','Datenaissance'=>'date_naissance','Sexe'=>'sexe','Adresse'=>'adresse','Nationalite'=>'nationalite_actuelle', 'id'=>'idpersonne', 'id2'=>'idpersonne'))
+		->join(array('fact' => 'facturation'), 'fact.idpatient = pat.idpersonne', array('Idfacturation' => 'idfacturation', 'Date' => 'date', 'Heure' => 'heure') )
+		->join(array('org' => 'organisme'), 'org.idorganisme = fact.organisme', array('LibelleOrganisme' => 'libelle') )
+		->where(array('fact.id_type_facturation' => 2, new In ( 'fact.idfacturation', $subselect )) )
+		->group('fact.idfacturation')
+		->order('fact.idfacturation DESC');
+			
+		/* Data set length after filtering */
+		$stat = $sql->prepareStatementForSqlObject($sQuery);
+		$rResultFt = $stat->execute();
+		$iFilteredTotal = count($rResultFt);
+			
+		$rResult = $rResultFt;
+			
+		$output = array(
+				"iTotalDisplayRecords" => $iFilteredTotal,
+				"aaData" => array()
+		);
+			
+		/*
+		 * $Control pour convertir la date en franï¿½ais
+		*/
+		$Control = new DateHelper();
+			
+		/*
+		 * ADRESSE URL RELATIF
+		*/
+		$baseUrl = $_SERVER['REQUEST_URI'];
+		$tabURI  = explode('public', $baseUrl);
+			
+		foreach ( $rResult as $aRow )
+		{
+			$row = array();
+			for ( $i=0 ; $i<count($aColumns) ; $i++ )
+			{
+				if ( $aColumns[$i] != ' ' )
+				{
+					/* General output */
+					if ($aColumns[$i] == 'Nom'){
+						$row[] = "<div id='nomMaj'>".$aRow[ $aColumns[$i]]."</div>";
+					}
+	
+					else if ($aColumns[$i] == 'Prenom'){
+						$row[] = "<div>".$aRow[ $aColumns[$i]]."</div>";
+					}
+	
+					else if ($aColumns[$i] == 'Datenaissance') {
+							
+						$date_naissance = $aRow[ $aColumns[$i] ];
+						if($date_naissance){ $row[] = $Control->convertDate($aRow[ $aColumns[$i] ]); }else{ $row[] = null;}
+	
+					}
+	
+					else if ($aColumns[$i] == 'LibelleOrganisme') {
+						$row[] = "<div class='adresseText' >".$aRow[ $aColumns[$i] ]."</div>";
+					}
+	
+					else if ($aColumns[$i] == 'Date') {
+						$row[] = "<div>".$Control->convertDate($aRow[ $aColumns[$i] ]).' - '.$Control->decouperTimeHm($aRow[ 'Heure' ])."</div>";
+					}
+	
+					else if ($aColumns[$i] == 'id') {
+						$html ="<infoBulleVue> <a id='".$aRow[ $aColumns[$i] ]."' href='javascript:listeAnalysesFacturees(".$aRow[ 'Idfacturation' ].");'>";
+						$html .="<img style='display: inline; margin-right: 10%;' src='".$tabURI[0]."public/images_icons/voir2.png' title='d&eacute;tails'></a></infoBulleVue>";
+							
+						$html .= "<infoBulleVue id='priseencharge_".$aRow[ 'Idfacturation' ]."'>";
+						$html .= "<!-- img src='".$tabURI[0]."public/images_icons/symbol_supprimer.png' title='Annuler' --></infoBulleVue>";
+							
+						$row[] = $html;
+					}
+	
+					else {
+						$row[] = $aRow[ $aColumns[$i] ];
+					}
+	
+				}
+			}
+			$output['aaData'][] = $row;
+		}
+	
+		return $output;
+	}
+	
+	
+	
 	public function verifierExisteConsultation($idfacturation){
 		$adapter = $this->tableGateway->getAdapter ();
 		$sql = new Sql ( $adapter );
@@ -1991,7 +2277,16 @@ class PatientTable {
 		return $result->current();
 	}
 	
-	
+	public function getGroupeSanguinPatient($idpatient){
+		$adapter = $this->tableGateway->getAdapter ();
+		$sql = new Sql($adapter);
+		$select = $sql->select()->from(array('d'=>'demande_analyse'))->columns(array('*'));
+		$select->join(array('rda' => 'resultat_demande_analyse') ,'rda.iddemande_analyse = d.iddemande', array('*'));
+		$select->join(array('vgsrh' => 'valeurs_gsrh_groupage') ,'vgsrh.idresultat_demande_analyse = rda.iddemande_analyse', array('*'));
+		$select->where(array('d.idpatient' => $idpatient, 'd.idanalyse' => 2, 'rda.valide' => 1));
+		
+		return $sql->prepareStatementForSqlObject($select)->execute()->current();
+	}
 	
 	
 	

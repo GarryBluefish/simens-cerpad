@@ -87,7 +87,7 @@ class PatientForm extends Form {
 		
 		$this->add ( array (
 		    'name' => 'sexe',
-		    'type' => 'Zend\Form\Element\Select',
+		    'type' => 'Select',
 		    'options' => array (
 		        'label' => 'Sexe',
 		        'value_options' => array (
@@ -152,7 +152,7 @@ class PatientForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'email',
-				'type' => 'Zend\Form\Element\Email',
+				'type' => 'Email',
 				'options' => array (
 						'label' => 'Email'
 				),
@@ -165,7 +165,7 @@ class PatientForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'situation_matrimoniale',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'label' => 'Situation matrimoniale',
 						'value_options' => array (
@@ -183,7 +183,7 @@ class PatientForm extends Form {
 		//Les deux suivants c est l'un ou l'autre qui est affiché
 		$this->add ( array (
 		    'name' => 'situation_matrimoniale',
-		    'type' => 'Zend\Form\Element\Select',
+		    'type' => 'Select',
 		    'options' => array (
 		        'label' => 'Situation matrimoniale',
 		        'value_options' => array (
@@ -219,7 +219,7 @@ class PatientForm extends Form {
 		
 		$this->add ( array (
 		    'name' => 'nationalite_actuelle',
-		    'type' => 'Zend\Form\Element\Select',
+		    'type' => 'Select',
 		    'options' => array (
 		        'label' => iconv ( 'ISO-8859-1', 'UTF-8','Nationalité actuelle'),
 		        'value_options' => array (
@@ -235,7 +235,7 @@ class PatientForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'nationalite_origine',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'label' => iconv ( 'ISO-8859-1', 'UTF-8','Nationalité origine'),
 				),

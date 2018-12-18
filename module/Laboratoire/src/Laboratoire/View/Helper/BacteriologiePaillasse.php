@@ -249,7 +249,7 @@ class BacteriologiePaillasse
 				60);
 		
 		$this->_page->setFont($this->_newTime, 10);
-		$this->_page->drawText('Téléphone: 33 726 25 36   BP: 24000',
+		$this->_page->drawText('Téléphone: 77 680 69 69',
 				$this->_leftMargin,
 				$this->_pageWidth - ( 100 + 450));
 		

@@ -124,7 +124,7 @@ class ResultatDemandeAnalyseTable {
 	            if($tab[$i]){ $donnees['champ'.$i] = $tab[$i]; $donneesExiste = 1; }else{ $donnees['champ'.$i] = null; }
 	        }
 	        $donnees['type_materiel'] = $tab[$i];
-	        $donnees['commentaire'] = $tab[$i+1];
+	        //$donnees['commentaire'] = $tab[$i+1];
 	        
 	        if($donneesExiste == 0){
 	            $this->tableGateway->delete ( array ( 'iddemande_analyse' => $iddemande ) );
@@ -141,7 +141,7 @@ class ResultatDemandeAnalyseTable {
 	            if($tab[$i]){ $donnees['champ'.$i] = $tab[$i]; $donneesExiste = 1; }else{ $donnees['champ'.$i] = null; }
 	        }
 	        $donnees['type_materiel'] = $tab[$i];
-	        $donnees['commentaire'] = $tab[$i+1];
+	        //$donnees['commentaire'] = $tab[$i+1];
 	        
 	        if($donneesExiste == 0){
 	            $this->tableGateway->delete ( array ( 'iddemande_analyse' => $iddemande ) );
@@ -155,6 +155,20 @@ class ResultatDemandeAnalyseTable {
 	    }
 	    
 	    return $donneesExiste;
+	}
+	
+	public function updateValeursCommentaireNfs($tab, $iddemande, $idanalyse){
+		$db = $this->tableGateway->getAdapter();
+		$sql = new Sql($db);
+		$donnees = array();
+		if($idanalyse == 1){ $donnees['commentaire'] = $tab[25]; }
+		else if($idanalyse == 71){ $donnees['commentaire'] = $tab[27]; }
+
+		
+		$sQuery = $sql->update() ->table('valeurs_nfs') ->set( $donnees )
+		->where(array('idresultat_demande_analyse' => $iddemande ));
+		$sql->prepareStatementForSqlObject($sQuery)->execute();
+		
 	}
 	
 	public function getValeursGsrhGroupage($iddemande){
@@ -330,54 +344,75 @@ class ResultatDemandeAnalyseTable {
 	    $sQuery = $sql->select()
 	    ->from(array('va' => 'valeurs_test_combs_indirect'))->columns(array('*'))
 	    ->where(array('idresultat_demande_analyse' => $iddemande));
-	
-	    return $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
+	    $result = $sql->prepareStatementForSqlObject($sQuery)->execute();
+	     
+	    $donnees = array();
+	    foreach ($result as $res){
+	    	$donnees[] = $res;
+	    }
+	     
+	    return $donnees;
 	}
 	
 	public function addValeursTestCombsIndirect($tab, $iddemande){
-	    $db = $this->tableGateway->getAdapter();
-	    $sql = new Sql($db);
-	    $donneesExiste = 0;
 	    
-	    $donnees = array();
-	    $donnees['valeur'] = $tab[1];
-	    $donnees['titre']  = $tab[2];
-	    $donnees['type_materiel']  = $tab[3];
-	
-	    if($donnees['valeur']){ $donneesExiste = 1; }
-	    
-	    //Si les resultats n y sont pas on les ajoute
-	    if(!$this->getValeursTestCombsIndirect($iddemande)){
-	        
-	        if($donneesExiste == 0){
-	            $this->tableGateway->delete ( array ( 'iddemande_analyse' => $iddemande ) );
-	            $this->setResultDemandeNonEffectuee($iddemande);
-	        }else{
-	            $donnees['idresultat_demande_analyse'] = $iddemande;
-	            $sQuery = $sql->insert() ->into('valeurs_test_combs_indirect') ->values( $donnees );
-	            $sql->prepareStatementForSqlObject($sQuery)->execute();
-	            $this->setResultDemandeEffectuee($iddemande);
-	        }
-
-	    }
-	    //Sinon on effectue des mises a jours
-	    else {
-	        
-	        if($donneesExiste == 0){
-	            $this->tableGateway->delete ( array ( 'iddemande_analyse' => $iddemande ) );
-	            $this->setResultDemandeNonEffectuee($iddemande);
-	        }else{
-	            $sQuery = $sql->update() ->table('valeurs_test_combs_indirect') ->set( $donnees )
-	            ->where(array('idresultat_demande_analyse' => $iddemande ));
-	            $sql->prepareStatementForSqlObject($sQuery)->execute();
-	            $this->setResultDemandeEffectuee($iddemande);
-	        }
-
-	    }
-	    
-	    return $donneesExiste;
+		$db = $this->tableGateway->getAdapter();
+		$sql = new Sql($db);
+		$donneesExiste = 0;
+		
+		$donnees = array();
+		 
+		//Suppression préalable des données
+		$sQuery = $sql->delete() ->from('valeurs_test_combs_indirect')
+		->where(array('idresultat_demande_analyse' => $iddemande));
+		$sql->prepareStatementForSqlObject($sQuery)->execute();
+		$this->setResultDemandeNonEffectuee($iddemande);
+		 
+		if(count($tab) == 5){
+			$donnees['type_materiel'] = $tab[0];
+			$donnees['commentaire'] = $tab[4];
+		
+			for($i = 1 ; $i < count($tab[1]) ; $i++){
+				if($tab[1][$i]){
+					$donnees['valeur'] = $tab[1][$i];
+					$donnees['titre']  = $tab[2][$i];
+					$donnees['temperature']  = $tab[3][$i];
+		
+					$donnees['idresultat_demande_analyse'] = $iddemande;
+					$sQuery = $sql->insert() ->into('valeurs_test_combs_indirect') ->values( $donnees );
+					$sql->prepareStatementForSqlObject($sQuery)->execute();
+					$this->setResultDemandeEffectuee($iddemande);
+					 
+					$donneesExiste = 1;
+				}
+			}
+		}
+		 
+		if($donneesExiste == 0){
+			$this->tableGateway->delete ( array ( 'iddemande_analyse' => $iddemande ) );
+			$this->setResultDemandeNonEffectuee($iddemande);
+		}
+		 
+		return $donneesExiste;
 	}
 	
+	public function addCommentValeursTestCombsIndirect($tab, $iddemande){
+		$db = $this->tableGateway->getAdapter();
+		$sql = new Sql($db);
+		$donneesExiste = 0;
+		 
+		$donnees = array();
+		$donnees['commentaire'] = $tab[1];
+		
+		if($this->getValeursTestCombsIndirect($iddemande)[0]){
+			$idresultat = $this->getValeursTestCombsIndirect($iddemande)[0]['id_valeur'];
+			$sQuery = $sql->update() ->table('valeurs_test_combs_indirect') ->set( $donnees )
+			->where(array('idresultat_demande_analyse' => $iddemande, 'id_valeur' => $idresultat));
+			$sql->prepareStatementForSqlObject($sQuery)->execute();
+			$this->setResultDemandeEffectuee($iddemande);
+		}
+		
+	}
 	//****************************************************************************************************
 	//****************************************************************************************************
 	public function getValeursTestDemmel($iddemande){

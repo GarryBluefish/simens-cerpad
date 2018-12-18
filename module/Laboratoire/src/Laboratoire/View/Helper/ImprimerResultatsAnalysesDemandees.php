@@ -428,7 +428,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		$this->Cell(0,0.3,"",0,1,'C',true);
 		$this->SetTextColor(0,0,0);
 		$this->SetFont('Times','',9.5);
-		$this->Cell(81,5,'Téléphone: 33 726 25 36 ',0,0,'L',false);
+		$this->Cell(81,5,'Téléphone: 77 680 69 69 ',0,0,'L',false);
 		$this->SetTextColor(128);
 		$this->SetFont('Times','I',9);
 		$this->Cell(20,8,'Page '.$this->PageNo(),0,0,'C',false);
@@ -828,25 +828,38 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		$resultats = $this->getResultatsAnalysesDemandees();
 		$listeAnalysesDemandees = $this->getAnalysesDemandees();
 		$infosAnalyseDemande = array();
+		$datePrelevement = "";
+		$idanalyseAff = "";
 		
 		for($i = 0 ; $i < count($listeAnalysesDemandees) ; $i++){
 			$idanalyse = $listeAnalysesDemandees[$i]['idanalyse'];
 
 	 	    if($idanalyse == 1){
+	 	    	
 	 	    	$analyses[$idanalyse]            = $listeAnalysesDemandees[$i]['Designation'];
 	 	    	$idAnalyses[$idanalyse]          = $idanalyse;
 	 	    	$typesAnalyses[$idanalyse]       = $listeAnalysesDemandees[$i]['Libelle'];
 	 	    	$infosAnalyseDemande[$idanalyse] = $listeAnalysesDemandees[$i];
+	 	    	$datePrelevement = $infosAnalyseDemande[1]['DateHeurePrelevement'];
+	 	    	$idanalyseAff = $idanalyse;
+	 	    	
+	 	    }else if($idanalyse == 71){
+	 	    	
+	 	    	$analyses[$idanalyse]            = $listeAnalysesDemandees[$i]['Designation'];
+	 	    	$idAnalyses[$idanalyse]          = $idanalyse;
+	 	    	$typesAnalyses[$idanalyse]       = $listeAnalysesDemandees[$i]['Libelle'];
+	 	    	$infosAnalyseDemande[$idanalyse] = $listeAnalysesDemandees[$i];
+	 	    	$datePrelevement = $infosAnalyseDemande[71]['DateHeurePrelevement'];
+	 	    	$idanalyseAff = $idanalyse;
+	 	    	
 	 	    }
 		}
 		
-		//Date de prelèvement
-		$datePrelevement = $infosAnalyseDemande[1]['DateHeurePrelevement'];
 		
 		//Affichage des infos sur le biologiste et le technicien
-		$dateEnregistrement  =  $controle->convertDateTime($infosAnalyseDemande[1]['DateEnregistrementResultat']);
-		$prenomNomTechnicien = $infosAnalyseDemande[1]['Prenom'].' '.$infosAnalyseDemande[1]['Nom'];
-		$prenomNomBiologiste = $infosAnalyseDemande[1]['PrenomValidateur'].' '.$infosAnalyseDemande[1]['NomValidateur'];
+		//$dateEnregistrement  =  $controle->convertDateTime($infosAnalyseDemande[1]['DateEnregistrementResultat']);
+		//$prenomNomTechnicien = $infosAnalyseDemande[1]['Prenom'].' '.$infosAnalyseDemande[1]['Nom'];
+		//$prenomNomBiologiste = $infosAnalyseDemande[1]['PrenomValidateur'].' '.$infosAnalyseDemande[1]['NomValidateur'];
 		
 		$this->SetFont('times','',8);
 		//$this->Cell(45,-1,'Enregistré le : '.$dateEnregistrement,'',0,'L',0);
@@ -863,7 +876,13 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		$this->SetFont('times','I',9);
 		$this->Cell(35,7,'Hématologie','',0,'L',0);
 		$this->SetFont('times','U',10);
-		$this->Cell(115,7,'HEMOGRAMME','',0,'C',0);
+		if($idanalyseAff == 1){
+			$this->Cell(115,7,'HEMOGRAMME','',0,'C',0);
+		}else 
+			if($idanalyseAff == 71){
+				$this->Cell(115,7,'HEMOGRAMME & TAUX DE RETICULOCYTES (TR)','',0,'C',0);
+			}
+
 		$this->Cell(35,7,'','',1,'C',0);
 		
 		$this->Ln(3);
@@ -1676,12 +1695,15 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		 * ------ COMMENTAIRE ------ COMMENTAIRE ------ COMMENTAIRE -------
 		 */
 		$this->ln(3);
-		$this->SetFont('times','U',10.5);
-		$this->Cell(185,6,'Commentaire :','',1,'L',0);
 		
-		$this->SetFillColor(255,255,255);
-		$this->SetFont('times','',10.5);
-		$this->MultiCell(185,6,iconv ('UTF-8' , 'windows-1252', $resultats[1]['commentaire']),0,'J',1);
+		if(str_replace(' ','', $resultats[1]['commentaire'])){
+			$this->SetFont('times','U',10.5);
+			$this->Cell(185,6,'Commentaire :','',1,'L',0);
+			
+			$this->SetFillColor(255,255,255);
+			$this->SetFont('times','',10.5);
+			$this->MultiCell(185,6,iconv ('UTF-8' , 'windows-1252', $resultats[1]['commentaire']),0,'J',1);
+		}
 		
 		$this->SetFont('timesi','U',9);
 		$this->Text(163, 270, 'Cachet et signature');
@@ -1830,7 +1852,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 			
 			
 			//TEST DE COOMBS INDIRECT --- TEST DE COOMBS INDIRECT --- TEST DE COOMBS INDIRECT
-			if(in_array(4, $idAnalysesImmunoHemato)){
+			if(in_array(5, $idAnalysesImmunoHemato)){
 					
 				if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249);}
 					
@@ -1838,26 +1860,100 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 				$this->SetFont('zap','',11.3);
 				$this->Cell(5,6,' +','BT',0,'C',1);
 				$this->SetFont('times','',9);
-				$this->Cell(60,6,'TEST DE COOMBS INDIRECT : ','BT',0,'L',1);
-					
-				$testCoombsInDirect = $resultats[5]['valeur'];
-				if($testCoombsInDirect == 'Negatif'){ $testCoombsInDirect = 'Négatif'; }
-			
-				$this->SetFont('times','B',11.5);
-				$this->Cell(25,6,$testCoombsInDirect,'BT',0,'L',1);
-			
-				if($testCoombsInDirect == 'Positif'){
-					$this->SetFont('times','I',10);
-					$this->Cell(20,6,'Titre : ','BT',0,'R',1);
-					$this->SetFont('times','B',10);
-					$this->Cell(75,6,iconv ('UTF-8' , 'windows-1252', $resultats[5]['titre']),'BT',1,'L',1);
+				$this->Cell(55,6,'TEST DE COOMBS INDIRECT (RAI) : ','BT',0,'L',1);
+
+				$nbLignes = count($resultats[5]);
+				
+				if($nbLignes > 0){
+						
+					for($i = 0 ; $i < $nbLignes ; $i++){
+							
+						$valeur = $resultats[5][$i]['valeur'];
+						$titre  = $resultats[5][$i]['titre'];
+						$temperature = $resultats[5][$i]['temperature'];
+							
+						if($i == 0){
+							$this->SetFont('times','',11);
+							$this->Cell(15,6,' » ','T',0,'R',1);
+								
+							if($valeur == 'Negatif'){ $valeur = 'Négatif';}
+							$this->SetFont('timesb','',11);
+							$this->Cell(20,6,$valeur,'T',0,'L',1);
+							
+							if($valeur == 'Négatif'){
+								$this->SetFont('timesi','',9);
+								$this->Cell(35,6,'','T',0,'R',1);
+							}else{
+								$this->SetFont('timesi','',9);
+								$this->Cell(15,6,' Titre :','T',0,'R',1);
+								
+								$this->SetFont('timesb','',11);
+								$this->Cell(20,6,$titre,'T',0,'L',1);
+							}
+							
+							$this->SetFont('timesi','',9);
+							$this->Cell(30,6,' Température :','T',0,'R',1);
+							
+							$this->SetFont('timesb','',11);
+							$this->Cell(12,6,$temperature.' °C','T',0,'R',1);
+							
+							$this->Cell(13,6,'','T',1,'L',1);
+							
+						}else{
+							$this->Cell(60,6,"",'',0,'L',1);
+								
+							$this->SetFont('times','',11);
+							$this->Cell(15,6,' » ','T',0,'R',1);
+								
+							if($valeur == 'Negatif'){ $valeur = 'Négatif';}
+							$this->SetFont('timesb','',11);
+							$this->Cell(20,6,$valeur,'T',0,'L',1);
+							
+							if($valeur == 'Négatif'){
+								$this->SetFont('timesi','',9);
+								$this->Cell(35,6,'','T',0,'R',1);
+							}else{
+								$this->SetFont('timesi','',9);
+								$this->Cell(15,6,' Titre :','T',0,'R',1);
+								
+								$this->SetFont('timesb','',11);
+								$this->Cell(20,6,$titre,'T',0,'L',1);
+							}
+							
+							$this->SetFont('timesi','',9);
+							$this->Cell(30,6,' Température :','T',0,'R',1);
+							
+							$this->SetFont('timesb','',11);
+							$this->Cell(12,6,$temperature.' °C','T',0,'R',1);
+							
+							$this->Cell(13,6,'','T',1,'L',1);
+							
+						}
+				
+							
+					}
+						
 				}else{
-					$this->SetFont('times','I',10);
-					$this->Cell(20,6,'','BT',0,'L',1);
 					$this->SetFont('times','B',11);
-					$this->Cell(75,6,'','BT',1,'L',1);
+					$this->Cell(130,6,'','T',1,'L',1);
+						
 				}
+				
+				
+				/** Conclusion --- Conclusion --- Conclusion**/
+				/** Conclusion --- Conclusion --- Conclusion**/
+				if(!$resultats[5][0]['commentaire']){
+					$this->Cell(185,6,'','B',0,'L',1);
+				}else {
+					$this->Cell(15,6,'','B',0,'L',1);
 					
+					$this->SetFont('timesi','U',11);
+					$this->Cell(25,6,'Commentaire :','B',0,'R',1);
+					
+					$this->SetFont('timesb','',11);
+					$this->MultiCell(145,6,iconv ('UTF-8' , 'windows-1252', $resultats[5][0]['commentaire']),'B','J',1);
+					
+				}
 					
 			}
 			
@@ -2458,13 +2554,15 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 				
 				/** Commentaire --- Commentaire --- Commentaire**/
 				/** Commentaire --- Commentaire --- Commentaire**/
-				$this->Cell(15,6,'','B',0,'L',1);
-				
-				$this->SetFont('timesbi','U',10);
-				$this->Cell(25,6,'Commentaire :','B',0,'R',1);
-				
-				$this->SetFont('times','B',11);
-				$this->MultiCell(145,6,iconv ('UTF-8' , 'windows-1252', $resultats[10]['commentaire_goutte_epaisse']),'B','J',1);
+				if(str_replace(' ','', $resultats[10]['commentaire_goutte_epaisse'])){
+					$this->Cell(15,6,'','B',0,'L',1);
+					
+					$this->SetFont('timesbi','U',10);
+					$this->Cell(25,6,'Commentaire :','B',0,'R',1);
+					
+					$this->SetFont('times','B',11);
+					$this->MultiCell(145,6,iconv ('UTF-8' , 'windows-1252', $resultats[10]['commentaire_goutte_epaisse']),'B','J',1);
+				}
 				
 
 			}
@@ -2482,16 +2580,20 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 				$this->Cell(50,6,"PSA QUALITATIF : ",'BT',0,'L',1);
 					
 				$psa_qualitatif = 'Positif';
-				if($psa_qualitatif == 'negatif'){ $psa_qualitatif = 'Négatif'; }
+				if($resultats[52]['psa_qualitatif'] == 'Negatif'){ $psa_qualitatif = 'Négatif'; }
 				$this->SetFont('times','B',11);
 				$this->Cell(35,6,$psa_qualitatif,'BT',0,'L',1);
 				
+                /*
 				$this->SetFont('times','I',9);
 				$this->Cell(13,6,'Titre :','BT',0,'L',1);
 			
 				$this->SetFont('times','B',11);
 				$this->Cell(25,6,number_format($resultats[52]['psa'], 0, ',', ' ').'  ng/ml','BT',0,'L',1);
-					
+			    */
+                
+				$this->Cell(38,6,'','BT',0,'L',1);
+
 				$this->SetFont('times','I',9);
 				$this->Cell(38,6,'','BT',0,'L',1);
 					
@@ -2543,7 +2645,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 			
 			
 			//FACTEURS RHUMATOIDES (RF LATEX) --- FACTEURS RHUMATOIDES (RF LATEX) ---
-			if(in_array(53, $idAnalysesSerologie)){
+			if(in_array(54, $idAnalysesSerologie)){
 					
 				if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249); }
 					
@@ -2557,7 +2659,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 				$this->Cell(5,6,'','BT',0,'L',1);
 					
 				$valeurFacteursRhumatoides = 'Positif';
-				if($resultats[54]['facteurs_rhumatoides'] == 'negatif'){ $valeurFacteursRhumatoides = 'Négatif'; }
+				if($resultats[54]['facteurs_rhumatoides'] == 'Negatif'){ $valeurFacteursRhumatoides = 'Négatif'; }
 			
 				$this->SetFont('times','B',11);
 				$this->Cell(20,6,$valeurFacteursRhumatoides,'BT',0,'L',1);
@@ -2601,7 +2703,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 				$this->Cell(5,6,'','BT',0,'L',1);
 					
 				$valeurWaalerRose = 'Positif';
-				if($resultats[55]['rf_waaler_rose'] == 'negatif'){ $valeurWaalerRose = 'Négatif'; }
+				if($resultats[55]['rf_waaler_rose'] == 'Negatif'){ $valeurWaalerRose = 'Négatif'; }
 					
 				$this->SetFont('times','B',11);
 				$this->Cell(20,6,$valeurWaalerRose,'BT',0,'L',1);
@@ -2681,6 +2783,9 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 					
 					$this->SetFont('times','B',11);
 					$this->Cell(25,6,number_format($resultats[56]['toxoplasmose_igg_titre'], 0, ',', ' ').' UI/ml','T',0,'L',1);
+				}else{
+					$this->SetFont('times','I',9);
+					$this->Cell(35,6,'','T',0,'L',1);
 				}
 				
 				$this->SetFont('times','I',7);
@@ -2755,6 +2860,9 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 						
 					$this->SetFont('times','B',11);
 					$this->Cell(25,6,number_format($resultats[57]['rubeole_igg_titre'], 0, ',', ' ').' UI/ml','T',0,'L',1);
+				}else{
+					$this->SetFont('times','I',9);
+					$this->Cell(35,6,'','T',0,'L',1);
 				}
 			
 				$this->SetFont('times','I',7);
@@ -2822,7 +2930,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 			
 			
 			//ASLO --- ASLO --- ASLO --- ASLO --- ASLO --- ASLO --- ASLO --- ASLO	
-			if(in_array(60, $idAnalysesSerologie)){
+			if(in_array(61, $idAnalysesSerologie)){
 					
 				if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249);}
 					
@@ -3693,7 +3801,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 				$this->Cell(40,6,'( HbA1C DCCT N: 4,27 - 6,07 )','BT',0,'L',1);
 					
 				$this->SetFont('times','B',11);
-				$this->Cell(35,6,number_format($resultats[43]['hemoglobine_glyquee_hbac_mmol'], 0, ',', ' ').' mmol/mol','BT',0,'L',1);
+				$this->Cell(35,6,number_format($resultats[43]['hemoglobine_glyquee_hbac_mmol'], 1, ',', ' ').' mmol/mol','BT',0,'L',1);
 						
 				$this->SetFont('times','I',7);
 				$this->Cell(32,6,'( HbA1C IFCC N: 23 - 42 )','BT',1,'L',1);
@@ -3908,7 +4016,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 				$this->Cell(40,6,'LIPIDES TOTAUX : ','BT',0,'L',1);
 			
 				$this->SetFont('times','B',11);
-				$this->Cell(25,6,number_format($resultats[30]['lipides_totaux'], 1, ',', ' ').' g/l','BT',0,'L',1);
+				$this->Cell(25,6,number_format($resultats[30]['lipides_totaux'], 2, ',', ' ').' g/l','BT',0,'L',1);
 			
 				$this->SetFont('times','I',7);
 				$this->Cell(5,6,'','BT',0,'L',1);

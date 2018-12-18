@@ -62,7 +62,7 @@ class HopitalForm extends Form
 		
 		$this->add(array(
 				'name' => 'region',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'label' =>  iconv ( 'ISO-8859-1', 'UTF-8','Région') 
 				),
@@ -76,7 +76,7 @@ class HopitalForm extends Form
 		
 		$this->add(array(
 				'name' => 'departement',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 						'label' =>  iconv ( 'ISO-8859-1', 'UTF-8','Département')
 				),
@@ -116,7 +116,7 @@ class HopitalForm extends Form
 		/*Buttons --- Buttons --- Buttons --- Buttons*/
 		$this->add(array(
 				'name' => 'terminer',
-				'type' => 'button',
+				'type' => 'Button',
 				'attributes' => array(
 						'value' => 'Terminer',
 						'id' => 'terminer',
@@ -125,7 +125,7 @@ class HopitalForm extends Form
 		
 		$this->add(array(
 				'name' => 'enregistrer',
-				'type' => 'button',
+				'type' => 'Button',
 				'attributes' => array(
 						'value' => 'Enregistrer',
 						'id' => 'enregistrer',
@@ -134,7 +134,7 @@ class HopitalForm extends Form
 		
 		$this->add(array(
 				'name' => 'annuler',
-				'type' => 'button',
+				'type' => 'Button',
 				'attributes' => array(
 						'value' => 'Annuler',
 						'id' => 'annuler',

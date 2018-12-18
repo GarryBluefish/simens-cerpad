@@ -25,12 +25,17 @@ $(window).load(function () {
 	<li id="plus_menu_facturation" style="background: #4a5765;" >
 
 	   <div style="margin-left:30px; height:40px; padding-top:20px;"><a href="<?php echo $this->basePath()."/facturation/admission";?>"  >
-	       <span id="admission_style" style="margin-left:5px; color: white; font-size:15px; font-family:Times New Roman;"><img style="display: inline;" src='<?php echo $this->basePath().'/images_icons/dossier.PNG'?>' alt='Liste' /> Admission </span></a>
+	       <span id="admission_style" style="margin-left:5px; color: white; font-size:15px; font-family:Times New Roman;"><img style="display: inline;" src='<?php echo $this->basePath().'/images_icons/dossier.png'?>' alt='Liste' /> Admission </span></a>
 	   </div>
 
 	   <div id="listeDesAdmis" style="margin-left:30px; height:40px;"><a href="<?php echo $this->basePath()."/facturation/liste-patients-admis";?>" >
-	       <img style="margin-left:5px; display: inline;" src='<?php echo $this->basePath().'/images_icons/liste.PNG'?>' alt='Liste' />
+	       <img style="margin-left:5px; display: inline;" src='<?php echo $this->basePath().'/images_icons/liste.png'?>' alt='Liste' />
 	       <span id="liste_admis_style" style="font-size:15px; color: white; font-family:Times New Roman;">Liste des admis</span></a>
+	   </div>
+	   
+	   <div id="listeDesPrisesEnCharge" style="margin-left:30px; height:40px;"><a href="<?php echo $this->basePath()."/facturation/liste-patients-priseencharge";?>" >
+	       <img style="margin-left:5px; display: inline;" src='<?php echo $this->basePath().'/images_icons/liste.png'?>' alt='Liste' />
+	       <span id="liste_prise_en_charge_style" style="font-size:15px; color: white; font-family:Times New Roman;">Prises en charge</span></a>
 	   </div>
 	   
 	</li>
@@ -44,8 +49,13 @@ $(window).load(function () {
 	<li id="plus_menu_historique" style="background: #4a5765;" >
 
 	   <div id="historiquelisteDesAdmis" style="margin-left:30px; height:40px; padding-top:20px;"><a href="<?php echo $this->basePath()."/facturation/historique-liste-patients-admis";?>" >
-	       <img style="margin-left:5px; display: inline;" src='<?php echo $this->basePath().'/images_icons/liste.PNG'?>' alt='Liste' />
+	       <img style="margin-left:5px; display: inline;" src='<?php echo $this->basePath().'/images_icons/liste.png'?>' alt='Liste' />
 	       <span id="historique_liste_admis_style" style="font-size:15px; color: white; font-family:Times New Roman;">Liste des admis</span></a>
+	   </div>
+	   
+	   <div id="historiquelistePriseEnCharge" style="margin-left:30px; height:40px;"><a href="<?php echo $this->basePath()."/facturation/historique-patients-priseencharges";?>" >
+	       <img style="margin-left:5px; display: inline;" src='<?php echo $this->basePath().'/images_icons/liste.png'?>' alt='Liste' />
+	       <span id="historique_liste_pec_style" style="font-size:15px; color: white; font-family:Times New Roman;">Prise en charge</span></a>
 	   </div>
 	   
 	</li>
@@ -63,7 +73,7 @@ $(window).load(function () {
 	   </div>
 
 	   <div id="consultationListeDesAdmis" style="margin-left:30px; height:40px;"><a href="<?php echo $this->basePath()."/facturation/liste-patients-admis-consultation";?>" >
-	       <img style="margin-left:5px; display: inline;" src='<?php echo $this->basePath().'/images_icons/liste.PNG'?>' alt='Liste' />
+	       <img style="margin-left:5px; display: inline;" src='<?php echo $this->basePath().'/images_icons/liste.png'?>' alt='Liste' />
 	       <span id="consultation_liste_admis_style" style="font-size:15px; color: white; font-family:Times New Roman;">Liste des admis</span></a>
 	   </div>
 	   

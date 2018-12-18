@@ -20,7 +20,7 @@ function majModifierConsultation(){
 	});
 	
 	//Histoire de la maladie --- Histoire de la maladie
-	$('#criseHM, #episodeFievreHM, #hospitalisationHM, #priseEnChargeHospitalisationHM').trigger('change');
+	$('#criseHM, #episodeFievreHM, #hospitalisationHM').trigger('change');
 	
 	//Suivi des traitements --- Mise à jour des vaccins 
 	$('#suiviDesTraitements, #misesAJourDesVaccins').trigger('change');

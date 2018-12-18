@@ -18,7 +18,7 @@ class TypePersonnelForm extends Form {
 		
 		$this->add ( array (
 				'name' => 'type_personnel',
-				'type' => 'Zend\Form\Element\Select',
+				'type' => 'Select',
 				'options' => array (
 				),
 				'attributes' => array (
