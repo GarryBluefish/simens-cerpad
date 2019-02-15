@@ -4,6 +4,7 @@ var tabUrl = base_url.split("public");
 var saveStatOption1 = 0;
 var saveStatOption2 = 0;
 var saveStatOption3 = 0;
+var saveStatOption4 = 0;
 
 function initialisation (){
 	//GESTION DE LA PAGE INFOS 1
@@ -44,7 +45,7 @@ function initialisation (){
 			$('#contenuPageB').fadeOut(function(){
 				$('#menu_infos').html('MENU');
 				$('#menuGeneral').fadeIn();
-				$('#iconeInfosPremiereIntervention').css({'visibility' : 'hidden'});
+				//$('#iconeInfosPremiereIntervention').css({'visibility' : 'hidden'});
 			});
 		}
 	});
@@ -68,12 +69,40 @@ function initialisation (){
 			$('#contenuPageC').fadeOut(function(){
 				$('#menu_infos').html('MENU');
 				$('#menuGeneral').fadeIn();
-				$('#iconeInfosPremiereIntervention').css({'visibility' : 'hidden'});
+				//$('#iconeInfosPremiereIntervention').css({'visibility' : 'hidden'});
 			});
 		}
 	});
 	
 
+	//GESTION DE LA PAGE INFOS 4
+	//GESTION DE LA PAGE INFOS 4
+	$('#menuOption4').click(function(){
+		$('#menuGeneral').fadeOut(function(){
+			$('#menu_infos').html('CARTE INTERACTIVE');
+			$('#contenuPageD').fadeIn();
+		});
+	});
+	
+	$('#retourPageDMenuInfos').click(function(){
+		if(saveStatOption4 == 1){
+			//vart = tabUrl[0]+'public/facturation/informations-statistiques';
+		    //$(location).attr("href",vart);
+		}else{
+			$('#contenuPageD').fadeOut(function(){
+				$('#menu_infos').html('MENU');
+				$('#menuGeneral').fadeIn();
+				//$('#iconeInfosPremiereIntervention').css({'visibility' : 'hidden'});
+			});
+		}
+	});
+	
+	
+	
+	
+	
+	
+	
 	
 	
 

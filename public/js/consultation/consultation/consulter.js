@@ -1343,7 +1343,7 @@ function getExamensNonFaitsDansExamComp(nbExamensNonFaits,tabIndexAnalysesNonFai
 			
 			$('#idAnalyseAFExamComp'+i).html("<label style='width: 100%; height:30px; text-align:left;' class='iconeAlertRougeOrange'>" +
 	                " <span style='font-size: 12px;'>&#11166; </span> <span style='font-size: 13px;'>" +
-	                ""+tabAnalysesNonFaits[i]+"</span> <span style='color: red;'>&#x2717;</span>" +
+	                ""+tabAnalysesNonFaits[i]+"</span> <span style='color: red;'></span>" +
 	                " <ul style='float: right;'> <li style='margin-top: 2px;'> "+infosAlerteIcone+"</li> <li id='iconeIndicateurSelection_"+tabIndexAnalysesNonFaits[i]+"' title='Demande effectu&eacute;e' style='margin-top: 2px; margin-bottom: -10px; margin-left: 3px;'>  </li></ul>"+
 	                " <span style='color: green; float: right; '></span>" +
 	                "</label>");
@@ -1359,6 +1359,135 @@ function getExamensNonFaitsDansExamComp(nbExamensNonFaits,tabIndexAnalysesNonFai
 	},2000);
 	
 }
+
+
+//NOUVEAU CODE DU 20/12/18 --- NOUVEAU CODE DU 20/12/18
+//NOUVEAU CODE DU 20/12/18 --- NOUVEAU CODE DU 20/12/18
+var appelPopupProgrammeExamRadio = 0;
+function afficherProgrammeDesExamensRadiologiques(){
+	
+	$( "#programmeDesExamensRadiologiques" ).dialog({
+		resizable: false,
+	    height:370,
+	    width:850,
+	    autoOpen: false,
+	    modal: true,
+	});
+	
+	$("#programmeDesExamensRadiologiques").dialog('open');
+	
+	if(appelPopupProgrammeExamRadio == 0){
+		appelPopupProgrammeExamRadio = 1;
+		getInfosPopupProgrammeDesExamensRadiologiques(nbDonneesProgrammeAnalysesRadiosObligatoires, tabIndexAnalyseRadioProgramme, tabNomAnalyseRadioProgramme, tabNombreFoisAnalyseRadioProgramme);
+	}
+	
+
+}
+
+
+function getExamensRadioEffecutesDansExamCompOblig(nbExamensRadioEffectuesOblig,tabIndexAnalysesRadioOblig,tabAnalysesRadioOblig){
+	//Ajout de l'interface d'affichage des analyses effectuées
+	//Ajout de l'interface d'affichage des analyses effectuées
+	var nbLigneAAfficher = parseInt(nbExamensRadioEffectuesOblig/3);
+	if((nbExamensRadioEffectuesOblig%3) != 0){ nbLigneAAfficher += 1; }
+	
+	for(var i = 1 ; i <= nbLigneAAfficher ; i++){
+		var hauteur = 45*i;  
+		$('.contenuExamensRadioEffectuesObligStyle').css('height',hauteur+'px');
+	}
+
+	//Placer les analyses déjà effectuées
+	//Placer les analyses déjà effectuées
+	if(tabAnalysesRadioOblig.length == 0){
+		$('.contenuExamensRadioEffectuesObligStyle table').html("<tr style='width: 100%'><td style='width: 100%; color: red; padding-top: 7px; text-align: center; font-family: times new roman;'>Aucun examen radio effectu&eacute;</td></tr>");
+	}else{
+		for(var i = 1 ; i < tabAnalysesRadioOblig.length ; i++){
+			
+			var infoExamen = "";
+			if(tabIndexAnalysesRadioOblig[i] == 2){
+				infoExamen = "Tous les ans &agrave; partir de 5 ans";
+			}else 
+				if(tabIndexAnalysesRadioOblig[i] == 3){
+					infoExamen = "Tous les ans &agrave; partir de 2 ans";
+				}else 
+					if(tabIndexAnalysesRadioOblig[i] == 7 || tabIndexAnalysesRadioOblig[i] == 9){
+						infoExamen = "Tous les ans &agrave; partir de 2 ans";
+					}
+			
+			
+			$('#idAnalyseExamRadioCompOblig'+i).html("<label style='width: 100%; height:30px; text-align:left;'>" +
+					                       " <span style='font-size: 12px;'>&#11166; </span>" +
+					                       " <span style='font-size: 13px;'>"+tabAnalysesRadioOblig[i]+"</span>" +
+					                       " <span style='color: green;'>&#10003;</span>" +
+					                       " <span style='color: green; font-family: Tempus Sans ITC; float: right;'> <span title='"+infoExamen+"'>&#128712; </span>  </span>" +
+					                       "</label>");
+		}
+	}
+
+	//Affichage des labels
+	//Affichage des labels
+	setTimeout(function(){
+		for(var i = 1 ; i <= nbLigneAAfficher ; i++){
+			$('#examensRadioEffectuesObligECLigne'+i).toggle(true);
+		}
+	},2000);
+	
+}
+
+
+
+function getExamensRadiologNonFaitsDansExamComp(nbExamensRadiologNonFaits,tabIndexAnalysesRadiologNonFaits,tabAnalysesRadiologNonFaits){
+	//Ajout de l'interface d'affichage des analyses non effectuées
+	//Ajout de l'interface d'affichage des analyses non effectuées
+	var nbLigneAAfficher = parseInt(nbExamensRadiologNonFaits/3);
+	if((nbExamensRadiologNonFaits%3) != 0){ nbLigneAAfficher += 1; }
+	
+	for(var i = 1 ; i <= nbLigneAAfficher ; i++){
+		var hauteur = 45*i;  
+		$('.contenuExamensRadiologAFaireStyle').css('height',hauteur+'px');
+	}
+
+	//Placer les analyses non effectuées
+	//Placer les analyses non effectuées
+	if(tabAnalysesRadiologNonFaits.length == 0){
+		$('#demanderLesAnalysesRadiologAFaireIcone').toggle(false);
+		$('.contenuExamensRadiologAFaireStyle table').html("<tr style='width: 100%'><td style='width: 100%; color: red; padding-top: 7px; text-align: center; font-family: times new roman;'>Aucun examen radio &agrave; faire </td></tr>");
+	}else{
+		for(var i = 1 ; i < tabAnalysesRadiologNonFaits.length ; i++){
+			
+			if(tabTypeAlerteAnalysesRadiologNonFaites[i] == 0){
+				var infosAlerteIcone = "<img src='../images_icons/non.png' title='Rappel aux parents : "+tabDateAlerteAnalysesRadiologNonFaites[i]+"'>";
+			}else{
+				var infosAlerteIcone = "<img src='../images_icons/alertRouge.gif' style='margin-left: 3px; width: 12px; height: 12px;' title='Alerter les parents : "+tabDateAlerteAnalysesRadiologNonFaites[i]+"'>";
+			}
+			
+			
+			$('#idAnalyseAFExamRadiologComp'+i).html("<label style='width: 100%; height:30px; text-align:left;' class='iconeAlertRougeOrange'>" +
+	                " <span style='font-size: 12px;'>&#11166; </span> <span style='font-size: 13px;'>" +
+	                ""+tabAnalysesRadiologNonFaits[i]+"</span> <span style='color: red;'></span>" +
+	                " <ul style='float: right;'> <li style='margin-top: 2px;'> "+infosAlerteIcone+"</li> <li id='iconeIndicateurSelection_"+tabIndexAnalysesRadiologNonFaits[i]+"' title='Demande effectu&eacute;e' style='margin-top: 2px; margin-bottom: -10px; margin-left: 3px;'>  </li></ul>"+
+	                " <span style='color: green; float: right; '></span>" +
+	                "</label>");
+		}
+	}
+
+	//Affichage des labels
+	//Affichage des labels
+	setTimeout(function(){
+		for(var i = 1 ; i <= nbLigneAAfficher ; i++){
+			$('#examensRadiologAFaireECLigne'+i).toggle(true);
+		}
+	},2000);
+	
+}
+
+
+
+
+
+
+
+
 
 
 
@@ -1600,6 +1729,174 @@ function voirDateDemandeProgramme(tabIndexAnalyse,col)
 
 
 
+//CODE --- 28/12/18 --- 28/12/18
+//CODE --- 28/12/18 --- 28/12/18
+
+function afficherLabelExamensRadiologiques(nbExamen){
+	
+	var labelExamBio = "";
+	for(var i = 1 ; i <= nbExamen ; i++){
+		labelExamBio = ''+
+			'<table style="width:100%;" id="tabLigneExamProgrammeRadio_'+i+'"  class="designLabelProgrammeDesExamensRadio">'+
+		      '<tr style="height:40px; width:100%;" id="examLabelProgrammeRadioLigne'+i+'" >'+
+		          '<th style="width:40%; padding-right: 7px; vertical-align: top;"> '+
+			         '<div class="zoneInfosStyle zoneInfosProgrammeDesExamensRadiologiques" style="width: 100%;">'+ 
+	                    '<div style="float:left; width: 100%;" id="idAnalyseAFProgrammeRadioComp'+i+'" > </div> '+
+	                 '</div>'+ 
+			      '</th>'+
+				 
+			      '<th style="width:60%; padding-left: 5px; padding-right: 7px; vertical-align: top;"> '+
+			         '<div class="zoneInfosStyle zoneInfosProgrammeDesExamensRadiologiques" style="width: 100%;">'+
+	                     '<div style="float:left; width: 100%;" id="idAnalyseAFProgrammeRadioInfos'+i+'" >'+ 
+	                      
+	                     
+	                         '<table style="width: 100%; height: 2px;">'+
+	                           '<tr  style="width: 100%; height: 2px;">'+
+	                             '<td  style="width: 33%; vertical-align: top; padding-right: 2px;" id="colonneA_'+i+'">'+
+	                              
+	                                 '<table style="width: 100%; height: 2px;">'+
+		                                '<tr  style="width: 100%; height: 2px;">'+
+		                                  '<td class="popInfEnTeteProg" style="">Infos sur les demandes</td>'+
+		                                '</tr>'+
+		                                '<tr  style="width: 100%; height: 2px;">'+
+		                                  '<td style="width: 100%;" class="col popInfContenuProg"></td>'+
+		                                '</tr>'+
+		                             '</table>'+
+		                           
+	                             '</td>'+
+	                             
+	                             '<td  style="width: 33%; vertical-align: top; padding-right: 2px;" id="colonneB_'+i+'">'+
+	                             
+	                                 '<table style="width: 100%; height: 2px;">'+
+	                                    '<tr  style="width: 100%; height: 2px;">'+
+	                                      '<td class="popInfEnTeteProg" style="">Infos sur les r&eacute;sultat</td>'+
+	                                    '</tr>'+
+	                                    '<tr  style="width: 100%; height: 2px;">'+
+	                                      '<td style="width: 100%;" class="col popInfContenuProg"></td>'+
+	                                    '</tr>'+
+	                                 '</table>'+
+	                             
+	                             '</td>'+
+	                             
+	                             '<td  style="width: 34%; vertical-align: top; padding-right: 4px;" id="colonneC_'+i+'">'+
+	                             
+	                                 '<table style="width: 100%; height: 2px;">'+
+                                        '<tr  style="width: 100%; height: 2px;">'+
+                                          '<td class="popInfEnTeteProg" style="">Prochaine date</td>'+
+                                        '</tr>'+
+                                        '<tr  style="width: 100%; height: 2px;">'+
+                                          '<td style="width: 100%;" class="col popInfContenuProg"></td>'+
+                                        '</tr>'+
+                                     '</table>'+
+	                             
+	                             '</td>'+
+	                           '</tr>'+
+	                         '</table>'+
+	                         
+	                     
+	                     '</div>'+
+	                 '</div>'+
+			      '</th>'+
+				 
+		      '</tr>'+
+		   
+		   '</table>';
+		
+		$('#tabLigneExamProgrammeRadio_'+(i-1)).after(labelExamBio);
+	}
+}
+
+function getInfosPopupProgrammeDesExamensRadiologiques(nbExamensEffectues,tabIndexAnalyses,tabNomAnalyses,tabNbFoisAnalyses){
+	
+	//alert(tabNomAnalyses);
+	
+	//Ajout de l'interface d'affichage des analyses effectuées
+	//Ajout de l'interface d'affichage des analyses effectuées
+	afficherLabelExamensRadiologiques(nbExamensEffectues);
+	
+	$('.zoneInfosProgrammeDesExamensRadiologiques').css({'height':'45px', 'margin-bottom':'10px'});
+
+	//Placer les analyses déjà effectuées 
+	//Placer les analyses déjà effectuées
+	if(tabNomAnalyses.length == 0){
+		//$('.zoneInfosProgrammeDesExamensRadiologiques table').html("<tr style='width: 100%'><td style='width: 100%; color: red; padding-top: 7px; text-align: center; font-family: times new roman;'>Aucune analyse effectu&eacute;e</td></tr>");
+	}else{
+		for(var i = 1 ; i < tabNomAnalyses.length ; i++){
+			
+			var infoExamen = "";
+			if(tabIndexAnalyses[i] == 2){
+				infoExamen = "Tous les ans &agrave; partir de 5 ans";
+			}else 
+				if(tabIndexAnalyses[i] == 3){
+					infoExamen = "Tous les ans &agrave; partir de 2 ans";
+				}else 
+					if(tabIndexAnalyses[i] == 7 || tabIndexAnalyses[i] == 9){
+						infoExamen = "Tous les ans &agrave; partir de 10 ans";
+					}
+
+			/**
+			 *  Ecriture du nom de l'analyse 
+			 */
+			$('#idAnalyseAFProgrammeRadioComp'+i).html("<label style='width: 92%; height:30px; text-align:left;'>" +
+					                       " <span style='font-size: 12px;'>&#11166; </span>" +
+					                       " <span style='font-size: 13px;'>"+tabNomAnalyses[i]+"</span>" +
+					                       " <span style='color: green;'></span>" +
+					                       " <span style='color: green; font-family: Tempus Sans ITC; float: right;'> <span title='"+infoExamen+"'>&#128712; </span>  </span>" +
+					                       "</label>");
+			
+			/**
+			 *  Ecriture les infos sur le nombre de fois 'colonneA_x' 
+			 */
+			/*
+			var nbFoisAnalyseDemVar = tabNbFoisAnalyses[tabIndexAnalyses[i]];
+			var affCalendarListeDateDemande = "";
+			if(nbFoisAnalyseDemVar != 0){
+				affCalendarListeDateDemande = "<div style='float: left; width: 50%;' id='dateDemandeProgramme_1_"+tabIndexAnalyses[i]+"' class='dateDemProgPop'> <span style='padding-top:15px;' title='Dates des demandes'>date : </span> <img onclick='voirDateDemandeProgramme("+tabIndexAnalyses[i]+",1"+");' src='../images_icons/calendar_16.png' style=''> </div>";
+			}
+			
+			$('#idAnalyseAFProgrammeBioInfos'+i+' #colonneA_'+i+' .col').html(
+					"<div style='float: left; width: 50%;'><span style='' title='Nombre'>nb : </span> <span style='font-family: Time new roman; font-size: 21px; font-weight: bold;'> "+nbFoisAnalyseDemVar+" </span></div>"+
+					affCalendarListeDateDemande+
+					""+
+					""
+					);
+			*/
+			
+			/**
+			 *  Ecrire les infos sur le nombre de fois 'colonneB_x' 
+			 */
+			/*
+			var nbFoisAnalyseDemResultVar = tabNombreFoisAnalyseProgrammeAyantResultat[tabIndexAnalyses[i]];
+			var affCalendarListeDateDemandeResult = "";
+			if(nbFoisAnalyseDemResultVar != 0){
+				affCalendarListeDateDemandeResult = "" +
+				"<div style='float: left; width: 50%;'><span style='' title='Nombre'>nb : </span> <span style='font-family: Time new roman; font-size: 21px; font-weight: bold;'> "+nbFoisAnalyseDemResultVar+" </span></div>"+		
+				"<div style='float: left; width: 50%;' id='dateDemandeProgramme_2_"+tabIndexAnalyses[i]+"' class='dateDemProgPop'> <span style='padding-top:15px;' title='R&eacute;sultats'>r&eacute;sult : </span> <img onclick='voirDateDemandeProgramme("+tabIndexAnalyses[i]+",2"+");' src='../images_icons/resultat3.png' style='width: 19px; height: 19px;'> </div>";
+			}
+			if(nbFoisAnalyseDemVar != 0 && nbFoisAnalyseDemResultVar == 0){
+				affCalendarListeDateDemandeResult = "<div style='color: red; font-family: Time new roman; font-size: 14px; padding-top: 2px; text-align: center;'> Aucun </div>";
+			}
+			
+			$('#idAnalyseAFProgrammeBioInfos'+i+' #colonneB_'+i+' .col').html(
+					affCalendarListeDateDemandeResult+
+					""
+					);
+			*/
+			
+			/**
+			 *  Ecrire les infos sur le nombre de fois 'colonneC_x' 
+			 */
+			/*
+			$('#idAnalyseAFProgrammeBioInfos'+i+' #colonneC_'+i+' .col').html(
+					"<div style='float: left; width: 100%;'><span style='font-size: 18px; font-weight: normal; color: green;'> "+tabProchaineDateAnalyseProgrammeAyantResultat[tabIndexAnalyses[i]]+" </span></div>"+
+					""
+					);
+			*/
+		}
+	}
+
+	$('a,img,span').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });
+}
 
 
 
@@ -1679,7 +1976,19 @@ var jsel = 1;
 var jsupsel = 1;
 var jsupselDebut = 1;
 var nbExamensNonFaitsAFaire = 0;
+var appelFuntionDemanderLesAnalysesAFaire = 0;
 function demanderLesAnalysesAFaire() {
+	
+	
+	//$('#iconeVoirSupprimerAlert img').off('click');
+	/*
+	if(appelFuntionDemanderLesAnalysesAFaire == 1){
+		appelFuntionDemanderLesAnalysesAFaire == 0;
+		preventDefault();
+	}
+	appelFuntionDemanderLesAnalysesAFaire == 1
+	*/
+	
 	
 	$('#examenComplementaireDemandeDelpiant').trigger('click');
 	
@@ -2930,10 +3239,10 @@ function infos_parentales()
 	
 }
 
-function infos_parentales_programme()
+function infos_parentales_programme(id)
 {
 	
-	$('#idPopInfEnTeteInterfaceProg').w2overlay({ html: "" +
+	$('#idPopInfEnTeteInterfaceProg'+id).w2overlay({ html: "" +
 		"" +
 		"<div style='border-bottom:1px solid green; height: 30px; background: #f9f9f9; width: 600px; text-align:center; padding-top: 10px; font-size: 13px; color: green; font-weight: bold;'><img style='padding-right: 10px;' src='"+tabUrl[0]+"public/images_icons/Infos_parentales.png' >Informations parentales</div>" +
 		"<div style='height: 245px; width: 600px; padding-top:10px; text-align:center;'>" +
@@ -2948,10 +3257,10 @@ function infos_parentales_programme()
 //
 
 
-function infos_patient_programme()
+function infos_patient_programme(id)
 {
 	
-	$('#idPopInfEnTeteInterfaceProg').w2overlay({ html: "" +
+	$('#idPopInfEnTeteInterfaceProg'+id).w2overlay({ html: "" +
 		"" +
 		"<div style='border-bottom:1px solid green; height: 30px; background: #f9f9f9; width: 300px; text-align:center; padding-top: 10px; font-size: 13px; color: green; font-weight: bold;'><img style='padding-right: 10px; height: 14px;' src='"+tabUrl[0]+"public/images_icons/ajouterphoto.png' >Informations du patient </div>" +
 		"<div style='height: 145px; width: 300px; padding-top:10px; text-align:center;'>" +

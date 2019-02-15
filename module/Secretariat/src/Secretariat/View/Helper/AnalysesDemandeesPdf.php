@@ -78,11 +78,11 @@ class AnalysesDemandeesPdf
 		$this->_page->setFont($this->_newTime, 10);
 		$this->_page->drawText('République du Sénégal',
 				$this->_leftMargin,
-				$this->_pageHeight - 50);
+				$this->_pageHeight - 50, "iso-8859-1");
 		$this->_page->setFont($this->_newTime, 10);
 		$this->_page->drawText('Université Gaston Berger de Saint-Louis / UFR 2S',
 				$this->_leftMargin,
-				$this->_pageHeight - 65);
+				$this->_pageHeight - 65,"iso-8859-1");
 		$this->_page->setFont($this->_newTime, 10);
 		$this->_page->drawText('Centre de Recherche et de Prise en Charge - ',
 				$this->_leftMargin,
@@ -90,7 +90,7 @@ class AnalysesDemandeesPdf
 		$this->_page->setFont($this->_newTime, 10);
 		$this->_page->drawText('Ambulatoire de la Drépanocytose (CERPAD)',
 		    $this->_leftMargin,
-		    $this->_pageHeight - 95);
+		    $this->_pageHeight - 95,"iso-8859-1");
 		
 		
 		$font = ZendPdf\Font::fontWithName(ZendPdf\Font::FONT_TIMES_ROMAN);
@@ -99,7 +99,7 @@ class AnalysesDemandeesPdf
 		$dateNow = $today->format ( 'd/m/Y' );
 		$this->_page->drawText('Imprimé le, ' . $dateNow,
 				450,
-				$this->_pageHeight - 50);
+				$this->_pageHeight - 50, "iso-8859-1");
 	}
 	
 	public function setPatient($patient){
@@ -237,7 +237,7 @@ class AnalysesDemandeesPdf
 		$this->_page->setFillColor(new ZendPdf\Color\Html('green'));
 		$this->_page->drawText('FACTURE PRO-FORMA',
 				$this->_leftMargin+150,
-				$this->_yPosition);
+				$this->_yPosition, "iso-8859-1");
 		$this->_yPosition -= 5;
 		$this->_page->setlineColor(new ZendPdf\Color\Html('green'));
 		$this->_page->drawLine($this->_leftMargin,
@@ -269,29 +269,29 @@ class AnalysesDemandeesPdf
 		$this->_page->setFont($this->_newTime, 10); //NÂ°:
 		$this->_page->drawText(iconv ('UTF-8' , 'ISO-8859-1' , ' '.$this->_patient->numero_dossier),
 				$this->_leftMargin,
-				$this->_yPosition);
+				$this->_yPosition, "iso-8859-1");
 		
 		
 			//-----------------------------------------------
 			$this->_page->setFont($this->_newTimeGras, 9);
 			$this->_page->drawText('PRENOM & NOM :',
 					$this->_leftMargin+123,
-					$this->_yPosition);
+					$this->_yPosition, "iso-8859-1");
 			$this->_page->setFont($this->_newTime, 10);
 			$this->_page->drawText(iconv ('UTF-8' ,'ISO-8859-1' , $value->prenom.'  '.$value->nom),
 					$this->_leftMargin+210,
-					$this->_yPosition);
+					$this->_yPosition, "iso-8859-1");
 			//-----------------------------------------------
 			$this->_yPosition -= 15;
 			//----------------------------------------------
 			$this->_page->setFont($this->_newTimeGras, 9);
 			$this->_page->drawText('SEXE :',
 					$this->_leftMargin+173,
-					$this->_yPosition);
+					$this->_yPosition, "iso-8859-1");
 			$this->_page->setFont($this->_newTime, 10);
 			$this->_page->drawText(iconv ('UTF-8' ,'ISO-8859-1' , $value->sexe),
 					$this->_leftMargin+210,
-					$this->_yPosition);
+					$this->_yPosition, "iso-8859-1");
  			//-----------------------------------------------
     		$this->_yPosition -= 15;
  			//----- -----------------------------------------
@@ -358,7 +358,7 @@ class AnalysesDemandeesPdf
 			$this->_page->setFont($this->_newTime, 10);
 			$this->_page->drawText(iconv ('UTF-8' ,'ISO-8859-1' , $value->adresse),
 					$this->_leftMargin+210,
-					$this->_yPosition);
+					$this->_yPosition,"iso-8859-1");
 			//-----------------------------------------------
 			
 			$this->_page->setlineColor(new ZendPdf\Color\Html('green'));
@@ -404,7 +404,7 @@ class AnalysesDemandeesPdf
 			$this->getStyle2_10();
 			$this->_page->drawText(":: Hématologie",
 					$this->_leftMargin+5,
-					$this->_yPosition);
+					$this->_yPosition,"iso-8859-1");
 			$this->_yPosition -= 20;
 			
 			$j = 0;
@@ -425,7 +425,7 @@ class AnalysesDemandeesPdf
 					$this->getNewTime();
 					$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', ++$j.'.  '.$analyses[$i]),
 							$this->_leftMargin+10,
-							$this->_yPosition);
+							$this->_yPosition,"iso-8859-1");
 			
 					$this->getNewTime2();
 					$this->_page->drawText($this->prixMill("$tarifs[$i]"),
@@ -459,7 +459,7 @@ class AnalysesDemandeesPdf
 			$this->getStyle2_10();
 			$this->_page->drawText(":: Biochimie",
 					$this->_leftMargin+5,
-					$this->_yPosition);
+					$this->_yPosition, "iso-8859-1");
 			$this->_yPosition -= 20;
 				
 			$j = 0;
@@ -479,9 +479,9 @@ class AnalysesDemandeesPdf
 							$this->_yPosition -2);
 						
 					$this->getNewTime();
-					$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', ++$j.'.  '.$analyses[$i]),
+					$this->_page->drawText( ++$j.'.  '.$analyses[$i],
 							$this->_leftMargin+10,
-							$this->_yPosition);
+							$this->_yPosition,"iso-8859-1");
 						
 					$this->getNewTime2();
 					$this->_page->drawText($this->prixMill("$tarifs[$i]"),
@@ -514,7 +514,7 @@ class AnalysesDemandeesPdf
 			$this->getStyle2_10();
 			$this->_page->drawText(":: Parasitologie",
 					$this->_leftMargin+5,
-					$this->_yPosition);
+					$this->_yPosition,"iso-8859-1");
 			$this->_yPosition -= 20;
 			
 			
@@ -535,9 +535,9 @@ class AnalysesDemandeesPdf
 							$this->_yPosition -2);
 			
 					$this->getNewTime();
-					$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', ++$j.'.  '.$analyses[$i]),
+					$this->_page->drawText( ++$j.'.  '.$analyses[$i],
 							$this->_leftMargin+10,
-							$this->_yPosition);
+							$this->_yPosition,"iso-8859-1");
 			
 					$this->getNewTime2();
 					$this->_page->drawText($this->prixMill("$tarifs[$i]"),
@@ -571,7 +571,7 @@ class AnalysesDemandeesPdf
 			$this->getStyle2_10();
 			$this->_page->drawText(":: Bactériologie",
 					$this->_leftMargin+5,
-					$this->_yPosition);
+					$this->_yPosition,"iso-8859-1");
 			$this->_yPosition -= 20;
 				
 			$j = 0;
@@ -591,9 +591,9 @@ class AnalysesDemandeesPdf
 							$this->_yPosition -2);
 						
 					$this->getNewTime();
-					$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', ++$j.'.  '.$analyses[$i]),
+					$this->_page->drawText( ++$j.'.  '.$analyses[$i],
 							$this->_leftMargin+10,
-							$this->_yPosition);
+							$this->_yPosition,"iso-8859-1");
 						
 					$this->getNewTime2();
 					$this->_page->drawText($this->prixMill("$tarifs[$i]"),
@@ -626,7 +626,7 @@ class AnalysesDemandeesPdf
 			$this->getStyle2_10();
 			$this->_page->drawText(":: Dépistage",
 					$this->_leftMargin+5,
-					$this->_yPosition);
+					$this->_yPosition,"iso-8859-1");
 			$this->_yPosition -= 20;
 		
 			$j = 0;
@@ -646,9 +646,9 @@ class AnalysesDemandeesPdf
 							$this->_yPosition -2);
 		
 					$this->getNewTime();
-					$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', ++$j.'.  '.$analyses[$i]),
+					$this->_page->drawText( ++$j.'.  '.$analyses[$i],
 							$this->_leftMargin+10,
-							$this->_yPosition);
+							$this->_yPosition,"iso-8859-1");
 		
 					$this->getNewTime2();
 					$this->_page->drawText($tarifs[$i],
@@ -684,9 +684,9 @@ class AnalysesDemandeesPdf
 				$this->_yPosition - 2);
 		
 		$this->getStyle6();
-		$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "TOTAL  : "),
+		$this->_page->drawText( "TOTAL  : ",
 				$this->_leftMargin+260,
-				$this->_yPosition);
+				$this->_yPosition,"iso-8859-1");
 		
 		$this->getNewTimeBold2();
 		$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1',  $this->prixMill("$montant")  ),
@@ -710,7 +710,7 @@ class AnalysesDemandeesPdf
 		$this->_page->setFont($this->_newTime, 10);
 		$this->_page->drawText('Téléphone: 77 680 69 69',
 				$this->_leftMargin,
-				$this->_pageWidth - ( 100 + 440));
+				$this->_pageWidth - ( 100 + 440),"iso-8859-1");
 		
 		$this->_page->setFont($this->_newTime, 10);
 		$this->_page->drawText('SIMENS+: ',

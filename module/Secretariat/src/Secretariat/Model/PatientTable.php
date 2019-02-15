@@ -450,7 +450,7 @@ class PatientTable {
 		return $output;
 		
 	}
-	
+	//&#9654;
 	//Recupere la liste des actes
 	//Recupere la liste des actes
 	public function getListeDesTypesAnalyses(){

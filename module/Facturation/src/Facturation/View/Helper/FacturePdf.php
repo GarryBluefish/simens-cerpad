@@ -32,6 +32,7 @@ class FacturePdf
 	protected $_infos;
 	protected $_listeAnalysesDemndees;
 	protected $_depistage;
+	protected $_listeInfTauxAnalyses;
 	
 	
 	public function __construct()
@@ -82,11 +83,11 @@ class FacturePdf
 		$this->_page->setFont($this->_newTime, 10);
 		$this->_page->drawText('République du Sénégal',
 				$this->_leftMargin,
-				$this->_pageHeight - 50);
+				$this->_pageHeight - 50, "iso-8859-1");
 		$this->_page->setFont($this->_newTime, 10);
-		$this->_page->drawText('Université Gaston Berger / UFR 2S',
+		$this->_page->drawText("Université Gaston Berger / UFR 2S",
 				$this->_leftMargin,
-				$this->_pageHeight - 65);
+				$this->_pageHeight - 65, "iso-8859-1");
 		$this->_page->setFont($this->_newTime, 10);
 		$this->_page->drawText('Centre de Recherche et de Prise en Charge - ',
 				$this->_leftMargin,
@@ -94,7 +95,7 @@ class FacturePdf
 		$this->_page->setFont($this->_newTime, 10);
 		$this->_page->drawText('Ambulatoire de la Drépanocytose (CERPAD)',
 		    $this->_leftMargin,
-		    $this->_pageHeight - 95);
+		    $this->_pageHeight - 95, "iso-8859-1");
 		
 		
 		$font = ZendPdf\Font::fontWithName(ZendPdf\Font::FONT_TIMES_ROMAN);
@@ -206,6 +207,14 @@ class FacturePdf
 		$this->_listeAnalysesDemndees = $listeAnalysesDemndees;
 	}
 	
+	public function setListeInfTauxAnalyses($listeInfTauxAnalyses){
+		$this->_listeInfTauxAnalyses = $listeInfTauxAnalyses;
+	}
+	
+	public function getListeInfTauxAnalyses(){
+		return $this->_listeInfTauxAnalyses;
+	}
+	
 	protected function nbJours($debut, $fin) {
 		//60 secondes X 60 minutes X 24 heures dans une journee
 		$nbSecondes = 60*60*24;
@@ -256,9 +265,9 @@ class FacturePdf
 		//***** numéro de la facture ******
 		//***** numéro de la facture ******
 		$this->_page->setFont($this->_newTime, 10);
-		$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', 'NÂ°: '.$this->_infos['numero']),
+		$this->_page->drawText(iconv ( 'UTF-8', '', 'NÂ°: '.$this->_infos['numero']),
 				$this->_leftMargin,
-				715);
+				715,"iso-8859-1");
 		
 		
 		
@@ -266,27 +275,27 @@ class FacturePdf
 		$this->_page->setFont($this->_newTime, 10);
 		$this->_page->drawText(iconv ('UTF-8' , 'ISO-8859-1' , $this->_DonneesPatient['numero_dossier'] ),
 				$this->_leftMargin,
-				$this->_yPosition);
+				$this->_yPosition,"iso-8859-1");
 			//-----------------------------------------------
 			$this->_page->setFont($this->_newTimeGras, 9);
 			$this->_page->drawText('PRENOM & NOM :',
 					$this->_leftMargin+123,
-					$this->_yPosition);
+					$this->_yPosition,"iso-8859-1");
 			$this->_page->setFont($this->_newTime, 10);
 			$this->_page->drawText(iconv ('UTF-8' ,'ISO-8859-1' , $value['prenom'].'  '.$value['nom']),
 					$this->_leftMargin+210,
-					$this->_yPosition);
+					$this->_yPosition,"iso-8859-1");
 			//-----------------------------------------------
 			$this->_yPosition -= 15;// allez a ligne suivante
 			//----------------------------------------------
 			$this->_page->setFont($this->_newTimeGras, 9);
 			$this->_page->drawText('SEXE :',
 					$this->_leftMargin+173,
-					$this->_yPosition);
+					$this->_yPosition,"iso-8859-1");
 			$this->_page->setFont($this->_newTime, 10);
 			$this->_page->drawText(iconv ('UTF-8' ,'ISO-8859-1' , $value['sexe']),
 					$this->_leftMargin+210,
-					$this->_yPosition);
+					$this->_yPosition,"iso-8859-1");
  			//-----------------------------------------------
     		$this->_yPosition -= 15;// allez a ligne suivante
  			//----- -----------------------------------------
@@ -297,7 +306,7 @@ class FacturePdf
 				$this->_page->setFont($this->_newTimeGras, 9);
 				$this->_page->drawText('DATE DE NAISSANCE :',
 						$this->_leftMargin+102,
-						$this->_yPosition);
+						$this->_yPosition,"iso-8859-1");
 				$this->_page->setFont($this->_newTime, 10);
 			
 				
@@ -327,18 +336,18 @@ class FacturePdf
 					
 				$this->_page->drawText($date_naissance."  (".$age.")",
 						$this->_leftMargin+210,
-						$this->_yPosition);
+						$this->_yPosition,"iso-8859-1");
 				
 			}else {
 				$this->_page->setFont($this->_newTimeGras, 9);
 				$this->_page->drawText('AGE :',
 						$this->_leftMargin+176,
-						$this->_yPosition);
+						$this->_yPosition,"iso-8859-1");
 				$this->_page->setFont($this->_newTime, 10);
 			
 				$this->_page->drawText($value['age']." ans",
 						$this->_leftMargin+210,
-						$this->_yPosition);
+						$this->_yPosition,"iso-8859-1");
 			}
 			
 			//-----------------------------------------------
@@ -347,11 +356,11 @@ class FacturePdf
 			$this->_page->setFont($this->_newTimeGras, 9);
 			$this->_page->drawText('ADRESSE :',
 					$this->_leftMargin+155,
-					$this->_yPosition);
+					$this->_yPosition,"iso-8859-1");
 			$this->_page->setFont($this->_newTime, 10);
 			$this->_page->drawText(iconv ('UTF-8' ,'ISO-8859-1' , $value['adresse']),
 					$this->_leftMargin+210,
-					$this->_yPosition);
+					$this->_yPosition,"iso-8859-1");
 			//-----------------------------------------------
 			
 			$this->_page->setlineColor(new ZendPdf\Color\Html('green'));
@@ -369,9 +378,9 @@ class FacturePdf
 		$this->_yPosition -= $noteLineHeight; //aller a la ligne suivante
 		
 		$this->getStyle6();
-		$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "DESIGNATION "),
+		$this->_page->drawText("DESIGNATION ",
 				$this->_leftMargin+15,
-				$this->_yPosition);
+				$this->_yPosition,"iso-8859-1");
 		
 		$this->_page->setLineColor(new ZendPdf\Color\Html('#999999'));
 		$this->_page->setLineWidth(1);
@@ -381,7 +390,7 @@ class FacturePdf
 				$this->_leftMargin-400,
 				$this->_yPosition -5);
 		
-		$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "TARIF (FCFA)"),
+		$this->_page->drawText("TARIF (FCFA)",
 				$this->_leftMargin+325,
 				$this->_yPosition);
 		
@@ -407,7 +416,41 @@ class FacturePdf
 		for( $j = 0 ; $j < count($listeAnalysesDemandees) ; $j++){
 			$analyses[$i] = $listeAnalysesDemandees[$j]['designation'];
 			$typesAnalyses[$i] = $listeAnalysesDemandees[$j]['libelle'];
-			$tarifs[$i++] = $listeAnalysesDemandees[$j]['tarif'];
+			
+			if($this->_infos['type_facturation'] == 2){
+				
+				$idOrganisme = $this->_infos['idorganisme'];
+					
+				if($idOrganisme == 1 || $idOrganisme == 2){
+					$listeInfTauxAnalyses = $this->getListeInfTauxAnalyses();
+						
+					$idanalyse = $listeAnalysesDemandees[$j]['idanalyse'];
+						
+					if(in_array($idanalyse, $listeInfTauxAnalyses[0])){
+						if($listeInfTauxAnalyses[1][$idanalyse] == 1){
+							$tarifNormal = $listeAnalysesDemandees[$j]['tarif'];
+							$tarifs[$i++] = (string)($tarifNormal+($tarifNormal/2)); //50%
+						}else{
+							$tarifNormal = $listeAnalysesDemandees[$j]['tarif'];
+							$tarifs[$i++] = (string)($tarifNormal*2); //100%
+						}
+					}else{
+						$tarifNormal = $listeAnalysesDemandees[$j]['tarif'];
+						$tarifs[$i++] = (string)($tarifNormal+($tarifNormal*2)); //200%
+					}
+				
+				}else{
+					$tarifNormal = $listeAnalysesDemandees[$j]['tarif'];
+					$tarifs[$i++] = (string)($tarifNormal+($tarifNormal*2)); //200%
+				}
+				
+			}else{
+				$tarifs[$i++] = $listeAnalysesDemandees[$j]['tarif'];
+			}
+			
+			 
+			 
+
 		}
 		
 		//-----------------------------------------------------------------------
@@ -423,7 +466,7 @@ class FacturePdf
 			$this->getNewItalique2();
 			$this->_page->drawText("(Hématologie)",
 					$this->_leftMargin+15,
-					$this->_yPosition+10);
+					$this->_yPosition+10,"iso-8859-1");
 			$this->_yPosition -= $noteLineHeight-20;
 			
 			
@@ -443,9 +486,9 @@ class FacturePdf
 							$this->_yPosition -2);
 						
 					$this->getNewTime3();
-					$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', ++$j.')  '.$analyses[$i]),
+					$this->_page->drawText( ++$j.')  '.$analyses[$i],
 							$this->_leftMargin+10,
-							$this->_yPosition);
+							$this->_yPosition,"iso-8859-1");
 						
 					$this->getNewTime4();
 					$this->_page->drawText($this->prixMill( $tarifs[$i] ),
@@ -485,7 +528,7 @@ class FacturePdf
 			$this->getNewItalique2();
 			$this->_page->drawText("(Biochimie)",
 					$this->_leftMargin+15,
-					$this->_yPosition+10);
+					$this->_yPosition+10,"iso-8859-1");
 			$this->_yPosition -= $noteLineHeight-20;
 				
 				
@@ -505,9 +548,9 @@ class FacturePdf
 							$this->_yPosition -2);
 		
 					$this->getNewTime3();
-					$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', ++$j.')  '.$analyses[$i]),
+					$this->_page->drawText(++$j.')  '.$analyses[$i],
 							$this->_leftMargin+10,
-							$this->_yPosition);
+							$this->_yPosition,"iso-8859-1");
 		
 					$this->getNewTime4();
 					$this->_page->drawText($this->prixMill( $tarifs[$i] ),
@@ -566,9 +609,9 @@ class FacturePdf
 							$this->_yPosition -2);
 		
 					$this->getNewTime3();
-					$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', ++$j.')  '.$analyses[$i]),
+					$this->_page->drawText( ++$j.')  '.$analyses[$i],
 							$this->_leftMargin+10,
-							$this->_yPosition);
+							$this->_yPosition,"iso-8859-1");
 		
 					$this->getNewTime4();
 					$this->_page->drawText($this->prixMill( $tarifs[$i] ),
@@ -607,7 +650,7 @@ class FacturePdf
 			$this->getNewItalique2();
 			$this->_page->drawText("(Bactériologie)",
 					$this->_leftMargin+15,
-					$this->_yPosition+10);
+					$this->_yPosition+10,"iso-8859-1");
 			$this->_yPosition -= $noteLineHeight-20;
 		
 		
@@ -627,9 +670,9 @@ class FacturePdf
 							$this->_yPosition -2);
 		
 					$this->getNewTime3();
-					$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', ++$j.')  '.$analyses[$i]),
+					$this->_page->drawText( ++$j.')  '.$analyses[$i],
 							$this->_leftMargin+10,
-							$this->_yPosition);
+							$this->_yPosition,"iso-8859-1");
 		
 					$this->getNewTime4();
 					$this->_page->drawText($this->prixMill( $tarifs[$i] ),
@@ -668,7 +711,7 @@ class FacturePdf
 			$this->getNewItalique2();
 			$this->_page->drawText("(Dépistage)",
 					$this->_leftMargin+15,
-					$this->_yPosition+10);
+					$this->_yPosition+10,"iso-8859-1");
 			$this->_yPosition -= $noteLineHeight-20;
 		
 		
@@ -688,9 +731,9 @@ class FacturePdf
 							$this->_yPosition -2);
 		
 					$this->getNewTime3();
-					$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', ++$j.')  '.$analyses[$i]),
+					$this->_page->drawText( ++$j.')  '.$analyses[$i],
 							$this->_leftMargin+10,
-							$this->_yPosition);
+							$this->_yPosition,"iso-8859-1");
 		
 					$this->getNewTime4();
 					$this->_page->drawText($this->prixMill( $tarifs[$i] ),
@@ -737,14 +780,14 @@ class FacturePdf
 // 				$this->_yPosition - 2);
 		
 // 		$this->getStyle();
-// 		$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "NumÃ©ro de la facture : "),
+// 		$this->_page->drawText("NumÃ©ro de la facture : ",
 // 				$this->_leftMargin+5,
-// 				$this->_yPosition);
+// 				$this->_yPosition,"iso-8859-1");
 		
 // 		$this->getNewTime();
-// 		$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $this->_infos['numero']),
+// 		$this->_page->drawText( $this->_infos['numero'],
 // 				$this->_leftMargin+150,
-// 				$this->_yPosition);
+// 				$this->_yPosition,"iso-8859-1");
 
 // 		$this->_yPosition -= $noteLineHeight;
 		
@@ -757,12 +800,12 @@ class FacturePdf
 // 				$this->_yPosition - 2);
 		
 // 		$this->getStyle();
-// 		$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "Service d'admission : "),
+// 		$this->_page->drawText( "Service d'admission : ",
 // 				$this->_leftMargin+5,
-// 				$this->_yPosition);
+// 				$this->_yPosition,"iso-8859-1");
 		
 // 		$this->getNewTime();
-// 		$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', "Infirmerie"),
+// 		$this->_page->drawText( "Infirmerie",
 // 				$this->_leftMargin+140,
 // 				$this->_yPosition);
 		
@@ -846,14 +889,14 @@ class FacturePdf
 					$this->_leftMargin+5,
 					$this->_yPosition);
 			*/
-			$this->_page->drawText("Taux à régler : ",
+			$this->_page->drawText("Taux réglé : ",
 					$this->_leftMargin+5,
-					$this->_yPosition);
+					$this->_yPosition,"iso-8859-1");
 				
 			$this->getNewTime();
 			
 			if($this->_infos['taux']){
-				$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $this->_infos['taux'].' %'),
+				$this->_page->drawText( $this->_infos['taux'].' %',
 						$this->_leftMargin+160,
 						$this->_yPosition);
 			}else {
@@ -894,9 +937,9 @@ class FacturePdf
 					$this->_yPosition);
 			
 			$this->getStyle();
-			$this->_page->drawText("Montant à régler : ",
+			$this->_page->drawText("Montant réglé : ",
 					$this->_leftMargin+5,
-					$this->_yPosition);
+					$this->_yPosition,"iso-8859-1");
 			
 			$this->getNewTimeBold();
 			$this->_page->drawText(iconv ( 'UTF-8', 'ISO-8859-1', $this->prixMill( $this->_infos['montant_avec_majoration']) ),
@@ -967,7 +1010,7 @@ class FacturePdf
 				$this->getStyle();
 				$this->_page->drawText("Facture réglée le : ",
 						$this->_leftMargin+5,
-						$this->_yPosition);
+						$this->_yPosition,"iso-8859-1");
 					
 				$dateHeureReglement = $Control->convertDate($this->_infos['factureReglee']['date_reglement']).'  -  '.$this->_infos['factureReglee']['heure_reglement'];
 				$typeReglement = $this->_infos['factureReglee']['type_reglement'];
@@ -1006,7 +1049,7 @@ class FacturePdf
 		$this->_page->setFont($this->_newTime, 10);
 		$this->_page->drawText('Téléphone: 77 680 69 69   -  Email: cerpad@ugb.edu.sn',
 				$this->_leftMargin,
-				$this->_pageWidth - ( 100 + 420));
+				$this->_pageWidth - ( 100 + 420),"iso-8859-1");
 		
 		$this->_page->setFont($this->_newTime, 10);
 		$this->_page->drawText('',

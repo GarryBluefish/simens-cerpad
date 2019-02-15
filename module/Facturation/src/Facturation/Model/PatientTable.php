@@ -696,6 +696,13 @@ class PatientTable {
 	    return $output;
 	}
 	
+	public function getAutresOrganismes($idfacturation){
+		$db = $this->tableGateway->getAdapter();
+		$sql = new Sql($db);
+		$sQuery = $sql->select('autres_organismes')->where(array('idfacturation' => $idfacturation));
+		$requete = $sql->prepareStatementForSqlObject($sQuery);
+		return $requete->execute() ->current();
+	}
 	
 	//********** RECUPERER LA LISTE DES PATIENTS PRISES EN CHARGE *********
 	//********** RECUPERER LA LISTE DES PATIENTS PRISES EN CHARGE *********
@@ -757,7 +764,8 @@ class PatientTable {
 		->from(array('pat' => 'patient'))->columns(array('*'))
 		->join(array('pers' => 'personne'), 'pers.idpersonne = pat.idpersonne' , array('Nom'=>'nom','Prenom'=>'prenom','Datenaissance'=>'date_naissance','Sexe'=>'sexe','Adresse'=>'adresse','Nationalite'=>'nationalite_actuelle', 'id'=>'idpersonne', 'id2'=>'idpersonne'))
 		->join(array('fact' => 'facturation'), 'fact.idpatient = pat.idpersonne', array('Idfacturation' => 'idfacturation', 'Date' => 'date', 'Heure' => 'heure') )
-		->join(array('org' => 'organisme'), 'org.idorganisme = fact.organisme', array('LibelleOrganisme' => 'libelle') )		
+		->join(array('factpec' => 'facturation_prisencharge'), 'factpec.idfacturation = fact.idfacturation', array('*') )
+		->join(array('org' => 'organisme'), 'org.idorganisme = factpec.organisme', array('LibelleOrganisme' => 'libelle') )		
 		->where(array('fact.id_type_facturation' => 2, new NotIn ( 'fact.idfacturation', $subselect )) )
 		->group('fact.idfacturation')
 		->order('fact.idfacturation DESC');
@@ -809,7 +817,13 @@ class PatientTable {
 					}
 					 
 					else if ($aColumns[$i] == 'LibelleOrganisme') {
-						$row[] = "<div class='adresseText' >".$aRow[ $aColumns[$i] ]."</div>";
+						if($aRow[ $aColumns[$i] ] == 'Autres'){
+							$organisme = $this->getAutresOrganismes($aRow[ 'Idfacturation' ]);
+							$row[] = "<div class='adresseText' >".$organisme['nom_organisme']."</div>";
+						}else{
+							$row[] = "<div class='adresseText' >".$aRow[ $aColumns[$i] ]."</div>";							
+						}
+					
 					}
 					 
 					else if ($aColumns[$i] == 'Date') {
@@ -899,7 +913,8 @@ class PatientTable {
 		->from(array('pat' => 'patient'))->columns(array('*'))
 		->join(array('pers' => 'personne'), 'pers.idpersonne = pat.idpersonne' , array('Nom'=>'nom','Prenom'=>'prenom','Datenaissance'=>'date_naissance','Sexe'=>'sexe','Adresse'=>'adresse','Nationalite'=>'nationalite_actuelle', 'id'=>'idpersonne', 'id2'=>'idpersonne'))
 		->join(array('fact' => 'facturation'), 'fact.idpatient = pat.idpersonne', array('Idfacturation' => 'idfacturation', 'Date' => 'date', 'Heure' => 'heure') )
-		->join(array('org' => 'organisme'), 'org.idorganisme = fact.organisme', array('LibelleOrganisme' => 'libelle') )
+		->join(array('factpec' => 'facturation_prisencharge'), 'factpec.idfacturation = fact.idfacturation', array('*') )
+		->join(array('org' => 'organisme'), 'org.idorganisme = factpec.organisme', array('LibelleOrganisme' => 'libelle') )
 		->where(array('fact.id_type_facturation' => 2, new In ( 'fact.idfacturation', $subselect )) )
 		->group('fact.idfacturation')
 		->order('fact.idfacturation DESC');
@@ -1267,7 +1282,7 @@ class PatientTable {
 		 
 		/* 
 		 * SQL queries
-		* Liste des resultats des demandes d'analyses
+		* Liste des bilans des prelevements
 		*/
 		$sql2 = new Sql ($db );
 		$subselect = $sql2->select ();
@@ -2359,4 +2374,9 @@ class PatientTable {
 		$select->order('idexamen ASC');
 		return $sql->prepareStatementForSqlObject($select)->execute();
 	}
+	
+	
+	
+	
+	
 }

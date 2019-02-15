@@ -1586,7 +1586,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		
 		/*2) Deuxième colonne ==== Pour les résultats*/
 		$this->Cell(20,6,number_format($resultats[1]['champ22'],0,',', ' '),'',0,'R',1);
-		$this->Cell(19,6,'g/dl','',0,'L',1);
+		$this->Cell(19,6,'fl','',0,'L',1);
 		
 		$this->SetFont('times','',10.5);
 		$this->Cell(16,6,'','',0,'L',1);

@@ -179,7 +179,7 @@ function clickRowHandler()
 		if(id){ visualiser(id); }
 	});
 	
-	$('a,img,hass').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });
+	$('a,img,span').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });
 
 }
 
@@ -202,7 +202,7 @@ $('#precedent').click(function(){
   	//$('.organisme').toggle(false); $('#organisme').val('');
 	//$('.taux').toggle(false); $('#taux').val('');
 	tarifFact = 0;
-  	$('#montant_avec_majoration').val('');
+  	$('#montant_avec_majoration_vue').val('');
   			
 
 	
@@ -224,7 +224,7 @@ $('#precedent').click(function(){
 
 var entreeValidation = 0;
 
-function admettre(idpatient){ 
+function admettre(idpatient){
 	deplierFormulaireAdmission = 1;
 	$("#termineradmission").replaceWith("<button id='termineradmission' style='height:35px;'>Terminer</button>");
     $("#titre").replaceWith("<div id='titre2' style='font-family: police2; color: green; font-size: 18px; font-weight: bold; padding-left: 35px;'><iS style='font-size: 25px;'>&curren;</iS> ADMISSION </div>");	
@@ -265,6 +265,10 @@ function admettre(idpatient){
         	    	 entreeValidation = 1;
                      $('.termineradmission button').click(function(){
                     	 
+                    	 $('#montant_avec_majoration_vue').attr('readonly', false);
+                    	 
+                    	 //alert($('#formulairePrincipal')[0].checkValidity()); return false;
+                    	 
                     	 if($('#formulairePrincipal')[0].checkValidity() == true){
                     		 //formulaire valide et envoi des données
                     		 $('.termineradmission button').attr('disabled', true);
@@ -273,14 +277,17 @@ function admettre(idpatient){
             	    		 
             	    		 $('#envoyerDonneesAdmission').trigger('click');
             	    	 }
+                    	 
+                    	 $('#montant_avec_majoration_vue').keyup(function(){
+                    		 $('#montant_avec_majoration_vue').val('').attr('readonly', true);
+                    	 });
             	    
                      });
         	     }
 
         	     
-        },
-        //error:function(e){console.log(e);alert("Une erreur interne est survenue!");},
-        //dataType: "html"
+        }
+    
     });
     
     //Annuler l'admission
@@ -358,7 +365,7 @@ function listeDemandesAnalyses()
 		}
 	} );
 	
-	$('a,img,hass,infoBulleVue').tooltip({
+	$('a,img,span,infoBulleVue').tooltip({
         animation: true,
         html: true,
         placement: 'bottom',
@@ -402,40 +409,148 @@ function supprimerAnalyseDeselectionnees(iddemande) {
 }
 
 
-function ajouterFacturation(tarif , iddemande){
+function ajouterFacturation(tarif , iddemande, idAnalyse){
 	
 	//Ajout des demandes selectionées dans un tableau
 	tableauAnalysesSelectionnees.push(iddemande); 
 	$('#listeanalysesselectionnees').val(tableauAnalysesSelectionnees);
+	
+	//alert(tableauAnalysesSelectionnees);
 	//-----------------------------------------------
 	
-	tarifFact +=tarif;
-	$("#montant").val(tarifFact);
-	
-	var taux = $("#taux").val();
-	if(taux){
-		$("#montant_avec_majoration").val(prixMill(tarifFact+(tarifFact*taux)/100));
-	} else {
-		$("#montant_avec_majoration").val(prixMill(tarifFact));
+	if(entreeOrganismePEC != 0){ //Facture avec prise en charge
+		if(entreeOrganismePEC == 1 || entreeOrganismePEC == 2){
+			var montantMajoreAnalyse = 0; 
+			if(tableauInfosTarifAnalyse[0].hasOwnProperty(idAnalyse)){
+				var montantNormal = tableauInfosTarifAnalyse[0][idAnalyse];
+				if( tableauInfosTarifAnalyse[1][idAnalyse] == 1 ){
+					montantMajoreAnalyse = montantNormal+(montantNormal/2); //50%
+					
+				}else
+					if(tableauInfosTarifAnalyse[1][idAnalyse]==2){
+						montantMajoreAnalyse = montantNormal*2; //100%
+
+					}
+				
+			}else{
+				/* Ici on gère les analyses ne faisant pas parti de celles prise en charge */
+				montantMajoreAnalyse = tarif+tarif*2; //200% par défaut
+			    }
+
+			tarifFact +=montantMajoreAnalyse;
+			$("#montant").val(tarifFact);
+			$("#grand_total_majoration").val(prixMill(tarifFact));
+			
+			var taux = $("#taux").val();
+			if(taux){
+				$("#montant_avec_majoration").val((tarifFact*taux)/100);
+				$("#montant_avec_majoration_vue").val(prixMill((tarifFact*taux)/100));
+			} 
+			
+			
+		}else 
+			if(entreeOrganismePEC == 3){
+				var montantNormal = tarif;
+				var montantMajoreAnalyse = montantNormal+montantNormal*2; //200%
+				
+				tarifFact += montantMajoreAnalyse;
+				$("#montant").val(tarifFact);
+				$("#grand_total_majoration").val(prixMill(tarifFact));
+				
+				var taux = $("#taux").val();
+				if(taux){
+					$("#montant_avec_majoration").val((tarifFact*taux)/100);
+					$("#montant_avec_majoration_vue").val(prixMill((tarifFact*taux)/100));
+				} 
+				
+			}
+		
+	}else{ // Facture normale
+		
+		tarifFact +=tarif;
+		$("#montant").val(tarifFact);
+		$("#montant_avec_majoration_vue").val(prixMill(tarifFact));
+		
 	}
+	
 }
 
-function reduireFacturation(tarif , iddemande){
+function reduireFacturation(tarif , iddemande, idAnalyse){
 	
 	//Supprimer l'analyse déselectionnée du tableau
 	supprimerAnalyseDeselectionnees(iddemande); 
 	$('#listeanalysesselectionnees').val(tableauAnalysesSelectionnees);
+	//alert(tableauAnalysesSelectionnees);
 	//---------------------------------------------
+
+	if(entreeOrganismePEC != 0){ //Facture avec prise en charge
+		if(entreeOrganismePEC == 1 || entreeOrganismePEC == 2){
+			var montantMajoreAnalyse = 0; 
+			if(tableauInfosTarifAnalyse[0].hasOwnProperty(idAnalyse)){
+				var montantNormal = tableauInfosTarifAnalyse[0][idAnalyse];
+				if( tableauInfosTarifAnalyse[1][idAnalyse] == 1 ){
+					montantMajoreAnalyse = montantNormal+(montantNormal/2); //50%
+					
+				}else
+					if(tableauInfosTarifAnalyse[1][idAnalyse]==2){
+						montantMajoreAnalyse = montantNormal*2; //100%
+
+					}
+				
+			}else{
+				/* Ici on gère les analyses ne faisant pas parti de celles prise en charge */
+				montantMajoreAnalyse = tarif+tarif*2; //200% par défaut	
+			}
+
+			tarifFact -= montantMajoreAnalyse;
+			$("#montant").val(tarifFact);
+			$("#grand_total_majoration").val(prixMill(tarifFact));
+			
+			var taux = $("#taux").val();
+			if(taux){
+				$("#montant_avec_majoration").val((tarifFact*taux)/100);
+				$("#montant_avec_majoration_vue").val(prixMill((tarifFact*taux)/100));
+			} 
+			
+			//Vider les champs si le tarif est 0 FCFA
+			if(tarifFact == 0){
+				$("#grand_total_majoration, #montant_avec_majoration_vue").val('');
+			}
+			
+		}else 
+			if(entreeOrganismePEC == 3){
+				var montantNormal = tarif;
+				var montantMajoreAnalyse = montantNormal+montantNormal*2; //200%
+				
+				tarifFact -= montantMajoreAnalyse;
+				$("#montant").val(tarifFact);
+				$("#grand_total_majoration").val(prixMill(tarifFact));
+				
+				var taux = $("#taux").val();
+				if(taux){
+					$("#montant_avec_majoration").val((tarifFact*taux)/100);
+					$("#montant_avec_majoration_vue").val(prixMill((tarifFact*taux)/100));
+				} 
+				
+				//Vider les champs si le tarif est 0 FCFA
+				if(tarifFact == 0){
+					$("#grand_total_majoration, #montant_avec_majoration_vue").val('');
+				}
+			}
+		
+	}else{ // Facture normale
+		
+		tarifFact -=tarif;
+		$("#montant").val(tarifFact);
+		$("#montant_avec_majoration_vue").val(prixMill(tarifFact));
 	
-	tarifFact -=tarif;
-	$("#montant").val(tarifFact);
-	
-	var taux = $("#taux").val();
-	if(taux){
-		$("#montant_avec_majoration").val(prixMill(tarifFact+(tarifFact*taux)/100));
-	} else {
-		$("#montant_avec_majoration").val(prixMill(tarifFact));
+		//Vider les champs si le tarif est 0 FCFA
+		if(tarifFact == 0){
+			$("#grand_total_majoration, #montant_avec_majoration_vue").val('');
+		}
 	}
+	
+	
 }
 
 function getTarif(taux){ 
@@ -443,13 +558,23 @@ function getTarif(taux){
 	if(tarifFact && taux){
 		//montantMajore = tarifFact + (tarifFact*taux)/100;
 		montantMajore = (tarifFact*taux)/100;
-		$('#montant_avec_majoration').val(prixMill(montantMajore));
+		$('#montant_avec_majoration_vue').val(prixMill(montantMajore));
 	} else if(!taux){
-		$('#montant_avec_majoration').val(prixMill(tarifFact));
+		$('#montant_avec_majoration_vue').val(prixMill(tarifFact));
 	}
 }
 
-var temoin = 0;
+function reinitTarifListeAnalyse(){
+	$(".analyseChoixCheckedASTY, .analyseChoixCheckedToutASTY").removeAttr('checked');
+	$(".analyseChoixCheckedImgASTY").html('');
+	$("#grand_total_majoration, #montant_avec_majoration_vue").val('');
+	tarifFact = 0;
+	tableauAnalysesSelectionnees = [];
+}
+
+var temoinFacturationNormale = 1;
+var temoinFacturationPEC = 1;
+
 function scriptMajorationFacturation(){
 	$('.organisme').toggle(false);
 	$('.taux').toggle(false);
@@ -458,113 +583,116 @@ function scriptMajorationFacturation(){
 	$(boutons[0]).trigger('click');
 	
 	$(boutons).click(function(){
-		if(boutons[0].checked){
+		if(boutons[0].checked && temoinFacturationNormale == 1){
+			temoinFacturationNormale = 0;
+			temoinFacturationPEC = 1;
+			
 			$('.organisme').toggle(false);
 			$('.taux').toggle(false);
-			
-			if(temoin == 1){
-				$('#montant_avec_majoration').val(prixMill(tarifFact));
-				temoin = 0;
-			}
-			$('#taux').val("");
-
 			$('#organisme').attr('required', false);
+			
+			tarifNormalAApplique();
+			entreeOrganismePEC = 0; 
+			reinitTarifListeAnalyse();
+			$('#colonneGrandTotalMaj').toggle(false);
+			$('#colonneAjustReplaceGTM').toggle(true);
+			
+			$("#autre_organisme").toggle(false).attr('required', false);
+			
 		} else 
-			if(boutons[1].checked){
+			if(boutons[1].checked && temoinFacturationPEC == 1){
+				temoinFacturationPEC = 0;
+				temoinFacturationNormale = 1;
+				
 				$('.organisme').toggle(true);
 				$('.taux').toggle(true);
-
-				if(temoin == 0){
-					temoin = 1;
-				}
 				
-				$('#organisme').attr('required', true);
+				$('#organisme').attr('required', true).trigger('change');
+				reinitTarifListeAnalyse();
+				$('#colonneGrandTotalMaj').toggle(true);
+				$('#colonneAjustReplaceGTM').toggle(false);
+				
 			}
 	});
 	
+}
+
+//var tableauInfosTarifAnalyse = [{1:5000, 2:3000, 7:2000, 53:4000}, {1:1, 2:1, 7:2, 53:1}];
+var entreeOrganismePEC = 0;
+var entrePECUgb = 0;
+function getTauxOrganisme(id){
+	entreeOrganismePEC = id; 
 	
-	//Pour l'impression de la facture
-	//Pour l'impression de la facture
-//	$('.termineradmissions').click(function(){ //alert('imprimer'); return false;
-//
-//		var donnees = new Array();
-//		donnees['idpatient'] = $('#idpatient').val();
-//		donnees['numero'] = $('#numero').val();
-//		donnees['service'] = $('#service').val();
-//		donnees['montant_avec_majoration'] = $('#montant_avec_majoration').val();
-//		donnees['montant'] = $('#montant').val();
-//		
-//		alert(donnees['idpatient']); return false;
-//		
-//		if( temoin == 0 ){
-//			
-//			donnees['type_facturation'] = 1;
-//			var vart = tabUrl[0]+'public/facturation/impression-facture';
-//		    
-//			var formulaireImprimerFacture = document.getElementById("FormulaireImprimerFacture");
-//			formulaireImprimerFacture.setAttribute("action", vart);
-//			formulaireImprimerFacture.setAttribute("method", "POST");
-//			formulaireImprimerFacture.setAttribute("target", "_blank");
-//			
-//			for( donnee in donnees ){
-//				// Ajout dynamique de champs dans le formulaire
-//				var champ = document.createElement("input");
-//				champ.setAttribute("type", "hidden");
-//				champ.setAttribute("name", donnee);
-//				champ.setAttribute("value", donnees[donnee]);
-//				formulaireImprimerFacture.appendChild(champ);
-//			}
-//
-//			if( donnees['service'] ){
-//				// Envoi de la requête
-//				$("#ImprimerFacture").trigger('click');
-//				setTimeout(function(){
-//					document.getElementById("formulairePrincipal").submit();
-//				});
-//				return false;
-//			} else if( !donnees['service'] ){
-//				return true;
-//			}
-//		 
-//		} else if( temoin == 1 ){
-//			
-//			donnees['type_facturation'] = 2;
-//			donnees['organisme'] = $('#organisme').val();
-//			donnees['taux'] = $('#taux').val();
-//			var vart = tabUrl[0]+'public/facturation/impression-pdf';
-//		    
-//			var formulaireImprimerFacture = document.getElementById("FormulaireImprimerFacture");
-//			formulaireImprimerFacture.setAttribute("action", vart);
-//			formulaireImprimerFacture.setAttribute("method", "POST");
-//			formulaireImprimerFacture.setAttribute("target", "_blank");
-//			
-//			for( donnee in donnees ){
-//				// Ajout dynamique de champs dans le formulaire
-//				var champ = document.createElement("input");
-//				champ.setAttribute("type", "hidden");
-//				champ.setAttribute("name", donnee);
-//				champ.setAttribute("value", donnees[donnee]);
-//				formulaireImprimerFacture.appendChild(champ);
-//			}
-//
-//			if( donnees['service'] && donnees['organisme']){
-//				// Envoi de la requête
-//				$("#ImprimerFacture").trigger('click');
-//				setTimeout(function(){
-//					document.getElementById("formulairePrincipal").submit();
-//				});
-//				return false;
-//			} else if( !donnees['service'] || !donnees['organisme']){
-//				return true;
-//			}
-//			
-//		}
-//		
-//	});
+	if(id == 1 || id == 2){
+		if(entrePECUgb == 0){ reinitTarifListeAnalyse(); entrePECUgb = 1; }
+
+		
+		for(var i = 0 ; i < tableauIddemande.length ; i++){
+			
+			var idAnalyse = tableauIdDemandeAnalyse[tableauIddemande[i]];
+			
+			if(tableauInfosTarifAnalyse[0].hasOwnProperty(idAnalyse)){
+				var montantNormal = tableauInfosTarifAnalyse[0][idAnalyse];
+				if(tableauInfosTarifAnalyse[1][idAnalyse]==1){
+					var montantMajoreAnalyse = montantNormal+montantNormal/2; //50%
+					
+					var montantAvecMajorationAppliquee = '<span style="color: red;" title="50%">'+prixMill(montantNormal)+'</span> - '+prixMill(montantMajoreAnalyse);
+					$(".tarifNormalEtAvecMajoration_"+tableauIddemande[i]+" div").html(montantAvecMajorationAppliquee);
+				}else
+					if(tableauInfosTarifAnalyse[1][idAnalyse]==2){
+						var montantMajoreAnalyse = montantNormal*2; //100%
+
+						var montantAvecMajorationAppliquee = '<span style="" title="100%">'+prixMill(montantNormal)+'</span> - '+prixMill(montantMajoreAnalyse);
+						$(".tarifNormalEtAvecMajoration_"+tableauIddemande[i]+" div").html(montantAvecMajorationAppliquee);
+					}
+			}else{
+				/* Ici on gère les analyses ne faisant pas parti de celles prise en charge */
+				var montantNormal = tableauIdDemandeTarif[tableauIddemande[i]];
+				montantMajoreAnalyse = montantNormal+montantNormal*2; //200% par défaut	
+				
+				var montantAvecMajorationAppliquee = '<span style="" title="200%">'+prixMill(montantNormal)+'</span> - '+prixMill(montantMajoreAnalyse);
+				$(".tarifNormalEtAvecMajoration_"+tableauIddemande[i]+" div").html(montantAvecMajorationAppliquee);
+			}
+			
+		}
+		
+		$("#autre_organisme").toggle(false).attr('required', false);
+		
+	}else
+		if(id == 3){
+			entrePECUgb = 0;
+			reinitTarifListeAnalyse();
+			
+			for(var i = 0 ; i < tableauIddemande.length ; i++){
+				var montantNormal = tableauIdDemandeTarif[tableauIddemande[i]];
+				var montantMajoreAnalyse = montantNormal+montantNormal*2; //200%
+				
+				var montantAvecMajorationAppliquee = '<span style="" title="200%">'+prixMill(montantNormal)+'</span> - '+prixMill(montantMajoreAnalyse);
+				$(".tarifNormalEtAvecMajoration_"+tableauIddemande[i]+" div").html(montantAvecMajorationAppliquee);
+			
+			}
+			
+			$("#autre_organisme").toggle(true).attr('required', true);
+		}
+	
+	$('a,img,span').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });
+}
+
+function tarifNormalAApplique(){
+	
+	for(var i = 0 ; i < tableauIddemande.length ; i++){
+		var montantMajoreAnalyse = tableauIdDemandeTarif[tableauIddemande[i]];
+		
+		var montantAvecMajorationAppliquee = prixMill(montantMajoreAnalyse);
+		$(".tarifNormalEtAvecMajoration_"+tableauIddemande[i]+" div").html(montantAvecMajorationAppliquee);
+	}
 }
 
 
-function afficherLaListeDesAnalysesDelaDemande(idpatient, date, numOrdre){ 
+
+
+
+function afficherLaListeDesAnalysesDelaDemande(idpatient, date, numOrdre){
 	
 	$('#listeDesAnalysesTableau').html('<table style="width: 100%; margin-top: 30px;" align: center;> <tr> <td style="margin-top: 20px; text-align: center; "> Chargement </td> </tr>  <tr> <td align="center"> <img style="margin-top: 20px; width: 50px; height: 50px;" src="../images/loading/Chargement_1.gif" /> </td> </tr> </table>');
 
@@ -575,10 +703,8 @@ function afficherLaListeDesAnalysesDelaDemande(idpatient, date, numOrdre){
         success: function(data) {
         	    var result = jQuery.parseJSON(data);  
         	    $('#listeDesAnalysesTableau').html(result);
-        },
+        }
         
-        //error:function(e){console.log(e);alert("Une erreur interne est survenue!");},
-        //dataType: "html"
 	});
         	
 }

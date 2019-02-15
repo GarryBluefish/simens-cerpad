@@ -9,7 +9,7 @@ function affichageInfosDepistageMensuel(){
 	$( "#affichageInfosStatistiques" ).dialog({
 		resizable: false,
 	    height:690,
-	    width:1200,
+	    width:1300,
 	    autoOpen: false,
 	    modal: true,
 	    buttons: {

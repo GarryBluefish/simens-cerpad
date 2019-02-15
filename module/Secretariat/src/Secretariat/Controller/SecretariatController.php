@@ -202,7 +202,7 @@ class SecretariatController extends AbstractActionController {
 	public function listePatientAction() {
 		$this->layout ()->setTemplate ( 'layout/secretariat' );
 		
-		$timestart = microtime(true);
+		//$timestart = microtime(true);
 		
 		//$output = $this->getPatientTable ()->listePatientsAjax();
 		//var_dump($output); exit();
@@ -210,8 +210,8 @@ class SecretariatController extends AbstractActionController {
 		//$listeDossierPatient = $this->getListeDossierPatientTable()->fetchAll();
 		//var_dump($listeDossierPatient); exit();
 		
-		$timeend = microtime(true);
-		$time = $timeend-$timestart;
+		//$timeend = microtime(true);
+		//$time = $timeend-$timestart;
 		
 		//var_dump(number_format($time,3)); exit();
 		

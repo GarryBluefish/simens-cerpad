@@ -25,6 +25,13 @@ class AnalyseTable {
 		return $infosPatient;
 	}
 	
+	/**
+	 * -----------------------------------------------------------------------------------
+	 * PARTIE GESTION DES ANALYSES BIOLOGIQUES --- PARTIE GESTION DES ANALYSES BIOLOGIQUES
+	 * PARTIE GESTION DES ANALYSES BIOLOGIQUES --- PARTIE GESTION DES ANALYSES BIOLOGIQUES
+	 * -----------------------------------------------------------------------------------
+	 */
+	
 	public function getAnalysesObligatoiresDemandeesParPatient($idpatient){
 		
 		$sql = new Sql($this->tableGateway->getAdapter());
@@ -101,7 +108,7 @@ class AnalyseTable {
 	}
 	
 	/**
-	 * LES ANALYSES A FAIRE EN URGENCE
+	 * LES ANALYSES BIOLOGIQUES A FAIRE EN URGENCE
 	 */
 	
 	public function getAnalysesAFaireEnUrgence($idpatient){
@@ -187,10 +194,12 @@ class AnalyseTable {
 		 * Les analyses non demandées parmis les obligatoires
 		*/
 		$tabListeIndexAnalysesObligatoires = $this->getListeIndexAnalyseObligatoire();
+		//var_dump($tabIndexAnalysesDemandeesProchaineDate); exit();
+		
 		for($i=0 ; $i<count($tabListeIndexAnalysesObligatoires); $i++){
 			$idanalyse = $tabListeIndexAnalysesObligatoires[$i];
 			if(!in_array($tabListeIndexAnalysesObligatoires[$i], $tabIndexAnalysesDemandeesProchaineDate)){
-		
+				
 				//Recuperer les prochaines dates
 				$nbJours = 0;
 				if     ($idanalyse == 1 ){ $nbJours = 91;  } //Chaque 3mois dès la naissance
@@ -206,26 +215,31 @@ class AnalyseTable {
 				$dateActuellement = (new \DateTime ( "now" ))->format ( 'Y-m-d' );
 				$dateProchaine = $this->getDateProchaine($infosPatient['date_naissance'], $nbJours);
 				
-				if((new DateHelper())->getDateProchaine($dateActuellement, 30) >= $dateProchaine){
+				if(($dateProchaine > $dateActuellement) && ((new DateHelper())->getDateProchaine($dateActuellement, 30) >= $dateProchaine)){
 					$tabIndexProchaineDateAlerter[] = $idanalyse;
-					$tabAnalyseUrgentFaireAlerter[$idanalyse] = 0; // 0= alerte orange
+					$tabAnalyseUrgentFaireAlerter[$idanalyse] = 0; //0 = alerte orange
+					$tabDateAnalyseUrgentFaireAlerter[$idanalyse] = $dateProchaine;
+				}
+				elseif($dateProchaine <= $dateActuellement){
+					$tabIndexProchaineDateAlerter[] = $idanalyse;
+					$tabAnalyseUrgentFaireAlerter[$idanalyse] = 1; //1 = alerte rouge
 					$tabDateAnalyseUrgentFaireAlerter[$idanalyse] = $dateProchaine;
 				}
 				
 			}
 		}
 		
-		//var_dump($tabAnalyseUrgentFaireAlerter); exit();
+		
 		
 		return array($tabIndexProchaineDateAlerter, $tabAnalyseUrgentFaireAlerter, $tabDateAnalyseUrgentFaireAlerter);
 		
 	}
 	
 	/**
-	 * LES ANALYSES EFFECTUEES ET A FAIRE
+	 * LES ANALYSES BIOLOGIQUES EFFECTUEES ET A FAIRE
 	 * @param unknown $idpatient
 	 */
-	public function getAnalyseEffectuees($idpatient){
+	public function getAnalysesBiologiquesEffectuees($idpatient){
 		
 		/* 1°°°)
 		 * Liste de toutes les analyses obligatoires
@@ -272,8 +286,6 @@ class AnalyseTable {
  		 * Recuperer les analyses non faites par le patient
  		 * Recuperer les analyses non faites par le patient
  		 */
- 		//$tabIndexAnalysesAFaireEnUrgence = array_values(array_diff($tabToutesAnalysesObligatoires, $tabIndexAnalysesFaites));
- 		
  		$tabIndexAnalysesAFaireEnUrgence = $this->getAnalysesAFaireEnUrgence($idpatient)[0];
  		
  		$tabTypesAnalysesNonFaites = array();
@@ -286,21 +298,14 @@ class AnalyseTable {
  		}
  		
  		$tabInfosCompletesAnalysesAFaireEnUrgence = $this->getAnalysesAFaireEnUrgence($idpatient);
- 			
- 		//var_dump($tabIndexAnalysesAFaireEnUrgence); exit();
- 		
- 		
- 		//var_dump($this->getListeAnalyseObligatoire()); exit();
- 		
- 		//var_dump(array($tabIndexAnalysesFaites, $tabAnalysesFaites, $tabIndexAnalysesNonFaits, $tabAnalysesNonFaits, $tabTypesAnalysesNonFaites, $tabTarifAnalysesNonFaites)); exit();
- 		
+
+ 		//var_dump($tabInfosCompletesAnalysesAFaireEnUrgence); exit();
+ 	
  		
  		return array($tabIndexAnalysesFaites, $tabAnalysesFaites, 
  				     $tabIndexAnalysesAFaireEnUrgence, $tabAnalysesNonFaits, 
  				     $tabTypesAnalysesNonFaites, $tabTarifAnalysesNonFaites, $tabInfosCompletesAnalysesAFaireEnUrgence);
 	}
-	
-	
 	
 	
 	/**
@@ -519,68 +524,411 @@ class AnalyseTable {
 	}
 	
 	
+	
+	
+	
+	/**
+	 * ---------------------------------------------------------------------------------------
+	 * PARTIE GESTION DES ANALYSES RADIOLOGIQUES --- PARTIE GESTION DES ANALYSES RADIOLOGIQUES
+	 * PARTIE GESTION DES ANALYSES RADIOLOGIQUES --- PARTIE GESTION DES ANALYSES RADIOLOGIQUES
+	 * ---------------------------------------------------------------------------------------
+	 */
+	public function getListeAnalysesRadiosObligatoires(){
+		$sql = new Sql($this->tableGateway->getAdapter());
+		$sQuery = $sql->select()
+		->from(array('ei' => 'examen_imagerie'))->columns(array('idexamen', 'designation'))
+		->join(array('leopi' => 'liste_examen_obligatoire_patient_interne'), 'leopi.idexamen = ei.idexamen', array('*'));
+		$listeToutesAnalysesObligatoires = $sql->prepareStatementForSqlObject($sQuery)->execute();
+	
+		$tabInfosAnalysesObligatoires = array();
+	
+		foreach ($listeToutesAnalysesObligatoires as $liste){
+			$tabInfosAnalysesObligatoires [$liste['idexamen']] = array();
+				
+			$tabInfosAnalysesObligatoires [$liste['idexamen']][] = $liste['idexamen'];
+			$tabInfosAnalysesObligatoires [$liste['idexamen']][] = $liste['designation'];
+			$tabInfosAnalysesObligatoires [$liste['idexamen']][] = 0;
+		}
+	
+		return $tabInfosAnalysesObligatoires;
+	}
+	
+	public function getListeIndexAnalysesRadiologiquesObligatoires(){
+		$sql = new Sql($this->tableGateway->getAdapter());
+		$sQuery = $sql->select()
+		->from(array('ei' => 'examen_imagerie'))->columns(array('idexamen', 'designation'))
+		->join(array('leopi' => 'liste_examen_obligatoire_patient_interne'), 'leopi.idexamen = ei.idexamen', array('*'));
+		$listeToutesAnalysesRadioObligatoires = $sql->prepareStatementForSqlObject($sQuery)->execute();
+	
+		$tabIndexAnalysesRadioObligatoires = array();
+		foreach ($listeToutesAnalysesRadioObligatoires as $liste){
+			$tabIndexAnalysesRadioObligatoires [] = $liste['idexamen'];
+		}
+		
+		return $tabIndexAnalysesRadioObligatoires;
+	}
+	
+	
+	public function getAnalysesRadiologiquesObligatoires(){
+		$sql = new Sql($this->tableGateway->getAdapter());
+		$sQuery = $sql->select()
+		->from(array('ei' => 'examen_imagerie'))->columns(array('idexamen', 'designation'))
+		->join(array('leopi' => 'liste_examen_obligatoire_patient_interne'), 'leopi.idexamen = ei.idexamen', array('*'));
+		return $sql->prepareStatementForSqlObject($sQuery)->execute();
+	}
+	
+	public function getAnalysesRadiologiquesObligatoiresDemandeesParPatient($idpatient){
+		$sql = new Sql($this->tableGateway->getAdapter());
+		$sQuery = $sql->select()
+		->from(array('ei' => 'examen_imagerie'))->columns(array('idexamen', 'designation'))
+		->join(array('leopi' => 'liste_examen_obligatoire_patient_interne'), 'leopi.idexamen = ei.idexamen', array('*'))
+		->join(array('dec' => 'demande_examen_cons'), 'dec.idexamen = leopi.idexamen', array('dateDemande' => 'date_enreg', 'heureDemande' => 'heure_enreg') )
+		->where(array('dec.idpatient' => $idpatient))
+		->order(array('ei.idexamen' => 'ASC', 'dateDemande' => 'DESC'));
+		return $sql->prepareStatementForSqlObject($sQuery)->execute();
+	}
+	
+	
+	/**
+	 * LES ANALYSES RADIOLOGIQUES A FAIRE EN URGENCE
+	 */
+	
+	public function getAnalysesRadiologiquesAFaireEnUrgence($idpatient){
+	
+		$infosPatient = $this->getInfosPatient($idpatient);
+	
+		/* 1°°°)
+		 * Les analyses demandées parmis les obligatoires
+		 * Les analyses demandées parmis les obligatoires
+		 */
+		$listeAnalysesDemandees = $this->getAnalysesRadiologiquesObligatoiresDemandeesParPatient($idpatient);
+	
+		$tabIndexAnalysesRadioDemandees = array();
+		$tabIndexProchaineDateAlerter = array();
+		$tabIndexAnalysesRadioDemandeesProchaineDate = array();
+		$tabAnalyseRadioUrgentFaireAlerter = array();
+		$tabDateAnalyseRadioUrgentFaireAlerter = array();
+	
+		foreach ($listeAnalysesDemandees as $liste){
+	
+			$idexamen = $liste['idexamen'];
+	
+			if(!in_array($idexamen, $tabIndexAnalysesRadioDemandees)){
+	
+				$tabIndexAnalysesRadioDemandees [] = $idexamen;
+				$age = $this->Age((new DateHelper())->convertDate($infosPatient['date_naissance']));
+	
+				//Recuperer les prochaines dates
+				$nbJours = 0;
+				$incAnalyseTabProchaine = 0;
+				$dateProchaine = '0000-00-00';
+	
+				//Tous les ans à partir de 5 ans
+				if (($idexamen == 2) && $age >= 5){
+					$nbJours = 1825;
+					$incAnalyseTabProchaine = 1;
+					$dateProchaine = $this->getDateProchaine($liste['dateDemande'], $nbJours);
+				}
+				//Tous les ans à partir de 2 ans
+				elseif (($idexamen == 3) && $age >= 2){
+					$nbJours = 730;
+					$incAnalyseTabProchaine = 1;
+					$dateProchaine = $this->getDateProchaine($liste['dateDemande'], $nbJours);
+				}
+				//Tous les ans à partir de 10 ans
+				elseif (($idexamen == 7 || $idexamen == 9) && $age >= 10){
+					$nbJours = 3650;
+					$incAnalyseTabProchaine = 1;
+					$dateProchaine = $this->getDateProchaine($liste['dateDemande'], $nbJours);
+				}
+				
+				
+				if($incAnalyseTabProchaine == 1){
+					$dateActuellement = (new \DateTime ( "now" ))->format ( 'Y-m-d' );
+					$tabIndexAnalysesRadioDemandeesProchaineDate [] = $idexamen;
+						
+					if(($dateProchaine > $dateActuellement) && ((new DateHelper())->getDateProchaine($dateActuellement, 30) >= $dateProchaine)){
+						$tabIndexProchaineDateAlerter[] = $idexamen;
+						$tabAnalyseRadioUrgentFaireAlerter[$idexamen] = 0; // 0= alerte orange
+						$tabDateAnalyseRadioUrgentFaireAlerter[$idexamen] = $dateProchaine;
+					}
+					elseif($dateProchaine <= $dateActuellement){
+						$tabIndexProchaineDateAlerter[] = $idexamen;
+						$tabAnalyseRadioUrgentFaireAlerter[$idexamen] = 1; // 1= alerte rouge
+						$tabDateAnalyseRadioUrgentFaireAlerter[$idexamen] = $dateProchaine;
+					}
+				}
+					
+			}
+	
+		}
+		
+	
+		/* 2°°°)
+		 * Les analyses radiologiques non demandées parmis les obligatoires
+		 * Les analyses radiologiques non demandées parmis les obligatoires
+		 */
+		$tabListeIndexAnalysesObligatoires = $this->getListeIndexAnalysesRadiologiquesObligatoires();
+		
+		for($i=0 ; $i<count($tabListeIndexAnalysesObligatoires); $i++){
+			$idexamen = $tabListeIndexAnalysesObligatoires[$i];
+			if(!in_array($tabListeIndexAnalysesObligatoires[$i], $tabIndexAnalysesRadioDemandeesProchaineDate)){
+	
+				//Recuperer les prochaines dates
+				$nbJours = 0;
+				if     ($idexamen == 2 ){ $nbJours = 1825; } //Tous les ans à partir de 5 ans
+				elseif ($idexamen == 3 ){ $nbJours =  730; } //Tous les ans à partir de 2 ans
+				elseif ($idexamen == 7 ){ $nbJours = 3650; } //Tous les ans à partir de 10 ans
+				elseif ($idexamen == 9 ){ $nbJours = 3650; } //Tous les ans à partir de 10 ans
+				
+				$dateActuellement = (new \DateTime ( "now" ))->format ( 'Y-m-d' );
+				$dateProchaine = $this->getDateProchaine($infosPatient['date_naissance'], $nbJours);
+				
+				if(($dateProchaine > $dateActuellement) && ((new DateHelper())->getDateProchaine($dateActuellement, 30) >= $dateProchaine)){
+					$tabIndexProchaineDateAlerter[] = $idexamen;
+					$tabAnalyseRadioUrgentFaireAlerter[$idexamen] = 0; // 0= alerte orange
+					$tabDateAnalyseRadioUrgentFaireAlerter[$idexamen] = $dateProchaine;
+				}
+				elseif($dateProchaine <= $dateActuellement){
+					$tabIndexProchaineDateAlerter[] = $idexamen;
+					$tabAnalyseRadioUrgentFaireAlerter[$idexamen] = 1; // 1= alerte rouge
+					$tabDateAnalyseRadioUrgentFaireAlerter[$idexamen] = $dateProchaine;
+				}
+				
+			}
+		}
+		
+		return array($tabIndexProchaineDateAlerter, $tabAnalyseRadioUrgentFaireAlerter, $tabDateAnalyseRadioUrgentFaireAlerter);
+	
+	}
+	
+	/**
+	 * LES ANALYSES RADIOLOGIQUES EFFECTUEES ET A FAIRE
+	 * @param unknown $idpatient
+	 */
+	public function getAnalysesRadiologiquesEffectuees($idpatient){
+	
+		/* 1°°°)
+		 * Liste de toutes les analyses obligatoires
+		 * Liste de toutes les analyses obligatoires
+		 */
+		$listeAnalysesRadiologiquesObligatoires = $this->getAnalysesRadiologiquesObligatoires();
+		
+		$tabAnalysesRadioObligatoires = array();
+		$tabDesignationAnalysesRadioObligatoires = array();
+		foreach ($listeAnalysesRadiologiquesObligatoires as $liste){
+			$idexamen = $liste['idexamen'];
+			if(!in_array($idexamen, $tabAnalysesRadioObligatoires)){
+				$tabAnalysesRadioObligatoires [] = $idexamen;
+				$tabDesignationAnalysesRadioObligatoires [$idexamen] = $liste['designation'];
+			}
+		}
+		
+		/* 2°°°)
+		 * Liste des analyses radiologiques demandées
+		 * Liste des analyses radiologiques demandées
+		 */
+		$listeAnalysesRadiologiquesEffectuees = $this->getAnalysesRadiologiquesObligatoiresDemandeesParPatient($idpatient);
+			
+		$tabIndexAnalysesRadiologiquesFaites = array();
+		$tabAnalysesRadiologiquesFaites = array();
+		foreach ($listeAnalysesRadiologiquesEffectuees as $liste){
+			$idexamen = $liste['idexamen'];
+			if(in_array($idexamen, $tabAnalysesRadioObligatoires)){
+				$tabIndexAnalysesRadiologiquesFaites[] = $idexamen;
+				$tabAnalysesRadiologiquesFaites[] = $liste['designation'];
+			}
+		}
+			
+		/* 3°°°)
+		 * Recuperer les analyses radiologiques non faites par le patient
+		 * Recuperer les analyses radiologiques non faites par le patient
+		 */
+		$tabIndexAnalysesRadioAFaireEnUrgence = $this->getAnalysesRadiologiquesAFaireEnUrgence($idpatient)[0];
+
+		$tabTypesAnalysesNonFaites = array();
+		$tabAnalysesNonFaits = array();
+		$tabTarifAnalysesNonFaites = array();
+		for($i = 0 ; $i < count($tabIndexAnalysesRadioAFaireEnUrgence) ; $i++){
+			$tabTypesAnalysesNonFaites[] = $this->getListeAnalysesRadiosObligatoires()[$tabIndexAnalysesRadioAFaireEnUrgence[$i]][0];
+			$tabAnalysesNonFaits[] = $this->getListeAnalysesRadiosObligatoires()[$tabIndexAnalysesRadioAFaireEnUrgence[$i]][1];
+			$tabTarifAnalysesNonFaites[] = $this->getListeAnalysesRadiosObligatoires()[$tabIndexAnalysesRadioAFaireEnUrgence[$i]][2];
+		}
+			
+		$tabInfosCompletesAnalysesAFaireEnUrgence = $this->getAnalysesRadiologiquesAFaireEnUrgence($idpatient);
+	
+		//var_dump($tabInfosCompletesAnalysesAFaireEnUrgence); exit();
+		
+		return array($tabIndexAnalysesRadiologiquesFaites, $tabAnalysesRadiologiquesFaites,
+   			         $tabIndexAnalysesRadioAFaireEnUrgence, $tabAnalysesNonFaits,	
+				     $tabTypesAnalysesNonFaites, $tabTarifAnalysesNonFaites, $tabInfosCompletesAnalysesAFaireEnUrgence);
+	}
+	
+	
+	
+	
+	/**
+	 *
+	 * GESTION DU PROGRAMME DES ANALYSES RADIOLOGIQUES
+	 * @param $idpatient
+	 */
+	public function getProgrammeAnalysesRadiologiquesObligatoiresEffectuees($idpatient){
+	
+	
+		/* 0°°°)
+		 * Les informations du patient
+		 * Les informations du patient
+		 */
+		$infosPatient = $this->getInfosPatient($idpatient);
+	
+	
+		/* 1°°°)
+		 * Liste de toutes les analyses obligatoires
+		 * Liste de toutes les analyses obligatoires
+		 */
+		$listeToutesAnalysesObligatoires = $this->getAnalysesRadiologiquesObligatoires();
+		
+		$tabToutesAnalysesObligatoires = array();
+		$tabToutesDesignationAnalysesObligatoires = array();
+		foreach ($listeToutesAnalysesObligatoires as $liste){
+			$idexamen = $liste['idexamen'];
+			if(!in_array($idexamen, $tabToutesAnalysesObligatoires)){
+				$tabToutesAnalysesObligatoires [] = $idexamen;
+				$tabToutesDesignationAnalysesObligatoires [$idexamen] = $liste['designation'];
+			}
+		}
+	
+		/* 2°°°)
+		 * Liste de toutes les analyses demandées
+		 * Liste de toutes les analyses demandées
+		 */
+		$listeAnalysesDemandees = $this->getAnalysesRadiologiquesObligatoiresDemandeesParPatient($idpatient);
+
+		
+		$tabToutesAnalysesDemandees = array();
+		$tabNbFoisAnalyseDemandees = array();
+		$tabDateDemandeAnalyses = array();
+		$tabIndexAnalysesDemandees = array();
+		$tabProchaineDateAnalysesDemandeesAyantResultat = array();
+		$tabIndexAnalysesDemandeesProchaineDate = array();
+	
+		foreach ($listeAnalysesDemandees as $liste){
+				
+			//Gérer les nombres de fois
+			$idexamen = $liste['idexamen'];
+			$tabToutesAnalysesDemandees [] = $idexamen;
+			
+			if(!in_array($idexamen, $tabIndexAnalysesDemandees)){
+			
+				$idanalyseTamp = $idexamen;
+				$tabIndexAnalysesDemandees[] = $idanalyseTamp;
+				$tabDateDemandeAnalyses [$idanalyseTamp] = array();
+				
+				$age = $this->Age((new DateHelper())->convertDate($infosPatient['date_naissance']));
+			
+				//Recuperer les prochaines dates
+				$nbJours = 0;
+				$incAnalyseTabProchaine = 0;
+				$dateProchaine = '0000-00-00';
+			
+				//Tous les ans à partir de 5 ans, 2 ans, 10 ans et 10 ans
+				if ($idexamen == 2 || $idexamen == 3 || $idexamen == 7 || $idexamen == 9){
+					$nbJours = 365;
+					$incAnalyseTabProchaine = 1;
+					$dateProchaine = $this->getDateProchaine($liste['dateDemande'], $nbJours);
+				}
+			
+			
+				if($incAnalyseTabProchaine == 1){
+					$dateActuellement = (new \DateTime ( "now" ))->format ( 'Y-m-d' );
+					$tabIndexAnalysesRadioDemandeesProchaineDate [] = $idexamen;
+			
+					if(($dateProchaine > $dateActuellement) && ((new DateHelper())->getDateProchaine($dateActuellement, 30) >= $dateProchaine)){
+						$tabIndexAnalysesDemandeesProchaineDate[] = $idexamen;
+						$tabProchaineDateAnalysesDemandeesAyantResultat[$idexamen] = $dateProchaine;
+					}
+					elseif($dateProchaine <= $dateActuellement){
+						$tabIndexAnalysesDemandeesProchaineDate[] = $idexamen;
+						$tabProchaineDateAnalysesDemandeesAyantResultat[$idexamen] = $dateProchaine;
+					}
+				}
+					
+			}
+			$tabDateDemandeAnalyses [$idanalyseTamp] [] = $liste['dateDemande'];
+			
+			
+			
+			
+		}
+	
+		$tabNbFoisAnalyseDemandees = array_count_values($tabToutesAnalysesDemandees);
+	
+		/* 3°°°)
+		 * Les analyses non demandées parmis les obligatoires
+	 	 * Les analyses non demandées parmis les obligatoires
+		 */
+		for($i=0 ; $i<count($tabToutesAnalysesObligatoires); $i++){
+			$idexamen = $tabToutesAnalysesObligatoires[$i];
+			if(!in_array($tabToutesAnalysesObligatoires[$i], $tabIndexAnalysesDemandeesProchaineDate)){
+			
+				//Recuperer les prochaines dates
+				$nbJours = 0;
+				if     ($idexamen == 2 ){ $nbJours = 1825; } //Tous les ans à partir de 5 ans
+				elseif ($idexamen == 3 ){ $nbJours =  730; } //Tous les ans à partir de 2 ans
+				elseif ($idexamen == 7 ){ $nbJours = 3650; } //Tous les ans à partir de 10 ans
+				elseif ($idexamen == 9 ){ $nbJours = 3650; } //Tous les ans à partir de 10 ans
+				
+				$tabProchaineDateAnalysesDemandeesAyantResultat[$idexamen] = $this->getDateProchaine($infosPatient['date_naissance'], $nbJours);
+			}
+			
+		}
+	
+		
+		/* 4°°°)
+		 * Liste des analyses demandées ayant deja des résutlats
+	 	 * Liste des analyses demandées ayant deja des résutlats
+		 */
+		$sql = new Sql($this->tableGateway->getAdapter());
+		$sQuery = $sql->select()
+		->from(array('ei' => 'examen_imagerie'))->columns(array('idexamen', 'designation'))
+		->join(array('leopi' => 'liste_examen_obligatoire_patient_interne'), 'leopi.idexamen = ei.idexamen', array('*'))
+		->join(array('dec' => 'demande_examen_cons'), 'dec.idexamen = leopi.idexamen', array('dateDemande' => 'date_enreg', 'heureDemande' => 'heure_enreg') )
+		->join(array('rerc' => 'resultat_examen_radio_cons'), 'rerc.idcons = dec.idcons', array('*') )
+		->where(array('dec.idpatient' => $idpatient, 'rerc.idexamen = dec.idexamen'))
+		->order(array('ei.idexamen' => 'ASC', 'dateDemande' => 'DESC'));
+		$listeAnalysesDemandeesAyantResultat = $sql->prepareStatementForSqlObject($sQuery)->execute();
+		
+		$tabAnalysesDemandeesAyantResultat = array();
+		$tabIndexAnalysesDemandeesResultat = array();
+		$tabDatesAnalysesDemandeesAyantResultat = array();
+		$tabIdDemandeAnalysesDemandeesAyantResultat = array();
+	
+		foreach ($listeAnalysesDemandeesAyantResultat as $liste){
+	
+			//Gerer les nombres de fois
+			$idanalyse = $liste['idexamen'];
+			$tabAnalysesDemandeesAyantResultat [] = $idanalyse;
+				
+			//Gérer les dates des demandes ayant des resultats
+			if(!in_array($idanalyse, $tabIndexAnalysesDemandeesResultat)){
+				$idanalyseTamp = $idanalyse;
+				$tabIndexAnalysesDemandeesResultat[] = $idanalyseTamp;
+				$tabDatesAnalysesDemandeesAyantResultat [$idanalyseTamp] = array();
+			}
+			$tabDatesAnalysesDemandeesAyantResultat [$idanalyseTamp] [] = $liste['dateDemande'];
+			//$tabIdDemandeAnalysesDemandeesAyantResultat [$idanalyseTamp] [] = $liste['idDemande'];
+		}
+		$tabNbFoisAnalyseDemandeesAyantResultat = array_count_values($tabAnalysesDemandeesAyantResultat);
+	
+		//var_dump($tabNbFoisAnalyseDemandeesAyantResultat); exit();
+	
+		return array($tabToutesAnalysesObligatoires, $tabToutesDesignationAnalysesObligatoires,
+				$tabNbFoisAnalyseDemandees, $tabDateDemandeAnalyses,
+				$tabNbFoisAnalyseDemandeesAyantResultat, $tabDatesAnalysesDemandeesAyantResultat, /*$tabIdDemandeAnalysesDemandeesAyantResultat,*/
+				$tabProchaineDateAnalysesDemandeesAyantResultat
+		);
+	
+	}
+	
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
- 
- public function getDemandeAnalyse(){
- 		return $this->tableGateway->select(function (Select $select){
- 			$select->join('depistage' , 'depistage.idpatient = demande_analyse.idpatient' , array('*'));
- 			$select->join('patient' , 'patient.idpersonne = depistage.idpatient' , array('*'));
- 			$select->join('personne' , 'personne.idpersonne = patient.idpersonne' , array('date_naissance'));
- 			$select->order('date_naissance asc');
- 		})->toArray();
- 	}
- 	
- 	public function getDemandeAnalyseParPeriode($date_debut, $date_fin){
- 		return $this->tableGateway->select(function (Select $select) use ($date_debut, $date_fin){
- 			$select->join('depistage' , 'depistage.idpatient = demande_analyse.idpatient' , array('*'));
- 			$select->join('patient' , 'patient.idpersonne = depistage.idpatient' , array('*'));
- 			$select->join('personne' , 'personne.idpersonne = patient.idpersonne' , array('date_naissance'));
- 			$select->order('date_naissance asc');
- 			$select->where(array(
-					'date_naissance >= ?' => $date_debut,
-					'date_naissance <= ?' => $date_fin,
-			));
- 		})->toArray();
- 	}
- 
- 
- */

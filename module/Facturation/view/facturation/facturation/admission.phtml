@@ -101,7 +101,9 @@ initialisation();
 		  
 		  <?php echo $this->formhidden($form->get('idpatient')); ?>    
 		  <?php echo $this->formhidden($form->get('montant')); ?>  
-		  <?php echo $this->formhidden($form->get('listeanalysesselectionnees')); ?>    
+		  <?php echo $this->formhidden($form->get('montant_avec_majoration')); ?>  
+		  <?php echo $this->formhidden($form->get('listeanalysesselectionnees')); ?>
+		  <?php echo $this->formhidden($form->get('taux_defaut')); ?>    
 		  <div id="info_bebe" style='width: 100%; margin-top:10px; height:185px;'>
                <div style="float:left; width:17.5%; height:5%;">
 		       </div>
@@ -114,14 +116,23 @@ initialisation();
 		                   <div class="comment-form-patient_radio" ><?php echo $this->formRow($form->get('type_facturation'));?></div>
 		                 </td>
 		                 
-		                 <td class="comment-form-patient organisme" style='width: 33%;'><?php echo $this->formRow($form->get('organisme'));?></td>
+		                 <td class="comment-form-patient organisme" style='width: 33%;'>
+		                   <?php echo $this->formRow($form->get('organisme'));?>
+		                   <input id="autre_organisme" name="autre_organisme" placeholder="Saisir le nom de l'organisme" type="text" style="vertical-align:top; margin-top: -10px; margin-bottom: -20px; display: none;">
+		                 </td>
 		                 <td class="comment-form-patient taux" style='width: 33%;'><?php echo $this->formRow($form->get('taux'));?></td>
 		             </tr>
 		         
 		             <tr style='width: 100%;'>
 		                 <td class="comment-form-patient" style='width: 33%;'><?php echo $this->formRow($form->get('numero'));?></td>
-   		                 <td class="comment-form-patient" style='width: 33%;'><?php echo $this->formRow($form->get('montant_avec_majoration'));?></td>
-		                 <td class="comment-form-patient" style='width: 33%;'><?php //echo $this->formRow($form->get('service'));?></td>
+   		                 <td class="comment-form-patient" style='width: 33%; display:none;' id="colonneGrandTotalMaj">
+		                   <?php echo $this->formRow($form->get('grand_total_majoration'));?>
+		                 </td>
+   		                 <td class="comment-form-patient" style='width: 33%;'>
+   		                   <?php echo $this->formRow($form->get('montant_avec_majoration_vue'));?>
+   		                 </td>
+   		                 <td id="colonneAjustReplaceGTM" style='width: 33%;'></td>
+   		                 
 		             </tr>
 		         </table>
 		       </div>
@@ -189,7 +200,6 @@ initialisation();
 </div>
 		
 
-
 <script>
 animation();
 $('#service').val("");
@@ -197,6 +207,10 @@ $('#montant_avec_majoration').attr('required', true);
 scriptMajorationFacturation();
 
 nbDemandes = '<?php echo $this->nbDemandes;?>';
+
+$('#taux_defaut').val(20);
 </script>
 
+<!-- Liste des analyses prise en charge par l'UGB -->
+<?php echo $this->listeAnalysePecUgb;?> 
 

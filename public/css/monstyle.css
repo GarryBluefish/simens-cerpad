@@ -4307,7 +4307,7 @@ div .dataTables_paginate
 
 .designHistoireMaladie label, .designLabelExamenComplementaire label,
 .designLabelResultatExamenComplementaire label, .designStyleLabel label,
-.designLabelProgrammeDesExamensBio label
+.designLabelProgrammeDesExamensBio label, .designLabelProgrammeDesExamensRadio label
 {
 	line-height: 1.7em;
 

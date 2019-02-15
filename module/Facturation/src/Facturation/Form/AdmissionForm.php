@@ -45,14 +45,38 @@ class AdmissionForm extends Form{
 		) );
 
 		$this->add ( array (
-				'name' => 'montant_avec_majoration',
+				'name' => 'grand_total_majoration',
 				'type' => 'Text',
 				'options' => array (
-						'label' => iconv('ISO-8859-1', 'UTF-8','Tarif (fcfa)')
+						'label' => iconv('ISO-8859-1', 'UTF-8','Grand Total (FCFA)')
 				),
 				'attributes' => array (
+						'id' => 'grand_total_majoration',
+						'style' => 'width: 70%;',
+						'readonly' => true,
+				)
+		) );
+		
+		$this->add ( array (
+				'name' => 'montant_avec_majoration',
+				'type' => 'Hidden',
+				'attributes' => array (
 						'id' => 'montant_avec_majoration',
+				)
+				
+		) );
+		
+		$this->add ( array (
+				'name' => 'montant_avec_majoration_vue',
+				'type' => 'Text',
+				'options' => array (
+						'label' => iconv('ISO-8859-1', 'UTF-8','Tarif à régler (FCFA)')
+				),
+				'attributes' => array (
+						'id' => 'montant_avec_majoration_vue',
 						'required' => true,
+						'style' => 'width: 70%;',
+						'readonly' => true,
 				)
 		) );
 		
@@ -109,6 +133,7 @@ class AdmissionForm extends Form{
 						'label' => iconv('ISO-8859-1', 'UTF-8','Organisme')
 				),
 				'attributes' => array(
+						'onchange' => 'getTauxOrganisme(this.value)',
 						'id' => 'organisme',
 				),
 		));
@@ -119,7 +144,6 @@ class AdmissionForm extends Form{
 				'options' => array (
 						'label' => iconv('ISO-8859-1', 'UTF-8','Taux (%)'),
 						'value_options' => array(
-								'' => '',
 								20 => '20',
 						),
 				),
@@ -127,6 +151,15 @@ class AdmissionForm extends Form{
 						'registerInArrrayValidator' => true,
 						'onchange' => 'getTarif(this.value)',
 						'id' => 'taux',
+						'disabled' => true,
+				),
+		));
+		
+		$this->add(array(
+				'name' => 'taux_defaut',
+				'type' => 'Hidden',
+				'attributes' => array(
+						'id' => 'taux_defaut',
 				),
 		));
 		

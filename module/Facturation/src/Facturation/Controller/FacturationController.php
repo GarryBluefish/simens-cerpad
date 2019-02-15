@@ -228,9 +228,19 @@ class FacturationController extends AbstractActionController {
  		$output = $this->getPatientTable ()->getListeDemandesDesPatients();
  		$nbDemandes = count($output['aaData']);
  		
+ 		
+
+ 		/**
+ 		 * Liste des analyses prise en charge par l'UGB
+ 		 */
+ 		$listeAnalysePecUgb = $this->getFacturationTable()->getListeAnalysePriseEnChargeParUGB();
+ 		//var_dump($listeAnalysePecUgb); exit();
+ 		
+ 		
 		return array (
 				'form' => $formAdmission,
 				'nbDemandes' => $nbDemandes,
+				'listeAnalysePecUgb' => $listeAnalysePecUgb,
 		);
 	}
 	
@@ -642,7 +652,7 @@ class FacturationController extends AbstractActionController {
 				      <th id='typeA' style='cursor: pointer;'>Type</th>
 					  <th id='analyseA' style='cursor: pointer;'>Analyse</th>
 	                  <th id='tarifA' style='cursor: pointer; ' >Tarif (FCFA)</th>
-				      <th id='choixA' style='' > <div style='width: 50%; float: left;'> Choix </div> <div style='width: 50%; float: left; font-size: 10px;' id='choixCheckedTout'> Tout <input type='checkbox' name='nameChoixCheckedTout'> </div> </th>
+				      <th id='choixA' style='' > <div style='width: 50%; float: left;'> Choix </div> <div style='width: 50%; float: left; font-size: 10px;' id='choixCheckedTout'> Tout <input type='checkbox' name='nameChoixCheckedTout' class='analyseChoixCheckedToutASTY'> </div> </th>
 				   </tr>
 			     </thead>";
 	    
@@ -651,6 +661,9 @@ class FacturationController extends AbstractActionController {
 	    $html .="<script> 
 	               var tableauIddemande = [];
 	               var i = 0; 
+	    		
+	    		   var tableauIdDemandeAnalyse = [];
+	    		   var tableauIdDemandeTarif = [];
 	        
 	               var tableauIddemandeChoisi = [];
 	             </script>";
@@ -664,8 +677,8 @@ class FacturationController extends AbstractActionController {
 	    		$html .="<tr style='height:20px; width:100%; font-family: times new roman;'>
  					    <td id='typeA' style='font-size: 13px;'> ".$listeAnalysesDemandees[$i]['libelle']." </td>
  					    <td id='analyseA' style='font-size: 13px;'> ".$listeAnalysesDemandees[$i]['designation']." </td>
- 				        <td id='tarifA' style='font-size: 15px;'> <div style='float: right;'> ".$this->prixMill($listeAnalysesDemandees[$i]['tarif'])." </div>  </td>
- 				        <td id='choixA' style='font-size: 15px;'> <div style='float: left; width: 45%;' id='choixChecked".$listeAnalysesDemandees[$i]['iddemande']."' > <input type='checkbox' name='nameChoixChecked_".$listeAnalysesDemandees[$i]['iddemande']."' > <div id='cocher_".$listeAnalysesDemandees[$i]['iddemande']."' style='float: right;'> <!-- Emplacement de limage cocher--> </div> </div> </td>
+ 				        <td id='tarifA' class='tarifNormalEtAvecMajoration_".$listeAnalysesDemandees[$i]['iddemande']."' style='font-size: 15px;'> <div style='float: right;'> ".$this->prixMill($listeAnalysesDemandees[$i]['tarif'])." </div>  </td>
+ 				        <td id='choixA' style='font-size: 15px;'> <div style='float: left; width: 45%;' id='choixChecked".$listeAnalysesDemandees[$i]['iddemande']."' > <input type='checkbox' class='analyseChoixCheckedASTY' name='nameChoixChecked_".$listeAnalysesDemandees[$i]['iddemande']."' > <div id='cocher_".$listeAnalysesDemandees[$i]['iddemande']."' style='float: right;' class='analyseChoixCheckedImgASTY'> <!-- Emplacement de limage cocher--> </div> </div> </td>
  				     </tr>";
 	    		 
 	    		$iddemande = $listeAnalysesDemandees[$i]['iddemande'];
@@ -677,16 +690,19 @@ class FacturationController extends AbstractActionController {
 	    	
 	                       if(choixAnalyseChecked".$iddemande."[0].checked){
 	                           $('#cocher_".$iddemande."').html('<img  src=\'".$this->baseUrl()."public/images_icons/tick_16.png\' >');
-	                           ajouterFacturation(".$listeAnalysesDemandees[$i]['tarif'].",".$iddemande.");
+	                           ajouterFacturation(".$listeAnalysesDemandees[$i]['tarif'].",".$iddemande.",".$listeAnalysesDemandees[$i]['idanalyse'].");
 	    	
 	                       }else{
                                $('#cocher_".$iddemande."').html('');
                                $('#choixCheckedTout input[name=\'nameChoixCheckedTout\']').removeAttr('checked');
-                               reduireFacturation(".$listeAnalysesDemandees[$i]['tarif'].",".$iddemande.");
+                               reduireFacturation(".$listeAnalysesDemandees[$i]['tarif'].",".$iddemande.",".$listeAnalysesDemandees[$i]['idanalyse'].");
                   
 	                       }
 	    	
 	                   });
+                               		
+                       tableauIdDemandeAnalyse[".$iddemande."] = ".$listeAnalysesDemandees[$i]['idanalyse'].";
+                       tableauIdDemandeTarif[".$iddemande."] =  ".$listeAnalysesDemandees[$i]['tarif'].";
 	                 </script>";
 	    		 
 	    	}
@@ -707,12 +723,17 @@ class FacturationController extends AbstractActionController {
 	        var choixCheckedTout = $('#choixCheckedTout input[name=\'nameChoixCheckedTout\']');
 	        
 	        $(choixCheckedTout).click(function(){
-	            tableauAnalysesSelectionnees = [];
+	            //tableauAnalysesSelectionnees = [];
 	            if(choixCheckedTout[0].checked){
-	                tarifFact = 0;
+	                //tarifFact = 0;
 	                for(var k = 0 ; k < tableauIddemande.length ; k++){
-	                    $('#choixChecked'+tableauIddemande[k]+' input').removeAttr('checked');
-	                    $('#choixChecked'+tableauIddemande[k]+' input').trigger('click');
+	      		
+	      		        var choixCheckedAnalyse = $('#choixChecked'+tableauIddemande[k]+' input');
+	      		        if(!choixCheckedAnalyse[0].checked){ 
+	      		           //$('#choixChecked'+tableauIddemande[k]+' input').removeAttr('checked');
+	                       $('#choixChecked'+tableauIddemande[k]+' input').trigger('click');
+	                    }
+	                    
 	                }
 	        
 	            }else{
@@ -737,7 +758,7 @@ class FacturationController extends AbstractActionController {
 	        $('#service').css({'background':'#eee','border-bottom-width':'0px','border-top-width':'0px','border-left-width':'0px','border-right-width':'0px','font-weight':'bold','color':'green','font-family': 'Times  New Roman','font-size':'18px'});
 	        $('#service').html('<option>Infirmier</option>').attr('disabled',true);
 	        $('#taux').css({'font-weight':'bold','color':'#065d10','padding-left':'10px','font-family': 'Times  New Roman','font-size':'24px'});
-	        $('#montant_avec_majoration').css({'background':'#eee','border-bottom-width':'0px','border-top-width':'0px','border-left-width':'0px','border-right-width':'0px','font-weight':'bold','color':'green','font-family': 'Time  New Romans','font-size':'24px'});
+	        $('#montant_avec_majoration_vue,#grand_total_majoration').css({'background':'#eee','border-bottom-width':'0px','border-top-width':'0px','border-left-width':'0px','border-right-width':'0px','font-weight':'bold','color':'green','font-family': 'Time  New Romans','font-size':'24px'});
 	        //$('#montant_avec_majoration').attr('readonly',true);
 	        $('#idpatient').val(".$idpatient.");
 	          
@@ -769,7 +790,7 @@ class FacturationController extends AbstractActionController {
 				      <th id='typeA' style='cursor: pointer;'>Type</th>
 					  <th id='analyseA' style='cursor: pointer;'>Analyse</th>
 	                  <th id='tarifA' style='cursor: pointer; ' >Tarif (FCFA)</th>
-				      <th id='choixA' style='' > <div style='width: 50%; float: left;'> Choix </div> <div style='width: 50%; float: left; font-size: 10px;' id='choixCheckedTout'> Tout <input type='checkbox' name='nameChoixCheckedTout'> </div> </th>
+				      <th id='choixA' style='' > <div style='width: 50%; float: left;'> Choix </div> <div style='width: 50%; float: left; font-size: 10px;' id='choixCheckedTout'> Tout <input type='checkbox' name='nameChoixCheckedTout' class='analyseChoixCheckedToutASTY'> </div> </th>
 				   </tr>
 			     </thead>";
 		 
@@ -779,6 +800,9 @@ class FacturationController extends AbstractActionController {
 	               var tableauIddemande = [];
 	               var i = 0;
 	    
+				   var tableauIdDemandeAnalyse = [];
+	    		   var tableauIdDemandeTarif = [];
+				
 	               var tableauIddemandeChoisi = [];
 	             </script>";
 		 
@@ -787,33 +811,37 @@ class FacturationController extends AbstractActionController {
 		if($date){
 			$listeAnalysesDemandees = $this->getAnalyseTable()->getListeAnalysesDerniereDemandeNonFacturees($idpatient, $date);
 			for($i = 0 ; $i < count($listeAnalysesDemandees) ; $i++){
-		
+		        
 				$html .="<tr style='height:20px; width:100%; font-family: times new roman;'>
  					    <td id='typeA' style='font-size: 13px;'> ".$listeAnalysesDemandees[$i]['libelle']." </td>
  					    <td id='analyseA' style='font-size: 13px;'> ".$listeAnalysesDemandees[$i]['designation']." </td>
- 				        <td id='tarifA' style='font-size: 15px;'> <div style='float: right;'> ".$this->prixMill($listeAnalysesDemandees[$i]['tarif'])." </div>  </td>
- 				        <td id='choixA' style='font-size: 15px;'> <div style='float: left; width: 45%;' id='choixChecked".$listeAnalysesDemandees[$i]['iddemande']."' > <input type='checkbox' name='nameChoixChecked_".$listeAnalysesDemandees[$i]['iddemande']."' > <div id='cocher_".$listeAnalysesDemandees[$i]['iddemande']."' style='float: right;'> <!-- Emplacement de limage cocher--> </div> </div> </td>
+ 				        <td id='tarifA' class='tarifNormalEtAvecMajoration_".$listeAnalysesDemandees[$i]['iddemande']."' style='font-size: 15px;'> <div style='float: right;'> ".$this->prixMill($listeAnalysesDemandees[$i]['tarif'])." </div>  </td>
+ 				        <td id='choixA' style='font-size: 15px;'> <div style='float: left; width: 45%;' id='choixChecked".$listeAnalysesDemandees[$i]['iddemande']."' > <input type='checkbox' class='analyseChoixCheckedASTY' name='nameChoixChecked_".$listeAnalysesDemandees[$i]['iddemande']."' > <div id='cocher_".$listeAnalysesDemandees[$i]['iddemande']."' style='float: right;' class='analyseChoixCheckedImgASTY'> <!-- Emplacement de limage cocher--> </div> </div> </td>
  				     </tr>";
-		
+				
+				
 				$iddemande = $listeAnalysesDemandees[$i]['iddemande'];
 		
 				$html .="<script>
 	                   tableauIddemande [i++] = ".$iddemande.";
 	                   var choixAnalyseChecked".$iddemande." = $('#choixChecked".$iddemande."  input[name=\'nameChoixChecked_".$iddemande."\']');
 	                   $(choixAnalyseChecked".$iddemande.").click(function(){
-		
+				
 	                       if(choixAnalyseChecked".$iddemande."[0].checked){
 	                           $('#cocher_".$iddemande."').html('<img  src=\'".$this->baseUrl()."public/images_icons/tick_16.png\' >');
-	                           ajouterFacturation(".$listeAnalysesDemandees[$i]['tarif'].",".$iddemande.");
-		
+	                           ajouterFacturation(".$listeAnalysesDemandees[$i]['tarif'].",".$iddemande.",".$listeAnalysesDemandees[$i]['idanalyse'].");
+				
 	                       }else{
                                $('#cocher_".$iddemande."').html('');
                                $('#choixCheckedTout input[name=\'nameChoixCheckedTout\']').removeAttr('checked');
-                               reduireFacturation(".$listeAnalysesDemandees[$i]['tarif'].",".$iddemande.");
-		
+                               reduireFacturation(".$listeAnalysesDemandees[$i]['tarif'].",".$iddemande.",".$listeAnalysesDemandees[$i]['idanalyse'].");
+				
 	                       }
-		
+				
 	                   });
+                 
+                       tableauIdDemandeAnalyse[".$iddemande."] = ".$listeAnalysesDemandees[$i]['idanalyse'].";
+                       tableauIdDemandeTarif[".$iddemande."] =  ".$listeAnalysesDemandees[$i]['tarif'].";
 	                 </script>";
 		
 			}
@@ -824,7 +852,6 @@ class FacturationController extends AbstractActionController {
 		 
 		$html .="</table>";
 		 
-		 
 		$html .= "</tr>";
 		$html .= "</table>";
 		 
@@ -834,12 +861,17 @@ class FacturationController extends AbstractActionController {
 	        var choixCheckedTout = $('#choixCheckedTout input[name=\'nameChoixCheckedTout\']');
 	    
 	        $(choixCheckedTout).click(function(){
-	            tableauAnalysesSelectionnees = [];
+	            //tableauAnalysesSelectionnees = [];
 	            if(choixCheckedTout[0].checked){
-	                tarifFact = 0;
+	                
 	                for(var k = 0 ; k < tableauIddemande.length ; k++){
-	                    $('#choixChecked'+tableauIddemande[k]+' input').removeAttr('checked');
-	                    $('#choixChecked'+tableauIddemande[k]+' input').trigger('click');
+	    
+	      		        var choixCheckedAnalyse = $('#choixChecked'+tableauIddemande[k]+' input');
+	      		        if(!choixCheckedAnalyse[0].checked){
+	      		           //$('#choixChecked'+tableauIddemande[k]+' input').removeAttr('checked');
+	                       $('#choixChecked'+tableauIddemande[k]+' input').trigger('click');
+	                    }
+	          
 	                }
 	    
 	            }else{
@@ -850,7 +882,8 @@ class FacturationController extends AbstractActionController {
 	            }
 	        });
 	    
-	        $('#numOrdre').html(".$numOrdre.");   
+		
+		    $('#numOrdre').html(".$numOrdre.");   
 	      	$('.listeAAfficher').html('');
 	      	$('.listeAAfficher_".$numOrdre."').html('<img  src=\'../images_icons/transfert_bas.png\' title=\'la liste en bas\' />');
 	      			
@@ -858,15 +891,13 @@ class FacturationController extends AbstractActionController {
               show: { effect: 'slideDown', delay: 250 }
             });
 
-	      	var boutons = $('input[name=type_facturation]');
-	        $(boutons[0]).trigger('click');
-	      	$('.organisme').toggle(false); $('#organisme').val('');
-			$('.taux').toggle(false); $('#taux').val('');
-   			tarifFact = 0;
-	      	$('#montant_avec_majoration').val('');
+	      	var boutonsReinit = $('input[name=type_facturation]');
+	        $(boutonsReinit[0]).trigger('click');
+	      	$(boutonsReinit[0]).trigger('click');
 	      			
-	       </script>";
-		
+	      	reinitTarifListeAnalyse();
+				
+		    </script>";
 		
 		
 		$this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );
@@ -900,18 +931,32 @@ class FacturationController extends AbstractActionController {
 	    
 	    if($type_facturation == 2){
 	        $donnees['id_type_facturation'] = 2;
-	        $donnees['organisme'] = $this->params ()->fromPost ( 'organisme' );
-	        $donnees['taux_majoration'] = $this->params ()->fromPost ( 'taux' );
-	        $donnees['montant_avec_majoration'] = (int)str_replace(" ", "",$this->params ()->fromPost ( 'montant_avec_majoration' ));
-	    } 
-	    else
-	    if($type_facturation == 1){
-	        $donnees['id_type_facturation'] = 1;
-	    }
+	    }else
+	    	if($type_facturation == 1){
+	    		$donnees['id_type_facturation'] = 1;
+	    	}
 	    
+	    	//var_dump($this->params ()->fromPost ( 'organisme' ) == 3); exit();
+	    	
 	    //Ajouter la facturation
 	    $idfacturation = $this->getFacturationTable() ->addFacturation( $donnees );
 	    	
+	    //Ajouter les infos de la prise en charge 
+	    if($type_facturation == 2){
+	    	$donneesPec['idfacturation'] = $idfacturation;
+	    	$donneesPec['taux'] = $this->params ()->fromPost ( 'taux_defaut' );
+	    	$donneesPec['organisme'] = $this->params ()->fromPost ( 'organisme' );
+	    	$donneesPec['montant_avec_majoration'] = (int)$montant;
+	    	$donneesPec['montant_patient'] = (int)str_replace(" ", "",$this->params ()->fromPost ( 'montant_avec_majoration' ));
+	    	
+	    	$this->getFacturationTable() ->addFacturationPriseencharge($donneesPec);
+	    	
+	    	if($donneesPec['organisme'] == 3){
+	    		$autre_organisme = $this->params ()->fromPost ( 'autre_organisme' );
+	    		$this->getFacturationTable() ->addAutresOrganismes($idfacturation, $autre_organisme);
+	    	}
+	    }
+	    
 	    //Ajouter la liste des analyses pour lesquelles le patient est admis à l'infirmerie pour prélèvement
 	    $this->getFacturationTable() ->addAnalyses( $idfacturation , $liste_demandes_analyses ); 
 
@@ -975,6 +1020,7 @@ class FacturationController extends AbstractActionController {
 	    $historiquePEC = ( int ) $this->params ()->fromPost ( 'historiquePEC', 0 );
 	    
 	    $facturation = $this->getFacturationTable()->getFacturation( $idfacturation );
+	    $facturationPECharge = $this->getFacturationTable()->getPrisenChargeFacturation( $idfacturation );
 	    
 	    $today = new \DateTime ();
 	    $dateAujourdhui = $today->format( 'Y-m-d' );
@@ -1008,9 +1054,56 @@ class FacturationController extends AbstractActionController {
 	    
  	    	$html .="<tr style='height:20px; width:100%; font-family: times new roman;'>
  					    <td id='typeA' style='font-size: 13px;'> ".$listeAnalysesDemandees[$i]['libelle']." </td>
-  					    <td id='analyseA' style='font-size: 13px;'> ".$listeAnalysesDemandees[$i]['designation']." </td>
-  				        <td id='tarifA' style='font-size: 15px;'> <div style='float: right;'> ".$this->prixMill($listeAnalysesDemandees[$i]['tarif'])." </div>  </td>
-  				     </tr>";
+  					    <td id='analyseA' style='font-size: 13px;'> ".$listeAnalysesDemandees[$i]['designation']." </td>";
+  			
+ 	    	if($facturation['id_type_facturation'] == 2){
+ 	    		
+ 	    		$idOrganisme = $facturationPECharge['organisme'];
+ 	    		
+ 	    		if($idOrganisme == 1 || $idOrganisme == 2){
+ 	    			$listeInfTauxAnalyses = $this->getFacturationTable()->getListeIdAnalysesPECParUGB();
+ 	    			$idanalyse = $listeAnalysesDemandees[$i]['idanalyse'];
+ 	    			if(in_array($idanalyse, $listeInfTauxAnalyses[0])){
+ 	    				if($listeInfTauxAnalyses[1][$idanalyse] == 1){
+ 	    					$tarifNormal = $listeAnalysesDemandees[$i]['tarif'];
+ 	    					$tarifPEC = $tarifNormal+($tarifNormal/2); //50%
+ 	    					
+ 	    					$html .="<td id='tarifA' style='font-size: 15px;'> <div style='float: right;'> <span style='color: red;' title='50%'>".$this->prixMill($tarifNormal)."</span> - ".$this->prixMill("$tarifPEC")." </div>  </td>";
+ 	    				}else 
+ 	    					if($listeInfTauxAnalyses[1][$idanalyse] == 2){
+ 	    						$tarifNormal = $listeAnalysesDemandees[$i]['tarif'];
+ 	    						$tarifPEC = $tarifNormal*2; //100%
+ 	    						 
+ 	    						$html .="<td id='tarifA' style='font-size: 15px;'> <div style='float: right;'> <span style='' title='100%'>".$this->prixMill($tarifNormal)."</span> - ".$this->prixMill("$tarifPEC")." </div>  </td>";
+ 	    					}
+
+ 	    			}else{
+ 	    				$tarifNormal = $listeAnalysesDemandees[$i]['tarif'];
+ 	    				$tarifPEC = $tarifNormal+($tarifNormal*2); //200%
+ 	    				 
+ 	    				$html .="<td id='tarifA' style='font-size: 15px;'> <div style='float: right;'> <span style='' title='200%'>".$this->prixMill($tarifNormal)."</span> - ".$this->prixMill("$tarifPEC")." </div>  </td>";
+ 	    				
+ 	    			}
+ 	    			
+ 	    		}else
+ 	    			if($idOrganisme == 3){
+ 	    				
+ 	    				$tarifNormal = $listeAnalysesDemandees[$i]['tarif'];
+ 	    				$tarifPEC = $tarifNormal+($tarifNormal*2); //200%
+ 	    				 
+ 	    				$html .="<td id='tarifA' style='font-size: 15px;'> <div style='float: right;'> <span style='' title='200%'>".$this->prixMill($tarifNormal)."</span> - ".$this->prixMill("$tarifPEC")." </div>  </td>";
+ 	    				
+ 	    			}
+ 	    		
+ 	    		
+ 	    	}else
+ 	    		if($facturation['id_type_facturation'] == 1){
+ 	    			$html .="<td id='tarifA' style='font-size: 15px;'> <div style='float: right;'> ".$this->prixMill($listeAnalysesDemandees[$i]['tarif'])." </div>  </td>";
+ 	    		}
+
+  			
+ 	    	
+  			$html .="</tr>";
 	    	 
 	    	 
  	    }
@@ -1041,17 +1134,24 @@ class FacturationController extends AbstractActionController {
  	    if($facturation['id_type_facturation'] == 2){
  	    	$html .="<table style='margin-top: 5px; margin-left:17.5%; width: 80%;'>";
 
- 	    	$organisme = $this->getFacturationTable()->getOrganisme($facturation['organisme']);
  	    	$html .="<tr style='width: 80%; '>";
- 	    	$html .="<td style='width: 50%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Facture prise en charge par  </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px;'> ". $organisme['libelle'] ." </p></td>";
- 	     	if($facturation['taux_majoration']){
- 	     		$html .="<td style='width: 25%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Taux &agrave; r&eacute;gler (%) </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-weight:bold; font-size:22px;'> ". $facturation['taux_majoration'] ." </p></td>";
+ 	    	if($facturationPECharge['organisme'] == 3){
+ 	    		$organisme = $this->getFacturationTable()->getAutresOrganismes($idfacturation);
+ 	    		$html .="<td style='width: 50%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Facture prise en charge par  </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px;'> ". $organisme['nom_organisme'] ." </p></td>";
+ 	    	}else{
+ 	    		$organisme = $this->getFacturationTable()->getOrganisme($facturationPECharge['organisme']);
+ 	    		$html .="<td style='width: 50%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Facture prise en charge par  </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px;'> ". $organisme['libelle'] ." </p></td>";
+ 	    	}
+
+ 	     	
+ 	     	if($facturationPECharge['taux']){
+ 	     		$html .="<td style='width: 25%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Taux r&eacute;gl&eacute; (%) </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-weight:bold; font-size:22px;'> ". $facturationPECharge['taux'] ." </p></td>";
  	     	}else {
  	     		$html .="<td style='width: 25%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Taux (%) </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-weight:bold; font-size:22px;'> 0 </p></td>";
  	     	}
- 	     	$majoration = ($facturation['montant'] * $facturation['taux_majoration'])/100;
+ 	     	$majoration = ($facturation['montant'] * 20)/100;
  	     	$html .="<td style='width: 25%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Montant r&eacute;gl&eacute; (FCFA) </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-weight:bold; font-size:22px;'> ". $this->prixMill("$majoration") ." </p></td>";
- 	     	$html .="<!-- td style='width: 25%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Tarif major&eacute; (FCFA) </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-size:15px; font-weight:bold; font-size:22px;'> ". $this->prixMill( $facturation['montant_avec_majoration'] )  ."  </p></td-->";
+ 	     	$html .="<!-- td style='width: 25%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Tarif major&eacute; (FCFA) </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-size:15px; font-weight:bold; font-size:22px;'> ". $this->prixMill( $facturationPECharge['montant_avec_majoration'] )  ."  </p></td-->";
  	     	$html .="</tr>";
 
  	     	$html .="</table>";
@@ -1059,9 +1159,9 @@ class FacturationController extends AbstractActionController {
 	    
 	    
 	    if($priseencharge == 1){
-	    	$taux = $facturation['taux_majoration'];
-	    	$montantPatient = ($facturation['montant'] * $facturation['taux_majoration'])/100;
-	    	$montantOrganisme = $facturation['montant'] - $montantPatient;
+	    	$taux = $facturationPECharge['taux'];
+	    	$montantPatient = $facturationPECharge['montant_patient'];
+	    	$montantOrganisme = $facturationPECharge['montant_avec_majoration'] - $montantPatient;
 	    	
 	    	$html .="<table style='margin-top: 5px; margin-left:17.5%; width: 80%;'>";
 	    	
@@ -1086,9 +1186,9 @@ class FacturationController extends AbstractActionController {
 	    }
 	    
 	    if($historiquePEC == 1){
-	    	$taux = $facturation['taux_majoration'];
-	    	$montantPatient = ($facturation['montant'] * $facturation['taux_majoration'])/100;
-	    	$montantOrganisme = $facturation['montant'] - $montantPatient;
+	    	$taux = $facturationPECharge['taux'];
+	    	$montantPatient = $facturationPECharge['montant_patient'];
+	    	$montantOrganisme = $facturationPECharge['montant_avec_majoration'] - $montantPatient;
 	    	
 	    	$html .="<table style='margin-top: 5px; margin-left:17.5%; width: 80%;'>";
 	    	
@@ -1241,15 +1341,25 @@ class FacturationController extends AbstractActionController {
 			//******************************************************
 			$lePatient = $this->getPatientTable()->getInfoPatient( $idpatient );
 			$factureReglee = $this->getFacturationTable()->getReglementFacturation($idfacturation);
-				
+			
+			$facturationPECharge = $this->getFacturationTable()->getPrisenChargeFacturation( $idfacturation );
+			$listeInfTauxAnalyses = $this->getFacturationTable()->getListeIdAnalysesPECParUGB();
+			
+			if($facturationPECharge['organisme'] == 3){
+				$nom_organisme = $this->getFacturationTable()->getAutresOrganismes($idfacturation)['nom_organisme'];
+			}else{
+				$nom_organisme = $this->getFacturationTable()->getOrganisme($facturationPECharge['organisme'])['libelle'];
+			}
+			
 			$infos = array(
 					'numero' => $facturation['numero'],
 					'service' => $service,
 					'montant' => $facturation['montant'],
-					'montant_avec_majoration' => $facturation['montant_avec_majoration'],
+					'montant_avec_majoration' => $facturationPECharge['montant_patient'],
 					'type_facturation' => $facturation['id_type_facturation'],
-					'organisme' => $this->getFacturationTable()->getOrganisme( $facturation['organisme'] )['libelle'],
-					'taux' => $facturation['taux_majoration'],
+					'organisme' => $nom_organisme,
+					'idorganisme' => $facturationPECharge['organisme'],
+					'taux' => 20,
 					'priseencharge' => $priseencharge,
 					'historiquePEC' => $historiquePEC,
 					'factureReglee' => $factureReglee,
@@ -1271,6 +1381,9 @@ class FacturationController extends AbstractActionController {
 			
 			//Entrer les données sur la liste des analyses
 			$page->setListeAnalysesDemndees($listeAnalysesDemandees);
+			
+			//Liste des analyses prises en charge par l'UGB
+			$page->setListeInfTauxAnalyses($listeInfTauxAnalyses);
 			
 			$page->setService($service);
 			$page->setInformations($infos);
@@ -1339,6 +1452,9 @@ class FacturationController extends AbstractActionController {
 		$listeFactures = $this->getFacturationTable()->getListeFacturesDuPatient($idpersonne);
 		
 		$facturation = $this->getFacturationTable()->getFacturation( $idfacturation );
+		
+		$facturationPECharge = $this->getFacturationTable()->getPrisenChargeFacturation( $idfacturation );
+		 
 		 
 		$today = new \DateTime ();
 		$dateAujourdhui = $today->format( 'Y-m-d' );
@@ -1416,13 +1532,63 @@ class FacturationController extends AbstractActionController {
 		
 		$listeAnalysesDemandees = $this->getFacturationTable()->getListeAnalysesFacturees($idfacturation);
 		for($i = 0 ; $i < count($listeAnalysesDemandees) ; $i++){
-		
+
 			$html .="<tr style='height:20px; width:100%; font-family: times new roman;'>
  					    <td id='typeA' style='font-size: 13px;'> ".$listeAnalysesDemandees[$i]['libelle']." </td>
-  					    <td id='analyseA' style='font-size: 13px;'> ".$listeAnalysesDemandees[$i]['designation']." </td>
-  				        <td id='tarifA' style='font-size: 15px;'> <div style='float: right;'> ".$this->prixMill($listeAnalysesDemandees[$i]['tarif'])." </div>  </td>
-  				     </tr>";
-		
+  					    <td id='analyseA' style='font-size: 13px;'> ".$listeAnalysesDemandees[$i]['designation']." </td>";
+				
+			
+			if($facturation['id_type_facturation'] == 2){
+			
+				$idOrganisme = $facturationPECharge['organisme'];
+			
+				if($idOrganisme == 1 || $idOrganisme == 2){
+					$listeInfTauxAnalyses = $this->getFacturationTable()->getListeIdAnalysesPECParUGB();
+					$idanalyse = $listeAnalysesDemandees[$i]['idanalyse'];
+					if(in_array($idanalyse, $listeInfTauxAnalyses[0])){
+						if($listeInfTauxAnalyses[1][$idanalyse] == 1){
+							$tarifNormal = $listeAnalysesDemandees[$i]['tarif'];
+							$tarifPEC = $tarifNormal+($tarifNormal/2); //50%
+							 
+							$html .="<td id='tarifA' style='font-size: 15px;'> <div style='float: right;'> <span style='color: red;' title='50%'>".$this->prixMill($tarifNormal)."</span> - ".$this->prixMill("$tarifPEC")." </div>  </td>";
+						}else
+						if($listeInfTauxAnalyses[1][$idanalyse] == 2){
+							$tarifNormal = $listeAnalysesDemandees[$i]['tarif'];
+							$tarifPEC = $tarifNormal*2; //100%
+								
+							$html .="<td id='tarifA' style='font-size: 15px;'> <div style='float: right;'> <span style='' title='100%'>".$this->prixMill($tarifNormal)."</span> - ".$this->prixMill("$tarifPEC")." </div>  </td>";
+						}
+			
+					}else{
+						$tarifNormal = $listeAnalysesDemandees[$i]['tarif'];
+						$tarifPEC = $tarifNormal+($tarifNormal*2); //200%
+						 
+						$html .="<td id='tarifA' style='font-size: 15px;'> <div style='float: right;'> <span style='' title='200%'>".$this->prixMill($tarifNormal)."</span> - ".$this->prixMill("$tarifPEC")." </div>  </td>";
+			
+					}
+					 
+				}else
+				if($idOrganisme == 3){
+			
+					$tarifNormal = $listeAnalysesDemandees[$i]['tarif'];
+					$tarifPEC = $tarifNormal+($tarifNormal*2); //200%
+					 
+					$html .="<td id='tarifA' style='font-size: 15px;'> <div style='float: right;'> <span style='' title='200%'>".$this->prixMill($tarifNormal)."</span> - ".$this->prixMill("$tarifPEC")." </div>  </td>";
+			
+				}
+			
+			
+			}else
+			if($facturation['id_type_facturation'] == 1){
+				$html .="<td id='tarifA' style='font-size: 15px;'> <div style='float: right;'> ".$this->prixMill($listeAnalysesDemandees[$i]['tarif'])." </div>  </td>";
+			}
+			
+				
+			 
+			$html .="</tr>";
+			 
+			 
+			
 		
 		}
 			
@@ -1502,7 +1668,6 @@ class FacturationController extends AbstractActionController {
   					    <td id='analyseA' style='font-size: 13px;'> ".$listeAnalysesDemandees[$i]['designation']." </td>
   				        <td id='tarifA' style='font-size: 15px;'> <div style='float: right;'> ".$this->prixMill($listeAnalysesDemandees[$i]['tarif'])." </div>  </td>
   				     </tr>";
-		
 		
 		}
 			

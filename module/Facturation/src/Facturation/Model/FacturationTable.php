@@ -19,6 +19,14 @@ class FacturationTable {
  	    return $this->tableGateway->getLastInsertValue( $this->tableGateway->insert($donnees) );
  	}
  	
+ 	public function addFacturationPriseencharge($donnees){
+ 		$db = $this->tableGateway->getAdapter();
+ 		$sql = new Sql($db);
+ 	
+ 		$sQuery = $sql->insert()->into('facturation_prisencharge')->values($donnees);
+ 		$sql->prepareStatementForSqlObject($sQuery)->execute();
+ 	
+ 	}
  	
  	public function addAnalyses($idfacturation , $liste_demandes_analyses){
  	    $db = $this->tableGateway->getAdapter();
@@ -45,8 +53,25 @@ class FacturationTable {
  		$sQuery = $sql->insert()->into('facturation_cons') 
  		->values($donnees);
  		$sql->prepareStatementForSqlObject($sQuery)->execute();
+ 	}
+
+ 	public function addAutresOrganismes($idfacturation, $nomorganisme){
+ 		$db = $this->tableGateway->getAdapter();
+ 		$sql = new Sql($db);
+ 	
+ 		$sQuery = $sql->insert()->into('autres_organismes')->values(array('idfacturation'=>$idfacturation, 'nom_organisme' =>$nomorganisme));
+ 		$sql->prepareStatementForSqlObject($sQuery)->execute();
  	
  	}
+ 	
+ 	public function getAutresOrganismes($idfacturation){
+ 		$db = $this->tableGateway->getAdapter();
+ 		$sql = new Sql($db);
+ 		$sQuery = $sql->select('autres_organismes')->where(array('idfacturation' => $idfacturation));
+ 		$requete = $sql->prepareStatementForSqlObject($sQuery);
+ 		return $requete->execute() ->current();
+ 	}
+ 	
  	
  	public function reglementFacturation($infosPriseencharge){
  		$db = $this->tableGateway->getAdapter();
@@ -95,6 +120,15 @@ class FacturationTable {
  		$db = $this->tableGateway->getAdapter();
  		$sql = new Sql($db);
  		$sQuery = $sql->select('facturation')
+ 		->where(array('idfacturation' => $idfacturation));
+ 		$requete = $sql->prepareStatementForSqlObject($sQuery);
+ 		return $requete->execute()->current();
+ 	}
+ 	
+ 	public function getPrisenChargeFacturation($idfacturation){
+ 		$db = $this->tableGateway->getAdapter();
+ 		$sql = new Sql($db);
+ 		$sQuery = $sql->select('facturation_prisencharge')
  		->where(array('idfacturation' => $idfacturation));
  		$requete = $sql->prepareStatementForSqlObject($sQuery);
  		return $requete->execute()->current();
@@ -242,7 +276,7 @@ class FacturationTable {
  		$requete = $sql->prepareStatementForSqlObject($sQuery);
  		$result = $requete->execute();
  		
- 		$options = array(null);
+ 		$options = array();
  		
  		foreach ($result as $data) {
  			$options[$data['idorganisme']] = $data['libelle'];
@@ -331,10 +365,50 @@ class FacturationTable {
  	}
  	
  	
+ 	public function getListeAnalysePriseEnChargeParUGB(){
+ 		$db = $this->tableGateway->getAdapter();
+ 		$sql = new Sql($db);
+ 		$sQuery = (new Sql($db))->select()
+ 		->from(array('opugb' => 'organisme_pec_analyse_ugb'))->columns( array( 'idanalyse', 'taux_pec' ))
+ 		->join(array('a' => 'analyse'), 'a.idanalyse = opugb.idanalyse' , array('tarif'));
+ 		
+ 		$requete = $sql->prepareStatementForSqlObject($sQuery);
+ 		$result = $requete->execute();
+
+ 		$tableauInfosTarifAnalyse = '<script> var tableauInfosTarifAnalyse = [';
+ 		$listeAnalyseTarif = '{';
+ 		$listeAnalyseTaux = '{';	
+ 		foreach ($result as $data) {
+ 			$listeAnalyseTarif .= $data['idanalyse'].':'.$data['tarif'].',';
+ 			$listeAnalyseTaux  .= $data['idanalyse'].':'.$data['taux_pec'].',';
+ 		}
+ 		
+ 		$listeAnalyseTarif .= '},';
+ 		$listeAnalyseTaux  .= '}';
+ 		$tableauInfosTarifAnalyse .= $listeAnalyseTarif.$listeAnalyseTaux.']; </script>';
+ 		
+ 		return $tableauInfosTarifAnalyse;
+ 	}
  	
  	
+ 	public function getListeIdAnalysesPECParUGB(){
+ 		$db = $this->tableGateway->getAdapter();
+ 		$sql = new Sql($db);
+ 		$sQuery = (new Sql($db))->select()
+ 		->from(array('opugb' => 'organisme_pec_analyse_ugb'))->columns( array( 'idanalyse', 'taux_pec' ));
+ 		$requete = $sql->prepareStatementForSqlObject($sQuery);
+ 		$result = $requete->execute();
  	
- 	
+ 		$listeAnalyses = array();
+ 		$listeIdTaux = array();
+ 		foreach ($result as $data) {
+ 			$idanalyse = $data['idanalyse'];
+ 			$listeAnalyses[] = $idanalyse;
+ 			$listeIdTaux[$idanalyse]  = $data['taux_pec'];
+ 		}
+ 			
+ 		return array($listeAnalyses, $listeIdTaux);
+ 	}
  	
  	
  	

@@ -544,7 +544,8 @@ width: 190px; /* la largeur du champ input*/
 }
 
 
-.contenuExamensEffectuesStyle, .contenuExamensAFaireStyle
+.contenuExamensEffectuesStyle, .contenuExamensAFaireStyle, 
+.contenuExamensRadioEffectuesObligStyle, .contenuExamensRadiologAFaireStyle
 {
 	height: 45px;
 	margin-bottom: 15px;

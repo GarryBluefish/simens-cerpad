@@ -6024,7 +6024,7 @@ class TechnicienController extends AbstractActionController {
 	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
 	    $html .= "  <td style='width: 55%;'><label class='lab1' ><span> IDP <input id='champ22' type='number' step='any'  min='0' max='50'> </span></label></td>";
-	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'> g/dl </label></td>";
+	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'> fl </label></td>";
 	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> 9, 0 - 17, 0 </label></td>";
 	    $html .= "</tr>";
 	    
@@ -8930,14 +8930,15 @@ class TechnicienController extends AbstractActionController {
 				
 		}
 		sort($tabProfils);
+		sort($tabAnnees);
 		
 		$totalCol = array();
 		
 		$html = '<table class="titreTableauInfosStatistiques">
 				   <tr class="ligneTitreTableauInfos">
-				     <td style="width: 16%; height: 40px;">P&eacute;riodes</td>';
+				     <td style="width: 14%; height: 40px;">P&eacute;riodes</td>';
 				     
-		        if(count($tabProfils) == 0){ $largeur = 72; }else{ $largeur = 72/count($tabProfils); }
+		        if(count($tabProfils) == 0){ $largeur = 74; }else{ $largeur = 74/count($tabProfils); }
 		
 				for($iProf=0 ; $iProf<count($tabProfils) ;$iProf++){
 					$html .='
@@ -9146,14 +9147,15 @@ class TechnicienController extends AbstractActionController {
 	
 		}
 		sort($tabProfils);
+		sort($tabAnnees);
 	
 		$totalCol = array();
 	
 		$html = '<table class="titreTableauInfosStatistiques">
 				   <tr class="ligneTitreTableauInfos">
-				     <td style="width: 16%; height: 40px;">P&eacute;riodes</td>';
+				     <td style="width: 14%; height: 40px;">P&eacute;riodes</td>';
 
-		if(count($tabProfils) == 0){ $largeur = 72; }else{ $largeur = 72/count($tabProfils); }
+		if(count($tabProfils) == 0){ $largeur = 74; }else{ $largeur = 74/count($tabProfils); }
 		
 		for($iProf=0 ; $iProf<count($tabProfils) ;$iProf++){
 			$html .='
@@ -9370,6 +9372,7 @@ class TechnicienController extends AbstractActionController {
 	
 		}
 		sort($tabProfils);
+		sor($tabAnnees);
 	
 		return array($tabAnnees, $tabDonneesAnnuelle, $tabMois, $tabProfils, $tabProfilsAnneesMois, count($listeResultatsDepistages));
 	}

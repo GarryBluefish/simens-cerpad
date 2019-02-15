@@ -493,7 +493,7 @@ echo $this->form()->openTag($form); ?>
                      </td>
                      <td style="width:50%;">
                         <div>    
-                            <img class="image2_TP" style='cursor: pointer; position:relative; left: 15%; width: 60%; height: 60%;' src='<?php echo $this->basepath().'/images_icons/antecedentsfam.png'?>' />
+                            <img class="image2_TP" style='cursor: pointer; position:relative; left: 15%; width: 60%; height: 60%;' src='<?php echo $this->basepath().'/images_icons/Antecedentsfam.png'?>' />
                         </div>
                      </td>
                  </tr>
@@ -1568,16 +1568,18 @@ echo $this->form()->openTag($form); ?>
     
      <!--*4*-->
      <div style='font-family: police2;font-size: 17px; font-weight: bold;' class='examenComplementaireDelpiantAlert' >Examens compl&eacute;mentaires</div>
-     <div style='max-height: 700px;'>
+     <div style='max-height: 800px;'>
             
         <div id="accordionsss">
                
             <!--**************** EXAMENS EFFECTUES *****************-->
             <!--**************** EXAMENS EFFECTUES *****************-->
             <div style='font-family: police2;font-size: 17px; font-weight: bold;'> Examens effectu&eacute;s </div>
-            <div style='max-height:200px;'>
+            <div style='max-height:450px;'>
             
-		         <div class="titreZoneInfosEFStyle">&#10049; Les examens biologiques suivants sont d&eacute;j&agrave; effectu&eacute;s <span id="infosProgrammeDesExamensBiologiquesAlert">  <img  id="infosProgrammeDesExamensBiologiquesIcone"  onclick="afficherProgrammeDesExamensBiologiques();" style="float: right; cursor: pointer; " src="../images_icons/icons-calendrier-24.png" title="programme des examens biologiques"></span> </div>
+                 <!--**************** EXAMENS BIOLOGIQUES EFFECTUES *****************-->
+                 <!--**************** EXAMENS BIOLOGIQUES EFFECTUES *****************-->
+		         <div class="titreZoneInfosEFStyle">&#10049; Les examens biologiques effectu&eacute;s <span id="infosProgrammeDesExamensBiologiquesAlert">  <img  id="infosProgrammeDesExamensBiologiquesIcone"  onclick="afficherProgrammeDesExamensBiologiques();" style="float: right; cursor: pointer; " src="../images_icons/icons-calendrier-24.png" title="programme des examens biologiques"></span> </div>
 		         <div class="zoneInfosStyle contenuExamensEffectuesStyle">
 		            <table style="width:100%;">
 		              
@@ -1745,15 +1747,96 @@ echo $this->form()->openTag($form); ?>
                    <?php } ?>
                        //alert(tabNombreFoisAnalyseProgrammeAyantResultat);
                  </script>
-                      
+                 
+                 
+                 
+                 
+                 <!--**************** EXAMENS RADIOLOGIQUES EFFECTUES *****************-->
+                 <!--**************** EXAMENS RADIOLOGIQUES EFFECTUES *****************-->
+		         <div class="titreZoneInfosEFStyle">&#10049; Les examens radiologiques effectu&eacute;s <span id="infosProgrammeDesExamensRadiologiquesAlert">  <img  id="infosProgrammeDesExamensRadiologiquesIcone"  onclick="afficherProgrammeDesExamensRadiologiques();" style="float: right; cursor: pointer; " src="../images_icons/icons-calendrier-24.png" title="programme des examens radios" ></span> </div>
+		         <div class="zoneInfosStyle contenuExamensRadioEffectuesObligStyle">
+		            <table style="width:100%;">
+		              
+		              <!-- LIGNE N°1 -->
+					  <tr style="height:40px; width:100%;" id="examensRadioEffectuesObligECLigne1" class="designLabelExamenComplementaire" >
+					     <th style="width:33%; padding-right: 25px; vertical-align: top;"> 
+		                      <div style="float:left; width: 100%;" id="idAnalyseExamRadioCompOblig1" > </div> 
+						 </th>
+						 
+						 <th style="width:33%; padding-right: 25px; vertical-align: top;"> 
+		                      <div style="float:left; width: 100%;" id="idAnalyseExamRadioCompOblig2" > </div> 
+						 </th>
+						 
+						 <th style="width:33%; padding-right: 25px; vertical-align: top;"> 
+		                      <div style="float:left; width: 100%;" id="idAnalyseExamRadioCompOblig3" > </div> 
+					     </th>
+				      </tr>
+				      
+				      <!-- LIGNE N°2 -->
+					  <tr style="height:40px; width:100%;" id="examensRadioEffectuesObligECLigne2" class="designLabelExamenComplementaire" >
+					     <th style="width:33%; padding-right: 25px; vertical-align: top;"> 
+		                      <div style="float:left; width: 100%;" id="idAnalyseExamRadioCompOblig4" > </div> 
+						 </th>
+						 
+						 <th style="width:33%; padding-right: 25px; vertical-align: top;"> 
+		                      <div style="float:left; width: 100%;" id="idAnalyseExamRadioCompOblig5" > </div> 
+						 </th>
+						 
+						 <th style="width:33%; padding-right: 25px; vertical-align: top;"> 
+		                      <div style="float:left; width: 100%;" id="idAnalyseExamRadioCompOblig6" > </div> 
+					     </th>
+				      </tr>
+				      
+				    </table>
+				    
+				    
+				    
+				    <script>
+                      var nbExamensRadioEffectuesOblig = '<?php echo count($this->donneesExamensRadioEffectues[0]); ?>';
+                      var tabIndexAnalysesRadioOblig = new Array();
+                      var tabAnalysesRadioOblig = new Array();
+                      var i = 1;
+
+                      <?php for($i=0 ; $i<count($this->donneesExamensRadioEffectues[0]) ; $i++){?>
+                        tabIndexAnalysesRadioOblig[i] = '<?php echo $this->donneesExamensRadioEffectues[0][$i]; ?>';
+                        tabAnalysesRadioOblig[i++] = '<?php echo $this->donneesExamensRadioEffectues[1][$i]; ?>';
+                      <?php }?>
+                   
+                      getExamensRadioEffecutesDansExamCompOblig(nbExamensRadioEffectuesOblig,tabIndexAnalysesRadioOblig,tabAnalysesRadioOblig); 
+                    </script>
+				    
+				    
+				    <!-- PARTIE POUR LA GESTION DU PROGRAMME DES EXAMENS RADIOLOGIQUES -->
+                    <!-- PARTIE POUR LA GESTION DU PROGRAMME DES EXAMENS RADIOLOGIQUES -->
+                    <script type="text/javascript">
+                    var nbDonneesProgrammeAnalysesRadiosObligatoires = '<?php echo count($this->donneesProgrammeAnalysesRadiosObligatoires[0]); ?>';
+                    var tabIndexAnalyseRadioProgramme = new Array();
+                    var tabNomAnalyseRadioProgramme = new Array();
+                    var tabNombreFoisAnalyseRadioProgramme = new Array();
+                    var tabDateDemandeAnalyseRadioProgramme = new Array();
+
+                    var i = 1;
+                    
+                    <?php for($i=0 ; $i<count($this->donneesProgrammeAnalysesRadiosObligatoires[0]) ; $i++){?>
+                        <?php $indexAnalyseRadioProg = $this->donneesProgrammeAnalysesRadiosObligatoires[0][$i]; ?>
+                        tabIndexAnalyseRadioProgramme[i] = '<?php echo $indexAnalyseRadioProg; ?>';
+                        tabNomAnalyseRadioProgramme[i++] = '<?php echo $this->donneesProgrammeAnalysesRadiosObligatoires[1][$indexAnalyseRadioProg]; ?>';
+
+                    <?php } ?>    
+                    </script>
+                 
+                 
+                 
+				    
+                 </div>  
      		</div>
                   
             <!--**************** EXAMENS A FAIRE *****************-->
             <!--**************** EXAMENS A FAIRE *****************-->
             <div style='font-family: police2;font-size: 17px; font-weight: bold;' class='examenComplementaireAFaireDelpiantAlert'> Examens &agrave; faire </div>
-            <div style='max-height:200px;'>
+            <div style='max-height:450px;'>
             
-                 <div class="titreZoneInfosEAFStyle">&#10049; Les examens biologiques suivants ne sont pas encore faits  <span id="iconeVoirSupprimerAlert">  <img  id="demanderLesAnalysesAFaireIcone"  onclick="demanderLesAnalysesAFaire();" style="float: right; cursor: pointer; " src="../images_icons/demander_analyses.png" title="Effectuer la demande des analyses"></span> </div>
+                 <div class="titreZoneInfosEAFStyle">&#10049; Les examens biologiques &agrave; faire  <span id="iconeVoirSupprimerAlert">  <img  id="demanderLesAnalysesAFaireIcone"  onclick="demanderLesAnalysesAFaire();" style="float: right; cursor: pointer; " src="../images_icons/demander_analyses.png" title="Effectuer la demande des analyses"></span> </div>
 		         <div class="zoneInfosStyle contenuExamensAFaireStyle">
 		            <table style="width:100%;">
 		              
@@ -1842,6 +1925,76 @@ echo $this->form()->openTag($form); ?>
                    
                    getExamensNonFaitsDansExamComp(nbExamensNonFaits,tabIndexAnalysesNonFaits,tabAnalysesNonFaits); 
                  </script>
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 <div class="titreZoneInfosEAFStyle">&#10049; Les examens radiologiques &agrave; faire  <span id="iconeVoirSupprimerExamRadioAlert">  <!--img  id="demanderLesAnalysesRadiologAFaireIcone"  onclick="demanderLesAnalysesAFaire();" style="float: right; cursor: pointer; " src="../images_icons/demander_analyses.png" title="Effectuer la demande des analyses"--></span> </div>
+		         <div class="zoneInfosStyle contenuExamensRadiologAFaireStyle">
+		            <table style="width:100%;">
+		              
+		              <!-- LIGNE N°1 -->
+					  <tr style="height:40px; width:100%;" id="examensRadiologAFaireECLigne1" class="designLabelExamenComplementaire" >
+					     <th style="width:33%; padding-right: 25px; vertical-align: top;"> 
+		                      <div style="float:left; width: 100%;" id="idAnalyseAFExamRadiologComp1" > </div> 
+						 </th>
+						 
+						 <th style="width:33%; padding-right: 25px; vertical-align: top;"> 
+		                      <div style="float:left; width: 100%;" id="idAnalyseAFExamRadiologComp2" > </div> 
+						 </th>
+						 
+						 <th style="width:33%; padding-right: 25px; vertical-align: top;"> 
+		                      <div style="float:left; width: 100%;" id="idAnalyseAFExamRadiologComp3" > </div> 
+						 </th>
+				      </tr>
+				      
+				      <!-- LIGNE N°2 -->
+					  <tr style="height:40px; width:100%;" id="examensRadiologAFaireECLigne2" class="designLabelExamenComplementaire" >
+					     <th style="width:33%; padding-right: 25px; vertical-align: top;"> 
+		                      <div style="float:left; width: 100%;" id="idAnalyseAFExamRadiologComp4" > </div> 
+						 </th>
+						 
+						 <th style="width:33%; padding-right: 25px; vertical-align: top;"> 
+		                      <div style="float:left; width: 100%;" id="idAnalyseAFExamRadiologComp5" > </div> 
+						 </th>
+						 
+						 <th style="width:33%; padding-right: 25px; vertical-align: top;"> 
+		                      <div style="float:left; width: 100%;" id="idAnalyseAFExamRadiologComp6" > </div> 
+						 </th>
+				      </tr>
+				      
+				    </table>
+				    
+                 </div>
+                 
+                 <script>
+                   var nbExamensRadiologNonFaits = '<?php echo count($this->donneesExamensRadioEffectues[2]); ?>';
+                   var tabIndexAnalysesRadiologNonFaits = new Array();
+                   var tabAnalysesRadiologNonFaits = new Array();
+                   var tabTypesAnalysesRadiologNonFaits = new Array();
+                   var tabTarifAnalysesRadiologNonFaits = new Array();
+                   var tabTypeAlerteAnalysesRadiologNonFaites = new Array();
+                   var tabDateAlerteAnalysesRadiologNonFaites = new Array();
+                   var i = 1;
+
+                   <?php for($i=0 ; $i<count($this->donneesExamensRadioEffectues[2]) ; $i++){?>
+                	   tabIndexAnalysesRadiologNonFaits[i] = '<?php echo $this->donneesExamensRadioEffectues[2][$i]; ?>';
+                	   tabAnalysesRadiologNonFaits[i] = '<?php echo $this->donneesExamensRadioEffectues[3][$i]; ?>';
+                	   tabTypesAnalysesRadiologNonFaits[i] = '<?php echo $this->donneesExamensRadioEffectues[4][$i]; ?>';
+                	   tabTarifAnalysesRadiologNonFaits[i] = '<?php echo $this->donneesExamensRadioEffectues[5][$i]; ?>';
+
+                  	   //Gestion des alertes des examens Radios obligatoires à faire
+                	   tabTypeAlerteAnalysesRadiologNonFaites[i] = '<?php echo $this->donneesExamensRadioEffectues[6][1][ $this->donneesExamensRadioEffectues[2][$i] ]; ?>';
+                	   tabDateAlerteAnalysesRadiologNonFaites[i++] = '<?php echo $Control->convertDate($this->donneesExamensRadioEffectues[6][2][ $this->donneesExamensRadioEffectues[2][$i] ]); ?>';
+                   <?php }?>
+                   
+                   getExamensRadiologNonFaitsDansExamComp(nbExamensRadiologNonFaits,tabIndexAnalysesRadiologNonFaits,tabAnalysesRadiologNonFaits); 
+                 </script>
+                 
+                 
      		</div>
                   
             <!--**************** DEMANDE D'EXAMENS PAR LE MEDECIN *****************-->
@@ -2475,9 +2628,9 @@ echo $this->form()->openTag($form); ?>
 <div id="programmeDesExamensBiologiques" title="Programme des examens biologiques" style="display: none;" align="center" >
      <table style="width:100%; margin-bottom: 7px;"> 
        <tr style="width:100%;">
-         <td style="width:100%; height: 15px;" class="popInfEnTeteInterfaceProg" id="idPopInfEnTeteInterfaceProg">
-           <img onclick="infos_patient_programme();" src="../images_icons/ajouterphoto.png" style="margin-left: 10px; float: left; margin-top: 1px; height: 14px; cursor: pointer;">
-           <img onclick="infos_parentales_programme();" src="../images_icons/Infos_parentales.png" style="margin-left: 10px; float: left; margin-left: 10px; cursor: pointer;">
+         <td style="width:100%; height: 15px;" class="popInfEnTeteInterfaceProg" id="idPopInfEnTeteInterfaceProg1">
+           <img onclick="infos_patient_programme(1);" src="../images_icons/ajouterphoto.png" style="margin-left: 10px; float: left; margin-top: 1px; height: 14px; cursor: pointer;">
+           <img onclick="infos_parentales_programme(1);" src="../images_icons/Infos_parentales.png" style="margin-left: 10px; float: left; margin-left: 10px; cursor: pointer;">
          </td>
        </tr> 
      </table>
@@ -2486,6 +2639,18 @@ echo $this->form()->openTag($form); ?>
 
 
 
+<!-- POP-UP pour le programme des examens radiologiques -->
+<div id="programmeDesExamensRadiologiques" title="Programme des examens radiologiques" style="display: none;" align="center" >
+     <table style="width:100%; margin-bottom: 7px;"> 
+       <tr style="width:100%;">
+         <td style="width:100%; height: 15px;" class="popInfEnTeteInterfaceProg" id="idPopInfEnTeteInterfaceProg2">
+           <img onclick="infos_patient_programme(2);" src="../images_icons/ajouterphoto.png" style="margin-left: 10px; float: left; margin-top: 1px; height: 14px; cursor: pointer;">
+           <img onclick="infos_parentales_programme(2);" src="../images_icons/Infos_parentales.png" style="margin-left: 10px; float: left; margin-left: 10px; cursor: pointer;">
+         </td>
+       </tr> 
+     </table>
+     <table style="width:100%;" id="tabLigneExamProgrammeRadio_0"> </table>
+</div>
 
 
 

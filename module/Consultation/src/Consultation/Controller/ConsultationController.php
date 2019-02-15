@@ -753,13 +753,21 @@ class ConsultationController extends AbstractActionController {
 		$listeActes = $this->getConsultationTable()->getListeDesActes();
 		
 		/*
-		 * RECUPERER LES ANALYSES EFFECTUEES PAR LE PATIENT FAISANT PARTIE DES ANALYSES OBLIGATOIRES A FAIRE
+		 * RECUPERER LES ANALYSES BIOLOGIQUES - RADIOLOGIQUES EFFECTUEES ET A FAIRE
 		 */
-		$donneesExamensEffectues = $this->getAnalyseAFaireTable()->getAnalyseEffectuees($idpatient);
-		
+		/**
+         * Les analyses biologiques
+		 */
+		$donneesExamensBiologiquesEffectues = $this->getAnalyseAFaireTable()->getAnalysesBiologiquesEffectuees($idpatient);
 		$donneesProgrammeAnalysesObligatoires = $this->getAnalyseAFaireTable()->getProgrammeAnalysesObligatoiresEffectuees($idpatient);
 		
-		//var_dump($donneesProgrammeAnalysesObligatoires); exit();
+		/**
+		 * Les analyses radiologiques
+		 */
+		$donneesExamensRadiologiquesEffectues = $this->getAnalyseAFaireTable()->getAnalysesRadiologiquesEffectuees($idpatient);
+		$donneesProgrammeAnalysesRadiosObligatoires = $this->getAnalyseAFaireTable()->getProgrammeAnalysesRadiologiquesObligatoiresEffectuees($idpatient);
+		
+		//var_dump($donneesExamensRadiologiquesEffectues); exit();
 		/**
 		 * Les traitements médicamenteux - Les traitements médicamenteux
 		 * Les traitements médicamenteux - Les traitements médicamenteux
@@ -795,8 +803,10 @@ class ConsultationController extends AbstractActionController {
 				'nbMotifs' => $nbMotif,
 				'form' => $form,
 				'patient' => $patient,
-				'donneesExamensEffectues' => $donneesExamensEffectues,
+				'donneesExamensEffectues' => $donneesExamensBiologiquesEffectues,
 				'donneesProgrammeAnalysesObligatoires' => $donneesProgrammeAnalysesObligatoires,
+				'donneesExamensRadioEffectues' => $donneesExamensRadiologiquesEffectues,
+				'donneesProgrammeAnalysesRadiosObligatoires' => $donneesProgrammeAnalysesRadiosObligatoires,
 				
 				'mDouleur' => $mDouleur,
 				'listeVoieAdministration' => $listeVoieAdministration,
@@ -1411,7 +1421,7 @@ class ConsultationController extends AbstractActionController {
 		$listeActes = $this->getConsultationTable()->getListeDesActes();
 		
 		//RECUPERER LES ANALYSES EFFECTUEES PAR LE PATIENT FAISANT PARTIE DES ANALYSES OBLIGATOIRES A FAIRE 
-		$donneesExamensEffectues = $this->getAnalyseAFaireTable()->getAnalyseEffectuees($idpatient);
+		$donneesExamensEffectues = $this->getAnalyseAFaireTable()->getAnalysesBiologiquesEffectuees($idpatient);
 
 		
 		//var_dump($donneesExamensEffectues); exit();
@@ -2176,7 +2186,7 @@ class ConsultationController extends AbstractActionController {
 		$listeActes = $this->getConsultationTable()->getListeDesActes();
 		
 		//RECUPERER LES ANALYSES EFFECTUEES PAR LE PATIENT FAISANT PARTIE DES ANALYSES OBLIGATOIRES A FAIRE
-		$donneesExamensEffectues = $this->getAnalyseAFaireTable()->getAnalyseEffectuees($idpatient);
+		$donneesExamensEffectues = $this->getAnalyseAFaireTable()->getAnalysesBiologiquesEffectuees($idpatient);
 		
 		
 		//var_dump($donneesExamensEffectues); exit();
