@@ -137,7 +137,8 @@ return array(
                 		
                 	'verifier-patient-existant' => 'secretariat',
                 	'annuler-analyse-demandee' => 'secretariat',
-    								
+
+                	'effectuer-recherche-avancee-ajax' => 'secretariat', 	
                 ),
     						
                 /***
@@ -173,7 +174,8 @@ return array(
                 		
                 	'get-informations-resultats-analyses-validees-patient' => array('biologiste','medecin'),
                 	'get-liste-analyses-demandees-validees' => array('biologiste','medecin'),
-                	'retirer-validation' => 'biologiste',			
+                	'retirer-validation' => 'biologiste',	
+                	'envoi-sms-alert' => 'biologiste',		
                 ),
 
             	/*

@@ -134,6 +134,38 @@ class PatientTable {
 	    return $sql->prepareStatementForSqlObject($sQuery)->execute();
 	}
 	
+	public function getNbPatientsDepistesExterneInterne($idpatient)
+	{
+		/*
+		 * Nb Patients dépistés
+		*/
+		$sql = new Sql($this->tableGateway->getAdapter());
+		$sQuery = $sql->select()
+		->from(array('dep' => 'depistage'))->columns(array('*'));
+		$nbDepistes = $sql->prepareStatementForSqlObject($sQuery)->execute()->count();
+		
+		/*
+		 * Nb Patients dépistés internes
+		*/
+		$sql = new Sql($this->tableGateway->getAdapter());
+		$sQuery = $sql->select()
+		->from(array('dep' => 'depistage'))->columns(array('*'))
+		->where(array('dep.typepatient' => 1, 'dep.valide' => 1));
+		$nbInternes = $sql->prepareStatementForSqlObject($sQuery)->execute()->count();
+		
+		/*
+		 * 
+		*/
+		$sql = new Sql($this->tableGateway->getAdapter());
+		$sQuery = $sql->select()
+		->from(array('dep' => 'depistage'))->columns(array('*'))
+		->join(array('th' => 'typage_hemoglobine'), 'th.idtypage=dep.typage', array('*'))
+		->where(array('dep.idpatient' => $idpatient));
+		$nvProfil = $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
+		
+		return array($nbDepistes, $nbInternes, $nvProfil['designation_stat']);
+	}
+	
 	
 	//La liste des patients dépistés de type (SS ou SC ou SB) pour lesquels le typepatient n'est pas mis à 1
 	public function getListeDepistagePatient()
@@ -514,6 +546,34 @@ class PatientTable {
 		return $donnees;
 	}
 	
+	/**
+	 * Recuperer la liste des patients ayant au moin une demande non encore facturée
+	 */
+	public function getListePatientsAnalyseDemandeeNonFacturee(){
+		$db = $this->tableGateway->getAdapter();
+			
+		$sql2 = new Sql ($db );
+		$subselect = $sql2->select ();
+		$subselect->from ( array ( 'fact' => 'facturation_demande_analyse' ) );
+		$subselect->columns (array ( 'iddemande_analyse' ) );
+			
+			
+		$sql = new Sql($db);
+		$sQuery = $sql->select()
+		->from(array('d' => 'demande_analyse'))->columns(array('*'))
+		->where(array(new NotIn ( 'd.iddemande', $subselect ) ) )
+		->group('idpatient');	
+		$resultat = $sql->prepareStatementForSqlObject($sQuery)->execute();
+	
+		$donnees = array();
+		foreach ($resultat as $result){
+			$donnees[] = $result['idpatient'];
+		}
+	
+		return $donnees;
+	}
+	
+	
 	//<!-- LISTE DES PATIENTS POUR LES DEMANDES D'AUJOURD'HUI -->
 	//<!-- LISTE DES PATIENTS POUR LES DEMANDES D'AUJOURD'HUI -->
 	public function listeDemandesAujourdhuiAjax()
@@ -522,37 +582,9 @@ class PatientTable {
 	
 		$aColumns = array('numero_dossier', 'Nom','Prenom','Datenaissance', 'Adresse', 'Date', 'id', 'id2');
 	
-		/* Indexed column (used for fast and accurate table cardinality) */
-		$sIndexColumn = "id";
-	
-		/*
-		 * Paging
-		*/
-		$sLimit = array();
-		if ( isset( $_GET['iDisplayStart'] ) && $_GET['iDisplayLength'] != '-1' )
-		{
-			$sLimit[0] = $_GET['iDisplayLength'];
-			$sLimit[1] = $_GET['iDisplayStart'];
-		}
-	
-		/*
-		 * Ordering
-		*/
-		if ( isset( $_GET['iSortCol_0'] ) )
-		{
-			$sOrder = array();
-			$j = 0;
-			for ( $i=0 ; $i<intval( $_GET['iSortingCols'] ) ; $i++ )
-			{
-				if ( $_GET[ 'bSortable_'.intval($_GET['iSortCol_'.$i]) ] == "true" )
-				{
-					$sOrder[$j++] = $aColumns[ intval( $_GET['iSortCol_'.$i] ) ]."
-								 	".$_GET['sSortDir_'.$i];
-				}
-			}
-		}
-	
 		$aujourdhui = (new \DateTime() ) ->format('Y-m-d');
+		
+		$listeDesPatientsAyantDNF = $this->getListePatientsAnalyseDemandeeNonFacturee();
 		
 		/*
 		 * SQL queries
@@ -574,8 +606,6 @@ class PatientTable {
 		$rResult = $rResultFt;
 	
 		$output = array(
-				//"sEcho" => intval($_GET['sEcho']),
-				//"iTotalRecords" => $iTotal,
 				"iTotalDisplayRecords" => $iFilteredTotal,
 				"aaData" => array()
 		);
@@ -630,8 +660,7 @@ class PatientTable {
 						$html .= "<infoBulleVue> <a href='javascript:listeDemandes(".$aRow[ $aColumns[$i] ].")' >";
 						$html .="<img style='display: inline; margin-right: 5%;' src='".$tabURI[0]."public/images_icons/details.png' title='liste des demandes'></a> </infoBulleVue>";
 	
-						$demandesNonFacturees = $this->getListeAnalysesDemandeesNonFacturees($aRow[ $aColumns[$i] ]);
-						if($demandesNonFacturees){
+						if(in_array($aRow[ $aColumns[$i] ], $listeDesPatientsAyantDNF)){
 							$html .='<img style="margin-left: 10%; width: 7px; height: 10px;" src="'.$tabURI[0].'public/images_icons/desactiver.png" title="Existance d\'analyses demand&eacute;es non encore factur&eacute;es">';
 						}
 						
@@ -653,42 +682,29 @@ class PatientTable {
 		return $output;
 	}
 	
+	
+	
+	
 	public function listeDemandesTousAjax()
 	{
 		$db = $this->tableGateway->getAdapter();
 	
 		$aColumns = array('numero_dossier', 'Nom','Prenom','Datenaissance', 'Adresse', 'Date', 'id', 'id2');
 	
-		/* Indexed column (used for fast and accurate table cardinality) */
-		$sIndexColumn = "id";
-	
+		$listeDesPatientsAyantDNF = $this->getListePatientsAnalyseDemandeeNonFacturee();
+		
 		/*
-		 * Paging
-		*/
-		$sLimit = array();
-		if ( isset( $_GET['iDisplayStart'] ) && $_GET['iDisplayLength'] != '-1' )
-		{
-			$sLimit[0] = $_GET['iDisplayLength'];
-			$sLimit[1] = $_GET['iDisplayStart'];
-		}
-	
-		/*
-		 * Ordering
-		*/
-		if ( isset( $_GET['iSortCol_0'] ) )
-		{
-			$sOrder = array();
-			$j = 0;
-			for ( $i=0 ; $i<intval( $_GET['iSortingCols'] ) ; $i++ )
-			{
-				if ( $_GET[ 'bSortable_'.intval($_GET['iSortCol_'.$i]) ] == "true" )
-				{
-					$sOrder[$j++] = $aColumns[ intval( $_GET['iSortCol_'.$i] ) ]."
-								 	".$_GET['sSortDir_'.$i];
-				}
-			}
-		}
-	
+		 * Effectif total
+		 */
+		$sql1 = new Sql($db);
+		$sQuery1 = $sql1->select()
+		->from(array('pat' => 'patient'))->columns(array('*'))
+		->join(array('pers' => 'personne'), 'pat.idpersonne = pers.idpersonne', array('*'))
+		->join(array('dem_an' => 'demande_analyse'), 'pat.idpersonne = dem_an.idpatient', array('Date'=>'date', 'Time'=>'time'))
+		->group('idpatient');
+		$effectifPatients = $sql1->prepareStatementForSqlObject($sQuery1)->execute()->count();
+		
+		
 		/*
 		 * SQL queries
 		*/
@@ -698,7 +714,8 @@ class PatientTable {
 		->join(array('pers' => 'personne'), 'pat.idpersonne = pers.idpersonne', array('Nom'=>'nom','Prenom'=>'prenom','Datenaissance'=>'date_naissance','Sexe'=>'sexe','Adresse'=>'adresse','Nationalite'=>'nationalite_actuelle','id'=>'idpersonne','id2'=>'idpersonne'))
 		->join(array('dem_an' => 'demande_analyse'), 'pat.idpersonne = dem_an.idpatient', array('Date'=>'date', 'Time'=>'time')) 
 		->order(array('dem_an.date' => 'DESC', 'dem_an.time' => 'DESC'))
-		->group('idpatient');
+		->group('idpatient')
+		->limit(3000);
 	
 		/* Data set length after filtering */
 		$stat = $sql->prepareStatementForSqlObject($sQuery);
@@ -708,9 +725,7 @@ class PatientTable {
 		$rResult = $rResultFt;
 	
 		$output = array(
-				//"sEcho" => intval($_GET['sEcho']),
-				//"iTotalRecords" => $iTotal,
-				"iTotalDisplayRecords" => $iFilteredTotal,
+				"iTotalDisplayRecords" => $effectifPatients,//$iFilteredTotal,
 				"aaData" => array()
 		);
 	
@@ -718,8 +733,8 @@ class PatientTable {
 		 * $Control pour convertir la date en franï¿½ais
 		*/
 		$Control = new DateHelper();
-	
-		/*
+
+    	/*
 		 * ADRESSE URL RELATIF
 		*/
 		$baseUrl = $_SERVER['REQUEST_URI'];
@@ -764,8 +779,7 @@ class PatientTable {
 						$html .= "<infoBulleVue> <a href='javascript:listeDemandes(".$aRow[ $aColumns[$i] ].")' >";
 						$html .="<img style='display: inline; margin-right: 5%;' src='".$tabURI[0]."public/images_icons/details.png' title='liste des demandes'></a> </infoBulleVue>";
 	
-						$demandesNonFacturees = $this->getListeAnalysesDemandeesNonFacturees($aRow[ $aColumns[$i] ]);
-						if($demandesNonFacturees){
+						if(in_array($aRow[ $aColumns[$i] ], $listeDesPatientsAyantDNF)){
 							$html .='<img style="margin-left: 10%; width: 7px; height: 10px;" src="'.$tabURI[0].'public/images_icons/desactiver.png" title="Existance d\'analyses demand&eacute;es non encore factur&eacute;es">';
 						}
 						
@@ -784,8 +798,127 @@ class PatientTable {
 			}
 			$output['aaData'][] = $row;
 		}
+		
 		return $output;
 	}
+	
+	/**
+	 * Effectuer une recherche avancée
+	 */
+	public function listeToutesDemandesRechercheAvanceeAjax($infosPatientRechercher = null)
+	{
+		$db = $this->tableGateway->getAdapter();
+	
+		$aColumns = array('numero_dossier', 'Nom','Prenom','Datenaissance', 'Adresse', 'Date', 'id');
+	
+		$listeDesPatientsAyantDNF = $this->getListePatientsAnalyseDemandeeNonFacturee();
+	
+		/*
+		 * $Control pour convertir la date en franï¿½ais
+		*/
+		$Control = new DateHelper();
+		
+		//Ecrire la clause "WHERE"
+		$tabInfosPatRecherche = explode(";", $infosPatientRechercher);
+		$clauseWhere = array();
+		for ($itPR = 0 ; $itPR < count($tabInfosPatRecherche)-1 ; $itPR++) {
+			$attInfos = explode("!", $tabInfosPatRecherche[$itPR]);
+			$chaineVal = str_replace(' ', '', $attInfos[1]);
+			
+			if($attInfos[0] == 0 && $chaineVal != ""){$clauseWhere['numero_dossier  like ?'] = '%'.trim($attInfos[1]).'%';}
+			if($attInfos[0] == 1 && $chaineVal != ""){$clauseWhere['nom like ?'] = trim($attInfos[1]).'%';}
+			if($attInfos[0] == 2 && $chaineVal != ""){$clauseWhere['prenom  like ?'] = trim($attInfos[1]).'%';}
+			if($attInfos[0] == 3 && $chaineVal != ""){$clauseWhere['adresse  like ?'] = trim($attInfos[1]).'%';}
+			if($attInfos[0] == 4 && $chaineVal != ""){$clauseWhere['date_naissance  like ?'] = '%'.$Control->conversionDatePourRechercheAvancee(trim($attInfos[1])).'%';}
+		}
+		
+		//var_dump($clauseWhere); exit();
+		
+		/*
+		 * SQL queries
+		*/
+		$sql = new Sql($db);
+		$sQuery = $sql->select()
+		->from(array('pat' => 'patient'))->columns(array('*'))
+		->join(array('pers' => 'personne'), 'pat.idpersonne = pers.idpersonne', array('Nom'=>'nom','Prenom'=>'prenom','Datenaissance'=>'date_naissance','Sexe'=>'sexe','Adresse'=>'adresse','Nationalite'=>'nationalite_actuelle','id'=>'idpersonne','id2'=>'idpersonne'))
+		->join(array('dem_an' => 'demande_analyse'), 'pat.idpersonne = dem_an.idpatient', array('Date'=>'date', 'Time'=>'time'))
+		->order(array('dem_an.date' => 'DESC', 'dem_an.time' => 'DESC'))
+		->group('idpatient')
+		->where($clauseWhere);
+	
+		/* Data set length after filtering */
+		$stat = $sql->prepareStatementForSqlObject($sQuery);
+		$rResultFt = $stat->execute();
+		$iFilteredTotal = count($rResultFt);
+	
+		$rResult = $rResultFt;
+	
+		$output = array(
+				"iTotalDisplayRecords" => $iFilteredTotal,
+				"aaData" => array()
+		);
+	
+		//Veirifier que le nombre patient ne depasse pas 10
+	    if($tabInfosPatRecherche==null || $iFilteredTotal > 10){ return 0; }
+		
+		/*
+		 * ADRESSE URL RELATIF
+		*/
+		$baseUrl = $_SERVER['REQUEST_URI'];
+		$tabURI  = explode('public', $baseUrl);
+	
+		/*
+		 * Prï¿½parer la liste
+		*/
+		$listePatients = "";
+		foreach ( $rResult as $aRow )
+		{
+			$listePatients .= "<tr> ";
+			for ( $i=0 ; $i<count($aColumns) ; $i++ )
+			{
+				if ( $aColumns[$i] != ' ' )
+				{
+					/* General output */
+					if ($aColumns[$i] == 'Datenaissance') {
+						$date_naissance = $aRow[ $aColumns[$i] ];
+						if($date_naissance){ 
+							$listePatients .= "<td>". $Control->convertDate($aRow[ $aColumns[$i] ]) ."</td>";
+						}else{ 
+							$listePatients .= "";
+						}
+					}
+					else if ($aColumns[$i] == 'Date'){
+						$listePatients .= "<td> <div>".$Control->convertDate($aRow[ $aColumns[$i] ]).' - '.$Control->getTimeHm($aRow['Time'])."</div> </td>";
+					}
+					else if ($aColumns[$i] == 'id') {
+						
+						$listePatients .= "<td>";
+						$listePatients .="<infoBulleVue> <a href='javascript:visualiser(".$aRow[ $aColumns[$i] ].")' >";
+						$listePatients .="<img style='margin-left: 5%; margin-right: 15%;' src='".$tabURI[0]."public/images_icons/voir2.png' title='d&eacute;tails'></a> </infoBulleVue>";
+					
+						$listePatients .= "<infoBulleVue> <a href='javascript:listeDemandes(".$aRow[ $aColumns[$i] ].")' >";
+						$listePatients .="<img style='display: inline; margin-right: 5%;' src='".$tabURI[0]."public/images_icons/details.png' title='liste des demandes'></a> </infoBulleVue>";
+					
+						if(in_array($aRow[ $aColumns[$i] ], $listeDesPatientsAyantDNF)){
+							$listePatients .='<img style="margin-left: 10%; width: 7px; height: 10px;" src="'.$tabURI[0].'public/images_icons/desactiver.png" title="Existance d\'analyses demand&eacute;es non encore factur&eacute;es">';
+						}
+						$listePatients .= "</td>";
+						
+					}else {
+						$listePatients .= "<td><div>". $aRow[ $aColumns[$i] ] ."</div></td>";
+					}
+	
+				}
+			}
+			$listePatients .= "</tr>";
+		}
+	
+		$output['aaData'] = $listePatients;
+		
+		
+		return $output;
+	}
+	
 	
 	
 	public function listeDemandesFiltreAjax()

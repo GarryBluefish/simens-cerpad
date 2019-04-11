@@ -3042,7 +3042,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 					$this->Cell(10,6,'Titre :','T',0,'L',1);
 			
 					$this->SetFont('times','B',11);
-					$this->Cell(18,6,number_format($resultats[62]['widal_titre_to'], 0, ',', ' ').' ','T',0,'L',1);
+					$this->Cell(18,6,$resultats[62]['widal_titre_to'].' ','T',0,'L',1);
 				}else{
 					$this->SetFont('times','B',11);
 					$this->Cell(28,6,'','T',0,'L',1);
@@ -3068,7 +3068,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 					$this->Cell(10,6,'Titre :','T',0,'L',1);
 						
 					$this->SetFont('times','B',11);
-					$this->Cell(25,6,number_format($resultats[62]['widal_titre_th'], 0, ',', ' ').' ','T',1,'L',1);
+					$this->Cell(25,6,$resultats[62]['widal_titre_th'].' ','T',1,'L',1);
 				}else{
 					$this->SetFont('times','B',11);
 					$this->Cell(35,6,'','T',1,'L',1);
@@ -3103,7 +3103,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 					$this->Cell(10,6,'Titre :','',0,'L',1);
 						
 					$this->SetFont('times','B',11);
-					$this->Cell(18,6,number_format($resultats[62]['widal_titre_ao'], 0, ',', ' ').' ','',0,'L',1);
+					$this->Cell(18,6,$resultats[62]['widal_titre_ao'].' ','',0,'L',1);
 				}else{
 					$this->SetFont('times','B',11);
 					$this->Cell(28,6,'','',0,'L',1);
@@ -3129,7 +3129,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 					$this->Cell(10,6,'Titre :','',0,'L',1);
 				
 					$this->SetFont('times','B',11);
-					$this->Cell(25,6,number_format($resultats[62]['widal_titre_ah'], 0, ',', ' ').' ','',1,'L',1);
+					$this->Cell(25,6,$resultats[62]['widal_titre_ah'].' ','',1,'L',1);
 				}else{
 					$this->SetFont('times','B',11);
 					$this->Cell(35,6,'','',1,'L',1);
@@ -3164,7 +3164,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 					$this->Cell(10,6,'Titre :','',0,'L',1);
 				
 					$this->SetFont('times','B',11);
-					$this->Cell(18,6,number_format($resultats[62]['widal_titre_bo'], 0, ',', ' ').' ','',0,'L',1);
+					$this->Cell(18,6,$resultats[62]['widal_titre_bo'].' ','',0,'L',1);
 				}else{
 					$this->SetFont('times','B',11);
 					$this->Cell(28,6,'','',0,'L',1);
@@ -3190,7 +3190,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 					$this->Cell(10,6,'Titre :','',0,'L',1);
 				
 					$this->SetFont('times','B',11);
-					$this->Cell(25,6,number_format($resultats[62]['widal_titre_bh'], 0, ',', ' ').' ','',1,'L',1);
+					$this->Cell(25,6,$resultats[62]['widal_titre_bh'].' ','',1,'L',1);
 				}else{
 					$this->SetFont('times','B',11);
 					$this->Cell(35,6,'','',1,'L',1);
@@ -3224,7 +3224,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 					$this->Cell(10,6,'Titre :','B',0,'L',1);
 				
 					$this->SetFont('times','B',11);
-					$this->Cell(18,6,number_format($resultats[62]['widal_titre_co'], 0, ',', ' ').' ','B',0,'L',1);
+					$this->Cell(18,6,$resultats[62]['widal_titre_co'].' ','B',0,'L',1);
 				}else{
 					$this->SetFont('times','B',11);
 					$this->Cell(28,6,'','B',0,'L',1);
@@ -3250,7 +3250,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 					$this->Cell(10,6,'Titre :','B',0,'L',1);
 				
 					$this->SetFont('times','B',11);
-					$this->Cell(25,6,number_format($resultats[62]['widal_titre_ch'], 0, ',', ' ').' ','B',1,'L',1);
+					$this->Cell(25,6,$resultats[62]['widal_titre_ch'].' ','B',1,'L',1);
 				}else{
 					$this->SetFont('times','B',11);
 					$this->Cell(35,6,'','B',1,'L',1);

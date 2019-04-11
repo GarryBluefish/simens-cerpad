@@ -1209,20 +1209,69 @@ class SecretariatController extends AbstractActionController {
 		) ) );
 	}
 	
+	public function effectuerRechercheAvanceeAjaxAction() {
+		$infosPatientRechercher = $this->params ()->fromQuery ( 'infosUrl' );
+		
+		$retourInformations = "";
+		$output = $this->getPatientTable ()->listeToutesDemandesRechercheAvanceeAjax($infosPatientRechercher);
+		
+		/**
+		 * Le nombre patient ‡ afficher dÈpasse 100 ou que la variable $infosPatientRechercher=null
+		*/
+		if($output == 0){
+			$retourInformations = "<tr><td colspan='7'>Affiner la recherche <span style='font-style: italic'>(plusieurs dossiers sont concern√©s)</span> ...</td></tr>";
+		}
+		/**
+		 * Affichage du patient ou de la liste des patients en fonction de $infosPatientRechercher
+		 */
+		else{
+			if($output['iTotalDisplayRecords'] == 0){
+				$retourInformations = "<tr><td colspan='7'>Pas de donn√©es disponibles  <!-- span style='font-style: italic'>(v√©rifiez les infos renseign√©es)</span--></td></tr>";
+			}else{
+				$retourInformations = $output['aaData'];
+			}
+		}
+		
+		$this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );
+		return $this->getResponse ()->setContent ( Json::encode ( $retourInformations ) );
+	}
+	
 	public function listeDemandesAction() {
 		$this->layout ()->setTemplate ( 'layout/secretariat' );
 
-		//$liste = $this->getAnalyseTable()->getListeAnalysesDemandeesNonFacturees(2328);
-		//$liste = $this->getPatientTable ()->getFactureDelaDemande(8021);
-// 		if($liste){
-// 			//var_dump('cest pas vide'); exit();
-// 			var_dump($liste); exit();
-// 		}else{
-// 			//var_dump('cest vide'); exit();
-// 			var_dump($liste); exit();
-// 		}
+		/*
+		$retourInformations = "";
+		$infosPatientRechercher = "1!DIAKHA   ;";
+		$output = $this->getPatientTable ()->listeToutesDemandesRechercheAvanceeAjax($infosPatientRechercher);
 		
-		return new ViewModel ( );
+		// Le nombre patient ‡ afficher dÈpasse 100 ou que la variable $infosPatientRechercher=null
+		if($output == 0){
+			$retourInformations = "Affiner la recherche ...";
+		}
+	    //Affichage du patient ou de la liste des patients en fonction de $infosPatientRechercher 
+		else{
+			if($output['iTotalDisplayRecords'] == 0){
+				$retourInformations = "Pas de donn√©es disponibles ! (v√©rifiez les infos renseign√©es)";
+			}else{
+				$retourInformations = $output['aaData'];
+				echo($output['aaData']); exit();
+			}
+		}
+		//var_dump($output); exit();
+	 
+	    */
+		
+		//$Control = new DateHelper();
+		
+		//var_dump($Control->convertDateInAnglais('12/02/0000')); exit();
+		//str_split
+		//$chaineTab = explode('/', '12/04/');
+		
+		
+		//var_dump($Control->conversionDatePourRechercheAvancee('01/01/2009')); exit();
+		
+		
+		return new ViewModel();
 	}
 	
 	//Pour les listes **** pour les listes **** pour les listes

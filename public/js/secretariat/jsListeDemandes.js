@@ -175,104 +175,189 @@
      	});
      	
     	$('a,img,hass').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });
-     }
+    }
     
-// LISTE DE TOUS LES PATIENTS POUR TOUTES LES DEMANDES EFFECTUEES
-// LISTE DE TOUS LES PATIENTS POUR TOUTES LES DEMANDES EFFECTUEES
-var oTablePTous;
-function initialisationListe2(){
+    function formatVirguleParMill(num) { 
+    	return ("" + num).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, function($1) { return $1 + "," });
+    }
+    
+    function effectuerRechercheAvancee(valInfosUrl){
     	
-    $( "#accordions" ).accordion();
-    $( "button" ).button();
-    	
-    oTablePTous = $('#patientTous').dataTable
-    ( {
-    	"sPaginationType": "full_numbers",
-    	"aLengthMenu": [5,7,10,15],
-    	"aaSorting": [],
-    	"oLanguage": {
-    		"sInfo": "_START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
-    		"sInfoEmpty": "0 &eacute;l&eacute;ment &agrave; afficher",
-    		"sInfoFiltered": "",
-    		"sUrl": "",
-    		"oPaginate": {
-    			"sFirst":    "|<",
-    			"sPrevious": "<",
-    			"sNext":     ">",
-    			"sLast":     ">|"
-    		}
-    		
-    	},
+         $.ajax({
+             type: 'POST',
+             url: tabUrl[0]+'public/secretariat/effectuer-recherche-avancee-ajax?infosUrl='+valInfosUrl,
+             data:'valInfosUrl='+valInfosUrl,
+             success: function(data) {
+             	     var result = jQuery.parseJSON(data);  
+             	     $('#patientTous tbody').html(result);
+             }
+         });
+         
+    }
+    
+	// LISTE DE TOUS LES PATIENTS POUR TOUTES LES DEMANDES EFFECTUEES
+	// LISTE DE TOUS LES PATIENTS POUR TOUTES LES DEMANDES EFFECTUEES
+	var oTablePTous;
+	var valInfosUrl = "";
+	function initialisationListe2(){
+	    	
+	    $( "#accordions" ).accordion();
+	    $( "button" ).button();
+	    	
+	    oTablePTous = $('#patientTous').dataTable
+	    ( {
+	    	"sPaginationType": "full_numbers",
+	    	"aLengthMenu": [5,7,10,15],
+	    	"aaSorting": [],
+	    	"oLanguage": {
+	    		"sInfo": "_START_ &agrave; _END_ sur _TOTAL_ patients  <div class='nbTotalPatientTous'></div>",
+	    		"sInfoEmpty": "0 &eacute;l&eacute;ment &agrave; afficher",
+	    		"sInfoFiltered": "",
+	    		"sUrl": "",
+	    		"oPaginate": {
+	    			"sFirst":    "|<",
+	    			"sPrevious": "<",
+	    			"sNext":     ">",
+	    			"sLast":     ">|"
+	    		}
+	    		
+	    	},
+	
+	    	"sAjaxSource":  tabUrl[0]+"public/secretariat/liste-demandes-tous-ajax?infosUrl="+valInfosUrl,
+	    	"fnDrawCallback": function() 
+	    	{
+	    		clickRowHandler2();
+	    	},
+	    	"sServerMethod": "GET", 
+	    	"fnServerData": function (sSource, aoData, fnCallback) {
+	            $.getJSON(sSource, aoData, function (json) {
+	            	//alert(json.iTotalDisplayRecords); 
+	            	fnCallback(json); 
+	            	$(".dataTables_info .nbTotalPatientTous").parent().after("<div style='display: inline; float: left;'><span style='font-style: italic;'>Eff. total : </span>"+formatVirguleParMill(json.iTotalDisplayRecords)+" patients</div>");
+	            }); 
+	        }, 
+	    	
+	    
+	    } );
+	    	
+	    
+	    var asInitValsPTous = new Array();
+		
+		$("#patientTous tfoot input").keyup( function () {
+			
+			oTablePTous.fnFilter( this.value, $("#patientTous tfoot input").index(this) );
+			
+			/** Effectuer une recherche avancée (i.e: Rechercher directement dans la base de données) **/
+			if($('#patientTous tbody tr').length == 1){
+				if($('#patientTous tbody tr td').length == 1){ // Ce qui signifie que le tableau est vide
+					
+					/*
+					if(
+						$(this).parent().attr('class') == 'num_dossier_l2' ||
+						$(this).parent().attr('class') == 'nom_l2'
+					){
+						if (event.keyCode == 13) { 
+							alert('oo'); 
+							return false; 
+						}
+					}
+					*/
+					
+					valInfosUrl = "";
+					
+					var num_dosier = $(".num_dossier_l2 input").val();
+					if( num_dosier !== " Num. dossier"){
+						valInfosUrl += "0!"+num_dosier+";";
+					}
+					
+					var nom_l2 = $(".nom_l2 input").val();
+					if( nom_l2 !== " Nom"){
+						valInfosUrl += "1!"+nom_l2+";";
+					}
+					
+					var prenom_l2 = $(".prenom_l2 input").val();
+					if( prenom_l2 !== " PrÃ©nom"){
+						valInfosUrl += "2!"+prenom_l2+";";
+					}
+					
+					var adresse_l2 = $(".adresse_l2 input").val();
+					if( adresse_l2  !== " Adresse"){
+						valInfosUrl += "3!"+adresse_l2+";";
+					}
+					
+					var date_l2 = $(".date_l2 input").val(); 
+					if( date_l2  !== " Date naiss."){
+						valInfosUrl += "4!"+date_l2+";";
+					}
+					
+					$('#patientTous tbody tr td').html('Recherche avanc&eacute;e ...');
+					effectuerRechercheAvancee(valInfosUrl);
 
-    	"sAjaxSource":  tabUrl[0]+"public/secretariat/liste-demandes-tous-ajax",
-    	"fnDrawCallback": function() 
-    	{
-    		clickRowHandler2();
-    	}
-    	
-    } );
-    	
-     var asInitValsPTous = new Array();
-	
-	$("#patientTous tfoot input").keyup( function () {
-		oTablePTous.fnFilter( this.value, $("#patientTous tfoot input").index(this) );
-	} );
-	
-	/*
-	 * Support functions to provide a little bit of 'user friendlyness' to the textboxes in 
-	 * the footer
-	 */
-	$("#patientTous tfoot input").each( function (i) {
-		asInitValsPTous[i] = this.value;
-	} );
-	
-	$("#patientTous tfoot input").focus( function () {
-		if ( this.className == "search_init" )
-		{
-			this.className = "";
-			this.value = "";
-		}
-	} );
-	
-	$("#patientTous tfoot input").blur( function (i) {
-		if ( this.value == "" )
-		{
-			this.className = "search_init";
-			this.value = asInitValsPTous[$("#patientTous tfoot input").index(this)];
-		}
-	} );
-	
-    $(".boutonTerminer").html('<button type="submit" id="terminer" style=" font-family: police2; font-size: 17px; font-weight: bold;"> Terminer </button>');
-    
-}
-    
-
- 
-function clickRowHandler2() 
-{
-	var id;
-	$('#patientTous tbody tr').contextmenu({
-		target: '#context-menu',
-		onItem: function (context, e) {
-    	
-			if($(e.target).text() == 'DÃ©tails' || $(e.target).is('#visualiserCTX')){
-				visualiser(id);
-			} else 
-				
-				if($(e.target).text() == 'Liste demandes' || $(e.target).is('#modifierCTX')){
-					listeDemandes(id);
 				}
-    		
-		}
-    	
-    	
-	}).bind('mousedown', function (e) {
-		var aData = oTablePTous.fnGetData( this );
-		id = aData[7];
-	});
-    
-	$('a,img,hass').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });
-}
+			}
+			
+			/** Obtenir le nombre de ligne du tableau **/
+			//alert(oTablePTous.fnSettings().aData.length); return false;
+
+		} );    
+		
+		
+		
+		
+		
+		/*
+		 * Support functions to provide a little bit of 'user friendlyness' to the textboxes in 
+		 * the footer
+		 */
+		$("#patientTous tfoot input").each( function (i) {
+			asInitValsPTous[i] = this.value;
+		} );
+		
+		$("#patientTous tfoot input").focus( function () {
+			if ( this.className == "search_init" )
+			{
+				this.className = "";
+				this.value = "";
+			}
+		} );
+		
+		$("#patientTous tfoot input").blur( function (i) {
+			if ( this.value == "" )
+			{
+				this.className = "search_init";
+				this.value = asInitValsPTous[$("#patientTous tfoot input").index(this)];
+			}
+		} );
+		
+	    $(".boutonTerminer").html('<button type="submit" id="terminer" style=" font-family: police2; font-size: 17px; font-weight: bold;"> Terminer </button>');
+	    
+	}
+	    
+	 
+	function clickRowHandler2() 
+	{
+		var id;
+		$('#patientTous tbody tr').contextmenu({
+			target: '#context-menu',
+			onItem: function (context, e) {
+	    	
+				if($(e.target).text() == 'DÃ©tails' || $(e.target).is('#visualiserCTX')){
+					visualiser(id);
+				} else 
+					
+					if($(e.target).text() == 'Liste demandes' || $(e.target).is('#modifierCTX')){
+						listeDemandes(id);
+					}
+	    		
+			}
+	    	
+		}).bind('mousedown', function (e) {
+			var aData = oTablePTous.fnGetData( this );
+			id = aData[7];
+		});
+	    
+		$('a,img,hass').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });
+	}
 
     
     function visualiser(id){

@@ -15,6 +15,7 @@ use Consultation\View\Helper\ImprimerUnExamenDemande;
 use Consultation\View\Helper\ImprimerExamensRadioDemandes;
 use Consultation\View\Helper\ImprimerExamensBioDemandes;
 use Zend\Server\Method\Prototype;
+use Consultation\View\Helper\OsmsMaster\src\Osms;
 
 class ConsultationController extends AbstractActionController {
 	
@@ -521,6 +522,42 @@ class ConsultationController extends AbstractActionController {
 	
 	public function listeConsultationsAction() {
 		$this->layout ()->setTemplate ( 'layout/consultation' );
+
+		/**
+		 * Test envoie sms
+		 */
+		/*
+		$credential = array(
+		    'clientId' => 'ianIQwqkI27VVUXajC9aDfB2qZG2FleL',
+		    'clientSecret' => 'pxMekLkQx5MRZ6cO'
+		);
+		
+		$osms = new Osms($credential);
+		$token = $osms->getTokenFromConsumerKey();
+		var_dump($osms->sendSMS('tel:+221773139352',
+				                'tel:+221773139352',
+		                        'Bonjour c est SIMENS','SIMENS-INFOS'
+		              )); exit();
+		
+		var_dump('ee'); exit();
+		*/
+		
+		
+		/**
+		 * Test excuter un fichier python
+		 */
+		/*
+		$baseUrl = $_SERVER['SCRIPT_FILENAME'];
+		$tabURI  = explode('public', $baseUrl);
+		
+		$arg1 = 12; 
+		$arg2 = 20;
+		
+		$output = shell_exec('C:\Python\python '.$tabURI[0].'public/api/jibalamy-rainbowbox-a989e05c75ed/boiteaec.py '.$arg1.' '.$arg2.' 2>&1');
+		echo $output; 
+		exit();
+		*/
+		
 	}
 	
 	
@@ -2879,6 +2916,7 @@ class ConsultationController extends AbstractActionController {
 		$effectifPatientDepistesAges = $this->getDepistageTable()->getEffectifPatientDepistesAges0_8();
 		$pourcentageEffectifPatientDepistesAges = $this->pourcentage_element_tab($effectifPatientDepistesAges[0], $effectifPatientDepistesAges[1]);
 		
+		//var_dump($effectifPatientDepistesAges); exit();
 		
 		/**
 		 * Répartition des nouveaux nés par adresses

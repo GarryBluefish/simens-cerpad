@@ -178,4 +178,16 @@ class DateHelper extends AbstractHelper{
 		}
 		return $nomTableauJS;
 	}
+	
+	
+	public function conversionDatePourRechercheAvancee ($date) {
+		$chaineTab = explode('/', $date);
+		if(count($chaineTab) == 1){ return str_replace(' ', '', $chaineTab[0]); }
+		if(count($chaineTab) == 2){ return str_replace(' ', '', $chaineTab[1].'-'.$chaineTab[0]); }
+		if(count($chaineTab) == 3){
+			$chaineObt = (strlen(str_replace(' ', '',$chaineTab[2])) == 4) ?  $chaineTab[2].'-'.$chaineTab[1].'-'.$chaineTab[0] : $chaineTab[1].'-'.$chaineTab[0];
+			return str_replace(' ', '', $chaineObt); 
+		}
+	}
+	
 }

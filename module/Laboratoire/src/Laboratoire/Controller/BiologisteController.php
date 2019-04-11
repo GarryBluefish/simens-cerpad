@@ -13,6 +13,7 @@ use Secretariat\View\Helper\DocumentResultatsPdf;
 use Secretariat\View\Helper\ResultatsNfsPdf;
 use Secretariat\View\Helper\ResultatsTypageHemoglobinePdf;
 use Laboratoire\View\Helper\ImprimerResultatsAnalysesDemandees;
+use Consultation\View\Helper\OsmsMaster\src\Osms;
 
 class BiologisteController extends AbstractActionController {
 	protected $personneTable;
@@ -957,6 +958,8 @@ class BiologisteController extends AbstractActionController {
 		$idemploye = $this->layout()->user['idemploye'];
 		
 		$demande = $this->getResultatDemandeAnalyseTable()->getDemandeAnalysesAvecIddemande($iddemande);
+		$infoDepistage = array(0,0,0);
+		$envoiSms = 0;
 		if($demande){
 			$depistage = $this->getPatientTable()->getDepistagePatient($demande['idpatient']);
 			if($depistage->current()){
@@ -972,6 +975,13 @@ class BiologisteController extends AbstractActionController {
 						}else{
 							$this->getPatientTable()->updatePatientCodePatient($demande['idpatient'], null); 
 						}
+						
+						/*
+						 * Envoi d'un alert sms
+						*/
+						$infoDepistage = $this->getPatientTable()->getNbPatientsDepistesExterneInterne($demande['idpatient']);
+						$envoiSms = 1;
+						//$this->envoiSmsAlert($infoDepistage);
 					}
 					
 				}
@@ -984,11 +994,33 @@ class BiologisteController extends AbstractActionController {
 		
 		
 		$this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );
-		return $this->getResponse ()->setContent ( Json::encode ( $nbAnalysesDemandees ) );
+		return $this->getResponse ()->setContent ( Json::encode ( array($envoiSms, $infoDepistage[0], $infoDepistage[1], $infoDepistage[2], $nbAnalysesDemandees) ) );
 	}
 	
 	
-	
+	public function envoiSmsAlertAction(){
+		
+		$EffectifTotal   = ( int ) $this->params ()->fromPost ( 'EffectifTotal',   0 );
+		$EffectifInterne = ( int ) $this->params ()->fromPost ( 'EffectifInterne', 0 );
+		$typeProfil      =         $this->params ()->fromPost ( 'typeProfil', 0 );
+		
+		$credential = array(
+				'clientId' => 'ianIQwqkI27VVUXajC9aDfB2qZG2FleL',
+				'clientSecret' => 'pxMekLkQx5MRZ6cO'
+		);
+		$message = "Nouveau profil : ".$typeProfil." ; ".
+				   "Patients dépistés : ".$EffectifTotal." ; ".
+		           "Patients internes : ".$EffectifInterne;
+		
+		$osms = new Osms($credential);
+		$token = $osms->getTokenFromConsumerKey();
+		         $osms->sendSMS('tel:+221773139352',
+		         		        'tel:+221773139352',$message,'SIMENS');
+		         /*
+		         $osms->sendSMS('tel:+221773139352',
+		         		        'tel:+221775708807',$message,'SIMENS');
+		         		        */
+	}
 	
 	
 	//PARTIE GESTION DES RESULTATS VALIDES PAR LE BIOLOGISTE

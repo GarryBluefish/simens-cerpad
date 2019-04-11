@@ -435,13 +435,28 @@
             success: function(data) {
             	     
             	var result = jQuery.parseJSON(data);
-            	
+
             	$('.resultat_existe'+iddemande).html("<img  src='../images_icons/tick_16.png' />");
-            	
-            	if(result == 0){
+            	if(result[0] == 1){ envoiSmsAlert(result[1], result[2], result[3]); }
+
+            	if(result[4] == 0){
             	    $(location).attr("href",tabUrl[0]+'public/biologiste/liste-resultats-analyses');
             	}
             	
+            }
+        });
+    	
+    }
+    
+    function envoiSmsAlert(EffectifTotal, EffectifInterne, typeProfil) {
+    	
+        $.ajax({
+            type: 'POST',
+            url: tabUrl[0]+'public/biologiste/envoi-sms-alert' ,
+            data:{'EffectifTotal': EffectifTotal, 'EffectifInterne': EffectifInterne, 'typeProfil': typeProfil},
+            success: function(data) {
+            	//var result = jQuery.parseJSON(data);
+            	//alert(result);
             }
         });
     	

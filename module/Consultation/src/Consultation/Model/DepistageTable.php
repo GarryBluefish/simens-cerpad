@@ -143,7 +143,7 @@ class DepistageTable {
  		$select->join(array('bp' => 'bilan_prelevement') , 'bp.idfacturation = fda.idfacturation' , array('date_prelevement'));
  		
  		
- 		$select->where(array('sexe' => 'Féminin', 'date_prelevement >=?' => '2017-04-25', 'date_prelevement <=?' => '2018-04-24'));
+ 		$select->where(array('sexe' => 'Féminin', 'date_prelevement >=?' => '2017-04-25', 'date_prelevement <=?' => '2019-02-26'));
  		//$select->where(array('d.valide' => 1, 'sexe' => 'Féminin'));
  		return $sql->prepareStatementForSqlObject($select)->execute()->count();
  	}
@@ -160,7 +160,7 @@ class DepistageTable {
  		$select->join(array('fda' => 'facturation_demande_analyse') , 'fda.iddemande_analyse = d.iddemande_analyse' , array('*'));
  		$select->join(array('bp' => 'bilan_prelevement') , 'bp.idfacturation = fda.idfacturation' , array('date_prelevement'));
  		
- 		$select->where(array('sexe' => 'Masculin', 'date_prelevement >=?' => '2017-04-25', 'date_prelevement <=?' => '2018-04-24'));
+ 		$select->where(array('sexe' => 'Masculin', 'date_prelevement >=?' => '2017-04-25', 'date_prelevement <=?' => '2019-02-26'));
  		//$select->where(array('d.valide' => 1, 'sexe' => 'Masculin'));
  		return $sql->prepareStatementForSqlObject($select)->execute()->count();
  	}
@@ -215,7 +215,7 @@ class DepistageTable {
  		
  		$select->join(array('pr' => 'parent') ,'pr.idpatient = p.idpersonne');
  		
- 		$select->where(array('parent' => 'pere', 'ethnie  != ?' => '', 'date_prelevement >=?' => '2017-04-25', 'date_prelevement <=?' => '2018-04-24'));
+ 		$select->where(array('parent' => 'pere', 'ethnie  != ?' => '', 'date_prelevement >=?' => '2017-04-25', 'date_prelevement <=?' => '2019-02-26'));
  		//$select->where(array('d.valide' => 1,'parent' => 'pere', 'ethnie  != ?' => ''));
  		$select->order('ethnie ASC');
  		
@@ -254,7 +254,7 @@ class DepistageTable {
  		$select->join(array('bp' => 'bilan_prelevement') , 'bp.idfacturation = fda.idfacturation' , array('date_prelevement'));
 
  		
- 		$select->where(array('date_prelevement >=?' => '2017-04-25', 'date_prelevement <=?' => '2018-04-24'));
+ 		$select->where(array('date_prelevement >=?' => '2017-04-25', 'date_prelevement <=?' => '2019-02-26'));
  		//$select->where(array('d.valide' => 1));
  		$select->order('designation_stat ASC');
  		$resultat = $sql->prepareStatementForSqlObject($select)->execute();
@@ -286,7 +286,7 @@ class DepistageTable {
  		$select->join(array('fda' => 'facturation_demande_analyse') , 'fda.iddemande_analyse = d.iddemande_analyse' , array('*'));
  		$select->join(array('bp' => 'bilan_prelevement') , 'bp.idfacturation = fda.idfacturation' , array('date_prelevement'));
  			
- 		$select->where(array( 'ethnie  != ?' => '', 'date_prelevement >=?' => '2017-04-25', 'date_prelevement <=?' => '2018-04-24'));
+ 		$select->where(array( 'ethnie  != ?' => '', 'date_prelevement >=?' => '2017-04-25', 'date_prelevement <=?' => '2019-02-26'));
  		//$select->where(array('d.valide' => 1, 'ethnie  != ?' => ''));
  		$select->order(array('ethnie' => 'ASC'));
  		$resultat = $sql->prepareStatementForSqlObject($select)->execute();
@@ -333,7 +333,7 @@ class DepistageTable {
  		$select->join(array('pr' => 'parent') ,'pr.idpatient = p.idpersonne');
  		$select->join(array('pers2' => 'personne') ,'pers2.idpersonne = pr.idpersonne', array('Profession' =>'profession'));
  			
- 		$select->where(array('parent' => 'mere', 'ethnie  != ?' => '', 'date_prelevement >=?' => '2017-04-25', 'date_prelevement <=?' => '2018-04-24'));
+ 		$select->where(array('parent' => 'mere', 'ethnie  != ?' => '', 'date_prelevement >=?' => '2017-04-25', 'date_prelevement <=?' => '2019-02-26'));
  		//$select->where(array('d.valide' => 1,'parent' => 'mere', 'ethnie  != ?' => ''));
  		$select->order(array('pers2.profession' => 'ASC'));
 
@@ -371,7 +371,7 @@ class DepistageTable {
  		$select->join(array('pr' => 'parent') ,'pr.idpatient = p.idpersonne');
  		$select->join(array('pers2' => 'personne') ,'pers2.idpersonne = pr.idpersonne', array('Profession' =>'profession'));
  	
- 		$select->where(array('parent' => 'pere', 'ethnie  != ?' => '', 'date_prelevement >=?' => '2017-04-25', 'date_prelevement <=?' => '2018-04-24'));
+ 		$select->where(array('parent' => 'pere', 'ethnie  != ?' => '', 'date_prelevement >=?' => '2017-04-25', 'date_prelevement <=?' => '2019-02-26'));
  		//$select->where(array('d.valide' => 1,'parent' => 'pere', 'ethnie  != ?' => ''));
  		$select->order(array('pers2.profession' => 'ASC'));
  	
@@ -437,24 +437,31 @@ class DepistageTable {
  		$select->join(array('fda' => 'facturation_demande_analyse') , 'fda.iddemande_analyse = d.iddemande_analyse' , array('*'));
  		$select->join(array('bp' => 'bilan_prelevement') , 'bp.idfacturation = fda.idfacturation' , array('date_prelevement'));
  	
- 		$select->where(array('date_prelevement >=?' => '2017-04-25', 'date_prelevement <=?' => '2018-04-24'));
+ 		$select->where(array('date_prelevement >=?' => '2017-04-25', 'date_prelevement <=?' => '2019-02-26'));
  		$select->group('d.idpatient');
  		$resultat = $sql->prepareStatementForSqlObject($select)->execute();
  	
  		$listeAgesPatients = array();
+ 		$tabAgesRecup = array();
  		foreach ($resultat as $result){
  			$date_naissance = $result['date_naissance'];
  			$date_prelevement = $result['date_prelevement'];
  			
  			$ageJour = $this->nbJours($date_naissance, $date_prelevement);
- 			if($ageJour >= 0 && $ageJour <= 8){
+ 			if($ageJour >= 0 && $ageJour <= 1000){
  				$listeAgesPatients [] = $ageJour;
+ 				if(!in_array($ageJour, $tabAgesRecup)){ $tabAgesRecup[] = $ageJour; }
  			}
  		}
  	
  		$effectifPatientsDepistesParAge = array_count_values($listeAgesPatients); 
  		ksort($effectifPatientsDepistesParAge);
- 		$listeDesAges = array_values(array_flip($effectifPatientsDepistesParAge));
+ 		sort($tabAgesRecup);
+ 		
+ 		//var_dump($tabAgesRecup); exit();
+
+ 		$listeDesAges = $tabAgesRecup; //array_values(array_flip($effectifPatientsDepistesParAge));
+ 		
  		
  		return array(array_values($effectifPatientsDepistesParAge), array_sum($effectifPatientsDepistesParAge), $effectifPatientsDepistesParAge, $listeDesAges);
  	}
@@ -485,7 +492,7 @@ class DepistageTable {
  		$select->join(array('fda' => 'facturation_demande_analyse') , 'fda.iddemande_analyse = d.iddemande_analyse' , array('*'));
  		$select->join(array('bp' => 'bilan_prelevement') , 'bp.idfacturation = fda.idfacturation' , array('date_prelevement'));
  	
- 		$select->where(array('date_prelevement >=?' => '2017-04-25', 'date_prelevement <=?' => '2018-04-24'));
+ 		$select->where(array('date_prelevement >=?' => '2017-04-25', 'date_prelevement <=?' => '2019-02-26'));
  		$select->group('d.idpatient');
  		$resultat = $sql->prepareStatementForSqlObject($select)->execute();
  	
