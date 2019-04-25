@@ -465,6 +465,8 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 	protected $analysesDemandees;
 	protected $resultatsAnalysesDemandees; 
 	protected $anterioriteNfs;
+	protected $resultatsAntiBioGrammePVDemande;
+	
 	
 	public function getNomService()
 	{
@@ -516,6 +518,16 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		$this->analysesDemandees = $analysesDemandees;
 	}
 	
+	public function getResultatsAntiBioGrammePVDemande()
+	{
+	    return $this->resultatsAntiBioGrammePVDemande;
+	}
+	
+	public function setResultatsAntiBioGrammePVDemande($resultatsAntiBioGrammePVDemande)
+	{
+	    $this->resultatsAntiBioGrammePVDemande = $resultatsAntiBioGrammePVDemande;
+	}
+	
 	public function getResultatsAnalysesDemandees()
 	{
 		return $this->resultatsAnalysesDemandees;
@@ -552,6 +564,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 	protected $analysesBilanElectrolyte;
 	protected $analysesTypageHemoglobine;
 	protected $analysesSerologieHIV;
+	protected $analysesSerologiePV;
 	
 
 	public function setAnalysesImmunoHemato($analysesImmunoHemato){
@@ -666,6 +679,14 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		return $this->analysesSerologieHIV;
 	}
 	
+	public function setAnalysesSerologiePV($analysesSerologiePV){
+	    $this->analysesSerologiePV = $analysesSerologiePV;
+	}
+	
+	public function getAnalysesSerologiePV(){
+	    return $this->analysesSerologiePV;
+	}
+	
 	//Premiere page NFS --- NFS --- NFS
 	//Premiere page NFS --- NFS --- NFS
 	function affichageResultatAnalyseNFS()
@@ -692,6 +713,24 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		$this->AddPage();
 		$this->EnTetePage();
 		$this->AfficherResultatsSerologieHIV();
+	}
+	
+	//Page Sérologie PV
+	//Page Sérologie PV
+	function affichageResultatsPV()
+	{
+	    $this->AddPage();
+	    $this->EnTetePage();
+	    $this->AfficherResultatsPV();
+	}
+	
+	//Page Sérologie Antibiogramme PV
+	//Page Sérologie Antibiogramme PV
+	function affichageResultatsAntibiogrammePV($resultatsABGPV)
+	{
+	    $this->AddPage();
+	    $this->EnTetePage();
+	    $this->AfficherResultatsAntibiogrammePV($resultatsABGPV);
 	}
 	
 	//Dernière page Typage hémoglobine (Profil du patient au dépistage)
@@ -4742,6 +4781,1196 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 	
 	
 	
+	function AfficherResultatsPV(){
+	    $controle = new DateHelper();
+	    $this->AddFont('symb','','symbol.php');
+	    $this->AddFont('zap','','zapfdingbats.php');
+	    $this->AddFont('timesb','','timesb.php');
+	    $this->AddFont('timesi','','timesi.php');
+	    $this->AddFont('times','','times.php');
+	
+	    $resultats = $this->getResultatsAnalysesDemandees();
+	    $listeAnalysesDemandees = $this->getAnalysesDemandees();
+	    $infosAnalyseDemande = array();
+	
+	    for($i = 0 ; $i < count($listeAnalysesDemandees) ; $i++){
+	        $idanalyse = $listeAnalysesDemandees[$i]['idanalyse'];
+	
+	        if($idanalyse == 65){
+	            $analyses[$idanalyse]            = $listeAnalysesDemandees[$i]['Designation'];
+	            $idAnalyses[$idanalyse]          = $idanalyse;
+	            $typesAnalyses[$idanalyse]       = $listeAnalysesDemandees[$i]['Libelle'];
+	            $infosAnalyseDemande[$idanalyse] = $listeAnalysesDemandees[$i];
+	        }
+	    }
+	
+	    //Date de prelèvement
+	    $datePrelevement = $infosAnalyseDemande[65]['DateHeurePrelevement'];
+	
+	    //Affichage des infos sur le biologiste et le technicien
+	    $dateEnregistrement  =  $controle->convertDateTime($infosAnalyseDemande[65]['DateEnregistrementResultat']);
+	    $prenomNomTechnicien = $infosAnalyseDemande[65]['Prenom'].' '.$infosAnalyseDemande[65]['Nom'];
+	    $prenomNomBiologiste = $infosAnalyseDemande[65]['PrenomValidateur'].' '.$infosAnalyseDemande[65]['NomValidateur'];
+	
+	    $this->SetFont('times','',8);
+	    //$this->Cell(45,-1,'Enregistré le : '.$dateEnregistrement,'',0,'L',0);
+	    $this->Cell(45,-1,'Prélèvement effectué le : '.$datePrelevement,'',0,'L',0);
+	
+	    //$this->Cell(90,-1,'par : '.$prenomNomTechnicien.' ; validé par : '.$prenomNomBiologiste,'',1,'L',0);
+	    $this->Cell(90,-1,'','',1,'L',0);
+	
+	    $this->Ln(5);
+	
+	    //AFFICHAGE DE L'EN TETE DU TEXTE
+	    //AFFICHAGE DE L'EN TETE DU TEXTE
+	    $this->SetFillColor(249,249,249);
+	    $this->SetDrawColor(220,220,220);
+	
+	    $this->SetFont('times','I',9);
+	    $this->Cell(35,7,'','',0,'L',0);
+	    $this->SetFont('times','U',10);
+	    $this->Cell(115,7,"Prélèvement vaginal",'',0,'C',0);
+	    $this->Cell(35,7,'','',1,'C',0);
+	
+	    $this->Ln(3);
+	
+	    //matériel utilisé --- matériel utilisé --- matériel utilisé
+	    $this->SetFont('zap','',11.3);
+	    $this->Cell(4,6,' ^','BT',0,'C',1);
+	    $this->SetFont('times','',11);
+	    $this->Cell(181,6,'Type de matériel utilisé : '.iconv ('UTF-8' , 'windows-1252', $resultats[65]['type_materiel']),'BT',1,'L',1);
+	
+	    $this->Ln(5);
+	    $indice = 0;
+	    
+	    
+	    $idAnalysesSerologiePV = $this->getAnalysesSerologiePV();
+	    
+	    $listeAspectPertesAbondance = array(0=>'', 1=>'Peu abondante', 2=>'Abondante', 3=>'Très abondante');
+	    $listeAspectPertesCouleurs  = array(0=>'', 1=>'Blanchâtres', 2=>'Striées de sang', 3=>'Caillebottées', 'Marron');
+	    $listeAspectPertesOdeurs    = array(0=>'', 1=>'Fétides', 2=>'Non fétides');
+	    $listeAspectOrgane          = array(0=>'', 1=>'Col sain', 2=>'Col enflamm&eacute;');
+	    
+	    $listeLeucocytesChamp       = array(0=>'', 1=>'Rares', 2=>'Absentes');
+	    $listeHematiesChamp         = array(0=>'', 1=>'Absentes');
+	    $listeCellulesEpitheliales  = array(0=>'', 1=>'Absentes');
+	    $listeTrichomonasVaginalis  = array(0=>'', 1=>'Présence', 2=>'Absence');
+	    $listeLevuresFilamentsMyceliens = array(0=>'', 1=>'Présence', 2=>'Absence');
+	    $listeGardnerellaVaginalis      = array(0=>'', 1=>'Présence', 2=>'Absence');
+	    $listeMobiluncusSpp = array(0=>'', 1=>'Présence', 2=>'Absence');
+	    $listeClueCells     = array(0=>'', 1=>'Présence', 2=>'Absence');
+	    $listeLactobacillus = array(0=>'', 1=>'Présence', 2=>'Absence');
+	    $listeAutreFlore    = array(0=>'', 1=>'Bacille à gram négatif');
+	    $listeCulture       = array(0=>'', 1=>'Positive', 2=>'Négative');
+	    $listeIdentificationCulture = array(0=>'', 1=>'Candida albicans', 2=>'Escherichia coli', 3=>'Staphylococcus aureus');
+	    $listeRechercheDirecteMycoplasmes = array(0=>'', 1=>'Positive', 2=>'Négative');
+	    $listeRechercheDirecteAntigeneChlamydia = array(0=>'', 1=>'Positive', 2=>'Négative');
+	    $listeIdentificationRdm = array(0=>'', 1=>'Positive', 2=>'Négative');
+	    $listeFlore = array(0=>'', 1=>'Type 1', 2=>'Type 2', 3=>'Type 3', 4=>'Type 4');
+	    $listeIdentificationRdmPositive = array(0=>'', 1=>'Ureaplasma urealyticum', 2=>'Mycoplasma hominis');
+	    
+	    if(in_array(65, $idAnalysesSerologiePV)){
+	
+	        /**
+	         * Titre examen macroscopique
+	         */
+	        $this->SetFont('zap','',10);
+	        $this->Cell(4,6,' m','',0,'C',0);
+	        $this->SetFont('timesi','U',11);
+	        $this->Cell(181,6,'Examen macroscopique','',1,'L',0);
+	        /**
+	         * ==========================
+	         */
+	        
+	        /*
+	         * Première ligne --- Première ligne --- Première ligne
+	         */
+	        $indice = 0;
+	        if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249); }
+	        
+	        /*1) Première colonne ==== Pour les libellés*/
+	        $this->SetFont('zap','',10.5);
+	        $this->Cell(5,6,'','BT',0,'L',1);
+	        $this->SetFont('times','',10);
+	        $this->Cell(47,6,'Aspect des pertes (Abondance) :','BT',0,'R',1);
+	        
+	        /*2) Deuxième colonne ==== Pour les résultats*/
+	        $indexAPA = (int)$resultats[65]['aspect_pertes_abondance'];
+	        $this->SetFont('times','B',11);
+	        $this->Cell(48,6,$listeAspectPertesAbondance[$indexAPA],'BT',0,'L',1);
+	        
+	        /*3) Troisième colonne ===== pour les références */
+	        $this->SetFont('times','',10);
+	        $this->Cell(42,6,'Aspect des pertes (Odeurs) :','BT',0,'R',1);
+	        
+	        /*4) Quatrième colonne ===== pour les références */
+	        $indexAPO = (int)$resultats[65]['aspect_pertes_odeurs'];
+	        $this->SetFont('times','B',11);
+	        $this->Cell(43,6,$listeAspectPertesOdeurs[$indexAPO],'BT',1,'L',1);
+	        
+	        /*
+	         * Deuxième ligne --- Deuxième ligne --- Deuxième ligne
+	         */
+	        $this->Ln(0.5);
+	        if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249); }
+	         
+	        /*1) Première colonne ==== Pour les libellés*/
+	        $this->SetFont('zap','',10.5);
+	        $this->Cell(5,6,'','BT',0,'L',1);
+	        $this->SetFont('times','',10);
+	        $this->Cell(47,6,'Aspect des pertes (couleurs) :','BT',0,'R',1);
+	         
+	        /*2) Deuxième colonne ==== Pour les résultats*/
+	        $indexAPC = (int)$resultats[65]['aspect_pertes_couleurs'];
+	        $this->SetFont('times','B',11);
+	        $this->Cell(48,6,$listeAspectPertesCouleurs[$indexAPC],'BT',0,'L',1);
+	         
+	        /*3) Troisième colonne ===== pour les références */
+	        $this->SetFont('times','',10);
+	        $this->Cell(42,6,'Aspect oragne (Col) :','BT',0,'R',1);
+	         
+	        /*4) Quatrième colonne ===== pour les références */
+	        $indexAO = (int)$resultats[65]['aspect_organe_col'];
+	        $this->SetFont('times','B',11);
+	        $this->Cell(43,6,$listeAspectOrgane[$indexAO],'BT',1,'L',1);
+	       
+	        
+	        /**
+	         * Titre examen microscopique
+	         */
+	        $this->Ln(2);
+	        $this->SetFont('zap','',10);
+	        $this->Cell(4,6,' m','',0,'C',0);
+	        $this->SetFont('timesi','U',11);
+	        $this->Cell(181,6,'Examen microscopique','',1,'L',0);
+	        /**
+	         * ==========================
+	         */
+	        
+	        /*
+	         * Première ligne --- Première ligne --- Première ligne
+	         */
+	        $indice = 0;
+	        if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249); }
+	         
+	        /*1) Première colonne ==== Pour les libellés*/
+	        $this->SetFont('zap','',10.5);
+	        $this->Cell(5,6,'','BT',0,'L',1);
+	        $this->SetFont('times','',10);
+	        $this->Cell(47,6,'Leucocytes :','BT',0,'R',1);
+	         
+	        /*2) Deuxième colonne ==== Pour les résultats*/
+	        $indexLC = (int)$resultats[65]['leucocytes_champ'];
+	        $this->SetFont('times','B',11);
+	        $this->Cell(22,6,$listeLeucocytesChamp[$indexLC],'BT',0,'L',1);
+	        
+	        /*3) Troisième colonne ==== Pour les résultats*/
+	        $valChamp = $resultats[65]['leucocytes_champ_valeur'];
+	        if($valChamp){
+	            $this->SetFont('times','B',11);
+	            $this->Cell(8,6,$valChamp,'BT',0,'R',1);
+	            $this->SetFont('timesi','',10);
+	            $this->Cell(18,6,'/champ','BT',0,'L',1);
+	        }else{
+	            $this->Cell(26,6,'','BT',0,'R',1);
+	        }
+	        
+	        /*4) Quatrième colonne ===== pour les références */
+	        $this->SetFont('times','',10);
+	        $this->Cell(42,6,'Hématies/champ :','BT',0,'R',1);
+	         
+	        /*5) Cinquième colonne ===== pour les références */
+	        $indexHC = (int)$resultats[65]['hematies_champ'];
+	        $this->SetFont('times','B',11);
+	        $this->Cell(22,6,$listeHematiesChamp[$indexHC],'BT',0,'L',1);
+	        
+	        /*6) Sixième colonne ===== pour les références */
+	        $valChampHem = $resultats[65]['hematies_champ_valeur'];
+	        if($valChampHem){
+	            $this->SetFont('times','B',11);
+	            $this->Cell(8,6,$valChampHem,'BT',0,'R',1);
+	            $this->SetFont('timesi','',10);
+	            $this->Cell(13,6,'/champ','BT',1,'L',1);
+	        }else{
+	            $this->Cell(21,6,'','BT',1,'R',1);
+	        }
+	        
+	        
+	        /*
+	         * Deuxième ligne --- Deuxième ligne --- Deuxième ligne
+	         */
+	        if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249); }
+	        $this->Ln(0.5);
+	        /*1) Première colonne ==== Pour les libellés*/
+	        $this->SetFont('zap','',10.5);
+	        $this->Cell(5,6,'','BT',0,'L',1);
+	        $this->SetFont('times','',10);
+	        $this->Cell(47,6,'Cellules épithéliales :','BT',0,'R',1);
+	        
+	        /*2) Deuxième colonne ==== Pour les résultats*/
+	        $indexCE = (int)$resultats[65]['cellules_epitheliales'];
+	        $this->SetFont('times','B',11);
+	        $this->Cell(22,6,$listeCellulesEpitheliales[$indexCE],'BT',0,'L',1);
+	        
+	        /*3a) Troisième colonne A ==== Pour les résultats*/
+	        $valChampCEV = $resultats[65]['cellules_epitheliales_champ_valeur'];
+	        if($valChampCEV){
+	            $this->SetFont('times','B',11);
+	            $this->Cell(8,6,$valChampCEV,'BT',0,'R',1);
+	            $this->SetFont('timesi','',10);
+	            $this->Cell(18,6,'/champ','BT',0,'L',1);
+	        }else{
+	            $this->Cell(26,6,'','BT',0,'R',1);
+	        }
+	        
+	        /*3b) Troisième colonne B ===== pour les références */
+	        $this->SetFont('times','',10);
+	        $this->Cell(42,6,'Trichomonas vaginalis :','BT',0,'R',1);
+	        
+	        /*4) Quatrième colonne ===== pour les références */
+	        $indexTV = (int)$resultats[65]['trichomonas_vaginalis'];
+	        $this->SetFont('times','B',11);
+	        $this->Cell(43,6,$listeTrichomonasVaginalis[$indexTV],'BT',1,'L',1);
+	        
+	        /*
+	         * Troisième ligne --- Troisième ligne --- Troisième ligne
+	         */
+	        if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249); }
+	        $this->Ln(0.5);
+	        /*1) Première colonne ==== Pour les libellés*/
+	        $this->SetFont('zap','',10.5);
+	        $this->Cell(5,6,'','BT',0,'L',1);
+	        $this->SetFont('times','',10);
+	        $this->Cell(47,6,'Levures/filaments mycéliens :','BT',0,'R',1);
+	         
+	        /*2) Deuxième colonne ==== Pour les résultats*/
+	        $indexLFM = (int)$resultats[65]['levures_filaments_myceliens'];
+	        $this->SetFont('times','B',11);
+	        $this->Cell(48,6,$listeLevuresFilamentsMyceliens[$indexLFM],'BT',0,'L',1);
+	         
+	        /*3) Troisième colonne ===== pour les références */
+	        $this->SetFont('times','',10);
+	        $this->Cell(42,6,'Gardnerella vaginalis :','BT',0,'R',1);
+	         
+	        /*4) Quatrième colonne ===== pour les références */
+	        $indexGV = (int)$resultats[65]['gardnerella_vaginalis'];
+	        $this->SetFont('times','B',11);
+	        $this->Cell(43,6,$listeGardnerellaVaginalis[$indexGV],'BT',1,'L',1);
+	        
+	        /*
+	         * Quatrième ligne --- Quatrième ligne --- Quatrième ligne
+	         */
+	        if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249); }
+	        $this->Ln(0.5);
+	        /*1) Première colonne ==== Pour les libellés*/
+	        $this->SetFont('zap','',10.5);
+	        $this->Cell(5,6,'','BT',0,'L',1);
+	        $this->SetFont('times','',10);
+	        $this->Cell(47,6,'Mobiluncus spp :','BT',0,'R',1);
+	        
+	        /*2) Deuxième colonne ==== Pour les résultats*/
+	        $indexMS = (int)$resultats[65]['mobiluncus_spp'];
+	        $this->SetFont('times','B',11);
+	        $this->Cell(48,6,$listeMobiluncusSpp[$indexMS],'BT',0,'L',1);
+	        
+	        /*3) Troisième colonne ===== pour les références */
+	        $this->SetFont('times','',10);
+	        $this->Cell(42,6,'Clue cells :','BT',0,'R',1);
+	        
+	        /*4) Quatrième colonne ===== pour les références */
+	        $indexCC = (int)$resultats[65]['clue_cells'];
+	        $this->SetFont('times','B',11);
+	        $this->Cell(43,6,$listeClueCells[$indexCC],'BT',1,'L',1);
+	        
+	        /*
+	         * Cinquième ligne --- Cinquième ligne --- Cinquième ligne
+	         */
+	        if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249); }
+	        $this->Ln(0.5);
+	        /*1) Première colonne ==== Pour les libellés*/
+	        $this->SetFont('zap','',10.5);
+	        $this->Cell(5,6,'','BT',0,'L',1);
+	        $this->SetFont('times','',10);
+	        $this->Cell(47,6,'Lactobacillus :','BT',0,'R',1);
+	         
+	        /*2) Deuxième colonne ==== Pour les résultats*/
+	        $indexL = (int)$resultats[65]['lactobacillus'];
+	        $this->SetFont('times','B',11);
+	        $this->Cell(48,6,$listeLactobacillus[$indexL],'BT',0,'L',1);
+	         
+	        /*3) Troisième colonne ===== pour les références */
+	        $this->SetFont('times','',10);
+	        $this->Cell(42,6,'Autre flore :','BT',0,'R',1);
+	         
+	        /*4) Quatrième colonne ===== pour les références */
+	        $indexAF = (int)$resultats[65]['autre_flore'];
+	        $this->SetFont('times','B',11);
+	        $this->Cell(43,6,$listeAutreFlore[$indexAF],'BT',1,'L',1);
+	        
+	        /*
+	         * Sixième ligne --- Sixième ligne --- Sixième ligne
+	         */
+	        if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249); }
+	        $this->Ln(0.5);
+	        /*1) Première colonne ==== Pour les libellés*/
+	        $this->SetFont('zap','',10.5);
+	        $this->Cell(5,6,'','BT',0,'L',1);
+	        $this->SetFont('times','',10);
+	        $this->Cell(47,6,'Flore :','BT',0,'R',1);
+	        
+	        /*2) Deuxième colonne ==== Pour les résultats*/
+	        $indexFlore = (int)$resultats[65]['flore'];
+	        $this->SetFont('times','B',11);
+	        $this->Cell(16,6,$listeFlore[$indexFlore],'BT',0,'L',1);
+	        
+	        /*3) Troisième colonne ===== pour les références */
+	        $flore_note = $resultats[65]['flore_note'];
+	        if($flore_note){
+	            $this->SetFont('zap','',10.5);
+	            $this->Cell(6,6,'à','BT',0,'L',1);
+	            $this->SetFont('times','B',11);
+	            $this->Cell(111,6,$flore_note,'BT',1,'L',1);
+	        }else{
+	            $this->Cell(117,6,'','BT',1,'L',1);
+	        }
+	        
+	        /**
+	         * Titre culture
+	         */
+	        $this->Ln(2);
+	        $this->SetFont('zap','',10);
+	        $this->Cell(4,6,' m','',0,'C',0);
+	        $this->SetFont('timesi','U',11);
+	        $this->Cell(181,6,'Culture','',1,'L',0);
+	        /**
+	         * ==========================
+	         */
+	         
+	        /*
+	         * Première ligne --- Première ligne --- Première ligne
+	         */
+	        $indice = 0;
+	        if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249); }
+	        
+	        /*1) Première colonne ==== Pour les libellés*/
+	        $this->SetFont('zap','',10.5);
+	        $this->Cell(5,6,'','BT',0,'L',1);
+	        $this->SetFont('times','',10);
+	        $this->Cell(47,6,'Culture :','BT',0,'R',1);
+	        
+	        /*2) Deuxième colonne ==== Pour les résultats*/
+	        $indexC = (int)$resultats[65]['culture'];
+	        $this->SetFont('times','B',11);
+	        $this->Cell(48,6,$listeCulture[$indexC],'BT',0,'L',1);
+	        
+	        /*3) Troisième colonne ===== pour les références */
+	        $this->SetFont('times','',10);
+	        $this->Cell(19,6,'Identification :','BT',0,'R',1);
+	        
+	        /*4) Quatrième colonne ===== pour les références */
+	        $indexIC = (int)$resultats[65]['identification_culture'];
+	        $this->SetFont('times','B',11);
+	        $this->Cell(66,6,$listeIdentificationCulture[$indexIC],'BT',1,'L',1);
+	        
+	
+	        /**
+	         * Titre Recherches particulières
+	         */
+	        $this->Ln(2);
+	        $this->SetFont('zap','',10);
+	        $this->Cell(4,6,' m','',0,'C',0);
+	        $this->SetFont('timesi','U',11);
+	        $this->Cell(181,6,'Recherches particulières','',1,'L',0);
+	        /**
+	         * ==========================
+	         */
+	        
+	        /*
+	         * Première ligne --- Première ligne --- Première ligne
+	         */                                                                                                                                   
+	        $indice = 0;
+	        if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249); }
+	         
+	        /*1) Première colonne ==== Pour les libellés*/
+	        $this->SetFont('zap','',10.5);
+	        $this->Cell(5,6,'','BT',0,'L',1);
+	        $this->SetFont('times','',10);
+	        $this->Cell(65,6,'Recherche directe de l\'antigène de chlamydia :','BT',0,'R',1);
+	         
+	        /*2) Deuxième colonne ==== Pour les résultats*/
+	        $indexIR = (int)$resultats[65]['recherche_directe_antigene_chlamydia'];
+	        $this->SetFont('times','B',11);
+	        $this->Cell(43,6,$listeRechercheDirecteAntigeneChlamydia[$indexIR],'BT',0,'L',1);
+	         
+	        /*3) Troisième colonne ===== pour les références */
+	        $this->SetFont('times','',10);
+	        $this->Cell(47,6,'','BT',0,'R',1);
+	         
+	        /*4) Quatrième colonne ===== pour les références */
+	        $this->SetFont('times','B',11);
+	        $this->Cell(25,6,'','BT',1,'L',1);
+	        
+	        
+	        /*
+	         * Deuxième ligne --- Deuxième ligne --- Deuxième ligne
+	         */
+	        if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249); }
+	        $this->Ln(0.5);
+	        /*1) Première colonne ==== Pour les libellés*/
+	        $this->SetFont('zap','',10.5);
+	        $this->Cell(5,6,'','BT',0,'L',1);
+	        $this->SetFont('times','',10);
+	        $this->Cell(65,6,'Recherche directe mycoplasmes :','BT',0,'R',1);
+	        
+	        /*2) Deuxième colonne ==== Pour les résultats*/
+	        $indexRDM = (int)$resultats[65]['recherche_directe_mycoplasmes'];
+	        $this->SetFont('times','B',11);
+	        $this->Cell(18,6,$listeRechercheDirecteMycoplasmes[$indexRDM],'BT',0,'L',1);
+	        
+	        /*3) Troisième colonne ===== pour les références */
+	        if($indexRDM && $indexRDM == 1){
+	            $identifRP = $resultats[65]['identification_rdm_positive'];
+	            $this->SetFont('zap','',10.5);
+	            $this->Cell(6,6,'à','BT',0,'L',1);
+	            
+	            $this->SetFont('times','',10);
+	            $this->Cell(25,6,'Identification :','BT',0,'R',1);
+	            
+	            $this->SetFont('times','B',11);
+	            $this->Cell(66,6,$listeIdentificationRdmPositive[$identifRP],'BT',1,'L',1);
+	        }else{
+	            $this->Cell(97,6,'','BT',1,'L',1);
+	        }
+	        
+	        
+	        
+	        /**
+	         * Partie du commentaire de la conclusion
+	         */
+	        if(str_replace(' ','', $resultats[65]['commentaire'])){
+	            
+	            $this->SetFillColor(249,249,249);
+	            
+    	        $this->Ln(2);
+    	        $this->SetFont('zap','',10);
+    	        $this->Cell(4,6,' ','',0,'C',0);
+    	        $this->SetFont('timesi','U',11);
+    	        $this->Cell(181,6,'Conclusion','',1,'L',1);
+    	        /**
+    	         * ==========================
+    	         */
+	        
+	            $this->SetFont('times','',10.5);
+	            $this->MultiCell(185,6,iconv ('UTF-8' , 'windows-1252', $resultats[65]['commentaire']),0,'J',1);
+	        }
+	        $this->Ln(6);
+	        $this->SetFont('timesi','U',9);
+	        $this->Cell(165,6,'Cachet et signature','',0,'R',0);
+	        $this->Cell(20,6,'','',0,'C',0);
+	        
+	        
+	        /**
+	         * Affichage de l'antibiogramme --- Affichage de l'antibiogramme
+	         */
+	        if( $resultats[65]['identification_culture'] != 0 ){
+	            $iddemande = $resultats[65]['idresultat_demande_analyse'];
+	            
+	            $resultatsABGPV = $this->getResultatsAntiBioGrammePVDemande();
+	            //var_dump($resultatsABGPV); exit();
+	            $this->affichageResultatsAntibiogrammePV($resultatsABGPV);
+	        }
+	    }
+	    
+	    
+	    
+	
+	}
+	
+	function AfficherResultatsAntibiogrammePV($resultatsABGPV){
+	    
+	    $controle = new DateHelper();
+	    $this->AddFont('symb','','symbol.php');
+	    $this->AddFont('zap','','zapfdingbats.php');
+	    $this->AddFont('timesb','','timesb.php');
+	    $this->AddFont('timesi','','timesi.php');
+	    $this->AddFont('times','','times.php');
+	    
+	    $resultats = $this->getResultatsAnalysesDemandees();
+	    $listeAnalysesDemandees = $this->getAnalysesDemandees();
+	    $infosAnalyseDemande = array();
+	    
+	    for($i = 0 ; $i < count($listeAnalysesDemandees) ; $i++){
+	        $idanalyse = $listeAnalysesDemandees[$i]['idanalyse'];
+	    
+	        if($idanalyse == 65){
+	            $analyses[$idanalyse]            = $listeAnalysesDemandees[$i]['Designation'];
+	            $idAnalyses[$idanalyse]          = $idanalyse;
+	            $typesAnalyses[$idanalyse]       = $listeAnalysesDemandees[$i]['Libelle'];
+	            $infosAnalyseDemande[$idanalyse] = $listeAnalysesDemandees[$i];
+	        }
+	    }
+	    
+	    //Date de prelèvement
+	    $datePrelevement = $infosAnalyseDemande[65]['DateHeurePrelevement'];
+	    
+	    //Affichage des infos sur le biologiste et le technicien
+	    $dateEnregistrement  =  $controle->convertDateTime($infosAnalyseDemande[65]['DateEnregistrementResultat']);
+	    $prenomNomTechnicien = $infosAnalyseDemande[65]['Prenom'].' '.$infosAnalyseDemande[65]['Nom'];
+	    $prenomNomBiologiste = $infosAnalyseDemande[65]['PrenomValidateur'].' '.$infosAnalyseDemande[65]['NomValidateur'];
+	    
+	    $this->SetFont('times','',8);
+	    //$this->Cell(45,-1,'Enregistré le : '.$dateEnregistrement,'',0,'L',0);
+	    $this->Cell(45,-1,'Prélèvement effectué le : '.$datePrelevement,'',0,'L',0);
+	    
+	    //$this->Cell(90,-1,'par : '.$prenomNomTechnicien.' ; validé par : '.$prenomNomBiologiste,'',1,'L',0);
+	    $this->Cell(90,-1,'','',1,'L',0);
+	    
+	    $this->Ln(5);
+	    
+	    //AFFICHAGE DE L'EN TETE DU TEXTE
+	    //AFFICHAGE DE L'EN TETE DU TEXTE
+	    $this->SetFillColor(249,249,249);
+	    $this->SetDrawColor(220,220,220);
+	    
+	    $this->SetFont('times','I',10);
+	    $this->Cell(35,7,'','',0,'L',0);
+	    $this->SetFont('times','U',10);
+	    $this->Cell(115,7,"ANTIBIOGRAMME",'',0,'C',0);
+	    $this->Cell(35,7,'','',1,'C',0);
+	    
+	    $this->Ln(3);
+	    
+	    $listeIdentificationCulture = array(0=>'', 1=>'Candida albicans', 2=>'Escherichia coli', 3=>'Staphylococcus aureus');
+	    $indexIC = (int)$resultats[65]['identification_culture'];
+	    
+	    //souche isolée -- souche isolée -- souche isolée
+	    $this->SetFont('zap','',11.3);
+	    $this->Cell(4,6,' ^','BT',0,'C',1);
+	    $this->SetFont('times','',11);
+	    $this->Cell(181,6,'Souche isolée : '.iconv ('UTF-8' , 'windows-1252', $listeIdentificationCulture[$indexIC]),'BT',1,'L',1);
+	    
+	    $this->Ln(5);
+	    $indice = 0;
+	     
+	    
+	    /** Affichage des données de l'antibiogramme **/
+	    $resultatsPossibles = array(1=>'Résistante', 2=>'Sensible', 3=> 'Intermédiaire');
+	    
+	    
+	    if($resultatsABGPV){
+	        
+	        $groupeDESBLactamines = array();
+	        if($resultatsABGPV['ampicillineAM']){ $groupeDESBLactamines[] = array('libelle'  => 'Ampicilline', 'resultat' => $resultatsPossibles[$resultatsABGPV['ampicillineAM']], 'regroup' => 1 ); }
+	        if($resultatsABGPV['amoxillineAMX']){ $groupeDESBLactamines[] = array('libelle'  => 'Amoxilline', 'resultat' => $resultatsPossibles[$resultatsABGPV['amoxillineAMX']], 'regroup' => 1); }
+	        if($resultatsABGPV['ticarcillineTIC']){ $groupeDESBLactamines[] = array('libelle'  => 'Ticarcilline', 'resultat' => $resultatsPossibles[$resultatsABGPV['ticarcillineTIC']], 'regroup' => 1); }
+	        if($resultatsABGPV['piperacillinePIP']){ $groupeDESBLactamines[] = array('libelle'  => 'Piperacilline', 'resultat' => $resultatsPossibles[$resultatsABGPV['piperacillinePIP']], 'regroup' => 1); }
+	        if($resultatsABGPV['acideClavulaniqueAmoxicillineAMC']){ $groupeDESBLactamines[] = array('libelle'  => 'Acide clavulanique + Amoxicilline', 'resultat' => $resultatsPossibles[$resultatsABGPV['acideClavulaniqueAmoxicillineAMC']], 'regroup' => 1); }
+	        if($resultatsABGPV['gentamicineGM']){ $groupeDESBLactamines[] = array('libelle'  => 'Gentamicine', 'resultat' => $resultatsPossibles[$resultatsABGPV['gentamicineGM']], 'regroup' => 1); }
+	        if($resultatsABGPV['ticAcClavTCC']){ $groupeDESBLactamines[] = array('libelle'  => 'Tic-Ac-Clav', 'resultat' => $resultatsPossibles[$resultatsABGPV['ticAcClavTCC']], 'regroup' => 1); }
+	        if($resultatsABGPV['ertapenemeETP']){ $groupeDESBLactamines[] = array('libelle'  => 'Ertapénème', 'resultat' => $resultatsPossibles[$resultatsABGPV['ertapenemeETP']], 'regroup' => 1); }
+	        if($resultatsABGPV['imipenemeIPM']){ $groupeDESBLactamines[] = array('libelle'  => 'Imipénème', 'resultat' => $resultatsPossibles[$resultatsABGPV['imipenemeIPM']], 'regroup' => 1); }
+	        if($resultatsABGPV['oxacillineOX']){ $groupeDESBLactamines[] = array('libelle'  => 'Oxacilline', 'resultat' => $resultatsPossibles[$resultatsABGPV['oxacillineOX']], 'regroup' => 1); }
+	        if($resultatsABGPV['penicillineP']){ $groupeDESBLactamines[] = array('libelle'  => 'Pénicilline', 'resultat' => $resultatsPossibles[$resultatsABGPV['penicillineP']], 'regroup' => 1); }
+	        if($resultatsABGPV['cefalotineCF']){ $groupeDESBLactamines[] = array('libelle'  => 'Céfalotine', 'resultat' => $resultatsPossibles[$resultatsABGPV['cefalotineCF']], 'regroup' => 1); }
+	        if($resultatsABGPV['cefoxitineFOX']){ $groupeDESBLactamines[] = array('libelle'  => 'Céfoxitine', 'resultat' => $resultatsPossibles[$resultatsABGPV['cefoxitineFOX']], 'regroup' => 1); }
+	        if($resultatsABGPV['piperacillineTazobactamePPT']){ $groupeDESBLactamines[] = array('libelle'  => 'Pipéracilline tazobactame', 'resultat' => $resultatsPossibles[$resultatsABGPV['piperacillineTazobactamePPT']], 'regroup' => 1); }
+	        if($resultatsABGPV['cefotaximeCTX']){ $groupeDESBLactamines[] = array('libelle'  => 'Céfotaxime', 'resultat' => $resultatsPossibles[$resultatsABGPV['cefotaximeCTX']], 'regroup' => 1); } 
+	        if($resultatsABGPV['cefsulodineCFS']){ $groupeDESBLactamines[] = array('libelle'  => 'Céfsulodine', 'resultat' => $resultatsPossibles[$resultatsABGPV['cefsulodineCFS']], 'regroup' => 1); }
+	        if($resultatsABGPV['CFP']){ $groupeDESBLactamines[] = array('libelle'  => 'CFP', 'resultat' => $resultatsPossibles[$resultatsABGPV['CFP']], 'regroup' => 1); }
+	        if($resultatsABGPV['ceftazidimeCAZ']){ $groupeDESBLactamines[] = array('libelle'  => 'Céftazidime', 'resultat' => $resultatsPossibles[$resultatsABGPV['ceftazidimeCAZ']], 'regroup' => 1); }
+	        if($resultatsABGPV['ceftriaxoneCRO']){ $groupeDESBLactamines[] = array('libelle'  => 'Céftriaxone', 'resultat' => $resultatsPossibles[$resultatsABGPV['ceftriaxoneCRO']], 'regroup' => 1); }
+	        if($resultatsABGPV['cefepimeFEP']){ $groupeDESBLactamines[] = array('libelle'  => 'Céfépime', 'resultat' => $resultatsPossibles[$resultatsABGPV['cefepimeFEP']], 'regroup' => 1); }
+	        if($resultatsABGPV['aztreonamATM']){ $groupeDESBLactamines[] = array('libelle'  => 'Aztréonam', 'resultat' => $resultatsPossibles[$resultatsABGPV['aztreonamATM']], 'regroup' => 1); }
+	          
+	        $groupeDESPolymyxine = array();
+	        if($resultatsABGPV['fosfomycineFOS']){ $groupeDESPolymyxine[] = array('libelle'  => 'Fosfomycine', 'resultat' => $resultatsPossibles[$resultatsABGPV['fosfomycineFOS']], 'regroup' => 2); }
+	        if($resultatsABGPV['vancomycineVA']){ $groupeDESPolymyxine[] = array('libelle'  => 'Vancomycine', 'resultat' => $resultatsPossibles[$resultatsABGPV['vancomycineVA']], 'regroup' => 2); }
+	        if($resultatsABGPV['colistineCS']){ $groupeDESPolymyxine[] = array('libelle'  => 'Colistine', 'resultat' => $resultatsPossibles[$resultatsABGPV['colistineCS']], 'regroup' => 2); }
+	        
+	        $groupeDESAminosides = array();
+	        if($resultatsABGPV['kanamycineK']){ $groupeDESAminosides[] = array('libelle'  => 'Kanamycine', 'resultat' => $resultatsPossibles[$resultatsABGPV['kanamycineK']], 'regroup' => 3); }
+	        if($resultatsABGPV['tobramycineTB']){ $groupeDESAminosides[] = array('libelle'  => 'Tobramycine', 'resultat' => $resultatsPossibles[$resultatsABGPV['tobramycineTB']], 'regroup' => 3); }
+	        if($resultatsABGPV['amikacineAN']){ $groupeDESAminosides[] = array('libelle'  => 'Amikacine', 'resultat' => $resultatsPossibles[$resultatsABGPV['amikacineAN']], 'regroup' => 3); }
+	        if($resultatsABGPV['netilmycine']){ $groupeDESAminosides[] = array('libelle'  => 'Netilmycine', 'resultat' => $resultatsPossibles[$resultatsABGPV['netilmycine']], 'regroup' => 3); }
+	          
+	        $groupeDESPhenicoles = array();
+	        if($resultatsABGPV['chloramphenicolC']){ $groupeDESPhenicoles[] = array('libelle'  => 'Chloramphenicol', 'resultat' => $resultatsPossibles[$resultatsABGPV['chloramphenicolC']], 'regroup' => 4); }
+	         
+	        $groupeDESCyclines = array();
+	        if($resultatsABGPV['tetracyclineTE']){ $groupeDESCyclines[] = array('libelle'  => 'Tétracycline', 'resultat' => $resultatsPossibles[$resultatsABGPV['tetracyclineTE']], 'regroup' => 5); }
+	        if($resultatsABGPV['doxycyclineDO']){ $groupeDESCyclines[] = array('libelle'  => 'Doxycycline', 'resultat' => $resultatsPossibles[$resultatsABGPV['doxycyclineDO']], 'regroup' => 5); }
+	         
+	        $groupeDESMacrolidesEtApparentes = array();
+	        if($resultatsABGPV['erythromycineE']){ $groupeDESMacrolidesEtApparentes[] = array('libelle'  => 'Erythromycine', 'resultat' => $resultatsPossibles[$resultatsABGPV['erythromycineE']], 'regroup' => 6); }
+	        if($resultatsABGPV['lincomycineL']){ $groupeDESMacrolidesEtApparentes[] = array('libelle'  => 'Lincomycine', 'resultat' => $resultatsPossibles[$resultatsABGPV['lincomycineL']], 'regroup' => 6); }
+	        if($resultatsABGPV['pristinamycinePT']){ $groupeDESMacrolidesEtApparentes[] = array('libelle'  => 'Pristinamycine', 'resultat' => $resultatsPossibles[$resultatsABGPV['pristinamycinePT']], 'regroup' => 6); }
+
+	        $groupeDESFluoroquinolones = array();
+	        if($resultatsABGPV['acideFusidiqueFA']){ $groupeDESFluoroquinolones[] = array('libelle'  => 'Acide fusidique', 'resultat' => $resultatsPossibles[$resultatsABGPV['acideFusidiqueFA']], 'regroup' => 7); }
+	        if($resultatsABGPV['acideNalidixiqueNA']){ $groupeDESFluoroquinolones[] = array('libelle'  => 'Acide nalidixique', 'resultat' => $resultatsPossibles[$resultatsABGPV['acideNalidixiqueNA']], 'regroup' => 7); }
+	        if($resultatsABGPV['pefloxacinePEF']){ $groupeDESFluoroquinolones[] = array('libelle'  => 'Péfloxacine', 'resultat' => $resultatsPossibles[$resultatsABGPV['pefloxacinePEF']], 'regroup' => 7); }
+	        if($resultatsABGPV['norfloxacineNOR']){ $groupeDESFluoroquinolones[] = array('libelle'  => 'Norfloxacine', 'resultat' => $resultatsPossibles[$resultatsABGPV['norfloxacineNOR']], 'regroup' => 7); }
+	        if($resultatsABGPV['ciprofloxacineCIP']){ $groupeDESFluoroquinolones[] = array('libelle'  => 'Ciprofloxacine', 'resultat' => $resultatsPossibles[$resultatsABGPV['ciprofloxacineCIP']], 'regroup' => 7); }
+	        if($resultatsABGPV['LEV']){ $groupeDESFluoroquinolones[] = array('libelle'  => 'LEV', 'resultat' => $resultatsPossibles[$resultatsABGPV['LEV']], 'regroup' => 7); }
+	         
+	        $groupeDESImidazoles = array();
+	        if($resultatsABGPV['rifampicineRA']){ $groupeDESImidazoles[] = array('libelle'  => 'Rifampicine', 'resultat' => $resultatsPossibles[$resultatsABGPV['rifampicineRA']], 'regroup' => 8); }
+	        if($resultatsABGPV['cotrimoxazoleSXT']){ $groupeDESImidazoles[] = array('libelle'  => 'Cotrimoxazole', 'resultat' => $resultatsPossibles[$resultatsABGPV['cotrimoxazoleSXT']], 'regroup' => 8); }
+	         
+	        $conclusion = $resultatsABGPV['conclusion'];
+	        
+ 
+	        /* Affichage en ligne*/
+	        //$this->affichageInfosEnLigneABGPV($groupeDESBLactamines, $groupeDESPolymyxine, $groupeDESAminosides, $groupeDESPhenicoles, $groupeDESCyclines, $titreAlign='left');
+	        
+	        /* Affichage en colonne*/
+	        $this->affichageInfosEnColonneABGPV($groupeDESBLactamines, $groupeDESPolymyxine, $groupeDESAminosides, $groupeDESPhenicoles, $groupeDESCyclines, $groupeDESMacrolidesEtApparentes, $groupeDESFluoroquinolones, $groupeDESImidazoles, $conclusion);
+	        
+	    }
+	    
+	    
+	    
+	}
+	
+	
+	function affichageInfosEnLigneABGPV($groupeDESBLactamines,$groupeDESPolymyxine,$groupeDESAminosides,
+	    $groupeDESPhenicoles,$groupeDESCyclines,$titreAlign = 'left'){
+	    
+	        
+	    /**
+	     * Affichage du groupe des B-Lactamines
+	     */
+	    if($groupeDESBLactamines){
+	         
+	        if($titreAlign == 'left'){
+	            /* Titre B-Lactamines "alignement:gauche"*/
+	            $this->Ln(2);
+	            $this->SetFont('zap','',11);
+	            $this->Cell(6,6,' O','',0,'L',0);
+	            $this->SetFont('symb','U',11);
+	            $this->Cell(2,6,'b ','',0,'L',0);
+	            $this->SetFont('times','U',11);
+	            $this->Cell(177,6,'-Lactamines','',1,'L',0);
+	            $this->Ln(0.5);
+	            /* ====================== */
+	        }else{
+	            /* Titre B-Lactamines "alignement:centrer"*/
+	             $this->SetFont('zap','',11);
+	             $this->Cell(82,6,' O','',0,'R',0);
+	             $this->SetFont('symb','U',11);
+	             $this->Cell(2,6,'b ','',0,'L',0);
+	             $this->SetFont('times','U',11);
+	             $this->Cell(101,6,'-Lactamines','',1,'L',0);
+	             $this->Ln(0.5);
+	            /* ========================== */
+	        }
+	          
+	        $indice = 0;
+	        for($i=0; $i<count($groupeDESBLactamines); $i++){
+	    
+	            if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249); }
+	    
+	            /*1) Première colonne ==== */
+	            $this->SetFont('times','',11);
+	            $this->Cell(60,6,$groupeDESBLactamines[$i]['libelle'].' :','BT',0,'R',1);
+	            $this->SetFont('times','B',11);
+	            $this->Cell(31.5,6,$groupeDESBLactamines[$i]['resultat'],'BT',0,'L',1);
+	            $i++;
+	            if(array_key_exists($i, $groupeDESBLactamines)){
+	                /* Séparateur ------ Séparateur */
+	                $this->Cell(2,6,'','',0,'R',0);
+	                 
+	                /*2) Deuxième colonne ==== */
+	                $this->SetFont('times','',11);
+	                $this->Cell(60,6,$groupeDESBLactamines[$i]['libelle'].' :','BT',0,'R',1);
+	                $this->SetFont('times','B',11);
+	                $this->Cell(31.5,6,$groupeDESBLactamines[$i]['resultat'],'BT',0,'L',1);
+	            }
+	            $this->Ln();
+	        }
+	    
+	    }
+	     
+	     
+	    /**
+	     * Affichage du groupe des Polymyxines
+	     */
+	    if($groupeDESPolymyxine){
+	         
+	         
+	        /* Titre Polymyxines */
+	        if($titreAlign == 'left'){
+	            $this->Ln(2);
+	            $this->SetFont('zap','',11);
+	            $this->Cell(6,6,' O','',0,'L',0);
+	            $this->SetFont('times','U',11);
+	            $this->Cell(179,6,'Polymyxines','',1,'L',0);
+	            $this->Ln(0.5);
+	        }else{
+	            $this->Ln(2);
+	            $this->SetFont('zap','',11);
+	            $this->Cell(82,6,' O','',0,'R',0);
+	            $this->SetFont('times','U',11);
+	            $this->Cell(103,6,'Polymyxines','',1,'L',0);
+	            $this->Ln(0.5);
+	        }
+	        /* ========================== */
+	         
+	        $indice = 0;
+	        for($i=0; $i<count($groupeDESPolymyxine); $i++){
+	             
+	            if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249); }
+	             
+	            /*1) Première colonne ==== */
+	            $this->SetFont('times','',11);
+	            $this->Cell(60,6,$groupeDESPolymyxine[$i]['libelle'].' :','BT',0,'R',1);
+	            $this->SetFont('times','B',11);
+	            $this->Cell(31.5,6,$groupeDESPolymyxine[$i]['resultat'],'BT',0,'L',1);
+	            $i++;
+	            if(array_key_exists($i, $groupeDESPolymyxine)){
+	                /* Séparateur ------ Séparateur */
+	                $this->Cell(2,6,'','',0,'R',0);
+	    
+	                /*2) Deuxième colonne ==== */
+	                $this->SetFont('times','',11);
+	                $this->Cell(60,6,$groupeDESPolymyxine[$i]['libelle'].' :','BT',0,'R',1);
+	                $this->SetFont('times','B',11);
+	                $this->Cell(31.5,6,$groupeDESPolymyxine[$i]['resultat'],'BT',0,'L',1);
+	            }
+	            $this->Ln();
+	        }
+	         
+	    }
+	     
+	     
+	    /**
+	     * Affichage du groupe des Aminosides
+	     */
+	    if($groupeDESAminosides){
+	         
+	        /* Titre Aminosides */
+	        if($titreAlign == 'left'){
+	            $this->Ln(2);
+	            $this->SetFont('zap','',11);
+	            $this->Cell(6,6,' O','',0,'L',0);
+	            $this->SetFont('times','U',11);
+	            $this->Cell(179,6,'Aminosides','',1,'L',0);
+	            $this->Ln(0.5);
+	        }else{
+	            $this->Ln(2);
+	            $this->SetFont('zap','',11);
+	            $this->Cell(82,6,' O','',0,'R',0);
+	            $this->SetFont('times','U',11);
+	            $this->Cell(103,6,'Aminosides','',1,'L',0);
+	            $this->Ln(0.5);
+	        }
+	        /* ========================== */
+	         
+	        $indice = 0;
+	        for($i=0; $i<count($groupeDESAminosides); $i++){
+	    
+	            if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249); }
+	    
+	            /*1) Première colonne ==== */
+	            $this->SetFont('times','',11);
+	            $this->Cell(60,6,$groupeDESAminosides[$i]['libelle'].' :','BT',0,'R',1);
+	            $this->SetFont('times','B',11);
+	            $this->Cell(31.5,6,$groupeDESAminosides[$i]['resultat'],'BT',0,'L',1);
+	            $i++;
+	            if(array_key_exists($i, $groupeDESAminosides)){
+	                /* Séparateur ------ Séparateur */
+	                $this->Cell(2,6,'','',0,'R',0);
+	                 
+	                /*2) Deuxième colonne ==== */
+	                $this->SetFont('times','',11);
+	                $this->Cell(60,6,$groupeDESAminosides[$i]['libelle'].' :','BT',0,'R',1);
+	                $this->SetFont('times','B',11);
+	                $this->Cell(31.5,6,$groupeDESAminosides[$i]['resultat'],'BT',0,'L',1);
+	            }
+	            $this->Ln();
+	        }
+	    
+	    }
+	     
+	     
+	    /**
+	     * Affichage du groupe des Phénicoles
+	     */
+	    if($groupeDESPhenicoles){
+	    
+	        /* Titre Phénicoles */
+	        if($titreAlign == 'left'){
+	            $this->Ln(2);
+	            $this->SetFont('zap','',11);
+	            $this->Cell(6,6,' O','',0,'L',0);
+	            $this->SetFont('times','U',11);
+	            $this->Cell(179,6,'Phénicoles','',1,'L',0);
+	            $this->Ln(0.5);
+	        }else{
+	            $this->Ln(2);
+	            $this->SetFont('zap','',11);
+	            $this->Cell(82,6,' O','',0,'R',0);
+	            $this->SetFont('times','U',11);
+	            $this->Cell(103,6,'Phénicoles','',1,'L',0);
+	            $this->Ln(0.5);
+	        }
+	        /* ========================== */
+	    
+	        $indice = 0;
+	        for($i=0; $i<count($groupeDESPhenicoles); $i++){
+	             
+	            if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249); }
+	             
+	            /*1) Première colonne ==== */
+	            $this->SetFont('times','',11);
+	            $this->Cell(60,6,$groupeDESPhenicoles[$i]['libelle'].' :','BT',0,'R',1);
+	            $this->SetFont('times','B',11);
+	            $this->Cell(31.5,6,$groupeDESPhenicoles[$i]['resultat'],'BT',0,'L',1);
+	            $i++;
+	            if(array_key_exists($i, $groupeDESPhenicoles)){
+	                /* Séparateur ------ Séparateur */
+	                $this->Cell(2,6,'','',0,'R',0);
+	    
+	                /*2) Deuxième colonne ==== */
+	                $this->SetFont('times','',11);
+	                $this->Cell(60,6,$groupeDESPhenicoles[$i]['libelle'].' :','BT',0,'R',1);
+	                $this->SetFont('times','B',11);
+	                $this->Cell(31.5,6,$groupeDESPhenicoles[$i]['resultat'],'BT',0,'L',1);
+	            }
+	            $this->Ln();
+	        }
+	         
+	    }
+	     
+	     
+	    /**
+	     * Affichage du groupe des cyclines
+	     */
+	    if($groupeDESCyclines){
+	         
+	        /* Titre Cyclines */
+	        if($titreAlign == 'left'){
+	            $this->Ln(2);
+	            $this->SetFont('zap','',11);
+	            $this->Cell(6,6,' O','',0,'L',0);
+	            $this->SetFont('times','U',11);
+	            $this->Cell(179,6,'Cyclines','',1,'L',0);
+	            $this->Ln(0.5);
+	        }else{
+	            $this->Ln(2);
+	            $this->SetFont('zap','',11);
+	            $this->Cell(82,6,' O','',0,'R',0);
+	            $this->SetFont('times','U',11);
+	            $this->Cell(103,6,'Cyclines','',1,'L',0);
+	            $this->Ln(0.5);
+	        }
+	        /* ========================== */
+	         
+	        $indice = 0;
+	        for($i=0; $i<count($groupeDESCyclines); $i++){
+	    
+	            if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249); }
+	    
+	            /*1) Première colonne ==== */
+	            $this->SetFont('times','',11);
+	            $this->Cell(60,6,$groupeDESCyclines[$i]['libelle'].' :','BT',0,'R',1);
+	            $this->SetFont('times','B',11);
+	            $this->Cell(31.5,6,$groupeDESCyclines[$i]['resultat'],'BT',0,'L',1);
+	            $i++;
+	            if(array_key_exists($i, $groupeDESCyclines)){
+	                /* Séparateur ------ Séparateur */
+	                $this->Cell(2,6,'','',0,'R',0);
+	                 
+	                /*2) Deuxième colonne ==== */
+	                $this->SetFont('times','',11);
+	                $this->Cell(60,6,$groupeDESCyclines[$i]['libelle'].' :','BT',0,'R',1);
+	                $this->SetFont('times','B',11);
+	                $this->Cell(31.5,6,$groupeDESCyclines[$i]['resultat'],'BT',0,'L',1);
+	            }
+	            $this->Ln();
+	        }
+	    
+	    }
+	    
+	}
+	
+	
+	
+	function affichageInfosEnColonneABGPV($groupeDESBLactamines,$groupeDESPolymyxine,$groupeDESAminosides,
+	         $groupeDESPhenicoles,$groupeDESCyclines, $groupeDESMacrolidesEtApparentes, $groupeDESFluoroquinolones, $groupeDESImidazoles, $conclusion){
+	    
+	         $donneesAntiBioGrammePV = array();
+	         if($groupeDESBLactamines){ 
+	             $donneesAntiBioGrammePV = array_merge($donneesAntiBioGrammePV, array(array('libelle'=>'libOk','Titrelib'=>'BLactamines', 'regroup' => 1)), $groupeDESBLactamines);
+	         }
+	         if($groupeDESPolymyxine){
+	             $donneesAntiBioGrammePV = array_merge($donneesAntiBioGrammePV, array(array('libelle'=>'libOk','Titrelib'=>'Polymyxine', 'regroup' => 2)), $groupeDESPolymyxine);
+	         }
+	         if($groupeDESAminosides){
+	             $donneesAntiBioGrammePV = array_merge($donneesAntiBioGrammePV, array(array('libelle'=>'libOk','Titrelib'=>'Aminosides', 'regroup' => 3)), $groupeDESAminosides);
+	         }
+	         if($groupeDESPhenicoles){
+	             $donneesAntiBioGrammePV = array_merge($donneesAntiBioGrammePV, array(array('libelle'=>'libOk','Titrelib'=>'Phénicolés', 'regroup' => 4)), $groupeDESPhenicoles);
+	         }
+	         if($groupeDESCyclines){
+	             $donneesAntiBioGrammePV = array_merge($donneesAntiBioGrammePV, array(array('libelle'=>'libOk','Titrelib'=>'Cyclines', 'regroup' => 5)), $groupeDESCyclines);
+	         }
+	         if($groupeDESMacrolidesEtApparentes){
+	             $donneesAntiBioGrammePV = array_merge($donneesAntiBioGrammePV, array(array('libelle'=>'libOk','Titrelib'=>'Macrolides et apparentes', 'regroup' => 6)), $groupeDESMacrolidesEtApparentes);
+	         }
+	         if($groupeDESFluoroquinolones){
+	             $donneesAntiBioGrammePV = array_merge($donneesAntiBioGrammePV, array(array('libelle'=>'libOk','Titrelib'=>'Fluoroquinolones', 'regroup' => 7)), $groupeDESFluoroquinolones);
+	         }
+	         if($groupeDESImidazoles){
+	             $donneesAntiBioGrammePV = array_merge($donneesAntiBioGrammePV, array(array('libelle'=>'libOk','Titrelib'=>'Imidazolés', 'regroup' => 8)), $groupeDESImidazoles);
+	         }
+	         
+	         //var_dump($donneesAntiBioGrammePV); exit();
+	         //var_dump(array_chunk($donneesAntiBioGrammePV, 10)); exit();
+	         
+	         /** Affichage en colonne automatiquement */
+	         //$this->affichageInfosEnColonneABGPV_Auto($donneesAntiBioGrammePV, $conclusion);
+	         
+	         /** * Affichage en colonne avec ajustement */
+	         $this->affichageInfosEnColonneABGPV_Ajuster($donneesAntiBioGrammePV, $conclusion);
+	}
+	
+	/**
+	 * Affichage en colonne automatiquement
+	 */
+	function affichageInfosEnColonneABGPV_Auto($donneesAntiBioGrammePV, $conclusion){
+	    
+	    $nbLigneABG = (int)(count($donneesAntiBioGrammePV)/2);
+	    for($i=0,$j=$nbLigneABG ; $i<$nbLigneABG ; $i++,$j++){
+	    
+	        /*
+	         * Première colonne
+	         */
+	        if($donneesAntiBioGrammePV[$i]['libelle'] == 'libOk'){
+	            $this->SetFont('zap','',11);
+	            $this->Cell(6,6,' O','',0,'L',0);
+	            if($donneesAntiBioGrammePV[$i]['Titrelib'] == 'BLactamines'){
+	                $this->SetFont('symb','U',11);
+	                $this->Cell(2,6,'b ','',0,'L',0);
+	                $this->SetFont('times','U',11);
+	                $this->Cell(83,6,'-Lactamines','',0,'L',0);
+	            }else{
+	                $this->SetFont('times','U',11);
+	                $this->Cell(85,6,$donneesAntiBioGrammePV[$i]['Titrelib'],'',0,'L',0);
+	            }
+	        }else{
+	            $this->SetFont('times','',11);
+	            $this->Cell(60,6,$donneesAntiBioGrammePV[$i]['libelle'].' :','BLT',0,'R',1);
+	            $this->SetFont('times','B',11);
+	            $this->Cell(31,6,$donneesAntiBioGrammePV[$i]['resultat'],'BRT',0,'L',1);
+	        }
+	    
+	        /* Séparateur ------ Séparateur */
+	        $this->Cell(4,6,'','',0,'R',0);
+	    
+	        /*
+	         * Deuxième colonne
+	         */
+	        if($donneesAntiBioGrammePV[$j]['libelle'] == 'libOk'){
+	            $this->SetFont('zap','',11);
+	            $this->Cell(6,6,' O','',0,'L',0);
+	            $this->SetFont('times','U',11);
+	            $this->Cell(85,6,$donneesAntiBioGrammePV[$j]['Titrelib'],'',1,'L',0);
+	        }else{
+	            $this->SetFont('times','',11);
+	            $this->Cell(50,6,$donneesAntiBioGrammePV[$j]['libelle'].' :','BLT',0,'R',1);
+	            $this->SetFont('times','B',11);
+	            $this->Cell(41,6,$donneesAntiBioGrammePV[$j]['resultat'],'BRT',1,'L',1);
+	        }
+	    
+	        $this->Ln(0.5);
+	    }
+	    
+	    /**
+	     * Ligne restante
+	     */
+	    $nbLigneABG = count($donneesAntiBioGrammePV)%2;
+	    if($nbLigneABG != 0){
+	        /*
+	         * Première colonne
+	         */
+	        $this->Cell(91,6,'','',0,'',0);
+	        /* Séparateur ------ Séparateur */
+	        $this->Cell(4,6,'','',0,'',0);
+	        /*
+	         * Deuxième colonne
+	         */
+	        if(array_key_exists($j, $donneesAntiBioGrammePV)){
+	            $this->SetFont('times','',11);
+	            $this->Cell(50,6,$donneesAntiBioGrammePV[$j]['libelle'].' :','BLT',0,'R',1);
+	            $this->SetFont('times','B',11);
+	            $this->Cell(41,6,$donneesAntiBioGrammePV[$j]['resultat'],'BRT',0,'L',1);
+	        }
+	        $this->Ln();
+	    }
+	    
+	    /**
+	     * Conclusion
+	     */
+	    if(str_replace(' ','', $conclusion)){
+	        $this->SetFont('zap','',11);
+	        $this->Cell(5,6,'*','',0,'L',0);
+	        $this->SetFont('timesb','U',10);
+	        $this->Cell(180,6,'Conclusion :','',1,'L',0);
+	         
+	        $this->SetFont('times','',10.5);
+	        $this->MultiCell(185,6,iconv ('UTF-8' , 'windows-1252', $conclusion),0,'J',1);
+	    }
+	    $this->Ln();
+	    $this->SetFont('timesi','U',9);
+	    $this->Cell(140,6,'','',0,'',0);
+	    $this->Cell(45,6,'Cachet et signature','',1,'L',0);
+	    
+	}
+	
+	/**
+	 * Affichage en colonne avec ajustement
+	 */
+	function affichageInfosEnColonneABGPV_Ajuster($donneesAntiBioGrammePV, $conclusion){
+	    
+	    $elementsCol1 = array();
+	    $elementsCol2 = array();
+	    
+	    $nbLignes = (int)(count($donneesAntiBioGrammePV)/2);
+	    $subdivListe = array_chunk($donneesAntiBioGrammePV, $nbLignes);
+	    
+	    $listeElements = array();
+	    for($i=0 ; $i<count($subdivListe) ; $i++){
+	        $listeElements['liste'.$i] = $subdivListe[$i];
+	    }
+	    
+	    $liste1 = $listeElements['liste0'];
+	    $liste2 = $listeElements['liste1'];
+	    $liste3 = (count($listeElements) == 3) ? $listeElements['liste2'] : array();
+	    
+	    $lastElementListe1 = $liste1[count($liste1)-1];
+	    $elSuivants = array();
+	    for($i=0 ; $i<count($liste2) ; $i++){
+	        if($liste2[$i]['regroup'] == $lastElementListe1['regroup']){
+	            $elSuivants [] = $liste2[$i];
+	        }else{
+	            $elementsCol2 [] = $liste2[$i];
+	        }
+	    }
+	    
+	    /**
+	     * Premiere colonne
+	     */
+	    $elementsCol1 = array_merge($liste1, $elSuivants);
+	    
+	    /**
+	     * Deuxieme colonne
+	     */
+	    $elementsCol2 = array_merge($elementsCol2, $liste3);
+	     
+	    
+	    //var_dump($elementsCol2); exit();
+	    //var_dump($donneesAntiBioGrammePV[$nbLigne]); exit();
+	    
+	    
+	    
+	    for($i=0 ; $i<count($elementsCol1) ; $i++){
+	         
+	        /*
+	         * Première colonne
+	         */
+	        if($elementsCol1[$i]['libelle'] == 'libOk'){
+	            $this->SetFont('zap','',11);
+	            $this->Cell(6,6,' O','',0,'L',0);
+	            if($elementsCol1[$i]['Titrelib'] == 'BLactamines'){
+	                $this->SetFont('symb','U',11);
+	                $this->Cell(2,6,'b ','',0,'L',0);
+	                $this->SetFont('times','U',11);
+	                $this->Cell(83,6,'-Lactamines','',0,'L',0);
+	            }else{
+	                $this->SetFont('times','U',11);
+	                $this->Cell(85,6,$elementsCol1[$i]['Titrelib'],'',0,'L',0);
+	            }
+	        }else{
+	            $this->SetFont('times','',11);
+	            $this->Cell(60,6,$elementsCol1[$i]['libelle'].' :','BLT',0,'R',1);
+	            $this->SetFont('times','B',11);
+	            $this->Cell(31,6,$elementsCol1[$i]['resultat'],'BRT',0,'L',1);
+	        }
+	         
+	        /* Séparateur ------ Séparateur */
+	        $this->Cell(4,6,'','',0,'R',0);
+	         
+	        /*
+	         * Deuxième colonne
+	         */
+	        if(array_key_exists($i, $elementsCol2)){
+	            if($elementsCol2[$i]['libelle'] == 'libOk'){
+	                $this->SetFont('zap','',11);
+	                $this->Cell(6,6,' O','',0,'L',0);
+	                $this->SetFont('times','U',11);
+	                $this->Cell(85,6,$elementsCol2[$i]['Titrelib'],'',1,'L',0);
+	            }else{
+	                $this->SetFont('times','',11);
+	                $this->Cell(50,6,$elementsCol2[$i]['libelle'].' :','BLT',0,'R',1);
+	                $this->SetFont('times','B',11);
+	                $this->Cell(41,6,$elementsCol2[$i]['resultat'],'BRT',1,'L',1);
+	            }
+	        }else {$this->Ln();}
+	         
+	        $this->Ln(0.5);
+	    }
+	    
+	    
+	    
+	    /**
+	     * Dernier element à afficher si la colonne 2 est superieur à la colonne 1
+	     */
+	    
+	    /**
+	     * Ligne restante
+	     */
+	    
+	    if(count($elementsCol2) > count($elementsCol1)){
+	        /*
+	         * Première colonne
+	         */
+	        $this->Cell(91,6,'','',0,'',0);
+	        /* Séparateur ------ Séparateur */
+	        $this->Cell(4,6,'','',0,'',0);
+	        /*
+	         * Deuxième colonne
+	         */
+	        if(array_key_exists(count($elementsCol2)-1, $elementsCol2)){
+	            $this->SetFont('times','',11);
+	            $this->Cell(50,6,$elementsCol2[count($elementsCol2)-1]['libelle'].' :','BLT',0,'R',1);
+	            $this->SetFont('times','B',11);
+	            $this->Cell(41,6,$elementsCol2[count($elementsCol2)-1]['resultat'],'BRT',0,'L',1);
+	        }
+	        $this->Ln();
+	    }
+	    
+	    
+	    
+	     
+	    /**
+	     * Conclusion
+	     */
+	    if(str_replace(' ','', $conclusion)){
+	        $this->SetFont('zap','',11);
+	        $this->Cell(5,6,'*','',0,'L',0);
+	        $this->SetFont('timesb','U',10);
+	        $this->Cell(180,6,'Conclusion :','',1,'L',0);
+	    
+	        $this->SetFont('times','',10.5);
+	        $this->MultiCell(185,6,iconv ('UTF-8' , 'windows-1252', $conclusion),0,'J',1);
+	    }
+	    $this->Ln();
+	    $this->SetFont('timesi','U',9);
+	    $this->Cell(140,6,'','',0,'',0);
+	    $this->Cell(45,6,'Cachet et signature','',1,'L',0);
+	    
+	}
 	
 	
 	

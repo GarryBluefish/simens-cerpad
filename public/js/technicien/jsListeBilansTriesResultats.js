@@ -455,8 +455,8 @@
     	} );
     	
     	
-    	//Taux de réticulocytes -- Taux de réticulocytes
-    	//Taux de réticulocytes -- Taux de réticulocytes
+    	//Taux de rï¿½ticulocytes -- Taux de rï¿½ticulocytes
+    	//Taux de rï¿½ticulocytes -- Taux de rï¿½ticulocytes
     	
     	$("#champ12, #champ25").keyup( function () {
     		var champ12 = $("#champ12").val();
@@ -1005,7 +1005,8 @@
     				else if(idanalyse == 61) { tab = getAslo(); } 
     				else if(idanalyse == 62) { tab = getWidal(); } 
     				else if(idanalyse == 63) { tab = getAgHbs(); } 
-    				else if(idanalyse == 64) { tab = getHIV(); }      
+    				else if(idanalyse == 64) { tab = getHIV(); }
+    				else if(idanalyse == 65) { tab = getPV(); }
     				     
     				     
     				else if(idanalyse == 68) { tab = getTypageHemoglobine(); }
@@ -1013,6 +1014,13 @@
     				else if(idanalyse == 70) { tab = getLDH(); }     
     				else if(idanalyse == 71) { tab = getChampsNfs_TAD(iddemande); }
     				     
+    				     /*
+    				     alert(tab[17]); 
+    				     alert(tab[28]); 
+    				     alert(tab[28][10]); 
+    				     
+    				     return false;
+    				     */
     				     
     				$( this ).dialog( "close" );
 
@@ -1031,7 +1039,7 @@
     					}
     				});
     			},
-    			"Annuler": function() {
+    			"Fermer": function() {
     				$(this).dialog( "close" );
     			}
     		}
@@ -1644,6 +1652,184 @@
 	    return tab;
     }
     
+    function getPV(){
+    	var tab = [];
+    	tab[1] = $('#type_materiel_pv').val();
+    	tab[2] = $('#aspect_pertes_abondance_pv').val();
+    	tab[3] = $('#aspect_pertes_couleurs_pv').val();
+    	tab[4] = $('#aspect_pertes_odeurs_pv').val();
+    	tab[5] = $('#aspect_organe_pv').val();
+    	
+    	tab[6]  = $('#leucocytes_champ_pv').val();
+    	tab[7]  = $('#hematies_champ_pv').val();
+    	tab[8]  = $('#cellules_epitheliales_champ_pv').val();
+    	tab[9]  = $('#trichomonas_vaginalis_pv').val();
+    	tab[10] = $('#levures_filaments_myceliens_pv').val();
+    	
+    	tab[11] = $('#gardnerella_vaginalis_pv').val();
+    	tab[12] = $('#mobiluncus_spp_pv').val();
+    	tab[13] = $('#clue_cells_pv').val();
+    	tab[14] = $('#lactobacillus_pv').val();
+    	tab[15] = $('#autre_flore_pv').val();
+
+    	tab[16] = $('#culture_pv').val();
+    	tab[17] = $('#identification_culture_pv').val();
+    	tab[18] = $('#recherche_directe_mycoplasmes_pv').val();
+    	//tab[19] = $('#identification_rdm_pv').val();
+    	tab[20] = $('#commentaire_pv').val();
+    	
+    	tab[21] = $('#leucocytes_champ_valeur_pv').val();
+    	tab[22] = $('#hematies_champ_valeur_pv').val();
+    	tab[23] = $('#cellules_epitheliales_champ_valeur_pv').val();
+    	tab[24] = $('#flore_pv').val();
+    	tab[25] = $('#flore_note_pv').val();
+    	tab[26] = $('#recherche_directe_antigene_chlamydia_pv').val();
+    	tab[27] = $('#identification_rdm_positive_pv').val();
+    	
+    	/**-- Les infos de l'antibiogramme ---**/
+    	if(Number(tab[17]) != 0){
+    		tab[28] = new Array();
+    		 
+    		/**
+    		 * PARTIE B-lactamines
+    		 */
+    		if($("#choixAmpicillineAMABG").get(0).checked){ tab[28][1] = $("#ampicillineAMABG").val(); }else{ tab[28][1] = -1; } 
+    		if($("#choixAmoxillineAMXABG").get(0).checked){ tab[28][2] = $("#amoxillineAMXABG").val(); }else{ tab[28][2] = -1; } 
+    		if($("#choixTicarcillineTICABG").get(0).checked){ tab[28][3] = $("#ticarcillineTICABG").val(); }else{ tab[28][3] = -1; } 
+    		if($("#choixPiperacillinePIPABG").get(0).checked){ tab[28][4] = $("#piperacillinePIPABG").val(); }else{ tab[28][4] = -1; } 
+    		if($("#choixAcideClavulaniqueAmoxicillineAMCABG").get(0).checked){ tab[28][5] = $("#acideClavulaniqueAmoxicillineAMCABG").val(); }else{ tab[28][5] = -1; } 
+    		
+    		if($("#choixGentamicineGMABG").get(0).checked){ tab[28][6] = $("#gentamicineGMABG").val(); }else{ tab[28][6] = -1; } 
+    		if($("#choixTicAcClavTCCABG").get(0).checked){ tab[28][7] = $("#ticAcClavTCCABG").val(); }else{ tab[28][7] = -1; } 
+    		if($("#choixErtapenemeETPABG").get(0).checked){ tab[28][8] = $("#ertapenemeETPABG").val(); }else{ tab[28][8] = -1; } 
+    		if($("#choixImipenemeIPMABG").get(0).checked){ tab[28][9] = $("#imipenemeIPMABG").val(); }else{ tab[28][9] = -1; } 
+    		if($("#choixOxacillineOXABG").get(0).checked){ tab[28][10] = $("#oxacillineOXABG").val(); }else{ tab[28][10] = -1; } 
+    		
+    		if($("#choixPenicillinePABG").get(0).checked){ tab[28][11] = $("#penicillinePABG").val(); }else{ tab[28][11] = -1; } 
+    		if($("#choixCefalotineCFABG").get(0).checked){ tab[28][12] = $("#cefalotineCFABG").val(); }else{ tab[28][12] = -1; } 
+    		if($("#choixCefoxitineFOXABG").get(0).checked){ tab[28][13] = $("#cefoxitineFOXABG").val(); }else{ tab[28][13] = -1; } 
+    		if($("#choixPiperacillineTazobactamePPTABG").get(0).checked){ tab[28][14] = $("#piperacillineTazobactamePPTABG").val(); }else{ tab[28][14] = -1; } 
+    		if($("#choixCefotaximeCTXABG").get(0).checked){ tab[28][15] = $("#cefotaximeCTXABG").val(); }else{ tab[28][15] = -1; } 
+    		
+    		if($("#choixCefsulodineCFSABG").get(0).checked){ tab[28][16] = $("#cefsulodineCFSABG").val(); }else{ tab[28][16] = -1; } 
+    		if($("#choixCFPABG").get(0).checked){ tab[28][17] = $("#CFPABG").val(); }else{ tab[28][17] = -1; } 
+    		if($("#choixCeftazidimeCAZABG").get(0).checked){ tab[28][18] = $("#ceftazidimeCAZABG").val(); }else{ tab[28][18] = -1; } 
+    		if($("#choixCeftriaxoneCROABG").get(0).checked){ tab[28][19] = $("#ceftriaxoneCROABG").val(); }else{ tab[28][19] = -1; } 
+    		if($("#choixCefepimeFEPABG").get(0).checked){ tab[28][20] = $("#cefepimeFEPABG").val(); }else{ tab[28][20] = -1; } 
+    		if($("#choixAztreonamATMABG").get(0).checked){ tab[28][21] = $("#aztreonamATMABG").val(); }else{ tab[28][21] = -1; } 
+    		
+    		/**
+    		 * FIN PARTIE B-lactamines
+    		 */
+    		
+    		/**
+    		 * PARTIE Polymyxine
+    		 */
+    		if($("#choixFosfomycineFOSABG").get(0).checked){ tab[28][22] = $("#fosfomycineFOSABG").val(); }else{ tab[28][22] = -1; } 
+    		if($("#choixVancomycineVAABG").get(0).checked){ tab[28][23]  = $("#vancomycineVAABG").val(); }else{ tab[28][23] = -1; } 
+    		if($("#choixColistineCSABG").get(0).checked){ tab[28][24]    = $("#colistineCSABG").val(); }else{ tab[28][24] = -1; } 
+    		/**
+    		 * FIN PARTIE Polymyxine
+    		 */
+    		
+    		/**
+    		 * PARTIE Aminosides
+    		 */
+    		if($("#choixKanamycineKABG").get(0).checked){ tab[28][25]   = $("#kanamycineKABG").val(); }else{ tab[28][25] = -1; } 
+    		if($("#choixTobramycineTBABG").get(0).checked){ tab[28][26] = $("#tobramycineTBABG").val(); }else{ tab[28][26] = -1; } 
+    		if($("#choixAmikacineANABG").get(0).checked){ tab[28][27] = $("#amikacineANABG").val(); }else{ tab[28][27] = -1; } 
+    		if($("#choixNetilmycineABG").get(0).checked){ tab[28][28] = $("#netilmycineABG").val(); }else{ tab[28][28] = -1; } 
+    		/**
+    		 * FIN PARTIE Aminosides
+    		 */
+    		
+    		/**
+    		 * PARTIE PhÃ©nicolÃ©s
+    		 */
+    		if($("#choixChloramphenicolCABG").get(0).checked){ tab[28][29] = $("#chloramphenicolCABG").val(); }else{ tab[28][29] = -1; } 
+    		/**
+    		 * FIN PARTIE PhÃ©nicolÃ©s
+    		 */
+    		
+    		/**
+    		 * PARTIE Cyclines
+    		 */
+    		if($("#choixTetracyclineTEABG").get(0).checked){ tab[28][30] = $("#tetracyclineTEABG").val(); }else{ tab[28][30] = -1; } 
+    		if($("#choixDoxycyclineDOABG").get(0).checked){ tab[28][31] = $("#doxycyclineDOABG").val(); }else{ tab[28][31] = -1; } 
+    		/**
+    		 * FIN PARTIE Cyclines
+    		 */
+    		
+    		/** 
+    		 * PARTIE Macrolides et apparentÃ©s 
+    		 */
+    		if($("#choixErythromycineEABG").get(0).checked){ tab[28][32] = $("#erythromycineEABG").val(); }else{ tab[28][32] = -1; } 
+    		if($("#choixLincomycineLABG").get(0).checked){ tab[28][33] = $("#lincomycineLABG").val(); }else{ tab[28][33] = -1; } 
+    		if($("#choixPristinamycinePTABG").get(0).checked){ tab[28][34] = $("#pristinamycinePTABG").val(); }else{ tab[28][34] = -1; } 
+    		
+    		/** 
+    		 * FIN PARTIE Macrolides et apparentÃ©s 
+    		 */
+    		
+    		/**
+    		 * PARTIE Fluoroquinolones
+    		 */
+    		if($("#choixAcideFusidiqueFAABG").get(0).checked){ tab[28][35] = $("#acideFusidiqueFAABG").val(); }else{ tab[28][35] = -1; } 
+    		if($("#choixAcideNalidixiqueNAABG").get(0).checked){ tab[28][36] = $("#acideNalidixiqueNAABG").val(); }else{ tab[28][36] = -1; } 
+    		if($("#choixPefloxacinePEFABG").get(0).checked){ tab[28][37] = $("#pefloxacinePEFABG").val(); }else{ tab[28][37] = -1; } 
+    		if($("#choixNorfloxacineNORABG").get(0).checked){ tab[28][38] = $("#norfloxacineNORABG").val(); }else{ tab[28][38] = -1; } 
+    		if($("#choixCiprofloxacineCIPABG").get(0).checked){ tab[28][39] = $("#ciprofloxacineCIPABG").val(); }else{ tab[28][39] = -1; } 
+    		if($("#choixLEVABG").get(0).checked){ tab[28][40] = $("#LEVABG").val(); }else{ tab[28][40] = -1; } 
+    		/**
+    		 * FIN PARTIE Fluoroquinolones
+    		 */
+    		
+    		/** 
+    		 * PARTIE ImidazolÃ©s 
+    		 */
+    		if($("#choixRifampicineRAABG").get(0).checked){ tab[28][41] = $("#rifampicineRAABG").val(); }else{ tab[28][41] = -1; } 
+    		if($("#choixCotrimoxazoleSXTABG").get(0).checked){ tab[28][42] = $("#cotrimoxazoleSXTABG").val(); }else{ tab[28][42] = -1; } 
+    		/** 
+    		 * FIN PARTIE ImidazolÃ©s 
+    		 */
+    		
+    		/**
+    		 * Conclusion
+    		 */
+    		 tab[28][43] = $("#conclusion_pv_ABG").val();
+    		/**
+    		 * ==========
+    		 */
+    	}else{ tab[28] = -1; }
+    	
+	    return tab;
+    }
+    
+    function getChampFloreNote(id){
+    	if(id == ''){
+    		$('.flore_note_class_pv').css({'visibility':'hidden'});
+    	}else{
+    		$('.flore_note_class_pv').css({'visibility':'visible'}).val('');
+    	}
+    }
+    
+    function getChampIdentificationRdmPositive(id){
+    	if(id == '' || id == 2){
+    		$('.identification_rdm_positive_class_pv').css({'visibility':'hidden'});
+    	}else{
+    		$('.identification_rdm_positive_class_pv').css({'visibility':'visible'}).val('');
+    	}
+    }
+    
+    function getIconeAntibiogrammeIdentCulture(id,i){ 
+    	if(id == 0){
+    		$('.antibiogrammeButtonAffInterface'+i).toggle(false);
+    	}else{
+    		$('.antibiogrammeButtonAffInterface'+i).toggle(true);
+    	}
+    }
+    
+    
     function getLDH(){
     	var tab = [];
     	tab[1] = $('#type_materiel_ldh').val();
@@ -1661,6 +1847,82 @@
     	} 
     };
     
+    function getListeIdentificationCulture(id){
+    	
+    	 var listeIdentificationCulture = new Array();
+    	 listeIdentificationCulture[1]='Candida albicans';
+    	 listeIdentificationCulture[2]='Escherichia coli';
+    	 listeIdentificationCulture[3]='Staphylococcus aureus';
+    	 
+    	 return listeIdentificationCulture[id];
+    }
+    
+    function antibiogrammeAfficherInterface(){
+    	
+    	$( "#resultatsAnalysesPVAntiBioGramme" ).dialog({
+    		resizable: false,
+    		height:680,
+    		width:800,
+    		autoOpen: false,
+    		modal: true,
+    		buttons: { 			
+
+    			"Terminer": function() {
+    				$(this).dialog( "close" );
+    			}
+    		}
+    	});
+    	
+    	var id = $('#identification_culture_pv').val();
+    	
+    	$("#valeurSoucheIsoleeIdentificationCulturePV").html(getListeIdentificationCulture(id));
+    	$("#resultatsAnalysesPVAntiBioGramme").dialog('open');
+    	
+    }
+    
+    function getNombreCultureIdentifier(id){
+    	if(id==1){
+        	$('.nombreCultureIdentifierABG').css('visibility','visible').val(1);
+        	$('.identificationCultureChampsABR_1').toggle(true);
+    	}else{
+        	$('.nombreCultureIdentifierABG').css('visibility','hidden');
+        	$('.identificationCultureChamps').toggle(false);
+        	$('#identification_culture_pv').val(0).trigger('change');
+    	}
+    }
+    
+    function getChampIdentificationCulture(nb){ 
+    	
+    	for(var i=1 ; i<nb ; i++){ 
+    		var champIdentCult =""+
+        	
+			  '<table style="width: 100%;" class="identificationCultureChamps champIdentCultABG identificationCultureChampsABR_'+(i+1)+'"  style="visibility:hidden;">'+
+		      '<tr class="ligneAnanlyse" style="width: 100%;">'+
+		      '  <td style="width: 25%;"><label class="lab1" style="padding-top: 5px;"><span style="font-weight: bold;"> Identification </span></label></td>'+
+		      '  <td style="width: 27%;">'+
+		      '              <label class="lab2" style="padding-top: 5px;">'+
+		      '                <select id="identification_culture_pv" style="width: 190px;" onchange="getIconeAntibiogrammeIdentCulture(this.value,'+(i+1)+')">'+
+		      '                 <option value=0 > </option>'+
+		      '                  <option value=1 >Candida albicans</option>'+
+		      '                  <option value=2 >Escherichia coli</option>'+
+		      '                  <option value=3 >Staphylococcus aureus</option>'+
+		      '                </select>'+
+		      '              </label>'+
+		      '          </td>'+
+		      '  <td style="width: 48%;"><label class="lab1 antibiogrammeButtonAffInterface'+(i+1)+'" style="padding-top: 0px; margin-top: 3px; margin-left: 10px; width: 30%; height: 15px; font-style: italic; border-radius: 35%; border: 3px solid #d8d8d8; padding-left: 10px; display: none;"> Antibiogramme </label></td>'+
+		      '</tr>'+
+		      '</table>';
+    		
+    		$('.identificationCultureChampsABR_'+i).after(champIdentCult);
+    		
+    	}
+    	
+    }
+    
+    function getChampsCultureIdentifierABG(id){ 
+    	$(".champIdentCultABG").remove();
+    	getChampIdentificationCulture(id);
+    }
     
     //Automatisation des champs calculables  -----  Automatisation des champs calculables
     //Automatisation des champs calculables  -----  Automatisation des champs calculables
@@ -2240,8 +2502,8 @@
     				else if(idanalyse == 61) { tab [61] = getAslo(); } 
     				else if(idanalyse == 62) { tab [62] = getWidal(); } 
     				else if(idanalyse == 63) { tab [63] = getAgHbs(); } 
-    				else if(idanalyse == 64) { tab [64] = getHIV(); }      
-  	    			     
+    				else if(idanalyse == 64) { tab [64] = getHIV(); }
+    				else if(idanalyse == 65) { tab [65] = getPV(); }
   	    			     
   	    			     
     				else if(idanalyse == 68) { tab [68] = getTypageHemoglobine(); }
@@ -2249,6 +2511,8 @@
     				else if(idanalyse == 70) { tab [70] = getLDH(); }   
     				else if(idanalyse == 71) { tab [71] = getChampsNfs_TAD(tabDemandes[i]); }
   	    		}
+  	    		
+  	    		
   	    		
   	        	$( this ).dialog( "close" );
   	            
@@ -2264,7 +2528,7 @@
   	        	
   	        },
   	        
-  	        "Annuler": function() {
+  	        "Fermer": function() {
   	        	$(this).dialog( "close" );
   	        }
   	   }
@@ -2359,7 +2623,7 @@
 		    		$('#test_combs_indirect_plus').toggle(false);
 		    	}
 		    	
-		    	//Blocage du champ titre lorsque la valeur est négative
+		    	//Blocage du champ titre lorsque la valeur est nï¿½gative
 			    $('#test_combs_indirect_'+nbLigne).attr('onchange', 'getTestCombsIndirectBlocTitre('+nbLigne+')');
 			    if($('#test_combs_indirect_'+nbLigne).val() == 'Negatif'){ $('#test_combs_indirect_'+nbLigne).trigger('change'); }
 	    	}
@@ -4553,8 +4817,8 @@
                                 "}).trigger('keyup');";
         	
         	
-        	//Taux de réticulocytes -- Taux de réticulocytes
-        	//Taux de réticulocytes -- Taux de réticulocytes
+        	//Taux de rï¿½ticulocytes -- Taux de rï¿½ticulocytes
+        	//Taux de rï¿½ticulocytes -- Taux de rï¿½ticulocytes
         	
         	scriptFormule += "$('.ER_"+iddemande+" #champ12, .ER_"+iddemande+" #champ25').keyup( function () {"+
             
@@ -5118,9 +5382,9 @@
     
     
     
-    //Impression des résultats des analyses demandées
-    //Impression des résultats des analyses demandées
-    //Impression des résultats des analyses demandées
+    //Impression des rï¿½sultats des analyses demandï¿½es
+    //Impression des rï¿½sultats des analyses demandï¿½es
+    //Impression des rï¿½sultats des analyses demandï¿½es
     function imprimerResultatsAnalysesDemandees(iddemande){
     	
     	if(iddemande){

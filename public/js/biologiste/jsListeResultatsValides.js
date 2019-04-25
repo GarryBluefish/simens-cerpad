@@ -346,9 +346,9 @@
     
     
     
-    //Impression des résultats des analyses demandées
-    //Impression des résultats des analyses demandées
-    //Impression des résultats des analyses demandées
+    //Impression des rï¿½sultats des analyses demandï¿½es
+    //Impression des rï¿½sultats des analyses demandï¿½es
+    //Impression des rï¿½sultats des analyses demandï¿½es
     function imprimerResultatsAnalysesDemandees(iddemande)
     {
     	if(iddemande){
@@ -402,9 +402,9 @@
     	
     }
     
-    //Validation des résultats des analyses
-    //Validation des résultats des analyses
-    //Validation des résultats des analyses
+    //Validation des rï¿½sultats des analyses
+    //Validation des rï¿½sultats des analyses
+    //Validation des rï¿½sultats des analyses
     function validerResultatAnalyse(id)
     {
     	$('#resultat_existe'+id).w2overlay({ html: "" +
@@ -650,8 +650,8 @@
     	} );
     	
     	
-    	//Taux de réticulocytes -- Taux de réticulocytes
-    	//Taux de réticulocytes -- Taux de réticulocytes
+    	//Taux de rï¿½ticulocytes -- Taux de rï¿½ticulocytes
+    	//Taux de rï¿½ticulocytes -- Taux de rï¿½ticulocytes
     	$("#champ12, #champ25").keyup( function () {
     		var champ12 = $("#champ12").val();
     		var champ25 = $("#champ25").val();
@@ -979,7 +979,7 @@
             	     
             	     $("#resultatsAnalyses").dialog('open');
             	     
-                 	 $('#commentaire_hemogramme').attr('readonly', true);
+                 	 $('#commentaire_hemogramme, #commentaire_pv, #conclusion_pv_ABG').attr('readonly', true);
                  	
                  	 //Ajouter des lignes
                  	 //Ajouter des lignes
@@ -1934,6 +1934,109 @@
     	
     }
     
+    function getChampFloreNote(id){
+    	if(id == ''){
+    		$('.flore_note_class_pv').css({'visibility':'hidden'});
+    	}else{
+    		$('.flore_note_class_pv').css({'visibility':'visible'}).val('');
+    	}
+    }
+    
+    function getChampIdentificationRdmPositive(id){
+    	if(id == '' || id == 2){
+    		$('.identification_rdm_positive_class_pv').css({'visibility':'hidden'});
+    	}else{
+    		$('.identification_rdm_positive_class_pv').css({'visibility':'visible'}).val('');
+    	}
+    }
+    
+    function getIconeAntibiogrammeIdentCulture(id,i){ 
+    	if(id == 0){
+    		$('.antibiogrammeButtonAffInterface'+i).toggle(false);
+    	}else{
+    		$('.antibiogrammeButtonAffInterface'+i).toggle(true);
+    	}
+    }
+    
+    
+    function getListeIdentificationCulture(id){
+    	
+   	 var listeIdentificationCulture = new Array();
+   	 listeIdentificationCulture[1]='Candida albicans';
+   	 listeIdentificationCulture[2]='Escherichia coli';
+   	 listeIdentificationCulture[3]='Staphylococcus aureus';
+   	 
+   	 return listeIdentificationCulture[id];
+   }
+   
+  
+    //Affichage de l'interface antibiogramme
+   function antibiogrammeAfficherInterface(){
+   	
+   	$( "#resultatsAnalysesPVAntiBioGramme" ).dialog({
+   		resizable: false,
+   		height:680,
+   		width:800,
+   		autoOpen: false,
+   		modal: true,
+   		buttons: { 			
+
+   			"Terminer": function() {
+   				$(this).dialog( "close" );
+   			}
+   		}
+   	});
+   	
+   	var id = $('#identification_culture_pv').val();
+   	
+   	$("#valeurSoucheIsoleeIdentificationCulturePV").html(getListeIdentificationCulture(id));
+   	$("#resultatsAnalysesPVAntiBioGramme").dialog('open');
+   	
+   }
+   
+   function getNombreCultureIdentifier(id){
+   	if(id==1){
+       	$('.nombreCultureIdentifierABG').css('visibility','visible').val(1);
+       	$('.identificationCultureChampsABR_1').toggle(true);
+   	}else{
+       	$('.nombreCultureIdentifierABG').css('visibility','hidden');
+       	$('.identificationCultureChamps').toggle(false);
+   	}
+   }
+   
+   function getChampIdentificationCulture(nb){ 
+   	
+   	for(var i=1 ; i<nb ; i++){ 
+   		var champIdentCult =""+
+       	
+			  '<table style="width: 100%;" class="identificationCultureChamps champIdentCultABG identificationCultureChampsABR_'+(i+1)+'"  style="visibility:hidden;">'+
+		      '<tr class="ligneAnanlyse" style="width: 100%;">'+
+		      '  <td style="width: 25%;"><label class="lab1" style="padding-top: 5px;"><span style="font-weight: bold;"> Identification </span></label></td>'+
+		      '  <td style="width: 27%;">'+
+		      '              <label class="lab2" style="padding-top: 5px;">'+
+		      '                <select id="identification_culture_pv" style="width: 190px;" onchange="getIconeAntibiogrammeIdentCulture(this.value,'+(i+1)+')">'+
+		      '                 <option value=0 > </option>'+
+		      '                  <option value=1 >Candida albicans</option>'+
+		      '                  <option value=2 >Escherichia coli</option>'+
+		      '                  <option value=3 >Staphylococcus aureus</option>'+
+		      '                </select>'+
+		      '              </label>'+
+		      '          </td>'+
+		      '  <td style="width: 48%;"><label class="lab1 antibiogrammeButtonAffInterface'+(i+1)+'" style="padding-top: 0px; margin-top: 3px; margin-left: 10px; width: 30%; height: 15px; font-style: italic; border-radius: 35%; border: 3px solid #d8d8d8; padding-left: 10px; display: none;"> Antibiogramme </label></td>'+
+		      '</tr>'+
+		      '</table>';
+   		
+   		$('.identificationCultureChampsABR_'+i).after(champIdentCult);
+   		
+   	}
+   	
+   }
+   
+   function getChampsCultureIdentifierABG(id){ 
+   	$(".champIdentCultABG").remove();
+   	getChampIdentificationCulture(id);
+   }
+    
     /**
      * ************************************************
      * ------------------------------------------------
@@ -2094,7 +2197,7 @@
             	     
                  	 //Bloquer la saisie sur tous les champs de commentaires
                   	 //Bloquer la saisie sur tous les champs de commentaires
-                     $('#commentaire_hemogramme').attr('readonly', true);
+                     $('#commentaire_hemogramme, #commentaire_pv, #conclusion_pv_ABG').attr('readonly', true);
                   	 $('.commentaire_protect textarea').attr('readonly', true);
                  	
             }
@@ -2130,7 +2233,7 @@
 		    		$('#test_combs_indirect_plus').toggle(false);
 		    	}
 		    	
-		    	//Blocage du champ titre lorsque la valeur est négative
+		    	//Blocage du champ titre lorsque la valeur est nï¿½gative
 			    $('#test_combs_indirect_'+nbLigne).attr('onchange', 'getTestCombsIndirectBlocTitre('+nbLigne+')');
 			    if($('#test_combs_indirect_'+nbLigne).val() == 'Negatif'){ $('#test_combs_indirect_'+nbLigne).trigger('change'); }
 	    	}

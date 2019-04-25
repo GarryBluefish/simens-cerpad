@@ -3901,6 +3901,306 @@ class ResultatDemandeAnalyseTable {
 	
 	//****************************************************************************************************
 	//****************************************************************************************************
+	//Verifier si un tableau est vide ou pas
+	function array_empty($array) {
+	    $is_empty = true;
+	    foreach($array as $k) {
+	        $is_empty = $is_empty && empty($k);
+	    }
+	    return $is_empty;
+	}
+	
+	public function getValeursPV($iddemande){
+	    $db = $this->tableGateway->getAdapter();
+	    $sql = new Sql($db);
+	    $sQuery = $sql->select()
+	    ->from(array('va' => 'valeurs_pv'))->columns(array('*'))
+	    ->where(array('idresultat_demande_analyse' => $iddemande));
+	
+	    return $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
+	}
+	
+	public function addValeursPV($tab, $iddemande){
+	    $db = $this->tableGateway->getAdapter();
+	    $sql = new Sql($db);
+	    $donneesExiste = 0;
+	
+	    $donnees = array();
+	
+	    if(str_replace( " ", "",$tab[1])){ $donnees['type_materiel'] = $tab[1]; }else{ $donnees['type_materiel'] = null; }
+	    if($tab[2]){ $donnees['aspect_pertes_abondance'] = $tab[2]; }else{ $donnees['aspect_pertes_abondance'] = null; }
+	    if($tab[3]){ $donnees['aspect_pertes_couleurs'] = $tab[3]; }else{ $donnees['aspect_pertes_couleurs'] = null; }
+	    if($tab[4]){ $donnees['aspect_pertes_odeurs'] = $tab[4]; }else{ $donnees['aspect_pertes_odeurs'] = null; }
+	    if($tab[5]){ $donnees['aspect_organe_col'] = $tab[5]; }else{ $donnees['aspect_organe_col'] = null; }
+	    
+	    if($tab[6]){ $donnees['leucocytes_champ'] = $tab[6]; }else{ $donnees['leucocytes_champ'] = null; }
+	    if($tab[7]){ $donnees['hematies_champ'] = $tab[7]; }else{ $donnees['hematies_champ'] = null; }
+	    if($tab[8]){ $donnees['cellules_epitheliales'] = $tab[8]; }else{ $donnees['cellules_epitheliales'] = null; }
+	    if($tab[9]){ $donnees['trichomonas_vaginalis'] = $tab[9]; }else{ $donnees['trichomonas_vaginalis'] = null; }
+	    if($tab[10]){ $donnees['levures_filaments_myceliens'] = $tab[10]; }else{ $donnees['levures_filaments_myceliens'] = null; }
+	
+	    if($tab[11]){ $donnees['gardnerella_vaginalis'] = $tab[11]; }else{ $donnees['gardnerella_vaginalis'] = null; }
+	    if($tab[12]){ $donnees['mobiluncus_spp'] = $tab[12]; }else{ $donnees['mobiluncus_spp'] = null; }
+	    if($tab[13]){ $donnees['clue_cells'] = $tab[13]; }else{ $donnees['clue_cells'] = null; }
+	    if($tab[14]){ $donnees['lactobacillus'] = $tab[14]; }else{ $donnees['lactobacillus'] = null; }
+	    if($tab[15]){ $donnees['autre_flore'] = $tab[15]; }else{ $donnees['autre_flore'] = null; }
+	    
+	    if($tab[16]){ $donnees['culture'] = $tab[16]; }else{ $donnees['culture'] = null; }
+	    if($tab[17]){ $donnees['identification_culture'] = $tab[17]; }else{ $donnees['identification_culture'] = null; }
+	    if($tab[18]){ 
+	        $donnees['recherche_directe_mycoplasmes'] = $tab[18]; 
+	        if($tab[18] == 1){
+	            if($tab[27]){ $donnees['identification_rdm_positive'] = $tab[27]; }else{ $donnees['identification_rdm_positive'] = null; }
+	        }else{
+	            $donnees['identification_rdm_positive'] = null;
+	        }
+	    }else{ 
+	        $donnees['recherche_directe_mycoplasmes'] = null; 
+	        $donnees['identification_rdm_positive'] = null;
+	    }
+	    
+	    if(str_replace( " ", "",$tab[20])){ $donnees['commentaire'] = $tab[20]; }else{ $donnees['commentaire'] = null; }
+	    
+	    //Dernier ajout
+	    if($tab[21]){ $donnees['leucocytes_champ_valeur'] = $tab[21]; }else{ $donnees['leucocytes_champ_valeur'] = null; }
+	    if($tab[22]){ $donnees['hematies_champ_valeur'] = $tab[22]; }else{ $donnees['hematies_champ_valeur'] = null; }
+	    if($tab[23]){ $donnees['cellules_epitheliales_champ_valeur'] = $tab[23]; }else{ $donnees['cellules_epitheliales_champ_valeur'] = null; }
+	    if($tab[24]){ 
+	        $donnees['flore'] = $tab[24]; 
+	        if($tab[25]){ $donnees['flore_note'] = $tab[25]; }else{ $donnees['flore_note'] = null; }
+	    }else{ 
+	        $donnees['flore'] = null;
+	        $donnees['flore_note'] = null;
+	    }
+	    if($tab[26]){ $donnees['Recherche_directe_antigene_chlamydia'] = $tab[26]; }else{ $donnees['Recherche_directe_antigene_chlamydia'] = null; }
+
+	    
+	    
+	    /**
+	     * Données de l'antibiogramme
+	     */
+	    $donneesAntibiogramme = array();
+	    if($tab[17] != 0){
+	        
+	        /**
+	         * PARTIE B-lactamines
+	         */
+	        if($tab[28][1] != -1){ $donneesAntibiogramme['ampicillineAM']    = $tab[28][1]; }else{ $donneesAntibiogramme['ampicillineAM'] = null; }
+	        if($tab[28][2] != -1){ $donneesAntibiogramme['amoxillineAMX']    = $tab[28][2]; }else{ $donneesAntibiogramme['amoxillineAMX'] = null; }
+	        if($tab[28][3] != -1){ $donneesAntibiogramme['ticarcillineTIC']  = $tab[28][3]; }else{ $donneesAntibiogramme['ticarcillineTIC'] = null; }
+	        if($tab[28][4] != -1){ $donneesAntibiogramme['piperacillinePIP'] = $tab[28][4]; }else{ $donneesAntibiogramme['piperacillinePIP'] = null; }
+	        if($tab[28][5] != -1){ $donneesAntibiogramme['acideClavulaniqueAmoxicillineAMC'] = $tab[28][5]; }else{ $donneesAntibiogramme['acideClavulaniqueAmoxicillineAMC'] = null; }
+	    
+	        if($tab[28][6] != -1){ $donneesAntibiogramme['gentamicineGM'] = $tab[28][6]; }else{ $donneesAntibiogramme['gentamicineGM'] = null; }
+	        if($tab[28][7] != -1){ $donneesAntibiogramme['ticAcClavTCC']  = $tab[28][7]; }else{ $donneesAntibiogramme['ticAcClavTCC'] = null; }
+	        if($tab[28][8] != -1){ $donneesAntibiogramme['ertapenemeETP'] = $tab[28][8]; }else{ $donneesAntibiogramme['ertapenemeETP'] = null; }
+	        if($tab[28][9] != -1){ $donneesAntibiogramme['imipenemeIPM']  = $tab[28][9]; }else{ $donneesAntibiogramme['imipenemeIPM'] = null; }
+	        if($tab[28][10] != -1){ $donneesAntibiogramme['oxacillineOX'] = $tab[28][10]; }else{ $donneesAntibiogramme['oxacillineOX'] = null; }
+	        
+	        if($tab[28][11] != -1){ $donneesAntibiogramme['penicillineP']  = $tab[28][11]; }else{ $donneesAntibiogramme['penicillineP'] = null; }
+	        if($tab[28][12] != -1){ $donneesAntibiogramme['cefalotineCF']  = $tab[28][12]; }else{ $donneesAntibiogramme['cefalotineCF'] = null; }
+	        if($tab[28][13] != -1){ $donneesAntibiogramme['cefoxitineFOX'] = $tab[28][13]; }else{ $donneesAntibiogramme['cefoxitineFOX'] = null; }
+	        if($tab[28][14] != -1){ $donneesAntibiogramme['piperacillineTazobactamePPT'] = $tab[28][14]; }else{ $donneesAntibiogramme['piperacillineTazobactamePPT'] = null; }
+	        if($tab[28][15] != -1){ $donneesAntibiogramme['cefotaximeCTX'] = $tab[28][15]; }else{ $donneesAntibiogramme['cefotaximeCTX'] = null; }
+	         
+	        if($tab[28][16] != -1){ $donneesAntibiogramme['cefsulodineCFS'] = $tab[28][16]; }else{ $donneesAntibiogramme['cefsulodineCFS'] = null; }
+	        if($tab[28][17] != -1){ $donneesAntibiogramme['CFP']            = $tab[28][17]; }else{ $donneesAntibiogramme['CFP'] = null; }
+	        if($tab[28][18] != -1){ $donneesAntibiogramme['ceftazidimeCAZ'] = $tab[28][18]; }else{ $donneesAntibiogramme['ceftazidimeCAZ'] = null; }
+	        if($tab[28][19] != -1){ $donneesAntibiogramme['ceftriaxoneCRO'] = $tab[28][19]; }else{ $donneesAntibiogramme['ceftriaxoneCRO'] = null; }
+	        if($tab[28][20] != -1){ $donneesAntibiogramme['cefepimeFEP']    = $tab[28][20]; }else{ $donneesAntibiogramme['cefepimeFEP'] = null; }
+	        if($tab[28][21] != -1){ $donneesAntibiogramme['aztreonamATM']   = $tab[28][21]; }else{ $donneesAntibiogramme['aztreonamATM'] = null; }
+	        /**
+	         * FIN PARTIE B-lactamines
+	         */
+	    
+	        /**
+	         * PARTIE Polymyxine
+	         */
+	        if($tab[28][22] != -1){ $donneesAntibiogramme['fosfomycineFOS'] = $tab[28][22]; }else{ $donneesAntibiogramme['fosfomycineFOS'] = null; }
+	        if($tab[28][23] != -1){ $donneesAntibiogramme['vancomycineVA']  = $tab[28][23]; }else{ $donneesAntibiogramme['vancomycineVA'] = null; }
+	        if($tab[28][24] != -1){ $donneesAntibiogramme['colistineCS']    = $tab[28][24]; }else{ $donneesAntibiogramme['colistineCS'] = null; }
+	        /**
+	         * FIN PARTIE Polymyxine
+	         */
+	        
+	        /**
+	         * PARTIE Aminosides
+	         */
+	        if($tab[28][25] != -1){ $donneesAntibiogramme['kanamycineK']   = $tab[28][25]; }else{ $donneesAntibiogramme['kanamycineK'] = null; }
+	        if($tab[28][26] != -1){ $donneesAntibiogramme['tobramycineTB'] = $tab[28][26]; }else{ $donneesAntibiogramme['tobramycineTB'] = null; }
+	        if($tab[28][27] != -1){ $donneesAntibiogramme['amikacineAN']   = $tab[28][27]; }else{ $donneesAntibiogramme['amikacineAN'] = null; }
+	        if($tab[28][28] != -1){ $donneesAntibiogramme['netilmycine']   = $tab[28][28]; }else{ $donneesAntibiogramme['netilmycine'] = null; }
+	        /**
+	         * FIN PARTIE Aminosides
+	         */
+	        
+	        /**
+	         * PARTIE Phénicolés
+	         */
+	        if($tab[28][29] != -1){ $donneesAntibiogramme['chloramphenicolC']   = $tab[28][29]; }else{ $donneesAntibiogramme['chloramphenicolC'] = null; }
+	        /**
+	         * FIN PARTIE Phénicolés
+	         */
+	        
+	        /**
+	         * PARTIE Cyclines
+	         */
+	        if($tab[28][30] != -1){ $donneesAntibiogramme['tetracyclineTE'] = $tab[28][30]; }else{ $donneesAntibiogramme['tetracyclineTE'] = null; }
+	        if($tab[28][31] != -1){ $donneesAntibiogramme['doxycyclineDO']  = $tab[28][31]; }else{ $donneesAntibiogramme['doxycyclineDO'] = null; }
+	        /**
+	         * FIN PARTIE Cyclines
+	         */
+	        
+	        /**
+	         * PARTIE Macrolides et apparentés
+	         */
+	        if($tab[28][32] != -1){ $donneesAntibiogramme['erythromycineE']   = $tab[28][32]; }else{ $donneesAntibiogramme['erythromycineE'] = null; }
+	        if($tab[28][33] != -1){ $donneesAntibiogramme['lincomycineL']     = $tab[28][33]; }else{ $donneesAntibiogramme['lincomycineL'] = null; }
+	        if($tab[28][34] != -1){ $donneesAntibiogramme['pristinamycinePT'] = $tab[28][34]; }else{ $donneesAntibiogramme['pristinamycinePT'] = null; }
+	        /**
+	         * FIN PARTIE Macrolides et apparentés
+	         */
+	        
+	        
+	        /**
+	         * PARTIE Fluoroquinolones
+	         */
+	        if($tab[28][35] != -1){ $donneesAntibiogramme['acideFusidiqueFA'] = $tab[28][35]; }else{ $donneesAntibiogramme['acideFusidiqueFA'] = null; }
+	        if($tab[28][36] != -1){ $donneesAntibiogramme['acideNalidixiqueNA'] = $tab[28][36]; }else{ $donneesAntibiogramme['acideNalidixiqueNA'] = null; }
+	        if($tab[28][37] != -1){ $donneesAntibiogramme['pefloxacinePEF'] = $tab[28][37]; }else{ $donneesAntibiogramme['pefloxacinePEF'] = null; }
+	        if($tab[28][38] != -1){ $donneesAntibiogramme['norfloxacineNOR'] = $tab[28][38]; }else{ $donneesAntibiogramme['norfloxacineNOR'] = null; }
+	        if($tab[28][39] != -1){ $donneesAntibiogramme['ciprofloxacineCIP'] = $tab[28][39]; }else{ $donneesAntibiogramme['ciprofloxacineCIP'] = null; }
+	        if($tab[28][40] != -1){ $donneesAntibiogramme['LEV'] = $tab[28][40]; }else{ $donneesAntibiogramme['LEV'] = null; }
+	        
+	        /**
+	         * FIN PARTIE Fluoroquinolones
+	         */
+	        
+	        /**
+	         * PARTIE Imidazolés
+	         */
+	        if($tab[28][41] != -1){ $donneesAntibiogramme['rifampicineRA'] = $tab[28][41]; }else{ $donneesAntibiogramme['rifampicineRA'] = null; }
+	        if($tab[28][42] != -1){ $donneesAntibiogramme['cotrimoxazoleSXT'] = $tab[28][42]; }else{ $donneesAntibiogramme['cotrimoxazoleSXT'] = null; }
+	        
+	        /**
+	         * FIN PARTIE Imidazolés
+	         */
+	        
+	        /**
+	         * Conclusion
+	         */
+	        if(str_replace(" ", "",$tab[28][43])){ $donneesAntibiogramme['conclusion'] = $tab[28][43]; }else{ $donneesAntibiogramme['conclusion'] = null; }
+	        /**
+	         * ==========
+	         */
+	    }
+	    
+	    
+	    if(!$this->array_empty($donnees)){ $donneesExiste = 1; }
+	
+	    //Si les resultats n y sont pas on les ajoute
+	    if(!$this->getValeursPV($iddemande)){
+	
+	        if($donneesExiste == 0){
+	            $this->tableGateway->delete ( array ( 'iddemande_analyse' => $iddemande ) );
+	            $this->setResultDemandeNonEffectuee($iddemande);
+	        }else{
+	            $donnees['idresultat_demande_analyse'] = $iddemande;
+	            $sQuery = $sql->insert() ->into('valeurs_pv') ->values( $donnees );
+	            $sql->prepareStatementForSqlObject($sQuery)->execute();
+	            $this->setResultDemandeEffectuee($iddemande);
+	            
+	            //Ajouter les donnees de l'antibiogramme
+	            if($tab[17] != 0 && !$this->array_empty($donneesAntibiogramme)){ $this->addValeursAntiBioGramme($donneesAntibiogramme, $iddemande); }
+	        }
+	
+	    }
+	    //Sinon on effectue des mises a jours
+	    else {
+	
+	        if($donneesExiste == 0){
+	            $this->tableGateway->delete ( array ( 'iddemande_analyse' => $iddemande ) );
+	            $this->setResultDemandeNonEffectuee($iddemande);
+	        }else{
+	            $sQuery = $sql->update() ->table('valeurs_pv') ->set( $donnees )
+	            ->where(array('idresultat_demande_analyse' => $iddemande ));
+	            $sql->prepareStatementForSqlObject($sQuery)->execute();
+	            $this->setResultDemandeEffectuee($iddemande);
+	            
+	            //Mettre à jour ou ajouter les donnees de l'antibiogramme
+	            if($tab[17] != 0 && !$this->array_empty($donneesAntibiogramme)){
+	                if($this->getValeursAntiBioGramme($iddemande)){
+	                    $this->updateValeursAntiBioGramme($donneesAntibiogramme, $iddemande);
+	                }else{
+	                    $this->addValeursAntiBioGramme($donneesAntibiogramme, $iddemande);
+	                }
+	            }else{
+	                $this->deleteValeursAntiBioGramme($iddemande);
+	            }
+	        }
+	
+	    }
+	
+	    return $donneesExiste;
+	}
+	
+	public function getValeursAntiBioGramme($iddemande){
+	    $db = $this->tableGateway->getAdapter();
+	    $sql = new Sql($db);
+	    $sQuery = $sql->select()
+	    ->from(array('vpa' => 'valeurs_pv_antibiogramme'))->columns(array('*'))
+	    ->where(array('idresultat_demande_analyse' => $iddemande));
+	
+	    return $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
+	}
+	
+	public function addValeursAntiBioGramme($donneesAntibiogramme, $iddemande){
+	    $db = $this->tableGateway->getAdapter();
+	    $sql = new Sql($db);
+	     
+	    $donneesAntibiogramme['idresultat_demande_analyse'] = $iddemande;
+	    $sQuery = $sql->insert() ->into('valeurs_pv_antibiogramme') ->values( $donneesAntibiogramme );
+	    $sql->prepareStatementForSqlObject($sQuery)->execute();
+	}
+	
+	public function updateValeursAntiBioGramme($donneesAntibiogramme, $iddemande){
+	    $db = $this->tableGateway->getAdapter();
+	    $sql = new Sql($db);
+	     
+	    $sQuery = $sql->update() ->table('valeurs_pv_antibiogramme') ->set( $donneesAntibiogramme )
+	    ->where(array('idresultat_demande_analyse' => $iddemande ));
+	    $sql->prepareStatementForSqlObject($sQuery)->execute();
+	}
+	
+	public function deleteValeursAntiBioGramme($iddemande){
+	    $db = $this->tableGateway->getAdapter();
+	    $sql = new Sql($db);
+	
+	    $sQuery = $sql->delete() ->from('valeurs_pv_antibiogramme')->where( array('idresultat_demande_analyse' => $iddemande) );
+	    $sql->prepareStatementForSqlObject($sQuery)->execute();
+	}
+	
+	public function updateValeursCommentairePV($tab, $iddemande, $idanalyse){
+	    $db = $this->tableGateway->getAdapter();
+	    $sql = new Sql($db);
+	    $donnees = array();
+	    if($idanalyse == 65){ $donnees['commentaire'] = $tab[1]; }
+	
+	    $sQuery = $sql->update() ->table('valeurs_pv') ->set( $donnees )
+	    ->where(array('idresultat_demande_analyse' => $iddemande ));
+	    $sql->prepareStatementForSqlObject($sQuery)->execute();
+	    
+	    /**
+	     * Mise à jour de la conclusion par le biologiste
+	     */
+	    $donneesAntibiogramme = array();
+	    if(str_replace(" ", "",$tab[2])){ $donneesAntibiogramme['conclusion'] = $tab[2]; }else{ $donneesAntibiogramme['conclusion'] = null; }
+	    $this->updateValeursAntiBioGramme($donneesAntibiogramme, $iddemande);
+	
+	}
+	
+	//****************************************************************************************************
+	//****************************************************************************************************
 	public function getValeursLDH($iddemande){
 		$db = $this->tableGateway->getAdapter();
 		$sql = new Sql($db);

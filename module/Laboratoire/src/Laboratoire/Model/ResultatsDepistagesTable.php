@@ -250,7 +250,7 @@ class ResultatsDepistagesTable {
  			$select->where(array(
  					'date_prelevement >= ?' => $date_debut,
  					'date_prelevement <= ?' => $date_fin,
- 					'designation_stat' => $profil,
+ 					'designation' => $profil,
  					'demande_analyse.idanalyse' => 68
  			));
  			$select->order('demande_analyse.idpatient asc');
@@ -281,7 +281,7 @@ class ResultatsDepistagesTable {
  					'valide' => 1,
  					'date_prelevement >= ?' => $date_debut,
  					'date_prelevement <= ?' => $date_fin,
- 					'designation_stat' => $profil,
+ 					'designation' => $profil,
  					'demande_analyse.idanalyse' => 68
  			));
  			$select->order('demande_analyse.idpatient asc');
@@ -312,7 +312,7 @@ class ResultatsDepistagesTable {
  					'valide' => 0,
  					'date_prelevement >= ?' => $date_debut,
  					'date_prelevement <= ?' => $date_fin,
- 					'designation_stat' => $profil,
+ 					'designation' => $profil,
  					'demande_analyse.idanalyse' => 68
  			));
  			$select->order('demande_analyse.idpatient asc');

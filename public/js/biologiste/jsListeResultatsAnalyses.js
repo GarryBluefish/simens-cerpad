@@ -347,9 +347,9 @@
     
     
     
-    //Impression des résultats des analyses demandées
-    //Impression des résultats des analyses demandées
-    //Impression des résultats des analyses demandées
+    //Impression des rï¿½sultats des analyses demandï¿½es
+    //Impression des rï¿½sultats des analyses demandï¿½es
+    //Impression des rï¿½sultats des analyses demandï¿½es
     function imprimerResultatsAnalysesDemandees(iddemande)
     {
     	if(iddemande){
@@ -403,9 +403,9 @@
     	
     }
     
-    //Validation des résultats des analyses sur les listes
-    //Validation des résultats des analyses sur les listes
-    //Validation des résultats des analyses sur les listes
+    //Validation des rï¿½sultats des analyses sur les listes
+    //Validation des rï¿½sultats des analyses sur les listes
+    //Validation des rï¿½sultats des analyses sur les listes
     function validerResultatAnalyse(id)
     {
     	$('#resultat_existe'+id).w2overlay({ html: "" +
@@ -701,8 +701,8 @@
     	} );
     	
     	
-    	//Taux de réticulocytes -- Taux de réticulocytes
-    	//Taux de réticulocytes -- Taux de réticulocytes
+    	//Taux de rï¿½ticulocytes -- Taux de rï¿½ticulocytes
+    	//Taux de rï¿½ticulocytes -- Taux de rï¿½ticulocytes
     	$("#champ12, #champ25").keyup( function () {
     		var champ12 = $("#champ12").val();
     		var champ25 = $("#champ25").val();
@@ -929,7 +929,7 @@
     		autoOpen: false,
     		modal: true,
     		buttons: {
-    			"Terminer": function() {
+    			"Enregistrer": function() {
     				     if(idanalyse ==  1) { tab    = getChampsNfs(); }
     				else if(idanalyse ==  2) { tab    = groupageRhesus(); }
     				else if(idanalyse ==  3) { tab    = antigeneDFaible(); }
@@ -1000,6 +1000,8 @@
     				else if(idanalyse == 62) { tab = getWidal(); } 
     				else if(idanalyse == 63) { tab = getAgHbs(); } 
     				     
+    				else if(idanalyse == 65) { tab = getPV(); } 
+    				     
     				     
     				     
     				else if(idanalyse == 68) { tab = getTypageHemoglobine(); }
@@ -1037,9 +1039,9 @@
     			},
     			
     			
-//    			"Annuler": function() {
-//    				$(this).dialog( "close" );
-//    			}
+    			"Fermer": function() {
+    				$(this).dialog( "close" );
+    			}
     			
     			
     		}
@@ -1594,6 +1596,125 @@
 	    return tab;
     }
     
+    function getPV(){
+    	var tab = [];
+    	tab[1] = $('#commentaire_pv').val();
+    	
+    	/**
+		 * Conclusion
+		 */
+		 tab[2] = $("#conclusion_pv_ABG").val();
+		/**
+		 * ==========
+		 */
+		 
+	    return tab;
+    }
+    
+    function getChampFloreNote(id){
+    	if(id == ''){
+    		$('.flore_note_class_pv').css({'visibility':'hidden'});
+    	}else{
+    		$('.flore_note_class_pv').css({'visibility':'visible'}).val('');
+    	}
+    }
+    
+    function getChampIdentificationRdmPositive(id){
+    	if(id == '' || id == 2){
+    		$('.identification_rdm_positive_class_pv').css({'visibility':'hidden'});
+    	}else{
+    		$('.identification_rdm_positive_class_pv').css({'visibility':'visible'}).val('');
+    	}
+    }
+    
+    function getIconeAntibiogrammeIdentCulture(id,i){ 
+    	if(id == 0){
+    		$('.antibiogrammeButtonAffInterface'+i).toggle(false);
+    	}else{
+    		$('.antibiogrammeButtonAffInterface'+i).toggle(true);
+    	}
+    }
+    
+    
+    function getListeIdentificationCulture(id){
+    	
+   	 var listeIdentificationCulture = new Array();
+   	 listeIdentificationCulture[1]='Candida albicans';
+   	 listeIdentificationCulture[2]='Escherichia coli';
+   	 listeIdentificationCulture[3]='Staphylococcus aureus';
+   	 
+   	 return listeIdentificationCulture[id];
+   }
+   
+  
+    //Affichage de l'interface antibiogramme
+   function antibiogrammeAfficherInterface(){
+   	
+   	$( "#resultatsAnalysesPVAntiBioGramme" ).dialog({
+   		resizable: false,
+   		height:680,
+   		width:800,
+   		autoOpen: false,
+   		modal: true,
+   		buttons: { 			
+
+   			"Terminer": function() {
+   				$(this).dialog( "close" );
+   			}
+   		}
+   	});
+   	
+   	var id = $('#identification_culture_pv').val();
+   	
+   	$("#valeurSoucheIsoleeIdentificationCulturePV").html(getListeIdentificationCulture(id));
+   	$("#resultatsAnalysesPVAntiBioGramme").dialog('open');
+   	
+   }
+   
+   function getNombreCultureIdentifier(id){
+   	if(id==1){
+       	$('.nombreCultureIdentifierABG').css('visibility','visible').val(1);
+       	$('.identificationCultureChampsABR_1').toggle(true);
+   	}else{
+       	$('.nombreCultureIdentifierABG').css('visibility','hidden');
+       	$('.identificationCultureChamps').toggle(false);
+   	}
+   }
+   
+   function getChampIdentificationCulture(nb){ 
+   	
+   	for(var i=1 ; i<nb ; i++){ 
+   		var champIdentCult =""+
+       	
+			  '<table style="width: 100%;" class="identificationCultureChamps champIdentCultABG identificationCultureChampsABR_'+(i+1)+'"  style="visibility:hidden;">'+
+		      '<tr class="ligneAnanlyse" style="width: 100%;">'+
+		      '  <td style="width: 25%;"><label class="lab1" style="padding-top: 5px;"><span style="font-weight: bold;"> Identification </span></label></td>'+
+		      '  <td style="width: 27%;">'+
+		      '              <label class="lab2" style="padding-top: 5px;">'+
+		      '                <select id="identification_culture_pv" style="width: 190px;" onchange="getIconeAntibiogrammeIdentCulture(this.value,'+(i+1)+')">'+
+		      '                 <option value=0 > </option>'+
+		      '                  <option value=1 >Candida albicans</option>'+
+		      '                  <option value=2 >Escherichia coli</option>'+
+		      '                  <option value=3 >Staphylococcus aureus</option>'+
+		      '                </select>'+
+		      '              </label>'+
+		      '          </td>'+
+		      '  <td style="width: 48%;"><label class="lab1 antibiogrammeButtonAffInterface'+(i+1)+'" style="padding-top: 0px; margin-top: 3px; margin-left: 10px; width: 30%; height: 15px; font-style: italic; border-radius: 35%; border: 3px solid #d8d8d8; padding-left: 10px; display: none;"> Antibiogramme </label></td>'+
+		      '</tr>'+
+		      '</table>';
+   		
+   		$('.identificationCultureChampsABR_'+i).after(champIdentCult);
+   		
+   	}
+   	
+   }
+   
+   function getChampsCultureIdentifierABG(id){ 
+   	$(".champIdentCultABG").remove();
+   	getChampIdentificationCulture(id);
+   }
+    
+     
     //Automatisation des champs calculables  -----  Automatisation des champs calculables
     //Automatisation des champs calculables  -----  Automatisation des champs calculables
     //Automatisation des champs calculables  -----  Automatisation des champs calculables
@@ -2080,6 +2201,7 @@
   	    			
   	    			     if(idanalyse ==  1) { tab  [1] = getChampsNfs(); }
   	    			else if(idanalyse == 71) { tab [71] = getChampsNfs_TAD(iddemande); }
+  	    			else if(idanalyse == 65) { tab [65] = getPV(); } 
   	    			     
   	    			     
 //    				else if(idanalyse ==  2) { tab  [2] = getChampsGroupeRhesus(); }
@@ -2161,7 +2283,7 @@
   	        	
   	        },
   	        
-  	        "Terminer": function() {
+  	        "Fermer": function() {
   	        	$(this).dialog( "close" );
   	        }
   	   }
@@ -2328,7 +2450,7 @@
 		    		$('#test_combs_indirect_plus').toggle(false);
 		    	}
 		    	
-		    	//Blocage du champ titre lorsque la valeur est négative
+		    	//Blocage du champ titre lorsque la valeur est nï¿½gative
 			    $('#test_combs_indirect_'+nbLigne).attr('onchange', 'getTestCombsIndirectBlocTitre('+nbLigne+')');
 			    if($('#test_combs_indirect_'+nbLigne).val() == 'Negatif'){ $('#test_combs_indirect_'+nbLigne).trigger('change'); }
 	    	}
