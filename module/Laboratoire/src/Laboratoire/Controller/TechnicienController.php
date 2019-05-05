@@ -2998,7 +2998,7 @@ class TechnicienController extends AbstractActionController {
 			  	
 			  	$html .="<tr style='height: 25px; width:100%;'>
 			  	           <td id='numerof'>
-      					       <hass><img style='padding-left: 10px; cursor: pointer;' class='info_secretaire".$listeDemandes['iddemande']."' src='../images_icons/info_infirmier.png' title='envoyÃ© par: ".$infosSecretaire['prenom'].' '.$infosSecretaire['nom']."' /></hass>
+      					       <hass><img style='padding-left: 10px; cursor: pointer;' class='info_secretaire".$listeDemandes['iddemande']."' src='../images_icons/info_infirmier.png' title='effectuÃ©e par: ".$infosSecretaire['prenom'].' '.$infosSecretaire['nom']."' /></hass>
 			  			   </td>
       					   <td id='datef' class='dateAffichee  dateAffichee_".$listeDemandes['iddemande']."' >". $date ."</td>
 			  	           <td id='optionf'>";
@@ -4230,25 +4230,34 @@ class TechnicienController extends AbstractActionController {
     	        $('#hematies_champ_valeur_pv').val('".$resultat['hematies_champ_valeur']."');
     	        $('#cellules_epitheliales_champ_pv').val('".$resultat['cellules_epitheliales']."');
     	        $('#cellules_epitheliales_champ_valeur_pv').val('".$resultat['cellules_epitheliales_champ_valeur']."');    	            
-    	        $('#trichomonas_vaginalis_pv').val('".$resultat['trichomonas_vaginalis']."');
-    	        $('#levures_filaments_myceliens_pv').val('".$resultat['levures_filaments_myceliens']."');
-    	        $('#gardnerella_vaginalis_pv').val('".$resultat['gardnerella_vaginalis']."');
+    	        $('#trichomonas_vaginalis_pv').val('".$resultat['trichomonas_vaginalis']."').trigger('change');
+    	        $('#levures_pv').val('".$resultat['levures']."');
+   	            $('#filaments_myceliens_pv').val('".$resultat['filaments_myceliens']."');
+    	        $('#gardnerella_vaginalis_pv').val('".$resultat['gardnerella_vaginalis']."').trigger('change');
     	        $('#mobiluncus_spp_pv').val('".$resultat['mobiluncus_spp']."');
     	        $('#clue_cells_pv').val('".$resultat['clue_cells']."');
     	        $('#lactobacillus_pv').val('".$resultat['lactobacillus']."');
-    	        $('#autre_flore_pv').val('".$resultat['autre_flore']."');
+    	        $('#autre_flore_pv').val('".$resultat['autre_flore']."').trigger('change');
     	        $('#flore_pv').val('".$resultat['flore']."').trigger('change');
     	        $('#flore_note_pv').val('".str_replace( "'", "\'", $resultat['flore_note'])."');
     	        $('#culture_pv').val('".$resultat['culture']."').trigger('change');
     	        $('#identification_culture_pv').val('".$resultat['identification_culture']."').trigger('change');
     	        $('#recherche_directe_antigene_chlamydia_pv').val('".$resultat['recherche_directe_antigene_chlamydia']."');
     	        $('#recherche_directe_mycoplasmes_pv').val('".$resultat['recherche_directe_mycoplasmes']."').trigger('change');
-                $('#identification_rdm_positive_pv').val('".$resultat['identification_rdm_positive']."');    	            
-    	            
-    	        
-    	        $('#commentaire_pv').val('".preg_replace("/(\r\n|\n|\r)/", "\\n", str_replace( "'", "\'", $resultat['commentaire'] ))."');
+                    
     	            
 	    	 </script>";
+	        
+	         //$('#commentaire_pv').val('".preg_replace("/(\r\n|\n|\r)/", "\\n", str_replace( "'", "\'", $resultat['commentaire'] ))."');
+	         
+	        
+	        
+	         $html .= ($resultat['identification_rdm_positive_choix1'])   ? '<script> $("#identification_rdm_positive_Choix1_pv").trigger("click"); </script>' : '';
+	         $html .= ($resultat['identification_rdm_positive_choix2'])   ? '<script> $("#identification_rdm_positive_Choix2_pv").trigger("click"); </script>' : '';
+	         
+	         $html .= ($resultat['autre_flore_cocci_pos_Choix1'])   ? '<script> $("#autre_flore_cocci_pos_Choix1_pv").trigger("click"); </script>' : '';
+	         $html .= ($resultat['autre_flore_cocci_pos_Choix2'])   ? '<script> $("#autre_flore_cocci_pos_Choix2_pv").trigger("click"); </script>' : '';
+	         
 	    }
 	    
 	    /**
@@ -4292,12 +4301,37 @@ class TechnicienController extends AbstractActionController {
 	             */
 	            
 	            /**
+	             * PARTIE Glycopeptides
+	             */
+	            $html .= ($resultatAntiBioGramme['vancomycineVA']) ? '$("#vancomycineVAABG").val("'.$resultatAntiBioGramme['vancomycineVA'].'"); $("#choixVancomycineVAABG").trigger("click");' : '';
+	            $html .= ($resultatAntiBioGramme['teicoplanine']) ? '$("#teicoplanineABG").val("'.$resultatAntiBioGramme['teicoplanine'].'"); $("#choixTeicoplanineABG").trigger("click");' : '';
+	            /**
+	             * FIN PARTIE Glycopeptides
+	             */
+
+	            
+	            /**
+	             * PARTIE Produits nitrés
+	             */
+	            $html .= ($resultatAntiBioGramme['nitrofurane']) ? '$("#nitrofuraneABG").val("'.$resultatAntiBioGramme['nitrofurane'].'"); $("#choixNitrofuraneABG").trigger("click");' : '';
+	            $html .= ($resultatAntiBioGramme['metronidazole']) ? '$("#metronidazoleABG").val("'.$resultatAntiBioGramme['metronidazole'].'"); $("#choixMetronidazoleABG").trigger("click");' : '';
+	            /**
+	             * FIN PARTIE Produits nitrés
+	             */
+
+	            /**
+	             * PARTIE Sulfamides
+	             */
+	            $html .= ($resultatAntiBioGramme['trimethoprimeSulfametoxazoleSXT']) ? '$("#trimethoprimeSulfametoxazoleSXTABG").val("'.$resultatAntiBioGramme['trimethoprimeSulfametoxazoleSXT'].'"); $("#choixTrimethoprimeSulfametoxazoleSXTABG").trigger("click");' : '';
+	            /**
+	             * FIN PARTIE Sulfamides
+	             */
+	            
+	            /**
 	             * PARTIE Polymyxine
 	             */
-	            $html .= ($resultatAntiBioGramme['fosfomycineFOS']) ? '$("#fosfomycineFOSABG").val("'.$resultatAntiBioGramme['fosfomycineFOS'].'"); $("#choixFosfomycineFOSABG").trigger("click");' : '';
-	            $html .= ($resultatAntiBioGramme['vancomycineVA']) ? '$("#vancomycineVAABG").val("'.$resultatAntiBioGramme['vancomycineVA'].'"); $("#choixVancomycineVAABG").trigger("click");' : '';
 	            $html .= ($resultatAntiBioGramme['colistineCS']) ? '$("#colistineCSABG").val("'.$resultatAntiBioGramme['colistineCS'].'"); $("#choixColistineCSABG").trigger("click");' : '';
-	             
+	            $html .= ($resultatAntiBioGramme['polymicine']) ? '$("#polymicineABG").val("'.$resultatAntiBioGramme['polymicine'].'"); $("#choixPolymicineABG").trigger("click");' : '';
 	            /**
 	             * FIN PARTIE Polymyxine
 	             */
@@ -4324,6 +4358,7 @@ class TechnicienController extends AbstractActionController {
 	            /**
 	             * PARTIE Cyclines
 	             */
+	            $html .= ($resultatAntiBioGramme['minocycline']) ? '$("#minocyclineABG").val("'.$resultatAntiBioGramme['minocycline'].'"); $("#choixMinocyclineABG").trigger("click");' : '';
 	            $html .= ($resultatAntiBioGramme['tetracyclineTE']) ? '$("#tetracyclineTEABG").val("'.$resultatAntiBioGramme['tetracyclineTE'].'"); $("#choixTetracyclineTEABG").trigger("click");' : '';
 	            $html .= ($resultatAntiBioGramme['doxycyclineDO']) ? '$("#doxycyclineDOABG").val("'.$resultatAntiBioGramme['doxycyclineDO'].'"); $("#choixDoxycyclineDOABG").trigger("click");' : '';
 	            /**
@@ -4333,6 +4368,7 @@ class TechnicienController extends AbstractActionController {
 	            /**
 	             * PARTIE Macrolides et apparentés
 	             */
+	            $html .= ($resultatAntiBioGramme['azithromycineAZT']) ? '$("#azithromycineAZTABG").val("'.$resultatAntiBioGramme['azithromycineAZT'].'"); $("#choixAzithromycineAZTABG").trigger("click");' : '';
 	            $html .= ($resultatAntiBioGramme['erythromycineE']) ? '$("#erythromycineEABG").val("'.$resultatAntiBioGramme['erythromycineE'].'"); $("#choixErythromycineEABG").trigger("click");' : '';
 	            $html .= ($resultatAntiBioGramme['lincomycineL']) ? '$("#lincomycineLABG").val("'.$resultatAntiBioGramme['lincomycineL'].'"); $("#choixLincomycineLABG").trigger("click");' : '';
 	            $html .= ($resultatAntiBioGramme['pristinamycinePT']) ? '$("#pristinamycinePTABG").val("'.$resultatAntiBioGramme['pristinamycinePT'].'"); $("#choixPristinamycinePTABG").trigger("click");' : '';
@@ -4343,7 +4379,6 @@ class TechnicienController extends AbstractActionController {
 	            /**
 	             * PARTIE Fluoroquinolones
 	             */
-	            $html .= ($resultatAntiBioGramme['acideFusidiqueFA']) ? '$("#acideFusidiqueFAABG").val("'.$resultatAntiBioGramme['acideFusidiqueFA'].'"); $("#choixAcideFusidiqueFAABG").trigger("click");' : '';
 	            $html .= ($resultatAntiBioGramme['acideNalidixiqueNA']) ? '$("#acideNalidixiqueNAABG").val("'.$resultatAntiBioGramme['acideNalidixiqueNA'].'"); $("#choixAcideNalidixiqueNAABG").trigger("click");' : '';
 	            $html .= ($resultatAntiBioGramme['pefloxacinePEF']) ? '$("#pefloxacinePEFABG").val("'.$resultatAntiBioGramme['pefloxacinePEF'].'"); $("#choixPefloxacinePEFABG").trigger("click");' : '';
 	            $html .= ($resultatAntiBioGramme['norfloxacineNOR']) ? '$("#norfloxacineNORABG").val("'.$resultatAntiBioGramme['norfloxacineNOR'].'"); $("#choixNorfloxacineNORABG").trigger("click");' : '';
@@ -4357,10 +4392,20 @@ class TechnicienController extends AbstractActionController {
 	            /**
 	             * PARTIE Imidazolés
 	             */
-	            $html .= ($resultatAntiBioGramme['rifampicineRA']) ? '$("#rifampicineRAABG").val("'.$resultatAntiBioGramme['rifampicineRA'].'"); $("#choixRifampicineRAABG").trigger("click");' : '';
 	            $html .= ($resultatAntiBioGramme['cotrimoxazoleSXT']) ? '$("#cotrimoxazoleSXTABG").val("'.$resultatAntiBioGramme['cotrimoxazoleSXT'].'"); $("#choixCotrimoxazoleSXTABG").trigger("click");' : '';
 	            /**
 	             * FIN PARTIE Imidazolés
+	             */
+	            
+	            
+	            /**
+	             * PARTIE Autres
+	             */
+	            $html .= ($resultatAntiBioGramme['fosfomycineFOS']) ? '$("#fosfomycineFOSABG").val("'.$resultatAntiBioGramme['fosfomycineFOS'].'"); $("#choixFosfomycineFOSABG").trigger("click");' : '';
+	            $html .= ($resultatAntiBioGramme['acideFusidiqueFA']) ? '$("#acideFusidiqueFAABG").val("'.$resultatAntiBioGramme['acideFusidiqueFA'].'"); $("#choixAcideFusidiqueFAABG").trigger("click");' : '';
+	            $html .= ($resultatAntiBioGramme['rifampicineRA']) ? '$("#rifampicineRAABG").val("'.$resultatAntiBioGramme['rifampicineRA'].'"); $("#choixRifampicineRAABG").trigger("click");' : '';
+	            /**
+	             * FIN PARTIE Autres
 	             */
 	            
 	            /**
@@ -8850,7 +8895,7 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "</tr>";
 	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 55%;'><label class='lab1' style='padding-top: 5px;'><span style='font-weight: bold;'> Aspect des pertes (Couleurs) </span></label></td>";
+	    $html .= "  <td style='width: 55%;'><label class='lab1' style='padding-top: 5px;'><span style='font-weight: bold;'> Aspect des pertes (Couleur) </span></label></td>";
 	    $html .= "  <td style='width: 15%;'>
 	                    <label class='lab2' style='padding-top: 5px;'>
 	                      <select id='aspect_pertes_couleurs_pv' style='width: 200px;'>
@@ -8859,6 +8904,8 @@ class TechnicienController extends AbstractActionController {
 	                        <option value=2 >Stri&eacute;es de sang</option>
 	                        <option value=3 >Caillebott&eacute;es</option>
 	                        <option value=4 >Marron</option>
+	                        <option value=5 >Gris&acirc;tre</option>
+	                        <option value=6 >Verd&acirc;tre</option>
 	                      </select>
 	                    </label>
 	                </td>";
@@ -8866,7 +8913,7 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "</tr>";
 	    
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 55%;'><label class='lab1' style='padding-top: 5px;'><span style='font-weight: bold;'> Aspect des pertes (Odeurs) </span></label></td>";
+	    $html .= "  <td style='width: 55%;'><label class='lab1' style='padding-top: 5px;'><span style='font-weight: bold;'> Aspect des pertes (Odeur) </span></label></td>";
 	    $html .= "  <td style='width: 15%;'>
 	                    <label class='lab2' style='padding-top: 5px;'>
 	                      <select id='aspect_pertes_odeurs_pv' style='width: 200px;'>
@@ -8888,6 +8935,7 @@ class TechnicienController extends AbstractActionController {
 	                        <option value=1 >Col sain</option>
 	                        <option value=2 >Col inflamm&eacute;</option>
   	                        <option value=3 >Col saignant au contact</option>
+	                        <option value=4 >Col l&eacute;g&egrave;rement inflamm&eacute;</option>
 	                      </select>
 	                    </label>
 	                </td>";
@@ -8918,9 +8966,9 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "  <td style='width: 20%;'><label class='lab1' style='padding-top: 5px;'><span style='font-weight: bold;'> Leucocytes </span></label></td>";
 	    $html .= "  <td style='width: 18%;'>
 	                    <label class='lab2' style='padding-top: 5px;'>
-	                      <select id='leucocytes_champ_pv' style='width: 90px;'>
+	                      <select id='leucocytes_champ_pv' style='width: 100px;'>
 	                        <option> </option>
-	                        <option value=1 >Rares</option>
+	                        <option value=1 >Pr&eacute;sentes</option>
 	                        <option value=2 >Absentes</option>
 	                      </select>
 	                    </label>
@@ -8933,9 +8981,10 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "  <td style='width: 11%;'><label class='lab1' style='font-weight: bold; text-align: right; padding-top: 5px;'> H&eacute;maties </label></td>";
 	    $html .= "  <td style='width: 18%;'>
 	                    <label class='lab2' style='padding-top: 5px;'>
-	                      <select id='hematies_champ_pv' style='width: 90px;'>
+	                      <select id='hematies_champ_pv' style='width: 100px;'>
 	                        <option> </option>
-	                        <option value=1 >Absentes</option>
+	                        <option value=1 >Pr&eacute;sentes</option>
+	                        <option value=2 >Absentes</option>
 	                      </select>
 	                    </label>
 	                </td>";
@@ -8954,9 +9003,10 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "  <td style='width: 20%;'><label class='lab1' style='padding-top: 5px;'><span style='font-weight: bold;'> Cellules &eacute;pitheliales </span></label></td>";
 	    $html .= "  <td style='width: 18%;'>
 	                    <label class='lab2' style='padding-top: 5px;'>
-	                      <select id='cellules_epitheliales_champ_pv' style='width: 90px;'>
+	                      <select id='cellules_epitheliales_champ_pv' style='width: 100px;'>
 	                        <option> </option>
-	                        <option value=1 >Absentes</option>
+	                        <option value=1 >Pr&eacute;sentes</option>
+	                        <option value=2 >Absentes</option>
 	                      </select>
 	                    </label>
 	                </td>";
@@ -8968,7 +9018,7 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "  <td style='width: 20%;'><label class='lab1' style='font-weight: bold; text-align: right; padding-top: 5px;'  title='Trichomonas vaginalis' > Trichomo. vaginalis </label></td>";
 	    $html .= "  <td style='width: 25%;'>
 	                    <label class='lab2' style='padding-top: 5px; width: 83%;'>
-	                      <select id='trichomonas_vaginalis_pv' style='width: 120px;'>
+	                      <select id='trichomonas_vaginalis_pv' style='width: 120px;' onchange='getTrichomonasVaginalisAutoPvABG(this.value);'>
 	                        <option> </option>
 	                        <option value=1 >Pr&eacute;sence</option>
 	                        <option value=2 >Absence</option>
@@ -8977,15 +9027,43 @@ class TechnicienController extends AbstractActionController {
 	                </td>";
 	    $html .= "</tr>";
 	    $html .= "</table>";
+	    
 	    /*
-	     * Levures/Filaments mycéliens && Gardnerella vaginalis
+	     * Levures && Filaments mycéliens
 	     */
 	    $html .= "<table style='width: 100%;'>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 25%;'><label class='lab1' style='padding-top: 5px;' ><span style='font-weight: bold;' title='Levures/Filaments myc&eacute;liens'> Lev./Fil. myc&eacute;liens </span></label></td>";
+	    $html .= "  <td style='width: 25%;'><label class='lab1' style='padding-top: 5px;' ><span style='font-weight: bold;'> Levures </span></label></td>";
 	    $html .= "  <td style='width: 30%;'>
 	                    <label class='lab2' style='padding-top: 5px;'>
-	                      <select id='levures_filaments_myceliens_pv' style='width: 120px;'>
+	                      <select id='levures_pv' style='width: 120px;'>
+	                        <option> </option>
+	                        <option value=1 >Pr&eacute;sence</option>
+	                        <option value=2 >Absence</option>
+	                      </select>
+	                    </label>
+	                </td>";
+	    $html .= "  <td style='width: 20%;'><label class='lab1' style='font-weight: bold; text-align: right; padding-top: 5px;' > Filaments myc&eacute;liens </label></td>";
+	    $html .= "  <td style='width: 25%;'>
+	                    <label class='lab2' style='padding-top: 5px; width: 83%;'>
+	                      <select id='filaments_myceliens_pv' style='width: 120px;'>
+	                        <option> </option>
+	                        <option value=1 >Pr&eacute;sence</option>
+	                        <option value=2 >Absence</option>
+	                      </select>
+	                    </label>
+	                </td>";
+	    $html .= "</tr>";
+	    
+	    /*
+	     * Lactobacillus && Gardnerella vaginalis
+	     */
+	    $html .= "<table style='width: 100%;'>";
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 25%;'><label class='lab1' style='padding-top: 5px;' ><span style='font-weight: bold;' > Lactobacillus </span></label></td>";
+	    $html .= "  <td style='width: 30%;'>
+	                    <label class='lab2' style='padding-top: 5px;'>
+	                      <select id='lactobacillus_pv' style='width: 120px;'>
 	                        <option> </option>
 	                        <option value=1 >Pr&eacute;sence</option>
 	                        <option value=2 >Absence</option>
@@ -8995,7 +9073,7 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "  <td style='width: 20%;'><label class='lab1' style='font-weight: bold; text-align: right; padding-top: 5px;' > Gardnerella vaginalis </label></td>";
 	    $html .= "  <td style='width: 25%;'>
 	                    <label class='lab2' style='padding-top: 5px; width: 83%;'>
-	                      <select id='gardnerella_vaginalis_pv' style='width: 120px;'>
+	                      <select id='gardnerella_vaginalis_pv' style='width: 120px;' onchange='getCommentaireAutoPvABG(this.value);'>
 	                        <option> </option>
 	                        <option value=1 >Pr&eacute;sence</option>
 	                        <option value=2 >Absence</option>
@@ -9032,39 +9110,12 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "</table>";
 	    
 	    /*
-	     * Lactobacillus && Autre flore
-	     */
-	    $html .= "<table style='width: 100%;'>";
-	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 25%;'><label class='lab1' style='padding-top: 5px;'><span style='font-weight: bold;' > Lactobacillus </span></label></td>";
-	    $html .= "  <td style='width: 30%;'>
-	                    <label class='lab2' style='padding-top: 5px;'>
-	                      <select id='lactobacillus_pv' style='width: 120px;'>
-	                        <option> </option>
-	                        <option value=1 >Pr&eacute;sence</option>
-	                        <option value=2 >Absence</option>
-	                      </select>
-	                    </label>
-	                </td>";
-	    $html .= "  <td style='width: 12%;'><label class='lab1' style='font-weight: bold; text-align: right; padding-top: 5px;' > Autre flore </label></td>";
-	    $html .= "  <td style='width: 33%;'>
-	                    <label class='lab2' style='padding-top: 5px; width: 87%;'>
-	                      <select id='autre_flore_pv' style='width: 170px; font-size: 13px;'>
-	                        <option> </option>
-	                        <option value=1 >Bacille &agrave; gram n&eacute;gatif</option>
-	                      </select>
-	                    </label>
-	                </td>";
-	    $html .= "</tr>";
-	    $html .= "</table>";
-	    
-	    /*
 	     * Flore
 	     */
 	    $html .= "<table style='width: 100%;'>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
 	    $html .= "  <td style='width: 25%;'><label class='lab1' style='padding-top: 5px;'><span style='font-weight: bold;' > Flore </span></label></td>";
-	    $html .= "  <td style='width: 30%;'>
+	    $html .= "  <td style='width: 22%;'>
 	                    <label class='lab2' style='padding-top: 5px;'>
 	                      <select id='flore_pv' style='width: 120px;' onchange='getChampFloreNote(this.value)'>
 	                        <option> </option>
@@ -9075,15 +9126,45 @@ class TechnicienController extends AbstractActionController {
 	                      </select>
 	                    </label>
 	                </td>";
-	    $html .= "  <td style='width: 45%;'>
-	                    <label class='lab2' style='padding-top: 5px; width: 91%;'>
-	                      <span style='font-weight: bold; font-size: 20px; text-align: left; visibility: hidden;' class='flore_note_class_pv'> &#10145; 
-	                        <input type='text' id='flore_note_pv' style='width: 210px; text-align: left; font-size: 16px; padding-left: 2px;'>
+	    $html .= "  <td style='width: 53%;'>
+	                    <label class='lab2' style='padding-top: 5px; width: 92%;'>
+	                      <span style='font-weight: bold; font-size: 20px; text-align: left; visibility: hidden;' class='flore_note_class_pv'> &#10145;
+	                        <input type='text' id='flore_note_pv' style='width: 260px; text-align: left; font-size: 16px; padding-left: 2px;'>
 	                      </span>
 	                    </label>
 	                </td>";
 	    $html .= "</tr>";
 	    $html .= "</table>";
+	    
+	    /*
+	     * Autre flore
+	     */
+	    $html .= "<table style='width: 100%;'>";
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 25%;'><label class='lab1' style='padding-top: 5px;'><span style='font-weight: bold;' > Autre flore </span></label></td>";
+	    $html .= "  <td style='width: 38%;'>
+	                    <label class='lab2' style='padding-top: 5px;'>
+	                      <select id='autre_flore_pv' style='width: 220px; font-size: 13px;'  onchange='getAutreFloreCocciPositif(this.value)'>
+	                        <option> </option>
+	                        <option value=1 >Bacilles &agrave; Gram n&eacute;gatif</option>
+	                        <option value=2 >Bacilles &agrave; Gram positif</option>
+                	        <option value=3 >Cocci &agrave; Gram positif</option>
+                	        <option value=4 >Diplocoques &agrave; Gram n&eacute;gatif</option>
+	                      </select>
+	                    </label>
+	                </td>";
+	   
+	    $html .= "  <td style='width: 14%;'>
+	                    <label style='padding-top: 5px;'><span class='autre_flore_cocci_positif_pv' style='visibility: hidden;'> <input type='checkbox' style='width:20px;' id='autre_flore_cocci_pos_Choix1_pv' > en amas </span></label>
+	                </td>";
+	    $html .= "  <td style='width: 23%;'>
+	                    <label style='padding-top: 5px; width: 80%;'><span class='autre_flore_cocci_positif_pv' style='visibility: hidden;'> <input type='checkbox' style='width:20px;' id='autre_flore_cocci_pos_Choix2_pv' > en chainettes </span></label>
+	                </td>";
+	    
+	    $html .= "</tr>";
+	    $html .= "</table>";
+	    
+	    
 
 	    
 	    /**
@@ -9174,16 +9255,24 @@ class TechnicienController extends AbstractActionController {
 	    $html .= '<script>  $("#choixCeftriaxoneCROABG").click(function(){ if($(this).get(0).checked){ $("#ceftriaxoneCROABG").attr("disabled", false); }else{ $("#ceftriaxoneCROABG").attr("disabled", true).val(""); } }) </script>';
 	    $html .= '<script>  $("#choixCefepimeFEPABG").click(function(){ if($(this).get(0).checked){ $("#cefepimeFEPABG").attr("disabled", false); }else{ $("#cefepimeFEPABG").attr("disabled", true).val(""); } }) </script>';
 	    $html .= '<script>  $("#choixAztreonamATMABG").click(function(){ if($(this).get(0).checked){ $("#aztreonamATMABG").attr("disabled", false); }else{ $("#aztreonamATMABG").attr("disabled", true).val(""); } }) </script>';
-	    
+	    /* PARTIE Glycopeptides */
+	    $html .= '<script>  $("#choixVancomycineVAABG").click(function(){ if($(this).get(0).checked){ $("#vancomycineVAABG").attr("disabled", false); }else{ $("#vancomycineVAABG").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixTeicoplanineABG").click(function(){ if($(this).get(0).checked){ $("#teicoplanineABG").attr("disabled", false); }else{ $("#teicoplanineABG").attr("disabled", true).val(""); } }) </script>';
+	    /* PARTIE Produits nitrés */
+	    $html .= '<script>  $("#choixNitrofuraneABG").click(function(){ if($(this).get(0).checked){ $("#nitrofuraneABG").attr("disabled", false); }else{ $("#nitrofuraneABG").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixMetronidazoleABG").click(function(){ if($(this).get(0).checked){ $("#metronidazoleABG").attr("disabled", false); }else{ $("#metronidazoleABG").attr("disabled", true).val(""); } }) </script>';
+	    /* PARTIE Sulfamides */
+	    $html .= '<script>  $("#choixTrimethoprimeSulfametoxazoleSXTABG").click(function(){ if($(this).get(0).checked){ $("#trimethoprimeSulfametoxazoleSXTABG").attr("disabled", false); }else{ $("#trimethoprimeSulfametoxazoleSXTABG").attr("disabled", true).val(""); } }) </script>';
+	     
 	    
 	    /*
 	     * Ajouter les scripts pour la gestion des checkbox non cochés
 	     * Pour la première colonne
 	     */
+	    
 	    /* PARTIE Polymyxine */
-	    $html .= '<script>  $("#choixFosfomycineFOSABG").click(function(){ if($(this).get(0).checked){ $("#fosfomycineFOSABG").attr("disabled", false); }else{ $("#fosfomycineFOSABG").attr("disabled", true).val(""); } }) </script>';
-	    $html .= '<script>  $("#choixVancomycineVAABG").click(function(){ if($(this).get(0).checked){ $("#vancomycineVAABG").attr("disabled", false); }else{ $("#vancomycineVAABG").attr("disabled", true).val(""); } }) </script>';
 	    $html .= '<script>  $("#choixColistineCSABG").click(function(){ if($(this).get(0).checked){ $("#colistineCSABG").attr("disabled", false); }else{ $("#colistineCSABG").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixPolymicineABG").click(function(){ if($(this).get(0).checked){ $("#polymicineABG").attr("disabled", false); }else{ $("#polymicineABG").attr("disabled", true).val(""); } }) </script>';
 	    /* PARTIE Aminosides */
 	    $html .= '<script>  $("#choixKanamycineKABG").click(function(){ if($(this).get(0).checked){ $("#kanamycineKABG").attr("disabled", false); }else{ $("#kanamycineKABG").attr("disabled", true).val(""); } }) </script>';
 	    $html .= '<script>  $("#choixTobramycineTBABG").click(function(){ if($(this).get(0).checked){ $("#tobramycineTBABG").attr("disabled", false); }else{ $("#tobramycineTBABG").attr("disabled", true).val(""); } }) </script>';
@@ -9192,14 +9281,15 @@ class TechnicienController extends AbstractActionController {
 	    /* PARTIE Phénicolés */
 	    $html .= '<script>  $("#choixChloramphenicolCABG").click(function(){ if($(this).get(0).checked){ $("#chloramphenicolCABG").attr("disabled", false); }else{ $("#chloramphenicolCABG").attr("disabled", true).val(""); } }) </script>';
 	    /* PARTIE Cyclines */
+	    $html .= '<script>  $("#choixMinocyclineABG").click(function(){ if($(this).get(0).checked){ $("#minocyclineABG").attr("disabled", false); }else{ $("#minocyclineABG").attr("disabled", true).val(""); } }) </script>';
 	    $html .= '<script>  $("#choixTetracyclineTEABG").click(function(){ if($(this).get(0).checked){ $("#tetracyclineTEABG").attr("disabled", false); }else{ $("#tetracyclineTEABG").attr("disabled", true).val(""); } }) </script>';
 	    $html .= '<script>  $("#choixDoxycyclineDOABG").click(function(){ if($(this).get(0).checked){ $("#doxycyclineDOABG").attr("disabled", false); }else{ $("#doxycyclineDOABG").attr("disabled", true).val(""); } }) </script>';
 	    /* PARTIE Macrolides et apparentés */
+	    $html .= '<script>  $("#choixAzithromycineAZTABG").click(function(){ if($(this).get(0).checked){ $("#azithromycineAZTABG").attr("disabled", false); }else{ $("#azithromycineAZTABG").attr("disabled", true).val(""); } }) </script>';
 	    $html .= '<script>  $("#choixErythromycineEABG").click(function(){ if($(this).get(0).checked){ $("#erythromycineEABG").attr("disabled", false); }else{ $("#erythromycineEABG").attr("disabled", true).val(""); } }) </script>';
 	    $html .= '<script>  $("#choixLincomycineLABG").click(function(){ if($(this).get(0).checked){ $("#lincomycineLABG").attr("disabled", false); }else{ $("#lincomycineLABG").attr("disabled", true).val(""); } }) </script>';
 	    $html .= '<script>  $("#choixPristinamycinePTABG").click(function(){ if($(this).get(0).checked){ $("#pristinamycinePTABG").attr("disabled", false); }else{ $("#pristinamycinePTABG").attr("disabled", true).val(""); } }) </script>';
 	    /* PARTIE Fluoroquinolones*/
-	    $html .= '<script>  $("#choixAcideFusidiqueFAABG").click(function(){ if($(this).get(0).checked){ $("#acideFusidiqueFAABG").attr("disabled", false); }else{ $("#acideFusidiqueFAABG").attr("disabled", true).val(""); } }) </script>';
 	    $html .= '<script>  $("#choixAcideNalidixiqueNAABG").click(function(){ if($(this).get(0).checked){ $("#acideNalidixiqueNAABG").attr("disabled", false); }else{ $("#acideNalidixiqueNAABG").attr("disabled", true).val(""); } }) </script>';
 	    $html .= '<script>  $("#choixPefloxacinePEFABG").click(function(){ if($(this).get(0).checked){ $("#pefloxacinePEFABG").attr("disabled", false); }else{ $("#pefloxacinePEFABG").attr("disabled", true).val(""); } }) </script>';
 	    $html .= '<script>  $("#choixNorfloxacineNORABG").click(function(){ if($(this).get(0).checked){ $("#norfloxacineNORABG").attr("disabled", false); }else{ $("#norfloxacineNORABG").attr("disabled", true).val(""); } }) </script>';
@@ -9208,6 +9298,10 @@ class TechnicienController extends AbstractActionController {
 	    /* PARTIE Imidazolés*/
 	    $html .= '<script>  $("#choixRifampicineRAABG").click(function(){ if($(this).get(0).checked){ $("#rifampicineRAABG").attr("disabled", false); }else{ $("#rifampicineRAABG").attr("disabled", true).val(""); } }) </script>';
 	    $html .= '<script>  $("#choixCotrimoxazoleSXTABG").click(function(){ if($(this).get(0).checked){ $("#cotrimoxazoleSXTABG").attr("disabled", false); }else{ $("#cotrimoxazoleSXTABG").attr("disabled", true).val(""); } }) </script>';
+	     
+	    /* PARTIE Autres*/
+	    $html .= '<script>  $("#choixFosfomycineFOSABG").click(function(){ if($(this).get(0).checked){ $("#fosfomycineFOSABG").attr("disabled", false); }else{ $("#fosfomycineFOSABG").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixAcideFusidiqueFAABG").click(function(){ if($(this).get(0).checked){ $("#acideFusidiqueFAABG").attr("disabled", false); }else{ $("#acideFusidiqueFAABG").attr("disabled", true).val(""); } }) </script>';
 	     
 	    /**
 	     * Partie recherches particulieres *** Partie recherches particulieres
@@ -9228,7 +9322,7 @@ class TechnicienController extends AbstractActionController {
 	     */
 	    $html .= "<table style='width: 100%;'>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 25%;'><label class='lab1' style='padding-top: 5px;'><span style='font-weight: bold;' title='Recherche directe de l\"antigene de chlamydia'> Rech. dir. ant. chlam. </span></label></td>";
+	    $html .= '  <td style="width: 25%;"><label class="lab1" style="padding-top: 5px;"><span style="font-weight: bold;" title="Recherche d\'Ag de Chlamydia trachomatis"> Rech. d\'Ag Chlam. tracho. </span></label></td>';
 	    $html .= "  <td style='width: 25%;'>
 	                    <label class='lab2' style='padding-top: 5px;'>
 	                      <select id='recherche_directe_antigene_chlamydia_pv' style='width: 120px;'>
@@ -9248,11 +9342,12 @@ class TechnicienController extends AbstractActionController {
 	    
 	    
 	    /*
-	     * Rech. dir. mycoplasmes && identification 
+	     * Recherche des Mycoplasmes && Identification 
 	     */
+	    /* Recherche des Mycoplasmes */
 	    $html .= "<table style='width: 100%;'>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 25%;'><label class='lab1' style='padding-top: 5px;'><span style='font-weight: bold;' title='Recherche directe mycoplasmes'> Rech. dir. mycoplasmes </span></label></td>";
+	    $html .= "  <td style='width: 25%;'><label class='lab1' style='padding-top: 5px;'><span style='font-weight: bold;' title='Recherche des Mycoplasmes'> Rech. des Mycoplasmes </span></label></td>";
 	    $html .= "  <td style='width: 25%;'>
 	                    <label class='lab2' style='padding-top: 5px;'>
 	                      <select id='recherche_directe_mycoplasmes_pv' style='width: 120px;' onchange='getChampIdentificationRdmPositive(this.value)'>
@@ -9263,19 +9358,30 @@ class TechnicienController extends AbstractActionController {
 	                    </label>
 	                </td>";
 	    $html .= "  <td style='width: 50%;'>
-	                    <label class='lab2' style='padding-top: 5px; width: 91%;'> 
-	                      <span style='font-weight: bold; text-align: left; visibility: hidden;'  class='identification_rdm_positive_class_pv'>  Identification
-    	                    <select id='identification_rdm_positive_pv' style='width: 181px; font-size: 13px;' >
-    	                      <option> </option>
-    	                      <option value=1 >Ureaplasma urealyticum</option>
-    	                      <option value=2 >Mycoplasma hominis</option>
-    	                    </select>
+	                    <label style='padding-top: 5px; width: 92%; '> 
+	                      <span style='  display: none; float: left;'  class='identification_rdm_positive_class_titre_pv'>  Titre : 
+    	                    <span style='font-size: 15px; font-weight: bold; padding-left: 10px;' >  &#8805; 10<sup>4</sup> ucc/ml</span>
 	                      </span>
 	                    </label>
 	                </td>";
 	    $html .= "</tr>";
 	    $html .= "</table>";
-	    
+	    /* Identification  -- Identification */
+	    $html .= "<table style='width: 100%; display: none;' class='identification_rdm_positive_class_pv'>";
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 25%;'>
+	                    <label class='lab2' style='padding-top: 5px;'> 
+	                      <span style='font-weight: bold; float: left; padding-left: 80px;' > Identification </span>
+	                    </label>
+	                </td>";
+	    $html .= "  <td style='width: 30%;'>
+	                    <label style='padding-top: 5px;'> <input type='checkbox' style='width:20px;' id='identification_rdm_positive_Choix1_pv' > Ureaplasma urealyticum </label>
+	                </td>";
+	    $html .= "  <td style='width: 45%;'>
+	                    <label style='padding-top: 5px; width: 91%;'> <input type='checkbox' style='width:20px;' id='identification_rdm_positive_Choix2_pv' > Mycoplasma hominis </label>
+	                </td>";
+	    $html .= "</tr>";
+	    $html .= "</table>";
 	    
 	    
 	    
@@ -9289,7 +9395,7 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "<table style='width: 100%; margin-top: 15px;'>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
 	    if($this->layout()->user['role'] == 'biologiste' || $this->layout()->user['role'] == 'technicien'){
-	        $html .= "<td style='width: 96%;'><label style='height: 140px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_pv' style='max-height: 100px; min-height: 100px; max-width: 560px; min-width: 560px; margin-left: 30px;' > </textarea> </label></td>";
+	        $html .= "<td style='width: 96%;'><label style='height: 140px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_pv' style='max-height: 100px; min-height: 100px; max-width: 560px; min-width: 560px; margin-left: 30px;' readonly> </textarea> </label></td>";
 	    }else{
 	        $html .= "<td style='width: 96%;'><label style='height: 140px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_pv' style='max-height: 100px; min-height: 100px; max-width: 560px; min-width: 560px; margin-left: 30px;' disabled> </textarea> </label></td>";
 	    }
@@ -9395,19 +9501,6 @@ class TechnicienController extends AbstractActionController {
 	    $html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixAcideClavulaniqueAmoxicillineAMCABG" > </label></td>';
 	    $html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
 	    $html .= '      <select id="acideClavulaniqueAmoxicillineAMCABG" style="width: 120px;" disabled> ';
-	    $html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
-	    $html .= '      </select></label> </td>';
-	    $html .= "</tr></table>";
-	    
-	    /*
-	     * Gentamicine GM
-	     */
-	    $html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
-	    $html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
-	    $html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Gentamicine GM </span></label></td>';
-	    $html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixGentamicineGMABG" > </label></td>';
-	    $html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
-	    $html .= '      <select id="gentamicineGMABG" style="width: 120px;" disabled> ';
 	    $html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
 	    $html .= '      </select></label> </td>';
 	    $html .= "</tr></table>";
@@ -9543,11 +9636,11 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "</tr></table>";
 	    
 	    /*
-	     * CFP
+	     * Cefopérazone CFP
 	     */
 	    $html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
 	    $html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
-	    $html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > CFP </span></label></td>';
+	    $html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > C&eacute;fop&eacute;razone CFP </span></label></td>';
 	    $html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixCFPABG" > </label></td>';
 	    $html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
 	    $html .= '      <select id="CFPABG" style="width: 120px;" disabled> ';
@@ -9616,29 +9709,106 @@ class TechnicienController extends AbstractActionController {
 	    $html .= '</tr>';
 	    $html .= '</table>';
 	    /*
-	     * Rifampicine RA
+	     * Cotrimoxazole
 	     */
 	    $html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
 	    $html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
-	    $html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Rifampicine RA </span></label></td>';
-	    $html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixRifampicineRAABG" > </label></td>';
-	    $html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
-	    $html .= '      <select id="rifampicineRAABG" style="width: 120px;" disabled> ';
-	    $html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
-	    $html .= '      </select></label> </td>';
-	    $html .= "</tr></table>";
-	    /*
-	     * Cotrimoxazole SXT
-	     */
-	    $html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
-	    $html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
-	    $html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Cotrimoxazole SXT </span></label></td>';
+	    $html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Cotrimoxazole </span></label></td>';
 	    $html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixCotrimoxazoleSXTABG" > </label></td>';
 	    $html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
 	    $html .= '      <select id="cotrimoxazoleSXTABG" style="width: 120px;" disabled> ';
 	    $html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
 	    $html .= '      </select></label> </td>';
 	    $html .= "</tr></table>";
+	    
+	    /**
+	     * Glycopeptides --- Glycopeptides
+	     */
+	    $html .= '<table style="width: 100%; margin-top: 14px;">';
+	    $html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+	    $html .= '  <td style="width: 100%; text-align: left; font-weight: bold; font-size: 12px; font-style: italic;"> &#10148; Glycopeptides </td>';
+	    $html .= '</tr>';
+	    $html .= '</table>';
+	    /*
+	     * Vancomycine VA
+	     */
+	    $html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+	    $html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+	    $html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Vancomycine VA </span></label></td>';
+	    $html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixVancomycineVAABG" > </label></td>';
+	    $html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+	    $html .= '      <select id="vancomycineVAABG" style="width: 120px;" disabled> ';
+	    $html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+	    $html .= '      </select></label> </td>';
+	    $html .= "</tr></table>";
+	    /*
+	     * Teicoplanine
+	     */
+	    $html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+	    $html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+	    $html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Teicoplanine </span></label></td>';
+	    $html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixTeicoplanineABG" > </label></td>';
+	    $html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+	    $html .= '      <select id="teicoplanineABG" style="width: 120px;" disabled> ';
+	    $html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+	    $html .= '      </select></label> </td>';
+	    $html .= "</tr></table>";
+	    
+	    /**
+	     * Produits nitrés --- Produits nitrés
+	     */
+	    $html .= '<table style="width: 100%; margin-top: 14px;">';
+	    $html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+	    $html .= '  <td style="width: 100%; text-align: left; font-weight: bold; font-size: 12px; font-style: italic;"> &#10148; Produits nitr&eacute;s </td>';
+	    $html .= '</tr>';
+	    $html .= '</table>';
+	    /*
+	     * Nitrofurane
+	     */
+	    $html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+	    $html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+	    $html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Nitrofurane </span></label></td>';
+	    $html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixNitrofuraneABG" > </label></td>';
+	    $html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+	    $html .= '      <select id="nitrofuraneABG" style="width: 120px;" disabled> ';
+	    $html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+	    $html .= '      </select></label> </td>';
+	    $html .= "</tr></table>";
+	    /*
+	     * Métronidazole
+	     */
+	    $html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+	    $html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+	    $html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > M&eacute;tronidazole </span></label></td>';
+	    $html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixMetronidazoleABG" > </label></td>';
+	    $html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+	    $html .= '      <select id="metronidazoleABG" style="width: 120px;" disabled> ';
+	    $html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+	    $html .= '      </select></label> </td>';
+	    $html .= "</tr></table>";
+	    
+	    
+	    /**
+	     * Sulfamides --- Sulfamides
+	     */
+	    $html .= '<table style="width: 100%; margin-top: 14px;">';
+	    $html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+	    $html .= '  <td style="width: 100%; text-align: left; font-weight: bold; font-size: 12px; font-style: italic;"> &#10148; Sulfamides </td>';
+	    $html .= '</tr>';
+	    $html .= '</table>';
+	    /*
+	     * Triméthoprime + Sulfamétoxazole (SXT)
+	     */
+	    $html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+	    $html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+	    $html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" title="Trim&eacute;thoprime + Sulfam&eacute;toxazole (SXT)"> Trim&eacute;tho. + Sulfa. (SXT) </span></label></td>';
+	    $html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixTrimethoprimeSulfametoxazoleSXTABG" > </label></td>';
+	    $html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+	    $html .= '      <select id="trimethoprimeSulfametoxazoleSXTABG" style="width: 120px;" disabled> ';
+	    $html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+	    $html .= '      </select></label> </td>';
+	    $html .= "</tr></table>";
+	    
 	    
 	    
         /*
@@ -9664,38 +9834,13 @@ class TechnicienController extends AbstractActionController {
 	     */
 	    
 	    /**
-	     * Polymyxine --- Polymyxine
+	     * Polymyxines --- Polymyxines
 	     */
 	    $html .= '<table style="width: 100%; margin-top: 15px;">';
 	    $html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
-	    $html .= '  <td style="width: 100%; text-align: left; font-weight: bold; font-size: 12px; font-style: italic;"> &#10148; Polymyxine </td>';
+	    $html .= '  <td style="width: 100%; text-align: left; font-weight: bold; font-size: 12px; font-style: italic;"> &#10148; Polymyxines </td>';
 	    $html .= '</tr>';
 	    $html .= '</table>';
-	    /*
-	     * Fosfomycine FOS
-	     */
-	    $html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
-	    $html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
-	    $html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Fosfomycine FOS </span></label></td>';
-	    $html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixFosfomycineFOSABG" > </label></td>';
-	    $html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
-	    $html .= '      <select id="fosfomycineFOSABG" style="width: 120px;" disabled> ';
-	    $html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
-	    $html .= '      </select></label> </td>';
-	    $html .= "</tr></table>";
-	    
-	    /*
-	     * Vancomycine VA
-	     */
-	    $html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
-	    $html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
-	    $html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Vancomycine VA </span></label></td>';
-	    $html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixVancomycineVAABG" > </label></td>';
-	    $html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
-	    $html .= '      <select id="vancomycineVAABG" style="width: 120px;" disabled> ';
-	    $html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
-	    $html .= '      </select></label> </td>';
-	    $html .= "</tr></table>";
 	    
 	    /*
 	     * Colistine CS
@@ -9709,6 +9854,20 @@ class TechnicienController extends AbstractActionController {
 	    $html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
 	    $html .= '      </select></label> </td>';
 	    $html .= "</tr></table>";
+	    
+	    /*
+	     * Polymicine
+	     */
+	    $html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+	    $html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+	    $html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Polymicine </span></label></td>';
+	    $html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixPolymicineABG" > </label></td>';
+	    $html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+	    $html .= '      <select id="polymicineABG" style="width: 120px;" disabled> ';
+	    $html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+	    $html .= '      </select></label> </td>';
+	    $html .= "</tr></table>";
+	    
 	    
 	    /**
 	     * Aminosides --- Aminosides
@@ -9740,6 +9899,19 @@ class TechnicienController extends AbstractActionController {
 	    $html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixTobramycineTBABG" > </label></td>';
 	    $html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
 	    $html .= '      <select id="tobramycineTBABG" style="width: 120px;" disabled> ';
+	    $html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+	    $html .= '      </select></label> </td>';
+	    $html .= "</tr></table>";
+	    
+	    /*
+	     * Gentamicine GM
+	     */
+	    $html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+	    $html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+	    $html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Gentamicine GM </span></label></td>';
+	    $html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixGentamicineGMABG" > </label></td>';
+	    $html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+	    $html .= '      <select id="gentamicineGMABG" style="width: 120px;" disabled> ';
 	    $html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
 	    $html .= '      </select></label> </td>';
 	    $html .= "</tr></table>";
@@ -9800,6 +9972,19 @@ class TechnicienController extends AbstractActionController {
 	    $html .= '</tr>';
 	    $html .= '</table>';
 	    /*
+	     * Minocycline 
+	     */
+	    $html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+	    $html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+	    $html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Minocycline </span></label></td>';
+	    $html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixMinocyclineABG" > </label></td>';
+	    $html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+	    $html .= '      <select id="minocyclineABG" style="width: 120px;" disabled> ';
+	    $html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+	    $html .= '      </select></label> </td>';
+	    $html .= "</tr></table>";
+	    
+	    /*
 	     * Tétracycline TE
 	     */
 	    $html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
@@ -9833,6 +10018,18 @@ class TechnicienController extends AbstractActionController {
 	    $html .= '  <td style="width: 100%; text-align: left; font-weight: bold; font-size: 12px; font-style: italic;"> &#10148; Macrolides et apparent&eacute;s </td>';
 	    $html .= '</tr>';
 	    $html .= '</table>';
+	    /*
+	     * Azithromycine AZT
+	     */
+	    $html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+	    $html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+	    $html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Azithromycine AZT </span></label></td>';
+	    $html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixAzithromycineAZTABG" > </label></td>';
+	    $html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+	    $html .= '      <select id="azithromycineAZTABG" style="width: 120px;" disabled> ';
+	    $html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+	    $html .= '      </select></label> </td>';
+	    $html .= "</tr></table>";
 	    /*
 	     * Erythromycine E
 	     */
@@ -9878,18 +10075,7 @@ class TechnicienController extends AbstractActionController {
 	    $html .= '  <td style="width: 100%; text-align: left; font-weight: bold; font-size: 12px; font-style: italic;"> &#10148; Fluoroquinolones </td>';
 	    $html .= '</tr>';
 	    $html .= '</table>';
-	    /*
-	     * Acide fusidique FA
-	     */
-	    $html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
-	    $html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
-	    $html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Acide fusidique FA </span></label></td>';
-	    $html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixAcideFusidiqueFAABG" > </label></td>';
-	    $html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
-	    $html .= '      <select id="acideFusidiqueFAABG" style="width: 120px;" disabled> ';
-	    $html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
-	    $html .= '      </select></label> </td>';
-	    $html .= "</tr></table>";
+	    
 	    /*
 	     * Acide nalidixique NA
 	     */
@@ -9939,17 +10125,70 @@ class TechnicienController extends AbstractActionController {
 	    $html .= '      </select></label> </td>';
 	    $html .= "</tr></table>";
 	    /*
-	     * LEV
+	     * Lévofloxacine LEV
 	     */
 	    $html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
 	    $html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
-	    $html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > LEV </span></label></td>';
+	    $html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > L&eacute;vofloxacine LEV </span></label></td>';
 	    $html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixLEVABG" > </label></td>';
 	    $html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
 	    $html .= '      <select id="LEVABG" style="width: 120px;" disabled> ';
 	    $html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
 	    $html .= '      </select></label> </td>';
 	    $html .= "</tr></table>";
+	    
+	    
+
+	    /**
+	     * Autres --- Autres
+	     */
+	    $html .= '<table style="width: 100%; margin-top: 15px;">';
+	    $html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+	    $html .= '  <td style="width: 100%; text-align: left; font-weight: bold; font-size: 12px; font-style: italic;"> &#10148; Autres </td>';
+	    $html .= '</tr>';
+	    $html .= '</table>';
+	     
+	    /*
+	     * Fosfomycine FOS
+	     */
+	    $html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+	    $html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+	    $html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Fosfomycine FOS </span></label></td>';
+	    $html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixFosfomycineFOSABG" > </label></td>';
+	    $html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+	    $html .= '      <select id="fosfomycineFOSABG" style="width: 120px;" disabled> ';
+	    $html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+	    $html .= '      </select></label> </td>';
+	    $html .= "</tr></table>";
+	     
+	    
+	    /*
+	     * Acide fusidique FA
+	     */
+	    $html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+	    $html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+	    $html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Acide fusidique FA </span></label></td>';
+	    $html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixAcideFusidiqueFAABG" > </label></td>';
+	    $html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+	    $html .= '      <select id="acideFusidiqueFAABG" style="width: 120px;" disabled> ';
+	    $html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+	    $html .= '      </select></label> </td>';
+	    $html .= "</tr></table>";
+	    
+	    
+	    /*
+	     * Rifampycine RIF - Rifampycine RIF
+	     */
+	    $html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+	    $html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+	    $html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Rifampycine RIF </span></label></td>';
+	    $html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixRifampicineRAABG" > </label></td>';
+	    $html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+	    $html .= '      <select id="rifampicineRAABG" style="width: 120px;" disabled> ';
+	    $html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+	    $html .= '      </select></label> </td>';
+	    $html .= "</tr></table>";
+	    
 	    
 	    
 	    /*

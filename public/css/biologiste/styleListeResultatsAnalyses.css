@@ -363,7 +363,7 @@ width: 100%; /* la largeur du champ input*/
 }
 
 .liste_patient div{
-	height: 22px;
+	height: 21px;
 	overflow: hidden;
 	
 }
@@ -717,4 +717,10 @@ div .dataTables_paginate
 	margin-bottom: -4px;
 	
 	margin-top: -20px;
+}
+
+
+.labABGRadius{
+	border-top-left-radius: 20px;
+	border-bottom-left-radius: 20px;
 }

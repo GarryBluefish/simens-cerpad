@@ -7,7 +7,7 @@
 * Author:  Olivier PLATHEY                                                     *
 *******************************************************************************/
 
-require('../../../../../../../public/js/plugins/fpdf181/makefont/ttfparser.php');
+require('C:/wamp/www/simens/module/Laboratoire/src/Laboratoire/View/Helper/fpdf181/makefont/ttfparser.php');
 
 function Message($txt, $severity='')
 {

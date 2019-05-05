@@ -1,3 +1,0 @@
-
-IS_LOCALHOST = False
-

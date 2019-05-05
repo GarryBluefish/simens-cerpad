@@ -1,0 +1,3 @@
+commande pour créer un font à partir d'un fichier .ttf
+
+C:\Users\DIALLO>php C:\wamp\www\simens\module\Laboratoire\src\Laboratoire\View\Helper\fpdf181\makefont\makefont.php C:\wamp\www\simens\module\Laboratoire\src\Laboratoire\View\Helper\fpdf181\makefont\BorderfontClassicalsPlain.ttf cp1252

@@ -562,14 +562,10 @@ class ConsultationController extends AbstractActionController {
 	
 	
 	public function consulterAction() {
-		
-		//$output = $this->getConsultationModConsTable()->getHistoriqueDesConsultations(744);
-		//var_dump($output); exit();
-		
-		
-		  //DEBUT --- DEBUT --- DEBUT
-		  $timestart = microtime(true);
-		  //-------------------------
+	    
+	    //DEBUT --- DEBUT --- DEBUT
+	    //$timestart = microtime(true);
+	    //-------------------------
 		
 		$this->layout ()->setTemplate ( 'layout/consultation' );
 	
@@ -1271,13 +1267,9 @@ class ConsultationController extends AbstractActionController {
 	
     public function modifierConsultationAction(){
     	
-    	
-    	//$listeAnalysesDemandees = $this->getAnalyseTable()->getListeAnalysesDemandeesDansConsDP('c_130218_123059', 744);
-    	//var_dump($listeAnalysesDemandees); exit();
-    	
-		  //DEBUT --- DEBUT --- DEBUT
-		  $timestart = microtime(true);
-		  //-------------------------
+		//DEBUT --- DEBUT --- DEBUT
+		//$timestart = microtime(true);
+		//-------------------------
 		
 		$this->layout ()->setTemplate ( 'layout/consultation' );
 	
@@ -2006,9 +1998,6 @@ class ConsultationController extends AbstractActionController {
 	
 	public function listePatientsConsultesAction() {
 		$this->layout ()->setTemplate ( 'layout/consultation' );
-		
-		//$output = $this->getConsultationModConsTable ()->getListePatientsConsultes();
-		//var_dump($output); exit();
 	}
 	
 	
@@ -2041,14 +2030,8 @@ class ConsultationController extends AbstractActionController {
 		 * POUR LE MENU GAUCHE dans -elementgauche.phtml
 		 */
 		 
-
-
-
-		//$listeAnalysesDemandees = $this->getAnalyseTable()->getListeAnalysesDemandeesDansConsDP('c_130218_123059', 744);
-		//var_dump($listeAnalysesDemandees); exit();
-		 
 		//DEBUT --- DEBUT --- DEBUT
-		$timestart = microtime(true);
+		//$timestart = microtime(true);
 		//-------------------------
 		
 		$this->layout ()->setTemplate ( 'layout/consultation' );
@@ -2457,11 +2440,6 @@ class ConsultationController extends AbstractActionController {
 			$form->populateValues($donneesRendezVous);
 		
 		}
-		 
-		 
-		//var_dump($rendezVous); exit();
-		 
-		 
 		 
 		
 		//FIN --- FIN --- FIN --- FIN --- FIN --- FIN --- FIN

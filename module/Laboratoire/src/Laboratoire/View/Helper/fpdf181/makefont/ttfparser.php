@@ -6,6 +6,7 @@
 * Date:    2015-11-29                                                          *
 * Author:  Olivier PLATHEY                                                     *
 *******************************************************************************/
+//namespace Laboratoire\View\Helper\fpdf181\makefont;
 
 class TTFParser
 {

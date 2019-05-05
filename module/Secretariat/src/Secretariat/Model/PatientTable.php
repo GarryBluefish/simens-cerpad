@@ -715,7 +715,7 @@ class PatientTable {
 		->join(array('dem_an' => 'demande_analyse'), 'pat.idpersonne = dem_an.idpatient', array('Date'=>'date', 'Time'=>'time')) 
 		->order(array('dem_an.date' => 'DESC', 'dem_an.time' => 'DESC'))
 		->group('idpatient')
-		->limit(3000);
+		->limit(5000);
 	
 		/* Data set length after filtering */
 		$stat = $sql->prepareStatementForSqlObject($sQuery);
@@ -725,7 +725,7 @@ class PatientTable {
 		$rResult = $rResultFt;
 	
 		$output = array(
-				"iTotalDisplayRecords" => $effectifPatients,//$iFilteredTotal,
+				"iTotalDisplayRecords" => $effectifPatients,
 				"aaData" => array()
 		);
 	
@@ -814,7 +814,7 @@ class PatientTable {
 		$listeDesPatientsAyantDNF = $this->getListePatientsAnalyseDemandeeNonFacturee();
 	
 		/*
-		 * $Control pour convertir la date en fran�ais
+		 * $Control pour convertir la date en francais
 		*/
 		$Control = new DateHelper();
 		

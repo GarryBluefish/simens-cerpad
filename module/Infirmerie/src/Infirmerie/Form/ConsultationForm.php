@@ -195,8 +195,10 @@ class ConsultationForm extends Form {
 						'max' => 100,
 						'min' => 1,
 						'id' => 'poids',
+				        'step' => 'any',
 						'class' => 'poids',
 						'required' => true,
+				    
 				)
 		) );
 		$this->add ( array (
@@ -209,6 +211,7 @@ class ConsultationForm extends Form {
 						'max' => 200,
 						'min' => 45,
 						'id' => 'taille',
+				        'step' => 'any',
 						'required' => true,
 				)
 		) );
@@ -236,6 +239,7 @@ class ConsultationForm extends Form {
 				'attributes' => array (
 						'min' => 30,
 						'max' => 55,
+				        'step' => 'any',
 						'id' => 'perimetre_cranien',
 				)
 		) );

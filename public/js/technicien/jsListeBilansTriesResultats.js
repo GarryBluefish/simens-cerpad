@@ -934,7 +934,7 @@
     	$( "#resultatsAnalyses" ).dialog({
     		resizable: false,
     		height:670,
-    		width:730,
+    		width:750,
     		autoOpen: false,
     		modal: true,
     		buttons: {
@@ -1652,6 +1652,15 @@
 	    return tab;
     }
     
+    /* à modifier au controller biologie - lorsque autre_flore Cocci à Gram est positif */
+    function getAutreFloreCocciPositif(id){
+    	if(id==3){ 
+    		$(".autre_flore_cocci_positif_pv").css({'visibility':'visible'});
+    	}else{
+    		$(".autre_flore_cocci_positif_pv").css({'visibility':'hidden'});
+    	}
+    }
+    
     function getPV(){
     	var tab = [];
     	tab[1] = $('#type_materiel_pv').val();
@@ -1664,7 +1673,8 @@
     	tab[7]  = $('#hematies_champ_pv').val();
     	tab[8]  = $('#cellules_epitheliales_champ_pv').val();
     	tab[9]  = $('#trichomonas_vaginalis_pv').val();
-    	tab[10] = $('#levures_filaments_myceliens_pv').val();
+    	tab[10] = $('#levures_pv').val();
+    	tab[31] = $('#filaments_myceliens_pv').val();
     	
     	tab[11] = $('#gardnerella_vaginalis_pv').val();
     	tab[12] = $('#mobiluncus_spp_pv').val();
@@ -1685,6 +1695,13 @@
     	tab[25] = $('#flore_note_pv').val();
     	tab[26] = $('#recherche_directe_antigene_chlamydia_pv').val();
     	tab[27] = $('#identification_rdm_positive_pv').val();
+    	
+		if($("#identification_rdm_positive_Choix1_pv").get(0).checked){ tab[29] = 1; }else{ tab[29] = -1; } 
+		if($("#identification_rdm_positive_Choix2_pv").get(0).checked){ tab[30] = 1; }else{ tab[30] = -1; } 
+		if($("#autre_flore_cocci_pos_Choix1_pv").get(0).checked){ tab[32] = 1; }else{ tab[32] = -1; } 
+		if($("#autre_flore_cocci_pos_Choix2_pv").get(0).checked){ tab[33] = 1; }else{ tab[33] = -1; } 
+		
+		
     	
     	/**-- Les infos de l'antibiogramme ---**/
     	if(Number(tab[17]) != 0){
@@ -1722,15 +1739,42 @@
     		 * FIN PARTIE B-lactamines
     		 */
     		
+    		/** 
+    		 * PARTIE Glycopeptides 
+    		 */
+    		if($("#choixVancomycineVAABG").get(0).checked){ tab[28][23]  = $("#vancomycineVAABG").val(); }else{ tab[28][23] = -1; } 
+    		if($("#choixTeicoplanineABG").get(0).checked){ tab[28][47]  = $("#teicoplanineABG").val(); }else{ tab[28][47] = -1; } 
+    		
+    		/** 
+    		 * FIN PARTIE Glycopeptides 
+    		 */
+    		
+    		/**
+    	     * PARTIE Produits nitrés 
+    	     */
+    		if($("#choixNitrofuraneABG").get(0).checked){ tab[28][48]  = $("#nitrofuraneABG").val(); }else{ tab[28][48] = -1; } 
+    		if($("#choixMetronidazoleABG").get(0).checked){ tab[28][49]  = $("#metronidazoleABG").val(); }else{ tab[28][49] = -1; } 
+    		/**
+    		 * FIN PARTIE Produits nitrés 
+    		 */
+    		
+    		/**
+    	     * PARTIE Sulfamides
+    	     */
+    		if($("#choixTrimethoprimeSulfametoxazoleSXTABG").get(0).checked){ tab[28][50]  = $("#trimethoprimeSulfametoxazoleSXTABG").val(); }else{ tab[28][50] = -1; } 
+    		/**
+    	     * FIN PARTIE Sulfamides
+    	     */
+    		
     		/**
     		 * PARTIE Polymyxine
-    		 */
-    		if($("#choixFosfomycineFOSABG").get(0).checked){ tab[28][22] = $("#fosfomycineFOSABG").val(); }else{ tab[28][22] = -1; } 
-    		if($("#choixVancomycineVAABG").get(0).checked){ tab[28][23]  = $("#vancomycineVAABG").val(); }else{ tab[28][23] = -1; } 
+    		 */ 
+    		if($("#choixPolymicineABG").get(0).checked){ tab[28][46] = $("#polymicineABG").val(); }else{ tab[28][46] = -1; } 
     		if($("#choixColistineCSABG").get(0).checked){ tab[28][24]    = $("#colistineCSABG").val(); }else{ tab[28][24] = -1; } 
     		/**
     		 * FIN PARTIE Polymyxine
     		 */
+    		
     		
     		/**
     		 * PARTIE Aminosides
@@ -1754,6 +1798,7 @@
     		/**
     		 * PARTIE Cyclines
     		 */
+    		if($("#choixMinocyclineABG").get(0).checked){ tab[28][45] = $("#minocyclineABG").val(); }else{ tab[28][45] = -1; } 
     		if($("#choixTetracyclineTEABG").get(0).checked){ tab[28][30] = $("#tetracyclineTEABG").val(); }else{ tab[28][30] = -1; } 
     		if($("#choixDoxycyclineDOABG").get(0).checked){ tab[28][31] = $("#doxycyclineDOABG").val(); }else{ tab[28][31] = -1; } 
     		/**
@@ -1763,6 +1808,7 @@
     		/** 
     		 * PARTIE Macrolides et apparentés 
     		 */
+    		if($("#choixAzithromycineAZTABG").get(0).checked){ tab[28][44] = $("#azithromycineAZTABG").val(); }else{ tab[28][44] = -1; } 
     		if($("#choixErythromycineEABG").get(0).checked){ tab[28][32] = $("#erythromycineEABG").val(); }else{ tab[28][32] = -1; } 
     		if($("#choixLincomycineLABG").get(0).checked){ tab[28][33] = $("#lincomycineLABG").val(); }else{ tab[28][33] = -1; } 
     		if($("#choixPristinamycinePTABG").get(0).checked){ tab[28][34] = $("#pristinamycinePTABG").val(); }else{ tab[28][34] = -1; } 
@@ -1774,7 +1820,6 @@
     		/**
     		 * PARTIE Fluoroquinolones
     		 */
-    		if($("#choixAcideFusidiqueFAABG").get(0).checked){ tab[28][35] = $("#acideFusidiqueFAABG").val(); }else{ tab[28][35] = -1; } 
     		if($("#choixAcideNalidixiqueNAABG").get(0).checked){ tab[28][36] = $("#acideNalidixiqueNAABG").val(); }else{ tab[28][36] = -1; } 
     		if($("#choixPefloxacinePEFABG").get(0).checked){ tab[28][37] = $("#pefloxacinePEFABG").val(); }else{ tab[28][37] = -1; } 
     		if($("#choixNorfloxacineNORABG").get(0).checked){ tab[28][38] = $("#norfloxacineNORABG").val(); }else{ tab[28][38] = -1; } 
@@ -1787,11 +1832,21 @@
     		/** 
     		 * PARTIE Imidazolés 
     		 */
-    		if($("#choixRifampicineRAABG").get(0).checked){ tab[28][41] = $("#rifampicineRAABG").val(); }else{ tab[28][41] = -1; } 
     		if($("#choixCotrimoxazoleSXTABG").get(0).checked){ tab[28][42] = $("#cotrimoxazoleSXTABG").val(); }else{ tab[28][42] = -1; } 
     		/** 
     		 * FIN PARTIE Imidazolés 
     		 */
+    		
+    		/**
+    		 * PARTIE Autres
+    		 */ 
+    		if($("#choixRifampicineRAABG").get(0).checked){ tab[28][41] = $("#rifampicineRAABG").val(); }else{ tab[28][41] = -1; } 
+    		if($("#choixFosfomycineFOSABG").get(0).checked){ tab[28][22] = $("#fosfomycineFOSABG").val(); }else{ tab[28][22] = -1; } 
+    		if($("#choixAcideFusidiqueFAABG").get(0).checked){ tab[28][35] = $("#acideFusidiqueFAABG").val(); }else{ tab[28][35] = -1; } 
+    		/**
+    		 * FIN PARTIE Autres
+    		 */
+    		
     		
     		/**
     		 * Conclusion
@@ -1805,28 +1860,98 @@
 	    return tab;
     }
     
+    
+    /*
+     * à modifier au controller biologie 
+     */
+    function getChampIdentificationRdmPositive(id){
+    	if(id == '' || id == 2){
+    		$('.identification_rdm_positive_class_titre_pv, .identification_rdm_positive_class_pv').toggle(false);
+    	}else{
+    		$('.identification_rdm_positive_class_titre_pv, .identification_rdm_positive_class_pv').toggle(true);
+    	}
+    }
+    /*
+     * =================================
+     */
+    var tabCommentaire = new Array();
+    
+    /* 1= - Candidose vaginale */
+    function getIconeAntibiogrammeIdentCulture(id,i){
+    	if(id == 0){
+    		$('.antibiogrammeButtonAffInterface'+i).toggle(false);
+    		tabCommentaire[1] = -1;
+    		if(tabCommentaire.hasOwnProperty(4)){ $('#flore_pv').trigger('change'); }
+    	}else{
+    		$('.antibiogrammeButtonAffInterface'+i).toggle(true);
+    		tabCommentaire[1] = "- Candidose vaginale \r\n";
+    		if(tabCommentaire.hasOwnProperty(4)){ tabCommentaire[4] = -1; }
+    	}
+    	
+    	setCommenataireAutoPvABG();
+    }
+    
+    /* 0= - Vaginose bactérienne à Gardenella vaginalis */
+    function getCommentaireAutoPvABG(id){  
+    	if(id==1){
+    		tabCommentaire[0] = "- Vaginose bactérienne à Gardenella vaginalis \r\n";
+    		if(tabCommentaire.hasOwnProperty(3)){ tabCommentaire[3] = -1; }
+    	}else{ 
+    	
+    		tabCommentaire[0] = -1; 
+    		if(tabCommentaire.hasOwnProperty(3)){ $('#flore_pv').trigger('change'); }
+    	}
+    	
+    	setCommenataireAutoPvABG();
+    }
+    
+    /* 2= - Vaginite à Trichomonas vaginalis */
+    function getTrichomonasVaginalisAutoPvABG(id){
+    	if(id==1){
+    		tabCommentaire[2] = "- Vaginite à Trichomonas vaginalis \r\n";
+    	}else{ tabCommentaire[2] = -1; }
+    	
+    	setCommenataireAutoPvABG();
+    }
+    
+    /* 3= - Flore vaginale déséquilibrée */
+    /* 4= - Flore vaginale normale */
     function getChampFloreNote(id){
     	if(id == ''){
     		$('.flore_note_class_pv').css({'visibility':'hidden'});
+    		tabCommentaire[3] = -1;
     	}else{
     		$('.flore_note_class_pv').css({'visibility':'visible'}).val('');
+    		
+    		/* 3= - Flore vaginale déséquilibrée */
+    		if(id == 3 || id == 4){
+    			if(tabCommentaire[0] == -1){
+    				tabCommentaire[3] = "- Flore vaginale déséquilibrée \r\n";
+    			}else{ tabCommentaire[3] = -1; }
+    		}else{ tabCommentaire[3] = -1; }
+    		
+    		/* 4= - Flore vaginale normale */
+    		if(id == 1 || id == 2){
+    			if(tabCommentaire[1] == -1){
+    				tabCommentaire[4] = "- Flore vaginale normale \r\n";
+    			}else{ tabCommentaire[4] = -1; }
+    		}else{ tabCommentaire[4] = -1; }
+    		
     	}
+    	
+    	setCommenataireAutoPvABG();
     }
     
-    function getChampIdentificationRdmPositive(id){
-    	if(id == '' || id == 2){
-    		$('.identification_rdm_positive_class_pv').css({'visibility':'hidden'});
-    	}else{
-    		$('.identification_rdm_positive_class_pv').css({'visibility':'visible'}).val('');
-    	}
-    }
     
-    function getIconeAntibiogrammeIdentCulture(id,i){ 
-    	if(id == 0){
-    		$('.antibiogrammeButtonAffInterface'+i).toggle(false);
-    	}else{
-    		$('.antibiogrammeButtonAffInterface'+i).toggle(true);
+    function setCommenataireAutoPvABG(){
+    	var commentaire = "";
+    	for(var i=0 ; i<tabCommentaire.length ; i++){
+    		if(tabCommentaire[i] && tabCommentaire[i]!= -1){
+        		commentaire += tabCommentaire[i];
+    		}
     	}
+    	
+    	$('#commentaire_pv').val(commentaire);
     }
     
     
@@ -2428,7 +2553,7 @@
   	    $( "#resultatsAnalysesDuneDemande" ).dialog({
   	    resizable: false,
   	    height:670,
-  	    width:720,
+  	    width:750,
   	    autoOpen: false,
   	    modal: true,
   	    buttons: {
@@ -3845,7 +3970,7 @@
     	  $( "#resultatsAnalysesParType" ).dialog({
     	    resizable: false,
     	    height:670,
-    	    width:720,
+    	    width:750,
     	    autoOpen: false,
     	    modal: true,
     	    buttons: {

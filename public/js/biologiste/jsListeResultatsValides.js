@@ -835,7 +835,7 @@
     	$( "#resultatsAnalyses" ).dialog({
     		resizable: false,
     		height:670,
-    		width:730,
+    		width:750,
     		autoOpen: false,
     		modal: true,
     		buttons: {
@@ -2004,6 +2004,24 @@
    	}
    }
    
+   function getChampIdentificationRdmPositive(id){
+	   
+	   	if(id == '' || id == 2){
+	   		$('.identification_rdm_positive_class_titre_pv, .identification_rdm_positive_class_pv').toggle(false);
+	   	}else{
+	   		$('.identification_rdm_positive_class_titre_pv, .identification_rdm_positive_class_pv').toggle(true);
+	   	}
+   }
+	   
+   function getAutreFloreCocciPositif(id){
+
+	   if(id==3){ 
+	   		$(".autre_flore_cocci_positif_pv").css({'visibility':'visible'});
+	   	}else{
+	   		$(".autre_flore_cocci_positif_pv").css({'visibility':'hidden'});
+	   	}
+   }
+   
    function getChampIdentificationCulture(nb){ 
    	
    	for(var i=1 ; i<nb ; i++){ 
@@ -2051,7 +2069,7 @@
   	    $( "#resultatsAnalysesDuneDemande" ).dialog({
   	    resizable: false,
   	    height:670,
-  	    width:720,
+  	    width:750,
   	    autoOpen: false,
   	    modal: true,
   	    buttons: {

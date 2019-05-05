@@ -3937,26 +3937,45 @@ class ResultatDemandeAnalyseTable {
 	    if($tab[7]){ $donnees['hematies_champ'] = $tab[7]; }else{ $donnees['hematies_champ'] = null; }
 	    if($tab[8]){ $donnees['cellules_epitheliales'] = $tab[8]; }else{ $donnees['cellules_epitheliales'] = null; }
 	    if($tab[9]){ $donnees['trichomonas_vaginalis'] = $tab[9]; }else{ $donnees['trichomonas_vaginalis'] = null; }
-	    if($tab[10]){ $donnees['levures_filaments_myceliens'] = $tab[10]; }else{ $donnees['levures_filaments_myceliens'] = null; }
+	    if($tab[10]){ $donnees['levures'] = $tab[10]; }else{ $donnees['levures'] = null; }
+	    if($tab[31]){ $donnees['filaments_myceliens'] = $tab[31]; }else{ $donnees['filaments_myceliens'] = null; }
 	
 	    if($tab[11]){ $donnees['gardnerella_vaginalis'] = $tab[11]; }else{ $donnees['gardnerella_vaginalis'] = null; }
 	    if($tab[12]){ $donnees['mobiluncus_spp'] = $tab[12]; }else{ $donnees['mobiluncus_spp'] = null; }
 	    if($tab[13]){ $donnees['clue_cells'] = $tab[13]; }else{ $donnees['clue_cells'] = null; }
 	    if($tab[14]){ $donnees['lactobacillus'] = $tab[14]; }else{ $donnees['lactobacillus'] = null; }
-	    if($tab[15]){ $donnees['autre_flore'] = $tab[15]; }else{ $donnees['autre_flore'] = null; }
+	    if($tab[15]){ 
+	        $donnees['autre_flore'] = $tab[15]; 
+	        if($tab[15] == 3){
+	            $donnees['autre_flore_cocci_pos_Choix1'] = ($tab[32] != -1)? $tab[32] : null;
+	            $donnees['autre_flore_cocci_pos_Choix2'] = ($tab[33] != -1)? $tab[33] : null;
+	        }else{
+	            $donnees['autre_flore_cocci_pos_Choix1'] = null;
+	            $donnees['autre_flore_cocci_pos_Choix2'] = null;
+	        }
+	    
+	    }else{
+	        $donnees['autre_flore'] = null; 
+	        $donnees['autre_flore_cocci_pos_Choix1'] = null;
+	        $donnees['autre_flore_cocci_pos_Choix2'] = null;
+	    }
+	    
 	    
 	    if($tab[16]){ $donnees['culture'] = $tab[16]; }else{ $donnees['culture'] = null; }
 	    if($tab[17]){ $donnees['identification_culture'] = $tab[17]; }else{ $donnees['identification_culture'] = null; }
-	    if($tab[18]){ 
+	    if($tab[18]){
 	        $donnees['recherche_directe_mycoplasmes'] = $tab[18]; 
 	        if($tab[18] == 1){
-	            if($tab[27]){ $donnees['identification_rdm_positive'] = $tab[27]; }else{ $donnees['identification_rdm_positive'] = null; }
+	            $donnees['identification_rdm_positive_choix1'] = ($tab[29] != -1) ? $tab[29] : null;
+	            $donnees['identification_rdm_positive_choix2'] = ($tab[30] != -1) ? $tab[30] : null;
 	        }else{
-	            $donnees['identification_rdm_positive'] = null;
+	            $donnees['identification_rdm_positive_choix1'] = null;
+	            $donnees['identification_rdm_positive_choix2'] = null;
 	        }
 	    }else{ 
 	        $donnees['recherche_directe_mycoplasmes'] = null; 
-	        $donnees['identification_rdm_positive'] = null;
+	        $donnees['identification_rdm_positive_choix1'] = null;
+	        $donnees['identification_rdm_positive_choix2'] = null;
 	    }
 	    
 	    if(str_replace( " ", "",$tab[20])){ $donnees['commentaire'] = $tab[20]; }else{ $donnees['commentaire'] = null; }
@@ -4014,11 +4033,38 @@ class ResultatDemandeAnalyseTable {
 	         */
 	    
 	        /**
+	         * PARTIE Glycopeptides
+	         */
+	        if($tab[28][23] != -1){ $donneesAntibiogramme['vancomycineVA'] = $tab[28][23]; }else{ $donneesAntibiogramme['vancomycineVA'] = null; }
+	        if($tab[28][47] != -1){ $donneesAntibiogramme['teicoplanine']  = $tab[28][47]; }else{ $donneesAntibiogramme['teicoplanine']  = null; }
+	         
+	        /**
+	         * FIN PARTIE Glycopeptides
+	         */
+	        
+	        /**
+	         * PARTIE Produits nitrés
+	         */
+	        if($tab[28][48] != -1){ $donneesAntibiogramme['nitrofurane']   = $tab[28][48]; }else{ $donneesAntibiogramme['nitrofurane']   = null; }
+	        if($tab[28][49] != -1){ $donneesAntibiogramme['metronidazole'] = $tab[28][49]; }else{ $donneesAntibiogramme['metronidazole'] = null; }
+	          
+	        /**
+	         * FIN PARTIE Produits nitrés
+	         */
+	        
+	        /**
+	         * PARTIE Sulfamides
+	         */
+	        if($tab[28][50] != -1){ $donneesAntibiogramme['trimethoprimeSulfametoxazoleSXT'] = $tab[28][50]; }else{ $donneesAntibiogramme['trimethoprimeSulfametoxazoleSXT'] = null; }
+	        /**
+	         * FIN PARTIE Sulfamides
+	         */
+	        
+	        /**
 	         * PARTIE Polymyxine
 	         */
-	        if($tab[28][22] != -1){ $donneesAntibiogramme['fosfomycineFOS'] = $tab[28][22]; }else{ $donneesAntibiogramme['fosfomycineFOS'] = null; }
-	        if($tab[28][23] != -1){ $donneesAntibiogramme['vancomycineVA']  = $tab[28][23]; }else{ $donneesAntibiogramme['vancomycineVA'] = null; }
 	        if($tab[28][24] != -1){ $donneesAntibiogramme['colistineCS']    = $tab[28][24]; }else{ $donneesAntibiogramme['colistineCS'] = null; }
+	        if($tab[28][46] != -1){ $donneesAntibiogramme['polymicine'] = $tab[28][46]; }else{ $donneesAntibiogramme['polymicine'] = null; }
 	        /**
 	         * FIN PARTIE Polymyxine
 	         */
@@ -4045,8 +4091,9 @@ class ResultatDemandeAnalyseTable {
 	        /**
 	         * PARTIE Cyclines
 	         */
+	        if($tab[28][45] != -1){ $donneesAntibiogramme['minocycline']    = $tab[28][45]; }else{ $donneesAntibiogramme['minocycline']    = null; }
 	        if($tab[28][30] != -1){ $donneesAntibiogramme['tetracyclineTE'] = $tab[28][30]; }else{ $donneesAntibiogramme['tetracyclineTE'] = null; }
-	        if($tab[28][31] != -1){ $donneesAntibiogramme['doxycyclineDO']  = $tab[28][31]; }else{ $donneesAntibiogramme['doxycyclineDO'] = null; }
+	        if($tab[28][31] != -1){ $donneesAntibiogramme['doxycyclineDO']  = $tab[28][31]; }else{ $donneesAntibiogramme['doxycyclineDO']  = null; }
 	        /**
 	         * FIN PARTIE Cyclines
 	         */
@@ -4054,6 +4101,7 @@ class ResultatDemandeAnalyseTable {
 	        /**
 	         * PARTIE Macrolides et apparentés
 	         */
+	        if($tab[28][44] != -1){ $donneesAntibiogramme['azithromycineAZT'] = $tab[28][44]; }else{ $donneesAntibiogramme['azithromycineAZT'] = null; }
 	        if($tab[28][32] != -1){ $donneesAntibiogramme['erythromycineE']   = $tab[28][32]; }else{ $donneesAntibiogramme['erythromycineE'] = null; }
 	        if($tab[28][33] != -1){ $donneesAntibiogramme['lincomycineL']     = $tab[28][33]; }else{ $donneesAntibiogramme['lincomycineL'] = null; }
 	        if($tab[28][34] != -1){ $donneesAntibiogramme['pristinamycinePT'] = $tab[28][34]; }else{ $donneesAntibiogramme['pristinamycinePT'] = null; }
@@ -4065,7 +4113,6 @@ class ResultatDemandeAnalyseTable {
 	        /**
 	         * PARTIE Fluoroquinolones
 	         */
-	        if($tab[28][35] != -1){ $donneesAntibiogramme['acideFusidiqueFA'] = $tab[28][35]; }else{ $donneesAntibiogramme['acideFusidiqueFA'] = null; }
 	        if($tab[28][36] != -1){ $donneesAntibiogramme['acideNalidixiqueNA'] = $tab[28][36]; }else{ $donneesAntibiogramme['acideNalidixiqueNA'] = null; }
 	        if($tab[28][37] != -1){ $donneesAntibiogramme['pefloxacinePEF'] = $tab[28][37]; }else{ $donneesAntibiogramme['pefloxacinePEF'] = null; }
 	        if($tab[28][38] != -1){ $donneesAntibiogramme['norfloxacineNOR'] = $tab[28][38]; }else{ $donneesAntibiogramme['norfloxacineNOR'] = null; }
@@ -4079,12 +4126,22 @@ class ResultatDemandeAnalyseTable {
 	        /**
 	         * PARTIE Imidazolés
 	         */
-	        if($tab[28][41] != -1){ $donneesAntibiogramme['rifampicineRA'] = $tab[28][41]; }else{ $donneesAntibiogramme['rifampicineRA'] = null; }
 	        if($tab[28][42] != -1){ $donneesAntibiogramme['cotrimoxazoleSXT'] = $tab[28][42]; }else{ $donneesAntibiogramme['cotrimoxazoleSXT'] = null; }
 	        
 	        /**
 	         * FIN PARTIE Imidazolés
 	         */
+	        
+	        /**
+	         * PARTIE Autres
+	         */
+	        if($tab[28][22] != -1){ $donneesAntibiogramme['fosfomycineFOS'] = $tab[28][22]; }else{ $donneesAntibiogramme['fosfomycineFOS'] = null; }
+	        if($tab[28][35] != -1){ $donneesAntibiogramme['acideFusidiqueFA'] = $tab[28][35]; }else{ $donneesAntibiogramme['acideFusidiqueFA'] = null; }
+	        if($tab[28][41] != -1){ $donneesAntibiogramme['rifampicineRA'] = $tab[28][41]; }else{ $donneesAntibiogramme['rifampicineRA'] = null; }
+	        /**
+	         * FIN PARTIE Autres
+	         */
+	        
 	        
 	        /**
 	         * Conclusion

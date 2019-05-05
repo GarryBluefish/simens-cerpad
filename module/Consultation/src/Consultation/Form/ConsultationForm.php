@@ -185,6 +185,7 @@ class ConsultationForm extends Form {
 						'max' => 100,
 						'min' => 1,
 						'id' => 'poids',
+				        'step' => 'any',
 						'class' => 'poids',
 						'required' => true,
 				)
@@ -199,6 +200,7 @@ class ConsultationForm extends Form {
 						'max' => 200,
 						'min' => 45,
 						'id' => 'taille',
+    				    'step' => 'any',
 						'required' => true,
 				)
 		) );
@@ -227,6 +229,7 @@ class ConsultationForm extends Form {
 						'min' => 30,
 						'max' => 55,
 						'id' => 'perimetre_cranien',
+	    			    'step' => 'any',
 				)
 		) );
 		
@@ -235,7 +238,8 @@ class ConsultationForm extends Form {
 				'type' => 'Text',
 				'attributes' => array (
 						'class' => 'tension_only_numeric',
-						'id' => 'tensionmaximale'
+						'id' => 'tensionmaximale',
+    				    'step' => 'any',
 				)
 		) );
 		
@@ -244,7 +248,8 @@ class ConsultationForm extends Form {
 				'type' => 'Text',
 				'attributes' => array (
 						'class' => 'tension_only_numeric',
-						'id' => 'tensionminimale'
+						'id' => 'tensionminimale',
+				        'step' => 'any',
 				)
 		) );
 		
@@ -257,7 +262,8 @@ class ConsultationForm extends Form {
 				'attributes' => array (
 						'class' => 'pouls_only_numeric',
 						'readonly' => 'readonly',
-						'id' => 'pouls'
+						'id' => 'pouls',
+				        'step' => 'any',
 				)
 		) );
 		$this->add ( array (
