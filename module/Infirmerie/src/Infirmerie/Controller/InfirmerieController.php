@@ -239,7 +239,7 @@ class InfirmerieController extends AbstractActionController {
 	    $debut_ts = strtotime($debut);
 	    $fin_ts = strtotime($fin);
 	    $diff = $fin_ts - $debut_ts;
-	    return ($diff / $nbSecondes);
+	    return (int)($diff / $nbSecondes);
 	}
 	
 	public function prixMill($prix) {
@@ -290,12 +290,25 @@ class InfirmerieController extends AbstractActionController {
 					
 				if($depistage->current()['typepatient'] == 1){
 					$type = "Interne";
-					$typage = "(<span style='color: red;'>".$typageHemoglobine['designation']."</span>)" ;
+						
+					$designation = $typageHemoglobine['designation'];
+					if($designation == 'SB+thal'){ $designation = "S&beta;<sup>+</sup> thalass&eacute;mie"; }else
+					if($designation == 'SB°thal'){ $designation = "S&beta;&deg; thalass&eacute;mie"; }
+						
+					$typage = "(<span style='color: red;'>".$designation."</span>)" ;
+				
 				}else{
-					$typage = "(".$typageHemoglobine['designation'].")" ;
+					$designation = $typageHemoglobine['designation'];
+					if($designation == 'AB+thal'){ $designation = "A&beta;<sup>+</sup> thalass&eacute;mie"; }else
+					if($designation == 'AB°thal'){ $designation = "A&beta;&deg; thalass&eacute;mie"; }
+				
+					$typage = "(".$designation.")" ;
 				}
+				
+				
 			}
 		}
+		
 	     
 	    $html ="
 	  
@@ -719,8 +732,13 @@ class InfirmerieController extends AbstractActionController {
 	
 		$listeAnalysesDemandees = $this->getFacturationTable()->getListeAnalysesFactureesPourInfirmerie($idfacturation);
 		$Prelevements = array();
+		$analyseFluorure = array();
+		
 		for($i = 0 ; $i < count($listeAnalysesDemandees) ; $i++){
 			
+		    $idanalyse = $listeAnalysesDemandees[$i]['idanalyse'];
+		    if($idanalyse == 72 || $idanalyse == 73){ $analyseFluorure[] = $idanalyse; }
+		    
  			if(!in_array($listeAnalysesDemandees[$i]['LibelleTube'], $Prelevements)){ $Prelevements [] = $listeAnalysesDemandees[$i]['LibelleTube']; }
 			
 			
@@ -793,10 +811,11 @@ class InfirmerieController extends AbstractActionController {
 		             		$i = 1;
 		             		foreach ($listeCodes as $codes){
 		             		
-		             			$codage = "<i>p".$i.":</i> &nbsp;<span id='pr".$i."'> ".$codes->annee."-".$codes->numero;
+		             			$codage = "<i>p".$i." :</i> &nbsp;<span id='pr".$i."'> ".$codes->annee."-".$codes->numero;
 		             			$LettrePrelevement = $codes->prelevement;
-		             			$html .= $this->codesPrelevements($codage, $LettrePrelevement);
-		             		
+		             			if($LettrePrelevement == "F-p0"){ if(in_array(72, $analyseFluorure)){ $infoLibelle = "HPVO"; }else{ $infoLibelle = "GPP"; } }else{ $infoLibelle = null; }
+		             			$html .= $this->codesPrelevements($codage, $LettrePrelevement, $infoLibelle);
+		             			
 		             			$html .="<style> #pr".$i.":hover{font-weight: bold;}; </style>";
 		             		
 		             			$i++;
@@ -831,15 +850,64 @@ class InfirmerieController extends AbstractActionController {
 		$html .="<input type='hidden' id='numeroOrdrePrelevement' name='numeroOrdrePrelevement' style='display: none;'>";
 		$html .="<input type='hidden' id='lettrePrelevement'      name='lettrePrelevement'      style='display: none;'>";
 		
+
+		/*NOUVEAU CODE*/
+		/*NOUVEAU CODE*/
+		if(in_array(72, $analyseFluorure) || in_array(73, $analyseFluorure)){
+		    $idAnalyseChoisie = (in_array(72, $analyseFluorure)) ? 72:73;
+		    $html .="<div id='prelevementGPPHPVO_AutoAjoutLigne1' class='prelevementGPPHPVO_AutoAjout'>";
+		    $html .="<div class='autre_prelev_GPP_HPVO'>2<sup>&egrave;me</sup> pr&eacute;l&egrave;vement de";
+		    if($idAnalyseChoisie == 72){$html .=" l'HPVO";}else{$html .=" la GPP";}
+		    $html .="</div>";
+		    $html .="<div class='barre_separat_prelev_GPP_HPVO'></div>";
+		    
+		    $html .="<table id='form_patient' style='margin-left:17.5%; width: 80%; border-bottom: 1px solid #F1F1F1;'>
+		           <tr style='vertical-align: top; background: re;'>
+		             <td class='comment-form-patient ' style='width: 20%; vertical-align:top; margin-right:0px;'>
+		               <label>Date & Heure</label>
+		               <input type='text' style='width:90%;' id='dateHeureGPPHPVO1'>
+		             </td>
+		             <td class='comment-form-patient ' style='width: 12%; vertical-align:top; margin-right:0px;'>
+		               <label>Intervalle </label>
+		               <input type='text' style='width:80%;' id='intervalleGPPHPVO1'>
+		             </td>
+                     <td class='comment-form-patient ' style='width: 45%; vertical-align:top; margin-right:0px;'>
+		               <label>Difficult&eacute;s rencontr&eacute;es</label>
+		               <input type='text' style='width:95%;' value='Aucune' id='difficultesGPPHPVO1'>
+		             </td>
+	                 <td class='comment-form-patient ' style='width: 23%; vertical-align:top; margin-right:0px;'>
+		               <label>Origine</label>
+		               <input type='text' style='width:90%;' id='origineGPPHPVO1'>
+		             </td>
+		           </tr>";
+		    $html .="</table>";
+		    
+		    $html .="</div>";
+		    
+		    
+		    $html .="<div class='autre_prelevGPPHPVO_pm' >";
+		    $html .="<div id='autre_prelevGPPHPVO_moins' class='apGPPHPVOM' onclick='suppressionAutoLigneGPPHPVO(".$idAnalyseChoisie.");' style='visibility: hidden;'> &minus; </div>";
+		    $html .="<div id='autre_prelevGPPHPVO_plus'  class='apGPPHPVOP' onclick='ajoutAutoLigneGPPHPVO(".$idAnalyseChoisie.");' > &plus; </div>";
+		    $html .="</div>";
+		}
+		
+		
+		
+		
 		$html .="<button id='validerForm' style='display: none;'> </button>";
 		
 		$html .="</form>";
 		
 		
-		$html .="<div style='color: white; opacity: 1; margin-top: -50px; margin-left:50px; width:95px; height:40px; float:left'>
+		$html .="<div style='width: 100px; background: red;'>";
+		$html .="<div style='color: white; opacity: 1; margin-top: 10px; margin-left:50px; width:95px; height:40px; float:left;' >
 	                <img  src='".$this->baseUrl()."public/images_icons/fleur1.jpg' />
 	             </div>";
-		 
+		$html .="</div>";
+		
+		/*NOUVEAU CODE*/
+		/*NOUVEAU CODE*/
+		
 		$html .="<script> 
 				
 				  $('#nb_tube').attr({'readonly':true}).val(".count($Prelevements).").css({'background':'#eee','border-bottom-width':'0px','border-top-width':'0px','border-left-width':'0px','border-right-width':'0px','font-weight':'bold','font-family': 'Times  New Roman','font-size':'22px'});;
@@ -1032,7 +1100,7 @@ class InfirmerieController extends AbstractActionController {
 	}
 	
 	
-	public function codesPrelevements($codage, $Prelevements) {
+	public function codesPrelevements($codage, $Prelevements, $infoLibelle) {
 	
 		if($Prelevements == "S"){
 			return $codage."-<span title='Sec' style='cursor:pointer;'>S</span></span><br>";
@@ -1048,6 +1116,10 @@ class InfirmerieController extends AbstractActionController {
 		}
 		if($Prelevements == "F"){
 			return $codage."-<span title='Fluorure' style='cursor:pointer;'>F</span></span><br>";
+		}
+		if($Prelevements == "F-p0"){
+		    $infoBulle = ($infoLibelle == "GPP") ? "la GPP":"l'HPVO";
+		    return $codage.'-<span title="Fluorure" style="cursor:pointer;">F</span> - <span title="Premier prél&egrave;vement pour '.$infoBulle.'" style="cursor:pointer;">p0</span></span><br>';
 		}
 		if($Prelevements == "Pb"){
 			return $codage."-<span title='Papier buvard' style='cursor:pointer;'>Pb</span></span><br>";
@@ -1103,12 +1175,15 @@ class InfirmerieController extends AbstractActionController {
 		
 		$listeAnalysesDemandees = $this->getFacturationTable()->getListeAnalysesFactureesPourInfirmerie($idfacturation);
 		$Prelevements = array();
+		$analyseFluorure = array();
+		
 		for($i = 0 ; $i < count($listeAnalysesDemandees) ; $i++){
 				
+			$idanalyse = $listeAnalysesDemandees[$i]['idanalyse'];
+			if($idanalyse == 72 || $idanalyse == 73){ $analyseFluorure[] = $idanalyse; }
+			
 			if(!in_array($listeAnalysesDemandees[$i]['LibelleTube'], $Prelevements)){ $Prelevements [] = $listeAnalysesDemandees[$i]['LibelleTube']; }
-				
-				
-		
+			
 			$html .="<tr style='height:20px; width:100%; font-family: times new roman;'>
  					    <td id='typeA' style='font-size: 13px;'> ".$listeAnalysesDemandees[$i]['libelle']." </td>
   					    <td id='analyseA' style='font-size: 13px;'> ".$listeAnalysesDemandees[$i]['designation']." </td>";
@@ -1193,8 +1268,9 @@ class InfirmerieController extends AbstractActionController {
 			foreach ($listeCodes as $codes){
 				
 				$codage = "<i>p".$i.":</i> &nbsp;<span id='pr".$i."'> ".$codes->annee."-".$codes->numero;
-				$Prelevements = $codes->prelevement;
-				$html .= $this->codesPrelevements($codage, $Prelevements);
+				$LettrePrelevement = $codes->prelevement;
+				if($LettrePrelevement == "F-p0"){ if(in_array(72, $analyseFluorure)){ $infoLibelle = "HPVO"; }else{ $infoLibelle = "GPP"; } }else{ $infoLibelle = null; }
+				$html .= $this->codesPrelevements($codage, $LettrePrelevement, $infoLibelle);
 				
 				$html .="<style> #pr".$i.":hover{font-weight: bold;}; </style>";
 				
@@ -1221,8 +1297,11 @@ class InfirmerieController extends AbstractActionController {
 			$html .="<td style='width: 15%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Transfuser </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 15px; padding-top: 5px; font-size:19px; width: 60%;'> ".$transfuser." </p></td>";
 			$html .="<td style='width: 35%; vertical-align:top; margin-right:10px;'>";
 					
+			$originePrelevement = $bilanPrelevement->origine_prelevement;
 			if($moment_transfusion){
 				$html .="<span id='labelHeureLABEL' style='padding-left: 5px;'>Dans les 3 derniers mois </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 15px; padding-top: 5px; font-size:19px; width: 60%;'> ".$moment_transfusion." </p>";
+			}elseif ($originePrelevement){
+				$html .="<span id='labelHeureLABEL' style='padding-left: 5px;'>Origine du pr&eacute;l&egrave;vement </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 15px; padding-top: 5px; font-size:19px; width: 60%;'> ".$originePrelevement." </p>";
 			}
 					
 			$html .="</td>";
@@ -1232,12 +1311,21 @@ class InfirmerieController extends AbstractActionController {
 			
 			$diagnostic = $bilanPrelevement->diagnostic;
 			$traitement = $bilanPrelevement->traitement;
+			$html .="<table id='form_patient' style='margin-top:10px; margin-left:17.5%; width: 80%; margin-bottom: 10px;'>";
+			$html .="<tr>";
+
+			if($moment_transfusion && $originePrelevement){
+				$html .="<td style='width: 30%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Origine du pr&eacute;l&egrave;vement </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-size:17px; max-height: 90px; width: 95%;'> ".$originePrelevement." </p></td>";
+			}
+			
 			if($diagnostic){
-				$html .="<table id='form_patient' style='margin-top:10px; margin-left:17.5%; width: 80%; margin-bottom: 10px;'>";
 				$html .="<td style='width: 35%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Diagnostic </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-size:17px; max-height: 90px; width: 95%;'> ".$diagnostic." </p></td>";
 				$html .="<td style='width: 35%; vertical-align:top; margin-right:10px;'><span id='labelHeureLABEL' style='padding-left: 5px;'>Traitement </span><br><p id='zoneChampInfo1' style='background:#f8faf8; padding-left: 5px; padding-top: 5px; font-size:17px; max-height: 90px; width: 95%;'> ".$traitement." </p></td>";
-				$html .="</table>";
+			}else{
+				$html .="<td style='width: 70%; vertical-align:top; margin-right:10px;'></td>";
 			}
+			$html .="</tr>";
+			$html .="</table>";
 
 		}
 
@@ -1291,7 +1379,12 @@ class InfirmerieController extends AbstractActionController {
 		
 		$listeAnalysesDemandees = $this->getFacturationTable()->getListeAnalysesFactureesPourInfirmerie($idfacturation);
 		$Prelevements = array();
+		$analyseFluorure = array();
+		
 		for($i = 0 ; $i < count($listeAnalysesDemandees) ; $i++){
+		    
+		    $idanalyse = $listeAnalysesDemandees[$i]['idanalyse'];
+		    if($idanalyse == 72 || $idanalyse == 73){ $analyseFluorure[] = $idanalyse; }
 				
 			if(!in_array($listeAnalysesDemandees[$i]['LibelleTube'], $Prelevements)){ $Prelevements [] = $listeAnalysesDemandees[$i]['LibelleTube']; }
 				
@@ -1366,7 +1459,8 @@ class InfirmerieController extends AbstractActionController {
 		
  			$codage = "<i>p".$i.":</i> &nbsp;<span id='pr".$i."'> ".$codes->annee."-".$codes->numero;
  			$LettrePrelevement = $codes->prelevement;
- 			$html .= $this->codesPrelevements($codage, $LettrePrelevement);
+ 			if($LettrePrelevement == "F-p0"){ if(in_array(72, $analyseFluorure)){ $infoLibelle = "HPVO"; }else{ $infoLibelle = "GPP"; } }else{ $infoLibelle = null; }
+ 			$html .= $this->codesPrelevements($codage, $LettrePrelevement, $infoLibelle);
 		
  			$html .="<style> #pr".$i.":hover{font-weight: bold;}; </style>";
 		
@@ -1605,7 +1699,7 @@ class InfirmerieController extends AbstractActionController {
 			$i = 1;
 			foreach ($listeCodes as $codes){
 		
-				$codage = "<i>p".$i.":</i> &nbsp;<span id='pr".$i."'> ".$codes->annee."-".$codes->numero;
+				$codage = "<i>p".$i." :</i> &nbsp;<span id='pr".$i."'> ".$codes->annee."-".$codes->numero;
 				$Prelevements = $codes->prelevement;
 				$html .= $this->codesPrelevements($codage, $Prelevements);
 		
@@ -1790,6 +1884,9 @@ class InfirmerieController extends AbstractActionController {
 		}
 		if($Prelevements == "F"){
 			return $codage."-<span title='Fluorure' style='cursor:pointer;'>F</span>-R</span><br>";
+		}
+		if($Prelevements == "F-p0"){
+		    return $codage."-<span title='Fluorure' style='cursor:pointer;'>F</span> - <span title='Premier prélevement' style='cursor:pointer;'>p0</span></span><br>";
 		}
 		if($Prelevements == "Pb"){
 			return $codage."-<span title='Papier buvard' style='cursor:pointer;'>Pb</span>-R</span><br>";
@@ -2092,10 +2189,22 @@ class InfirmerieController extends AbstractActionController {
 					
 				if($depistage->current()['typepatient'] == 1){
 					$type = "Interne";
-					$typage = "(<span style='color: red;'>".$typageHemoglobine['designation']."</span>)" ;
+						
+					$designation = $typageHemoglobine['designation'];
+					if($designation == 'SB+thal'){ $designation = "S&beta;<sup>+</sup> thalass&eacute;mie"; }else
+					if($designation == 'SB°thal'){ $designation = "S&beta;&deg; thalass&eacute;mie"; }
+						
+					$typage = "(<span style='color: red;'>".$designation."</span>)" ;
+				
 				}else{
-					$typage = "(".$typageHemoglobine['designation'].")" ;
+					$designation = $typageHemoglobine['designation'];
+					if($designation == 'AB+thal'){ $designation = "A&beta;<sup>+</sup> thalass&eacute;mie"; }else
+					if($designation == 'AB°thal'){ $designation = "A&beta;&deg; thalass&eacute;mie"; }
+				
+					$typage = "(".$designation.")" ;
 				}
+				
+				
 			}
 		}
 		
@@ -2274,10 +2383,21 @@ class InfirmerieController extends AbstractActionController {
 					
 				if($depistage->current()['typepatient'] == 1){
 					$type = "Interne";
-					$typage = "(<span style='color: red;'>".$typageHemoglobine['designation']."</span>)" ;
+						
+					$designation = $typageHemoglobine['designation'];
+					if($designation == 'SB+thal'){ $designation = "S&beta;<sup>+</sup> thalass&eacute;mie"; }else
+					if($designation == 'SB°thal'){ $designation = "S&beta;&deg; thalass&eacute;mie"; }
+						
+					$typage = "(<span style='color: red;'>".$designation."</span>)" ;
+				
 				}else{
-					$typage = "(".$typageHemoglobine['designation'].")" ;
+					$designation = $typageHemoglobine['designation'];
+					if($designation == 'AB+thal'){ $designation = "A&beta;<sup>+</sup> thalass&eacute;mie"; }else
+					if($designation == 'AB°thal'){ $designation = "A&beta;&deg; thalass&eacute;mie"; }
+				
+					$typage = "(".$designation.")" ;
 				}
+				
 			}
 		}
 		//---- FIN GESTION DU TYPE DE PATIENT ----
@@ -2507,9 +2627,19 @@ class InfirmerieController extends AbstractActionController {
 					
 				if($depistage->current()['typepatient'] == 1){
 					$type = "Interne";
-					$typage = "(<span style='color: red;'>".$typageHemoglobine['designation']."</span>)" ;
+						
+					$designation = $typageHemoglobine['designation'];
+					if($designation == 'SB+thal'){ $designation = "S&beta;<sup>+</sup> thalass&eacute;mie"; }else
+					if($designation == 'SB°thal'){ $designation = "S&beta;&deg; thalass&eacute;mie"; }
+						
+					$typage = "(<span style='color: red;'>".$designation."</span>)" ;
+				
 				}else{
-					$typage = "(".$typageHemoglobine['designation'].")" ;
+					$designation = $typageHemoglobine['designation'];
+					if($designation == 'AB+thal'){ $designation = "A&beta;<sup>+</sup> thalass&eacute;mie"; }else
+					if($designation == 'AB°thal'){ $designation = "A&beta;&deg; thalass&eacute;mie"; }
+				
+					$typage = "(".$designation.")" ;
 				}
 			}
 		}

@@ -259,7 +259,7 @@ class FacturationController extends AbstractActionController {
 	    $debut_ts = strtotime($debut);
 	    $fin_ts = strtotime($fin);
 	    $diff = $fin_ts - $debut_ts;
-	    return ($diff / $nbSecondes);
+	    return (int)($diff / $nbSecondes);
 	}
 	
 	public function prixMill($prix) {
@@ -936,8 +936,24 @@ class FacturationController extends AbstractActionController {
 	    		$donnees['id_type_facturation'] = 1;
 	    	}
 	    
-	    	//var_dump($this->params ()->fromPost ( 'organisme' ) == 3); exit();
-	    	
+	    /*
+	     * Vérifier estce qu'un autre utilisateur n'est pas entrain de vouloir enregistrer
+	     * la facture si oui on teste si les demandes ne sont pas déjà facturées
+	     **/
+	    $existListeDemandes = $this->getFacturationTable()->getAnalysesNonFacturees($liste_demandes_analyses, $donnees['montant']);
+	    if($existListeDemandes[0] == 0){
+	    	return $this->redirect()->toRoute('facturation', array('action' =>'liste-patients-admis'));
+	    }else{
+	    	$donnees['montant'] = $existListeDemandes[1];
+	    }
+	    
+	    $liste_demandes_analyses = $existListeDemandes[0];
+	    
+	    /**
+	     * =============================================================================
+	     * =============================================================================
+	     */
+	    
 	    //Ajouter la facturation
 	    $idfacturation = $this->getFacturationTable() ->addFacturation( $donnees );
 	    	
@@ -1887,10 +1903,15 @@ class FacturationController extends AbstractActionController {
 		
 		$listeAnalysesDemandees = $this->getFacturationTable()->getListeAnalysesFactureesPourInfirmerie($idfacturation);
 		$Prelevements = array();
+		$libTubeFluorure = array();
+		
 		for($i = 0 ; $i < count($listeAnalysesDemandees) ; $i++){
-				
-			if(!in_array($listeAnalysesDemandees[$i]['LibelleTube'], $Prelevements)){ $Prelevements [] = $listeAnalysesDemandees[$i]['LibelleTube']; }
-				
+		    $idanalyse = $listeAnalysesDemandees[$i]['idanalyse'];
+		    $libelleTube = $listeAnalysesDemandees[$i]['LibelleTube'];
+		    
+		    $libTubeFluorure[] = ($idanalyse == 72 || $idanalyse == 73) ? 1 : 0;
+		    
+		    if(!in_array($libelleTube, $Prelevements)){ $Prelevements [] = $libelleTube; }
 		}
 		
 		$dernierCodePrelevement = $this->getCodagePrelevementTable() ->getDernierPrelevement($Annee);
@@ -1906,12 +1927,18 @@ class FacturationController extends AbstractActionController {
 		$lettrePrelevement = array();
 		
 		for( $i = 0 ; $i < count($Prelevements) ; $i++ ){
-		
+		    
 			//Tableau des codes à inserer dans la BD
 			$anneePrelevement [] = $Annee;
 		    $numeroOrdrePrelevement [] = $numeroOrdreSuivant;
 			$lettrePrelevement [] = $this->prelevementLettreTableau($Prelevements[$i]);
 			
+		}
+		
+		//Verifier si les analyses 72 ou 73 sont selectionnées
+		if( in_array(1, $libTubeFluorure) &&  in_array('F', $lettrePrelevement) ){
+		    $cle = array_search('F', $lettrePrelevement);
+		    $lettrePrelevement[$cle] = 'F-p0';
 		}
 		
 		$user = $this->layout()->user;

@@ -131,20 +131,27 @@ class Personnel {
 		throw new \Exception ( "Not used" );
 	}
 	public function getInputFilter() {
-		if (! $this->inputFilter) {
+		if (! $this->inputFilter ) {
 
 			$inputFilter = new InputFilter ();
+			
+			/*
 			$inputFilter->add(array(
 					'name'     => 'id_personne',
-					'required' => true, //Par défaut c'est TRUE
-					'filters'  => array(
-							array('name' => 'Int'),
-					),
+					'filters' => array (
+							array (
+									'name' => 'StripTags'
+							),
+							array (
+									'name' => 'StringTrim'
+							)
+					)
 			));
+			*/
 
 			$inputFilter->add (array (
 					'name' => 'date_enregistrement',
-					'required' => false,
+					//'required' => false,
 					'filters' => array (
 							array (
 									'name' => 'StripTags'
@@ -288,7 +295,7 @@ class Personnel {
 			 
 			 
  
- $inputFilter->add (array (
+                    $inputFilter->add (array (
 					'name' => 'situation_matrimoniale',
 					'required' => false,
 					'filters' => array (

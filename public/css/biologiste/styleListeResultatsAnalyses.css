@@ -724,3 +724,38 @@ div .dataTables_paginate
 	border-top-left-radius: 20px;
 	border-bottom-left-radius: 20px;
 }
+
+
+#commentChoiceCheckPVID table, #commentChoiceCheckPVID table tr{
+	width: 100%;
+}
+
+#commentChoiceCheckPVID table tr .col1{
+	width: 10%;
+	/*background: red;*/
+}
+
+#commentChoiceCheckPVID table tr .col2{
+	width: 90%;
+	font-size: 15px;
+	font-family: time new roman;
+	/*background: yellow;*/
+}
+
+.commentChoicePVBut{
+	color: green; 
+	width: 20px; 
+	height: 15px; 
+	margin-bottom: 5px; 
+	margin-left: 3px;
+	border-radius: 10px;
+	box-shadow: 0pt 1pt 2px rgba(0, 0, 0, 0.1);
+	float: left;
+	font-weight: bold;
+}
+
+.commentChoicePVDiv{
+	height: 15px; 
+	margin-bottom: 5px;
+	float: left;
+}

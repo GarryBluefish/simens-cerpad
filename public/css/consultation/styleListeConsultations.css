@@ -1159,3 +1159,26 @@ table td p
 	background: #ebebeb;
 }
 
+/*Style pour la page informations statistiques*/
+/*Style pour la page informations statistiques*/
+#optionChoixAnyChart{
+	float: right;
+	font-size: 13px;
+}
+
+#optionChoixAnyChart .premEl, #optionChoixAnyChart .deuxiemE2{
+	float: left;
+	font-family: time new roman;
+	border-radius: 50%;
+    border: 1px solid #cccccc;
+	width: 15px;
+	height: 15px;
+	cursor: pointer;
+}
+
+#optionChoixAnyChart .premEl{
+	margin-right: 10px;
+	background-color: #00FF00;
+	font-weight: bold;
+}
+

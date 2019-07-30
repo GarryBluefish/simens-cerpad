@@ -256,7 +256,7 @@ class ConsultationController extends AbstractActionController {
 	    $debut_ts = strtotime($debut);
 	    $fin_ts = strtotime($fin);
 	    $diff = $fin_ts - $debut_ts;
-	    return ($diff / $nbSecondes);
+	    return (int)($diff / $nbSecondes);
 	}
 	
 	public function prixMill($prix) {
@@ -306,9 +306,19 @@ class ConsultationController extends AbstractActionController {
 	    			
 	    		if($depistage->current()['typepatient'] == 1){
 	    			$type = "Interne";
-	    			$typage = "(<span style='color: red;'>".$typageHemoglobine['designation']."</span>)" ;
+	    				
+	    			$designation = $typageHemoglobine['designation'];
+	    			if($designation == 'SB+thal'){ $designation = "S&beta;<sup>+</sup> thalass&eacute;mie"; }else
+	    			if($designation == 'SB°thal'){ $designation = "S&beta;&deg; thalass&eacute;mie"; }
+	    				
+	    			$typage = "(<span style='color: red;'>".$designation."</span>)" ;
+	    		
 	    		}else{
-	    			$typage = "(".$typageHemoglobine['designation'].")" ;
+	    			$designation = $typageHemoglobine['designation'];
+	    			if($designation == 'AB+thal'){ $designation = "A&beta;<sup>+</sup> thalass&eacute;mie"; }else
+	    			if($designation == 'AB°thal'){ $designation = "A&beta;&deg; thalass&eacute;mie"; }
+	    		
+	    			$typage = "(".$designation.")" ;
 	    		}
 	    	}
 	    }
@@ -590,12 +600,22 @@ class ConsultationController extends AbstractActionController {
 			if($depistage->current()['valide'] == 1){
 				$idTypage = $depistage->current()['typage'];
 				$typageHemoglobine = $this->getPatientTable()->getTypageHemoglobine($idTypage);
-					
+				
 				if($depistage->current()['typepatient'] == 1){
 					$type = "Interne";
-					$typage = "(<span style='color: red;'>".$typageHemoglobine['designation']."</span>)" ;
+						
+					$designation = $typageHemoglobine['designation'];
+					if($designation == 'SB+thal'){ $designation = "S&beta;<sup>+</sup> thalass&eacute;mie"; }else
+					if($designation == 'SB°thal'){ $designation = "S&beta;&deg; thalass&eacute;mie"; }
+						
+					$typage = "(<span style='color: red;'>".$designation."</span>)" ;
+				
 				}else{
-					$typage = "(".$typageHemoglobine['designation'].")" ;
+					$designation = $typageHemoglobine['designation'];
+					if($designation == 'AB+thal'){ $designation = "A&beta;<sup>+</sup> thalass&eacute;mie"; }else
+					if($designation == 'AB°thal'){ $designation = "A&beta;&deg; thalass&eacute;mie"; }
+				
+					$typage = "(".$designation.")" ;
 				}
 			}
 		}
@@ -1297,9 +1317,19 @@ class ConsultationController extends AbstractActionController {
 					
 				if($depistage->current()['typepatient'] == 1){
 					$type = "Interne";
-					$typage = "(<span style='color: red;'>".$typageHemoglobine['designation']."</span>)" ;
+				
+					$designation = $typageHemoglobine['designation'];
+					if($designation == 'SB+thal'){ $designation = "S&beta;<sup>+</sup> thalass&eacute;mie"; }else
+					if($designation == 'SB°thal'){ $designation = "S&beta;&deg; thalass&eacute;mie"; }
+				
+					$typage = "(<span style='color: red;'>".$designation."</span>)" ;
+				
 				}else{
-					$typage = "(".$typageHemoglobine['designation'].")" ;
+					$designation = $typageHemoglobine['designation'];
+					if($designation == 'AB+thal'){ $designation = "A&beta;<sup>+</sup> thalass&eacute;mie"; }else
+					if($designation == 'AB°thal'){ $designation = "A&beta;&deg; thalass&eacute;mie"; }
+				
+					$typage = "(".$designation.")" ;
 				}
 			}
 		}
@@ -2057,12 +2087,22 @@ class ConsultationController extends AbstractActionController {
 			if($depistage->current()['valide'] == 1){
 				$idTypage = $depistage->current()['typage'];
 				$typageHemoglobine = $this->getPatientTable()->getTypageHemoglobine($idTypage);
-					
+				
 				if($depistage->current()['typepatient'] == 1){
 					$type = "Interne";
-					$typage = "(<span style='color: red;'>".$typageHemoglobine['designation']."</span>)" ;
+				
+					$designation = $typageHemoglobine['designation'];
+					if($designation == 'SB+thal'){ $designation = "S&beta;<sup>+</sup> thalass&eacute;mie"; }else
+					if($designation == 'SB°thal'){ $designation = "S&beta;&deg; thalass&eacute;mie"; }
+				
+					$typage = "(<span style='color: red;'>".$designation."</span>)" ;
+				
 				}else{
-					$typage = "(".$typageHemoglobine['designation'].")" ;
+					$designation = $typageHemoglobine['designation'];
+					if($designation == 'AB+thal'){ $designation = "A&beta;<sup>+</sup> thalass&eacute;mie"; }else
+					if($designation == 'AB°thal'){ $designation = "A&beta;&deg; thalass&eacute;mie"; }
+				
+					$typage = "(".$designation.")" ;
 				}
 			}
 		}

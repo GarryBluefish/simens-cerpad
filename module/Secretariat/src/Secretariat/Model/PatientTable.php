@@ -105,23 +105,43 @@ class PatientTable {
 	{
 	    $data = array( 'idpatient' => $idpatient, 'ethnie' => $ethnie, 'date_enregistrement' => (new \DateTime() ) ->format('Y-m-d H:i:s'), 'idemploye' => $idemploye);
 	    
-	    //var_dump($data); exit();
-	    
 	    $db = $this->tableGateway->getAdapter();
 	    $sql = new Sql($db);
 	    $sQuery = $sql->insert() ->into('depistage') ->values( $data );
 	    $sql->prepareStatementForSqlObject($sQuery)->execute();
 	}
 	
-	public function updateDepistagePatient($idpatient, $ethnie, $typepatient, $idemploye)
+	public function updateDepistagePatient($idpatient, $ethnie, $idemploye)
 	{
-	    $data = array( 'ethnie' => $ethnie, 'typepatient' => $typepatient, 'idemploye' => $idemploye);
-	    	    
-	    $db = $this->tableGateway->getAdapter();
-	    $sql = new Sql($db);
-	    $sQuery = $sql->update() ->table('depistage') ->set( $data ) ->where( array('idpatient' => $idpatient ) );
-	    
-	    $sql->prepareStatementForSqlObject($sQuery) ->execute();
+		$depistage = $this->getDepistagePatient($idpatient)->current();
+		
+		if($depistage){
+			$data = array( 'ethnie' => $ethnie, 'idemploye' => $idemploye);
+			
+			$db = $this->tableGateway->getAdapter();
+			$sql = new Sql($db);
+			$sQuery = $sql->update() ->table('depistage') ->set( $data ) ->where( array('idpatient' => $idpatient ) );
+			 
+			$sql->prepareStatementForSqlObject($sQuery) ->execute();
+		}else{
+			$this->saveDepistagePatient($idpatient, $ethnie, $idemploye);
+		}
+
+	}
+	
+	public function deleteDepistagePatient($idpatient)
+	{
+		$depistage = $this->getDepistagePatient($idpatient)->current();
+		
+		if($depistage && !$depistage['typage']){
+			$db = $this->tableGateway->getAdapter();
+			$sql = new Sql($db);
+			$sQuery = $sql->delete()->from('depistage')
+			->where(array('idpatient' => $idpatient));
+			
+			$sql->prepareStatementForSqlObject($sQuery)->execute();
+		}
+		
 	}
 	
 	public function getDepistagePatient($idpatient)
@@ -884,7 +904,7 @@ class PatientTable {
 						if($date_naissance){ 
 							$listePatients .= "<td>". $Control->convertDate($aRow[ $aColumns[$i] ]) ."</td>";
 						}else{ 
-							$listePatients .= "";
+							$listePatients .= "<td></td>";
 						}
 					}
 					else if ($aColumns[$i] == 'Date'){

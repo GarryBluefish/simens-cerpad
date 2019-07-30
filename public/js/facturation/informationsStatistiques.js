@@ -101,54 +101,43 @@ function initialisation (){
 	
 	
 	
+
+	
+	
+	
+	
+	
+	//GESTION DES INTERFACES DU DIAGRAMME A BAR ET EN CAMEMBERT
+	//GESTION DES INTERFACES DU DIAGRAMME A BAR ET EN CAMEMBERT
+	$("#optionChoixAnyChart .premEl").click(function(){
+		$(this).css({"background-color" : "#00FF00", "font-weight" : "bold"});
+		$("#optionChoixAnyChart .deuxiemE2").css({"background-color" : "white", "font-weight" : "normal"});
+		$("#typagePatientsInternes").toggle(true);
+		$("#typagePatientsInternesAnychartPie").toggle(false);
+		/*
+		$("#typagePatientsInternesAnychartPie").fadeOut(function(){
+			$("#typagePatientsInternes").fadeIn();
+		});
+		*/
+	});
+	
+    $("#optionChoixAnyChart .deuxiemE2").click(function(){
+    	$(this).css({"background-color" : "#00FF00", "font-weight" : "bold"});
+		$("#optionChoixAnyChart .premEl").css({"background-color" : "white", "font-weight" : "normal"});
+		$("#typagePatientsInternes").toggle(false);
+		$("#typagePatientsInternesAnychartPie").toggle(true);
+		/*
+		$("#typagePatientsInternes").fadeOut(function(){
+			$("#typagePatientsInternesAnychartPie").fadeIn();
+		});
+		*/
+	});
 	
 	
 	
 	
 
-	/*
-	infosStatistiquesRapport();
-	$('#date_debut_rapport, #date_fin_rapport').change(function(){
-		var date_debut_rapport = $('#date_debut_rapport').val();
-		var date_fin_rapport = $('#date_fin_rapport').val();
-		
-		if(date_debut_rapport && date_fin_rapport){
-			$('.boutonAfficherInfosInervalleDateIntervention img').toggle(true);
-		}else{
-			$('.boutonAfficherInfosInervalleDateIntervention img').toggle(false);
-		}
-	}).keyup(function(){
-		var date_debut_rapport = $('#date_debut_rapport').val();
-		var date_fin_rapport = $('#date_fin_rapport').val();
-		
-		if(date_debut_rapport && date_fin_rapport){
-			$('.boutonAfficherInfosInervalleDateIntervention img').toggle(true);
-		}else{
-			$('.boutonAfficherInfosInervalleDateIntervention img').toggle(false);
-		}
-	});
-	*/
-
-
 	
-	
-	/*
-	$('#id_medecin, #age_min, #age_max').attr('disabled', true);
-	$('#visualiserResultatParAge').click(function(){
-		getInformationsStatistiquesParAge();
-	});
-	$('#visualiserResultatParDateIntervention').click(function(){
-		getInformationsStatistiquesParDateIntervention();
-	});
-	
-	
-	$('#iconeReinitialiserAge').click(function(){
-		getFonctionReinitialisationAge();
-	});
-	$('#iconeReinitialiserDateIntervention').click(function(){
-		getFonctionReinitialisationDateIntervention();
-	});
-	*/
 }
 
 
@@ -481,7 +470,7 @@ function getInformationsStatistiquesParDateIntervention(){
 
 	//1---))) POUR LA GESTION DU CAS SDI ( SERVICE - DATE_INTERVENTION ) 
 	//1---))) POUR LA GESTION DU CAS SDI ( SERVICE - DATE_INTERVENTION ) 
-	//**** Tous les médecins de tous les services confondus
+	//**** Tous les mï¿½decins de tous les services confondus
 	//**** id_service == 0
 	if(id_service == 0){
 		entreeReinit = 1;
@@ -489,16 +478,16 @@ function getInformationsStatistiquesParDateIntervention(){
 	}
 	//2---))) POUR LA GESTION DU CAS SDI ( SERVICE - DATE_INTERVENTION ) 
 	//2---))) POUR LA GESTION DU CAS SDI ( SERVICE - DATE_INTERVENTION ) 
-	//**** Tous les médecins du service sélectionné
+	//**** Tous les mï¿½decins du service sï¿½lectionnï¿½
 	//**** id_service != 0 && id_medecin == 0
 	else
 		if(id_service != 0 && id_medecin == 0){
 			entreeReinit = 2;
 			getInformationsSDIM(id_service, date_debut, date_fin); 
 		}
-	//3---))) POUR LA GESTION DU CAS SMDI ( SERVICE - MEDECIN - DATE_INTERVENTION ) (même chose que MDI ( MEDECIN DATE_INTERVENTION ) )
-	//3---))) POUR LA GESTION DU CAS SMDI ( SERVICE - MEDECIN - DATE_INTERVENTION ) (même chose que MDI ( MEDECIN DATE_INTERVENTION ) )
-	//**** Tous les médecins du service sélectionné pour récupérer les patients de tous les ages
+	//3---))) POUR LA GESTION DU CAS SMDI ( SERVICE - MEDECIN - DATE_INTERVENTION ) (mï¿½me chose que MDI ( MEDECIN DATE_INTERVENTION ) )
+	//3---))) POUR LA GESTION DU CAS SMDI ( SERVICE - MEDECIN - DATE_INTERVENTION ) (mï¿½me chose que MDI ( MEDECIN DATE_INTERVENTION ) )
+	//**** Tous les mï¿½decins du service sï¿½lectionnï¿½ pour rï¿½cupï¿½rer les patients de tous les ages
 	//**** id_service != 0 && id_medecin != 0 && AGE == 0
 		else
 			if(id_service != 0 && id_medecin != 0 && isNaN(age_max)){
@@ -507,7 +496,7 @@ function getInformationsStatistiquesParDateIntervention(){
 			}
 	//4---))) *** POUR LA GESTION DU CAS SMADI ( SERVICE - MEDECIN - AGE - DATE_INTERVENTION )
 	//4---))) *** POUR LA GESTION DU CAS SMADI ( SERVICE - MEDECIN - AGE - DATE_INTERVENTION )
-	//**** Tous les médecins du service sélectionné pour récupérer les patients de l'intervalle d'ages choisi
+	//**** Tous les mï¿½decins du service sï¿½lectionnï¿½ pour rï¿½cupï¿½rer les patients de l'intervalle d'ages choisi
 	//**** id_service != 0 && id_medecin != 0 && AGE != 0
 			else
 				if(id_service != 0 && id_medecin != 0 && !isNaN(age_max)){
@@ -714,7 +703,7 @@ function getListeDiagnostic(val){
 
 	//1---))) POUR LA GESTION DU CAS SDiag ( SERVICE - DIAGNOSTIC ) 
 	//1---))) POUR LA GESTION DU CAS SDiag ( SERVICE - DIAGNOSTIC ) 
-	//**** Tous les médecins de tous les services confondus
+	//**** Tous les mï¿½decins de tous les services confondus
 	//**** id_service == 0
 	if(id_service == 0){
 		if(date_debut == "" || date_fin == ""){
@@ -726,7 +715,7 @@ function getListeDiagnostic(val){
 	}
 	//2---))) POUR LA GESTION DU CAS SMDiag ( SERVICE - MEDECIN - DIAGNOSTIC ) 
 	//2---))) POUR LA GESTION DU CAS SMDiag ( SERVICE - MEDECIN - DIAGNOSTIC ) 
-	//**** Tous les médecins du service sélectionné
+	//**** Tous les mï¿½decins du service sï¿½lectionnï¿½
 	//**** id_service != 0 && id_medecin == 0
 	else
 		if(id_service != 0 && id_medecin == 0){
@@ -738,9 +727,9 @@ function getListeDiagnostic(val){
 					$('#diagnostic').val('');
 				}
 		}
-	//3---))) POUR LA GESTION DU CAS SMDI ( SERVICE - MEDECIN - DATE_INTERVENTION ) (même chose que MDI ( MEDECIN DATE_INTERVENTION ) )
-	//3---))) POUR LA GESTION DU CAS SMDI ( SERVICE - MEDECIN - DATE_INTERVENTION ) (même chose que MDI ( MEDECIN DATE_INTERVENTION ) )
-	//**** Tous les médecins du service sélectionné pour récupérer les patients de tous les ages
+	//3---))) POUR LA GESTION DU CAS SMDI ( SERVICE - MEDECIN - DATE_INTERVENTION ) (mï¿½me chose que MDI ( MEDECIN DATE_INTERVENTION ) )
+	//3---))) POUR LA GESTION DU CAS SMDI ( SERVICE - MEDECIN - DATE_INTERVENTION ) (mï¿½me chose que MDI ( MEDECIN DATE_INTERVENTION ) )
+	//**** Tous les mï¿½decins du service sï¿½lectionnï¿½ pour rï¿½cupï¿½rer les patients de tous les ages
 	//**** id_service != 0 && id_medecin != 0 && AGE == 0
 		else
 			if(id_service != 0 && id_medecin != 0 && isNaN(age_max)){
@@ -755,7 +744,7 @@ function getListeDiagnostic(val){
 			}
 	//4---))) *** POUR LA GESTION DU CAS SMADI ( SERVICE - MEDECIN - AGE - DATE_INTERVENTION )
 	//4---))) *** POUR LA GESTION DU CAS SMADI ( SERVICE - MEDECIN - AGE - DATE_INTERVENTION )
-	//**** Tous les médecins du service sélectionné pour récupérer les patients de l'intervalle d'ages choisi
+	//**** Tous les mï¿½decins du service sï¿½lectionnï¿½ pour rï¿½cupï¿½rer les patients de l'intervalle d'ages choisi
 	//**** id_service != 0 && id_medecin != 0 && AGE != 0
 			else
 				if(id_service != 0 && id_medecin != 0 && !isNaN(age_max)){

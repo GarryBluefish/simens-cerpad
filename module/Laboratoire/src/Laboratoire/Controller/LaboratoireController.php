@@ -101,7 +101,7 @@ class LaboratoireController extends AbstractActionController {
 	    $debut_ts = strtotime($debut);
 	    $fin_ts = strtotime($fin);
 	    $diff = $fin_ts - $debut_ts;
-	    return ($diff / $nbSecondes);
+	    return (int)($diff / $nbSecondes);
 	}
 	
 	public function infosPatientAction() {

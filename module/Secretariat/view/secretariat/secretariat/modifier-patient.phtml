@@ -354,7 +354,11 @@ echo $this->form ()->openTag ( $form );
    	   $("#prenom_pere").val(chaine);
 
     });
-   
-  
+
+
+    var typageProfilXZYA = "<?php echo $this->typage; ?>";
+    if(typageProfilXZYA != 0){ $("#patientClassique").replaceWith("<span title='Impossible de modifier car le patient est déja dépisté'> Externe </span>"); }
+
+    $('a,img,span').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });
 </script>
     

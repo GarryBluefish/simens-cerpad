@@ -128,7 +128,7 @@
     	$("#patient tbody tr").bind('dblclick', function (event) {
     		var aData = oTable.fnGetData( this );
     		var id = aData[7];
-    		visualiser(id);
+    		//visualiser(id);
     	});
     	
     	$('a,img,hass').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });
@@ -1007,7 +1007,7 @@
     				else if(idanalyse == 63) { tab = getAgHbs(); } 
     				else if(idanalyse == 64) { tab = getHIV(); }
     				else if(idanalyse == 65) { tab = getPV(); }
-    				     
+    				else if(idanalyse == 66) { tab = getECBU(); }     
     				     
     				else if(idanalyse == 68) { tab = getTypageHemoglobine(); }
     				     
@@ -1015,9 +1015,8 @@
     				else if(idanalyse == 71) { tab = getChampsNfs_TAD(iddemande); }
     				     
     				     /*
-    				     alert(tab[17]); 
-    				     alert(tab[28]); 
-    				     alert(tab[28][10]); 
+    				     alert(tab);
+    				     alert(tab[13]);
     				     
     				     return false;
     				     */
@@ -1081,6 +1080,7 @@
             	     getProteinurieFormule();
             	     
             	     ajoutCulotUrinaireAuto();
+            	     ajoutCulotEcbuAuto();
             	     getBilirubineTotaleDirecteAuto();
             	     getHemoglobineGlyqueeHbA1cFormule();
             	     
@@ -1652,7 +1652,6 @@
 	    return tab;
     }
     
-    /* à modifier au controller biologie - lorsque autre_flore Cocci à Gram est positif */
     function getAutreFloreCocciPositif(id){
     	if(id==3){ 
     		$(".autre_flore_cocci_positif_pv").css({'visibility':'visible'});
@@ -1861,9 +1860,6 @@
     }
     
     
-    /*
-     * à modifier au controller biologie 
-     */
     function getChampIdentificationRdmPositive(id){
     	if(id == '' || id == 2){
     		$('.identification_rdm_positive_class_titre_pv, .identification_rdm_positive_class_pv').toggle(false);
@@ -1874,63 +1870,79 @@
     /*
      * =================================
      */
-    var tabCommentaire = new Array();
+    //var tabCommentaire = new Array();
     
     /* 1= - Candidose vaginale */
     function getIconeAntibiogrammeIdentCulture(id,i){
     	if(id == 0){
     		$('.antibiogrammeButtonAffInterface'+i).toggle(false);
-    		tabCommentaire[1] = -1;
-    		if(tabCommentaire.hasOwnProperty(4)){ $('#flore_pv').trigger('change'); }
+    		//tabCommentaire[1] = -1;
+    		//if(tabCommentaire.hasOwnProperty(4)){ $('#flore_pv').trigger('change'); }
     	}else{
     		$('.antibiogrammeButtonAffInterface'+i).toggle(true);
-    		tabCommentaire[1] = "- Candidose vaginale \r\n";
-    		if(tabCommentaire.hasOwnProperty(4)){ tabCommentaire[4] = -1; }
+    		/*
+    		if($("#identification_culture_pv").val() == 1){
+        		tabCommentaire[1] = "- Candidose vaginale \r\n";
+        		if(tabCommentaire.hasOwnProperty(4)){ tabCommentaire[4] = -1; }
+    		}else{
+    			tabCommentaire[1] = -2; //Parcequ'il y a une culture
+    			if(tabCommentaire.hasOwnProperty(4)){ tabCommentaire[4] = -1; }
+    		}
+    		*/
     	}
     	
     	setCommenataireAutoPvABG();
     }
     
     /* 0= - Vaginose bactérienne à Gardenella vaginalis */
-    function getCommentaireAutoPvABG(id){  
+    function getCommentaireAutoPvABG(id){ 
+    	/*
     	if(id==1){
     		tabCommentaire[0] = "- Vaginose bactérienne à Gardenella vaginalis \r\n";
     		if(tabCommentaire.hasOwnProperty(3)){ tabCommentaire[3] = -1; }
+    		$(".disabledOrEnableGroup1").attr('disabled', true);
+    		$(".disabledOrEnableGroup2").attr('disabled', false);
     	}else{ 
-    	
     		tabCommentaire[0] = -1; 
     		if(tabCommentaire.hasOwnProperty(3)){ $('#flore_pv').trigger('change'); }
+    		$(".disabledOrEnableGroup1").attr('disabled', false);
+    		$(".disabledOrEnableGroup2").attr('disabled', true);
     	}
-    	
+    	$("#flore_pv").val('').trigger('change');
     	setCommenataireAutoPvABG();
+    	
+    	*/
     }
     
     /* 2= - Vaginite à Trichomonas vaginalis */
     function getTrichomonasVaginalisAutoPvABG(id){
+    	/*
     	if(id==1){
     		tabCommentaire[2] = "- Vaginite à Trichomonas vaginalis \r\n";
     	}else{ tabCommentaire[2] = -1; }
     	
     	setCommenataireAutoPvABG();
+    	*/
     }
     
     /* 3= - Flore vaginale déséquilibrée */
     /* 4= - Flore vaginale normale */
     function getChampFloreNote(id){
+    	/*
     	if(id == ''){
     		$('.flore_note_class_pv').css({'visibility':'hidden'});
     		tabCommentaire[3] = -1;
     	}else{
     		$('.flore_note_class_pv').css({'visibility':'visible'}).val('');
     		
-    		/* 3= - Flore vaginale déséquilibrée */
+    		// 3= - Flore vaginale déséquilibrée 
     		if(id == 3 || id == 4){
     			if(tabCommentaire[0] == -1){
     				tabCommentaire[3] = "- Flore vaginale déséquilibrée \r\n";
     			}else{ tabCommentaire[3] = -1; }
     		}else{ tabCommentaire[3] = -1; }
     		
-    		/* 4= - Flore vaginale normale */
+    		// 4= - Flore vaginale normale 
     		if(id == 1 || id == 2){
     			if(tabCommentaire[1] == -1){
     				tabCommentaire[4] = "- Flore vaginale normale \r\n";
@@ -1940,19 +1952,440 @@
     	}
     	
     	setCommenataireAutoPvABG();
+    	*/
     }
     
     
     function setCommenataireAutoPvABG(){
+    	/*
     	var commentaire = "";
     	for(var i=0 ; i<tabCommentaire.length ; i++){
-    		if(tabCommentaire[i] && tabCommentaire[i]!= -1){
+    		if(tabCommentaire[i] && tabCommentaire[i]!= -1 && tabCommentaire[i]!= -2){
         		commentaire += tabCommentaire[i];
     		}
     	}
     	
     	$('#commentaire_pv').val(commentaire);
+    	*/
     }
+    
+    
+    
+    function commentaireChoiceCheckPV(){
+    	
+    	$('#idCommentaireChoiceCheckPV').w2overlay({ html: "" +
+    		"" +
+    		"<div id='commentChoiceCheckPVID' style='height: 110px; width: 300px; padding-top:10px; text-align:left;'>" +
+    		"<table>"+
+    		"<tr><td class='col1'><button class='commentChoicePVBut But1' onclick='getCommentChoiceCheckPV(1)'></button></td> <td class='col2'><div class='commentChoicePVDiv' > Flore vaginale normale </div></td></tr>"+
+    		"<tr><td class='col1'><button class='commentChoicePVBut But2' onclick='getCommentChoiceCheckPV(2)'></button></td> <td class='col2'><div class='commentChoicePVDiv' > Flore vaginale déséquilibrée </div></td></tr>"+
+    		"<tr><td class='col1'><button class='commentChoicePVBut But3' onclick='getCommentChoiceCheckPV(3)'></button></td> <td class='col2'><div class='commentChoicePVDiv' > Vaginite à Trichomonas vaginalis </div></td></tr>"+
+    		"<tr><td class='col1'><button class='commentChoicePVBut But4' onclick='getCommentChoiceCheckPV(4)'></button></td> <td class='col2'><div class='commentChoicePVDiv' > Vaginose bactérienne à Gardenella vaginalis </div></td></tr>"+
+    		"<tr><td class='col1'><button class='commentChoicePVBut But5' onclick='getCommentChoiceCheckPV(5)'></button></td> <td class='col2'><div class='commentChoicePVDiv' > Candidose vaginale </div></td></tr>"+
+    		
+    		"</table>"+
+    		"</div>"+
+    		"<style> .w2ui-overlay:before{float: left; border: 1px solid green; top: 2px; border-bottom: 0px solid transparent; border-left:1px solid transparent;}  .w2ui-overlay{float: left; margin-left: -20px; border: 1px solid green; margin-top: 1 } </style>"
+    		
+    	});
+    	
+    	setCommenataireAutoChoiceCheckPV();
+    }
+    
+    var tabCommentaireChoicePV = new Array();
+    
+        tabCommentaireChoicePV[1] = "Flore vaginale normale \r\n";
+        tabCommentaireChoicePV[2] = "Flore vaginale déséquilibrée \r\n";
+       	tabCommentaireChoicePV[3] = "Vaginite à Trichomonas vaginalis \r\n";
+   		tabCommentaireChoicePV[4] = "Vaginose bactérienne à Gardenella vaginalis \r\n";
+		tabCommentaireChoicePV[5] = "Candidose vaginale \r\n";
+    var tabCommentaireSelect = new Array();	
+		
+    var pvBut1 = 0, pvBut2 = 0, pvBut3 = 0, pvBut4 = 0, pvBut5 = 0;
+    function getCommentChoiceCheckPV(id){
+    	
+    	if(id == 1){ 
+    		if(pvBut1 == 0){ $("#commentChoiceCheckPVID .But1").html("X"); pvBut1 = 1; tabCommentaireSelect[1] = 1;}
+    		else{ $("#commentChoiceCheckPVID .But1").html(""); pvBut1 = 0; tabCommentaireSelect[1] = -1;}
+    	}
+    	
+    	if(id == 2){
+    		if(pvBut2 == 0){ $("#commentChoiceCheckPVID .But2").html("X"); pvBut2 = 1; tabCommentaireSelect[2] = 1;}
+    		else{  $("#commentChoiceCheckPVID .But2").html(""); pvBut2 = 0;  tabCommentaireSelect[2] = -1;}
+    	}
+    	
+    	if(id == 3){
+    		if(pvBut3 == 0){ $("#commentChoiceCheckPVID .But3").html("X"); pvBut3 = 1; tabCommentaireSelect[3] = 1;}
+    		else{  $("#commentChoiceCheckPVID .But3").html(""); pvBut3 = 0;  tabCommentaireSelect[3] = -1;}
+    	}
+    	
+    	if(id == 4){
+    		if(pvBut4 == 0){ $("#commentChoiceCheckPVID .But4").html("X"); pvBut4 = 1; tabCommentaireSelect[4] = 1;}
+    		else{  $("#commentChoiceCheckPVID .But4").html(""); pvBut4 = 0;  tabCommentaireSelect[4] = -1;}
+    	}
+    	
+    	if(id == 5){
+    		if(pvBut5 == 0){ $("#commentChoiceCheckPVID .But5").html("X"); pvBut5 = 1; tabCommentaireSelect[5] = 1;}
+    		else{  $("#commentChoiceCheckPVID .But5").html(""); pvBut5 = 0;  tabCommentaireSelect[5] = -1;}
+    	}
+    	
+    	setCommenataireAutoChoiceCheckPV();
+    }
+    
+    function setCommenataireAutoChoiceCheckPV(){
+    	
+    	var commentaire = "";
+    	for(var i=1 ; i<=tabCommentaireSelect.length ; i++){
+    		if(tabCommentaireSelect[i] && tabCommentaireSelect[i]!= -1){
+        		commentaire += tabCommentaireChoicePV[i];
+        		$("#commentChoiceCheckPVID .But"+i).html("X");
+    		}
+    	}
+    	
+    	$('#commentaire_pv').val(commentaire);
+    }
+    
+    
+    // GESTION DE L'ANALYSE ECBU 
+    // GESTION DE L'ANALYSE ECBU 
+    // GESTION DE L'ANALYSE ECBU 
+    
+    function getFloreCocciEcbuPositif(id){
+    	if(id==3){ 
+    		$(".flore_cocci_positif_ecbu").css({'visibility':'visible'});
+    	}else{
+    		$(".flore_cocci_positif_ecbu").css({'visibility':'hidden'});
+    	}
+    }
+    
+    
+    function getListeCulotPositif(){
+    	var tab = new Array();
+    	var nbLigne = $("#culot_ecbu_tableau tr").length;
+    	
+    	for(var i=1 ; i<nbLigne ; i++){
+    		var culotEcbuSelect = $('#culot_ecbu_select_'+i).val();
+    		if(culotEcbuSelect != 4){
+        		var culotEcbuValSel = $('#culot_ecbu_valsel_'+i+' select').val();
+    		}else{
+        		var culotEcbuValSel = $('#culot_ecbu_valsel_'+i+' input').val();
+    		}
+    		
+    		tab[i] = culotEcbuSelect+'^$%$^'+culotEcbuValSel;
+    	}
+    	
+    	return tab;
+    }
+    
+    function getECBU(){
+    	var tab = [];
+    	tab[1] = $('#type_materiel_ecbu').val();
+    	tab[2] = $('#urines_ecbu').val();
+    	tab[3] = $('#leucocytes_ecbu').val();
+    	tab[4] = $('#leucocytes_champ_ecbu').val();
+    	tab[5] = $('#hematies_ecbu').val();
+    	tab[6] = $('#hematies_champ_ecbu').val();
+    	tab[7] = $('#levures_ecbu').val();
+    	tab[8] = $('#trichomonas_vaginalis_ecbu').val();
+    	tab[9] = $('#flore_ecbu').val();
+    	if($("#flore_cocci_pos_Choix1_ecbu").get(0).checked){ tab[10] = 1; }else{ tab[10] = -1; } 
+    	if($("#flore_cocci_pos_Choix2_ecbu").get(0).checked){ tab[11] = 1; }else{ tab[11] = -1; } 
+    	tab[12] = $('#culot_ecbu').val();
+    	//Pour la liste des culots selectionn�s
+    	if( tab[12] == 1 ){ tab[13] = getListeCulotPositif(); }
+    	//-------------------------------------
+    	tab[14] = $('#culture_ecbu').val();
+    	if($("#culture_pos_Choix1_ecbu").get(0).checked){ tab[15] = 1; }else{ tab[15] = -1; }
+    	if($("#culture_pos_Choix2_ecbu").get(0).checked){ tab[16] = 1; }else{ tab[16] = -1; }
+    	tab[17] = $('#identification_culture_select_ecbu').val();
+    	
+    	tab[18] = $('#commentaire_ecbu').val();
+    	
+    	return tab;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    var tabInfosCulotEcbu = new Array();
+    tabInfosCulotEcbu[0] = "";
+    
+    tabInfosCulotEcbu[1] = '<select name="culot_ecbu_val_1" id="culot_ecbu_val_1" style="width: 95%;"> ' +
+							   "  <option></option> " +
+							   "  <option value=1>Schistoma haematobium</option> " +
+							   "  <option value=2>Schistoma mansoni</option> " +
+							   "</select>"; 
+    
+    tabInfosCulotEcbu[2] = '<select name="culot_ecbu_val_2" id="culot_ecbu_val_2" style="width: 95%;"> ' +
+    		                   "  <option></option> " +
+    		                   "  <option value=1>Oxalate de calcium</option> " +
+    		                   "  <option value=2>Phosphate</option> " +
+    		                   "  <option value=3>Acide Urique</option> " +
+    		                   "  <option value=4>Phospho-ammoniacomagnesien</option> " +
+    		                   "</select>"; 
+    
+    tabInfosCulotEcbu[3] = '<select name="culot_ecbu_val_3" id="culot_ecbu_val_3" style="width: 95%;"> ' +
+                               "  <option></option> " +
+                               "  <option value=1>Hematiques</option> " +
+                               "  <option value=2>Leucocytaires</option> " +
+                               "</select>"; 
+    
+    tabInfosCulotEcbu[4] = '<input type="text" name="culot_ecbu_val_4" id="culot_ecbu_val_4" style="width:95%; text-align: left; padding-left: 3px;">';
+    
+    function listeElemtsCulotEcbuSelect(indice, val){
+    	$('#culot_ecbu_ligne_'+indice+' .emplaceListeElemtsCUSelect').html(tabInfosCulotEcbu[val]);
+    }
+    
+    function ajoutCulotEcbuAuto(){
+    	
+    	$('#culot_ecbu_plus').click(function(){
+	    	var nbLigne = $("#culot_ecbu_tableau tr").length;
+	    	$('#culot_ecbu_moins').toggle(true);
+	    	
+	    	if(nbLigne < 20){
+	    		var html ="<tr id='culot_ecbu_ligne_"+nbLigne+"' class='ligneAnanlyse' style='width: 100%;'>"+
+	    		          "  <td style='width: 20%;'></td>"+
+	    		          "  <td style='width: 20%;'>"+
+	    		          "    <label class='lab1 listeSelect'>"+
+	    		          "      <select onchange='listeElemtsCulotEcbuSelect("+nbLigne+",this.value);' name='culot_ecbu_select_"+nbLigne+"' id='culot_ecbu_select_"+nbLigne+"' >"+
+			    		  "        <option value=0 > </option> "+
+		                  "        <option value=1 >Oeufs</option> "+ 
+		                  "        <option value=2 >Cristaux</option> "+ 
+		                  "        <option value=3 >Cylindres</option> "+
+		                  "        <option value=4 >Parasites</option>  "+
+		                  "      </select>"+ 
+		   	              "    </label>"+
+		   	              "  </td>"+
+		                         
+	    		          "  <td style='width: 40%;'><label class='lab2 emplaceListeElemtsCUSelect' id='culot_ecbu_valsel_"+nbLigne+"' style='padding-top: 5px;'>  </label></td>"+
+	    	              "  <td style='width: 20%;'></td>"+
+                          "</tr>";
+
+		    	$('#culot_ecbu_ligne_'+(nbLigne-1)).after(html);
+		    	
+		    	if(nbLigne == 19){
+		    		$('#culot_ecbu_plus').toggle(false);
+		    	}
+	    	}
+
+	    });
+    	
+    	$('#culot_ecbu_moins').click(function(){ 
+	    	var nbLigne = $("#culot_ecbu_tableau tr").length;
+	    	
+	    	if(nbLigne > 2){
+		    	$('#culot_ecbu_ligne_'+(nbLigne-1)).remove();
+		    	if(nbLigne == 3){ 
+		    		$('#culot_ecbu_moins').toggle(false);
+		    	}
+		    	
+		    	if(nbLigne == 20){
+		    		$('#culot_ecbu_plus').toggle(true);
+		    	}
+	    	}
+
+	    });
+    	
+    }
+    
+    function getCulotEcbuListeSelect(){
+    	var tab = [];
+    	var nbLigne = $("#culot_ecbu_tableau tr").length;
+    	var j = 1;
+    	
+    	tab[0] = $('#type_materiel_culot_ecbu').val();
+    	tab[1] = new Array(); 
+    	tab[2] = new Array(); 
+    	for(var i=1 ; i<nbLigne ; i++){
+    		var listeSelect1  = $('#culot_ecbu_ligne_'+i+' .listeSelect select' ).val();
+    		var listeSelect2 = $('#culot_ecbu_ligne_'+i+' .emplaceListeElemtsCUSelect select').val();
+    		tab[1][j]   = listeSelect1;
+    		if(listeSelect2){ 
+    			tab[2][j++] = listeSelect2;
+    		}else{
+    			tab[2][j++] = $('#culot_ecbu_ligne_'+i+' .emplaceListeElemtsCUSelect input').val();;
+    		}
+    	}
+	    tab[3] = $('#conclusion_culot_ecbu_valeur').val();
+	    
+	    return tab;
+    }
+    
+    function getCulotEcbuPositif(id){
+    	if( id == 1 ){ 
+    		$("#culot_ecbu_tableau").toggle(true);
+    	}else{
+    		$("#culot_ecbu_tableau").toggle(false);
+    	}
+    }
+    
+    var commentCultPosValECBU = "";
+    var tabConcluCommentECBU = new Array();
+        tabConcluCommentECBU[1] = "Absence d'infection du tractus urinaire";
+        tabConcluCommentECBU[2] = "ECBU à Refaire";
+    function getCultureEcbuPositif(id){
+    	if(id==2){ 
+    		$(".culture_ecbu_negatif").css({'visibility': 'visible'}); 
+    		$("#culture_ecbu_choix12_positif").toggle(false);
+    		$("#commentaire_ecbu").attr('readonly', true).val(tabConcluCommentECBU[1]);
+    		$(".identificationCultureChampsECBU").toggle(false);
+    	}
+    	else if(id==1){ 
+    		$("#culture_ecbu_choix12_positif").toggle(true);  
+    		$(".culture_ecbu_negatif").css({'visibility': 'hidden'});  
+    		$("#culture_pos_Choix1_ecbu, #culture_pos_Choix2_ecbu").prop("checked", false);
+        	if(commentCultPosValECBU === tabConcluCommentECBU[1] || commentCultPosValECBU === tabConcluCommentECBU[2]){ commentCultPosValECBU = ""; }
+    		$("#commentaire_ecbu").attr('readonly', false).val(commentCultPosValECBU);
+    	}else{
+    		$(".culture_ecbu_negatif").css({'visibility': 'hidden'}); 
+    		$("#culture_ecbu_choix12_positif").toggle(false);
+    		$("#commentaire_ecbu").attr('readonly', false).val(commentCultPosValECBU);
+    		$(".identificationCultureChampsECBU").toggle(false);
+    	}
+    	
+    }
+    
+    function getCultPosChoix1Ecbu(){
+    	
+    	$("#culture_pos_Choix1_ecbu").prop("checked", true);
+    	$("#culture_pos_Choix2_ecbu").prop("checked", false);
+    	
+    	$(".identificationCultureChampsECBU").toggle(true); 
+    	if(commentCultPosValECBU === tabConcluCommentECBU[1] || commentCultPosValECBU === tabConcluCommentECBU[2]){ commentCultPosValECBU = ""; }
+    	$("#commentaire_ecbu").attr('readonly', false).val(commentCultPosValECBU);
+    }
+    
+    function getCultPosChoix2Ecbu(){
+    	
+    	$("#culture_pos_Choix1_ecbu").prop("checked", false);
+    	$("#culture_pos_Choix2_ecbu").prop("checked", true);
+    	
+    	$("#commentaire_ecbu").attr('readonly', true).val(tabConcluCommentECBU[2]); 
+    	$(".identificationCultureChampsECBU").toggle(false);
+    }
+    
+
+    function ajouterNouvelleSoucheECBU(){
+    	
+    	$( "#ajouterNouvelleSoucheECBU" ).dialog({
+    		resizable: false,
+    	    height:520,
+    	    width:450,
+    	    autoOpen: false,
+    	    modal: true,
+    	    buttons: {
+    	        "Fermer": function() {
+                  $( this ).dialog( "close" );
+    	        }
+    	    }
+    	});
+    	
+    	$("#ajouterNouvelleSoucheECBU").dialog('open');
+    }
+    
+    function getListeDesSouchesIdentificationCultureECBU(){
+    	
+    	$("#ajouterNouvelleSoucheECBU .tabAjouterNouvelleSoucheECBU .listeDeSouchesExistantes").empty();
+    	$("#ajouterNouvelleSoucheECBU .tabAjouterNouvelleSoucheECBU .listeDeSouchesExistantes").html('<div style="width: 99%; height: 199px;" align="center"> <img style="margin-top: 20px; width: 50px; height: 50px;" src="../images/loading/Chargement_1.gif" /> </div>');
+
+    	$.ajax({
+              type: 'POST',
+              url: tabUrl[0]+'public/technicien/get-liste-des-souches',
+              data:{},
+              success: function(data) {
+              	     var result = jQuery.parseJSON(data);
+              	     
+              	     $("#ajouterNouvelleSoucheECBU .tabAjouterNouvelleSoucheECBU .listeDeSouchesExistantes").html(result);
+              }
+          });
+    }
+    
+    function affInterfaceAjoutNewSoucheECBU(){
+    	$(".ligneBoutonsAjoutSoucheECBU").toggle(false);
+    	$(".interfaceAjoutNouvelleSoucheECBU").toggle(true);
+    }
+    
+    function annulerAjoutNewSoucheButtonECBU(){
+    	$(".ligneBoutonsAjoutSoucheECBU").toggle(true);
+    	$(".interfaceAjoutNouvelleSoucheECBU").toggle(false);
+    } 
+    
+    function validerAjoutNewSoucheButtonECBU(){
+    	var nouvelleSouche = $('#nouvelleSoucheAAjouter').val();
+    	
+    	if($('#formNewSoucheAAjouter')[0].checkValidity() == true){
+    		$('#nouvelleSoucheAAjouter').val("");
+        	$.ajax({
+                type: 'POST',
+                url: tabUrl[0]+'public/technicien/insert-nouvelle-souche',
+                data:{'nouvelleSouche' : nouvelleSouche},
+                success: function(data) {
+                	     var result = jQuery.parseJSON(data);
+                	     getListeDesSouchesIdentificationCultureECBU();
+                }
+            });
+		}else{
+			$('#formNewSoucheAAjouterButton').trigger('click');
+		}
+    }
+    
+    var idSoucheAModifierECBU;
+    function modifierInfosSoucheECBU(id,Num){
+    	var libelleSoucheModif = $(".LTPE2 .libelleID_"+id).text(); 
+    	$('#modificationSoucheAModifier').val(libelleSoucheModif);
+    	
+    	$(".interfAjoutNewSoucheECBU").toggle(false);
+    	$(".interfModifSoucheECBU").toggle(true);
+    	
+    	$(".modifSoucheNumeroECBU span").html("n&deg; "+Num);
+    	idSoucheAModifierECBU = id;
+    }
+    
+    function validerModificationSoucheButtonECBU(){
+    	if($('#formModificationSoucheAModifier')[0].checkValidity() == true){
+    		var nouveauNomSouche = $('#modificationSoucheAModifier').val();
+        	
+    		$.ajax({
+                type: 'POST',
+                url: tabUrl[0]+'public/technicien/modifier-souche-selectionnee',
+                data:{'idSouche' : idSoucheAModifierECBU, 'nouveauNomSouche' : nouveauNomSouche},
+                success: function(data) {
+                	     var result = jQuery.parseJSON(data);
+                	     getListeDesSouchesIdentificationCultureECBU();
+                	     annulerModificationSoucheButtonECBU();
+                }
+            });
+    		
+		}else{
+			$('#formModificationSoucheAModifierButton').trigger('click');
+		}
+    }
+    
+    function annulerModificationSoucheButtonECBU(){
+    	$(".ligneBoutonsAjoutSoucheECBU").toggle(true);
+    	$(".interfModifSoucheECBU").toggle(false);
+    }
+    
+    // FIN DE GESTION DE L'ANALYSE ECBU 
+    // FIN DE GESTION DE L'ANALYSE ECBU 
+    // FIN DE GESTION DE L'ANALYSE ECBU 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     function getLDH(){
@@ -2629,6 +3062,7 @@
     				else if(idanalyse == 63) { tab [63] = getAgHbs(); } 
     				else if(idanalyse == 64) { tab [64] = getHIV(); }
     				else if(idanalyse == 65) { tab [65] = getPV(); }
+    				else if(idanalyse == 66) { tab [66] = getECBU(); }
   	    			     
   	    			     
     				else if(idanalyse == 68) { tab [68] = getTypageHemoglobine(); }
@@ -2706,6 +3140,7 @@
             	     getProteinurieFormule();
             	     
             	     ajoutCulotUrinaireAuto();
+            	     ajoutCulotEcbuAuto();
             	     getBilirubineTotaleDirecteAuto();
             	     getHemoglobineGlyqueeHbA1cFormule();
             	     

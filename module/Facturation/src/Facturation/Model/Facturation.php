@@ -6,13 +6,14 @@ class Facturation {
 	public $id_patient;
 	public $id_service;
 	public $date_cons;
+	public $date;
 	public $montant;
 	public $numero;
 	public $montant_avec_majoration;
 	public $taux_majoration;
 	public $id_type_facturation;
 	public $organisme;
-	public $id_employe;
+	public $idemploye;
 	public $date_enregistrement;
 	public $date_archivage;
 	public $heure_archivage;
@@ -24,9 +25,10 @@ class Facturation {
 		$this->id_patient = (! empty ( $data ['id_patient'] )) ? $data ['id_patient'] : null;
 		$this->id_service = (! empty ( $data ['id_service'] )) ? $data ['id_service'] : null;
 		$this->date_cons = (! empty ( $data ['date_cons'] )) ? $data ['date_cons'] : null;
+		$this->date = (! empty ( $data ['date'] )) ? $data ['date'] : null;
 		$this->montant = (! empty ( $data ['montant'] )) ? $data ['montant'] : null;
 		$this->numero = (! empty ( $data ['numero'] )) ? $data ['numero'] : null;
-		$this->id_employe = (! empty ( $data ['id_employe'] )) ? $data ['id_employe'] : null; 	
+		$this->idemploye = (! empty ( $data ['idemploye'] )) ? $data ['idemploye'] : null; 	
 		$this->date_enregistrement = (! empty ( $data ['date_enregistrement'] )) ? $data ['date_enregistrement'] : null;
 		$this->montant_avec_majoration = (! empty ( $data ['montant_avec_majoration'] )) ? $data ['montant_avec_majoration'] : null;
 		$this->id_type_facturation = (! empty ( $data ['id_type_facturation'] )) ? $data ['id_type_facturation'] : null;

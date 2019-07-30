@@ -126,6 +126,11 @@ class TechnicienController extends AbstractActionController {
 		return $lesMois[$mois];
 	}
 	
+	public function moisAbregesEnLettre($mois){
+	    $lesMois = array('','Jan','Fev','Mar','Avr','Mai','Jun','Jul','Aou','Sep','Oct','Nov','Dec');
+	    return $lesMois[$mois];
+	}
+	
 	public function listeBilansAction() {
 		$this->layout ()->setTemplate ( 'layout/technicien' );
 		
@@ -158,7 +163,7 @@ class TechnicienController extends AbstractActionController {
 		$debut_ts = strtotime($debut);
 		$fin_ts = strtotime($fin);
 		$diff = $fin_ts - $debut_ts;
-		return ($diff / $nbSecondes);
+		return (int)($diff / $nbSecondes);
 	}
 	
 	public function etatCivilPatientAction($idpatient) {
@@ -182,9 +187,19 @@ class TechnicienController extends AbstractActionController {
 					
 				if($depistage->current()['typepatient'] == 1){
 					$type = "Interne";
-					$typage = "(<span style='color: red;'>".$typageHemoglobine['designation']."</span>)" ;
+					
+					$designation = $typageHemoglobine['designation'];
+					if($designation == 'SB+thal'){ $designation = "S&beta;<sup>+</sup> thalass&eacute;mie"; }else
+					if($designation == 'SB°thal'){ $designation = "S&beta;&deg; thalass&eacute;mie"; }
+					
+					$typage = "(<span style='color: red;'>".$designation."</span>)" ;
+						
 				}else{
-					$typage = "(".$typageHemoglobine['designation'].")" ;
+					$designation = $typageHemoglobine['designation'];
+					if($designation == 'AB+thal'){ $designation = "A&beta;<sup>+</sup> thalass&eacute;mie"; }else
+					if($designation == 'AB°thal'){ $designation = "A&beta;&deg; thalass&eacute;mie"; }
+						
+					$typage = "(".$designation.")" ;
 				}
 			}
 		}
@@ -436,7 +451,7 @@ class TechnicienController extends AbstractActionController {
 		return $html;
 	}
 	
-	public function codesPrelevements($codage, $Prelevements) {
+	public function codesPrelevements($codage, $Prelevements, $infoLibelle=null) {
 	
 		if($Prelevements == "S"){
 			return $codage."-<span title='Sec' style='cursor:pointer;'>S</span></span><br>";
@@ -452,6 +467,10 @@ class TechnicienController extends AbstractActionController {
 		}
 		if($Prelevements == "F"){
 			return $codage."-<span title='Fluorure' style='cursor:pointer;'>F</span></span><br>";
+		}
+		if($Prelevements == "F-p0"){
+			$infoBulle = ($infoLibelle == "GPP") ? "la GPP":"l'HPVO";
+			return $codage.'-<span title="Fluorure" style="cursor:pointer;">F</span> - <span title="Premier prél&egrave;vement pour '.$infoBulle.'" style="cursor:pointer;">p0</span></span><br>';
 		}
 		if($Prelevements == "Pb"){
 			return $codage."-<span title='Papier buvard' style='cursor:pointer;'>Pb</span></span><br>";
@@ -517,6 +536,15 @@ class TechnicienController extends AbstractActionController {
 	    
 	    $html = $this->etatCivilPatientAction($idpatient);
 	    
+	    $listeAnalysesDemandees = $this->getBilanPrelevementTable()->getListeAnalysesDemandeesAyantUnBilan($idfacturation);
+	    $analyseFluorure = array();
+	    
+	    for($i = 0 ; $i < count($listeAnalysesDemandees) ; $i++){
+	    
+	    	$idanalyse = $listeAnalysesDemandees[$i]['idanalyse'];
+	    	if($idanalyse == 72 || $idanalyse == 73){ $analyseFluorure[] = $idanalyse; }
+	    		
+	    }
 	    
 	    
 	    $bilanPrelevement = $this->getBilanPrelevementTable() ->getBilanPrelevement($idfacturation);
@@ -568,9 +596,10 @@ class TechnicienController extends AbstractActionController {
 	    	$i = 1;
 	    	foreach ($listeCodes as $codes){
 	    	
-	    		$codage = "<i>p".$i.":</i> &nbsp;<span id='pr".$i."'> ".$codes->annee."-".$codes->numero;
-	    		$Prelevements = $codes->prelevement;
-	    		$html .= $this->codesPrelevements($codage, $Prelevements);
+	    		$codage = "<i>p".$i." :</i> &nbsp;<span id='pr".$i."'> ".$codes->annee."-".$codes->numero;
+	    		$LettrePrelevement = $codes->prelevement;
+	    		if($LettrePrelevement == "F-p0"){ if(in_array(72, $analyseFluorure)){ $infoLibelle = "HPVO"; }else{ $infoLibelle = "GPP"; } }else{ $infoLibelle = null; }
+	    		$html .= $this->codesPrelevements($codage, $LettrePrelevement, $infoLibelle);
 	    	
 	    		$html .="<style> #pr".$i.":hover{font-weight: bold;}; </style>";
 	    	
@@ -794,6 +823,17 @@ class TechnicienController extends AbstractActionController {
 		 
 		$html = $this->etatCivilPatientAction($idpatient);
 		 
+		$listeAnalysesDemandees = $this->getBilanPrelevementTable()->getListeAnalysesDemandeesAyantUnBilan($idfacturation);
+		$analyseFluorure = array();
+		 
+		for($i = 0 ; $i < count($listeAnalysesDemandees) ; $i++){
+			 
+			$idanalyse = $listeAnalysesDemandees[$i]['idanalyse'];
+			if($idanalyse == 72 || $idanalyse == 73){ $analyseFluorure[] = $idanalyse; }
+			 
+		}
+		
+		
 		$bilanPrelevement = $this->getBilanPrelevementTable() ->getBilanPrelevement($idfacturation);
 		 
 		if($bilanPrelevement){
@@ -843,9 +883,11 @@ class TechnicienController extends AbstractActionController {
 			$i = 1;
 			foreach ($listeCodes as $codes){
 	
-				$codage = "<i>p".$i.":</i> &nbsp;<span id='pr".$i."'> ".$codes->annee."-".$codes->numero;
-				$Prelevements = $codes->prelevement;
-				$html .= $this->codesPrelevements($codage, $Prelevements);
+				$codage = "<i>p".$i." :</i> &nbsp;<span id='pr".$i."'> ".$codes->annee."-".$codes->numero;
+				$LettrePrelevement = $codes->prelevement;
+				if($LettrePrelevement == "F-p0"){ if(in_array(72, $analyseFluorure)){ $infoLibelle = "HPVO"; }else{ $infoLibelle = "GPP"; } }else{ $infoLibelle = null; }
+				$html .= $this->codesPrelevements($codage, $LettrePrelevement, $infoLibelle);
+				
 	
 				$html .="<style> #pr".$i.":hover{font-weight: bold;}; </style>";
 	
@@ -1694,70 +1736,59 @@ class TechnicienController extends AbstractActionController {
 	
 	public function listePatientsAction (){
 		$this->layout ()->setTemplate ( 'layout/technicien' );
-		/*
-	    $tab = array();
-	    
-	    $tab[1] = '';
-	    $tab[2] = '';
-	    $tab[3] = '';
-	    
-		var_dump($this->array_empty($tab)); exit();
-	    */
-		
-		//6 - 2017 - AC - 2017-04-25 - 2018-06-19
-		/*
-		$moisDateDebut = (int)substr('2017-04-25', 5, 2);
-		$moisDateFin   = (int)substr('2018-06-19', 5, 2);
-		
-		$jourDateDebut = (int)substr('2017-04-25', 8, 2);
-		$jourDateFin   = (int)substr('2018-06-19', 8, 2);
-		
-		if($moisDateDebut == '6'){ $dateDebut = '2017'.'-'.'6'.'-'.$jourDateDebut; }
-		else{ $dateDebut = '2017'.'-'.'6'.'-'.'01'; }
-		
-		if($moisDateFin == '6'){ $dateFin = '2017'.'-'.'6'.'-'.$jourDateFin; }
-		else{
-			$dernierJourMois = cal_days_in_month(CAL_GREGORIAN, '6', '2017');
-			$dateFin = '2017'.'-'.'6'.'-'.$dernierJourMois; 
-		}
-		*/
-		//var_dump($dateDebut.' - '.$dateFin); exit();
-		
-		
-		/*
-		$dateDebutChamp = '2017-04-25';
-		$dateFinChamp = '2018-06-19';
-		
-		$mois = '6';
-		$annee = '2017';
-		if($mois<10){ $mois = '0'.$mois; }
-		$dernierJourMois = cal_days_in_month(CAL_GREGORIAN, $mois, $annee);
-		$dateDebut = $annee.'-'.$mois.'-'.'01';
-		$dateFin = $annee.'-'.$mois.'-'.$dernierJourMois;
-
-		if($dateDebut < $dateDebutChamp){ 
-			$jourDateDebutChamp = (int)substr($dateDebutChamp, 8, 2);
-			$dateDebut = $annee.'-'.$mois.'-'.$jourDateDebutChamp;
-		}
-		
-		if($dateFin > $dateFinChamp){
-			$jourDateFinChamp = (int)substr($dateFinChamp, 8, 2);
-			$dateFin = $annee.'-'.$mois.'-'.$jourDateFinChamp;
-		}
-		
-		$listeNumeroDossier = $this->getResultatsDepistagesTable()->getListeNumeroDossierPatientsDepistagesAvecResultat('AC', $dateDebut, $dateFin);
-		
-		var_dump($listeNumeroDossier); exit();
-		*/
-		
-		
-		
 		
 		return new ViewModel ( );
 	}
 	
+
+	/*
+	 * Liste des souches --- Liste des souches --- Liste des souches 
+	 * Liste des souches --- Liste des souches --- Liste des souches 
+	 */
+	public function getListeDesSouchesAction()
+	{
+		$listeSouchesIdentif = $this->getResultatDemandeAnalyseTable()->getListeIdentificationSouchesIdDESC();
+		$html  = "<table>";
+		for($i = 0 ; $i <  count($listeSouchesIdentif); $i++){
+			$html .="<tr><td class='LTPE1' >".($i+1)."</td><td class='LTPE2  LTPE2_".$listeSouchesIdentif[$i][0]."' ><span class='libelleID_".$listeSouchesIdentif[$i][0]."'>".str_replace("'", "'", $listeSouchesIdentif[$i][1])."</span><img onclick='modifierInfosSoucheECBU(".$listeSouchesIdentif[$i][0].",".($i+1).");' class='imgLTPE2' src='../img/light/pencil.png'> </td></tr>";
+		}
+		$html .= "</table>";
+		
+		$listeSouchesIdentif = $this->getResultatDemandeAnalyseTable()->getListeIdentificationSouchesLibelleASC();
+		
+		$html  .= "<script> var optionsListesIdentifSouchesECBU = '<option value=0></option>'; </script>";
+		for($i = 0; $i<count($listeSouchesIdentif) ; $i++){
+			$html .= "<script> optionsListesIdentifSouchesECBU += '<option value=".$listeSouchesIdentif[$i][0].">".str_replace("'", "\'", $listeSouchesIdentif[$i][1])."</option>'; </script>";
+		}
+		$html .= "<script> $('#identification_culture_select_ecbu').html(optionsListesIdentifSouchesECBU); </script>";
+		 
 	
+		$this->getResponse()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html' );
+		return $this->getResponse ()->setContent(Json::encode ( $html ));
+	}
 	
+	public function insertNouvelleSoucheAction()
+	{
+		$idemploye = $this->layout()->user['idemploye'];
+		$nouvelleSouche = $this->params ()->fromPost ( 'nouvelleSouche' );
+		
+		$this->getResultatDemandeAnalyseTable()->insertNouvelleSouche($nouvelleSouche, $idemploye);
+		
+		$this->getResponse()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html' );
+		return $this->getResponse ()->setContent(Json::encode ( 1 ));
+	}
+	
+	public function modifierSoucheSelectionneeAction()
+	{
+		$idemploye = $this->layout()->user['idemploye'];
+		$idSouche = $this->params ()->fromPost ( 'idSouche' );
+		$nouveauNomSouche = $this->params ()->fromPost ( 'nouveauNomSouche' );
+		
+		$this->getResultatDemandeAnalyseTable()->modifierSoucheSelectionnee($idSouche, $nouveauNomSouche, $idemploye);
+		
+		$this->getResponse()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html' );
+		return $this->getResponse ()->setContent(Json::encode ( 1 ));
+	}
 	
 	public function vueListePrelevementTriReprisAction(){
 
@@ -1822,7 +1853,7 @@ class TechnicienController extends AbstractActionController {
 			$i = 1;
 			foreach ($listeCodes as $codes){
 		
-				$codage = "<i>p".$i.":</i> &nbsp;<span id='pr".$i."'> ".$codes['annee']."-".$codes['numero'];
+				$codage = "<i>p".$i." :</i> &nbsp;<span id='pr".$i."'> ".$codes['annee']."-".$codes['numero'];
 				$Prelevements = $codes['prelevement'];
 				$html .= $this->codesPrelevementsRepris($codage, $Prelevements);
 		
@@ -2028,7 +2059,7 @@ class TechnicienController extends AbstractActionController {
 			$i = 1;
 			foreach ($listeCodes as $codes){
 		
-				$codage = "<i>p".$i.":</i> &nbsp;<span id='pr".$i."'> ".$codes->annee."-".$codes->numero;
+				$codage = "<i>p".$i." :</i> &nbsp;<span id='pr".$i."'> ".$codes->annee."-".$codes->numero;
 				$Prelevements = $codes->prelevement;
 				$html .= $this->codesPrelevements($codage, $Prelevements);
 		
@@ -2397,9 +2428,20 @@ class TechnicienController extends AbstractActionController {
 					
 				if($depistage->current()['typepatient'] == 1){
 					$type = "Interne";
-					$typage = "(<span style='color: red;'>".$typageHemoglobine['designation']."</span>)" ;
+					
+					$designation = $typageHemoglobine['designation'];
+					if($designation == 'SB+thal'){ $designation = "S&beta;<sup>+</sup> thalass&eacute;mie"; }else
+					if($designation == 'SB°thal'){ $designation = "S&beta;&deg; thalass&eacute;mie"; }
+					
+					$typage = "(<span style='color: red;'>".$designation."</span>)" ;
+					
 				}else{
-					$typage = "(".$typageHemoglobine['designation'].")" ;
+					
+					$designation = $typageHemoglobine['designation'];
+					if($designation == 'AB+thal'){ $designation = "A&beta;<sup>+</sup> thalass&eacute;mie"; }else
+					if($designation == 'AB°thal'){ $designation = "A&beta;&deg; thalass&eacute;mie"; }
+					
+					$typage = "(".$designation.")" ;
 				}
 			}
 		}
@@ -2688,9 +2730,20 @@ class TechnicienController extends AbstractActionController {
 					
 				if($depistage->current()['typepatient'] == 1){
 					$type = "Interne";
-					$typage = "(<span style='color: red;'>".$typageHemoglobine['designation']."</span>)" ;
+					
+					$designation = $typageHemoglobine['designation'];
+					if($designation == 'SB+thal'){ $designation = "S&beta;<sup>+</sup> thalass&eacute;mie"; }else
+					if($designation == 'SB°thal'){ $designation = "S&beta;&deg; thalass&eacute;mie"; }
+						
+					$typage = "(<span style='color: red;'>".$designation."</span>)" ;
+						
 				}else{
-					$typage = "(".$typageHemoglobine['designation'].")" ;
+					
+					$designation = $typageHemoglobine['designation'];
+					if($designation == 'AB+thal'){ $designation = "A&beta;<sup>+</sup> thalass&eacute;mie"; }else
+					if($designation == 'AB°thal'){ $designation = "A&beta;&deg; thalass&eacute;mie"; }
+						
+					$typage = "(".$designation.")" ;
 				}
 			}
 		}
@@ -4245,12 +4298,16 @@ class TechnicienController extends AbstractActionController {
     	        $('#recherche_directe_antigene_chlamydia_pv').val('".$resultat['recherche_directe_antigene_chlamydia']."');
     	        $('#recherche_directe_mycoplasmes_pv').val('".$resultat['recherche_directe_mycoplasmes']."').trigger('change');
                     
-    	            
+    	        $('#commentaire_pv').val('".preg_replace("/(\r\n|\n|\r)/", "\\n", str_replace( "'", "\'", $resultat['commentaire'] ))."');
+
+    	        tabCommentaireSelect = new Array();
 	    	 </script>";
 	        
-	         //$('#commentaire_pv').val('".preg_replace("/(\r\n|\n|\r)/", "\\n", str_replace( "'", "\'", $resultat['commentaire'] ))."');
-	         
-	        
+	         $tabCommentaire = explode("\\n", preg_replace("/(\r\n|\n|\r)/", "\\n", str_replace( "'", "\'", $resultat['commentaire'])));
+	         for($i=0 ; $i<count($tabCommentaire) ; $i++){
+	         	$html .="<script> var indexCommentChoicePV = tabCommentaireChoicePV.indexOf('".$tabCommentaire[$i].'\r\n'."'); </script>";
+	         	$html .="<script> if(indexCommentChoicePV != -1){ tabCommentaireSelect[indexCommentChoicePV] = 1;}  </script>";
+	         }
 	        
 	         $html .= ($resultat['identification_rdm_positive_choix1'])   ? '<script> $("#identification_rdm_positive_Choix1_pv").trigger("click"); </script>' : '';
 	         $html .= ($resultat['identification_rdm_positive_choix2'])   ? '<script> $("#identification_rdm_positive_Choix2_pv").trigger("click"); </script>' : '';
@@ -4425,6 +4482,70 @@ class TechnicienController extends AbstractActionController {
 	    return $html;
 	}
 	
+	
+	protected function getResultatsECBU($iddemande){
+
+		$html  = "<script> getListeDesSouchesIdentificationCultureECBU(); </script>";
+		$html .= "<script> $('a,div').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } }); </script>";
+		
+		$resultat = $this->getResultatDemandeAnalyseTable()->getValeursECBU($iddemande);
+		$html .="<script> commentCultPosValECBU=''; </script>";
+		if($resultat){
+			$html .=
+			"<script>
+   	            commentCultPosValECBU = '".str_replace( "'", "\'", $resultat['conclusion'])."';
+	            $('#type_materiel_ecbu').val('".str_replace( "'", "\'", $resultat['type_materiel'])."');
+   	            $('#urines_ecbu').val('".$resultat['Urines']."');
+   	            $('#leucocytes_ecbu').val('".$resultat['Leucocytes']."');
+   	           	$('#leucocytes_champ_ecbu').val('".$resultat['LeucocytesChamp']."');
+   	           	$('#hematies_ecbu').val('".$resultat['Hematies']."');
+   	           	$('#hematies_champ_ecbu').val('".$resultat['HematiesChamp']."');
+   	           	$('#levures_ecbu').val('".$resultat['Levures']."');
+   	           	$('#trichomonas_vaginalis_ecbu').val('".$resultat['TrichomonasVaginalis']."');
+         		/*-Flore-*/	
+   	           	$('#flore_ecbu').val('".$resultat['Flore']."').trigger('change');
+   	           	/*-Culot-*/
+   	            $('#culot_ecbu').val('".$resultat['Culot']."').trigger('change');
+   	            /*-Culture-*/
+   	            $('#culture_ecbu').val('".$resultat['Culture']."').trigger('change');
+             </script>";     
+			
+			/*Flore --- Flore --- Flore*/
+			$html .= ($resultat['FloreAmas'])      ? '<script> $("#flore_cocci_pos_Choix1_ecbu").trigger("click"); </script>' : '';
+			$html .= ($resultat['FloreChainette']) ? '<script> $("#flore_cocci_pos_Choix2_ecbu").trigger("click"); </script>' : '';
+
+			/*Culture --- Culture --- Culture*/			
+			$html .= ($resultat['CulturePos1']) ? '<script> $("#culture_pos_Choix1_ecbu").trigger("click"); </script>' : '';
+			$html .= ($resultat['CulturePos2']) ? '<script> $("#culture_pos_Choix2_ecbu").trigger("click"); </script>' : '';
+			$html .= ($resultat['CulturePos1']) ? '<script> setTimeout(function(){ $("#identification_culture_select_ecbu").val('.$resultat['IdentificationCulture'].'); },500); </script>' : '';
+		
+			/*Culot --- Culot --- Culot*/
+			if($resultat['Culot'] == 1){
+				$resultatCulot = $this->getResultatDemandeAnalyseTable()->getValeursECBUCulot($iddemande);
+				$html .= '<script> setTimeout(function(){ '; $i=1;
+				foreach ($resultatCulot as $resultCul){
+					
+					//if(next($resultatCulot)){
+						$html .= '$("#culot_ecbu_plus").trigger("click");';						
+					//}
+					
+					
+					$typeCulot = $resultCul['type_culot'];
+					$html .= '$("#culot_ecbu_select_'.$i.'").val('.$typeCulot.').trigger("change");';
+					if($typeCulot == 4){
+						$html .= '$("#culot_ecbu_valsel_'.$i++.'  input").val("'.str_replace( '"', '\"', $resultCul['info_culot']).'");';
+					}else{
+						$html .= '$("#culot_ecbu_valsel_'.$i++.' select").val('.$resultCul['valeur_culot'].');';
+					}
+				}
+				$html .= '$("#culot_ecbu_moins").trigger("click");';
+				$html .= '}); </script>';
+			}
+		}
+		
+        return $html;
+	}
+	        
 	//***************** ========== RECUPERER UNE ANALYSE ========== ***************
 	//***************** ========== RECUPERER UNE ANALYSE ========== ***************
 	//***************** ========== RECUPERER UNE ANALYSE ========== ***************
@@ -4520,8 +4641,8 @@ class TechnicienController extends AbstractActionController {
 		if($analyse['Idanalyse'] == 62){ $html .= $this->widal_62(); $html .= $this->getResultatsWidal($iddemande); }
 		if($analyse['Idanalyse'] == 63){ $html .= $this->ag_hbs_63(); $html .= $this->getResultatsAgHbs($iddemande); }
 		if($analyse['Idanalyse'] == 64){ $html .= $this->hiv_64(); $html .= $this->getResultatsHIV($iddemande); }
-		if($analyse['Idanalyse'] == 65){ $html .= $this->pv_65();  $html .= $this->getResultatsPV($iddemande);}
-		if($analyse['Idanalyse'] == 66){ $html .= $this->ecbu_66(); }
+		if($analyse['Idanalyse'] == 65){ $html .= $this->pv_65();  $html .= $this->getResultatsPV($iddemande); }
+		if($analyse['Idanalyse'] == 66){ $html .= $this->ecbu_66(); $html .= $this->getResultatsECBU($iddemande); }
 		if($analyse['Idanalyse'] == 67){ $html .= $this->pus_67(); }
 		if($analyse['Idanalyse'] == 68){ $html .= $this->typage_hemoglobine_68();  $html .= $this->getResultatsTypageHemoglobine($iddemande); }
 		
@@ -4864,6 +4985,11 @@ class TechnicienController extends AbstractActionController {
 	            $this->getResultatDemandeAnalyseTable()->addResultatDemandeAnalyse($iddemande, $idemploye);
 	            $donneesExiste = $this->getResultatDemandeAnalyseTable()->addValeursPV($tab, $iddemande);
 	    }
+	    else
+	   		if($idanalyse == 66){
+	   			$this->getResultatDemandeAnalyseTable()->addResultatDemandeAnalyse($iddemande, $idemploye);
+	   			$donneesExiste = $this->getResultatDemandeAnalyseTable()->addValeursECBU($tab, $iddemande);
+	    }
 	    
 	    
 	    
@@ -5007,7 +5133,7 @@ class TechnicienController extends AbstractActionController {
 			if($liste['Idanalyse'] == 63){ $html .= $this->ag_hbs_63(); $html .= $this->getResultatsAgHbs($liste['iddemande']); }
 			if($liste['Idanalyse'] == 64){ $html .= $this->hiv_64(); $html .= $this->getResultatsHIV($liste['iddemande']); }
 			if($liste['Idanalyse'] == 65){ $html .= $this->pv_65();  $html .= $this->getResultatsPV($liste['iddemande']);}
-			if($liste['Idanalyse'] == 66){ $html .= $this->ecbu_66(); }
+			if($liste['Idanalyse'] == 66){ $html .= $this->ecbu_66(); $html .= $this->getResultatsECBU($liste['iddemande']); }
 			if($liste['Idanalyse'] == 67){ $html .= $this->pus_67(); }
 			if($liste['Idanalyse'] == 68){ $html .= $this->typage_hemoglobine_68();  $html .= $this->getResultatsTypageHemoglobine($liste['iddemande']); }
 			
@@ -5419,6 +5545,13 @@ class TechnicienController extends AbstractActionController {
 	                $this->getResultatDemandeAnalyseTable()->addResultatDemandeAnalyse($iddemande, $idemploye);
 	                $donneesExiste = $this->getResultatDemandeAnalyseTable()->addValeursPV($tab, $iddemande);
 	        }
+	        else
+	        	if($idanalyse == 66){
+	        		$tab = $tableau[$idanalyse];
+	        		$this->getResultatDemandeAnalyseTable()->addResultatDemandeAnalyse($iddemande, $idemploye);
+	        		$donneesExiste = $this->getResultatDemandeAnalyseTable()->addValeursECBU($tab, $iddemande);
+	        }
+	        
 	        
 	        
 	        
@@ -6086,6 +6219,8 @@ class TechnicienController extends AbstractActionController {
 	    $this->getResponse()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html' );
 	    return $this->getResponse ()->setContent(Json::encode ( $liste_select));
 	}
+	
+	
 	
 	/*
 	 * GESTION DES CHAMPS DES DIFFERENTES ANALYSES *********** GESTION DES CHAMPS DES DIFFERENTES ANALYSES
@@ -8061,14 +8196,16 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "</tr>";
 	    
 	    $html .= "</table>";
+
 	    
-	    $html .= "<table id='conclusion_resultat_electro_hemo' style='width: 100%; margin-left: 5px;'>";
+	    $html .= "<table id='conclusion_resultat_electro_hemo' style='width: 100%; margin-left: 5px; margin-top: 15px;'>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 70%;'><label class='lab1'><span style='font-weight: bold; width: 100%; text-align: right;'> Conclusion :  <input id='conclusion_electro_hemo_valeur' type='text' step='any' style='width: 70%; float: right; text-align: left;'> </span></label></td>";
-	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 86%;'> </label></td>";
+	    $html .= "<td style='width: 96%;'><label style='height: 140px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='conclusion_electro_hemo_valeur' style='max-height: 100px; min-height: 100px; max-width: 560px; min-width: 560px; margin-left: 30px;'> </textarea> </label></td>";
+	    $html .= "<td style='width: 5%;'></td>";
 	    $html .= "</tr>";
-	    $html .= "</table> ";
-	     
+	    $html .= "</table>";
+	    
+	    
 	    $html .= "</td> </tr>";
 	     
 	    
@@ -8080,7 +8217,7 @@ class TechnicienController extends AbstractActionController {
 	 */
 	public function electrophorese_preteines_45(){
 	    $html  = "<tr> <td align='center'>";
-	    $html .= "<table style='width: 100%;'>";
+	    $html .= "<table style='width: 100%; margin-left: 5px;'>";
 	
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
 	    $html .= "<tr class='ligneAnanlyse labelTypeMateriel' style='width: 100%; font-family: times new roman; font-size: 15px; margin-top: -45px;'>";
@@ -8142,16 +8279,25 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
 	    $html .= "  <td colspan='2' ><label><span style='font-size: 16px;'> Proteine totale:  </span></label></td>";
 	    $html .= "  <td style='width: 15%;'><label style='padding-top: 5px;'> <input id='proteine_totale' type='number' step='any'  tabindex='7'> </label></td>";
-	    $html .= "  <td style='width: 40%;'><label style='padding-top: 5px; width: 80%; font-size: 14px;'> g/dL </label></td>";
+	    $html .= "  <td style='width: 45%;'><label style='padding-top: 5px; width: 80%; font-size: 14px;'> g/dL </label></td>";
 	    $html .= "</tr>";
 
-	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td colspan='3' ><label style='height: 80px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_electrophorese_proteine' style='max-height: 57px; min-height: 57px; max-width: 400px; min-width: 400px; margin-left: 30px;' tabindex='8'> </textarea> </label></td>";
-	    $html .= "  <td style='width: 40%;'><label style='padding-top: 5px; width: 80%; height: 80px; font-size: 14px;'>  </label></td>";
-	    $html .= "</tr>";
+	    $html .= "</table>";
 	    
-	    $html .= "</table> </td> </tr>";
+	    
+	    $html .= "<table style='width: 100%; margin-left: 5px;'>";
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "<td style='width: 96%;'><label style='height: 140px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_electrophorese_proteine' style='max-height: 100px; min-height: 100px; max-width: 560px; min-width: 560px; margin-left: 30px;' tabindex='8'> </textarea> </label></td>";
+	    $html .= "<td style='width: 5%;'></td>";
+	    $html .= "</tr>";
+	    $html .= "</table>";
+	    
+	    
+	    $html .="</td> </tr>";
 	
+	    
+	    
+	    
 	    return $html;
 	}
 	
@@ -9119,10 +9265,10 @@ class TechnicienController extends AbstractActionController {
 	                    <label class='lab2' style='padding-top: 5px;'>
 	                      <select id='flore_pv' style='width: 120px;' onchange='getChampFloreNote(this.value)'>
 	                        <option> </option>
-	                        <option value=1 >Type 1</option>
-	                        <option value=2 >Type 2</option>
-	                        <option value=3 >Type 3</option>
-	                        <option value=4 >Type 4</option>
+	                        <option value=1 class='disabledOrEnableGroup1'>Type 1</option>
+	                        <option value=2 class='disabledOrEnableGroup1'>Type 2</option>
+	                        <option value=3 class='disabledOrEnableGroup2'>Type 3</option>
+	                        <option value=4 class='disabledOrEnableGroup2'>Type 4</option>
 	                      </select>
 	                    </label>
 	                </td>";
@@ -9395,7 +9541,7 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "<table style='width: 100%; margin-top: 15px;'>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
 	    if($this->layout()->user['role'] == 'biologiste' || $this->layout()->user['role'] == 'technicien'){
-	        $html .= "<td style='width: 96%;'><label style='height: 140px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_pv' style='max-height: 100px; min-height: 100px; max-width: 560px; min-width: 560px; margin-left: 30px;' readonly> </textarea> </label></td>";
+	        $html .= "<td style='width: 96%;'><label style='height: 140px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_pv' style='max-height: 100px; min-height: 100px; max-width: 560px; min-width: 560px; margin-left: 30px;' readonly> </textarea> <div style='float: right; font-family: Agency FB; font-size: 15px; margin-right: 10px; color: green; font-weight: bold;' onclick='commentaireChoiceCheckPV();' id='idCommentaireChoiceCheckPV'>Com.</div> </label></td>";
 	    }else{
 	        $html .= "<td style='width: 96%;'><label style='height: 140px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_pv' style='max-height: 100px; min-height: 100px; max-width: 560px; min-width: 560px; margin-left: 30px;' disabled> </textarea> </label></td>";
 	    }
@@ -10242,9 +10388,8 @@ class TechnicienController extends AbstractActionController {
 	 */
 	public function ecbu_66(){
 	    $html  = "<tr> <td align='center'>";
-	    $html .= "<table style='width: 100%;'>";
-	
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
+	    $html .= "<table style='width: 100%;'>";
 	    $html .= "<tr class='ligneAnanlyse labelTypeMateriel' style='width: 100%; font-family: times new roman; font-size: 15px; margin-top: -45px;'>";
 	    $html .= "  <td style='width: 55%;'> <label> Mat&eacute;riel utilis&eacute;</label> </td>";
 	    $html .= "  <td colspan='2' style='width: 35%;'> </td>";
@@ -10253,15 +10398,291 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "  <td style='width: 55%;'> <div class='noteTypeMateriel' style='float: left; height: 30px; width: 70%; padding-left: 10px;'> <input type='text' id='type_materiel_ecbu' tabindex='1' > </div> </td>";
 	    $html .= "  <td colspan='2' style='width: 45%;'> </td>";
 	    $html .= "</tr>";
+	    $html .= "</table>";
 	    //POUR LE NOM DU TYPE DE MATERIEL UTILISE
-	    	  
+	    
+	    $html .= "<table style='width: 100%;'>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 55%;'><label class='lab1' ><span style='font-weight: bold;'> ecbu (En attente ... ) </span></label></td>";
-	    $html .= "  <td style='width: 15%;'><label class='lab2' style='padding-top: 5px;'>  </label></td>";
-	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 80%;'> </label></td>";
+	    $html .= "  <td colspan='3' style='width: 100%; text-align: left; font-weight: bold; font-size: 12px; font-style: italic;'> &#10148; Examen macroscopique</td>";
 	    $html .= "</tr>";
-	
-	    $html .= "</table> </td> </tr>";
+	    $html .= "</table>";
+	     
+	    $html .= "<table style='width: 100%;'>";
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 30%;'><label class='lab1' style='padding-top: 5px;'><span style='font-weight: bold;'> Urines </span></label></td>";
+	    $html .= "  <td style='width: 40%;'>
+	                    <label class='lab2' style='padding-top: 5px;'>
+	                      <select id='urines_ecbu' style='width: 200px;'>
+	                        <option> </option>
+	                        <option value=1 >Claires</option>
+	                        <option value=2 >L&eacute;g&egrave;rement troubles</option>
+	                        <option value=3 >Troubles</option>
+                	        <option value=4 >H&eacute;matiques</option>
+                	        <option value=5 >Purulentes</option>
+	                      </select>
+	                    </label>
+	                </td>";
+	    $html .= "  <td style='width: 30%;'><label class='lab3' style='padding-top: 5px; width: 85%;'> </label></td>";
+	    $html .= "</tr>";
+	    $html .= "</table>";
+	    
+	     
+	    /**
+	     * Partie examen microscopique *** Partie examen microscopique
+	     * -----------------------------------------------------------
+	     * Partie examen microscopique *** Partie examen microscopique
+	     */
+	    $html .= "<table style='width: 100%;'>";
+	    /**
+	     * Examen microscopique --- Examen microscopique --- Examen microscopique
+	     */
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td colspan='3' style='width: 100%; text-align: left; font-weight: bold; font-size: 12px; font-style: italic;'> &#10148; Examen microscopique</td>";
+	    $html .= "</tr>";
+	    $html .= "</table>";
+	    /*
+	     * Leucocytes/champ && H�maties/champ
+	     */
+	    $html .= "<table style='width: 100%;'>";
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 20%;'><label class='lab1' style='padding-top: 5px;'><span style='font-weight: bold;'> Leucocytes </span></label></td>";
+	    $html .= "  <td style='width: 18%;'>
+	                    <label class='lab2' style='padding-top: 5px;'>
+	                      <select id='leucocytes_ecbu' style='width: 100px;'>
+	                        <option> </option>
+	                        <option value=1 >Pr&eacute;sentes</option>
+	                        <option value=2 >Absentes</option>
+	                      </select>
+	                    </label>
+	                </td>";
+	    $html .= "  <td style='width: 17%;'>
+	                    <label class='lab2' style='padding-top: 5px;'>
+	                      <input type='number' id='leucocytes_champ_ecbu' style='width: 45px; padding-left: 2px; height: 20px;' max=999 min=1>
+	                    </label>
+	                </td>";
+	    $html .= "  <td style='width: 11%;'><label class='lab1' style='font-weight: bold; text-align: right; padding-top: 5px;'> H&eacute;maties </label></td>";
+	    $html .= "  <td style='width: 18%;'>
+	                    <label class='lab2' style='padding-top: 5px;'>
+	                      <select id='hematies_ecbu' style='width: 100px;'>
+	                        <option> </option>
+	                        <option value=1 >Pr&eacute;sentes</option>
+	                        <option value=2 >Absentes</option>
+	                      </select>
+	                    </label>
+	                </td>";
+	    $html .= "  <td style='width: 16%;'>
+	                    <label class='lab2' style='padding-top: 5px; width: 73%;' title='champs'>
+	                      <input type='number' id='hematies_champ_ecbu' style='width: 45px; padding-left: 2px; height: 20px;' max=999 min=1>
+	                    </label>
+	                </td>";
+	    $html .= "</tr>";
+	    $html .= "</table>";
+	     
+	    /*
+	     * Levures && Trichomonas vaginalis
+	     */
+	    $html .= "<table style='width: 100%;'>";
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 20%;'><label class='lab1' style='padding-top: 5px;' ><span style='font-weight: bold;'> Levures </span></label></td>";
+	    $html .= "  <td style='width: 18%;'>
+	                    <label class='lab2' style='padding-top: 5px;'>
+	                      <select id='levures_ecbu' style='width: 100px;'>
+	                        <option> </option>
+	                        <option value=1 >Pr&eacute;sence</option>
+	                        <option value=2 >Absence</option>
+	                      </select>
+	                    </label>
+	                </td>";
+	    $html .= "  <td style='width: 28%;'><label class='lab1' style='font-weight: bold; text-align: right; padding-top: 5px;' > Trichomonas vaginalis </label></td>";
+	    $html .= "  <td style='width: 34%;'>
+	                    <label class='lab2' style='padding-top: 5px; width: 87%;'>
+	                      <select id='trichomonas_vaginalis_ecbu' style='width: 100px;'>
+	                        <option> </option>
+	                        <option value=1 >Pr&eacute;sence</option>
+	                        <option value=2 >Absence</option>
+	                      </select>
+	                    </label>
+	                </td>";
+	    $html .= "</tr>";
+	     
+	     
+	    /*
+	     * Flore
+	     */
+	    $html .= "<table style='width: 100%;'>";
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 20%;'><label class='lab1' style='padding-top: 5px;'><span style='font-weight: bold;' > Flore </span></label></td>";
+	    $html .= "  <td style='width: 35%;'>
+	                    <label class='lab2' style='padding-top: 5px;'>
+	                      <select id='flore_ecbu' style='width: 220px; font-size: 13px;'  onchange='getFloreCocciEcbuPositif(this.value)'>
+	                        <option> </option>
+	                        <option value=1 >Bacilles &agrave; Gram n&eacute;gatif</option>
+	                        <option value=2 >Bacilles &agrave; Gram positif</option>
+                	        <option value=3 >Cocci &agrave; Gram positif</option>
+                	        <option value=4 >Diplocoques &agrave; Gram n&eacute;gatif</option>
+	                      </select>
+	                    </label>
+	                </td>";
+	    
+	    $html .= "  <td style='width: 20%;'>
+	                    <label style='padding-top: 5px;'><span class='flore_cocci_positif_ecbu' style='visibility: hidden;'> <input type='checkbox' style='width:20px;' id='flore_cocci_pos_Choix1_ecbu' > en amas </span></label>
+	                </td>";
+	    $html .= "  <td style='width: 25%;'>
+	                    <label style='padding-top: 5px; width: 82%;'><span class='flore_cocci_positif_ecbu' style='visibility: hidden;'> <input type='checkbox' style='width:20px;' id='flore_cocci_pos_Choix2_ecbu' > en chainettes </span></label>
+	                </td>";
+	     
+	    $html .= "</tr>";
+	    $html .= "</table>";
+	    
+	    /*
+	     * Culot --- Culot --- Culot --- Culot
+	     */
+	    $html .= "<table style='width: 100%;'>";
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 20%;'><label class='lab1' style='padding-top: 5px;'><span style='font-weight: bold;' > Culot </span></label></td>";
+	    $html .= "  <td style='width: 35%;'>
+	                    <label class='lab2' style='padding-top: 5px;'>
+	                      <select id='culot_ecbu' style='width: 100px;'  onchange='getCulotEcbuPositif(this.value)'>
+	                        <option> </option>
+	                        <option value=1 >Positif</option>
+	                        <option value=2 >N&eacute;gatif</option>
+	                      </select>
+	                    </label>
+	                </td>";
+	    $html .= "  <td style='width: 45%;'>
+	                    <label style='padding-top: 5px; width: 90%;'></label>
+	                </td>";
+	    $html .= "</tr>";
+	    $html .= "</table>";
+	    
+	    $html .= "<table id='culot_ecbu_tableau' style='width: 100%; display: none'>";
+	    $html .= "<tr id='culot_ecbu_ligne_1' class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 20%;'></td>";
+	    $html .= "  <td style='width: 20%;'>
+	                  <label class='lab1 listeSelect'>
+                          <select onchange='listeElemtsCulotEcbuSelect(1,this.value);' name='culot_ecbu_select_1' id='culot_ecbu_select_1'> 
+                            <option value=0 > </option> 
+                            <option value=1 >Oeufs</option> 
+                            <option value=2 >Cristaux</option> 
+                            <option value=3 >Cylindres</option> 
+	                        <option value=4 >Parasites</option> 
+                          </select> 
+	                  </label>
+	                </td>";
+	    $html .= "  <td style='width: 40%;'><label class='lab2 emplaceListeElemtsCUSelect' id='culot_ecbu_valsel_1' style='padding-top: 5px;'>  </label></td>";
+	    $html .= "  <td style='width: 20%;'></td>";
+	    $html .= "</tr>";
+	    
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 20%;'></td>";
+	    $html .= "  <td style='width: 80%;' colspan='3'> <div style='float: left; width: 20%; text-align: center; font-weight: bold; font-size: 25px;'> <div style='float: left; width: 30%; cursor: pointer; display: none;' id='culot_ecbu_moins' class='culot_ecbu_pm'> &minus; </div> <div style=' float: left; width: 30%; cursor: pointer;'  id='culot_ecbu_plus' class='culot_ecbu_pm'> + </div> </div></td>";
+	    $html .= "</tr>";
+	    $html .= "</table>";
+	    
+	    /**
+	     * Partie Culture *** Partie Culture
+	     * ---------------------------------
+	     * Partie Culture *** Partie Culture
+	     */
+	    $html .= "<table style='width: 100%;'>";
+	    /**
+	     * Culture --- Culture --- Culture
+	     */
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td colspan='3' style='width: 100%; text-align: left; font-weight: bold; font-size: 12px; font-style: italic;'> &#10148; Culture </td>";
+	    $html .= "</tr>";
+	    $html .= "</table>";
+	    /*
+	     * Culture 
+	     */
+	    $html .= "<table style='width: 100%;'>";
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 20%;'><label class='lab1' style='padding-top: 5px;'><span style='font-weight: bold;' > Culture </span></label></td>";
+	    $html .= "  <td style='width: 25%;'>
+	                    <label class='lab2' style='padding-top: 5px;'>
+	                      <select id='culture_ecbu' style='width: 100px; font-size: 13px;'  onchange='getCultureEcbuPositif(this.value)'>
+	                        <option> </option>
+	                        <option value=1 >Positif</option>
+	                        <option value=2 >N&eacute;gatif </option>
+	                      </select>
+	                    </label>
+	                </td>";
+	    $html .= "  <td style='width: 20%;'>
+	                    <label style='padding-top: 5px;'> 
+	                      <span class='culture_ecbu_negatif' style='visibility: hidden;'> 
+	                        DGU &#60; 10<sup>4</sup> germes/ml 
+	                      </span> 
+	                    </label>
+	                </td>";
+	    $html .= "  <td style='width: 35%;'>
+	                    <label style='padding-top: 5px; width: 87%;'> </label>
+	                </td>";
+	    
+	    $html .= "</tr>";
+	    $html .= "</table>";
+	    
+	    /*
+	     * Culture positive
+	     */
+	    $html .= "<table id='culture_ecbu_choix12_positif' style='width: 100%; display: none;'>";
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 40%;'>
+	                    <label style='padding-top: 5px;' id='cul_label_pos_Choix1_ecbu' >
+	                      <span class='culture_ecbu_positif' > 
+	                        <input type='checkbox' style='width:20px;' id='culture_pos_Choix1_ecbu' onclick='getCultPosChoix1Ecbu();'> 
+	                        DGU &#8805; 10<sup>5</sup> germes/ml 
+	                      </span>
+	                    </label>
+	                </td>";
+	    $html .= "  <td style='width: 40%;'>
+	                    <label style='padding-top: 5px;' id='cul_label_pos_Choix2_ecbu' >
+	                      <span class='culture_ecbu_positif' > 
+	                        <input type='checkbox' style='width:20px;' id='culture_pos_Choix2_ecbu' onclick='getCultPosChoix2Ecbu();'>  
+	                        10<sup>4</sup> < DGU < 10<sup>5</sup> germes/ml
+	                      </span>
+	                    </label>
+	                </td>";
+	    $html .= "  <td style='width: 20%;'> <label style='padding-top: 5px; width: 78%;'></label> </td>";
+	    $html .= "</tr>";
+	    $html .= "</table>";
+	     
+	    /*
+	     * Les champs 'Identification'
+	     */
+	    $html .= "<table style='width: 100%; display: none;' class='identificationCultureChampsECBU identificationCultureChampsECBUABR_1'  >";
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 25%;'><label class='lab1' style='padding-top: 5px;'><div style='position: absolute; left: 30px; font-weight: bold; font-size: 25px; color: green; ' onclick='ajouterNouvelleSoucheECBU();' >&plus;</div><span style='font-weight: bold;'> Identification </span></label></td>";
+	    $html .= "  <td style='width: 27%;'>
+	                    <label class='lab2' style='padding-top: 5px;'>
+	                      <select id='identification_culture_select_ecbu' style='width: 190px;' onchange='getIconeAntibiogrammeIdentCultureECBU(this.value,1)'>
+	                      </select>
+	                    </label>
+	                </td>";
+	    $html .= "  <td style='width: 48%;'><label onclick='antibiogrammeAfficherInterfaceECBU()' class='lab1 antibiogrammeButtonAffInterfaceECBU1' style='padding-top: 0px; margin-top: 3px; margin-left: 10px; width: 30%; height: 15px; font-style: italic; border-radius: 35%; border: 3px solid #d8d8d8; padding-left: 10px; display: none;'> Antibiogramme </label></td>";
+	    $html .= "</tr>";
+	    $html .= "</table>";
+	    
+	    
+	    /**
+	     * Partie commentaire --- Partie commentaire
+	     * -----------------------------------------
+	     * Partie commentaire --- Partie commentaire
+	     */
+	     
+	    $html .= "<table style='width: 100%; margin-top: 15px;'>";
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    if($this->layout()->user['role'] == 'biologiste' || $this->layout()->user['role'] == 'technicien'){
+	    	$html .= "<td style='width: 96%;'><label style='height: 140px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_ecbu' style='max-height: 100px; min-height: 100px; max-width: 560px; min-width: 560px; margin-left: 30px;' readonly> </textarea> </label></td>";
+	    }else{
+	    	$html .= "<td style='width: 96%;'><label style='height: 140px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_ecbu' style='max-height: 100px; min-height: 100px; max-width: 560px; min-width: 560px; margin-left: 30px;' disabled> </textarea> </label></td>";
+	    }
+	    $html .= "<td style='width: 5%;'></td>";
+	    $html .= "</tr>";
+	    $html .= "</table>";
+	     
+	    
+	    $html .="</td> </tr>";
+	    
 	
 	    return $html;
 	}
@@ -10534,10 +10955,14 @@ class TechnicienController extends AbstractActionController {
 		
 		$totalCol = array();
 		
+		
+		
 		$html = '<table class="titreTableauInfosStatistiques">
 				   <tr class="ligneTitreTableauInfos">
 				     <td style="width: 14%; height: 40px;">P&eacute;riodes</td>';
-				     
+		
+		$html .= '<script> var ListeProfilsDataAnyChartLine = new Array(); var ilisteProfilsAnyChart = 0; ListeProfilsDataAnyChartLine[ilisteProfilsAnyChart++]="#"; </script>';
+		
 		        if(count($tabProfils) == 0){ $largeur = 74; }else{ $largeur = 74/count($tabProfils); }
 		
 				for($iProf=0 ; $iProf<count($tabProfils) ;$iProf++){
@@ -10545,6 +10970,9 @@ class TechnicienController extends AbstractActionController {
 				    <td style="width: '.$largeur.'%; height: 40px; text-align: center; color: green; font-family: times new roman; font-size: 18px; font-weight: bold; ">'.$tabProfils[$iProf].'</td>';
 					
 					$totalCol[$iProf] = 0;
+
+					
+					$html .= '<script> ListeProfilsDataAnyChartLine [ilisteProfilsAnyChart++] = "'.$tabProfils[$iProf].'"; </script>';
 				}
 				
 				
@@ -10555,11 +10983,14 @@ class TechnicienController extends AbstractActionController {
 		
 		$nombrePatientDepistes = 0;
 		$kligne = 0;
-		$html .="<script> var Pile = new Array(); </script>";
+		$indTabDataACL = 0;
+		
+		$html .="<script> var Pile = new Array(); var PileAnyChart = new Array();  var DataAnyChartLine = new Array();  </script>";
 	
 		$html .="<div id='listeTableauInfosStatistiques'>
 		           <table class='tableauInfosStatistiques'>";
 	
+		
 		for($i=0 ; $i<count($tabAnnees) ; $i++){
 				
 			$annee = $tabAnnees[$i];
@@ -10572,9 +11003,15 @@ class TechnicienController extends AbstractActionController {
 				$mois = $tabIndexDonnees[$ij];
 				$listeProfils = array_count_values($tabProfilsAnneesMois[$annee][$mois]);
 				
+				/*-----------------*/
+				$periodeMoisAnnee = $this->moisAbregesEnLettre($mois)." ".$annee;
+				$html .="<script> DataAnyChartLine [".$indTabDataACL."] = new Array();  DataAnyChartLine [".$indTabDataACL."][0] = '".$periodeMoisAnnee."';  </script>";
+				/*----------------*/
+				
 				if($ij==0){
 					$html .='<tr style="width: 100%; " class="couleurLigne_'.$kligne.'">
 				             <td class="infosPath periodeInfosLigne" style="width: 16%; height: 40px; padding-left: 15px; font-family: police2; font-size: 20px;">'. $this->moisEnLettre($mois).' '.$annee.' </td>';
+					
 					
 					for($iProf=0 ; $iProf<count($tabProfils) ;$iProf++){
 						
@@ -10586,8 +11023,17 @@ class TechnicienController extends AbstractActionController {
  							
  							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; color: green;">'.$listeProfils[$leProfil].'<span class="valPourcentage" style="font-size: 13px; color: black;">  ('.$pourValeur.'%)</span><span class="voirPlusNumDossierSTAT voirPlusNumDossierSTAT_'.$i.''.$ij.''.$iProf.'" onclick="voirPlusNumeroDossierStatInfo('.$i.','.$ij.','.$iProf.','.$mois.','.$annee.',\''.$leProfil.'\',\''.$intervalleDate[0].'\',\''.$intervalleDate[1].'\');" style="position: relative; margin-right: -15px; cursor: pointer; color: red;">&#11206;</span></td>';
  							$totalCol[$iProf] += $listeProfils[$leProfil];
+ 							
+ 							/*-----------------*/
+ 							$html .="<script> DataAnyChartLine [".$indTabDataACL."][".($iProf+1)."] = ".$listeProfils[$leProfil]."; </script>";
+ 							/*----------------*/
+ 							
  						}else{
 							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal;">0</td>';
+							
+							/*-----------------*/
+							$html .="<script> DataAnyChartLine [".$indTabDataACL."][".($iProf+1)."] = 0; </script>";
+							/*----------------*/
  						}
 
 					}
@@ -10601,6 +11047,7 @@ class TechnicienController extends AbstractActionController {
 					$html .='<tr style="width: 100%; " class="couleurLigne_'.$kligne.'">
 				             <td class="infosPath periodeInfosLigne" style="width: 16%; height: 40px; padding-left: 15px; font-family: police2; font-size: 20px;">'. $this->moisEnLettre($mois).' '.$annee.' </td>';
 				           
+					
 					for($iProf=0 ; $iProf<count($tabProfils) ;$iProf++){
 					
  						$leProfil = $tabProfils[$iProf];
@@ -10611,8 +11058,18 @@ class TechnicienController extends AbstractActionController {
  							
  							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; color: green;">'.$listeProfils[$leProfil].'<span class="valPourcentage" style="font-size: 13px; color: black;">  ('.$pourValeur.'%)</span><span class="voirPlusNumDossierSTAT voirPlusNumDossierSTAT_'.$i.''.$ij.''.$iProf.'" onclick="voirPlusNumeroDossierStatInfo('.$i.','.$ij.','.$iProf.','.$mois.','.$annee.',\''.$leProfil.'\',\''.$intervalleDate[0].'\',\''.$intervalleDate[1].'\');" style="position: relative; margin-right: -15px; cursor: pointer; color: red;">&#11206;</span></td>';
  							$totalCol[$iProf] += $listeProfils[$leProfil];
+ 							
+ 							/*-----------------*/
+ 							$html .="<script> DataAnyChartLine [".$indTabDataACL."][".($iProf+1)."] = ".$listeProfils[$leProfil]."; </script>";
+ 							/*----------------*/
+ 							
  						}else{
 							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal;">0</td>';
+							
+							/*-----------------*/
+							$html .="<script> DataAnyChartLine [".$indTabDataACL."][".($iProf+1)."] = 0; </script>";
+							/*----------------*/
+							
  						}
 					
 					}
@@ -10629,6 +11086,7 @@ class TechnicienController extends AbstractActionController {
 				}
 	
 				$kligne++;
+				$indTabDataACL++;
 				$nombrePatientDepistes += $tabDonneesAnnee[$mois];
 			}
 			
@@ -10647,6 +11105,12 @@ class TechnicienController extends AbstractActionController {
 			
 			//Gestion des statistiques pour les profils
 			$html .="<script> Pile.push({ y: ".$totalCol[$i]." , label: '".$tabProfils[$i]."' }); </script>";
+			
+			/*-----------------*/
+			$html .="<script> var valeurCouple = ['".$tabProfils[$i]."','".$totalCol[$i]."']; </script>";
+			$html .="<script> PileAnyChart.push(valeurCouple); </script>";
+			/*----------------*/
+			
 		}
 		
 		$piedTotal .='<td class="infosPath " style="width: 12%; height: 40px; text-align: right; padding-right: 15px; font-family: times new roman; font-size: 20px; font-weight: bold; color: green; border-left: 2.5px solid #cccccc;">'.$grandTotal.'</td>';
@@ -10755,6 +11219,8 @@ class TechnicienController extends AbstractActionController {
 				   <tr class="ligneTitreTableauInfos">
 				     <td style="width: 14%; height: 40px;">P&eacute;riodes</td>';
 
+		$html .= '<script> var ListeProfilsDataAnyChartLine = new Array(); var ilisteProfilsAnyChart = 0; ListeProfilsDataAnyChartLine[ilisteProfilsAnyChart++]="#"; </script>';
+		
 		if(count($tabProfils) == 0){ $largeur = 74; }else{ $largeur = 74/count($tabProfils); }
 		
 		for($iProf=0 ; $iProf<count($tabProfils) ;$iProf++){
@@ -10762,6 +11228,9 @@ class TechnicienController extends AbstractActionController {
 				    <td style="width: '.$largeur.'%; height: 40px; text-align: center; color: green; font-family: times new roman; font-size: 18px; font-weight: bold; ">'.$tabProfils[$iProf].'</td>';
 				
 			$totalCol[$iProf] = 0;
+			
+			$html .= '<script> ListeProfilsDataAnyChartLine [ilisteProfilsAnyChart++] = "'.$tabProfils[$iProf].'"; </script>';
+			
 		}
 	
 	
@@ -10772,8 +11241,10 @@ class TechnicienController extends AbstractActionController {
 	
 		$nombrePatientDepistes = 0;
 		$kligne = 0;
-		$html .="<script> var Pile = new Array(); </script>";
-	
+		$indTabDataACL = 0;
+		
+		$html .="<script> var Pile = new Array(); var PileAnyChart = new Array();  var DataAnyChartLine = new Array();  </script>";
+		
 		$html .="<div id='listeTableauInfosStatistiques'>
 		           <table class='tableauInfosStatistiques'>";
 	
@@ -10789,6 +11260,12 @@ class TechnicienController extends AbstractActionController {
 				$mois = $tabIndexDonnees[$ij];
 				$listeProfils = array_count_values($tabProfilsAnneesMois[$annee][$mois]);
 	
+				/*-----------------*/
+				$periodeMoisAnnee = $this->moisAbregesEnLettre($mois)." ".$annee;
+				$html .="<script> DataAnyChartLine [".$indTabDataACL."] = new Array();  DataAnyChartLine [".$indTabDataACL."][0] = '".$periodeMoisAnnee."';  </script>";
+				/*----------------*/
+				
+				
 				if($ij==0){
 					$html .='<tr style="width: 100%; " class="couleurLigne_'.$kligne.'">
 				             <td class="infosPath periodeInfosLigne" style="width: 16%; height: 40px; padding-left: 15px; font-family: police2; font-size: 20px;">'. $this->moisEnLettre($mois).' '.$annee.' </td>';
@@ -10803,8 +11280,18 @@ class TechnicienController extends AbstractActionController {
 							
 							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; color: green;">'.$listeProfils[$leProfil].'<span class="valPourcentage" style="font-size: 13px; color: black;">  ('.$pourValeur.'%)</span><span class="voirPlusNumDossierSTAT voirPlusNumDossierSTAT_'.$i.''.$ij.''.$iProf.'" onclick="voirPlusNumeroDossierStatInfo('.$i.','.$ij.','.$iProf.','.$mois.','.$annee.',\''.$leProfil.'\',\''.$date_debut.'\',\''.$date_fin.'\');" style="position: relative; margin-right: -15px; cursor: pointer; color: red;">&#11206;</span></td>';
 							$totalCol[$iProf] += $listeProfils[$leProfil];
+							
+							/*-----------------*/
+							$html .="<script> DataAnyChartLine [".$indTabDataACL."][".($iProf+1)."] = ".$listeProfils[$leProfil]."; </script>";
+							/*----------------*/
+							
 						}else{
 							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal;">0</td>';
+						
+							/*-----------------*/
+							$html .="<script> DataAnyChartLine [".$indTabDataACL."][".($iProf+1)."] = 0; </script>";
+							/*----------------*/
+											
 						}
 	
 					}
@@ -10829,8 +11316,17 @@ class TechnicienController extends AbstractActionController {
 							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; color: green;">'.$listeProfils[$leProfil].'<span class="valPourcentage" style="font-size: 13px; color: black;">  ('.$pourValeur.'%)</span><span class="voirPlusNumDossierSTAT voirPlusNumDossierSTAT_'.$i.''.$ij.''.$iProf.'" onclick="voirPlusNumeroDossierStatInfo('.$i.','.$ij.','.$iProf.','.$mois.','.$annee.',\''.$leProfil.'\',\''.$date_debut.'\',\''.$date_fin.'\');" style="position: relative; margin-right: -15px; cursor: pointer; color: red;">&#11206;</span></td>';
 							
 							$totalCol[$iProf] += $listeProfils[$leProfil];
+							
+							/*-----------------*/
+							$html .="<script> DataAnyChartLine [".$indTabDataACL."][".($iProf+1)."] = ".$listeProfils[$leProfil]."; </script>";
+							/*----------------*/
+							
 						}else{
 							$html .='<td class="infosPath" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal;">0</td>';
+						
+							/*-----------------*/
+							$html .="<script> DataAnyChartLine [".$indTabDataACL."][".($iProf+1)."] = 0; </script>";
+							/*----------------*/
 						}
 							
 					}
@@ -10849,6 +11345,7 @@ class TechnicienController extends AbstractActionController {
 				}
 	
 				$kligne++;
+				$indTabDataACL++;
 				$nombrePatientDepistes += $tabDonneesAnnee[$mois];
 			}
 				
@@ -10868,6 +11365,12 @@ class TechnicienController extends AbstractActionController {
 			
 			//Gestion des statistiques pour les profils
 			$html .="<script> Pile.push({ y: ".$totalCol[$i]." , label: '".$tabProfils[$i]."' }); </script>";
+			
+			/*-----------------*/
+			$html .="<script> var valeurCouple = ['".$tabProfils[$i]."','".$totalCol[$i]."']; </script>";
+			$html .="<script> PileAnyChart.push(valeurCouple); </script>";
+			/*----------------*/
+			
 		}
 		$piedTotal .='<td class="infosPath " style="width: 12%; height: 40px; text-align: right; padding-right: 15px; font-family: times new roman; font-size: 20px; font-weight: bold; color: green; border-left: 2.5px solid #cccccc;">'.$grandTotal.'</td>';
 	
@@ -11141,8 +11644,8 @@ class TechnicienController extends AbstractActionController {
 				    	
 				    	$listeNumDossierChaine .= $listeNumDossier[$iNumDossier].",";
 				    	if($iNumDossier+1 == count($listeNumDossier)){
-				    		$voirPlus = "";
-				    		if(count($listeNumDossier) > 1){ $voirPlus='<span class="voirPlusNumDossier_'.$i.''.$ij.'" style="margin-top: 22px;"></span> <span onclick="voirPlusNumeroDossier('.$i.','.$ij.',\''.$listeNumDossierChaine.'\');" style="position: absolute; font-size: 25px; color: red; cursor: pointer; font-weight: bold; ">+</span>'; }
+				    		$voirPlus = '<span style="font-size: 25px; opacity: 0;">+</span>';
+				    		if(count($listeNumDossier) > 1){ $voirPlus='<span class="voirPlusNumDossier_'.$i.''.$ij.'" style="margin-top: 22px;"></span> <span onclick="voirPlusNumeroDossier('.$i.','.$ij.',\''.$listeNumDossierChaine.'\');" style="position: relative; font-size: 25px; color: red; cursor: pointer; font-weight: bold; ">+</span>'; }
 				    		$html .='<td class="infosPath" style="width: 50%; height: 40px; text-align: center; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; color: green;"> '.$listeNumDossier[0].' <span style="font-size: 13px; color: black; align: right;"> '.$voirPlus.' </span></td>';		
 				    	}
 					}
@@ -11163,8 +11666,8 @@ class TechnicienController extends AbstractActionController {
 				    	
 				    	$listeNumDossierChaine .= $listeNumDossier[$iNumDossier].",";
 				    	if($iNumDossier+1 == count($listeNumDossier)){
-				    		$voirPlus = "";
-				    		if(count($listeNumDossier) > 1){ $voirPlus='<span class="voirPlusNumDossier_'.$i.''.$ij.'" style="margin-top: 22px;"></span> <span onclick="voirPlusNumeroDossier('.$i.','.$ij.',\''.$listeNumDossierChaine.'\');" style="position: absolute; font-size: 25px; color: red; cursor: pointer; font-weight: bold; ">+</span>'; }
+				    		$voirPlus = '<span style="font-size: 25px; opacity: 0;">+</span>';
+				    		if(count($listeNumDossier) > 1){ $voirPlus='<span class="voirPlusNumDossier_'.$i.''.$ij.'" style="margin-top: 22px;"></span> <span onclick="voirPlusNumeroDossier('.$i.','.$ij.',\''.$listeNumDossierChaine.'\');" style="position: relative; font-size: 25px; color: red; cursor: pointer; font-weight: bold; ">+</span>'; }
 				    		$html .='<td class="infosPath" style="width: 50%; height: 40px; text-align: center; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; color: green;"> '.$listeNumDossier[0].' <span style="font-size: 13px; color: black; align: right;"> '.$voirPlus.' </span></td>';		
 				    	}
 					}

@@ -4256,6 +4256,265 @@ class ResultatDemandeAnalyseTable {
 	
 	}
 	
+	
+	//****************************************************************************************************
+	//****************************************************************************************************
+	
+	public function getListeIdentificationSouchesIdDESC(){
+		$db = $this->tableGateway->getAdapter();
+		$sql = new Sql($db);
+		$sQuery = $sql->select()->from(array('lis' => 'liste_identification_souches'))
+		->columns(array('*'))->order('idsouche DESC');
+		$liste = $sql->prepareStatementForSqlObject($sQuery)->execute();
+		
+		$listeSouches = array();
+		foreach ($liste as $list){
+			$listeSouches [] = array($list['idsouche'],$list['libellesouche']);
+		}
+		
+		return $listeSouches;
+	}
+	
+	public function getListeIdentificationSouchesLibelleASC(){
+		$db = $this->tableGateway->getAdapter();
+		$sql = new Sql($db);
+		$sQuery = $sql->select()->from(array('lis' => 'liste_identification_souches'))
+		->columns(array('*'))->order('libellesouche ASC');
+		$liste = $sql->prepareStatementForSqlObject($sQuery)->execute();
+	
+		$listeSouches = array();
+		foreach ($liste as $list){
+			$listeSouches [] = array($list['idsouche'],$list['libellesouche']);
+		}
+	
+		return $listeSouches;
+	}
+	
+	public function getListeIdentifSouchesIdLibelleASC(){
+		$db = $this->tableGateway->getAdapter();
+		$sql = new Sql($db);
+		$sQuery = $sql->select()->from(array('lis' => 'liste_identification_souches'))
+		->columns(array('*'))->order('libellesouche ASC');
+		$liste = $sql->prepareStatementForSqlObject($sQuery)->execute();
+	
+		$listeSouches = array();
+		foreach ($liste as $list){
+			$listeSouches [$list['idsouche']] = $list['libellesouche'];
+		}
+	
+		return $listeSouches;
+	}
+	
+	public function getSoucheIdentifParLibelle($libelle){
+		$db = $this->tableGateway->getAdapter();
+		$sql = new Sql($db);
+		$sQuery = $sql->select()->from(array('lis' => 'liste_identification_souches'))
+		->where(array('libellesouche' => $libelle));
+		return $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
+	}
+	
+	public function insertNouvelleSouche($nouvelleSouche, $idemploye){
+		if(!$this->getSoucheIdentifParLibelle($nouvelleSouche)){
+			$db = $this->tableGateway->getAdapter();
+			$sql = new Sql($db);
+			$sQuery = $sql->insert()->into('liste_identification_souches')
+			->values( array('libellesouche'=>$nouvelleSouche, 'idemploye'=>$idemploye) );
+			$sql->prepareStatementForSqlObject($sQuery)->execute();
+		}
+	}
+	
+	public function modifierSoucheSelectionnee($idSouche, $nouveauNomSouche, $idemploye){
+
+		$donnees = array('libellesouche'=>$nouveauNomSouche, 'idemploye'=>$idemploye);
+		
+		$db = $this->tableGateway->getAdapter();
+		$sql = new Sql($db);
+		$sQuery = $sql->update() ->table('liste_identification_souches') ->set( $donnees )
+		->where(array('idsouche' => $idSouche ));
+		$sql->prepareStatementForSqlObject($sQuery)->execute();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public function getValeursECBUCulot($iddemande){
+		$db = $this->tableGateway->getAdapter();
+		$sql = new Sql($db);
+		$sQuery = $sql->select()
+		->from(array('va' => 'valeurs_ecbu_culot'))->columns(array('*'))
+		->where(array('idresultat_demande_analyse' => $iddemande))->order(array('type_culot'=>'ASC', 'valeur_culot'=>'ASC'));
+	
+		return $sql->prepareStatementForSqlObject($sQuery)->execute();
+	}
+	
+	public function deleteValeursECBUCulot($iddemande){
+		$db = $this->tableGateway->getAdapter();
+		$sql = new Sql($db);
+		$sQuery = $sql->delete()->from('valeurs_ecbu_culot')
+		->where(array('idresultat_demande_analyse' => $iddemande));
+		$sql->prepareStatementForSqlObject($sQuery)->execute();
+	}
+	
+	public function addValeursECBUCulot($iddemande, $listeCulotSelect){
+		$this->deleteValeursECBUCulot($iddemande);
+		$db = $this->tableGateway->getAdapter();
+		$sql = new Sql($db);
+
+		for($i=1 ; $i<count($listeCulotSelect); $i++){
+			$donnees = array();
+			
+			$listeCulSel = explode('^$%$^', $listeCulotSelect[$i]);
+			$donnees['idresultat_demande_analyse'] = $iddemande;
+			$donnees['type_culot']   = $listeCulSel[0];
+			if($listeCulSel[0] == 4){
+				$donnees['info_culot'] = $listeCulSel[1];
+			}else{
+				$donnees['valeur_culot'] = $listeCulSel[1];
+			}
+
+			$sQuery = $sql->insert() ->into('valeurs_ecbu_culot') ->values( $donnees );
+			$sql->prepareStatementForSqlObject($sQuery)->execute();
+		}
+		
+	}
+	
+	public function getValeursECBU($iddemande){
+		$db = $this->tableGateway->getAdapter();
+		$sql = new Sql($db);
+		$sQuery = $sql->select()
+		->from(array('va' => 'valeurs_ecbu'))->columns(array('*'))
+		->where(array('idresultat_demande_analyse' => $iddemande));
+	
+		return $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
+	}
+	
+	public function addValeursECBU($tab, $iddemande){
+		$db = $this->tableGateway->getAdapter();
+		$sql = new Sql($db);
+		$donneesExiste = 0;
+	
+		$donnees = array();
+		$listeCulotSelect = null;
+	
+		if(str_replace( " ", "",$tab[1])){ $donnees['type_materiel'] = $tab[1]; }else{ $donnees['type_materiel'] = null; } 
+		if($tab[2]){ $donnees['Urines'] = $tab[2]; }else{ $donnees['Urines'] = null; }
+		if($tab[3]){ $donnees['Leucocytes'] = $tab[3]; }else{ $donnees['Leucocytes'] = null; }
+		if($tab[4]){ $donnees['LeucocytesChamp'] = $tab[4]; }else{ $donnees['LeucocytesChamp'] = null; }
+		if($tab[5]){ $donnees['Hematies'] = $tab[5]; }else{ $donnees['Hematies'] = null; }
+		if($tab[6]){ $donnees['HematiesChamp'] = $tab[6]; }else{ $donnees['HematiesChamp'] = null; }
+		if($tab[7]){ $donnees['Levures'] = $tab[7]; }else{ $donnees['Levures'] = null; }
+		if($tab[8]){ $donnees['TrichomonasVaginalis'] = $tab[8]; }else{ $donnees['TrichomonasVaginalis'] = null; }
+		if($tab[9]){ $donnees['Flore'] = $tab[9]; }else{ $donnees['Flore'] = null; }
+		if($tab[9] == 3 ){
+			$donnees['FloreAmas']      = ($tab[10] != -1) ? 1 : null;
+			$donnees['FloreChainette'] = ($tab[11] != -1) ? 1 : null;
+		}else{
+			$donnees['FloreAmas']      = null;
+			$donnees['FloreChainette'] = null;
+		}
+		
+		if($tab[12]){ $donnees['Culot']   = $tab[12]; }else{ $donnees['Culot']   = null; }
+		if($tab[12]==1){ $listeCulotSelect = $tab[13]; }
+		
+		if($tab[14]){ $donnees['Culture'] = $tab[14]; }else{ $donnees['Culture'] = null; }
+		if($tab[14] == 1 ){
+			$donnees['CulturePos1'] = ($tab[15] != -1) ? 1 : null;
+			$donnees['CulturePos2'] = ($tab[16] != -1) ? 1 : null;
+			
+			if($donnees['CulturePos1'] == 1){ $donnees['IdentificationCulture'] = $tab[17]; }
+			else{ $donnees['IdentificationCulture'] = null; }
+		}else{
+			$donnees['CulturePos1'] = null;
+			$donnees['CulturePos2'] = null;
+			$donnees['IdentificationCulture'] = null;
+		}	
+		
+		if($tab[18]){ $donnees['conclusion'] = $tab[18]; }else{ $donnees['conclusion'] = null; }
+		
+		
+		
+		
+		
+		
+		
+		if(!$this->array_empty($donnees)){ $donneesExiste = 1; }
+		
+		//Si les resultats n y sont pas on les ajoute
+		if(!$this->getValeursECBU($iddemande)){
+		
+			if($donneesExiste == 0){
+				$this->tableGateway->delete ( array ( 'iddemande_analyse' => $iddemande ) );
+				$this->setResultDemandeNonEffectuee($iddemande);
+			}else{
+				$donnees['idresultat_demande_analyse'] = $iddemande;
+				$sQuery = $sql->insert() ->into('valeurs_ecbu') ->values( $donnees );
+				$sql->prepareStatementForSqlObject($sQuery)->execute();
+				$this->setResultDemandeEffectuee($iddemande);
+				 
+				if($listeCulotSelect){ $this->addValeursECBUCulot($iddemande, $listeCulotSelect); }
+				//Ajouter les donnees de l'antibiogramme
+				//if($tab[17] != 0 && !$this->array_empty($donneesAntibiogramme)){ $this->addValeursAntiBioGramme($donneesAntibiogramme, $iddemande); }
+			}
+		
+		}
+		//Sinon on effectue des mises a jours
+		else {
+		
+			if($donneesExiste == 0){
+				$this->tableGateway->delete ( array ( 'iddemande_analyse' => $iddemande ) );
+				$this->setResultDemandeNonEffectuee($iddemande);
+			}else{
+				$sQuery = $sql->update() ->table('valeurs_ecbu') ->set( $donnees )
+				->where(array('idresultat_demande_analyse' => $iddemande ));
+				$sql->prepareStatementForSqlObject($sQuery)->execute();
+				$this->setResultDemandeEffectuee($iddemande);
+
+				if($listeCulotSelect){ $this->addValeursECBUCulot($iddemande, $listeCulotSelect); }
+				
+				//Mettre à jour ou ajouter les donnees de l'antibiogramme
+				/*
+				if($tab[17] != 0 && !$this->array_empty($donneesAntibiogramme)){
+					if($this->getValeursAntiBioGramme($iddemande)){
+						$this->updateValeursAntiBioGramme($donneesAntibiogramme, $iddemande);
+					}else{
+						$this->addValeursAntiBioGramme($donneesAntibiogramme, $iddemande);
+					}
+				}else{
+					$this->deleteValeursAntiBioGramme($iddemande);
+				}
+				*/
+			}
+		
+		}
+		
+		return $donneesExiste;
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	//****************************************************************************************************
 	//****************************************************************************************************
 	public function getValeursLDH($iddemande){

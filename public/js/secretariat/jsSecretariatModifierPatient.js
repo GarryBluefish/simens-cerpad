@@ -144,18 +144,21 @@ nationalite_actuelle.attr( 'readonly', false );
   	//MENU GAUCHE
   	
   	$("#vider").click(function(){
-  		$('#lieu_naissance').val('');
-  		$('#email').val('');
-  		$('#nom').val('');
-  		$('#telephone').val('');
-  		$('#nationalite_origine').val('');
-  		$('#prenom').val('');
-  		$('#nationalite_actuelle').val('');
-  		$('#date_naissance').val('');
-  		$('#adresse').val('');
-  		$('#sexe').val('');
-  		$('#profession').val('');
-  		$('#age').val('');
+  		if(confirm("Etes-vous sur de vouloir vider les champs")){
+  	  		$('#lieu_naissance').val('');
+  	  		$('#email').val('');
+  	  		$('#nom').val('');
+  	  		$('#telephone').val('');
+  	  		$('#nationalite_origine').val('');
+  	  		$('#prenom').val('');
+  	  		$('#nationalite_actuelle').val('');
+  	  		$('#date_naissance').val('');
+  	  		$('#adresse').val('');
+  	  		$('#sexe').val('');
+  	  		$('#profession').val('');
+  	  		$('#age').val('');
+  		}
+  		
   		return false;
   	});
   	

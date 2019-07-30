@@ -196,7 +196,7 @@ class SecretariatController extends AbstractActionController {
 	    $debut_ts = strtotime($debut);
 	    $fin_ts = strtotime($fin);
 	    $diff = $fin_ts - $debut_ts;
-	    return ($diff / $nbSecondes);
+	    return (int)($diff / $nbSecondes);
 	}
 	
 	public function listePatientAction() {
@@ -551,7 +551,6 @@ class SecretariatController extends AbstractActionController {
 					$personne->photo = $photo;
 				}
 				$idpatient = $personne->idpersonne;
-				$typepatient = $personne->typepatient; if(!$typepatient){ $typepatient = 0; }
 				
 				$this->getPersonneTable() ->savePersonne($personne);
 				$idemploye = $this->layout()->user['idemploye'];
@@ -559,7 +558,8 @@ class SecretariatController extends AbstractActionController {
 				if($personne->sexe == 'Masculin'){ $numero_dossier = substr_replace($patient->numero_dossier, 1, 0, 1); }else{  $numero_dossier = substr_replace($patient->numero_dossier, 2, 0, 1);  }
 				$this->getPatientTable()->updatePatient($idpatient, $numero_dossier, $idemploye);
 				
-				if($personne->depistage == 1){ $this->getPatientTable()->updateDepistagePatient($idpatient, $personne->ethnie, $typepatient, $idemploye); }
+				if($personne->depistage == 1){ $this->getPatientTable()->updateDepistagePatient($idpatient, $personne->ethnie, $idemploye); }
+				else{$this->getPatientTable()->deleteDepistagePatient($idpatient); }
 		
 				//INFORMATIONS PARENTALES
 				//INFORMATIONS PARENTALES
@@ -576,11 +576,13 @@ class SecretariatController extends AbstractActionController {
 		$patient = $this->getPatientTable()->getPatient($idpersonne);
 		$depistage = $this->getPatientTable()->getDepistagePatient($idpersonne);
 		$typepatient = 0;
+		$typage = 0;
 		if($depistage->current( )){
 		    $personne->ethnie = $depistage->current()['ethnie']; 
 		    $personne->typepatient = $depistage->current()['typepatient'];
 		    $personne->depistage = 1;
 		    $typepatient = $depistage->current()['typepatient'];
+		    $typage = (int)$depistage->current()['typage'];
 		}
 		
 		$form->bind($personne);
@@ -616,11 +618,14 @@ class SecretariatController extends AbstractActionController {
 		    $formParent->populateValues($donneesInfosParentales);
 		}
 		
+		//var_dump($typage); exit();
+		
 		return new ViewModel ( array (
 		    'form' => $form,
 		    'formParent' => $formParent,
 		    'photo' => $personne->photo,
 		    'typepatient' => $typepatient,
+			'typage' => $typage,
 		    'depistage' => $depistage->count(),
 		) );
 		

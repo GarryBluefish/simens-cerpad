@@ -252,6 +252,97 @@ $(window).load(function () {
 <div style='display: none;' class='infos_parentales_tampon'> <!-- à ne pas supprimer *** pour les infos parentales --> </div>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- GESTION DE L'INTERFACE D'AJOUT DES Souches -->
+<!-- GESTION DE L'INTERFACE D'AJOUT DES Souches -->
+<!-- GESTION DE L'INTERFACE D'AJOUT DES Souches -->
+
+<div id="ajouterNouvelleSoucheECBU" title="Ajouter une nouvelle souche" style="display: none;" >
+
+    <table class="tabAjouterNouvelleSoucheECBU">
+        <tr>
+            <td>
+               <label> &#10048; Liste des souches </label>
+               <div class="listeDeSouchesExistantes"> 
+                   <!-- Contient la liste des types de pathologies -->
+               </div>
+            </td>
+        </tr>
+    </table>
+    
+    <table class="ligneBoutonsAjoutSoucheECBU interfAjoutNewSoucheECBU">
+        <tr>
+            <td>
+                <div class="boutonATP"> <button onclick="affInterfaceAjoutNewSoucheECBU();"> Ajouter une souche </button> </div>
+            </td>
+        </tr>
+    </table>
+    
+    <table class="interfaceAjoutNouvelleSoucheECBU interfAjoutNewSoucheECBU" style="display: none;">
+      <tr><td colspan="2" style="height: 20px; font-family: time new roman; font-size: 19px; margin-bottom: 10px;">&#10046; Nouvelle souche </td></tr>
+      <tr><td colspan="2"> <form id="formNewSoucheAAjouter"> <input type="text" id="nouvelleSoucheAAjouter" required placeholder="Entrer la nouvelle souche a ajouter"> <button id="formNewSoucheAAjouterButton" style="display: none;"></button> </form></td></tr>
+      <tr>
+        <td>
+          <div class="boutonAVAA"> <button onclick="annulerAjoutNewSoucheButtonECBU();"> Annuler </button> </div>
+        </td>
+        <td>
+          <div class="boutonAVAV"> <button onclick="validerAjoutNewSoucheButtonECBU();"> Valider </button> </div>
+        </td>
+      </tr>
+    </table>
+    
+    
+    <table class="interfaceModificationSoucheECBU interfModifSoucheECBU" style="display: none;">
+      <tr><td colspan="2" style="height: 20px; font-family: time new roman; font-size: 19px; margin-bottom: 10px;" class="modifSoucheNumeroECBU">&#10046; Modification de la souche <span></span></td></tr>
+      <tr><td colspan="2"> <form id="formModificationSoucheAModifier"> <input type="text" id="modificationSoucheAModifier" required > <button id="formModificationSoucheAModifierButton" style="display: none;"></button> </form></td></tr>
+      <tr>
+        <td>
+          <div class="boutonAVAA"> <button onclick="annulerModificationSoucheButtonECBU();"> Annuler </button> </div>
+        </td>
+        <td>
+          <div class="boutonAVAV"> <button onclick="validerModificationSoucheButtonECBU();"> Modifier </button> </div>
+        </td>
+      </tr>
+    </table>
+    
+</div>
+
+
+
+
+
+
+
+
+
 <script type="text/javascript">
 
 $(function(){
@@ -269,7 +360,8 @@ dep_analyses1();
 $('#liste_resultats_analyses').css({'font-weight':'bold','color':'white','font-size':'20px'});
 
 //Empêcher la touche entrée de répondre 
-$('#resultatsAnalyses, #contenuResultatsAnalysesParType, #resultatsAnalysesDuneDemande').keypress(function(event) {
+$('#resultatsAnalyses, #contenuResultatsAnalysesParType, #resultatsAnalysesDuneDemande, #ajouterNouvelleSoucheECBU').keypress(function(event) {
 	if (event.keyCode == 13) { return false; }
 });
 </script>
+

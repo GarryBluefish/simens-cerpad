@@ -25,7 +25,7 @@ class ListeBilanPrelevement {
      
 		$modification = "";
 		$suppression  = "";
-		if ($data['bp.idbilan=0'] == 0){
+		if ($data['idbilan2'] == 0){
 			$modification = "<a href='javascript:modifierBilan(".$data ['idfacturation'].")' ><img style='margin-right: 15%;' src='../images_icons/pencil_16.png' title='Modifier'></a>";
 			$suppression  = "<a id='suppBilan_".$data['idbilan']."' href='javascript:supprimerBilan(".$data['idbilan'].");' ><img src='../images_icons/symbol_supprimer.png' title='Supprimer'></a>";				
 		}

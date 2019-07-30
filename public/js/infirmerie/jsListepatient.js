@@ -234,7 +234,7 @@
                          $('.boutonTerminer').click(function(){
                          
                         	 if($('#formEnregistrementBilan')[0].checkValidity() == true){
-                        		 //formulaire valide et envoi des données
+                        		 //formulaire valide et envoi des donnï¿½es
                         		 $('.boutonTerminer button').attr('disabled', true);
                         		 $('#validerForm').trigger('click');
                         	 }else{
@@ -307,4 +307,66 @@
     	
     }
     
+    
+    function nouvelleLigneGPPHPVO(idanalyse, id)
+	{
+    	var infoSuiv = "";
+    	//if(idanalyse == 72){ infoSuiv = "de l'HPVO"; }else{ infoSuiv = "de la GPP"; }
+    	
+    	var ligne = ""+
+		 '<div id="prelevementGPPHPVO_AutoAjoutLigne'+id+'"  class="prelevementGPPHPVO_AutoAjout">'+
+	     '<div class="autre_prelev_GPP_HPVO">'+(id+1)+'<sup>&egrave;me</sup> pr&eacute;l&egrave;vement '+infoSuiv+
+	     '</div>'+
+	     '<div class="barre_separat_prelev_GPP_HPVO"></div>'+
+	    
+	     '<table id="form_patient" style="margin-left:17.5%; width: 80%; border-bottom: 1px solid #F1F1F1;">'+
+	           '<tr style="vertical-align: top; background: re;">'+
+	             '<td class="comment-form-patient " style="width: 20%; vertical-align:top; margin-right:0px;">'+
+	               '<label>Date & Heure</label>'+
+	               '<input type="text" style="width:90%;" id="dateHeureGPPHPVO'+id+'">'+
+	             '</td>'+
+	             '<td class="comment-form-patient " style="width: 12%; vertical-align:top; margin-right:0px;">'+
+	               '<label>Intervalle </label>'+
+	               '<input type="text" style="width:80%;" id="intervalleGPPHPVO'+id+'">'+
+	             '</td>'+
+                 '<td class="comment-form-patient " style="width: 45%; vertical-align:top; margin-right:0px;">'+
+	               '<label>Difficult&eacute;s rencontr&eacute;es</label>'+
+	               '<input type="text" style="width:95%;" value="Aucune" id="difficultesGPPHPVO'+id+'">'+
+	             '</td>'+
+                 '<td class="comment-form-patient " style="width: 23%; vertical-align:top; margin-right:0px;">'+
+	               '<label>Origine</label>'+
+	               '<input type="text" style="width:90%;" id="origineGPPHPVO'+id+'">'+
+	             '</td>'+
+	           '</tr>'+
+	     '</table>'+
+	    
+	     '</div>';
+    	
+    	return ligne
+	}
+    
+    
+	function ajoutAutoLigneGPPHPVO(idanalyse)
+	{
+		var nbLigne = $('.prelevementGPPHPVO_AutoAjout').length;
+		if( nbLigne+1 == 5 ){
+			$("#autre_prelevGPPHPVO_plus").css({'visibility':'hidden'}); 
+		}
+		var nouvelleLigne = nouvelleLigneGPPHPVO(idanalyse, nbLigne+1);
+		$("#prelevementGPPHPVO_AutoAjoutLigne"+nbLigne).after(nouvelleLigne);
+		
+		if( nbLigne+1 == 2 ){
+			 $("#autre_prelevGPPHPVO_moins").css({'visibility':'visible'}); 
+		}
+	}
+	
+	
+	function suppressionAutoLigneGPPHPVO(idanalyse)
+	{
+		var nbLigne = $('.prelevementGPPHPVO_AutoAjout').length;
+		if(nbLigne-1 == 1){ $("#autre_prelevGPPHPVO_moins").css({'visibility':'hidden'}); }
+		$("#prelevementGPPHPVO_AutoAjoutLigne"+nbLigne).remove();
+		if(nbLigne-1 == 4){ $("#autre_prelevGPPHPVO_plus").css({'visibility':'visible'}); }
+	}
+	
 	

@@ -175,7 +175,9 @@ return array(
                 	'get-informations-resultats-analyses-validees-patient' => array('biologiste','medecin'),
                 	'get-liste-analyses-demandees-validees' => array('biologiste','medecin'),
                 	'retirer-validation' => 'biologiste',	
-                	'envoi-sms-alert' => 'biologiste',		
+                	'envoi-sms-alert' => 'biologiste',
+
+                	'get-liste-des-souches' => 'biologiste',
                 ),
 
             	/*
@@ -223,6 +225,11 @@ return array(
             			
             		'infos-statistiques-depistages-nayant-pas-resultat' => 'technicien',
             		'infos-statistiques-voir-plus-numero-dossier' => 'technicien',	
+            			
+            			
+            		'get-liste-des-souches' => 'technicien',
+            		'insert-nouvelle-souche' => 'technicien',
+            		'modifier-souche-selectionnee' => 'technicien',
             	),	
             		
             		

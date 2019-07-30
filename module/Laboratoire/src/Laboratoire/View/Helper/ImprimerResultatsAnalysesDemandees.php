@@ -581,6 +581,9 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 	protected $analysesTypageHemoglobine;
 	protected $analysesSerologieHIV;
 	protected $analysesSerologiePV;
+	protected $analysesSerologieECBU;
+	protected $resultatsCulotPositifECBU;
+	protected $listeSouchesIdentif;
 	
 
 	public function setAnalysesImmunoHemato($analysesImmunoHemato){
@@ -703,6 +706,31 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 	    return $this->analysesSerologiePV;
 	}
 	
+	public function setAnalysesSerologieECBU($analysesSerologieECBU){
+		$this->analysesSerologieECBU = $analysesSerologieECBU;
+	}
+	
+	public function getAnalysesSerologieECBU(){
+		return $this->analysesSerologieECBU;
+	}
+	
+	public function setResultatCulotPositifECBU($resultatCulotPositifECBU){
+		$this->resultatsCulotPositifECBU = $resultatCulotPositifECBU;
+	}
+	
+	public function getResultatCulotPositifECBU(){
+		return $this->resultatsCulotPositifECBU;
+	}
+	
+	
+	public function setListeSouchesIdentif($listeSouchesIdentif){
+		$this->listeSouchesIdentif = $listeSouchesIdentif;
+	}
+	
+	public function getListeSouchesIdentif(){
+		return $this->listeSouchesIdentif;
+	}
+	
 	//Premiere page NFS --- NFS --- NFS
 	//Premiere page NFS --- NFS --- NFS
 	function affichageResultatAnalyseNFS()
@@ -747,6 +775,15 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 	    $this->AddPage();
 	    $this->EnTetePage();
 	    $this->AfficherResultatsAntibiogrammePV($resultatsABGPV);
+	}
+	
+	//Page Sérologie ECBU
+	//Page Sérologie ECBU
+	function affichageResultatsECBU()
+	{
+		$this->AddPage();
+		$this->EnTetePage();
+		$this->AfficherResultatsECBU();
 	}
 	
 	//Dernière page Typage hémoglobine (Profil du patient au dépistage)
@@ -4388,11 +4425,15 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 				
 				$this->Cell(3,6,'','T',1,'L',1);
 				
-				$this->SetFont('timesi','U',11);
-				$this->Cell(70,6,"Conclusion :",'B',0,'R',1);
 				
-				$this->SetFont('timesb','',11);
-				$this->Cell(115,6,iconv ('UTF-8' , 'windows-1252', $resultats[44][0]['conclusion']),'B',1,'L',1);
+				if(str_replace(' ','', $resultats[44][0]['conclusion'])){
+					$this->Cell(5,6,'','',0,'L',1);
+					$this->SetFont('timesbi','U',10);
+					$this->Cell(180,6,'Commentaire :','',1,'L',1);
+					$this->SetFont('timesb','',11);
+					$this->MultiCell(185,6,iconv ('UTF-8' , 'windows-1252', $resultats[44][0]['conclusion']),0,'J',1);
+				}
+				
 				
 			}
 			
@@ -4568,13 +4609,15 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 				
 				/** Conclusion --- Conclusion --- Conclusion**/
 				/** Conclusion --- Conclusion --- Conclusion**/
-				$this->Cell(15,6,'','BT',0,'L',1);
 				
-				$this->SetFont('timesbi','U',10);
-				$this->Cell(25,6,'Commentaire :','BT',0,'R',1);
-				
-				$this->SetFont('times','B',11);
-				$this->MultiCell(145,6,iconv ('UTF-8' , 'windows-1252', $resultats[45]['commentaire']),'BT','J',1);
+				if(str_replace(' ','', $resultats[45]['commentaire'])){
+					$this->Cell(15,6,'','',0,'L',1);
+					$this->SetFont('timesbi','U',10);
+					$this->Cell(170,6,'Commentaire :','',1,'L',1);
+					
+					$this->SetFont('times','B',11);
+					$this->MultiCell(185,6,iconv ('UTF-8' , 'windows-1252', $resultats[45]['commentaire']),'BT','J',1);
+				}
 				
 			}
 			
@@ -5259,14 +5302,18 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 	        $this->SetFont('times','B',11);
 	        $this->Cell(48,6,$listeCulture[$indexC],'BT',0,'L',1);
 	        
-	        /*3) Troisième colonne ===== pour les références */
-	        $this->SetFont('times','',10);
-	        $this->Cell(19,6,'Identification :','BT',0,'R',1);
-	        
-	        /*4) Quatrième colonne ===== pour les références */
-	        $indexIC = (int)$resultats[65]['identification_culture'];
-	        $this->SetFont('times','B',11);
-	        $this->Cell(66,6,$listeIdentificationCulture[$indexIC],'BT',1,'L',1);
+	        if($indexC == 1){
+	        	/*3) Troisième colonne ===== pour les références */
+	        	$this->SetFont('times','',10);
+	        	$this->Cell(19,6,'Identification :','BT',0,'R',1);
+	        	 
+	        	/*4) Quatrième colonne ===== pour les références */
+	        	$indexIC = (int)$resultats[65]['identification_culture'];
+	        	$this->SetFont('times','B',11);
+	        	$this->Cell(66,6,$listeIdentificationCulture[$indexIC],'BT',1,'L',1);
+	        }else{
+	        	$this->Cell(85,6,'','BT',1,'R',1);
+	        }
 	        
 	
 	        /**
@@ -6245,6 +6292,494 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 	
 	
 	
+	function AfficherResultatsECBU(){
+		$controle = new DateHelper();
+		$this->AddFont('symb','','symbol.php');
+		$this->AddFont('zap','','zapfdingbats.php');
+		$this->AddFont('timesb','','timesb.php');
+		$this->AddFont('timesi','','timesi.php');
+		$this->AddFont('times','','times.php');
+		$this->AddFont('bordure','','borderpi1515-9.php');
+		$this->AddFont('math','','maths.php');
+		
+	
+		$resultats = $this->getResultatsAnalysesDemandees();
+		$listeAnalysesDemandees = $this->getAnalysesDemandees();
+		$infosAnalyseDemande = array();
+	
+		for($i = 0 ; $i < count($listeAnalysesDemandees) ; $i++){
+			$idanalyse = $listeAnalysesDemandees[$i]['idanalyse'];
+	
+			if($idanalyse == 66){
+				$analyses[$idanalyse]            = $listeAnalysesDemandees[$i]['Designation'];
+				$idAnalyses[$idanalyse]          = $idanalyse;
+				$typesAnalyses[$idanalyse]       = $listeAnalysesDemandees[$i]['Libelle'];
+				$infosAnalyseDemande[$idanalyse] = $listeAnalysesDemandees[$i];
+			}
+		}
+	
+		//Date de prelèvement
+		$datePrelevement = $infosAnalyseDemande[66]['DateHeurePrelevement'];
+	
+		//Affichage des infos sur le biologiste et le technicien
+		$dateEnregistrement  =  $controle->convertDateTime($infosAnalyseDemande[66]['DateEnregistrementResultat']);
+		$prenomNomTechnicien = $infosAnalyseDemande[66]['Prenom'].' '.$infosAnalyseDemande[66]['Nom'];
+		$prenomNomBiologiste = $infosAnalyseDemande[66]['PrenomValidateur'].' '.$infosAnalyseDemande[66]['NomValidateur'];
+	
+		$this->SetFont('times','',8);
+		//$this->Cell(45,-1,'Enregistré le : '.$dateEnregistrement,'',0,'L',0);
+		$this->Cell(45,-1,'Prélèvement effectué le : '.$datePrelevement,'',0,'L',0);
+	
+		//$this->Cell(90,-1,'par : '.$prenomNomTechnicien.' ; validé par : '.$prenomNomBiologiste,'',1,'L',0);
+		$this->Cell(90,-1,'','',1,'L',0);
+	
+		$this->Ln(5);
+	
+		//AFFICHAGE DE L'EN TETE DU TEXTE
+		//AFFICHAGE DE L'EN TETE DU TEXTE
+		$this->SetFillColor(249,249,249);
+		$this->SetDrawColor(220,220,220);
+	
+	
+		$this->SetTextColor(191, 194, 191);
+		$this->SetFont('bordure','',12);
+		$x = 87.5;
+		$y = 68.3;
+		 
+		$this->Text($x-16, $y+3, 'GKKKKKKKKKKKKKK');
+		$this->Text($x+46.5, $y+3, 'H');
+		$this->Text($x-16, $y+7, 'JMMMMMMMMMMMMMM');
+		$this->Text($x+46.5, $y+7, 'I');
+		 
+		$this->SetTextColor(0,0,0);
+		 
+		$this->SetFont('times','',11);
+		$this->Cell(35,7,'','',0,'L',0);
+		$this->Cell(115,6,"Examen Cytobactériologique des Urines",'',0,'C',0);
+		$this->Cell(35,7,'','',1,'C',0);
+	
+		$this->Ln(3);
+	
+		//matériel utilisé --- matériel utilisé --- matériel utilisé
+		$this->SetFont('zap','',11.3);
+		$this->Cell(4,6,' ^','BT',0,'C',1);
+		$this->SetFont('times','',11);
+		$this->Cell(181,6,'Type de matériel utilisé : '.iconv ('UTF-8' , 'windows-1252', $resultats[66]['type_materiel']),'BT',1,'L',1);
+	
+		$this->Ln(5);
+		$indice = 0;
+		 
+		 
+		$idAnalysesSerologieECBU = $this->getAnalysesSerologieECBU();
+		 
+		$listeAspectUrines = array(0=>'', 1=>'Claires', 2 =>'Légèrement troubles', 3=>'Troubles', 4=>'Hématiques', 5=>'Purulentes');
+
+		$listeLeucocytesRep = array(0=>'', 1=>'Présentes', 2=>'Absentes');
+		$listeHematiesRep   = array(0=>'', 1=>'Présentes', 2=>'Absentes');
+		$listeLevuresRep    = array(0=>'', 1=>'Présentes', 2=>'Absentes');
+		$listeTrichoVaginalRep = array(0=>'', 1=>'Présence', 2=>'Absence');
+		$listeFloreRep    = array(0=>'', 1=>'Bacilles à Gram négatif', 2=>'Bacilles à Gram positif', 3=>'Cocci à Gram positif', 4=>'Diplocoques à Gram négatif');
+		$listeCulotRep = array(0=>'', 1=>'Positive', 2=>'Négative');
+		$listeCultureRep = array(0=>'', 1=>'Positive', 2=>'Négative');
+		$listeIdentifSouchesRep = array();
+
+		$listeEcbuCulotRep = array(0=>'', 1=>'Oeufs', 2=>'Cristaux', 3=>'Cylindres', 4=>'Parasites');
+		$listeEcbuCulotOeufsRep = array(0=>'', 1=>'Schistoma haematobium', 2=>'Schistoma mansoni');
+		$listeEcbuCulotCristauxRep = array(0=>'', 1=>'Oxalate de calcium', 2=>'Phosphate', 3=>'Acide Urique', 4=>'Phospho-ammoniacomagnesien');
+		$listeEcbuCulotCylindresRep = array(0=>'', 1=>'Hématiques', 2=>'Leucocytaires');
+		
+		
+		
+		if(in_array(66, $idAnalysesSerologieECBU)){
+	
+			/**
+			 * Titre examen macroscopique
+			 */
+			$this->SetFont('zap','',10);
+			$this->Cell(4,6,' m','',0,'C',0);
+			$this->SetFont('timesi','U',11);
+			$this->Cell(181,6,'Examen macroscopique','',1,'L',0);
+			/**
+			 * ==========================
+			*/
+			 
+			/*
+			 * Première ligne --- Première ligne --- Première ligne
+			*/
+			$indice = 0;
+			if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249); }
+			 
+			/*1) Première colonne ==== Pour les libellés*/
+			$this->SetFont('zap','',10.5);
+			$this->Cell(5,6,'','BT',0,'L',1);
+			$this->SetFont('times','',10);
+			$this->Cell(47,6,'Urines :','BT',0,'R',1);
+			
+			/*2) Deuxième colonne ==== Pour les résultats*/
+			$indexAspectUrines = (int)$resultats[66]['Urines'];
+			$this->SetFont('times','B',11);
+			$this->Cell(48,6,$listeAspectUrines[$indexAspectUrines],'BT',0,'L',1);
+			
+			/*3) Troisième colonne ===== pour les références */
+			$this->SetFont('times','',10);
+			$this->Cell(85,6,'','BT',1,'R',1);
+			
+			
+			/**
+			 * Titre examen microscopique
+			*/
+			$this->Ln(2);
+			$this->SetFont('zap','',10);
+			$this->Cell(4,6,' m','',0,'C',0);
+			$this->SetFont('timesi','U',11);
+			$this->Cell(181,6,'Examen microscopique','',1,'L',0);
+			/**
+			 * ==========================
+			*/
+			 
+			
+			/*
+			 * Première ligne --- Première ligne --- Première ligne
+			*/
+			$indice = 0;
+			if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249); }
+			
+			/*1) Première colonne ==== Pour les libellés*/
+			$this->SetFont('zap','',10.5);
+			$this->Cell(5,6,'','BT',0,'L',1);
+			$this->SetFont('times','',10);
+			$this->Cell(47,6,'Leucocytes :','BT',0,'R',1);
+			
+			/*2) Deuxième colonne ==== Pour les résultats*/
+			$indexLC = (int)$resultats[66]['Leucocytes'];
+			$this->SetFont('times','B',11);
+			$this->Cell(22,6,$listeLeucocytesRep[$indexLC],'BT',0,'L',1);
+			 
+			/*3) Troisième colonne ==== Pour les résultats*/
+			$valChamp = $resultats[66]['LeucocytesChamp'];
+			if($valChamp){
+				$this->SetFont('times','B',11);
+				$this->Cell(8,6,$valChamp,'BT',0,'R',1);
+				$this->SetFont('timesi','',10);
+				$this->Cell(18,6,'/champ','BT',0,'L',1);
+			}else{
+				$this->Cell(26,6,'','BT',0,'R',1);
+			}
+			 
+			/*4) Quatrième colonne ===== pour les références */
+			$this->SetFont('times','',10);
+			$this->Cell(42,6,'Hématies :','BT',0,'R',1);
+			
+			/*5) Cinquième colonne ===== pour les références */
+			$indexHC = (int)$resultats[66]['Hematies'];
+			$this->SetFont('times','B',11);
+			$this->Cell(22,6,$listeHematiesRep[$indexHC],'BT',0,'L',1);
+			 
+			/*6) Sixième colonne ===== pour les références */
+			$valChampHem = $resultats[66]['HematiesChamp'];
+			if($valChampHem){
+				$this->SetFont('times','B',11);
+				$this->Cell(8,6,$valChampHem,'BT',0,'R',1);
+				$this->SetFont('timesi','',10);
+				$this->Cell(13,6,'/champ','BT',1,'L',1);
+			}else{
+				$this->Cell(21,6,'','BT',1,'R',1);
+			}
+			 
+			 
+			/*
+			 * Deuxième ligne --- Deuxième ligne --- Deuxième ligne
+			*/
+			if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249); }
+			$this->Ln(0.5);
+			/*1) Première colonne ==== Pour les libellés*/
+			$this->SetFont('zap','',10.5);
+			$this->Cell(5,6,'','BT',0,'L',1);
+			$this->SetFont('times','',10);
+			$this->Cell(47,6,'Levures :','BT',0,'R',1);
+			
+			/*2) Deuxième colonne ==== Pour les résultats*/
+			$indexLev = (int)$resultats[66]['Levures'];
+			$this->SetFont('times','B',11);
+			$this->Cell(48,6,$listeLevuresRep[$indexLev],'BT',0,'L',1);
+			
+			/*3) Troisième colonne B ===== pour les références */
+			$this->SetFont('times','',10);
+			$this->Cell(42,6,'Trichomonas vaginalis :','BT',0,'R',1);
+
+			/*4) Quatrième colonne ===== pour les références */
+			$indexTV = (int)$resultats[66]['TrichomonasVaginalis'];
+			$this->SetFont('times','B',11);
+			$this->Cell(43,6,$listeTrichoVaginalRep[$indexTV],'BT',1,'L',1);
+
+			
+			/*
+			 * Troisième ligne --- Troisième ligne --- Troisième ligne
+			*/
+			if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249); }
+			$this->Ln(0.5);
+			
+			/*1) Première colonne ==== Pour les libellés*/
+			$this->SetFont('zap','',10.5);
+			$this->Cell(5,6,'','BT',0,'L',1);
+			$this->SetFont('times','',10);
+			$this->Cell(47,6,'Flore :','BT',0,'R',1);
+			 
+			/*2) Deuxième colonne ==== Pour les résultats*/
+			$indexAF = (int)$resultats[66]['Flore'];
+			$cocciChoix1 = $resultats[66]['FloreAmas'];
+			$cocciChoix2 = $resultats[66]['FloreChainette'];
+			if($cocciChoix1==1 && $cocciChoix2==1){
+				$compInfos = ' en amas et en chainettes';
+			}elseif ($cocciChoix1==1){
+				$compInfos = ' en amas';
+			}elseif ($cocciChoix2==1){
+				$compInfos = ' en chainettes';
+			}else{
+				$compInfos = '';
+			}
+			 
+			$this->SetFont('times','B',11);
+			$this->Cell(90,6,$listeFloreRep[$indexAF].$compInfos,'BT',0,'L',1);
+			 
+			/*3) Troisième colonne ===== pour les références */
+			$this->SetFont('times','B',11);
+			$this->Cell(43,6,'','BT',1,'L',1);
+			 
+			
+			/*
+			 * Quatrième ligne --- Quatrième ligne --- Quatrième ligne
+			*/
+			if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249); }
+			$this->Ln(0.5);
+				
+			/*1) Première colonne ==== Pour les libellés*/
+			$this->SetFont('zap','',10.5);
+			$this->Cell(5,6,'','BT',0,'L',1);
+			$this->SetFont('times','',10);
+			$this->Cell(47,6,'Culot :','BT',0,'R',1);
+			
+			$indexCulot = (int)$resultats[66]['Culot'];
+			$this->SetFont('times','B',11);
+			$this->Cell(90,6,$listeCulotRep[$indexCulot],'BT',0,'L',1);
+			
+			/*3) Troisième colonne ===== pour les références */
+			$this->SetFont('times','B',11);
+			$this->Cell(43,6,'','BT',1,'L',1);
+			
+			//Afficher les elements selectionnes du colut positif
+			if($indexCulot == 1){
+				$ecbuCulotOeufs = null;
+				$ecbuCulotCristaux = null;
+				$ecbuCulotCylindres = null;
+				$ecbuCulotParasites = null;
+				
+				$resultatCulPos = $this->resultatsCulotPositifECBU;
+				
+				foreach ($resultatCulPos as $resultCul){
+					
+					$typeCulot = $resultCul['type_culot'];
+					$infoResult = "";
+					if($typeCulot == 4){
+						$infoResult = str_replace( '"', '\"', $resultCul['info_culot']);
+						
+						$ecbuCulotParasites .= $infoResult.' ; ';
+					}else{
+						$valCulot = $resultCul['valeur_culot'];
+						if($typeCulot == 1){
+							$infoResult = $listeEcbuCulotOeufsRep[$valCulot];
+							$ecbuCulotOeufs .= $infoResult.' ; ';
+						}elseif ($typeCulot == 2){
+							$infoResult = $listeEcbuCulotCristauxRep[$valCulot];
+							$ecbuCulotCristaux .= $infoResult.' ; ';
+						}elseif ($typeCulot == 3){
+							$infoResult = $listeEcbuCulotCylindresRep[$valCulot];
+							$ecbuCulotCylindres .= $infoResult.' ; ';
+						}
+						
+					}
+					
+				}
+				
+				if($ecbuCulotOeufs){
+					$this->SetFont('zap','',9);
+					$this->Cell(5,6,'','',0,'L',1);
+					$this->Cell(51,6,'à','',0,'R',1);
+					$this->SetFont('times','',11);
+					$this->Cell(129,6,'Oeufs : '.rtrim($ecbuCulotOeufs,'; '),'',1,'L',1);
+				}
+				
+				if($ecbuCulotCristaux){
+					$this->SetFont('zap','',9);
+					$this->Cell(5,6,'','',0,'L',1);
+					$this->Cell(51,6,'à','',0,'R',1);
+					$this->SetFont('times','',11);
+					$this->Cell(129,6,'Cristaux : '.rtrim($ecbuCulotCristaux,'; '),'',1,'L',1);
+				}
+				
+				if($ecbuCulotCylindres){
+					$this->SetFont('zap','',9);
+					$this->Cell(5,6,'','',0,'L',1);
+					$this->Cell(51,6,'à','',0,'R',1);
+					$this->SetFont('times','',11);
+					$this->Cell(129,6,'Cylindres : '.rtrim($ecbuCulotCylindres,' ;'),'',1,'L',1);
+				}
+				
+				if($ecbuCulotParasites){
+					$this->SetFont('zap','',9);
+					$this->Cell(5,6,'','',0,'L',1);
+					$this->Cell(51,6,'à','',0,'R',1);
+					$this->SetFont('times','',11);
+					$this->Cell(129,6,'Parasites : '.rtrim($ecbuCulotParasites,'; '),'',1,'L',1);
+				}
+				
+				$this->Cell(185,1,'','B',1,'L',1);
+			}
+			
+			
+			/*
+			 * Sixième ligne --- Sixième ligne --- Sixième ligne
+			*/
+			$indexCulture = (int)$resultats[66]['Culture'];
+			if($indexCulture){
+				
+				/**
+				 * Titre culture
+				 */
+				$this->Ln(2);
+				$this->SetFont('zap','',10);
+				$this->Cell(4,6,' m','',0,'C',0);
+				$this->SetFont('timesi','U',11);
+				$this->Cell(181,6,'Culture','',1,'L',0);
+				/**
+				 * ==========================
+				*/
+				
+				$indice = 0;
+				if(($indice++%2) == 0){ $this->SetFillColor(225,225,225); }else{ $this->SetFillColor(249,249,249); }
+				$this->Ln(0.5);
+					
+				/*1) Première colonne ==== Pour les libellés*/
+				$this->SetFont('zap','',10.5);
+				$this->Cell(5,6,'','BT',0,'L',1);
+				$this->SetFont('times','',10);
+				$this->Cell(47,6,'Culture :','BT',0,'R',1);
+				
+				$this->SetFont('times','B',11);
+				$this->Cell(20,6,$listeCultureRep[$indexCulture],'BT',0,'L',1);
+				
+				$this->SetFont('zap','',11);
+				$this->Cell(8,6,'à','BT',0,'L',1);
+					
+				if($indexCulture == 1){
+					$CulturePos1 = (int)$resultats[66]['CulturePos1'];
+					$CulturePos2 = (int)$resultats[66]['CulturePos2'];
+				
+					if($CulturePos1 == 1){
+							
+						$this->SetFont('times','',11);
+						$this->Cell(12,6,'DGU','BT',0,'R',1);
+							
+						$this->SetFont('math','',13);
+						$this->Cell(5,6,'8','T',0,'L',1);
+							
+						$x = $this->GetX(); $y = $this->GetY();
+						$this->SetFont('times','B',10);
+						$this->Cell(8,6,'10 ','T',0,'L',1);
+						$this->Text($x+5.5, $y+3, '5');
+						$this->SetFont('times','B',11);
+						$this->Cell(80,6,'germes/ml','BT',1,'L',1);
+						
+						//La souche identifiée -- La souche identifiée
+						$this->SetFont('zap','',10.5);
+						$this->Cell(5,6,'','BT',0,'L',1);
+						$this->SetFont('times','',10);
+						$this->Cell(47,6,'Identification :','BT',0,'R',1);
+						
+						$identifSouche = (int)$resultats[66]['IdentificationCulture'];
+						
+						$this->SetFont('times','B',11);
+						$this->Cell(133,6,$this->listeSouchesIdentif[$identifSouche],'BT',1,'L',1);
+					
+					}elseif ($CulturePos2 == 1){
+							
+						$x = $this->GetX(); $y = $this->GetY();
+						$this->SetFont('times','B',10);
+						$this->Cell(8,6,'10 ','T',0,'L',1);
+						$this->Text($x+5.5, $y+3, '4');
+							
+						$this->SetFont('times','B',13);
+						$this->Cell(5,6,'<','T',0,'R',1);
+							
+						$this->SetFont('times','',11);
+						$this->Cell(12,6,'DGU','BT',0,'C',1);
+							
+						$this->SetFont('times','B',13);
+						$this->Cell(5,6,'>','T',0,'L',1);
+							
+						$x = $this->GetX(); $y = $this->GetY();
+						$this->SetFont('times','B',10);
+						$this->Cell(8,6,'10 ','T',0,'L',1);
+						$this->Text($x+5.5, $y+3, '5');
+							
+						$this->SetFont('times','B',11);
+						$this->Cell(67,6,'germes/ml','BT',1,'L',1);
+							
+					}else{
+						$this->SetFont('times','B',11);
+						$this->Cell(105,6,'','BT',0,'L',1);
+					}
+				
+				}elseif ($indexCulture == 2){
+				
+					$this->SetFont('times','',11);
+					$this->Cell(12,6,'DGU','BT',0,'R',1);
+						
+					$this->SetFont('times','',13);
+					$this->Cell(5,6,'<','T',0,'L',1);
+						
+					$x = $this->GetX(); $y = $this->GetY();
+					$this->SetFont('times','B',10);
+					$this->Cell(8,6,'10 ','T',0,'L',1);
+					$this->Text($x+5.5, $y+3, '4');
+					$this->SetFont('times','B',11);
+					$this->Cell(80,6,'germes/ml','BT',1,'L',1);
+					
+				}else {
+					$this->SetFont('times','B',11);
+					$this->Cell(105,6,'','BT',0,'L',1);
+				}
+				
+			}
+
+			
+			
+			$this->Ln();
+			
+			$conclusion = $resultats[66]['conclusion'];
+			
+			/**
+			 * Conclusion
+			 */
+			if(str_replace(' ','', $conclusion)){
+				$this->SetFont('zap','',11);
+				$this->Cell(5,6,'*','',0,'L',0);
+				$this->SetFont('timesb','U',10);
+				$this->Cell(180,6,'Conclusion :','',1,'L',0);
+				 
+				$this->SetFont('times','',10.5);
+				$this->MultiCell(185,6,iconv ('UTF-8' , 'windows-1252', $conclusion),0,'J',1);
+			}
+			$this->Ln();
+			$this->SetFont('timesi','U',9);
+			$this->Cell(140,6,'','',0,'',0);
+			$this->Cell(45,6,'Cachet et signature','',1,'L',0);
+			
+			
+			
+		}
+		 
+	}
 	
 	
 	

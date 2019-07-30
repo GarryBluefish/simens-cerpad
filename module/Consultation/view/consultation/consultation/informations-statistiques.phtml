@@ -11,6 +11,18 @@ $('#menu_statistiques_style').css({'font-weight':'bold','color':'white','font-si
 <!-- MES JS -->
 <?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/jqueryCharts/jquery.canvasjs.min.js');?>
 <?php echo $this->headScript()->appendFile($this->basePath().'/js/facturation/informationsStatistiques.js');?>
+<?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/zingchart/zingchart.min.js');?>
+    		        
+
+
+<!-- JS & CSS de anychart -->  
+<!-- JS & CSS de anychart -->
+<?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/anychart/js/anychart-base.min.js');?>
+<?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/anychart/js/anychart-ui.min.js');?>
+<?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/anychart/js/anychart-cartesian-3d.min.js');?>
+<?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/anychart/js/anychart-exports.min.js');?>
+<?php echo $this->headLink()->appendStylesheet($this->basePath().'/js/plugins/anychart/css/anychart-ui.min.css');?>
+<?php echo $this->headLink()->appendStylesheet($this->basePath().'/js/plugins/anychart/fonts/css/anychart-font.min.css');?>
 
 
 
@@ -147,10 +159,16 @@ $(window).load(function () {
 	//Les typages des patients internes
 	//Les typages des patients internes
 	var Pile = [];
+	var PileAnyChart = [];
 
 	for(var k = 1 ; k < ordonnees.length ; k++){
 		var tabValeur = { y: abcisses[k], label: ordonnees[k] };
 		Pile.push(tabValeur);
+
+		/*-----------------*/
+		var valeurCouple = [ordonnees[k],abcisses[k]];
+		PileAnyChart.push(valeurCouple);
+		/*----------------*/
 	}
 
 	function typagePatientsInternes() {
@@ -172,10 +190,16 @@ $(window).load(function () {
 	//La repartition selon les ethnies
 	//La repartition selon les ethnies
 	var PileEthnie = [];
+	var PileEthnieAnyChart = [];
 
 	for(var ke = 1 ; ke < ordEthnie.length ; ke++){ 
 		var tabDonnee = { y : ordEthnie[ke] , label : absEthnie[ke] };
 		PileEthnie.push(tabDonnee);
+
+		/*-----------------*/
+		var valeurCouple = [absEthnie[ke],ordEthnie[ke]];
+		PileEthnieAnyChart.push(valeurCouple);
+		/*----------------*/
 	}
 
 	function repartitionSelonEthnies() {
@@ -202,10 +226,16 @@ $(window).load(function () {
 	//Les différents types d'hémogobine rencontrés
 	//Les différents types d'hémogobine rencontrés
 	var PileDiffTypeHemo = [];
+	var PileDiffTypeHemoAnyChart = [];
 
 	for(var kh = 1 ; kh < ordTypeHemo.length ; kh++){ 
 		var tabDonnees = { y : ordTypeHemo[kh] , label : absTypeHemo[kh] };
 		PileDiffTypeHemo.push(tabDonnees);
+
+		/*-----------------*/
+		var valeurCouple = [absTypeHemo[kh],ordTypeHemo[kh]];
+		PileDiffTypeHemoAnyChart.push(valeurCouple);
+		/*----------------*/
 	}
 
 	function lesDifferentsTypesHemoglobineRencontres() {
@@ -228,25 +258,333 @@ $(window).load(function () {
 		lesDifferentsTypesHemoglobineRencontresPie.render();
 	}
 
-
-
 	//Répartition des différents types d'hémoglobine selon l'ethnie
 	//Répartition des différents types d'hémoglobine selon l'ethnie
 
-	
-
-
-
 
 	
 	
-	//APPEL DES FONCTIONS
-	patientsDepistes();
-	patientsInternes();
-	typagePatientsInternes();
-	repartitionSelonEthnies();
-	lesDifferentsTypesHemoglobineRencontres();
+	/*-- APPEL DES FONCTIONS --*/
+	//patientsDepistes();
+	//patientsInternes();
+	//typagePatientsInternes();
+	//repartitionSelonEthnies();
+	//lesDifferentsTypesHemoglobineRencontres();
 
+
+    
+    //***************************************************************
+    //***************************************************************
+
+
+	/*Utilisation de AnyChar --- Utilisation de AnyChar*/
+	/*Utilisation de AnyChar --- Utilisation de AnyChar*/
+	
+	//Patients depistés
+    //Patients depistés
+	function patientsDepistesAnyChart() {
+
+		anychart.onDocumentReady(function () {
+		    // create column chart
+		    var chart = anychart.column3d();
+
+		    // turn on chart animation
+		    chart.animation(true);
+
+		    // set chart title text settings
+		    chart.title('');
+
+		    // create area series with passed data
+		    chart.column([
+		        ['Externe', nbPatientDN],
+		        ['Interne', nbPatientDP],
+		    ]);
+
+		    chart.tooltip()
+		            .position('center-top')
+		            .anchor('center-bottom')
+		            .offsetX(0)
+		            .offsetY(5)
+		            .format('{%Value}');
+
+		    // set scale minimum
+		    chart.yScale().minimum(0);
+
+		    // set yAxis labels formatter
+		    chart.yAxis().labels().format('{%Value}{groupsSeparator: }');
+
+		    chart.tooltip().positionMode('point');
+		    chart.interactivity().hoverMode('by-x');
+
+		    chart.xAxis().title('');
+		    chart.yAxis().title('');
+
+		    // set container id for the chart
+		    chart.container('patientsDepistes');
+
+		    // initiate chart drawing
+		    chart.draw();
+		});
+
+	}
+
+	//Patients internes
+	//Patients internes
+    function patientsInternesAnyChart(){
+        
+    	anychart.onDocumentReady(function () {
+        	
+    	    // create pie chart with passed data
+    	    var chart = anychart.pie3d([
+    	        ['Feminin', nbPatientDPF],
+    	        ['Masculin', nbPatientDPM]
+    	    ]);
+
+       	    // turn on chart animation
+		    chart.animation(true);
+		    
+    	    // set chart title text settings
+    	    chart.title('')
+    	    // set chart radius
+    	    .radius('43%');
+
+    	    // set container id for the chart
+    	    chart.container('patientsInternes');
+    	    // initiate chart drawing
+    	    chart.draw();
+    	});
+    }
+
+    //Les typages des patients internes à bar
+	//Les typages des patients internes à bar
+    function typagePatientsInternesBarAnyChart() {
+
+    	anychart.onDocumentReady(function () {
+    	    // create bar chart
+    	    var chart = anychart.bar3d();
+
+    	    // turn on chart animation
+    	    chart.animation(true);
+
+    	    // set chart padding
+    	    chart.padding([10, 40, 5, 20]);
+
+    	    // set chart title text settings
+    	    chart.title('');
+
+    	    // create area series with passed data
+    	    chart.bar( PileAnyChart );
+
+    	    // set tooltip settings
+    	    chart.tooltip()
+    	            .positionMode('point')
+    	            .format('{%Value}')
+    	            .position('right')
+    	            .anchor('left-center')
+    	            .offsetX(5)
+    	            .offsetY(0);
+
+    	    // set yAxis labels formatter (axeY)
+    	    chart.yAxis().labels().format('{%Value}');
+
+    	    // set titles for axises
+    	    chart.xAxis().title('');
+    	    chart.yAxis().title('');
+    	    chart.interactivity().hoverMode('by-x');
+
+    	    // set scale minimum
+    	    chart.yScale().minimum(0);
+
+    	    // set container id for the chart
+    	    chart.container('typagePatientsInternes');
+
+    	    // initiate chart drawing
+    	    chart.draw();
+    	});
+
+	}
+
+
+    //Les typages des patients internes à camembert
+	//Les typages des patients internes à camembert
+    function typagePatientsInternesCamembertAnyChart() {
+
+    	anychart.onDocumentReady(function () {
+
+    		// create pie chart with passed data
+    	    var chart = anychart.pie3d( PileAnyChart );
+
+       	    // turn on chart animation
+		    chart.animation(true);
+		    
+    	    // set chart title text settings
+    	    chart.title('')
+    	    // set chart radius
+    	    .radius('43%');
+
+    	    // set container id for the chart
+    	    chart.container('typagePatientsInternesAnychartPie');
+    	    // initiate chart drawing
+    	    chart.draw();
+        	
+    	});
+
+	}
+
+
+    //La repartition selon les ethnies
+	//La repartition selon les ethnies
+	function repartitionSelonEthniesAnyChart() {
+
+		anychart.onDocumentReady(function () {
+
+    		// create pie chart with passed data
+    	    var chart = anychart.pie3d( PileEthnieAnyChart );
+
+       	    // turn on chart animation
+		    chart.animation(true);
+		    
+    	    // set chart title text settings
+    	    chart.title('')
+    	    // set chart radius
+    	    .radius('43%');
+
+    	    // set container id for the chart
+    	    chart.container('repartitionSelonEthniesPie');
+    	    // initiate chart drawing
+    	    chart.draw();
+        	
+    	});
+
+		anychart.onDocumentReady(function () {
+		    // create column chart
+		    var chart = anychart.column3d();
+
+		    // turn on chart animation
+		    chart.animation(true);
+
+		    // set chart title text settings
+		    chart.title('');
+
+		    // create area series with passed data
+		    chart.column( PileEthnieAnyChart );
+
+		    chart.tooltip()
+		            .position('center-top')
+		            .anchor('center-bottom')
+		            .offsetX(0)
+		            .offsetY(5)
+		            .format('{%Value}');
+
+		    // set scale minimum
+		    chart.yScale().minimum(0);
+
+		    // set yAxis labels formatter
+		    chart.yAxis().labels().format('{%Value}{groupsSeparator: }');
+
+		    chart.tooltip().positionMode('point');
+		    chart.interactivity().hoverMode('by-x');
+
+		    chart.xAxis().title('');
+		    chart.yAxis().title('');
+
+		    // set container id for the chart
+		    chart.container('repartitionSelonEthnies');
+
+		    // initiate chart drawing
+		    chart.draw();
+		});
+		
+	}
+
+
+
+	//Les différents types d'hémogobine rencontrés
+	//Les différents types d'hémogobine rencontrés
+	function lesDifferentsTypesHemoglobineRencontresAnyChart() {
+
+		anychart.onDocumentReady(function () {
+
+    		// create pie chart with passed data
+    	    var chart = anychart.pie3d( PileDiffTypeHemoAnyChart );
+
+       	    // turn on chart animation
+		    chart.animation(true);
+		    
+    	    // set chart title text settings
+    	    chart.title('')
+    	    // set chart radius
+    	    .radius('43%');
+
+    	    // set container id for the chart
+    	    chart.container('lesDifferentsTypesHemoglobineRencontresPie');
+    	    // initiate chart drawing
+    	    chart.draw();
+        	
+    	});
+
+		anychart.onDocumentReady(function () {
+		    // create column chart
+		    var chart = anychart.column3d();
+
+		    // turn on chart animation
+		    chart.animation(true);
+
+		    // set chart title text settings
+		    chart.title('');
+
+		    // create area series with passed data
+		    chart.column( PileDiffTypeHemoAnyChart );
+
+		    chart.tooltip()
+		            .position('center-top')
+		            .anchor('center-bottom')
+		            .offsetX(0)
+		            .offsetY(5)
+		            .format('{%Value}');
+
+		    // set scale minimum
+		    chart.yScale().minimum(0);
+
+		    // set yAxis labels formatter
+		    chart.yAxis().labels().format('{%Value}{groupsSeparator: }');
+
+		    chart.tooltip().positionMode('point');
+		    chart.interactivity().hoverMode('by-x');
+
+		    chart.xAxis().title('');
+		    chart.yAxis().title('');
+
+		    // set container id for the chart
+		    chart.container('lesDifferentsTypesHemoglobineRencontresColumn');
+
+		    // initiate chart drawing
+		    chart.draw();
+		});
+
+	}
+
+
+    
+    
+    patientsDepistesAnyChart();
+    patientsInternesAnyChart();
+    typagePatientsInternesBarAnyChart();
+    typagePatientsInternesCamembertAnyChart();
+    repartitionSelonEthniesAnyChart();
+    lesDifferentsTypesHemoglobineRencontresAnyChart();
+
+	/*=== Utilisation de AnyChar --- Utilisation de AnyChar ===*/
+	/*=== Utilisation de AnyChar --- Utilisation de AnyChar ===*/
+
+
+
+
+
+
+
+
+    
     });
 
     </script>
@@ -270,7 +608,7 @@ $(window).load(function () {
 	       
            <tr style="width: 100%; ">
 	         <td style="width: 100%; height: 40px; font-family: Goudy Old Style; font-weight: normal; font-size: 17px; text-align: center;">
-	             <div  align="center" style="overflow-y: auto; margin-right: 5px; margin-bottom: 15px;" >
+	             <div  align="center" style="overflow-y: auto; margin-right: 5px; margin-bottom: 0px;" >
 	              <table style="height: 36px; border: 1px solid #cccccc;">
 	                <tr style="height: 18px; border: 1px solid #cccccc;">
 	                  <td style=" border: 2px solid #cccccc; padding-left: 6px; padding-right: 6px;"> Externe </td>
@@ -295,8 +633,8 @@ $(window).load(function () {
 	       
 	       
 	       <tr style="width: 100%; vertical-align: top;">
-	         <td style="width: 100%; height: 400px;">
-	         <div id="patientsDepistes" style="height: 400px;"></div>
+	         <td style="width: 100%; height: 400px; vertical-align: top;" align="center">
+	           <div id="patientsDepistes" style="height: 400px; width: 100%;"></div>
 	         </td>
 	       </tr>
 	     </table> 
@@ -341,8 +679,8 @@ $(window).load(function () {
 	       
 	       
 	       <tr style="width: 100%; vertical-align: top;">
-	         <td style="width: 100%; height: 400px;">
-	         <div id="patientsInternes" style="height: 400px;"></div>
+	         <td style="width: 100%; height: 400px;" align="center">
+	          <div id="patientsInternes" style="height: 400px;"></div>
 	         </td>
 	       </tr>
 	     </table> 
@@ -366,7 +704,7 @@ $(window).load(function () {
 	       
 	       <tr style="width: 100%; ">
 	         <td align="center" style="width: 100%; height: 40px; font-family: Goudy Old Style; font-weight: normal; font-size: 17px; text-align: center;">
-	             <div  align="center" style="width: 100%; margin-left: 10px; max-width: 560px; overflow: auto; margin-bottom: 15px;">
+	             <div  align="center" style="width: 100%; margin-left: 10px; max-width: 560px; overflow: auto; margin-bottom: 0px;">
 	              <table style="height: 36px; border: 1px solid #cccccc;">
 	                <tr style="height: 18px; border: 1px solid #cccccc;">
 	                  
@@ -395,8 +733,10 @@ $(window).load(function () {
 	       
 	       
 	       <tr style="width: 100%; vertical-align: top;">
-	         <td style="width: 100%; height: 400px;">
-	         <div id="typagePatientsInternes" style="height: 400px;"></div>
+	         <td style="width: 100%; height: 400px;" align="center">
+	           <div id="optionChoixAnyChart"><div class="premEl">1</div> <div class="deuxiemE2" >2</div></div>
+	           <div id="typagePatientsInternes" style="height: 400px;"></div>
+	           <div id="typagePatientsInternesAnychartPie" style="height: 400px; display: none;" ></div>
 	         </td>
 	       </tr>
 	     </table> 
@@ -835,48 +1175,22 @@ $(window).load(function () {
 	        <table style="width: 100%;">
 	          <tr style="width: 100%;">
 	          
-	            <td align="center" style="width: 50%; height: 100px; background: re;" >
-	            <?php ?>
-	            <?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/zingchart/zingchart.min.js');?>
-		        <?php echo $this->headScript()->appendFile($this->basePath().'/js/biologiste/jsCarteInteractive.js');?>
- 		        <div id='chartSaintlouis'></div>
-	            
-                <div id='chartSaintlouisScript'> </div>
-	            <script type="text/javascript">carteZonesSaintLouis();</script>
-	          
+	            <!-- Première colonne -->
+	            <td align="right" style="width: 50%; height: 100px; background: re; vertical-align: top;" >
+    	            <?php echo $this->headScript()->appendFile($this->basePath().'/js/consultation/jsCarteInteractive.js');?>
+     		        <div style="width: 97%; text-align: center; font-family: time new roman;">Carte des zones ayant des depist&eacute;s dans la r&eacute;gion de Saint-Louis</div>
+     		        <div id='chartSaintlouis'></div>
+                    <div id='chartSaintlouisScript'> </div>
+    	            <script type="text/javascript">carteZonesSaintLouis();</script>
 	            </td>
 	            
-	            <td align="center" style="width: 50%; height: 100px; background: yellow;" >
-	            
-	            
-	             <div id='chartSenegal'></div>
-	            
-	            
-	              <script type="text/javascript">
-	              /*
-	              zingchart.loadModules('maps, maps-sen', function(e) {
-	            	  zingchart.render({ 
-	            		  id: 'chartSenegal', 
-	            		  data: {
-	            		    shapes: [
-	            		      {
-	            		        type: 'zingchart.maps',
-	            		        options: {
-	            		          name: 'sen'
-	            		        }
-	            		      }
-	            		    ]
-	            		  },
-	            		  height: 400, 
-	            		  width: '100%'
-	            	  });
-	            	});
-	            	*/
-	              </script>
-	            
-	            
+	            <!-- Deuxième colonne -->
+	            <td align="center" style="width: 50%; height: 100px; background: yello; border-left: 2px solid #cccccc; vertical-align: top; " >
+    	            <div style="width: 97%; text-align: center; font-family: time new roman;" id="colZoneSelect">Carte de la zone <span>s&eacute;lectionn&eacute;e</span></div>
+    	            <div id='chartSenegal' style='margin-top: 30px;'></div>
+    	            <div id='chartSenegalScript'></div> 
+    	            <script type="text/javascript"></script>
 	            </td>
-	            
 	          
 	          </tr>
 	        </table>
@@ -893,16 +1207,6 @@ $(window).load(function () {
 	
 
 </div>
-
-
-
-
-
-
-
-
-
-
 
 
 

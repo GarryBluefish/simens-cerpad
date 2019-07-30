@@ -66,9 +66,10 @@ class Personne {
 			$inputFilter->add(array(
 					'name'     => 'idpersonne',
 					'required' => false,
+					/*
 					'filters'  => array(
 							array('name' => 'Int'),
-					),
+					),*/
 			));
 
 			$inputFilter->add (array (

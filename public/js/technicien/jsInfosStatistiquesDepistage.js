@@ -450,6 +450,10 @@ function affichageDiagrammeColumn(){
 	
 	$(document).ready(function($) {
 
+		/**
+		 * ANCIENNE FONCTION
+		 */
+		/*
 		function diagrammeInfosStatistiques() {
 			var diagrammeInfosStatistiques = new CanvasJS.Chart("diagrammeInfosStatistiques", {
 				data: [{
@@ -462,7 +466,52 @@ function affichageDiagrammeColumn(){
 		}
 
 		diagrammeInfosStatistiques(); 
+		*/
+		
+		/**
+		 * NOUVELLE FONCTION
+		 */
+		$("#diagrammeInfosStatistiques").html("");
+		anychart.onDocumentReady(function () {
+		    // create column chart
+		    var chart = anychart.column3d();
 
+		    // turn on chart animation
+		    chart.animation(true);
+
+		    // set chart title text settings
+		    chart.title('');
+
+		    // create area series with passed data
+		    chart.column( PileAnyChart );
+
+		    chart.tooltip()
+		            .position('center-top')
+		            .anchor('center-bottom')
+		            .offsetX(0)
+		            .offsetY(5)
+		            .format('{%Value}');
+
+		    // set scale minimum
+		    chart.yScale().minimum(0);
+
+		    // set yAxis labels formatter
+		    chart.yAxis().labels().format('{%Value}{groupsSeparator: }');
+
+		    chart.tooltip().positionMode('point');
+		    chart.interactivity().hoverMode('by-x');
+
+		    chart.xAxis().title('');
+		    chart.yAxis().title('');
+
+		    // set container id for the chart
+		    chart.container('diagrammeInfosStatistiques');
+
+		    // initiate chart drawing
+		    chart.draw();
+		});
+
+		
 	});
 	
 }
@@ -473,6 +522,10 @@ function affichageDiagrammePie(){
 	
 	$(document).ready(function($) {
 
+		/**
+		 * ANCIENNE FONCTION
+		 */
+		/*
 		function diagrammeInfosStatistiques() {
 			var diagrammeInfosStatistiques = new CanvasJS.Chart("diagrammeInfosStatistiques", {
 				data: [{
@@ -485,6 +538,32 @@ function affichageDiagrammePie(){
 		}
 
 		diagrammeInfosStatistiques(); 
+		*/
+		
+		/**
+		 * NOUVELLE FONCTION
+		 */
+		$("#diagrammeInfosStatistiques").html("");
+		anychart.onDocumentReady(function () {
+        	
+    	    // create pie chart with passed data
+    	    var chart = anychart.pie3d( PileAnyChart );
+
+       	    // turn on chart animation
+		    chart.animation(true);
+		    
+    	    // set chart title text settings
+    	    chart.title('')
+    	    // set chart radius
+    	    .radius('43%');
+
+    	    // set container id for the chart
+    	    chart.container('diagrammeInfosStatistiques');
+    	    // initiate chart drawing
+    	    chart.draw();
+    	});
+		
+		
 
 	});
 	
@@ -496,6 +575,10 @@ function affichageDiagrammeBar(){
 	
 	$(document).ready(function($) {
 
+		/**
+		 * ANCIENNE FONCTION
+		 */
+		/*
 		function diagrammeInfosStatistiques() {
 			var diagrammeInfosStatistiques = new CanvasJS.Chart("diagrammeInfosStatistiques", {
 				data: [{
@@ -508,6 +591,55 @@ function affichageDiagrammeBar(){
 		}
 
 		diagrammeInfosStatistiques(); 
+		*/
+		
+		/**
+		 * NOUVELLE FONCTION
+		 */
+		$("#diagrammeInfosStatistiques").html("");
+		anychart.onDocumentReady(function () {
+    	    // create bar chart
+    	    var chart = anychart.bar3d();
+
+    	    // turn on chart animation
+    	    chart.animation(true);
+
+    	    // set chart padding
+    	    chart.padding([10, 40, 5, 20]);
+
+    	    // set chart title text settings
+    	    chart.title('');
+
+    	    // create area series with passed data
+    	    chart.bar( PileAnyChart );
+
+    	    // set tooltip settings
+    	    chart.tooltip()
+    	            .positionMode('point')
+    	            .format('{%Value}')
+    	            .position('right')
+    	            .anchor('left-center')
+    	            .offsetX(5)
+    	            .offsetY(0);
+
+    	    // set yAxis labels formatter (axeY)
+    	    chart.yAxis().labels().format('{%Value}');
+
+    	    // set titles for axises
+    	    chart.xAxis().title('');
+    	    chart.yAxis().title('');
+    	    chart.interactivity().hoverMode('by-x');
+
+    	    // set scale minimum
+    	    chart.yScale().minimum(0);
+
+    	    // set container id for the chart
+    	    chart.container('diagrammeInfosStatistiques');
+
+    	    // initiate chart drawing
+    	    chart.draw();
+    	});
+		
 
 	});
 	
@@ -519,6 +651,10 @@ function affichageDiagrammeLine(){
 	
 	$(document).ready(function($) {
 
+		/**
+		 * ANCIENNE FONCTION
+		 */
+		/*
 		function diagrammeInfosStatistiques() {
 			var diagrammeInfosStatistiques = new CanvasJS.Chart("diagrammeInfosStatistiques", {
 				data: [{
@@ -531,6 +667,109 @@ function affichageDiagrammeLine(){
 		}
 
 		diagrammeInfosStatistiques(); 
+		*/
+		
+		/**
+		 * NOUVELLE FONCTION
+		 */
+		$("#diagrammeInfosStatistiques").html("");
+		/*
+		anychart.onDocumentReady(function () {
+		    // create area chart
+		    var chart = anychart.line3d();
+
+		    // turn on chart animation
+		    chart.animation(true);
+
+		    // set chart title text settings
+		    
+		    chart.title()
+		            .enabled(true)
+		            .useHtml(true)
+		            .text('Site Visits During 2017 Year<br/>' +
+		                    '<span style="color:#212121; font-size: 13px;">' +
+		                    'Considered to be the total amount of visits, including repeatable' +
+		                    '</span>');
+
+		    chart.yAxis().title('');
+
+		    // create area series on passed data
+		    var series = chart.line();
+		    series.data(getData());
+		    series.name('');
+
+		    // set series data labels settings
+		    series.labels()
+		            .enabled(true)
+		            .fontColor('#212121');
+
+		    // set series data markers settings
+		    series.markers(true);
+
+		    // set tooltip settings
+		    chart.tooltip()
+		            .positionMode('point')
+		            .anchor('left-top')
+		            .offsetX(5)
+		            .offsetY(5);
+
+		    // set interactivity settings
+		    chart.interactivity().hoverMode('by-x');
+
+		    // set container for the chart
+		    chart.container('diagrammeInfosStatistiques');
+
+		    // initiate chart drawing
+		    chart.draw();
+		});
+
+		function getData() {
+		    return PileAnyChart;
+		}*/
+		
+		anychart.onDocumentReady(function () {
+		    // create data set on our data
+		    chartData = {
+		        header: ListeProfilsDataAnyChartLine,
+		        rows: getDataLineAnyChart()
+		    };
+
+		    // create area chart
+		    var chart = anychart.line3d();
+
+		    // set chart data
+		    chart.data(chartData);
+
+		    // turn on chart animation
+		    chart.animation(true);
+
+		    chart.yAxis().title('');
+		    chart.yAxis().labels().format('{%Value}');
+
+		    // turn on legend
+		    chart.legend()
+		            .enabled(true)
+		            .fontSize(13)
+		            .padding([0, 0, 20, 0]);
+
+		    // set 3D settings
+		    chart.zAspect('70%')
+		            .zAngle(60);
+
+		    // set interactivity and tooltips settings
+		    chart.interactivity().hoverMode('by-x');
+		    chart.tooltip().displayMode('union');
+
+		    // set container id for the chart
+		    chart.container('diagrammeInfosStatistiques');
+
+		    // initiate chart drawing
+		    chart.draw();
+		});
+
+		function getDataLineAnyChart() {
+		    return DataAnyChartLine;
+		}
 
 	});
 	

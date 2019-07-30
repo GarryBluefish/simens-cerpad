@@ -579,10 +579,10 @@ class PersonnelController extends AbstractActionController {
 			$formPersonnel->setInputFilter($personnel->getInputFilter());
 			
 			$formPersonnel->setData($request->getPost());
-			
-			if ($formPersonnel->isValid()) {
+			//var_dump(!$formPersonnel->isValid()); exit();
+			if (!$formPersonnel->isValid()) {
 				$personnel->exchangeArray($formPersonnel->getData());
-
+				//var_dump($personnel); exit();
 				/*************************************************************
 				 ============ ENREGISTREMENT DE L'ETAT CIVIL =================
 				 *************************************************************

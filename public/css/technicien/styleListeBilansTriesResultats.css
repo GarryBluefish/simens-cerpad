@@ -729,3 +729,230 @@ div .dataTables_paginate
 	border-top-left-radius: 20px;
 	border-bottom-left-radius: 20px;
 }
+
+
+.culot_ecbu_pm{
+	border: 2px solid #cccccc;
+	border-radius: 10px;
+	box-shadow: 0pt 1pt 2px rgba(0, 0, 0, 0.5);
+	padding-letf: 0px;
+	padding-top: 0px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+}
+
+#culot_ecbu_moins{
+	margin-right: 5px;
+}
+
+#commentChoiceCheckPVID table, #commentChoiceCheckPVID table tr{
+	width: 100%;
+}
+
+#commentChoiceCheckPVID table tr .col1{
+	width: 10%;
+	/*background: red;*/
+}
+
+#commentChoiceCheckPVID table tr .col2{
+	width: 90%;
+	font-size: 15px;
+	font-family: time new roman;
+	/*background: yellow;*/
+}
+
+.commentChoicePVBut{
+	color: green; 
+	width: 20px; 
+	height: 15px; 
+	margin-bottom: 5px; 
+	margin-left: 3px;
+	border-radius: 10px;
+	box-shadow: 0pt 1pt 2px rgba(0, 0, 0, 0.1);
+	float: left;
+	font-weight: bold;
+}
+
+.commentChoicePVDiv{
+	height: 15px; 
+	margin-bottom: 5px;
+	float: left;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#ajouterNouvelleSoucheECBU table, #ajouterNouvelleSoucheECBU table tr{
+	width: 100%;
+	vertical-align: top;
+}
+
+
+
+
+#ajouterNouvelleSoucheECBU .tabAjouterNouvelleSoucheECBU td{
+	width: 50%; 
+	margin-left: 5px;
+}
+
+#ajouterNouvelleSoucheECBU .tabAjouterNouvelleSoucheECBU td label{
+	width: 100%;
+	height: 25px;
+	font-size: 20px;
+	font-family: times new roman;
+	text-align: left;
+}
+#ajouterNouvelleSoucheECBU .tabAjouterNouvelleSoucheECBU td div{
+	width: 99%;
+	height: 200px;
+	font-size: 17px;
+	font-family: times new roman;
+	border: 1px solid #cccccc;
+    background : #fdfdfd;
+    box-shadow: 0pt 0pt 5px rgba(0, 0, 0, 0.3);
+	margin-bottom: 5px;
+	overflow-y: auto;
+}
+
+#ajouterNouvelleSoucheECBU .listeDeSouchesExistantes table tr{
+	width: 100%;
+	font-size: 17px;
+}
+
+#ajouterNouvelleSoucheECBU .listeDeSouchesExistantes table td{
+	padding-left: 6px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	border: 1px solid #cccccc;
+}
+
+#ajouterNouvelleSoucheECBU .listeDeSouchesExistantes table .LTPE1{
+	width: 8%;
+}
+
+#ajouterNouvelleSoucheECBU .listeDeSouchesExistantes table .LTPE2{
+	width: 92%;
+}
+
+#ajouterNouvelleSoucheECBU .listeDeSouchesExistantes table tr:hover{
+	background: #e1e1e1; 
+}
+
+.listeDeSouchesExistantes table img{
+	margin-left: -3px;
+	cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+#ajouterNouvelleSoucheECBU .ligneBoutonsAjout td{
+	width: 50%; 
+	height: 50px;
+	margin-left: 5px;
+}
+
+#ajouterNouvelleSoucheECBU .ligneBoutonsAjout button{
+	border: 1px;
+	border-radius: 15px;
+	border: 1px solid #bdb9b9;
+	height: 32px;
+	font-size: 14px;
+	margin-top: 5px;
+}
+
+.ligneBoutonsAjout .boutonATP button{
+	width: 50%;
+}
+
+#ajouterNouvelleSoucheECBU .ligneBoutonsAnnulerValiderAjout, #ajouterNouvelleSoucheECBU .ligneBoutonsAnnulerValiderAjout tr{
+	width: 100%;
+}
+
+
+#ajouterNouvelleSoucheECBU .interfaceAjoutNouvelleSoucheECBU .boutonAVAA,
+#ajouterNouvelleSoucheECBU .interfaceModificationSoucheECBU .boutonAVAA
+{
+	float: right; 
+}
+
+#ajouterNouvelleSoucheECBU .interfaceAjoutNouvelleSoucheECBU td,
+#ajouterNouvelleSoucheECBU .interfaceModificationSoucheECBU td
+{
+	width: 50%;
+	height: 50px;
+}
+
+#ajouterNouvelleSoucheECBU .interfaceAjoutNouvelleSoucheECBU button,
+#ajouterNouvelleSoucheECBU .interfaceModificationSoucheECBU button
+{
+	border: 1px;
+	border-radius: 15px;
+	border: 1px solid #bdb9b9;
+	height: 32px;
+	font-size: 14px;
+	margin-top: 5px;
+}
+
+
+.LTPE2 .imgLTPE2{
+	height: 16px; 
+	width: 16px;
+	float: right;
+	visibility: hidden;
+}
+
+#ajouterNouvelleSoucheECBU .listeDeSouchesExistantes table tr:hover .imgLTPE2{
+	float: right; 
+	height: 18px; 
+	width: 18px;
+	visibility: visible;
+}
+
+#ajouterNouvelleSoucheECBU .interfaceAjoutNouvelleSoucheECBU input,
+#ajouterNouvelleSoucheECBU .interfaceModificationSoucheECBU input
+{
+
+	width: 99%;
+	height: 40px;
+	padding-left: 8px;
+	font-size: 18px;
+	font-family: times new roman;
+	border: 2px solid #bdb9b9;
+	float: left;
+}
+
+.interfaceAjoutNouvelleSoucheECBU, .interfaceModificationSoucheECBU{
+	margin-top : 10px; 
+}

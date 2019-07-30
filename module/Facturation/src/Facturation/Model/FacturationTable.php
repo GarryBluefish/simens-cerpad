@@ -46,6 +46,42 @@ class FacturationTable {
 
  	}
  	
+ 	public function getAnalysesNonFacturees($liste_demandes_analyses, $montant){
+ 		$db = $this->tableGateway->getAdapter();
+ 		$sql = new Sql($db);
+ 		$idfacturation = null;
+
+ 		for($i = 0 ; $i < count($liste_demandes_analyses) ;  $i++){
+ 			$sQuery = $sql->select('facturation_demande_analyse') ->where(array('iddemande_analyse' => $liste_demandes_analyses[$i]));
+ 			$result = $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
+ 			if($result){ $idfacturation = $result['idfacturation']; break; }
+ 		}
+ 		
+ 		$listeTemoin = $liste_demandes_analyses;
+ 		
+ 		if($idfacturation){
+ 			$sQuery = $sql->select('facturation_demande_analyse') ->where(array('idfacturation' => $idfacturation));
+ 			$result = $sql->prepareStatementForSqlObject($sQuery)->execute();
+ 			
+ 			$tabDonnees = array();
+ 			foreach ($result as $res){
+ 				$iddemande = $res['iddemande_analyse'];
+ 				if(in_array($iddemande, $liste_demandes_analyses)){
+ 					unset($liste_demandes_analyses[array_search($iddemande, $liste_demandes_analyses)]);
+ 				}
+ 			}
+ 			sort($liste_demandes_analyses);
+ 			
+ 			//A revoir pour les tarifs
+ 			$tarif = ($liste_demandes_analyses) ? 0 : "";
+ 			
+ 			$resultat = ($liste_demandes_analyses) ? $liste_demandes_analyses : 0;
+ 			return array($resultat, $tarif);
+ 		}
+ 		
+ 		return array($liste_demandes_analyses, $montant);
+ 	}
+ 	
  	public function addFacturationConsultation($donnees){
  		$db = $this->tableGateway->getAdapter();
  		$sql = new Sql($db);

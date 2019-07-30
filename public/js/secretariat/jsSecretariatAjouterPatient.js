@@ -394,7 +394,7 @@ nationalite_actuelle.attr( 'readonly', false );
 	    					
 	    					changeMonth: true,
 	    					maxDate: 0,
-	    					minDate: -40, //Afficher uniquement que le dernier mois
+	    					//minDate: -40, //Afficher uniquement que le dernier mois
 	    			}
 	    	);
 	        

@@ -338,13 +338,57 @@ box-shadow: 0pt 0pt 12px rgba(0, 0, 0, 0.2);
 }
 
 #barre_separateur {
-    border-bottom: 2px solid #ccc;
+    border-bottom: 2.5px solid #ccc;
     margin-top: 2px;
     margin-left: 17.5%;
 }
 
+.autre_prelev_GPP_HPVO {
+	font-style: italic;
+    font-family: Times  New Roman;
+    font-size: 18px;
+    color: green;
+    margin-left: 17.5%;
+}
+
+.barre_separat_prelev_GPP_HPVO {
+    border-bottom: 2.5px solid #ccc;
+    margin-top: 2px;
+    margin-left: 17.5%;
+}
+
+.autre_prelevGPPHPVO_pm div{
+	border: 1.5px solid #cccccc;
+	border-radius: 10px;
+	box-shadow: 0pt 1pt 2px rgba(0, 0, 0, 0.8);
+	padding-letf: 0px;
+	padding-top: 0px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+	cursor: pointer;
+	width: 5%;
+	text-align: center; 
+	font-weight: bold; 
+	font-size: 30px; 
+	float: left;
+}
+
+.autre_prelevGPPHPVO_pm .apGPPHPVOM{
+	margin-right: 8px;
+}
+
+.autre_prelevGPPHPVO_pm{
+	margin-left: 17.5%;
+	margin-top: 5px;
+}
+
+.autre_prelevGPPHPVO_pm div:hover{
+	background: #eeeeee;
+}
+
+
 #barre_separateur_modif {
-    border-bottom: 2px solid #ccc;
+    border-bottom: 2.5px solid #ccc;
     margin-top: 3px;
     margin-left: 195px;
 }
@@ -477,7 +521,7 @@ font-size: 16px;
 
 left: 0px; /*déplacer le label*/
 
-min-width: 60px;
+min-width: 25px;
 
 padding-top: 4px;
 
