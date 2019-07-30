@@ -200,13 +200,13 @@
         		
         		$('#poidsP1Fievre input').val($(this).val());
         		var palier1 = 15 * $(this).val();
-        		$('.poidsP1Fievre').html(palier1+" <span style='font-size: 13px;'> mg/j </span>");
+        		$('.poidsP1Fievre').html(palier1.toFixed(1)+" <span style='font-size: 13px;'> mg/j </span>");
     		}else{
         		$('#poids').val($(this).val()).attr('readonly', false);
         		
         		$('#poidsP1Fievre input').val($(this).val());
         		var palier1 = 15 * $(this).val();
-        		$('.poidsP1Fievre').html(palier1+" <span style='font-size: 13px;'> mg/j </span>");
+        		$('.poidsP1Fievre').html(palier1.toFixed(1)+" <span style='font-size: 13px;'> mg/j </span>");
     		}
     		
     		$('#poidsP2 input, #poidsP2a input, #poidsP2b input, #poidsP3 input').val($(this).val()).attr('readonly', true); 
@@ -214,16 +214,16 @@
     		//Affichage des posologies pour les médicaments
     		//Affichage des posologies pour les médicaments
     		var palier1 = 15 * $(this).val();
-    		$('.poidsP1').html(palier1+" <span style='font-size: 13px;'> mg/j </span>");
+    		$('.poidsP1').html(palier1.toFixed(1)+" <span style='font-size: 13px;'> mg/j </span>");
     		
     		var palier2 = 30 * $(this).val();
-    		$('.poidsP2').html(palier2+" <span style='font-size: 13px;'> mg/j </span>");
+    		$('.poidsP2').html(palier2.toFixed(1)+" <span style='font-size: 13px;'> mg/j </span>");
     		
     		var palier2a = 1 * $(this).val();
-    		$('.poidsP2a').html(palier2a+" <span style='font-size: 13px;'> mg/j </span>");
+    		$('.poidsP2a').html(palier2a.toFixed(1)+" <span style='font-size: 13px;'> mg/j </span>");
     		
     		var palier2b = 2 * $(this).val();
-    		$('.poidsP2b').html(palier2b+" <span style='font-size: 13px;'> mg/j </span>");
+    		$('.poidsP2b').html(palier2b.toFixed(1)+" <span style='font-size: 13px;'> mg/j </span>");
     		
     		/*Palier 3 deux cas possibles*/
     		var voieAdminM5 = $('#voieAdminM5').val();
@@ -234,7 +234,7 @@
     		}else if(voieAdminM5 == 2){
     			$('#MorphineDosageInfos').html(" (15ug/kg)");
         		var palier3 = 15 * $(this).val();
-        		$('.poidsP3').html(palier3+" <span style='font-size: 13px;'> ug/j </span>");
+        		$('.poidsP3').html(palier3.toFixed(1)+" <span style='font-size: 13px;'> ug/j </span>");
     		}
     	    
     	}).keyup(function(){
@@ -246,13 +246,13 @@
         		
         		$('#poidsP1Fievre input').val($(this).val());
         		var palier1 = 15 * $(this).val();
-        		$('.poidsP1Fievre').html(palier1+" <span style='font-size: 13px;'> mg/j </span>");
+        		$('.poidsP1Fievre').html(palier1.toFixed(1)+" <span style='font-size: 13px;'> mg/j </span>");
     		}else{
         		$('#poids').val($(this).val()).attr('readonly', false);
         		
         		$('#poidsP1Fievre input').val($(this).val());
         		var palier1 = 15 * $(this).val();
-        		$('.poidsP1Fievre').html(palier1+" <span style='font-size: 13px;'> mg/j </span>");
+        		$('.poidsP1Fievre').html(palier1.toFixed(1)+" <span style='font-size: 13px;'> mg/j </span>");
     		}
     		
     		$('#poidsP2 input, #poidsP2a input, #poidsP2b input, #poidsP3 input').val($(this).val()).attr('readonly', true); 
@@ -260,16 +260,16 @@
     		//Affichage des posologies pour les médicaments
     		//Affichage des posologies pour les médicaments
     		var palier1 = 15 * $(this).val();
-    		$('.poidsP1').html(palier1+" <span style='font-size: 13px;'> mg/j </span>");
+    		$('.poidsP1').html(palier1.toFixed(1)+" <span style='font-size: 13px;'> mg/j </span>");
     		
     		var palier2 = 30 * $(this).val();
-    		$('.poidsP2').html(palier2+" <span style='font-size: 13px;'> mg/j </span>");
+    		$('.poidsP2').html(palier2.toFixed(1)+" <span style='font-size: 13px;'> mg/j </span>");
     		
     		var palier2a = 1 * $(this).val();
-    		$('.poidsP2a').html(palier2a+" <span style='font-size: 13px;'> mg/j </span>");
+    		$('.poidsP2a').html(palier2a.toFixed(1)+" <span style='font-size: 13px;'> mg/j </span>");
     		
     		var palier2b = 2 * $(this).val();
-    		$('.poidsP2b').html(palier2b+" <span style='font-size: 13px;'> mg/j </span>");
+    		$('.poidsP2b').html(palier2b.toFixed(1)+" <span style='font-size: 13px;'> mg/j </span>");
     		
     		/*Palier 3 deux cas possibles*/
     		var voieAdminM5 = $('#voieAdminM5').val();
@@ -280,7 +280,7 @@
     		}else if(voieAdminM5 == 2){
     			$('#MorphineDosageInfos').html(" (15ug/kg)");
         		var palier3 = 15 * $(this).val();
-        		$('.poidsP3').html(palier3+" <span style='font-size: 13px;'> ug/j </span>");
+        		$('.poidsP3').html(palier3.toFixed(1)+" <span style='font-size: 13px;'> ug/j </span>");
     		}
     	
     	});
@@ -308,7 +308,7 @@
     			$('#MorphineDosageInfos').html(" (15ug/kg)");
     			if(poidsPatient != 0){
             		var palier3 = 15 * poidsPatient;
-            		$('.poidsP3').html(palier3+" <span style='font-size: 13px;'> ug/j </span>");
+            		$('.poidsP3').html(palier3.toFixed(1)+" <span style='font-size: 13px;'> ug/j </span>");
     			}
     		}else if(voieAdminM5 == 0){
     			$('#MorphineDosageInfos').html("");
@@ -338,9 +338,9 @@
         		$('#poidsP1 input').val($(this).val());
         		$('#poidsP2 input, #poidsP2a input, #poidsP2b input, #poidsP3 input').val($(this).val()).attr('readonly', true); 
         		var palier1 = 15 * $(this).val();
-        		$('.poidsP1').html(palier1+" <span style='font-size: 13px;'> mg/j </span>");
+        		$('.poidsP1').html(palier1.toFixed(1)+" <span style='font-size: 13px;'> mg/j </span>");
         		var palier2 = 30 * $(this).val();
-        		$('.poidsP2').html(palier2+" <span style='font-size: 13px;'> mg/j </span>");
+        		$('.poidsP2').html(palier2.toFixed(1)+" <span style='font-size: 13px;'> mg/j </span>");
 
 
     		}else{ 
@@ -350,9 +350,9 @@
         		$('#poidsP1 input').val($(this).val());
         		$('#poidsP2 input, #poidsP2a input, #poidsP2b input, #poidsP3 input').val($(this).val()).attr('readonly', true); 
         		var palier1 = 15 * $(this).val();
-        		$('.poidsP1').html(palier1+" <span style='font-size: 13px;'> mg/j </span>");
+        		$('.poidsP1').html(palier1.toFixed(1)+" <span style='font-size: 13px;'> mg/j </span>");
         		var palier2 = 30 * $(this).val();
-        		$('.poidsP2').html(palier2+" <span style='font-size: 13px;'> mg/j </span>");
+        		$('.poidsP2').html(palier2.toFixed(1)+" <span style='font-size: 13px;'> mg/j </span>");
 
     		}
     		
@@ -360,7 +360,7 @@
     	    	    
     	}).keyup(function(){
     		var palier1 = 15 * $(this).val();
-    		$('.poidsP1Fievre').html(palier1+" <span style='font-size: 13px;'> mg/j </span>");
+    		$('.poidsP1Fievre').html(palier1.toFixed(1)+" <span style='font-size: 13px;'> mg/j </span>");
     		
     		if($(this).val()){
         		$('#poids').val($(this).val()).attr('readonly', false);
@@ -368,9 +368,9 @@
         		$('#poidsP1 input').val($(this).val());
         		$('#poidsP2 input, #poidsP2a input, #poidsP2b input, #poidsP3 input').val($(this).val()).attr('readonly', true); 
         		var palier1 = 15 * $(this).val();
-        		$('.poidsP1').html(palier1+" <span style='font-size: 13px;'> mg/j </span>");
+        		$('.poidsP1').html(palier1.toFixed(1)+" <span style='font-size: 13px;'> mg/j </span>");
         		var palier2 = 30 * $(this).val();
-        		$('.poidsP2').html(palier2+" <span style='font-size: 13px;'> mg/j </span>");
+        		$('.poidsP2').html(palier2.toFixed(1)+" <span style='font-size: 13px;'> mg/j </span>");
 
     		}else{
     			$('#alertePriseEnChargeFievre input').trigger("click");
@@ -379,9 +379,9 @@
         		$('#poidsP1 input').val($(this).val());
         		$('#poidsP2 input, #poidsP2a input, #poidsP2b input, #poidsP3 input').val($(this).val()).attr('readonly', true); 
         		var palier1 = 15 * $(this).val();
-        		$('.poidsP1').html(palier1+" <span style='font-size: 13px;'> mg/j </span>");
+        		$('.poidsP1').html(palier1.toFixed(1)+" <span style='font-size: 13px;'> mg/j </span>");
         		var palier2 = 30 * $(this).val();
-        		$('.poidsP2').html(palier2+" <span style='font-size: 13px;'> mg/j </span>");
+        		$('.poidsP2').html(palier2.toFixed(1)+" <span style='font-size: 13px;'> mg/j </span>");
 
 
     		}

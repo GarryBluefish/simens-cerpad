@@ -867,7 +867,7 @@
     	tab[5] = $('#hematies_ecbu').val();
     	tab[6] = $('#hematies_champ_ecbu').val();
     	tab[7] = $('#levures_ecbu').val();
-    	tab[8] = $('#trichomonas_vaginalis_ecbu').val();
+    	tab[8] = $('#filaments_myceliens_ecbu').val();
     	tab[9] = $('#flore_ecbu').val();
     	if($("#flore_cocci_pos_Choix1_ecbu").get(0).checked){ tab[10] = 1; }else{ tab[10] = -1; } 
     	if($("#flore_cocci_pos_Choix2_ecbu").get(0).checked){ tab[11] = 1; }else{ tab[11] = -1; } 
@@ -1048,31 +1048,20 @@
     	$("#commentaire_ecbu").attr('readonly', true).val(tabConcluCommentECBU[2]); 
     	$(".identificationCultureChampsECBU").toggle(false);
     }
-    
 
-    function ajouterNouvelleSoucheECBU(){
-    	
-    	$( "#ajouterNouvelleSoucheECBU" ).dialog({
-    		resizable: false,
-    	    height:520,
-    	    width:450,
-    	    autoOpen: false,
-    	    modal: true,
-    	    buttons: {
-    	        "Fermer": function() {
-                  $( this ).dialog( "close" );
-    	        }
-    	    }
-    	});
-    	
-    	$("#ajouterNouvelleSoucheECBU").dialog('open');
+    
+    function getLevuresFilMycEcbuPositif(id){
+    	if(id==1){
+    		$('.filamMycECBUToggle').css({'visibility':'visible'});
+    	}else{
+    		$('.filamMycECBUToggle').css({'visibility':'hidden'});
+    	}
     }
+    
     
     function getListeDesSouchesIdentificationCultureECBU(){
     	
-    	$("#ajouterNouvelleSoucheECBU .tabAjouterNouvelleSoucheECBU .listeDeSouchesExistantes").empty();
-    	$("#ajouterNouvelleSoucheECBU .tabAjouterNouvelleSoucheECBU .listeDeSouchesExistantes").html('<div style="width: 99%; height: 199px;" align="center"> <img style="margin-top: 20px; width: 50px; height: 50px;" src="../images/loading/Chargement_1.gif" /> </div>');
-
+    	
     	$.ajax({
               type: 'POST',
               url: tabUrl[0]+'public/biologiste/get-liste-des-souches',
@@ -1085,70 +1074,53 @@
           });
     }
     
-    function affInterfaceAjoutNewSoucheECBU(){
-    	$(".ligneBoutonsAjoutSoucheECBU").toggle(false);
-    	$(".interfaceAjoutNouvelleSoucheECBU").toggle(true);
-    }
     
-    function annulerAjoutNewSoucheButtonECBU(){
-    	$(".ligneBoutonsAjoutSoucheECBU").toggle(true);
-    	$(".interfaceAjoutNouvelleSoucheECBU").toggle(false);
-    } 
-    
-    function validerAjoutNewSoucheButtonECBU(){
-    	var nouvelleSouche = $('#nouvelleSoucheAAjouter').val();
+    var resultParasitesEcbu = "";
+    function getListeDesParasitesDansBdECBU(){
     	
-    	if($('#formNewSoucheAAjouter')[0].checkValidity() == true){
-    		$('#nouvelleSoucheAAjouter').val("");
-        	$.ajax({
-                type: 'POST',
-                url: tabUrl[0]+'public/technicien/insert-nouvelle-souche',
-                data:{'nouvelleSouche' : nouvelleSouche},
-                success: function(data) {
-                	     var result = jQuery.parseJSON(data);
-                	     getListeDesSouchesIdentificationCultureECBU();
-                }
-            });
-		}else{
-			$('#formNewSoucheAAjouterButton').trigger('click');
-		}
+    	$.ajax({
+              type: 'POST',
+              url: tabUrl[0]+'public/technicien/get-liste-des-parasites',
+              data:{},
+              success: function(data) {
+              	     var result = jQuery.parseJSON(data);
+              	     
+              	     $("#listeParasitesECBUSelect").html(result);
+              	     $("#parasites_ecbu").val(resultParasitesEcbu); 
+              }
+          });
     }
     
-    var idSoucheAModifierECBU;
-    function modifierInfosSoucheECBU(id,Num){
-    	var libelleSoucheModif = $(".LTPE2 .libelleID_"+id).text(); 
-    	$('#modificationSoucheAModifier').val(libelleSoucheModif);
+    
+    function getIconeAntibiogrammeCulturePosECBU(id,i){
+    	if(id == 0){
+    		$('.antiBGButAffInterfaceCultECBU'+i).toggle(false);
+    	}else{
+    		$('.antiBGButAffInterfaceCultECBU'+i).toggle(true);
+    	}
+    }
+
+    function antibiogrammeAfficherInterfaceECBU(){
     	
-    	$(".interfAjoutNewSoucheECBU").toggle(false);
-    	$(".interfModifSoucheECBU").toggle(true);
+    	$( "#resultatsAnalysesECBUAntiBioGramme" ).dialog({
+    		resizable: false,
+    		height:680,
+    		width:800,
+    		autoOpen: false,
+    		modal: true,
+    		buttons: { 			
+
+    			"Terminer": function() {
+    				$(this).dialog( "close" );
+    			}
+    		}
+    	});
     	
-    	$(".modifSoucheNumeroECBU span").html("n&deg; "+Num);
-    	idSoucheAModifierECBU = id;
-    }
-    
-    function validerModificationSoucheButtonECBU(){
-    	if($('#formModificationSoucheAModifier')[0].checkValidity() == true){
-    		var nouveauNomSouche = $('#modificationSoucheAModifier').val();
-        	
-    		$.ajax({
-                type: 'POST',
-                url: tabUrl[0]+'public/technicien/modifier-souche-selectionnee',
-                data:{'idSouche' : idSoucheAModifierECBU, 'nouveauNomSouche' : nouveauNomSouche},
-                success: function(data) {
-                	     var result = jQuery.parseJSON(data);
-                	     getListeDesSouchesIdentificationCultureECBU();
-                	     annulerModificationSoucheButtonECBU();
-                }
-            });
-    		
-		}else{
-			$('#formModificationSoucheAModifierButton').trigger('click');
-		}
-    }
-    
-    function annulerModificationSoucheButtonECBU(){
-    	$(".ligneBoutonsAjoutSoucheECBU").toggle(true);
-    	$(".interfModifSoucheECBU").toggle(false);
+    	var cultureSelECBU = $('#identification_culture_select_ecbu').val();
+    	var cultureSelLibECBU = $('#identification_culture_select_ecbu .SouchesCultIdentifID_'+cultureSelECBU).text();
+    	$("#valeurSoucheIsoleeIdentificationCultureECBU").html(cultureSelLibECBU);
+    	
+    	$("#resultatsAnalysesECBUAntiBioGramme").dialog('open');
     }
     
     // FIN DE GESTION DE L'ANALYSE ECBU 
@@ -1308,7 +1280,7 @@
             	     
             	     $("#resultatsAnalyses").dialog('open');
             	     
-                 	 $('#commentaire_hemogramme, #commentaire_pv, #conclusion_pv_ABG').attr('readonly', true);
+                 	 $('#commentaire_hemogramme, #commentaire_pv, #conclusion_pv_ABG, #conclusion_ecbu_ABG, #autres_precisions_commentaire_pv, #autres_precisions_commentaire_ecbu').attr('readonly', true);
                  	 $('#idCommentaireChoiceCheckPV').toggle(false);
                  	 //Ajouter des lignes
                  	 //Ajouter des lignes
@@ -2625,7 +2597,7 @@
             	     
                  	 //Bloquer la saisie sur tous les champs de commentaires
                   	 //Bloquer la saisie sur tous les champs de commentaires
-                     $('#commentaire_hemogramme, #commentaire_pv, #conclusion_pv_ABG').attr('readonly', true);
+                     $('#commentaire_hemogramme, #commentaire_pv, #conclusion_pv_ABG, #conclusion_ecbu_ABG, #autres_precisions_commentaire_pv, #autres_precisions_commentaire_ecbu').attr('readonly', true);
                   	 $('.commentaire_protect textarea').attr('readonly', true);
                   	 $('#idCommentaireChoiceCheckPV').toggle(false);
                  	

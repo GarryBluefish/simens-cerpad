@@ -281,6 +281,8 @@ $(function(){
 		var diagnostic_demande = $("#diagnostic_demande_text").val();
 		var temoinTypageHemo = $("#temoinTypageHemo").val();
 		var TypageHemoSelect = 0;
+		var PVSimple = 0;
+		var PVComplet = 0;
 		
 		var typesAnalyses = [];
 		var analyses = [];
@@ -289,6 +291,8 @@ $(function(){
 				typesAnalyses[j] = $('#type_analyse_name_'+i).val();
 				analyses[j] = $('#analyse_name_'+i).val();
 				if(analyses[j] == 68){ TypageHemoSelect = 1; }
+				if(analyses[j] == 65){ PVSimple = 1; }
+				if(analyses[j] == 74){ PVComplet = 1; }
 				j++;
 			}
 		}
@@ -297,7 +301,13 @@ $(function(){
 		if(analyses[1]){
 			
 			if(temoinTypageHemo == 1 && TypageHemoSelect == 1){
-				$('.messageAlertVoletPopup').html('<span style="font-size: 16px; color: red;"> La demande de d&eacute;pistage &agrave; d&eacute;j&agrave; &eacute;t&eacute; faite pour ce patient. Veuillez annuler celle s&eacute;lectionner pour pouvoir continuer. ! </span>');
+				$('.messageAlertVoletPopup').html('<span style="font-size: 16px; color: red;"> La demande de d&eacute;pistage &agrave; d&eacute;j&agrave; &eacute;t&eacute; faite pour ce patient. Veuillez annuler celle s&eacute;lectionn&eacute;e pour pouvoir continuer. ! </span>');
+				$('#volet').fadeIn(1000);
+				setTimeout(function(){ $('#volet').fadeOut(1000); }, 15000);
+				
+			}
+			else if(PVSimple == 1 && PVComplet == 1){
+				$('.messageAlertVoletPopup').html('<span style="font-size: 16px; color: red;"> Impossible de s&eacute;lectionner les deux types de PV &agrave; la fois. Veuillez en annuler un pour pouvoir continuer. ! </span>');
 				$('#volet').fadeIn(1000);
 				setTimeout(function(){ $('#volet').fadeOut(1000); }, 15000);
 				

@@ -514,13 +514,14 @@
     	
     	$('#idCommentaireChoiceCheckPV').w2overlay({ html: "" +
     		"" +
-    		"<div id='commentChoiceCheckPVID' style='height: 110px; width: 300px; padding-top:10px; text-align:left;'>" +
+    		"<div id='commentChoiceCheckPVID' style='height: 132px; width: 390px; padding-top:10px; text-align:left;'>" +
     		"<table>"+
     		"<tr><td class='col1'><button class='commentChoicePVBut But1' onclick='getCommentChoiceCheckPV(1)'></button></td> <td class='col2'><div class='commentChoicePVDiv' > Flore vaginale normale </div></td></tr>"+
     		"<tr><td class='col1'><button class='commentChoicePVBut But2' onclick='getCommentChoiceCheckPV(2)'></button></td> <td class='col2'><div class='commentChoicePVDiv' > Flore vaginale déséquilibrée </div></td></tr>"+
     		"<tr><td class='col1'><button class='commentChoicePVBut But3' onclick='getCommentChoiceCheckPV(3)'></button></td> <td class='col2'><div class='commentChoicePVDiv' > Vaginite à Trichomonas vaginalis </div></td></tr>"+
     		"<tr><td class='col1'><button class='commentChoicePVBut But4' onclick='getCommentChoiceCheckPV(4)'></button></td> <td class='col2'><div class='commentChoicePVDiv' > Vaginose bactérienne à Gardenella vaginalis </div></td></tr>"+
     		"<tr><td class='col1'><button class='commentChoicePVBut But5' onclick='getCommentChoiceCheckPV(5)'></button></td> <td class='col2'><div class='commentChoicePVDiv' > Candidose vaginale </div></td></tr>"+
+    		"<tr><td class='col1'><button class='commentChoicePVBut But6' onclick='getCommentChoiceCheckPV(6)'></button></td> <td class='col2'><div class='commentChoicePVDiv' > Vaginose bactérienne à Gardenella vaginalis et à Mobil..</div></td></tr>"+
     		
     		"</table>"+
     		"</div>"+
@@ -538,9 +539,11 @@
        	tabCommentaireChoicePV[3] = "Vaginite à Trichomonas vaginalis \r\n";
    		tabCommentaireChoicePV[4] = "Vaginose bactérienne à Gardenella vaginalis \r\n";
 		tabCommentaireChoicePV[5] = "Candidose vaginale \r\n";
+		tabCommentaireChoicePV[6] = "Vaginose bactérienne à Gardenella vaginalis et à Mobilincus spp \r\n";
+		
     var tabCommentaireSelect = new Array();	
 		
-    var pvBut1 = 0, pvBut2 = 0, pvBut3 = 0, pvBut4 = 0, pvBut5 = 0;
+    var pvBut1 = 0, pvBut2 = 0, pvBut3 = 0, pvBut4 = 0, pvBut5 = 0, pvBut6 = 0;
     function getCommentChoiceCheckPV(id){
     	
     	if(id == 1){ 
@@ -566,6 +569,11 @@
     	if(id == 5){
     		if(pvBut5 == 0){ $("#commentChoiceCheckPVID .But5").html("X"); pvBut5 = 1; tabCommentaireSelect[5] = 1;}
     		else{  $("#commentChoiceCheckPVID .But5").html(""); pvBut5 = 0;  tabCommentaireSelect[5] = -1;}
+    	}
+    	
+    	if(id == 6){
+    		if(pvBut6 == 0){ $("#commentChoiceCheckPVID .But6").html("X"); pvBut6 = 1; tabCommentaireSelect[6] = 1;}
+    		else{  $("#commentChoiceCheckPVID .But6").html(""); pvBut6 = 0;  tabCommentaireSelect[6] = -1;}
     	}
     	
     	setCommenataireAutoChoiceCheckPV();
@@ -621,35 +629,23 @@
     	return tab;
     }
     
+    
     function getECBU(){
+
     	var tab = [];
-    	tab[1] = $('#type_materiel_ecbu').val();
-    	tab[2] = $('#urines_ecbu').val();
-    	tab[3] = $('#leucocytes_ecbu').val();
-    	tab[4] = $('#leucocytes_champ_ecbu').val();
-    	tab[5] = $('#hematies_ecbu').val();
-    	tab[6] = $('#hematies_champ_ecbu').val();
-    	tab[7] = $('#levures_ecbu').val();
-    	tab[8] = $('#trichomonas_vaginalis_ecbu').val();
-    	tab[9] = $('#flore_ecbu').val();
-    	if($("#flore_cocci_pos_Choix1_ecbu").get(0).checked){ tab[10] = 1; }else{ tab[10] = -1; } 
-    	if($("#flore_cocci_pos_Choix2_ecbu").get(0).checked){ tab[11] = 1; }else{ tab[11] = -1; } 
-    	tab[12] = $('#culot_ecbu').val();
-    	//Pour la liste des culots selectionn�s
-    	if( tab[12] == 1 ){ tab[13] = getListeCulotPositif(); }
-    	//-------------------------------------
-    	tab[14] = $('#culture_ecbu').val();
-    	if($("#culture_pos_Choix1_ecbu").get(0).checked){ tab[15] = 1; }else{ tab[15] = -1; }
-    	if($("#culture_pos_Choix2_ecbu").get(0).checked){ tab[16] = 1; }else{ tab[16] = -1; }
-    	tab[17] = $('#identification_culture_select_ecbu').val();
+    	tab[2] = $('#autres_precisions_commentaire_ecbu').val();
     	
-    	tab[18] = $('#commentaire_ecbu').val();
-    	
-    	return tab;
+    	/**
+		 * Conclusion ABG
+		 */
+		 tab[1] = $("#conclusion_ecbu_ABG").val();
+		/**
+		 * ==========
+		 */
+		 
+	    return tab;
+    
     }
-    
-    
-    
     
     
     
@@ -813,29 +809,18 @@
     }
     
 
-    function ajouterNouvelleSoucheECBU(){
-    	
-    	$( "#ajouterNouvelleSoucheECBU" ).dialog({
-    		resizable: false,
-    	    height:520,
-    	    width:450,
-    	    autoOpen: false,
-    	    modal: true,
-    	    buttons: {
-    	        "Fermer": function() {
-                  $( this ).dialog( "close" );
-    	        }
-    	    }
-    	});
-    	
-    	$("#ajouterNouvelleSoucheECBU").dialog('open');
+    function getLevuresFilMycEcbuPositif(id){
+    	if(id==1){
+    		$('.filamMycECBUToggle').css({'visibility':'visible'});
+    	}else{
+    		$('.filamMycECBUToggle').css({'visibility':'hidden'});
+    	}
     }
+    
     
     function getListeDesSouchesIdentificationCultureECBU(){
     	
-    	$("#ajouterNouvelleSoucheECBU .tabAjouterNouvelleSoucheECBU .listeDeSouchesExistantes").empty();
-    	$("#ajouterNouvelleSoucheECBU .tabAjouterNouvelleSoucheECBU .listeDeSouchesExistantes").html('<div style="width: 99%; height: 199px;" align="center"> <img style="margin-top: 20px; width: 50px; height: 50px;" src="../images/loading/Chargement_1.gif" /> </div>');
-
+    	
     	$.ajax({
               type: 'POST',
               url: tabUrl[0]+'public/biologiste/get-liste-des-souches',
@@ -848,72 +833,55 @@
           });
     }
     
-    function affInterfaceAjoutNewSoucheECBU(){
-    	$(".ligneBoutonsAjoutSoucheECBU").toggle(false);
-    	$(".interfaceAjoutNouvelleSoucheECBU").toggle(true);
+    var resultParasitesEcbu = "";
+    function getListeDesParasitesDansBdECBU(){
+    	
+    	$.ajax({
+              type: 'POST',
+              url: tabUrl[0]+'public/technicien/get-liste-des-parasites',
+              data:{},
+              success: function(data) {
+              	     var result = jQuery.parseJSON(data);
+              	     
+              	     $("#listeParasitesECBUSelect").html(result);
+            	     $("#parasites_ecbu").val(resultParasitesEcbu); 
+              }
+          });
     }
     
-    function annulerAjoutNewSoucheButtonECBU(){
-    	$(".ligneBoutonsAjoutSoucheECBU").toggle(true);
-    	$(".interfaceAjoutNouvelleSoucheECBU").toggle(false);
-    } 
     
-    function validerAjoutNewSoucheButtonECBU(){
-    	var nouvelleSouche = $('#nouvelleSoucheAAjouter').val();
-    	
-    	if($('#formNewSoucheAAjouter')[0].checkValidity() == true){
-    		$('#nouvelleSoucheAAjouter').val("");
-        	$.ajax({
-                type: 'POST',
-                url: tabUrl[0]+'public/technicien/insert-nouvelle-souche',
-                data:{'nouvelleSouche' : nouvelleSouche},
-                success: function(data) {
-                	     var result = jQuery.parseJSON(data);
-                	     getListeDesSouchesIdentificationCultureECBU();
-                }
-            });
-		}else{
-			$('#formNewSoucheAAjouterButton').trigger('click');
-		}
+    
+    function getIconeAntibiogrammeCulturePosECBU(id,i){
+    	if(id == 0){
+    		$('.antiBGButAffInterfaceCultECBU'+i).toggle(false);
+    	}else{
+    		$('.antiBGButAffInterfaceCultECBU'+i).toggle(true);
+    	}
     }
-    
-    var idSoucheAModifierECBU;
-    function modifierInfosSoucheECBU(id,Num){
-    	var libelleSoucheModif = $(".LTPE2 .libelleID_"+id).text(); 
-    	$('#modificationSoucheAModifier').val(libelleSoucheModif);
+
+    function antibiogrammeAfficherInterfaceECBU(){
     	
-    	$(".interfAjoutNewSoucheECBU").toggle(false);
-    	$(".interfModifSoucheECBU").toggle(true);
-    	
-    	$(".modifSoucheNumeroECBU span").html("n&deg; "+Num);
-    	idSoucheAModifierECBU = id;
-    }
-    
-    function validerModificationSoucheButtonECBU(){
-    	if($('#formModificationSoucheAModifier')[0].checkValidity() == true){
-    		var nouveauNomSouche = $('#modificationSoucheAModifier').val();
-        	
-    		$.ajax({
-                type: 'POST',
-                url: tabUrl[0]+'public/technicien/modifier-souche-selectionnee',
-                data:{'idSouche' : idSoucheAModifierECBU, 'nouveauNomSouche' : nouveauNomSouche},
-                success: function(data) {
-                	     var result = jQuery.parseJSON(data);
-                	     getListeDesSouchesIdentificationCultureECBU();
-                	     annulerModificationSoucheButtonECBU();
-                }
-            });
+    	$( "#resultatsAnalysesECBUAntiBioGramme" ).dialog({
     		
-		}else{
-			$('#formModificationSoucheAModifierButton').trigger('click');
-		}
+    		resizable: false,
+    		height:680,
+    		width:800,
+    		autoOpen: false,
+    		modal: true,
+    		buttons: { 			
+
+    			"Terminer": function() {
+    				$(this).dialog( "close" );
+    			}
+    		}
+    	});
+    	
+    	var cultureSelECBU = $('#identification_culture_select_ecbu').val();
+    	var cultureSelLibECBU = $('#identification_culture_select_ecbu .SouchesCultIdentifID_'+cultureSelECBU).text();
+    	$("#valeurSoucheIsoleeIdentificationCultureECBU").html(cultureSelLibECBU);
+    	
+    	$("#resultatsAnalysesECBUAntiBioGramme").dialog('open');
     }
-    
-    function annulerModificationSoucheButtonECBU(){
-    	$(".ligneBoutonsAjoutSoucheECBU").toggle(true);
-    	$(".interfModifSoucheECBU").toggle(false);
-    }
-    
     // FIN DE GESTION DE L'ANALYSE ECBU 
     // FIN DE GESTION DE L'ANALYSE ECBU 
     // FIN DE GESTION DE L'ANALYSE ECBU 
@@ -1402,12 +1370,16 @@
     				else if(idanalyse == 63) { tab = getAgHbs(); } 
     				     
     				else if(idanalyse == 65) { tab = getPV(); } 
+    				else if(idanalyse == 66) { tab = getECBU(); } 
     				     
     				     
     				     
     				else if(idanalyse == 68) { tab = getTypageHemoglobine(); }
     				     
     				else if(idanalyse == 71) { tab = getChampsNfs_TAD(iddemande); }     
+    				     
+    				     
+    				else if(idanalyse == 74) { tab = getPV(); }
     				     
     				     
     				     //alert(tab); return false;
@@ -2000,6 +1972,7 @@
     function getPV(){
     	var tab = [];
     	tab[1] = $('#commentaire_pv').val();
+    	tab[3] = $('#autres_precisions_commentaire_pv').val();
     	
     	/**
 		 * Conclusion
@@ -2619,71 +2592,9 @@
   	    			
   	    			     if(idanalyse ==  1) { tab  [1] = getChampsNfs(); }
   	    			else if(idanalyse == 71) { tab [71] = getChampsNfs_TAD(iddemande); }
-  	    			else if(idanalyse == 65) { tab [65] = getPV(); } 
-  	    			     
-  	    			     
-//    				else if(idanalyse ==  2) { tab  [2] = getChampsGroupeRhesus(); }
-//    				else if(idanalyse ==  3) { tab  [3] = new Array("", $('#antigene_d_faible').val()); }
-//    				else if(idanalyse ==  4) { tab  [4] = testCombsDirect(); }
-//    				else if(idanalyse ==  5) { tab  [5] = testCombsIndirect(); }
-//       				else if(idanalyse ==  6) { tab  [6] = testCompatibilite(); }
-//       				else if(idanalyse ==  7) { tab  [7] = new Array("", $('#vitesse_sedimentation').val()); }
-//    				else if(idanalyse ==  8) { tab  [8] = new Array("", $('#test_demmel').val()); }
-//    				else if(idanalyse ==  9) { tab  [9] = new Array("", $('#taux_reticulocyte').val()); }
-//    				else if(idanalyse == 10) { tab [10] = getGoutteEpaisse(); }
-//  	    			     
-//    				else if(idanalyse == 14) { tab [14] = getTpInr(); }
-//    				else if(idanalyse == 15) { tab [15] = getTca();  }
-//    				else if(idanalyse == 16) { tab [16] = new Array("", $('#fibrinemie').val());  }
-//    				else if(idanalyse == 17) { tab [17] = new Array("", $('#temps_saignement').val());  }
-//  	    			    
-//    				else if(idanalyse == 21) { tab [21] = getGlycemie(); }
-//    				else if(idanalyse == 22) { tab [22] = new Array("", $('#creatininemie').val()); }
-//    				else if(idanalyse == 23) { tab [23] = new Array("", $('#uree_sanguine').val()); }
-//    				else if(idanalyse == 24) { tab [24] = new Array("", $('#acide_urique').val()); }
-//    				else if(idanalyse == 25) { tab [25] = getCholesterolTotal(); }
-//    				else if(idanalyse == 26) { tab [26] = getTriglycerides(); }
-//    				else if(idanalyse == 27) { tab [27] = getCholesterolHDL(); }
-//    				else if(idanalyse == 28) { tab [28] = getCholesterolLDL(); }
-//    				else if(idanalyse == 29) { tab [29] = getChol_Total_HDL_LDL_Trigly(); }
-//    				else if(idanalyse == 30) { tab [30] = getLipidesTotaux(); } 
-//    			    else if(idanalyse == 31) { tab [31] = getIonogramme(); }
-//    				else if(idanalyse == 32) { tab [32] = new Array("", $('#calcemie').val()); } 
-//    				else if(idanalyse == 33) { tab [33] = new Array("", $('#magnesemie').val()); }
-//    				else if(idanalyse == 34) { tab [34] = new Array("", $('#phosphoremie').val()); }
-//    				else if(idanalyse == 35) { tab [35] = getAsat(); }
-//    				else if(idanalyse == 36) { tab [36] = getAlat(); }
-//    				else if(idanalyse == 37) { tab [37] = getAsatAlat(); }
-//    				else if(idanalyse == 38) { tab [38] = new Array("", $('#phosphatage_alcaline').val()); }
-//    				else if(idanalyse == 39) { tab [39] = new Array("", $('#gama_gt').val()); }
-//    				else if(idanalyse == 40) { tab [40] = getFerSerique(); }   
-//    				else if(idanalyse == 41) { tab [41] = getFerritinine(); } 
-//    				else if(idanalyse == 42) { tab [42] = getBilirubineTotaleDirecte(); } 
-//    				else if(idanalyse == 43) { tab [43] = getHemoglobineGlyqueeHBAC(); } 
-//    				else if(idanalyse == 44) { tab [44] = getElectrophoreseHemoglobine(); }     
-//    				else if(idanalyse == 45) { tab [45] = getElectrophoreseProteines(); }     
-//    				else if(idanalyse == 46) { tab [46] = getAlbuminemie(); }    
-//    				else if(idanalyse == 47) { tab [47] = getAlbumineUrinaire(); } 
-//    				else if(idanalyse == 48) { tab [48] = getProtidemie(); } 
-//    				else if(idanalyse == 49) { tab [49] = getProteinurie(); } 
-//    				else if(idanalyse == 50) { tab [50] = getHlmCompteDaddis(); } 
-//    				else if(idanalyse == 51) { tab [51] = getBetaHcgPlasmatique(); } 
-//    				else if(idanalyse == 52) { tab [52] = getPsa(); } 
-//    				else if(idanalyse == 53) { tab [53] = getCrp(); } 
-//    				else if(idanalyse == 54) { tab [54] = getFacteursRhumatoides(); } 
-//    				else if(idanalyse == 55) { tab [55] = getRfWaalerRose(); } 
-//    				else if(idanalyse == 56) { tab [56] = getToxoplasmose(); } 
-//    				else if(idanalyse == 57) { tab [57] = getRubeole(); }
-//    				else if(idanalyse == 58) { tab [58] = getCulotUrinaire(); } 
-//    				else if(idanalyse == 59) { tab [59] = getSerologieChlamydiae(); } 
-//    				else if(idanalyse == 60) { tab [60] = getSerologieSyphilitique(); } 
-//    				else if(idanalyse == 61) { tab [61] = getAslo(); } 
-//    				else if(idanalyse == 62) { tab [62] = getWidal(); } 
-//    				else if(idanalyse == 63) { tab [63] = getAgHbs(); } 
-//  	    			     
-//  	    			     
-  	    			     
-//    				else if(idanalyse == 68) { tab [68] = getTypageHemoglobine(); }
+  	    			else if(idanalyse == 65) { tab [65] = getPV(); }
+  	    			else if(idanalyse == 74) { tab [74] = getPV(); }
+  	    	
   	    		}
   	    		
   	    		

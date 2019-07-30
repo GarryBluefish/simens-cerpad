@@ -808,7 +808,9 @@ div .dataTables_paginate
 
 
 
-#ajouterNouvelleSoucheECBU table, #ajouterNouvelleSoucheECBU table tr{
+#ajouterNouvelleSoucheECBU  table, #ajouterNouvelleSoucheECBU table tr,
+#ajouterNouveauParasiteECBU table, #ajouterNouveauParasiteECBU table tr
+{
 	width: 100%;
 	vertical-align: top;
 }
@@ -816,19 +818,26 @@ div .dataTables_paginate
 
 
 
-#ajouterNouvelleSoucheECBU .tabAjouterNouvelleSoucheECBU td{
+#ajouterNouvelleSoucheECBU  .tabAjouterNouvelleSoucheECBU td,
+#ajouterNouveauParasiteECBU .tabAjouterNouveauParasiteECBU td
+{
 	width: 50%; 
 	margin-left: 5px;
 }
 
-#ajouterNouvelleSoucheECBU .tabAjouterNouvelleSoucheECBU td label{
+#ajouterNouvelleSoucheECBU .tabAjouterNouvelleSoucheECBU td label,
+#ajouterNouveauParasiteECBU .tabAjouterNouveauParasiteECBU td label
+{
 	width: 100%;
 	height: 25px;
 	font-size: 20px;
 	font-family: times new roman;
 	text-align: left;
 }
-#ajouterNouvelleSoucheECBU .tabAjouterNouvelleSoucheECBU td div{
+
+#ajouterNouvelleSoucheECBU .tabAjouterNouvelleSoucheECBU td div,
+#ajouterNouveauParasiteECBU .tabAjouterNouveauParasiteECBU td div
+{
 	width: 99%;
 	height: 200px;
 	font-size: 17px;
@@ -840,31 +849,44 @@ div .dataTables_paginate
 	overflow-y: auto;
 }
 
-#ajouterNouvelleSoucheECBU .listeDeSouchesExistantes table tr{
+#ajouterNouvelleSoucheECBU .listeDeSouchesExistantes table tr,
+#ajouterNouveauParasiteECBU .listeDeParasitesExistants table tr 
+{
 	width: 100%;
 	font-size: 17px;
 }
 
-#ajouterNouvelleSoucheECBU .listeDeSouchesExistantes table td{
+#ajouterNouvelleSoucheECBU .listeDeSouchesExistantes table td,
+#ajouterNouveauParasiteECBU .listeDeParasitesExistants table td
+{
 	padding-left: 6px;
 	padding-top: 5px;
 	padding-bottom: 5px;
 	border: 1px solid #cccccc;
 }
 
-#ajouterNouvelleSoucheECBU .listeDeSouchesExistantes table .LTPE1{
+#ajouterNouvelleSoucheECBU .listeDeSouchesExistantes table .LTPE1,
+#ajouterNouveauParasiteECBU .listeDeParasitesExistants table .LTPE1
+{
 	width: 8%;
 }
 
-#ajouterNouvelleSoucheECBU .listeDeSouchesExistantes table .LTPE2{
+#ajouterNouvelleSoucheECBU .listeDeSouchesExistantes table .LTPE2,
+#ajouterNouveauParasiteECBU .listeDeParasitesExistants table .LTPE2
+{
 	width: 92%;
 }
 
-#ajouterNouvelleSoucheECBU .listeDeSouchesExistantes table tr:hover{
+#ajouterNouvelleSoucheECBU .listeDeSouchesExistantes table tr:hover,
+#ajouterNouveauParasiteECBU .listeDeParasitesExistants table tr:hover
+{
 	background: #e1e1e1; 
 }
 
-.listeDeSouchesExistantes table img{
+
+.listeDeSouchesExistantes table img,
+.listeDeParasitesExistants table img
+{
 	margin-left: -3px;
 	cursor: pointer;
 }
@@ -902,20 +924,26 @@ div .dataTables_paginate
 
 
 #ajouterNouvelleSoucheECBU .interfaceAjoutNouvelleSoucheECBU .boutonAVAA,
-#ajouterNouvelleSoucheECBU .interfaceModificationSoucheECBU .boutonAVAA
+#ajouterNouvelleSoucheECBU .interfaceModificationSoucheECBU .boutonAVAA,
+#ajouterNouveauParasiteECBU .interfaceAjoutNouveauParasiteECBU .boutonAVAA,
+#ajouterNouveauParasiteECBU .interfaceModificationParasiteECBU .boutonAVAA
 {
 	float: right; 
 }
 
 #ajouterNouvelleSoucheECBU .interfaceAjoutNouvelleSoucheECBU td,
-#ajouterNouvelleSoucheECBU .interfaceModificationSoucheECBU td
+#ajouterNouvelleSoucheECBU .interfaceModificationSoucheECBU td,
+#ajouterNouveauParasiteECBU .interfaceAjoutNouveauParasiteECBU td,
+#ajouterNouveauParasiteECBU .interfaceModificationParasiteECBU td
 {
 	width: 50%;
 	height: 50px;
 }
 
 #ajouterNouvelleSoucheECBU .interfaceAjoutNouvelleSoucheECBU button,
-#ajouterNouvelleSoucheECBU .interfaceModificationSoucheECBU button
+#ajouterNouvelleSoucheECBU .interfaceModificationSoucheECBU button,
+#ajouterNouveauParasiteECBU .interfaceAjoutNouveauParasiteECBU button,
+#ajouterNouveauParasiteECBU .interfaceModificationParasiteECBU button
 {
 	border: 1px;
 	border-radius: 15px;
@@ -933,7 +961,9 @@ div .dataTables_paginate
 	visibility: hidden;
 }
 
-#ajouterNouvelleSoucheECBU .listeDeSouchesExistantes table tr:hover .imgLTPE2{
+#ajouterNouvelleSoucheECBU .listeDeSouchesExistantes table tr:hover .imgLTPE2,
+#ajouterNouveauParasiteECBU .listeDeParasitesExistants table tr:hover .imgLTPE2
+{
 	float: right; 
 	height: 18px; 
 	width: 18px;
@@ -941,7 +971,9 @@ div .dataTables_paginate
 }
 
 #ajouterNouvelleSoucheECBU .interfaceAjoutNouvelleSoucheECBU input,
-#ajouterNouvelleSoucheECBU .interfaceModificationSoucheECBU input
+#ajouterNouvelleSoucheECBU .interfaceModificationSoucheECBU input,
+#ajouterNouveauParasiteECBU .interfaceAjoutNouveauParasiteECBU input,
+#ajouterNouveauParasiteECBU .interfaceModificationParasiteECBU input
 {
 
 	width: 99%;
@@ -953,6 +985,6 @@ div .dataTables_paginate
 	float: left;
 }
 
-.interfaceAjoutNouvelleSoucheECBU, .interfaceModificationSoucheECBU{
+.interfaceAjoutNouvelleSoucheECBU, .interfaceModificationSoucheECBU, .interfaceAjoutNouveauParasiteECBU{
 	margin-top : 10px; 
 }

@@ -821,7 +821,7 @@ class SecretariatController extends AbstractActionController {
 				<td colspan='3' style='height: 25px; '> 
 				
 				  <a id='precedent' style='text-decoration: none; font-family: police2; width:50px; cursor: pointer;'>
-	                <img src='".$this->chemin()."/images_icons/transfert_gauche.PNG' />
+	                <img src='".$this->chemin()."/images_icons/transfert_gauche.png' />
 		            Pr&eacute;c&eacute;dent
 		          </a>
 	        		

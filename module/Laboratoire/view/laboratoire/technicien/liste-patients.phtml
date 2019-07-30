@@ -236,6 +236,17 @@ $(window).load(function () {
 </div>
 
 
+<!-- POP UP pour Ajouter les résultats sur l'antibiogramme d'un ECBU -->
+<div id="resultatsAnalysesECBUAntiBioGramme" title="Entrez les r&eacute;sultats de l'antibiogramme de l'ECBU" style="display: none;"  align="center">
+    <div id="contenuResultatsAnalysesECBUAntiBioGramme" style="width: 95%;"> 
+      <form id="formEnvoyerResultatsAnalysesECBUAntiBioGramme">
+        <div> </div>
+        <button id='envoyerResultatsAnalysesECBUAntiBioGramme' style='display: none;'> button </button> 
+      </form>
+    </div>
+</div>
+
+
 
 
 
@@ -337,6 +348,59 @@ $(window).load(function () {
 
 
 
+<!-- GESTION DE L'INTERFACE D'AJOUT DES Parasites -->
+<!-- GESTION DE L'INTERFACE D'AJOUT DES Parasites -->
+<!-- GESTION DE L'INTERFACE D'AJOUT DES Parasites -->
+
+<div id="ajouterNouveauParasiteECBU" title="Ajouter un nouveau parasite" style="display: none;" >
+
+    <table class="tabAjouterNouveauParasiteECBU">
+        <tr>
+            <td>
+               <label> &#10048; Liste des parasites </label>
+               <div class="listeDeParasitesExistants"> 
+                   <!-- Contient la liste des parasites -->
+               </div>
+            </td>
+        </tr>
+    </table>
+    
+    <table class="ligneBoutonsAjoutParasiteECBU interfAjoutNewParasiteECBU">
+        <tr>
+            <td>
+                <div class="boutonATP"> <button onclick="affInterfaceAjoutNewParasiteECBU();"> Ajouter un parasite </button> </div>
+            </td>
+        </tr>
+    </table>
+    
+    <table class="interfaceAjoutNouveauParasiteECBU interfAjoutNewParasiteECBU" style="display: none;">
+      <tr><td colspan="2" style="height: 20px; font-family: time new roman; font-size: 19px; margin-bottom: 10px;">&#10046; Nouveau parasite </td></tr>
+      <tr><td colspan="2"> <form id="formNewParasiteAAjouter"> <input type="text" id="nouveauParasiteAAjouter" required placeholder="Entrer le nouveau parasite &agrave; ajouter"> <button id="formNewParasiteAAjouterButton" style="display: none;"></button> </form></td></tr>
+      <tr>
+        <td>
+          <div class="boutonAVAA"> <button onclick="annulerAjoutNewParasiteButtonECBU();"> Annuler </button> </div>
+        </td>
+        <td>
+          <div class="boutonAVAV"> <button onclick="validerAjoutNewParasiteButtonECBU();"> Valider </button> </div>
+        </td>
+      </tr>
+    </table>
+    
+    <table class="interfaceModificationParasiteECBU interfModifParasiteECBU" style="display: none;">
+      <tr><td colspan="2" style="height: 20px; font-family: time new roman; font-size: 19px; margin-bottom: 10px;" class="modifParasiteNumeroECBU">&#10046; Modification du nom du parasite <span></span></td></tr>
+      <tr><td colspan="2"> <form id="formModificationParasiteAModifier"> <input type="text" id="modificationParasiteAModifier" required > <button id="formModificationParasiteAModifierButton" style="display: none;"></button> </form></td></tr>
+      <tr>
+        <td>
+          <div class="boutonAVAA"> <button onclick="annulerModificationParasiteButtonECBU();"> Annuler </button> </div>
+        </td>
+        <td>
+          <div class="boutonAVAV"> <button onclick="validerModificationParasiteButtonECBU();"> Modifier </button> </div>
+        </td>
+      </tr>
+    </table>
+    
+    
+</div>
 
 
 

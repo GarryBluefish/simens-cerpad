@@ -360,5 +360,7 @@ echo $this->form ()->openTag ( $form );
     if(typageProfilXZYA != 0){ $("#patientClassique").replaceWith("<span title='Impossible de modifier car le patient est déja dépisté'> Externe </span>"); }
 
     $('a,img,span').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });
+
+    $('#date_naissance, #age').attr('autocomplete', 'off'); 
 </script>
     

@@ -1758,7 +1758,7 @@ class TechnicienController extends AbstractActionController {
 		
 		$html  .= "<script> var optionsListesIdentifSouchesECBU = '<option value=0></option>'; </script>";
 		for($i = 0; $i<count($listeSouchesIdentif) ; $i++){
-			$html .= "<script> optionsListesIdentifSouchesECBU += '<option value=".$listeSouchesIdentif[$i][0].">".str_replace("'", "\'", $listeSouchesIdentif[$i][1])."</option>'; </script>";
+			$html .= "<script> optionsListesIdentifSouchesECBU += '<option value=".$listeSouchesIdentif[$i][0]."  class=".'SouchesCultIdentifID_'.$listeSouchesIdentif[$i][0]." >".str_replace("'", "\'", $listeSouchesIdentif[$i][1])."</option>'; </script>";
 		}
 		$html .= "<script> $('#identification_culture_select_ecbu').html(optionsListesIdentifSouchesECBU); </script>";
 		 
@@ -1789,6 +1789,66 @@ class TechnicienController extends AbstractActionController {
 		$this->getResponse()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html' );
 		return $this->getResponse ()->setContent(Json::encode ( 1 ));
 	}
+	
+	
+	/*
+	 * Liste des parasites --- Liste des parasites --- Liste des parasites
+	 * Liste des parasites --- Liste des parasites --- Liste des parasites
+	 */
+	public function getListeDesParasitesAction()
+	{
+		$listeParasites = $this->getResultatDemandeAnalyseTable()->getListeParasitesIdDESC();
+		$html  = "<table>";
+		for($i = 0 ; $i <  count($listeParasites); $i++){
+			$html .="<tr><td class='LTPE1' >".($i+1)."</td><td class='LTPE2  LTPE2_".$listeParasites[$i][0]."' ><span class='libelleID_".$listeParasites[$i][0]."'>".str_replace("'", "'", $listeParasites[$i][1])."</span><img onclick='modifierInfosParasiteECBU(".$listeParasites[$i][0].",".($i+1).");' class='imgLTPE2' src='../img/light/pencil.png'> </td></tr>";
+		}
+		$html .= "</table>";
+	
+		$listeParasites = $this->getResultatDemandeAnalyseTable()->getListeParasitesLibelleASC();
+	
+		$html  .= "<script> var optionsListeParasitesECBU = '<option value=0></option>'; </script>";
+		for($i = 0; $i<count($listeParasites) ; $i++){
+			$html .= "<script> optionsListeParasitesECBU += '<option value=".$listeParasites[$i][0].">".str_replace("'", "\'", $listeParasites[$i][1])."</option>'; </script>";
+		}
+
+		$html .= "<script> $('#parasites_ecbu').html(optionsListeParasitesECBU); </script>";
+		
+	
+		$this->getResponse()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html' );
+		return $this->getResponse ()->setContent(Json::encode ( $html ));
+	}
+	
+	public function insertNouveauParasiteAction()
+	{
+		$idemploye = $this->layout()->user['idemploye'];
+		$nouveauParasite = $this->params ()->fromPost ( 'nouveauParasite' );
+	
+		$this->getResultatDemandeAnalyseTable()->insertNouveauParasite($nouveauParasite, $idemploye);
+	
+		$this->getResponse()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html' );
+		return $this->getResponse ()->setContent(Json::encode ( 1 ));
+	}
+	
+	public function modifierParasiteSelectionneAction()
+	{
+		$idemploye = $this->layout()->user['idemploye'];
+		$idParasite = $this->params ()->fromPost ( 'idParasite' );
+		$nouveauNomParasite = $this->params ()->fromPost ( 'nouveauNomParasite' );
+	
+		$this->getResultatDemandeAnalyseTable()->modifierParasiteSelectionne($idParasite, $nouveauNomParasite, $idemploye);
+	
+		$this->getResponse()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html' );
+		return $this->getResponse ()->setContent(Json::encode ( 1 ));
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public function vueListePrelevementTriReprisAction(){
 
@@ -4299,7 +4359,11 @@ class TechnicienController extends AbstractActionController {
     	        $('#recherche_directe_mycoplasmes_pv').val('".$resultat['recherche_directe_mycoplasmes']."').trigger('change');
                     
     	        $('#commentaire_pv').val('".preg_replace("/(\r\n|\n|\r)/", "\\n", str_replace( "'", "\'", $resultat['commentaire'] ))."');
+    	        $('#autres_precisions_commentaire_pv').val('".preg_replace("/(\r\n|\n|\r)/", "\\n", str_replace( "'", "\'", $resultat['precision_commentaire'] ))."');
+    	        		
 
+    	        		
+    	        		
     	        tabCommentaireSelect = new Array();
 	    	 </script>";
 	        
@@ -4469,7 +4533,7 @@ class TechnicienController extends AbstractActionController {
 	             * Conclusion
 	             */
 	            
-	            $html .= ($resultatAntiBioGramme['conclusion']) ? '$("#conclusion_pv_ABG").val("'.$resultatAntiBioGramme['conclusion'].'");' : '';
+	            $html .= ($resultatAntiBioGramme['conclusion']) ? '$("#conclusion_pv_ABG").val("'.preg_replace("/(\r\n|\n|\r)/", "\\n", str_replace( "'", "\'",$resultatAntiBioGramme['conclusion'])).'");' : '';
 	            /**
 	             * ==========
 	             */
@@ -4485,10 +4549,20 @@ class TechnicienController extends AbstractActionController {
 	
 	protected function getResultatsECBU($iddemande){
 
-		$html  = "<script> getListeDesSouchesIdentificationCultureECBU(); </script>";
+		$resultat = $this->getResultatDemandeAnalyseTable()->getValeursECBU($iddemande);
+		
+		$html = "";
+		
+		if($resultat['Parasites']){
+			/*Parasites --- Parasites --- Parasites*/
+			$html .= '<script> resultParasitesEcbu = '.$resultat['Parasites'].';  </script>';
+		}else { $html .= '<script> resultParasitesEcbu = "";  </script>'; }
+		
+		$html .= "<script> getListeDesSouchesIdentificationCultureECBU(); </script>";
+		$html .= "<script> getListeDesParasitesDansBdECBU(); </script>";
 		$html .= "<script> $('a,div').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } }); </script>";
 		
-		$resultat = $this->getResultatDemandeAnalyseTable()->getValeursECBU($iddemande);
+		
 		$html .="<script> commentCultPosValECBU=''; </script>";
 		if($resultat){
 			$html .=
@@ -4500,14 +4574,19 @@ class TechnicienController extends AbstractActionController {
    	           	$('#leucocytes_champ_ecbu').val('".$resultat['LeucocytesChamp']."');
    	           	$('#hematies_ecbu').val('".$resultat['Hematies']."');
    	           	$('#hematies_champ_ecbu').val('".$resultat['HematiesChamp']."');
-   	           	$('#levures_ecbu').val('".$resultat['Levures']."');
-   	           	$('#trichomonas_vaginalis_ecbu').val('".$resultat['TrichomonasVaginalis']."');
+   	           	$('#levures_ecbu').val('".$resultat['Levures']."').trigger('change');
+   	           	$('#filaments_myceliens_ecbu').val('".$resultat['FilamentsMyceliens']."');
+   	           	$('#cellules_epitheliales_ecbu').val('".$resultat['CellulesEpitheliales']."');
+   	           	$('#cellules_epitheliales_champ_ecbu').val('".$resultat['CellulesEpithelialesChamp']."');
          		/*-Flore-*/	
    	           	$('#flore_ecbu').val('".$resultat['Flore']."').trigger('change');
    	           	/*-Culot-*/
    	            $('#culot_ecbu').val('".$resultat['Culot']."').trigger('change');
    	            /*-Culture-*/
    	            $('#culture_ecbu').val('".$resultat['Culture']."').trigger('change');
+   	            		
+   	            $('#autres_precisions_commentaire_ecbu').val('".preg_replace("/(\r\n|\n|\r)/", "\\n", str_replace( "'", "\'", $resultat['precision_commentaire'] ))."');
+    	        
              </script>";     
 			
 			/*Flore --- Flore --- Flore*/
@@ -4517,8 +4596,8 @@ class TechnicienController extends AbstractActionController {
 			/*Culture --- Culture --- Culture*/			
 			$html .= ($resultat['CulturePos1']) ? '<script> $("#culture_pos_Choix1_ecbu").trigger("click"); </script>' : '';
 			$html .= ($resultat['CulturePos2']) ? '<script> $("#culture_pos_Choix2_ecbu").trigger("click"); </script>' : '';
-			$html .= ($resultat['CulturePos1']) ? '<script> setTimeout(function(){ $("#identification_culture_select_ecbu").val('.$resultat['IdentificationCulture'].'); },500); </script>' : '';
-		
+			$html .= ($resultat['CulturePos1']) ? '<script> setTimeout(function(){ $("#identification_culture_select_ecbu").val('.$resultat['IdentificationCulture'].').trigger("change"); },500); </script>' : '';
+			
 			/*Culot --- Culot --- Culot*/
 			if($resultat['Culot'] == 1){
 				$resultatCulot = $this->getResultatDemandeAnalyseTable()->getValeursECBUCulot($iddemande);
@@ -4540,6 +4619,169 @@ class TechnicienController extends AbstractActionController {
 				}
 				$html .= '$("#culot_ecbu_moins").trigger("click");';
 				$html .= '}); </script>';
+			}
+		}
+		
+		
+		/**
+		 * Recuperer les donnees de l'antibiogramme
+		 */
+		 
+		if($resultat['IdentificationCulture'] != 0){
+			$resultatAntiBioGramme = $this->getResultatDemandeAnalyseTable()->getValeursAntiBioGrammeECBU($iddemande);
+			if($resultatAntiBioGramme){
+				$html .= '<script> /*alert("'.$resultatAntiBioGramme['ampicillineAM'].'");*/';
+		
+				/**
+				 * PARTIE B-lactamines
+				 */
+				$html .= ($resultatAntiBioGramme['ampicillineAM'])   ? '$("#ampicillineAMABGecbu").val("'.$resultatAntiBioGramme['ampicillineAM'].'"); $("#choixAmpicillineAMABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['amoxillineAMX'])   ? '$("#amoxillineAMXABGecbu").val("'.$resultatAntiBioGramme['amoxillineAMX'].'"); $("#choixAmoxillineAMXABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['ticarcillineTIC']) ? '$("#ticarcillineTICABGecbu").val("'.$resultatAntiBioGramme['ticarcillineTIC'].'"); $("#choixTicarcillineTICABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['piperacillinePIP']) ? '$("#piperacillinePIPABGecbu").val("'.$resultatAntiBioGramme['piperacillinePIP'].'"); $("#choixPiperacillinePIPABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['acideClavulaniqueAmoxicillineAMC']) ? '$("#acideClavulaniqueAmoxicillineAMCABGecbu").val("'.$resultatAntiBioGramme['acideClavulaniqueAmoxicillineAMC'].'"); $("#choixAcideClavulaniqueAmoxicillineAMCABGecbu").trigger("click");' : '';
+				 
+				$html .= ($resultatAntiBioGramme['gentamicineGM']) ? '$("#gentamicineGMABGecbu").val("'.$resultatAntiBioGramme['gentamicineGM'].'"); $("#choixGentamicineGMABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['ticAcClavTCC']) ? '$("#ticAcClavTCCABGecbu").val("'.$resultatAntiBioGramme['ticAcClavTCC'].'"); $("#choixTicAcClavTCCABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['ertapenemeETP']) ? '$("#ertapenemeETPABGecbu").val("'.$resultatAntiBioGramme['ertapenemeETP'].'"); $("#choixErtapenemeETPABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['imipenemeIPM']) ? '$("#imipenemeIPMABGecbu").val("'.$resultatAntiBioGramme['imipenemeIPM'].'"); $("#choixImipenemeIPMABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['oxacillineOX']) ? '$("#oxacillineOXABGecbu").val("'.$resultatAntiBioGramme['oxacillineOX'].'"); $("#choixOxacillineOXABGecbu").trigger("click");' : '';
+		
+				$html .= ($resultatAntiBioGramme['penicillineP']) ? '$("#penicillinePABGecbu").val("'.$resultatAntiBioGramme['penicillineP'].'"); $("#choixPenicillinePABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['cefalotineCF']) ? '$("#cefalotineCFABGecbu").val("'.$resultatAntiBioGramme['cefalotineCF'].'"); $("#choixCefalotineCFABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['cefoxitineFOX']) ? '$("#cefoxitineFOXABGecbu").val("'.$resultatAntiBioGramme['cefoxitineFOX'].'"); $("#choixCefoxitineFOXABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['piperacillineTazobactamePPT']) ? '$("#piperacillineTazobactamePPTABGecbu").val("'.$resultatAntiBioGramme['piperacillineTazobactamePPT'].'"); $("#choixPiperacillineTazobactamePPTABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['cefotaximeCTX']) ? '$("#cefotaximeCTXABGecbu").val("'.$resultatAntiBioGramme['cefotaximeCTX'].'"); $("#choixCefotaximeCTXABGecbu").trigger("click");' : '';
+				 
+				$html .= ($resultatAntiBioGramme['cefsulodineCFS']) ? '$("#cefsulodineCFSABGecbu").val("'.$resultatAntiBioGramme['cefsulodineCFS'].'"); $("#choixCefsulodineCFSABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['CFP']) ? '$("#CFPABGecbu").val("'.$resultatAntiBioGramme['CFP'].'"); $("#choixCFPABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['ceftazidimeCAZ']) ? '$("#ceftazidimeCAZABGecbu").val("'.$resultatAntiBioGramme['ceftazidimeCAZ'].'"); $("#choixCeftazidimeCAZABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['ceftriaxoneCRO']) ? '$("#ceftriaxoneCROABGecbu").val("'.$resultatAntiBioGramme['ceftriaxoneCRO'].'"); $("#choixCeftriaxoneCROABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['cefepimeFEP']) ? '$("#cefepimeFEPABGecbu").val("'.$resultatAntiBioGramme['cefepimeFEP'].'"); $("#choixCefepimeFEPABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['aztreonamATM']) ? '$("#aztreonamATMABGecbu").val("'.$resultatAntiBioGramme['aztreonamATM'].'"); $("#choixAztreonamATMABGecbu").trigger("click");' : '';
+				/**
+				 * FIN PARTIE B-lactamines
+				 */
+				 
+				/**
+				 * PARTIE Glycopeptides
+				 */
+				$html .= ($resultatAntiBioGramme['vancomycineVA']) ? '$("#vancomycineVAABGecbu").val("'.$resultatAntiBioGramme['vancomycineVA'].'"); $("#choixVancomycineVAABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['teicoplanine']) ? '$("#teicoplanineABGecbu").val("'.$resultatAntiBioGramme['teicoplanine'].'"); $("#choixTeicoplanineABGecbu").trigger("click");' : '';
+				/**
+				 * FIN PARTIE Glycopeptides
+				 */
+		
+				 
+				/**
+				 * PARTIE Produits nitrés
+				 */
+				$html .= ($resultatAntiBioGramme['nitrofurane']) ? '$("#nitrofuraneABGecbu").val("'.$resultatAntiBioGramme['nitrofurane'].'"); $("#choixNitrofuraneABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['metronidazole']) ? '$("#metronidazoleABGecbu").val("'.$resultatAntiBioGramme['metronidazole'].'"); $("#choixMetronidazoleABGecbu").trigger("click");' : '';
+				/**
+				 * FIN PARTIE Produits nitrés
+				 */
+		
+				/**
+				 * PARTIE Sulfamides
+				 */
+				$html .= ($resultatAntiBioGramme['trimethoprimeSulfametoxazoleSXT']) ? '$("#trimethoprimeSulfametoxazoleSXTABGecbu").val("'.$resultatAntiBioGramme['trimethoprimeSulfametoxazoleSXT'].'"); $("#choixTrimethoprimeSulfametoxazoleSXTABGecbu").trigger("click");' : '';
+				/**
+				 * FIN PARTIE Sulfamides
+				 */
+				 
+				/**
+				 * PARTIE Polymyxine
+				 */
+				$html .= ($resultatAntiBioGramme['colistineCS']) ? '$("#colistineCSABGecbu").val("'.$resultatAntiBioGramme['colistineCS'].'"); $("#choixColistineCSABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['polymicine']) ? '$("#polymicineABGecbu").val("'.$resultatAntiBioGramme['polymicine'].'"); $("#choixPolymicineABGecbu").trigger("click");' : '';
+				/**
+				 * FIN PARTIE Polymyxine
+				 */
+				 
+				/**
+				 * PARTIE Aminosides
+				 */
+				$html .= ($resultatAntiBioGramme['kanamycineK']) ? '$("#kanamycineKABGecbu").val("'.$resultatAntiBioGramme['kanamycineK'].'"); $("#choixKanamycineKABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['tobramycineTB']) ? '$("#tobramycineTBABGecbu").val("'.$resultatAntiBioGramme['tobramycineTB'].'"); $("#choixTobramycineTBABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['amikacineAN']) ? '$("#amikacineANABGecbu").val("'.$resultatAntiBioGramme['amikacineAN'].'"); $("#choixAmikacineANABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['netilmycine']) ? '$("#netilmycineABGecbu").val("'.$resultatAntiBioGramme['netilmycine'].'"); $("#choixNetilmycineABGecbu").trigger("click");' : '';
+				/**
+				 * FIN PARTIE Aminosides
+				 */
+				 
+				/**
+				 * PARTIE Phénicolés
+				 */
+				$html .= ($resultatAntiBioGramme['chloramphenicolC']) ? '$("#chloramphenicolCABGecbu").val("'.$resultatAntiBioGramme['chloramphenicolC'].'"); $("#choixChloramphenicolCABGecbu").trigger("click");' : '';
+				/**
+				 * FIN PARTIE Phénicolés
+				 */
+				 
+				/**
+				 * PARTIE Cyclines
+				 */
+				$html .= ($resultatAntiBioGramme['minocycline']) ? '$("#minocyclineABGecbu").val("'.$resultatAntiBioGramme['minocycline'].'"); $("#choixMinocyclineABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['tetracyclineTE']) ? '$("#tetracyclineTEABGecbu").val("'.$resultatAntiBioGramme['tetracyclineTE'].'"); $("#choixTetracyclineTEABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['doxycyclineDO']) ? '$("#doxycyclineDOABGecbu").val("'.$resultatAntiBioGramme['doxycyclineDO'].'"); $("#choixDoxycyclineDOABGecbu").trigger("click");' : '';
+				/**
+				 * FIN PARTIE Cyclines
+				 */
+				 
+				/**
+				 * PARTIE Macrolides et apparentés
+				 */
+				$html .= ($resultatAntiBioGramme['azithromycineAZT']) ? '$("#azithromycineAZTABGecbu").val("'.$resultatAntiBioGramme['azithromycineAZT'].'"); $("#choixAzithromycineAZTABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['erythromycineE']) ? '$("#erythromycineEABGecbu").val("'.$resultatAntiBioGramme['erythromycineE'].'"); $("#choixErythromycineEABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['lincomycineL']) ? '$("#lincomycineLABGecbu").val("'.$resultatAntiBioGramme['lincomycineL'].'"); $("#choixLincomycineLABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['pristinamycinePT']) ? '$("#pristinamycinePTABGecbu").val("'.$resultatAntiBioGramme['pristinamycinePT'].'"); $("#choixPristinamycinePTABGecbu").trigger("click");' : '';
+				/**
+				 * FIN PARTIE Macrolides et apparentés
+				 */
+				 
+				/**
+				 * PARTIE Fluoroquinolones
+				 */
+				$html .= ($resultatAntiBioGramme['acideNalidixiqueNA']) ? '$("#acideNalidixiqueNAABGecbu").val("'.$resultatAntiBioGramme['acideNalidixiqueNA'].'"); $("#choixAcideNalidixiqueNAABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['pefloxacinePEF']) ? '$("#pefloxacinePEFABGecbu").val("'.$resultatAntiBioGramme['pefloxacinePEF'].'"); $("#choixPefloxacinePEFABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['norfloxacineNOR']) ? '$("#norfloxacineNORABGecbu").val("'.$resultatAntiBioGramme['norfloxacineNOR'].'"); $("#choixNorfloxacineNORABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['ciprofloxacineCIP']) ? '$("#ciprofloxacineCIPABGecbu").val("'.$resultatAntiBioGramme['ciprofloxacineCIP'].'"); $("#choixCiprofloxacineCIPABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['LEV']) ? '$("#LEVABGecbu").val("'.$resultatAntiBioGramme['LEV'].'"); $("#choixLEVABGecbu").trigger("click");' : '';
+				/**
+				 * FIN PARTIE Fluoroquinolones
+				 */
+				 
+				 
+				/**
+				 * PARTIE Imidazolés
+				 */
+				$html .= ($resultatAntiBioGramme['cotrimoxazoleSXT']) ? '$("#cotrimoxazoleSXTABGecbu").val("'.$resultatAntiBioGramme['cotrimoxazoleSXT'].'"); $("#choixCotrimoxazoleSXTABGecbu").trigger("click");' : '';
+				/**
+				 * FIN PARTIE Imidazolés
+				 */
+				 
+				 
+				/**
+				 * PARTIE Autres
+				 */
+				$html .= ($resultatAntiBioGramme['fosfomycineFOS']) ? '$("#fosfomycineFOSABGecbu").val("'.$resultatAntiBioGramme['fosfomycineFOS'].'"); $("#choixFosfomycineFOSABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['acideFusidiqueFA']) ? '$("#acideFusidiqueFAABGecbu").val("'.$resultatAntiBioGramme['acideFusidiqueFA'].'"); $("#choixAcideFusidiqueFAABGecbu").trigger("click");' : '';
+				$html .= ($resultatAntiBioGramme['rifampicineRA']) ? '$("#rifampicineRAABGecbu").val("'.$resultatAntiBioGramme['rifampicineRA'].'"); $("#choixRifampicineRAABGecbu").trigger("click");' : '';
+				/**
+				 * FIN PARTIE Autres
+				 */
+				 
+				/**
+				 * Conclusion
+				 */
+				 
+				$html .= ($resultatAntiBioGramme['conclusion']) ? '$("#conclusion_ecbu_ABG").val("'.preg_replace("/(\r\n|\n|\r)/", "\\n", str_replace( "'", "\'",$resultatAntiBioGramme['conclusion'])).'");' : '';
+				/**
+				 * ==========
+				 */
+				 
+				 
+				$html .='</script>';
 			}
 		}
 		
@@ -4641,13 +4883,16 @@ class TechnicienController extends AbstractActionController {
 		if($analyse['Idanalyse'] == 62){ $html .= $this->widal_62(); $html .= $this->getResultatsWidal($iddemande); }
 		if($analyse['Idanalyse'] == 63){ $html .= $this->ag_hbs_63(); $html .= $this->getResultatsAgHbs($iddemande); }
 		if($analyse['Idanalyse'] == 64){ $html .= $this->hiv_64(); $html .= $this->getResultatsHIV($iddemande); }
-		if($analyse['Idanalyse'] == 65){ $html .= $this->pv_65();  $html .= $this->getResultatsPV($iddemande); }
+		if($analyse['Idanalyse'] == 65){ $html .= $this->pv_65(65);  $html .= $this->getResultatsPV($iddemande); }
 		if($analyse['Idanalyse'] == 66){ $html .= $this->ecbu_66(); $html .= $this->getResultatsECBU($iddemande); }
 		if($analyse['Idanalyse'] == 67){ $html .= $this->pus_67(); }
 		if($analyse['Idanalyse'] == 68){ $html .= $this->typage_hemoglobine_68();  $html .= $this->getResultatsTypageHemoglobine($iddemande); }
 		
 		if($analyse['Idanalyse'] == 70){ $html .= $this->ldh_70();  $html .= $this->getResultatsLDH($iddemande); }
 		if($analyse['Idanalyse'] == 71){ $html .= $this->nfs_tr_71(); $html .= $this->getResultatsNfsTR($iddemande); }
+		
+		if($analyse['Idanalyse'] == 74){ $html .= $this->pv_65(74);  $html .= $this->getResultatsPV($iddemande); }
+		
 		
 		$html .= "</table>";
 		
@@ -5017,6 +5262,12 @@ class TechnicienController extends AbstractActionController {
 	        	$this->getResultatDemandeAnalyseTable()->addResultatDemandeAnalyse($iddemande, $idemploye);
 	        	$donneesExiste = $this->getResultatDemandeAnalyseTable()->addValeursNfs($tab, $iddemande);
 	    }
+	    
+	    else
+	    if($idanalyse == 74){
+	            $this->getResultatDemandeAnalyseTable()->addResultatDemandeAnalyse($iddemande, $idemploye);
+	            $donneesExiste = $this->getResultatDemandeAnalyseTable()->addValeursPV($tab, $iddemande);
+	    }
 	        
 	    $donnees = array($iddemande, $donneesExiste);
 	    $this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );
@@ -5132,13 +5383,16 @@ class TechnicienController extends AbstractActionController {
 			if($liste['Idanalyse'] == 62){ $html .= $this->widal_62(); $html .= $this->getResultatsWidal($liste['iddemande']); }
 			if($liste['Idanalyse'] == 63){ $html .= $this->ag_hbs_63(); $html .= $this->getResultatsAgHbs($liste['iddemande']); }
 			if($liste['Idanalyse'] == 64){ $html .= $this->hiv_64(); $html .= $this->getResultatsHIV($liste['iddemande']); }
-			if($liste['Idanalyse'] == 65){ $html .= $this->pv_65();  $html .= $this->getResultatsPV($liste['iddemande']);}
+			if($liste['Idanalyse'] == 65){ $html .= $this->pv_65(65);  $html .= $this->getResultatsPV($liste['iddemande']);}
 			if($liste['Idanalyse'] == 66){ $html .= $this->ecbu_66(); $html .= $this->getResultatsECBU($liste['iddemande']); }
 			if($liste['Idanalyse'] == 67){ $html .= $this->pus_67(); }
 			if($liste['Idanalyse'] == 68){ $html .= $this->typage_hemoglobine_68();  $html .= $this->getResultatsTypageHemoglobine($liste['iddemande']); }
 			
 			if($liste['Idanalyse'] == 70){ $html .= $this->ldh_70();  $html .= $this->getResultatsLDH($liste['iddemande']); }
 			if($liste['Idanalyse'] == 71){ $html .= $this->nfs_tr_71(); $html .= $this->getResultatsNfsTR($liste['iddemande']); }
+			
+			if($liste['Idanalyse'] == 74){ $html .= $this->pv_65(74);  $html .= $this->getResultatsPV($liste['iddemande']);}
+			
 			
 			$tabAnalyses[] = $liste['Idanalyse'];
 			$tabDemandes[] = $liste['iddemande'];
@@ -5577,6 +5831,13 @@ class TechnicienController extends AbstractActionController {
 	        		$this->getResultatDemandeAnalyseTable()->addValeursNfs($tab, $iddemande);
 	        }
 	        
+	        
+	        else
+		        if($idanalyse == 74){
+		        	$tab = $tableau[$idanalyse];
+		        	$this->getResultatDemandeAnalyseTable()->addResultatDemandeAnalyse($iddemande, $idemploye);
+		        	$donneesExiste = $this->getResultatDemandeAnalyseTable()->addValeursPV($tab, $iddemande);
+		        }
 	    }
 	    
 	    //Le plus petit iddemande du tableau
@@ -6421,12 +6682,23 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "  <td style='width: 30%;'></td>";
 	    $html .= "</tr>";
 
-	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td colspan='2' ><label style='height: 80px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_hemogramme' style='max-height: 57px; min-height: 57px; max-width: 400px; min-width: 400px; margin-left: 30px;' readonly> </textarea> </label></td>";
-	    $html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 80%; height: 80px; font-size: 14px;'>  </label></td>";
-	    $html .= "</tr>";
+	    //COMMENTAIRE  --- COMMENTAIRE
+	    $html .= "</table>";
 	    
-	    $html .= "</table> </td> </tr>";
+	    $html .= "<table style='width: 100%; margin-top: 0px;'>";
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    if($this->layout()->user['role'] == 'biologiste' || $this->layout()->user['role'] == 'technicien'){
+	    	$html .= "<td style='width: 96%;'><label style='height: 140px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_hemogramme' style='max-height: 100px; min-height: 100px; max-width: 560px; min-width: 560px; margin-left: 30px; text-align: justify; padding: 5px;' > </textarea> </label></td>";
+	    }else{
+	    	$html .= "<td style='width: 96%;'><label style='height: 140px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_hemogramme' style='max-height: 100px; min-height: 100px; max-width: 560px; min-width: 560px; margin-left: 30px; text-align: justify; padding: 5px;' disabled> </textarea> </label></td>";
+	    }
+	    $html .= "<td style='width: 5%;'></td>";
+	    $html .= "</tr>";
+	    $html .= "</table>";
+	    
+	    
+	    $html .= "</td> </tr>";
+	    
 	    
 	    
 	    return $html;
@@ -6649,15 +6921,25 @@ class TechnicienController extends AbstractActionController {
 		$html .= "  <td style='width: 15%;'></td>";
 		$html .= "  <td style='width: 30%;'></td>";
 		$html .= "</tr>";
+		
+		$html .= "</table>";
 		 
+		 
+		$html .= "<table style='width: 100%; margin-top: 0px;'>";
 		$html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-		$html .= "  <td colspan='2' ><label style='height: 80px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_hemogramme' style='max-height: 57px; min-height: 57px; max-width: 400px; min-width: 400px; margin-left: 30px;' readonly> </textarea> </label></td>";
-		$html .= "  <td style='width: 30%;'><label style='padding-top: 5px; width: 80%; height: 80px; font-size: 14px;'>  </label></td>";
+		if($this->layout()->user['role'] == 'biologiste' || $this->layout()->user['role'] == 'technicien'){
+			$html .= "<td style='width: 96%;'><label style='height: 140px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_hemogramme' style='max-height: 100px; min-height: 100px; max-width: 560px; min-width: 560px; margin-left: 30px; text-align: justify; padding: 5px;' > </textarea> </label></td>";
+		}else{
+			$html .= "<td style='width: 96%;'><label style='height: 140px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Commentaire:  </span> <textarea id='commentaire_hemogramme' style='max-height: 100px; min-height: 100px; max-width: 560px; min-width: 560px; margin-left: 30px; text-align: justify; padding: 5px;' disabled> </textarea> </label></td>";
+		}
+		$html .= "<td style='width: 5%;'></td>";
 		$html .= "</tr>";
+		$html .= "</table>";
 		 
-		$html .= "</table> </td> </tr>";
 		 
-		 
+		$html .= "</td> </tr>";
+		
+		
 		return $html;
 	}
 	
@@ -9003,7 +9285,7 @@ class TechnicienController extends AbstractActionController {
 	/**
 	 * analyse 65
 	 */
-	public function pv_65(){
+	public function pv_65($idanalyse=null){
 	    $html  = "<tr> <td align='center'>";
 	    $html .= "<table style='width: 100%;'>";
 	
@@ -9121,7 +9403,7 @@ class TechnicienController extends AbstractActionController {
 	                </td>";
 	    $html .= "  <td style='width: 17%;'>
 	                    <label class='lab2' style='padding-top: 5px;'>
-	                      <input type='number' id='leucocytes_champ_valeur_pv' style='width: 45px; padding-left: 2px; height: 20px;' max=999 min=1>/champs
+	                      <input type='text' id='leucocytes_champ_valeur_pv' style='width: 45px; padding-left: 2px; height: 20px;' >/champs
 	                    </label>
 	                </td>";
 	    $html .= "  <td style='width: 11%;'><label class='lab1' style='font-weight: bold; text-align: right; padding-top: 5px;'> H&eacute;maties </label></td>";
@@ -9136,7 +9418,7 @@ class TechnicienController extends AbstractActionController {
 	                </td>";
 	    $html .= "  <td style='width: 16%;'>
 	                    <label class='lab2' style='padding-top: 5px; width: 73%;' title='champs'>
-	                      <input type='number' id='hematies_champ_valeur_pv' style='width: 45px; padding-left: 2px; height: 20px;' max=999 min=1>/c.
+	                      <input type='text' id='hematies_champ_valeur_pv' style='width: 45px; padding-left: 2px; height: 20px;' >/c.
 	                    </label>
 	                </td>";
 	    $html .= "</tr>";
@@ -9158,7 +9440,7 @@ class TechnicienController extends AbstractActionController {
 	                </td>";
 	    $html .= "  <td style='width: 17%;'>
 	                    <label class='lab2' style='padding-top: 5px;'>
-	                      <input type='number' id='cellules_epitheliales_champ_valeur_pv' style='width: 45px; padding-left: 2px; height: 20px;' max=999 min=1>/champs
+	                      <input type='text' id='cellules_epitheliales_champ_valeur_pv' style='width: 45px; padding-left: 2px; height: 20px;' >/champs
 	                    </label>
 	                </td>";
 	    $html .= "  <td style='width: 20%;'><label class='lab1' style='font-weight: bold; text-align: right; padding-top: 5px;'  title='Trichomonas vaginalis' > Trichomo. vaginalis </label></td>";
@@ -9454,47 +9736,49 @@ class TechnicienController extends AbstractActionController {
 	     * -------------------------------------------------------------------
 	     * Partie recherches particulieres *** Partie recherches particulieres
 	     */
-	    $html .= "<table style='width: 100%;'>";
-	    /**
-	     * Recherches particulieres --- Recherches particulieres 
-	     */
-	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 100%; text-align: left; font-weight: bold; font-size: 12px; font-style: italic;'> &#10148; Recherches particuli&egrave;res </td>";
-	    $html .= "</tr>";
-	    $html .= "</table>";
-	    
-	    /*
-	     * Recherche directe de l'antigène de chlamydia 
-	     */
-	    $html .= "<table style='width: 100%;'>";
-	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= '  <td style="width: 25%;"><label class="lab1" style="padding-top: 5px;"><span style="font-weight: bold;" title="Recherche d\'Ag de Chlamydia trachomatis"> Rech. d\'Ag Chlam. tracho. </span></label></td>';
-	    $html .= "  <td style='width: 25%;'>
+	    if($idanalyse == 74){
+	    	
+	    	$html .= "<table style='width: 100%;'>";
+	    	/**
+	    	 * Recherches particulieres --- Recherches particulieres
+	    	 */
+	    	$html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    	$html .= "  <td style='width: 100%; text-align: left; font-weight: bold; font-size: 12px; font-style: italic;'> &#10148; Recherches particuli&egrave;res </td>";
+	    	$html .= "</tr>";
+	    	$html .= "</table>";
+	    	 
+	    	/*
+	    	 * Recherche directe de l'antigène de chlamydia
+	    	*/
+	    	$html .= "<table style='width: 100%;'>";
+	    	$html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    	$html .= '  <td style="width: 25%;"><label class="lab1" style="padding-top: 5px;"><span style="font-weight: bold;" title="Recherche d\'Ag de Chlamydia trachomatis"> Rech. d\'Ag Chlam. tracho. </span></label></td>';
+	    	$html .= "  <td style='width: 25%;'>
 	                    <label class='lab2' style='padding-top: 5px;'>
 	                      <select id='recherche_directe_antigene_chlamydia_pv' style='width: 120px;'>
 	                        <option> </option>
 	                        <option value=1 >Positive</option>
 	                        <option value=2 >N&eacute;gative</option>
-	      
+	   
 	                      </select>
 	                    </label>
 	                </td>";
-	    $html .= "  <td style='width: 25%;'><label class='lab1' style='padding-top: 5px;'><span style='font-weight: bold;' >  </span></label></td>";
-	    $html .= "  <td style='width: 25%;'>
+	    	$html .= "  <td style='width: 25%;'><label class='lab1' style='padding-top: 5px;'><span style='font-weight: bold;' >  </span></label></td>";
+	    	$html .= "  <td style='width: 25%;'>
 	                    <label class='lab2' style='padding-top: 5px; width: 83%;'> </label>
 	                </td>";
-	    $html .= "</tr>";
-	    $html .= "</table>";
-	    
-	    
-	    /*
-	     * Recherche des Mycoplasmes && Identification 
-	     */
-	    /* Recherche des Mycoplasmes */
-	    $html .= "<table style='width: 100%;'>";
-	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 25%;'><label class='lab1' style='padding-top: 5px;'><span style='font-weight: bold;' title='Recherche des Mycoplasmes'> Rech. des Mycoplasmes </span></label></td>";
-	    $html .= "  <td style='width: 25%;'>
+	    	$html .= "</tr>";
+	    	$html .= "</table>";
+	    	 
+	    	 
+	    	/*
+	    	 * Recherche des Mycoplasmes && Identification
+	    	*/
+	    	/* Recherche des Mycoplasmes */
+	    	$html .= "<table style='width: 100%;'>";
+	    	$html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    	$html .= "  <td style='width: 25%;'><label class='lab1' style='padding-top: 5px;'><span style='font-weight: bold;' title='Recherche des Mycoplasmes'> Rech. des Mycoplasmes </span></label></td>";
+	    	$html .= "  <td style='width: 25%;'>
 	                    <label class='lab2' style='padding-top: 5px;'>
 	                      <select id='recherche_directe_mycoplasmes_pv' style='width: 120px;' onchange='getChampIdentificationRdmPositive(this.value)'>
 	                        <option> </option>
@@ -9503,31 +9787,33 @@ class TechnicienController extends AbstractActionController {
 	                      </select>
 	                    </label>
 	                </td>";
-	    $html .= "  <td style='width: 50%;'>
-	                    <label style='padding-top: 5px; width: 92%; '> 
-	                      <span style='  display: none; float: left;'  class='identification_rdm_positive_class_titre_pv'>  Titre : 
+	    	$html .= "  <td style='width: 50%;'>
+	                    <label style='padding-top: 5px; width: 92%; '>
+	                      <span style='  display: none; float: left;'  class='identification_rdm_positive_class_titre_pv'>  Titre :
     	                    <span style='font-size: 15px; font-weight: bold; padding-left: 10px;' >  &#8805; 10<sup>4</sup> ucc/ml</span>
 	                      </span>
 	                    </label>
 	                </td>";
-	    $html .= "</tr>";
-	    $html .= "</table>";
-	    /* Identification  -- Identification */
-	    $html .= "<table style='width: 100%; display: none;' class='identification_rdm_positive_class_pv'>";
-	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
-	    $html .= "  <td style='width: 25%;'>
-	                    <label class='lab2' style='padding-top: 5px;'> 
+	    	$html .= "</tr>";
+	    	$html .= "</table>";
+	    	/* Identification  -- Identification */
+	    	$html .= "<table style='width: 100%; display: none;' class='identification_rdm_positive_class_pv'>";
+	    	$html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    	$html .= "  <td style='width: 25%;'>
+	                    <label class='lab2' style='padding-top: 5px;'>
 	                      <span style='font-weight: bold; float: left; padding-left: 80px;' > Identification </span>
 	                    </label>
 	                </td>";
-	    $html .= "  <td style='width: 30%;'>
+	    	$html .= "  <td style='width: 30%;'>
 	                    <label style='padding-top: 5px;'> <input type='checkbox' style='width:20px;' id='identification_rdm_positive_Choix1_pv' > Ureaplasma urealyticum </label>
 	                </td>";
-	    $html .= "  <td style='width: 45%;'>
+	    	$html .= "  <td style='width: 45%;'>
 	                    <label style='padding-top: 5px; width: 91%;'> <input type='checkbox' style='width:20px;' id='identification_rdm_positive_Choix2_pv' > Mycoplasma hominis </label>
 	                </td>";
-	    $html .= "</tr>";
-	    $html .= "</table>";
+	    	$html .= "</tr>";
+	    	$html .= "</table>";
+	    	
+	    }
 	    
 	    
 	    
@@ -9548,6 +9834,22 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "<td style='width: 5%;'></td>";
 	    $html .= "</tr>";
 	    $html .= "</table>";
+	    
+	    
+	    /**
+	     * PRECISION A APPORTER SUR LE COMMENTAIRE
+	     */
+	    $html .= "<table style='width: 100%; margin-top: 2px;'>";
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    if($this->layout()->user['role'] == 'biologiste' || $this->layout()->user['role'] == 'technicien'){
+	    	$html .= "<td style='width: 96%;'><label style='height: 140px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Autres Pr&eacute;cisions :  </span> <textarea id='autres_precisions_commentaire_pv' style='max-height: 100px; min-height: 100px; max-width: 560px; min-width: 560px; margin-left: 30px; text-align: justify; padding: 5px;' > </textarea> </label></td>";
+	    }else{
+	    	$html .= "<td style='width: 96%;'><label style='height: 140px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Autres Pr&eacute;cisions :  </span> <textarea id='autres_precisions_commentaire_pv' style='max-height: 100px; min-height: 100px; max-width: 560px; min-width: 560px; margin-left: 30px; text-align: justify; padding: 5px;' disabled> </textarea> </label></td>";
+	    }
+	    $html .= "<td style='width: 5%;'></td>";
+	    $html .= "</tr>";
+	    $html .= "</table>";
+	    
 	    
 	    $html .= " </td> </tr>";
 	
@@ -10457,7 +10759,7 @@ class TechnicienController extends AbstractActionController {
 	                </td>";
 	    $html .= "  <td style='width: 17%;'>
 	                    <label class='lab2' style='padding-top: 5px;'>
-	                      <input type='number' id='leucocytes_champ_ecbu' style='width: 45px; padding-left: 2px; height: 20px;' max=999 min=1>
+	                      <input type='text' id='leucocytes_champ_ecbu' style='width: 45px; padding-left: 2px; height: 20px;' >
 	                    </label>
 	                </td>";
 	    $html .= "  <td style='width: 11%;'><label class='lab1' style='font-weight: bold; text-align: right; padding-top: 5px;'> H&eacute;maties </label></td>";
@@ -10472,31 +10774,31 @@ class TechnicienController extends AbstractActionController {
 	                </td>";
 	    $html .= "  <td style='width: 16%;'>
 	                    <label class='lab2' style='padding-top: 5px; width: 73%;' title='champs'>
-	                      <input type='number' id='hematies_champ_ecbu' style='width: 45px; padding-left: 2px; height: 20px;' max=999 min=1>
+	                      <input type='text' id='hematies_champ_ecbu' style='width: 45px; padding-left: 2px; height: 20px;' >
 	                    </label>
 	                </td>";
 	    $html .= "</tr>";
 	    $html .= "</table>";
 	     
 	    /*
-	     * Levures && Trichomonas vaginalis
+	     * Levures && Filaments Myceliens
 	     */
 	    $html .= "<table style='width: 100%;'>";
 	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
 	    $html .= "  <td style='width: 20%;'><label class='lab1' style='padding-top: 5px;' ><span style='font-weight: bold;'> Levures </span></label></td>";
 	    $html .= "  <td style='width: 18%;'>
 	                    <label class='lab2' style='padding-top: 5px;'>
-	                      <select id='levures_ecbu' style='width: 100px;'>
+	                      <select id='levures_ecbu' style='width: 100px;'  onchange='getLevuresFilMycEcbuPositif(this.value)'>
 	                        <option> </option>
 	                        <option value=1 >Pr&eacute;sence</option>
 	                        <option value=2 >Absence</option>
 	                      </select>
 	                    </label>
 	                </td>";
-	    $html .= "  <td style='width: 28%;'><label class='lab1' style='font-weight: bold; text-align: right; padding-top: 5px;' > Trichomonas vaginalis </label></td>";
+	    $html .= "  <td style='width: 28%;'><label class='lab1' style='font-weight: bold; text-align: right; padding-top: 5px;' ><span class='filamMycECBUToggle' style='visibility: hidden;'> Filaments Myc&eacute;liens </span> </label></td>";
 	    $html .= "  <td style='width: 34%;'>
 	                    <label class='lab2' style='padding-top: 5px; width: 87%;'>
-	                      <select id='trichomonas_vaginalis_ecbu' style='width: 100px;'>
+	                      <select class='filamMycECBUToggle' id='filaments_myceliens_ecbu' style='width: 100px; visibility: hidden;'>
 	                        <option> </option>
 	                        <option value=1 >Pr&eacute;sence</option>
 	                        <option value=2 >Absence</option>
@@ -10505,6 +10807,34 @@ class TechnicienController extends AbstractActionController {
 	                </td>";
 	    $html .= "</tr>";
 	     
+	    /*
+	     * Cellules épithéliales 
+	    */
+	    $html .= "<table style='width: 100%;'>";
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 20%;'><label class='lab1' style='padding-top: 5px;'><span style='font-weight: bold;'> Cellules &eacute;pitheliales </span></label></td>";
+	    $html .= "  <td style='width: 18%;'>
+	                    <label class='lab2' style='padding-top: 5px;'>
+	                      <select id='cellules_epitheliales_ecbu' style='width: 100px;'>
+	                        <option> </option>
+	                        <option value=1 >Pr&eacute;sentes</option>
+	                        <option value=2 >Absentes</option>
+	                      </select>
+	                    </label>
+	                </td>";
+	    $html .= "  <td style='width: 17%;'>
+	                    <label class='lab2' style='padding-top: 5px;'>
+	                      <input type='text' id='cellules_epitheliales_champ_ecbu' style='width: 45px; padding-left: 2px; height: 20px;' >/champs
+	                    </label>
+	                </td>";
+	    $html .= "  <td style='width: 20%;'><label class='lab1' style='font-weight: bold; text-align: right; padding-top: 5px;' > </label></td>";
+	    $html .= "  <td style='width: 25%;'>
+	                    <label class='lab2' style='padding-top: 5px; width: 83%;'>
+	                    </label>
+	                </td>";
+	    $html .= "</tr>";
+	    $html .= "</table>";
+	    
 	     
 	    /*
 	     * Flore
@@ -10516,6 +10846,7 @@ class TechnicienController extends AbstractActionController {
 	                    <label class='lab2' style='padding-top: 5px;'>
 	                      <select id='flore_ecbu' style='width: 220px; font-size: 13px;'  onchange='getFloreCocciEcbuPositif(this.value)'>
 	                        <option> </option>
+	    		            <option value=5 >Absente</option>
 	                        <option value=1 >Bacilles &agrave; Gram n&eacute;gatif</option>
 	                        <option value=2 >Bacilles &agrave; Gram positif</option>
                 	        <option value=3 >Cocci &agrave; Gram positif</option>
@@ -10533,6 +10864,28 @@ class TechnicienController extends AbstractActionController {
 	     
 	    $html .= "</tr>";
 	    $html .= "</table>";
+	    
+	    /*
+	     * Parasites --- Parasites --- Parasites
+	     */
+	    $html .= "<table style='width: 100%;'>";
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    $html .= "  <td style='width: 20%;'><label class='lab1' style='padding-top: 5px;'><div style='position: absolute; left: 30px; font-weight: bold; font-size: 25px; color: green;' onclick='ajouterNouvelParasiteECBU();' >&plus;</div> <span style='font-weight: bold;' > Parasites </span></label></td>";
+	    $html .= "  <td style='width: 35%;'>
+	                    <label class='lab2' style='padding-top: 5px;'>
+	                      <select id='parasites_ecbu' style='width: 220px;' >
+	                        <option> </option>
+	                      </select>
+	                    </label>
+	                </td>";
+	    $html .= "  <td style='width: 45%;'>
+	                    <label style='padding-top: 5px; width: 90%;'></label>
+	                </td>";
+	    $html .= "</tr>";
+	    $html .= "</table>";
+
+	    
+	    
 	    
 	    /*
 	     * Culot --- Culot --- Culot --- Culot
@@ -10654,13 +11007,101 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "  <td style='width: 25%;'><label class='lab1' style='padding-top: 5px;'><div style='position: absolute; left: 30px; font-weight: bold; font-size: 25px; color: green; ' onclick='ajouterNouvelleSoucheECBU();' >&plus;</div><span style='font-weight: bold;'> Identification </span></label></td>";
 	    $html .= "  <td style='width: 27%;'>
 	                    <label class='lab2' style='padding-top: 5px;'>
-	                      <select id='identification_culture_select_ecbu' style='width: 190px;' onchange='getIconeAntibiogrammeIdentCultureECBU(this.value,1)'>
+	                      <select id='identification_culture_select_ecbu' style='width: 190px;' onchange='getIconeAntibiogrammeCulturePosECBU(this.value,1)'>
 	                      </select>
 	                    </label>
 	                </td>";
-	    $html .= "  <td style='width: 48%;'><label onclick='antibiogrammeAfficherInterfaceECBU()' class='lab1 antibiogrammeButtonAffInterfaceECBU1' style='padding-top: 0px; margin-top: 3px; margin-left: 10px; width: 30%; height: 15px; font-style: italic; border-radius: 35%; border: 3px solid #d8d8d8; padding-left: 10px; display: none;'> Antibiogramme </label></td>";
+	    $html .= "  <td style='width: 48%;'><label onclick='antibiogrammeAfficherInterfaceECBU()' class='lab1 antiBGButAffInterfaceCultECBU1' style='padding-top: 0px; margin-top: 3px; margin-left: 10px; width: 30%; height: 15px; font-style: italic; border-radius: 35%; border: 3px solid #d8d8d8; padding-left: 10px; display: none;'> Antibiogramme </label></td>";
 	    $html .= "</tr>";
 	    $html .= "</table>";
+	    
+	    
+	    
+	    
+	    /**
+	     * Les autres à placer ici
+	     */
+	     
+	    /*
+	     * Préparer l'interface de saisie des données de l'antibiogramme
+	    */
+	    $interfaceSaisieDonneesABG = $this->getAntiBioGrammeDeECBU();
+	    $html .= "<script> $('#contenuResultatsAnalysesECBUAntiBioGramme div').html('".$interfaceSaisieDonneesABG."'); </script>";
+	    /*
+	     * Ajouter les scripts pour la gestion des checkbox non cochés
+	     * Pour la première colonne
+	     */
+	    $html .= '<script>  $("#choixAmpicillineAMABGecbu").click(function(){ if($("#choixAmpicillineAMABGecbu").get(0).checked){ $("#ampicillineAMABGecbu").attr("disabled", false); }else{ $("#ampicillineAMABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixAmoxillineAMXABGecbu").click(function(){ if($("#choixAmoxillineAMXABGecbu").get(0).checked){ $("#amoxillineAMXABGecbu").attr("disabled", false); }else{ $("#amoxillineAMXABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixTicarcillineTICABGecbu").click(function(){ if($("#choixTicarcillineTICABGecbu").get(0).checked){ $("#ticarcillineTICABGecbu").attr("disabled", false); }else{ $("#ticarcillineTICABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixPiperacillinePIPABGecbu").click(function(){ if($("#choixPiperacillinePIPABGecbu").get(0).checked){ $("#piperacillinePIPABGecbu").attr("disabled", false); }else{ $("#piperacillinePIPABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixAcideClavulaniqueAmoxicillineAMCABGecbu").click(function(){ if($("#choixAcideClavulaniqueAmoxicillineAMCABGecbu").get(0).checked){ $("#acideClavulaniqueAmoxicillineAMCABGecbu").attr("disabled", false); }else{ $("#acideClavulaniqueAmoxicillineAMCABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixGentamicineGMABGecbu").click(function(){ if($("#choixGentamicineGMABGecbu").get(0).checked){ $("#gentamicineGMABGecbu").attr("disabled", false); }else{ $("#gentamicineGMABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixTicAcClavTCCABGecbu").click(function(){ if($("#choixTicAcClavTCCABGecbu").get(0).checked){ $("#ticAcClavTCCABGecbu").attr("disabled", false); }else{ $("#ticAcClavTCCABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixErtapenemeETPABGecbu").click(function(){ if($("#choixErtapenemeETPABGecbu").get(0).checked){ $("#ertapenemeETPABGecbu").attr("disabled", false); }else{ $("#ertapenemeETPABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixImipenemeIPMABGecbu").click(function(){ if($("#choixImipenemeIPMABGecbu").get(0).checked){ $("#imipenemeIPMABGecbu").attr("disabled", false); }else{ $("#imipenemeIPMABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixOxacillineOXABGecbu").click(function(){ if($("#choixOxacillineOXABGecbu").get(0).checked){ $("#oxacillineOXABGecbu").attr("disabled", false); }else{ $("#oxacillineOXABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixPenicillinePABGecbu").click(function(){ if($("#choixPenicillinePABGecbu").get(0).checked){ $("#penicillinePABGecbu").attr("disabled", false); }else{ $("#penicillinePABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixCefalotineCFABGecbu").click(function(){ if($("#choixCefalotineCFABGecbu").get(0).checked){ $("#cefalotineCFABGecbu").attr("disabled", false); }else{ $("#cefalotineCFABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixCefoxitineFOXABGecbu").click(function(){ if($("#choixCefoxitineFOXABGecbu").get(0).checked){ $("#cefoxitineFOXABGecbu").attr("disabled", false); }else{ $("#cefoxitineFOXABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixPiperacillineTazobactamePPTABGecbu").click(function(){ if($("#choixPiperacillineTazobactamePPTABGecbu").get(0).checked){ $("#piperacillineTazobactamePPTABGecbu").attr("disabled", false); }else{ $("#piperacillineTazobactamePPTABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixCefotaximeCTXABGecbu").click(function(){ if($("#choixCefotaximeCTXABGecbu").get(0).checked){ $("#cefotaximeCTXABGecbu").attr("disabled", false); }else{ $("#cefotaximeCTXABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixCefsulodineCFSABGecbu").click(function(){ if($(this).get(0).checked){ $("#cefsulodineCFSABGecbu").attr("disabled", false); }else{ $("#cefsulodineCFSABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixCFPABGecbu").click(function(){ if($(this).get(0).checked){ $("#CFPABGecbu").attr("disabled", false); }else{ $("#CFPABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixCeftazidimeCAZABGecbu").click(function(){ if($(this).get(0).checked){ $("#ceftazidimeCAZABGecbu").attr("disabled", false); }else{ $("#ceftazidimeCAZABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixCeftriaxoneCROABGecbu").click(function(){ if($(this).get(0).checked){ $("#ceftriaxoneCROABGecbu").attr("disabled", false); }else{ $("#ceftriaxoneCROABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixCefepimeFEPABGecbu").click(function(){ if($(this).get(0).checked){ $("#cefepimeFEPABGecbu").attr("disabled", false); }else{ $("#cefepimeFEPABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixAztreonamATMABGecbu").click(function(){ if($(this).get(0).checked){ $("#aztreonamATMABGecbu").attr("disabled", false); }else{ $("#aztreonamATMABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    /* PARTIE Glycopeptides */
+	    $html .= '<script>  $("#choixVancomycineVAABGecbu").click(function(){ if($(this).get(0).checked){ $("#vancomycineVAABGecbu").attr("disabled", false); }else{ $("#vancomycineVAABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixTeicoplanineABGecbu").click(function(){ if($(this).get(0).checked){ $("#teicoplanineABGecbu").attr("disabled", false); }else{ $("#teicoplanineABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    /* PARTIE Produits nitrés */
+	    $html .= '<script>  $("#choixNitrofuraneABGecbu").click(function(){ if($(this).get(0).checked){ $("#nitrofuraneABGecbu").attr("disabled", false); }else{ $("#nitrofuraneABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixMetronidazoleABGecbu").click(function(){ if($(this).get(0).checked){ $("#metronidazoleABGecbu").attr("disabled", false); }else{ $("#metronidazoleABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    /* PARTIE Sulfamides */
+	    $html .= '<script>  $("#choixTrimethoprimeSulfametoxazoleSXTABGecbu").click(function(){ if($(this).get(0).checked){ $("#trimethoprimeSulfametoxazoleSXTABGecbu").attr("disabled", false); }else{ $("#trimethoprimeSulfametoxazoleSXTABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    
+	     
+	    /*
+	     * Ajouter les scripts pour la gestion des checkbox non cochés
+	    * Pour la première colonne
+	    */
+	     
+	    /* PARTIE Polymyxine */
+	    $html .= '<script>  $("#choixColistineCSABGecbu").click(function(){ if($(this).get(0).checked){ $("#colistineCSABGecbu").attr("disabled", false); }else{ $("#colistineCSABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixPolymicineABGecbu").click(function(){ if($(this).get(0).checked){ $("#polymicineABGecbu").attr("disabled", false); }else{ $("#polymicineABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    /* PARTIE Aminosides */
+	    $html .= '<script>  $("#choixKanamycineKABGecbu").click(function(){ if($(this).get(0).checked){ $("#kanamycineKABGecbu").attr("disabled", false); }else{ $("#kanamycineKABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixTobramycineTBABGecbu").click(function(){ if($(this).get(0).checked){ $("#tobramycineTBABGecbu").attr("disabled", false); }else{ $("#tobramycineTBABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixAmikacineANABGecbu").click(function(){ if($(this).get(0).checked){ $("#amikacineANABGecbu").attr("disabled", false); }else{ $("#amikacineANABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixNetilmycineABGecbu").click(function(){ if($(this).get(0).checked){ $("#netilmycineABGecbu").attr("disabled", false); }else{ $("#netilmycineABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    /* PARTIE Phénicolés */
+	    $html .= '<script>  $("#choixChloramphenicolCABGecbu").click(function(){ if($(this).get(0).checked){ $("#chloramphenicolCABGecbu").attr("disabled", false); }else{ $("#chloramphenicolCABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    /* PARTIE Cyclines */
+	    $html .= '<script>  $("#choixMinocyclineABGecbu").click(function(){ if($(this).get(0).checked){ $("#minocyclineABGecbu").attr("disabled", false); }else{ $("#minocyclineABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixTetracyclineTEABGecbu").click(function(){ if($(this).get(0).checked){ $("#tetracyclineTEABGecbu").attr("disabled", false); }else{ $("#tetracyclineTEABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixDoxycyclineDOABGecbu").click(function(){ if($(this).get(0).checked){ $("#doxycyclineDOABGecbu").attr("disabled", false); }else{ $("#doxycyclineDOABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    /* PARTIE Macrolides et apparentés */
+	    $html .= '<script>  $("#choixAzithromycineAZTABGecbu").click(function(){ if($(this).get(0).checked){ $("#azithromycineAZTABGecbu").attr("disabled", false); }else{ $("#azithromycineAZTABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixErythromycineEABGecbu").click(function(){ if($(this).get(0).checked){ $("#erythromycineEABGecbu").attr("disabled", false); }else{ $("#erythromycineEABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixLincomycineLABGecbu").click(function(){ if($(this).get(0).checked){ $("#lincomycineLABGecbu").attr("disabled", false); }else{ $("#lincomycineLABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixPristinamycinePTABGecbu").click(function(){ if($(this).get(0).checked){ $("#pristinamycinePTABGecbu").attr("disabled", false); }else{ $("#pristinamycinePTABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    /* PARTIE Fluoroquinolones*/
+	    $html .= '<script>  $("#choixAcideNalidixiqueNAABGecbu").click(function(){ if($(this).get(0).checked){ $("#acideNalidixiqueNAABGecbu").attr("disabled", false); }else{ $("#acideNalidixiqueNAABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixPefloxacinePEFABGecbu").click(function(){ if($(this).get(0).checked){ $("#pefloxacinePEFABGecbu").attr("disabled", false); }else{ $("#pefloxacinePEFABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixNorfloxacineNORABGecbu").click(function(){ if($(this).get(0).checked){ $("#norfloxacineNORABGecbu").attr("disabled", false); }else{ $("#norfloxacineNORABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixCiprofloxacineCIPABGecbu").click(function(){ if($(this).get(0).checked){ $("#ciprofloxacineCIPABGecbu").attr("disabled", false); }else{ $("#ciprofloxacineCIPABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixLEVABGecbu").click(function(){ if($(this).get(0).checked){ $("#LEVABGecbu").attr("disabled", false); }else{ $("#LEVABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    /* PARTIE Imidazolés*/
+	    $html .= '<script>  $("#choixRifampicineRAABGecbu").click(function(){ if($(this).get(0).checked){ $("#rifampicineRAABGecbu").attr("disabled", false); }else{ $("#rifampicineRAABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixCotrimoxazoleSXTABGecbu").click(function(){ if($(this).get(0).checked){ $("#cotrimoxazoleSXTABGecbu").attr("disabled", false); }else{ $("#cotrimoxazoleSXTABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    
+	    /* PARTIE Autres*/
+	    $html .= '<script>  $("#choixFosfomycineFOSABGecbu").click(function(){ if($(this).get(0).checked){ $("#fosfomycineFOSABGecbu").attr("disabled", false); }else{ $("#fosfomycineFOSABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    $html .= '<script>  $("#choixAcideFusidiqueFAABGecbu").click(function(){ if($(this).get(0).checked){ $("#acideFusidiqueFAABGecbu").attr("disabled", false); }else{ $("#acideFusidiqueFAABGecbu").attr("disabled", true).val(""); } }) </script>';
+	    
+	    
+	    
 	    
 	    
 	    /**
@@ -10681,11 +11122,856 @@ class TechnicienController extends AbstractActionController {
 	    $html .= "</table>";
 	     
 	    
+	    /**
+	     * PRECISION A APPORTER SUR LE COMMENTAIRE
+	     */
+	    $html .= "<table style='width: 100%; margin-top: 2px;'>";
+	    $html .= "<tr class='ligneAnanlyse' style='width: 100%;'>";
+	    if($this->layout()->user['role'] == 'biologiste' || $this->layout()->user['role'] == 'technicien'){
+	    	$html .= "<td style='width: 96%;'><label style='height: 140px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Autres Pr&eacute;cisions :  </span> <textarea id='autres_precisions_commentaire_ecbu' style='max-height: 100px; min-height: 100px; max-width: 560px; min-width: 560px; margin-left: 30px; text-align: justify; padding: 5px;' > </textarea> </label></td>";
+	    }else{
+	    	$html .= "<td style='width: 96%;'><label style='height: 140px;' ><span style='font-size: 16px; float: left;  margin-left: 30px;'> Autres Pr&eacute;cisions :  </span> <textarea id='autres_precisions_commentaire_ecbu' style='max-height: 100px; min-height: 100px; max-width: 560px; min-width: 560px; margin-left: 30px; text-align: justify; padding: 5px;' disabled> </textarea> </label></td>";
+	    }
+	    $html .= "<td style='width: 5%;'></td>";
+	    $html .= "</tr>";
+	    $html .= "</table>";
+	    
+	    
 	    $html .="</td> </tr>";
 	    
 	
 	    return $html;
 	}
+	
+	
+	
+	/**
+	 * interface pour l'antibiogramme de l'analyse 65
+	 */
+	public function getAntiBioGrammeDeECBU()
+	{
+		/*
+		 * Entete
+		*/
+		$html  = '<table style="width: 100%;"><tr style="width: 100%;"><td  style="width: 100%;" align=center> <div style="border-radius: 25%; border: 3px solid #d8d8d8; background-color: #f1f1f1; width: 40%; font-weight: bold; "> Antibiogramme </div> </td></tr></table>';
+		$html .= '<table style="width: 100%; margin-top: 15px;"><tr style="width: 100%;"><td  style="width: 100%; font-family: time new" align=left> <div style="background-color: #f1f1f1; width: 50%; font-weight: bold; float: left; font-size: 15px; ">&#9883; Souche isol&eacute;e : <span id="valeurSoucheIsoleeIdentificationCultureECBU" style="font-size: 17px; font-weight: normal;"> Nom de la souche</span> </div> </td></tr></table>';
+		/*
+		 * =======
+		*/
+		 
+		$html .= '<table style="width: 100%;">';
+		$html .= '<tr style="width: 100%;">';
+		/*
+		 * Premiere colonne
+		*/
+		$html .= '  <td style="width: 49%; height: 20px; background: re; vertical-align: top;">';
+		/*
+		 * ================
+		*/
+		 
+		/**
+		 * B-lactamines --- B-lactamines
+		 */
+		$html .= '<table style="width: 100%; margin-top: 15px;">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 100%; text-align: left; font-weight: bold; font-size: 12px; font-style: italic;"> &#10148; &#42933;-lactamines </td>';
+		$html .= '</tr>';
+		$html .= '</table>';
+		/*
+		 * Ampicilline AM
+		*/
+		$html .= '<table style="width: 100%;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Ampicilline AM </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixAmpicillineAMABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="ampicillineAMABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= '</tr></table>';
+	
+		/*
+		 * Amoxilline AMX
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Amoxilline AMX </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixAmoxillineAMXABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="amoxillineAMXABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/*
+		 * Ticarcilline TIC
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Ticarcilline TIC </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixTicarcillineTICABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="ticarcillineTICABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/*
+		 * Piperacilline PIP
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Piperacilline PIP </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixPiperacillinePIPABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="piperacillinePIPABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/*
+		 * Acide clavulanique + Amoxicilline AMC
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" title="Acide clavulanique + Amoxicilline AMC"> Acide clav. + Amoxi. AMC </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixAcideClavulaniqueAmoxicillineAMCABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="acideClavulaniqueAmoxicillineAMCABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/*
+		 * Tic-Ac-Clav TCC
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Tic-Ac-Clav TCC </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixTicAcClavTCCABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="ticAcClavTCCABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/*
+		 * Ertapénème ETP
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Ertap&eacute;n&egrave;me ETP </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixErtapenemeETPABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="ertapenemeETPABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/*
+		 * Imipénème IPM
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Imip&eacute;n&egrave;me IPM </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixImipenemeIPMABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="imipenemeIPMABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/*
+		 * Oxacilline OX
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Oxacilline OX </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixOxacillineOXABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="oxacillineOXABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/*
+		 * Penicilline P
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Penicilline P </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixPenicillinePABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="penicillinePABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/*
+		 * Céfalotine CF
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > C&eacute;falotine CF </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixCefalotineCFABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="cefalotineCFABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/*
+		 * Céfoxitine FOX
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > C&eacute;foxitine FOX </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixCefoxitineFOXABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="cefoxitineFOXABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/*
+		 * Pipéracilline + Tazobactame PPT
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" title="Pip&eacute;racilline + Tazobactame PPT"> Pip&eacute;racil. + Tazobact. PPT </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixPiperacillineTazobactamePPTABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="piperacillineTazobactamePPTABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+	
+		/*
+		 * Céfotaxime CTX
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > C&eacute;fotaxime CTX </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixCefotaximeCTXABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="cefotaximeCTXABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/*
+		 * Cefsulodine CFS
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Cefsulodine CFS </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixCefsulodineCFSABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="cefsulodineCFSABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/*
+		 * Cefopérazone CFP
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > C&eacute;fop&eacute;razone CFP </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixCFPABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="CFPABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+	
+		/*
+		 * Ceftazidime CAZ
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Ceftazidime CAZ </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixCeftazidimeCAZABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="ceftazidimeCAZABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/*
+		 * Ceftriaxone CRO
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Ceftriaxone CRO </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixCeftriaxoneCROABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="ceftriaxoneCROABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/*
+		 * Céfépime FEP
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > C&eacute;f&eacute;pime FEP </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixCefepimeFEPABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="cefepimeFEPABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/*
+		 * Aztréonam ATM
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Aztr&eacute;onam ATM </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixAztreonamATMABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="aztreonamATMABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/**
+		 * Imidazolés --- Imidazolés
+		 */
+		$html .= '<table style="width: 100%; margin-top: 14px;">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 100%; text-align: left; font-weight: bold; font-size: 12px; font-style: italic;"> &#10148; Imidazol&eacute;s </td>';
+		$html .= '</tr>';
+		$html .= '</table>';
+		/*
+		 * Cotrimoxazole
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Cotrimoxazole </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixCotrimoxazoleSXTABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="cotrimoxazoleSXTABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/**
+		 * Glycopeptides --- Glycopeptides
+		 */
+		$html .= '<table style="width: 100%; margin-top: 14px;">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 100%; text-align: left; font-weight: bold; font-size: 12px; font-style: italic;"> &#10148; Glycopeptides </td>';
+		$html .= '</tr>';
+		$html .= '</table>';
+		/*
+		 * Vancomycine VA
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Vancomycine VA </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixVancomycineVAABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="vancomycineVAABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		/*
+		 * Teicoplanine
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Teicoplanine </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixTeicoplanineABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="teicoplanineABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/**
+		 * Produits nitrés --- Produits nitrés
+		 */
+		$html .= '<table style="width: 100%; margin-top: 14px;">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 100%; text-align: left; font-weight: bold; font-size: 12px; font-style: italic;"> &#10148; Produits nitr&eacute;s </td>';
+		$html .= '</tr>';
+		$html .= '</table>';
+		/*
+		 * Nitrofurane
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Nitrofurane </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixNitrofuraneABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="nitrofuraneABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		/*
+		 * Métronidazole
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > M&eacute;tronidazole </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixMetronidazoleABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="metronidazoleABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		 
+		/**
+		 * Sulfamides --- Sulfamides
+		 */
+		$html .= '<table style="width: 100%; margin-top: 14px;">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 100%; text-align: left; font-weight: bold; font-size: 12px; font-style: italic;"> &#10148; Sulfamides </td>';
+		$html .= '</tr>';
+		$html .= '</table>';
+		/*
+		 * Triméthoprime + Sulfamétoxazole (SXT)
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" title="Trim&eacute;thoprime + Sulfam&eacute;toxazole (SXT)"> Trim&eacute;tho. + Sulfa. (SXT) </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixTrimethoprimeSulfametoxazoleSXTABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="trimethoprimeSulfametoxazoleSXTABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		 
+		 
+		/*
+		 * Fermeture Première colonne
+		*/
+		$html .= '  </td>';
+		/*
+		 * ==========================
+		*/
+		 
+		   
+		/* Séparateur des colonnes --- Séparateur des colonnes */
+		$html .= '  <td style="width:  1.5%; height: 20px; background: indig;"> </td>';
+		/*=====================================================*/
+		  
+		    
+		/*
+		 * Deuxième colonne
+		*/
+		$html .= '  <td style="width: 49.5%; height: 20px; background: yello; vertical-align: top;">';
+		/*
+		 * ====================
+		*/
+		 
+		/**
+		 * Polymyxines --- Polymyxines
+		 */
+		$html .= '<table style="width: 100%; margin-top: 15px;">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 100%; text-align: left; font-weight: bold; font-size: 12px; font-style: italic;"> &#10148; Polymyxines </td>';
+		$html .= '</tr>';
+		$html .= '</table>';
+		 
+		/*
+		 * Colistine CS
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Colistine CS </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixColistineCSABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="colistineCSABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/*
+		 * Polymicine
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Polymicine </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixPolymicineABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="polymicineABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		 
+		/**
+		 * Aminosides --- Aminosides
+		 */
+		$html .= '<table style="width: 100%; margin-top: 17px;">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 100%; text-align: left; font-weight: bold; font-size: 12px; font-style: italic;"> &#10148; Aminosides </td>';
+		$html .= '</tr>';
+		$html .= '</table>';
+		/*
+		 * Kanamycine K
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Kanamycine K </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixKanamycineKABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="kanamycineKABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/*
+		 * Tobramycine TB
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Tobramycine TB </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixTobramycineTBABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="tobramycineTBABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/*
+		 * Gentamicine GM
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Gentamicine GM </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixGentamicineGMABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="gentamicineGMABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/*
+		 * Amikacine AN
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Amikacine AN </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixAmikacineANABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="amikacineANABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/*
+		 * Netilmycine
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Netilmycine </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixNetilmycineABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="netilmycineABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/**
+		 * Phénicolés --- Phénicolés
+		 */
+		$html .= '<table style="width: 100%; margin-top: 17px;">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 100%; text-align: left; font-weight: bold; font-size: 12px; font-style: italic;"> &#10148; Ph&eacute;nicol&eacute;s </td>';
+		$html .= '</tr>';
+		$html .= '</table>';
+		/*
+		 * Chloramphénicol C
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Chloramph&eacute;nicol C </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixChloramphenicolCABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="chloramphenicolCABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/**
+		 * Cyclines --- Cyclines
+		 */
+		$html .= '<table style="width: 100%; margin-top: 17px;">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 100%; text-align: left; font-weight: bold; font-size: 12px; font-style: italic;"> &#10148; Cyclines </td>';
+		$html .= '</tr>';
+		$html .= '</table>';
+		/*
+		 * Minocycline
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Minocycline </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixMinocyclineABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="minocyclineABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/*
+		 * Tétracycline TE
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > T&eacute;tracycline TE </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixTetracyclineTEABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="tetracyclineTEABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/*
+		 * Doxycycline DO
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Doxycycline DO </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixDoxycyclineDOABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="doxycyclineDOABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/**
+		 * Macrolides et apparentés --- Macrolides et apparentés
+		 */
+		$html .= '<table style="width: 100%; margin-top: 17px;">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 100%; text-align: left; font-weight: bold; font-size: 12px; font-style: italic;"> &#10148; Macrolides et apparent&eacute;s </td>';
+		$html .= '</tr>';
+		$html .= '</table>';
+		/*
+		 * Azithromycine AZT
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Azithromycine AZT </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixAzithromycineAZTABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="azithromycineAZTABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		/*
+		 * Erythromycine E
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Erythromycine E </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixErythromycineEABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="erythromycineEABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		/*
+		 * Lincomycine L
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Lincomycine L </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixLincomycineLABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="lincomycineLABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		/*
+		 * Pristinamycine PT
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Pristinamycine PT </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixPristinamycinePTABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="pristinamycinePTABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		/**
+		 * Fluoroquinolones --- Fluoroquinolones
+		 */
+		$html .= '<table style="width: 100%; margin-top: 17px;">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 100%; text-align: left; font-weight: bold; font-size: 12px; font-style: italic;"> &#10148; Fluoroquinolones </td>';
+		$html .= '</tr>';
+		$html .= '</table>';
+		 
+		/*
+		 * Acide nalidixique NA
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Acide nalidixique NA </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixAcideNalidixiqueNAABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="acideNalidixiqueNAABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		/*
+		 * Péfloxacine PEF
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > P&eacute;floxacine PEF </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixPefloxacinePEFABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="pefloxacinePEFABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		/*
+		 * Norfloxacine NOR
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Norfloxacine NOR </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixNorfloxacineNORABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="norfloxacineNORABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		/*
+		 * Ciprofloxacine CIP
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Ciprofloxacine CIP </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixCiprofloxacineCIPABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="ciprofloxacineCIPABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1 > </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		/*
+		 * Lévofloxacine LEV
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > L&eacute;vofloxacine LEV </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixLEVABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="LEVABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		 
+	
+		/**
+		 * Autres --- Autres
+		 */
+		$html .= '<table style="width: 100%; margin-top: 15px;">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 100%; text-align: left; font-weight: bold; font-size: 12px; font-style: italic;"> &#10148; Autres </td>';
+		$html .= '</tr>';
+		$html .= '</table>';
+	
+		/*
+		 * Fosfomycine FOS
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Fosfomycine FOS </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixFosfomycineFOSABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="fosfomycineFOSABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+	
+		 
+		/*
+		 * Acide fusidique FA
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Acide fusidique FA </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixAcideFusidiqueFAABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="acideFusidiqueFAABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		 
+		/*
+		 * Rifampycine RIF - Rifampycine RIF
+		*/
+		$html .= '<table style="width: 100%; margin-top: -1px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		$html .= '  <td style="width: 62%;"><label class="lab1 labABGRadius" style="padding-top: 5px;"><span style="font-weight: bold;" > Rifampycine RIF </span></label></td>';
+		$html .= '  <td style="width: 4%;"><label class="lab1" style="padding-top: 5px;"> <input type="checkbox" style="width:20px;" id="choixRifampicineRAABGecbu" > </label></td>';
+		$html .= '    <td style="width: 34%;"> <label class="lab2" style="padding-top: 5px;">';
+		$html .= '      <select id="rifampicineRAABGecbu" style="width: 120px;" disabled> ';
+		$html .= '        <option value=-1> </option> <option value=1 >R&eacute;sistante</option><option value=2 >Sensible</option><option value=3 >Interm&eacute;diaire</option>';
+		$html .= '      </select></label> </td>';
+		$html .= "</tr></table>";
+		 
+		 
+		 
+		/*
+		 * Fermeture Deuxième colonne
+		*/
+		$html .= '  </td>';
+		/*
+		 * ==========================
+		*/
+	
+		 
+		$html .= '</tr>';
+		 
+		$html .= '</table>';
+		/*
+		 * ==================
+		*/
+		 
+		 
+		$html .= "</tr>";
+		 
+		$html .= "</table>";
+		 
+		 
+		/**
+		 * Partie commentaire --- Partie commentaire
+		 * -----------------------------------------
+		 * Partie commentaire --- Partie commentaire
+		 */
+	
+		$html .= '<table style="width: 100%; margin-top: 15px;" class="designEnTeteAnalyse">';
+		$html .= '<tr class="ligneAnanlyse" style="width: 100%;">';
+		if($this->layout()->user['role'] == 'biologiste' || $this->layout()->user['role'] == 'technicien'){
+			$html .= '<td style="width: 100%;"><label class="labABGRadius" style="height: 140px;" ><span style="font-size: 16px; float: left;  margin-left: 30px;"> Conclusion :  </span> <textarea id="conclusion_ecbu_ABG" style="max-height: 100px; min-height: 100px; max-width: 630px; min-width: 630px; margin-left: 30px;" > </textarea> </label></td>';
+		}else{
+			$html .= '<td style="width: 100%;"><label class="labABGRadius" style="height: 140px;" ><span style="font-size: 16px; float: left;  margin-left: 30px;"> Conclusion :  </span> <textarea id="conclusion_ecbu_ABG" style="max-height: 100px; min-height: 100px; max-width: 630px; min-width: 630px; margin-left: 30px;" disabled> </textarea> </label></td>';
+		}
+		$html .= '<td style="width: 5%;"></td>';
+		$html .= '</tr>';
+		$html .= '</table>';
+		 
+		 
+		 
+		return $html;
+	}
+	
 	
 	/**
 	 * analyse 67

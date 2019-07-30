@@ -178,6 +178,7 @@ return array(
                 	'envoi-sms-alert' => 'biologiste',
 
                 	'get-liste-des-souches' => 'biologiste',
+                	
                 ),
 
             	/*
@@ -230,6 +231,11 @@ return array(
             		'get-liste-des-souches' => 'technicien',
             		'insert-nouvelle-souche' => 'technicien',
             		'modifier-souche-selectionnee' => 'technicien',
+            		'get-liste-des-parasites' => 'technicien',
+            		'insert-nouveau-parasite' => 'technicien',
+            		'modifier-parasite-selectionne' => 'technicien',
+            			
+            		
             	),	
             		
             		
