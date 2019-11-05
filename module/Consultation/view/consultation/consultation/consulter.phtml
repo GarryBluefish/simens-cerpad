@@ -466,7 +466,7 @@ echo $this->form()->openTag($form); ?>
      <!-- ********************Ant�c�dents ou Terrain particulier ******************-->
      <!-- ********************Ant�c�dents ou Terrain particulier ******************--> 
      
-     <div style='font-family: police2;font-size: 17px; font-weight: bold;'>Ant&eacute;c&eacute;dents et Historiques</div>  
+     <div id='antHistVCM' style='font-family: police2;font-size: 17px; font-weight: bold;'>Ant&eacute;c&eacute;dents et Historiques</div>  
         <div style=' max-height: 500px;'>
              <?php 
                echo $this->headLink()->appendStylesheet($this->basePath().'/css/consultation/styleHistoriquesTerrainParticulier.css');
@@ -476,7 +476,7 @@ echo $this->form()->openTag($form); ?>
          <div id="tabsAntecedents">
                   <ul>
                      <li><a href="#tabss-1">Ant&eacute;c&eacute;dents</a></li>
-                     <li><a href="#tabss-2">Historiques</a></li>
+                     <li><a href="#tabss-2" id='histVCM' >Historiques</a></li>
                   </ul>
                                    
          <div id="tabss-1"> 
@@ -1100,7 +1100,7 @@ echo $this->form()->openTag($form); ?>
                      </td>
                      <td style="width:25%;">
                         <div>    
-                            <img class="image2" style='cursor: pointer; width: 100%;' src='<?php echo $this->basepath().'/images_icons/image_Historique_2 - Copie.png'?>'  />
+                            <img class="image2" style='cursor: pointer; width: 100%;' id='analysesVCM' src='<?php echo $this->basepath().'/images_icons/image_Historique_2 - Copie.png'?>'  />
                         </div>
                      </td>
                      <td style="width:25%;">
@@ -3235,3 +3235,89 @@ if($listeVoieAdmin){ ?>
 	  
 	</script>
 <?php } ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- IMAGE *** Monsieur VCM *** -->
+	<!-- IMAGE *** Monsieur VCM *** -->
+	
+	<!-- Monsieur VCM -->
+	<!-- Monsieur VCM -->
+	
+	   <div style="position: absolute; left: -215px; top: 260px; background: white; border: 1.5px solid #dcdcdc; box-shadow: 0 1px 2px rgba(0,0,0,0.3); border-radius: 10px;">
+          <img style="border-radius: 10px;" src="http://localhost:5000/appliweb/vcm/mvcm/VCM:en_cours--hypo--globule_rouge.svg?width=200" usemap="#imagemap" />
+       </div>
+       
+       <map name="imagemap">
+         <area onClick='hide_all();document.getElementById("fleche_anemie").style.display="block";document.getElementById("box_anemie").style.display="block"' shape="rect" coords="130, 49, 151, 80" title="anémie" />
+       </map>
+       
+	   <div id="fleche_anemie" style='display:none; position:absolute; left:-63px; top:320px; width:80px; border-top-style:solid; border-top-color:black; border-top-width:1.5px;'></div>
+		
+	   <div id="box_anemie" style='display:none; position:absolute; background-color:#FFFFBB; left:15px; top:300px; border-style:solid; border-color:black; border-width:1px; width: 520px; border-radius: 10px;'>
+	     <div onClick='hide_all()' style='float: right; border-right-style:none; border-top-style:none; border-bottom-style:solid; border-left-style:solid; border-color:black; border-width:1px; cursor:pointer;'> <b>&nbsp;X&nbsp;</b> </div>
+	     <div style='margin:8px;'>
+	       <b> Anémie </b>&nbsp;&nbsp;&nbsp;&nbsp;<br/> * Anémie régénérative hypochrome associée a une hyperleucocytose modérée. <span style='color: red; cursor: pointer; font-weight: bold;' onClick='ouvrirPopupResultat()'> &#128065; </span>
+	     </div>
+	   </div>
+	   
+	     
+
+	   <script >
+	   <!--
+		if (typeof(window["hideables"]) == "undefined") {
+		  hideables = new Array();
+		}
+		hideables.push('fleche_anemie');
+		hideables.push('box_anemie');
+		function hide_all() {
+		  for(i = 0; i < hideables.length; i++) {
+		    document.getElementById(hideables[i]).style.display="none";
+		  }
+		}
+
+		function ouvrirPopupResultat() {
+			hide_all();
+			$('#antHistVCM, #histVCM, #analysesVCM').trigger('click');
+
+			//#resultAnalyseValideVCM
+			resultatsDesAnalyses(9252);
+		}
+	   -->
+	   </script>
+
+

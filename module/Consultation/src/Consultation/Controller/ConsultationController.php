@@ -2950,6 +2950,45 @@ class ConsultationController extends AbstractActionController {
 		//var_dump($repartitionPatientDepistesParAdresses); exit();
 		
 		
+		/**
+		 * Répartition des analyses par patient Externe - Interne - Parents de patients Interne
+		 * Répartition des analyses par patient Externe - Interne - Parents de patients Interne
+		 * Répartition des analyses par patient Externe - Interne - Parents de patients Interne
+		 */
+		/** Répartition des analyses par patient Externe */
+		$repartitionAnalysesParPatientExterne = $this->getDepistageTable()->getRepartitionAnalysesParPatient(0);
+		$totalAnalysesParPatientExterne = array_sum($repartitionAnalysesParPatientExterne[1]);
+		$tableauAnalysesParPatientExterne = array_values($repartitionAnalysesParPatientExterne[1]);
+		
+		$pourcentageAnalysesParPatientExterne = $this->pourcentage_element_tab($tableauAnalysesParPatientExterne, $totalAnalysesParPatientExterne);
+		
+		/** Répartition des analyses par patient Interne */
+		$repartitionAnalysesParPatientInterne = $this->getDepistageTable()->getRepartitionAnalysesParPatient(1);
+		$totalAnalysesParPatientInterne = array_sum($repartitionAnalysesParPatientInterne[1]);
+		$tableauAnalysesParPatientInterne = array_values($repartitionAnalysesParPatientInterne[1]);
+		
+		$pourcentageAnalysesParPatientInterne = $this->pourcentage_element_tab($tableauAnalysesParPatientInterne, $totalAnalysesParPatientInterne);
+		
+		/** Répartition des analyses par patient Dépistés */
+		$repartitionAnalysesParPatientsDepistes = $this->getDepistageTable()->getRepartitionAnalysesParPatientsDepistes();
+		$totalAnalysesParPatientsDepistes = array_sum($repartitionAnalysesParPatientsDepistes[1]);
+		$tableauAnalysesParPatientsDepistes = array_values($repartitionAnalysesParPatientsDepistes[1]);
+		
+		$pourcentageAnalysesParPatientsDepistes = $this->pourcentage_element_tab($tableauAnalysesParPatientsDepistes, $totalAnalysesParPatientsDepistes);
+		
+		
+		/** Répartition des analyses par patient Interne */
+		$repartitionAnalysesParParentPatient = $this->getDepistageTable()->getRepartitionAnalysesParParentsPatients();
+		$totalAnalysesParParentPatient = array_sum($repartitionAnalysesParParentPatient[1]);
+		$tableauAnalysesParParentPatient = array_values($repartitionAnalysesParParentPatient[1]);
+		
+		$pourcentageAnalysesParParentPatient = $this->pourcentage_element_tab($tableauAnalysesParParentPatient, $totalAnalysesParParentPatient);
+		
+		
+		//echo  "<pre>";
+		//var_dump($tableauAnalysesParParentPatient); exit();
+		//echo  "</pre>";
+		
 		
 		return array (
 				'nbPatientD'   => $nbPatientD,
@@ -2985,6 +3024,18 @@ class ConsultationController extends AbstractActionController {
 				
 				'repartitionPatientDepistesParAdresses' => $repartitionPatientDepistesParAdresses,
 				'pourcentagePatientDepistesParAdresses' => $pourcentagePatientDepistesParAdresses,
+		    
+    		    'repartitionAnalysesParPatientExterne' => $repartitionAnalysesParPatientExterne,
+    		    'pourcentageAnalysesParPatientExterne' => $pourcentageAnalysesParPatientExterne,
+		    
+    		    'repartitionAnalysesParPatientInterne' => $repartitionAnalysesParPatientInterne,
+    		    'pourcentageAnalysesParPatientInterne' => $pourcentageAnalysesParPatientInterne,
+		    
+    		    'repartitionAnalysesParPatientsDepistes' => $repartitionAnalysesParPatientsDepistes,
+    		    'pourcentageAnalysesParPatientsDepistes' => $pourcentageAnalysesParPatientsDepistes,
+		    
+    		    'repartitionAnalysesParParentPatient' => $repartitionAnalysesParParentPatient,
+    		    'pourcentageAnalysesParParentPatient' => $pourcentageAnalysesParParentPatient,
 		);
 		
 	}

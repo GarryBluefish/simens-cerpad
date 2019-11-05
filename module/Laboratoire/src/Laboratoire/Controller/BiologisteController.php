@@ -1358,6 +1358,7 @@ class BiologisteController extends AbstractActionController {
 	
 	}
 	
+	
 	public function listeResultatsValidesAction() {
 		
 		$this->layout ()->setTemplate ( 'layout/biologiste' );
@@ -1402,6 +1403,142 @@ class BiologisteController extends AbstractActionController {
 		$this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );
 		return $this->getResponse ()->setContent ( Json::encode ( $nbAnalysesDemandees ) );
 	}
+	
+	
+	public function getInformationsVcmAction()
+	{
+		$idpatient = ( int ) $this->params ()->fromPost ( 'idpatient', 0 );
+		$iddemande = ( int ) $this->params ()->fromPost ( 'iddemande', 0 );
+	
+		$listeDemandesAnalyses  = $this->getPatientTable ()->getListeDemandesAnalysesAvecResultatsValides($idpatient);
+	
+		$tabInfosPathologies = array();
+		$tabIdAnalyse = array();
+		$tabIdDemande = array();
+		foreach ($listeDemandesAnalyses as $listeDemAna){
+			$idDemande = $listeDemAna['iddemande'];
+			$idAnalyse = $listeDemAna['idanalyse'];
+			
+			if(!in_array($idAnalyse, $tabIdAnalyse)){  
+				$tabIdAnalyse[] = $idAnalyse;
+				$tabIdDemande[] = $idDemande;
+				
+				$result = $this->getInfosAlertVcm($idDemande, $idAnalyse);
+				if($result){
+					$tabInfosPathologies[] = $this->getInfosAlertVcm($idDemande, $idAnalyse);
+				}
+			}
+			
+ 		}
+	
+		$this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );
+		return $this->getResponse ()->setContent ( Json::encode ( $tabInfosPathologies ) );
+	}
+	
+	
+	public function getInfosAlertVcm($idDemande, $idAnalyse)
+	{
+		$infosResultat = null;
+		$resultatFinal = null;
+		
+		if($idAnalyse == 71){ //NFS&TR
+			$resultat = $this->getResultatDemandeAnalyseTable()->getValeursNfs($idDemande);
+			$infosResultat = str_replace( "'", "\'", $resultat['commentaire'] );
+			
+			if(strstr($infosResultat, 'anémie') || strstr($infosResultat, 'Anémie')){
+				$resultatFinal = array(71, 'Anémie', 'en_cours--hypo--globule_rouge', $infosResultat, $idDemande);
+			}
+		}elseif ($idAnalyse == 10){ //GOUTTE EPAISSE (Paludisme)
+			$resultat = $this->getResultatDemandeAnalyseTable()->getValeursGoutteEpaisse($idDemande);
+			$infosResultat = str_replace( "'", "\'", $resultat['commentaire_goutte_epaisse'] );
+				
+			if($resultat['goutte_epaisse'] == 'Positif'){
+				$resultatFinal = array(10, 'Paludisme', 'en_cours--parasite--globule_rouge', $infosResultat, $idDemande);
+			}
+		}elseif ($idAnalyse == 53){ //CRP (Inflammation)
+			$resultat = $this->getResultatDemandeAnalyseTable()->getValeursCrp($idDemande);
+			$infosResultat =  'CRP : '.$resultat['crpValeurResultat'].' mg/l';
+				
+			if($resultat['optionResultatCrp'] == 'positif'){
+				$resultatFinal = array(53, 'Inflammation', 'en_cours--inflammation', $infosResultat, $idDemande);
+			}
+		}elseif ($idAnalyse == 54){ //FACTEURES RHUMATOIDES (RF LATEX) (Maladies des articulations)
+			$resultat = $this->getResultatDemandeAnalyseTable()->getValeursFacteursRhumatoides($idDemande);
+			$infosResultat =  'Facteur rhumatoide '.$resultat['facteurs_rhumatoides_titre'].' UI/ml';
+				
+			if($resultat['facteurs_rhumatoides'] == 'Positif' && $resultat['facteurs_rhumatoides_titre'] > 30){
+				$resultatFinal = array(54, 'Arthrite (inflammation des articulations)', 'en_cours--inflammation--articulation', $infosResultat, $idDemande);
+			}elseif($resultat['facteurs_rhumatoides'] == 'Positif'){
+				$resultatFinal = array(54, 'Arthropathie', 'en_cours--patho--articulation', $infosResultat, $idDemande);
+			}
+		}elseif ($idAnalyse == 25){ //CHOLESTEROL TOTAL (Lipid�mie)
+			$resultat = $this->getResultatDemandeAnalyseTable()->getValeursCholesterolTotal($idDemande);
+			$infosResultat =  'Cholesterol Total : '.$resultat['cholesterol_total_1'].' g/l &nbsp;-&nbsp; soit '.$resultat['cholesterol_total_2'].' mmol/l';
+				
+			if($resultat['cholesterol_total_1'] > 2.6){ 
+				$resultatFinal = array(25, "Risque d'hyperlipidémie", 'risque--hyper--lipidemie', $infosResultat, $idDemande);
+			}elseif($resultat['cholesterol_total_1'] > 2.2){
+				$resultatFinal = array(25, "Risque de trouble de la lipidémie", 'risque--patho--lipidemie', $infosResultat, $idDemande);
+			}
+		}elseif ($idAnalyse == 37){ //TRANSAMINASES (Maladies du foie)
+			$resultatTgoAsat = $this->getResultatDemandeAnalyseTable()->getValeursTgoAsat($idDemande);
+			$resultatTgpAlat = $this->getResultatDemandeAnalyseTable()->getValeursTgpAlat($idDemande);
+			$infosResultat =  'TGO/Asat = '.$resultatTgoAsat['tgo_asat'].' u/l &nbsp;-&nbsp; TGP/Alat = '.$resultatTgpAlat['tgp_alat'].' u/l';
+				
+			if($resultatTgoAsat['tgo_asat'] > 35){
+				$resultatFinal = array(37, "Maladie hépatique", 'en_cours--patho--foie', $infosResultat, $idDemande);
+			}
+		}elseif ($idAnalyse == 21){ //GLYCEMIE 
+			$resultat = $this->getResultatDemandeAnalyseTable()->getValeursGlycemie($idDemande);
+			$infosResultat =  'Glycémie : '.$resultat['glycemie_1'].' g/l &nbsp; soit &nbsp; '.$resultat['glycemie_2'].' mmol/l';
+				
+			if($resultat['glycemie_1'] < 0.6){ ///coords : 130, 49, 151, 80
+				$resultatFinal = array(21, "Hypoglycémie", 'en_cours--hypo--glycemie', $infosResultat, $idDemande);
+			}elseif($resultat['glycemie_1'] > 1.10){ 
+				$resultatFinal = array(21, "Hyperglycémie", 'en_cours--hyper--glycemie', $infosResultat, $idDemande);
+			}
+		}elseif ($idAnalyse == 22){ //CREATININEMIE 
+			$resultat = $this->getResultatDemandeAnalyseTable()->getValeursCreatininemie($idDemande);
+			$infosResultat =  'Créatininémie : '.$resultat['creatininemie'].' mg/l';
+				
+			if($resultat['creatininemie'] > 13){ ///coords : 60, 110, 81, 141
+				$resultatFinal = array(22, "Insuffisance rénale", 'en_cours--hypo--rein', $infosResultat, $idDemande);
+			}
+		}elseif ($idAnalyse == 51){ //BETA HCG PLASMATIQUE (QUALITATIF) 
+			$resultat = $this->getResultatDemandeAnalyseTable()->getValeursBetaHcgPlasmatique($idDemande);
+			$infosResultat =  'En état de grossesse';
+				
+			if($resultat['beta_hcg_plasmatique'] == 'Positif'){ ///coords : 14, 62, 38, 86
+				$resultatFinal = array(51, "Grossesse", 'en_cours--physio--grossesse', $infosResultat, $idDemande);
+			}
+		}elseif ($idAnalyse == 52){ //PSA (QUALITATIF) 
+			$resultat = $this->getResultatDemandeAnalyseTable()->getValeursPsa($idDemande);
+			$infosResultat =  'Maladie de la prostate';
+				
+			if($resultat['psa_qualitatif'] == 'Positif' && $resultat['psa'] > 4){ ///coords : 37, 131, 58, 152
+				$resultatFinal = array(52, "Prostate", 'en_cours--patho--prostate', $infosResultat, $idDemande);
+			}
+		}
+		
+		
+		return $resultatFinal;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

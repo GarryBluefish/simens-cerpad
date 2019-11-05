@@ -286,3 +286,373 @@ $('#resultatsAnalyses, #contenuResultatsAnalysesParType, #resultatsAnalysesDuneD
 	if (event.keyCode == 13) { return false; }
 });
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- ========== IMAGE *** Monsieur VCM *** ============= -->
+	<!-- ========== IMAGE *** Monsieur VCM *** ============= -->
+	<div id="iconeMonsieurVCM" style="display: none;" >
+         <div style="position: absolute; width: 200px; left: -215px; top: 280px; background: white; border: 1.5px solid #dcdcdc; box-shadow: 0 1px 2px rgba(0,0,0,0.3); border-radius: 10px;">
+           <img style="border-radius: 10px;" src="http://localhost:5000/appliweb/vcm/mvcm/VCM:.svg?width=200" />
+         </div>
+    </div>
+         
+    <div id="iconeTimeLineDigramme" > </div>
+    <div id="iconeInfosPathologiesMonsieurVCM" > </div>
+         
+         
+    <!-- ========== *** POP-UP POUR LA Frise Chronologique *** ========== -->
+    <!-- ========== *** POP-UP POUR LA Frise Chronologique *** ========== -->
+    <!-- JS & CSS de anychart -->  
+	<!-- JS & CSS de anychart -->
+	<?php echo $this->headLink()->appendStylesheet($this->basePath().'/js/plugins/timeglider/css/jquery-ui-1.8.5custom-modif.css');?>
+	<?php echo $this->headLink()->appendStylesheet($this->basePath().'/js/plugins/timeglider/timeglider/Timeglider.css');?>
+	<?php echo $this->headLink()->appendStylesheet($this->basePath().'/js/plugins/timeglider/timeglider/timeglider.datepicker.css');?>
+	
+	<?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/timeglider/js/underscore-min.js');?>
+	<?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/timeglider/js/backbone-min.js');?>
+	   	<?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/timeglider/js/json2.js');?>
+	<?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/timeglider/js/jquery.tmpl.js');?>
+	<?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/timeglider/js/ba-tinyPubSub.js');?>
+		<?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/timeglider/js/jquery.mousewheel.js');?>
+		<?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/timeglider/js/jquery.ui.ipad.js');?>
+	<?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/timeglider/js/globalize.js');?>
+		<?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/timeglider/js/ba-debug.min.js');?>
+		
+	
+    <?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/timeglider/timeglider/TG_Date.js');?>
+	<?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/timeglider/timeglider/TG_Org.js');?>
+	<?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/timeglider/timeglider/TG_Timeline.js');?>
+	<?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/timeglider/timeglider/TG_TimelineView.js');?>
+	<?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/timeglider/timeglider/TG_Mediator.js');?>
+	<?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/timeglider/timeglider/timeglider.timeline.widget.js');?>
+	<?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/timeglider/timeglider/timeglider.datepicker.js');?>
+
+	<?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/timeglider/js/jquery.jscrollpane.min.js');?>
+	<?php echo $this->headScript()->appendFile($this->basePath().'/js/plugins/timeglider/js/jquery.ui.sortable.js');?>
+	
+	
+	<div id="affichageFriseChronologique" class="affichageFriseChronologique" title="Frise chronologique" style="display: none;"  align="center">
+	    <div id="interfaceFriseChronologique" style="width: 95%; height: 400px;"></div>
+	</div>
+	
+	
+	<script>
+
+	var base_url = window.location.toString();
+	var tabUrl = base_url.split("public");
+
+	function getScriptTimeline(){
+
+		var tg1 = $("#interfaceFriseChronologique").timeline({
+			"timezone":"-06:00",
+            "min_zoom":1,  
+            "max_zoom":40, 
+            "data_source":tabUrl[0]+'public/js/plugins/timeglider/json/infos_patient.json',
+            "show_footer":true,
+			"display_zoom_level":false,
+			"show_centerline":false,
+			"constrain_to_data":false,
+        });
+
+          // get the tg_instance in order to call methods on it
+          var tg_instance = tg1.data("timeline");
+
+          /*
+          $(".goTo").click(function() {
+              var date = ""; //2019-09-14 
+              var zoom = 100;
+              tg_instance.goTo(date,zoom);
+          });
+          */
+
+	}
+           
+    </script>
+	
+	
+	
+	<style type='text/css'>
+
+		#interfaceFriseChronologique {
+			margin:32px;
+			margin-bottom:0;
+		}
+		
+	</style>
+	
+	
+	
+	<script type='text/javascript'>
+
+	$(function () { 
+
+		/*
+		var tg_instance = {};
+		
+
+		tg1 = $("#interfaceFriseChronologique").timeline({
+					
+					/*
+					// custom hover & click callbacks
+					// returning false prevents default
+	
+					eventHover: function($ev, ev) {
+						debug.log("ev hover, no follow:", ev);
+						return false;
+					},
+					
+					eventClick: function($ev, ev) {
+						debug.log("eventClick, no follow:", ev);
+						return false;
+					},
+					*/
+	/*
+					"min_zoom":1, 
+					"max_zoom":50, 
+					"timezone":"-06:00",
+					"icon_folder":"timeglider/icons/",
+					"data_source": "json/js_history_test.json",
+					"show_footer":true,
+					"display_zoom_level":true,
+					"mousewheel":"zoom", // zoom | pan | none
+					"constrain_to_data":true,
+					"image_lane_height":100,
+					"legend":{type:"default"}, // default | checkboxes
+					"loaded":function () { 
+						// loaded callback function
+					 }
+	
+			}).resizable({
+				stop:function(){ 
+					// $(this).data("timeline").resize();
+				}
+			});
+			
+			*/
+		
+		//tg_instance = tg1.data("timeline");
+	
+
+		/*
+		$(".goto").click(function() {
+			var d = $(this).attr("date");
+			var z = $(this).attr("zoom");
+			tg_instance.goTo(d,z);
+		});
+		
+		$(".zoom").click(function() {
+			var z = Number($(this).attr("z"));
+			tg_instance.zoom(z);
+		});
+		
+		
+		tg_instance.panButton($(".pan-left"), "left");
+		tg_instance.panButton($(".pan-right"), "right");
+		
+		
+		$(document).on("dblclick", function (event) {
+				
+			var med = tg_instance.getMediator();
+			var info = med.getDateFromOffset(event.pageX);
+			console.log("click date info object:", info);
+			alert("Double-clicked for date:" + info.dateStr);
+			
+		});
+		*/
+		
+
+		/*
+		$("#getScope").click(function() {
+			
+			var so = tg_instance.getScope();
+						
+			var ml = "RETURNS: <br><br>container (jquery dom object): " + so.container.toString()
+			+ "<br>focusDateSec (tg sec):" + so.focusDateSec
+			+ "<br>focusMS (js timestamp): " + so.focusMS
+			+ "<br>leftMS (js timestamp): " + so.leftMS
+			+ "<br>left_sec (tg sec): " + so.left_sec
+			+ "<br>rightMS (js timestamp): " + so.rightMS
+			+ "<br>right_sec (tg sec): " + so.right_sec
+			+ "<br>spp (seconds per pixel): " + so.spp
+			+ "<br>timelineBounds (object, left- & right-most in tg sec): " + JSON.stringify(so.timelineBounds)
+			+ "<br>timelines (array of ids): " + JSON.stringify(so.timelines);
+			
+			var d = new Date(so.focusMS)
+			
+			ml += "<br><br>Date using focusMS:" + d.toString('yyyy-MM-dd');
+			
+			$(".scope-view").html(ml);
+					
+		});
+		*/
+	
+
+		/*
+		$("#loadData").click(function() {
+			
+			var src = $("#loadDataSrc").val();
+			
+			var cb_fn = function(args, timeline) {
+				// called after parsing data, after load
+				debug.log("args", args, "timeline", timeline[0].id);
+			};
+			
+			var cb_args = {}; // {display:true};
+			
+			tg_instance.getMediator().emptyData();
+			tg_instance.loadTimeline(src, function(){debug.log("cb!");}, true);
+			
+			$("#reloadDataDiv").hide();
+		});
+		
+		
+		
+		
+		$("#reloadTimeline").click(function() {
+			tg_instance.reloadTimeline("js_history", "json/js_history.json");
+		});
+		
+		
+	
+		$("#refresh").click(function() {
+			debug.log("timeline refreshed!");
+			tg_instance.refresh();
+		});
+		
+		
+		
+		$("#scrolldown").bind("click", function() {
+			$(".timeglider-timeline-event").animate({top:"+=100"})
+		})
+		
+		$("#scrollup").bind("click", function() {
+			$(".timeglider-timeline-event").animate({top:"-=100"})
+		})
+				*/
+
+	
+	/*
+	  	timeglider.eventActions = {
+			nagavigateTo:function(obj) {
+				// event object must have a "navigateTo"
+				// element with zoom, then ISO date delimited
+				// with a pipe | 
+				// one can use
+				var nav = obj.navigateTo;
+				tg_instance.goTo(nav.focus_date,nav.zoom_level);
+				
+				setTimeout(function () {
+					$el = $(".timeglider-timeline-event#" + obj.id);
+					$el.find(".timeglider-event-spanner").css({"border":"1px solid green"});  
+				}, 50);
+				
+			}
+		}
+
+
+	
+		
+		$("#adjustNow").click(function() {
+			tg_instance.adjustNowEvents();
+		});	
+		
+		
+		
+		
+		$("#addEvent").click(function() {
+		
+			var rando = Math.floor((Math.random()*1000)+1); 
+			var impo = Math.floor((Math.random()*50)+20); 
+			
+			var obj = {
+				id:"new_" + rando,
+				title:"New Event!",
+				startdate:"today",
+				importance:impo,
+				icon:"star_red.png",
+				timelines:["js_history"]
+			}
+			
+			tg_instance.addEvent(obj, true);
+			
+		});	
+		*/
+		
+		
+		/*
+		$("#updateEvent").click(function() {
+			
+			var startdateObject = new timeglider.TG_Date("2003-01-02 12:00:00");
+			
+			console.log("startdateObject", startdateObject);
+			
+			var updatedEventModel = {
+				id:"deathofflash",
+				title: "Flash struggles to survive in the age of HTML5.",
+				startdate: startdateObject
+			}
+			
+			tg_instance.updateEvent(updatedEventModel);
+
+		});	
+		
+		
+		$(".method").each(function() {
+			$(this).find("h4").addClass("clearfix");
+			$(this).prepend("<div class='dragger'>drag me</div>");
+		});
+		
+		
+		$("#sorters").sortable({"handle":".dragger"});
+		$("#sorters").disableSelection();
+		*/
+
+		
+    }); // end document-ready
+    
+    
+    </script>
+	
+	

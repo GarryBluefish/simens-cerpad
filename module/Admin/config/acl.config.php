@@ -178,6 +178,7 @@ return array(
                 	'envoi-sms-alert' => 'biologiste',
 
                 	'get-liste-des-souches' => 'biologiste',
+                	'get-informations-vcm' => 'biologiste',
                 	
                 ),
 

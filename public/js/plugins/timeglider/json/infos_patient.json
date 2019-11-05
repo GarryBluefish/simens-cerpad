@@ -1,0 +1,129 @@
+[
+{ "id": "us_general",
+	"title" : "",
+	"description" : "",
+	"focus_date" : "today",
+	"initial_zoom" : "40",
+	
+	"events" : [
+        
+        {
+	        "id": "bsu-1",
+	        "title": "Anémie",
+	        "startdate": "2016-04-30 20:00:00",
+	        "date_limit": "da",
+	        "description": "Maladie des globules rouges",
+	        "link": "",
+	        "icon": "vcm_en_cours-hypo-globule_rouge__scale__400.png",
+	        "low_threshold": "0",
+	        "high_threshold": "60",
+	        "importance": "55",
+	        "y_position" : "0",
+	        "tags": "sports, idaho, football"
+	    },
+	    
+        {
+			"id" :           "tg_line_befecbb76b6beef453ae53345a44315e816472",
+	        "title" :        "&nbsp;&nbsp;Paludisme",
+			"startdate" :    "2019-03-15 11:57:25",
+			"enddate" :      "",
+			"date_display" :   "da",
+			"description" :  "Infection parasitaire des globules rouges",
+			"link" :         "",
+			"icon" :         "vcm_en_cours-parasite-globule_rouge__scale__500.png",
+			"low_threshold" :"0",
+			"high_threshold":"60",
+			"importance" : "55",
+			"y_position" : "0",
+			"tags": "reconstruction, civil war"
+		},
+		
+        {
+			"id" :           "tg_line_befecbb76b6beef453ae53345a44315e816473",
+	        "title" :        "Prostate",
+			"startdate" :    "2017-07-08 17:00",
+			"date_limit" :   "da",
+			"description" :  "Maladie de la prostate",
+			"link" :         "",
+			"icon" :         "vcm_en_cours-patho-prostate__scale__500.png",
+			"low_threshold" :"0",
+			"high_threshold":"60",
+			"importance" :   "55",
+			"y_position" :         "0",
+			"tags": "technology, ohio"
+		},
+		
+		{
+	        "id": "bsu-3",
+	        "title": "Cardiopathie",
+	        "startdate": "2019-08-30 20:00:00",
+	        "date_limit": "da",
+	        "description": "Maladie du coeur ou du péricarde",
+	        "link": "",
+	        "icon": "vcm_en_cours-patho-coeur__scale__100.png",
+	        "low_threshold": "1",
+	        "high_threshold": "100",
+	        "importance": "55",
+	        "ypix": "0",
+	        "tags": "sports, idaho, football"
+	    },
+	    
+	    {
+	        "id": "bsu-2",
+	        "title": "Maladie orale",
+	        "startdate": "2019-01-25 20:00:00",
+	        "date_limit": "da",
+	        "description": "Maladie orale",
+	        "link": "",
+	        "icon": "vcm_en_cours-patho-bouche__scale__64.png",
+	        "low_threshold": "1",
+	        "high_threshold": "100",
+	        "importance": "55",
+	        "ypix": "0",
+	        "tags": "sports, idaho, football"
+	    },
+	    
+	    {
+	        "id": "bsu-4",
+	        "title": "Trouble du rythme",
+	        "startdate": "2015-05-11",
+	        "date_limit": "da",
+	        "description": "Risque de pathologie cardiaque",
+	        "link": "",
+	        "icon": "vcm_risque-patho-coeur_rythme__scale__100.png",
+	        "low_threshold": "1",
+	        "high_threshold": "100",
+	        "importance": "55",
+	        "ypix": "0",
+	        "tags": "sports, idaho, football"
+	    },
+	    
+	    {
+	        "id": "bsu-5",
+	        "title": "Trouble du rythme",
+	        "startdate": "2018-01-30 20:00:00",
+	        "date_limit": "da",
+	        "description": "Troubles du rythme (pathologie cardiaque + signal ECG)",
+	        "link": "",
+	        "icon": "vcm_en_cours-patho-coeur_rythme__scale__100.png",
+	        "low_threshold": "1",
+	        "high_threshold": "100",
+	        "importance": "55",
+	        "ypix": "0",
+	        "tags": "sports, idaho, football"
+	    }
+
+	    
+    ],
+
+	"legend": [
+	   {"title":"Cardiopathie", "icon":"vcm_en_cours-patho-coeur__scale__100.png"},
+	   {"title":"Prostate", "icon":"vcm_en_cours-patho-prostate__scale__500.png"},
+  	   {"title":"Paludisme", "icon":"vcm_en_cours-parasite-globule_rouge__scale__500.png"},
+   	   {"title":"Anémie", "icon":"vcm_en_cours-hypo-globule_rouge__scale__400.png"}
+	]
+    
+}
+
+
+]

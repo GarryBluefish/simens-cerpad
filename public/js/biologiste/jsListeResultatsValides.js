@@ -179,22 +179,471 @@
             	     $('#contenu').fadeOut(function(){
             	    	 $('#titre span').html('LES RESULTATS DES ANALYSES'); 
             	    	 $('#liste_demandes').fadeIn(100);
+            	    	 
+            	    	 
+            	    	 $("#iconeTimeLineDigramme").html("<img style='position: absolute; left: -215px; top: 235px; width: 30px; height: 30px; cursor: pointer;' title='Frise chronologique' onclick='getTimeLineDigramme()' src='../images_icons/icons8-chronologie-30-1.png' />");
+            	    	 $("#iconeInfosPathologiesMonsieurVCM").html('<table align="center" style="position: absolute; width: 200px; left: -215px; top: 280px; "> <tr> <td style="margin-top: 35px; text-align: center;"> Chargement </td> </tr>  <tr> <td align="center" style="text-align: center;"> <img style="margin-top: 13px; width: 40px; height: 40px;" src="../images/loading/Chargement_1.gif" /> </td> </tr><table>');
+            	    	 //Appel de monsieur VCM
+            	    	 getInfosSurMonsieurVCM(idpatient, result[2]);
             	     });
         	            	 
+            	     
             	     $('.boutonTerminer').click(function(){
             	    	 $('#liste_demandes').fadeOut(function(){
             	    		 $('#titre span').html('LISTE DES RESULTATS PAR PATIENT'); 
             	    		 $('#contenu').fadeIn(300);
             	    	 });
-            	    		 
+            	    	 
+            	    	 //Renvoi de monsieur VCM
+            	    	 $("#iconeMonsieurVCM").toggle(false);	
+            	    	 $("#iconeInfosPathologiesMonsieurVCM, #iconeTimeLineDigramme").html("");
             	     });
+            	     
             }
         });
     	
     }
     
-    function listeDemandesAnalyses()
-    {
+    
+    
+    function getInfosSurMonsieurVCM(idpatient, iddemande){
+    	
+    	var chemin = tabUrl[0]+'public/biologiste/get-informations-vcm';
+    	$.ajax({
+    		type: 'POST',
+    		url: chemin ,
+    		data: {'idpatient':idpatient, 'iddemande':iddemande},
+    		success: function(data) {
+    			var result = jQuery.parseJSON(data);
+    			var entreResultat = 0;
+    			var lienInfosPathologie = "";
+    			var infosPathologieMvcm = new Array();
+    			var listeIdAnalyse = new Array();
+    			var listeInfosIdAnalyse = new Array();
+    			
+    			for(var i=0; i<result.length; i++){
+    				entreResultat = 1;
+    				var idanalyse = result[i][0];
+    				var libPathologie = result[i][1];
+    				var infosLien = result[i][2];
+    				var infosResult = result[i][3];
+    				var idDemande = result[i][4];
+    				listeIdAnalyse[i] = idanalyse;
+    				listeInfosIdAnalyse[idanalyse] = new Array(); 
+    				listeInfosIdAnalyse[idanalyse][0] = idDemande;
+    				listeInfosIdAnalyse[idanalyse][1] = idanalyse;
+    				listeInfosIdAnalyse[idanalyse][2] = infosResult;
+    				listeInfosIdAnalyse[idanalyse][3] = libPathologie;
+    				
+    				if(i==0){ lienInfosPathologie += infosLien; }else{ lienInfosPathologie += '___VCM:'+infosLien; }
+    				infosPathologieMvcm[i] = new Array();
+    				infosPathologieMvcm[i][0] = idanalyse;
+    				infosPathologieMvcm[i][1] = libPathologie;
+    				infosPathologieMvcm[i][2] = infosResult;
+    				infosPathologieMvcm[i][3] = idDemande;
+    			}
+
+    			
+    			if(entreResultat == 0){
+        			$("#iconeMonsieurVCM").toggle(true);
+        			$("#iconeInfosPathologiesMonsieurVCM").html("");
+    			}else{
+    				var monsieurVcm = getMonsieurVCM(lienInfosPathologie);
+    				var scriptVcmFinal = getPathologiesMonsieurVcm(infosPathologieMvcm, listeIdAnalyse, listeInfosIdAnalyse);
+    				monsieurVcm += scriptVcmFinal;
+    				
+    				//alert(monsieurVcm);
+    				$('#iconeInfosPathologiesMonsieurVCM').html(monsieurVcm);
+    			}
+    		}
+    	});
+    	
+    }
+    
+    
+    function getMonsieurVCM(lienInfosPathologie){
+    	
+    	var scritpMVCM = ''+
+				         '<div style="position: absolute; width: 200px; left: -215px; top: 280px; background: white; border: 1.5px solid #dcdcdc; box-shadow: 0 1px 2px rgba(0,0,0,0.3); border-radius: 10px;">'+
+				           '<img style="border-radius: 10px;" src="http://localhost:5000/appliweb/vcm/mvcm/VCM:'+lienInfosPathologie+'.svg?width=200" usemap="#imagemap" />'+
+				         '</div>';
+        
+    	return scritpMVCM;
+    }
+    
+    
+    function getPathologiesMonsieurVcm(infosPathologieMvcm, listeIdAnalyse, listeInfosIdAnalyse){
+    	
+    	var scriptImageMap = '<map name="imagemap">';
+    	var scriptTextMap = ''+
+    	                    '<script>'+
+							//'if (typeof(window["hideables"]) == "undefined") {'+
+							   'hideables = new Array();'+
+							//'}'+
+						    '</script>';
+    	
+    	
+    	for(var i=0 ; i<infosPathologieMvcm.length ; i++){
+    		
+    		if(infosPathologieMvcm[i][0] == 71){ //130, 49, 151, 80 : coords de l'icone globule rouge
+        		
+    			var compInfos1 = "";
+    			var compInfos2 = "";
+    			var compInfoResutat = -1;
+    			var tabInfosAnalyse = new Array();
+    			if(listeIdAnalyse.indexOf(10) != -1){
+    				compInfos1 = ", Paludisme"; 
+    				compInfos2 = "Paludisme";
+    				compInfoResutat = listeInfosIdAnalyse[10][0];
+    				
+    				tabInfosAnalyse[0] = listeInfosIdAnalyse[10][0];
+    				tabInfosAnalyse[1] = listeInfosIdAnalyse[10][1];
+    				tabInfosAnalyse[2] = listeInfosIdAnalyse[10][2];
+    			}else 
+    				if(listeIdAnalyse.indexOf(21) != -1){
+    					compInfos1 = ", "+listeInfosIdAnalyse[21][3]; 
+        				compInfos2 = listeInfosIdAnalyse[21][3];
+        				compInfoResutat = listeInfosIdAnalyse[21][0];
+        				
+        				tabInfosAnalyse[0] = listeInfosIdAnalyse[21][0];
+        				tabInfosAnalyse[1] = listeInfosIdAnalyse[21][1];
+        				tabInfosAnalyse[2] = listeInfosIdAnalyse[21][2];
+    				}
+    			
+    			
+    			scriptImageMap += '<area onClick="hide_all();document.getElementById(\'fleche_'+infosPathologieMvcm[i][0]+'\').style.display=\'block\';document.getElementById(\'box_'+infosPathologieMvcm[i][0]+'\').style.display=\'block\'" shape="rect" coords="130, 49, 151, 80" title="'+infosPathologieMvcm[i][1]+''+compInfos1+'" />';
+    			
+        		scriptTextMap +=  ''+
+					    		  '<div id="fleche_'+infosPathologieMvcm[i][0]+'" style="display:none; position:absolute; left:-63px; top:345px; width:80px; border-top-style:solid; border-top-color:black; border-top-width:1.5px;"></div>'+
+								  '<div id="box_'+infosPathologieMvcm[i][0]+'" style="display:none; position:absolute; background-color:#FFFFBB; left:15px; top:325px; border-style:solid; border-color:black; border-width:1px; width: 520px; border-radius: 10px;">'+
+								    '<div onClick="hide_all()" style="float: right; border-right-style:none; border-top-style:none; border-bottom-style:solid; border-left-style:solid; border-color:black; border-width:1px; cursor:pointer;"> <b>&nbsp;X&nbsp;</b> </div>'+
+								    '<div style="margin:8px;">'+
+								      '<b> '+infosPathologieMvcm[i][1]+' </b>&nbsp;&nbsp;&nbsp;&nbsp;<br/> * '+infosPathologieMvcm[i][2]+' <span style="color: red; cursor: pointer; font-weight: bold;" onClick="ouvrirPopupResultat('+infosPathologieMvcm[i][3]+')"> &#128065; </span>';  
+				
+        		//Lorsqu'il y a aussi un cas de paludisme (Goutte Èpaisse)
+        		if(compInfoResutat != -1){
+					scriptTextMap += '<b> <br/> '+compInfos2+' </b>&nbsp;&nbsp;&nbsp;&nbsp;<br/> * '+tabInfosAnalyse[2]+' <span style="color: red; cursor: pointer; font-weight: bold;" onClick="ouvrirPopupResultat('+compInfoResutat+')"> &#128065; </span>';
+				}				    
+								      
+		        scriptTextMap +=	'</div>'+
+								  '</div>';
+								  
+			    //Lorsqu'il y a aussi un cas de paludisme (Goutte Èpaisse)
+        		if(listeIdAnalyse.indexOf(10) != -1){
+        			scriptImageMap += '<area onClick="hide_all();document.getElementById(\'fleche_'+tabInfosAnalyse[1]+'\').style.display=\'block\';document.getElementById(\'box_'+tabInfosAnalyse[1]+'\').style.display=\'block\'" shape="rect" coords="103,113,133,134" title="Paludisme (infection parasitaire des globules rouges)" />';
+					scriptTextMap  += ''+
+						    		  '<div id="fleche_10" style="display:none; position:absolute; left:-80px; top:405px; width:100px; border-top-style:solid; border-top-color:black; border-top-width:1.5px;"></div>'+
+									  '<div id="box_10" style="display:none; position:absolute; background-color:#FFFFBB; left:15px; top:390px; border-style:solid; border-color:black; border-width:1px; width: 520px; border-radius: 10px;">'+
+									    '<div onClick="hide_all()" style="float: right; border-right-style:none; border-top-style:none; border-bottom-style:solid; border-left-style:solid; border-color:black; border-width:1px; cursor:pointer;"> <b>&nbsp;X&nbsp;</b> </div>'+
+									    '<div style="margin:8px;">'+
+									      '<b> Paludisme </b>&nbsp;&nbsp;&nbsp;&nbsp;<br/> * infection parasitaire des globules rouges <span style="color: red; cursor: pointer; font-weight: bold;" onClick="ouvrirPopupResultat('+compInfoResutat+')"> &#128065; </span>'+  
+					                    '</div>'+
+					                  '</div>';
+					scriptTextMap +=  '<script>'+
+										'hideables.push("fleche_'+tabInfosAnalyse[1]+'");'+
+										'hideables.push("box_'+tabInfosAnalyse[1]+'");'+
+									  '</script>';
+				}	
+								  
+								  
+        		scriptTextMap +=  '<script>'+
+									'hideables.push("fleche_'+infosPathologieMvcm[i][0]+'");'+
+									'hideables.push("box_'+infosPathologieMvcm[i][0]+'");'+
+								  '</script>';	
+								  
+    		}else
+    			if(infosPathologieMvcm[i][0] == 10 && listeIdAnalyse.indexOf(71) == -1){ //130, 49, 151, 80 : coords de l'icone globule rouge
+    				
+    				scriptImageMap += '<area onClick="hide_all();document.getElementById(\'fleche_'+infosPathologieMvcm[i][0]+'\').style.display=\'block\';document.getElementById(\'box_'+infosPathologieMvcm[i][0]+'\').style.display=\'block\'" shape="rect" coords="130, 49, 151, 80" title="'+infosPathologieMvcm[i][1]+'" />';
+    				
+    				scriptTextMap +=  ''+
+						    		  '<div id="fleche_'+infosPathologieMvcm[i][0]+'" style="display:none; position:absolute; left:-63px; top:340px; width:80px; border-top-style:solid; border-top-color:black; border-top-width:1.5px;"></div>'+
+									  '<div id="box_'+infosPathologieMvcm[i][0]+'" style="display:none; position:absolute; background-color:#FFFFBB; left:15px; top:320px; border-style:solid; border-color:black; border-width:1px; width: 520px; border-radius: 10px;">'+
+									    '<div onClick="hide_all()" style="float: right; border-right-style:none; border-top-style:none; border-bottom-style:solid; border-left-style:solid; border-color:black; border-width:1px; cursor:pointer;"> <b>&nbsp;X&nbsp;</b> </div>'+
+									    '<div style="margin:8px;">'+
+									      '<b> '+infosPathologieMvcm[i][1]+' </b>&nbsp;&nbsp;&nbsp;&nbsp;<br/> * '+infosPathologieMvcm[i][2]+' <span style="color: red; cursor: pointer; font-weight: bold;" onClick="ouvrirPopupResultat('+infosPathologieMvcm[i][3]+')"> &#128065; </span>'+  
+    									'</div>'+
+				  					  '</div>';
+    				
+    				scriptTextMap +=  '<script>'+
+										'hideables.push("fleche_'+infosPathologieMvcm[i][0]+'");'+
+										'hideables.push("box_'+infosPathologieMvcm[i][0]+'");'+
+									  '</script>';	
+    			
+    			}else
+    				if(infosPathologieMvcm[i][0] == 53){ //0, 173, 21, 203 : coords de l'icone inflammation
+        				
+        				scriptImageMap += '<area onClick="hide_all();document.getElementById(\'fleche_'+infosPathologieMvcm[i][0]+'\').style.display=\'block\';document.getElementById(\'box_'+infosPathologieMvcm[i][0]+'\').style.display=\'block\'" shape="rect" coords="0, 173, 21, 203" title="'+infosPathologieMvcm[i][1]+'" />';
+        				
+        				scriptTextMap +=  ''+
+    						    		  '<div id="fleche_'+infosPathologieMvcm[i][0]+'" style="display:none; position:absolute; left:-193px; top:470px; width:210px; border-top-style:solid; border-top-color:black; border-top-width:1.5px;"></div>'+
+    									  '<div id="box_'+infosPathologieMvcm[i][0]+'" style="display:none; position:absolute; background-color:#FFFFBB; left:15px; top:450px; border-style:solid; border-color:black; border-width:1px; width: 200px; border-radius: 10px;">'+
+    									    '<div onClick="hide_all()" style="float: right; border-right-style:none; border-top-style:none; border-bottom-style:solid; border-left-style:solid; border-color:black; border-width:1px; cursor:pointer;"> <b>&nbsp;X&nbsp;</b> </div>'+
+    									    '<div style="margin:8px;">'+
+    									      '<b> '+infosPathologieMvcm[i][1]+' </b>&nbsp;&nbsp;&nbsp;&nbsp;<br/> * '+infosPathologieMvcm[i][2]+' <span style="color: red; cursor: pointer; font-weight: bold;" onClick="ouvrirPopupResultat('+infosPathologieMvcm[i][3]+')"> &#128065; </span>'+  
+        									'</div>'+
+    				  					  '</div>';
+        				
+        				scriptTextMap +=  '<script>'+
+    										'hideables.push("fleche_'+infosPathologieMvcm[i][0]+'");'+
+    										'hideables.push("box_'+infosPathologieMvcm[i][0]+'");'+
+    									  '</script>';	
+        			
+        			}else
+        				if(infosPathologieMvcm[i][0] == 54){ //152,	76,	173, 97 : coords de l'icone articulation
+            				
+            				scriptImageMap += '<area onClick="hide_all();document.getElementById(\'fleche_'+infosPathologieMvcm[i][0]+'\').style.display=\'block\';document.getElementById(\'box_'+infosPathologieMvcm[i][0]+'\').style.display=\'block\'" shape="rect" coords="152, 76, 173, 97" title="'+infosPathologieMvcm[i][1]+'" />';
+            				
+            				scriptTextMap +=  ''+
+        						    		  '<div id="fleche_'+infosPathologieMvcm[i][0]+'" style="display:none; position:absolute; left:-40px; top:370px; width:80px; border-top-style:solid; border-top-color:black; border-top-width:1.5px;"></div>'+
+        									  '<div id="box_'+infosPathologieMvcm[i][0]+'" style="display:none; position:absolute; background-color:#FFFFBB; left:15px; top:350px; border-style:solid; border-color:black; border-width:1px; width: 330px; border-radius: 10px;">'+
+        									    '<div onClick="hide_all()" style="float: right; border-right-style:none; border-top-style:none; border-bottom-style:solid; border-left-style:solid; border-color:black; border-width:1px; cursor:pointer;"> <b>&nbsp;X&nbsp;</b> </div>'+
+        									    '<div style="margin:8px;">'+
+        									      '<b> '+infosPathologieMvcm[i][1]+' </b>&nbsp;&nbsp;&nbsp;&nbsp;<br/> * '+infosPathologieMvcm[i][2]+' <span style="color: red; cursor: pointer; font-weight: bold;" onClick="ouvrirPopupResultat('+infosPathologieMvcm[i][3]+')"> &#128065; </span>'+  
+            									'</div>'+
+        				  					  '</div>';
+            				
+            				scriptTextMap +=  '<script>'+
+        										'hideables.push("fleche_'+infosPathologieMvcm[i][0]+'");'+
+        										'hideables.push("box_'+infosPathologieMvcm[i][0]+'");'+
+        									  '</script>';	
+            			
+            			}else
+            				if(infosPathologieMvcm[i][0] == 25){ //130, 54, 151, 75 : coords de l'icone risque de trouble de la lipid√©mie
+                				
+                				scriptImageMap += '<area onClick="hide_all();document.getElementById(\'fleche_'+infosPathologieMvcm[i][0]+'\').style.display=\'block\';document.getElementById(\'box_'+infosPathologieMvcm[i][0]+'\').style.display=\'block\'" shape="rect" coords="130, 54, 151, 75" title="'+infosPathologieMvcm[i][1]+'" />';
+                				
+                				scriptTextMap +=  ''+
+            						    		  '<div id="fleche_'+infosPathologieMvcm[i][0]+'" style="display:none; position:absolute; left:-63px; top:350px; width:80px; border-top-style:solid; border-top-color:black; border-top-width:1.5px;"></div>'+
+            									  '<div id="box_'+infosPathologieMvcm[i][0]+'" style="display:none; position:absolute; background-color:#FFFFBB; left:15px; top:330px; border-style:solid; border-color:black; border-width:1px; width: 330px; border-radius: 10px;">'+
+            									    '<div onClick="hide_all()" style="float: right; border-right-style:none; border-top-style:none; border-bottom-style:solid; border-left-style:solid; border-color:black; border-width:1px; cursor:pointer;"> <b>&nbsp;X&nbsp;</b> </div>'+
+            									    '<div style="margin:8px;">'+
+            									      '<b> '+infosPathologieMvcm[i][1]+' </b>&nbsp;&nbsp;&nbsp;&nbsp;<br/> * '+infosPathologieMvcm[i][2]+' <span style="color: red; cursor: pointer; font-weight: bold;" onClick="ouvrirPopupResultat('+infosPathologieMvcm[i][3]+')"> &#128065; </span>'+  
+                									'</div>'+
+            				  					  '</div>';
+                				
+                				scriptTextMap +=  '<script>'+
+            										'hideables.push("fleche_'+infosPathologieMvcm[i][0]+'");'+
+            										'hideables.push("box_'+infosPathologieMvcm[i][0]+'");'+
+            									  '</script>';	
+                			
+                			}else
+                				if(infosPathologieMvcm[i][0] == 37){ //14, 109, 35, 130 : coords de l'icone maladie h√©patique
+                    				
+                    				scriptImageMap += '<area onClick="hide_all();document.getElementById(\'fleche_'+infosPathologieMvcm[i][0]+'\').style.display=\'block\';document.getElementById(\'box_'+infosPathologieMvcm[i][0]+'\').style.display=\'block\'" shape="rect" coords="14, 109, 35, 130" title="'+infosPathologieMvcm[i][1]+'" />';
+                    				
+                    				scriptTextMap +=  ''+
+                						    		  '<div id="fleche_'+infosPathologieMvcm[i][0]+'" style="display:none; position:absolute; left:-179px; top:400px; width:205px; border-top-style:solid; border-top-color:black; border-top-width:1.5px;"></div>'+
+                									  '<div id="box_'+infosPathologieMvcm[i][0]+'" style="display:none; position:absolute; background-color:#FFFFBB; left:15px; top:385px; border-style:solid; border-color:black; border-width:1px; width: 330px; border-radius: 10px;">'+
+                									    '<div onClick="hide_all()" style="float: right; border-right-style:none; border-top-style:none; border-bottom-style:solid; border-left-style:solid; border-color:black; border-width:1px; cursor:pointer;"> <b>&nbsp;X&nbsp;</b> </div>'+
+                									    '<div style="margin:8px;">'+
+                									      '<b> '+infosPathologieMvcm[i][1]+' </b>&nbsp;&nbsp;&nbsp;&nbsp;<br/> * '+infosPathologieMvcm[i][2]+' <span style="color: red; cursor: pointer; font-weight: bold;" onClick="ouvrirPopupResultat('+infosPathologieMvcm[i][3]+')"> &#128065; </span>'+  
+                    									'</div>'+
+                				  					  '</div>';
+                    				
+                    				scriptTextMap +=  '<script>'+
+                										'hideables.push("fleche_'+infosPathologieMvcm[i][0]+'");'+
+                										'hideables.push("box_'+infosPathologieMvcm[i][0]+'");'+
+                									  '</script>';	
+                    			
+                    			}else
+                    				if(infosPathologieMvcm[i][0] == 21 && listeIdAnalyse.indexOf(71) == -1){ //130, 49, 151, 80 : coords de l'icone glycÈmie
+                        				
+                        				scriptImageMap += '<area onClick="hide_all();document.getElementById(\'fleche_'+infosPathologieMvcm[i][0]+'\').style.display=\'block\';document.getElementById(\'box_'+infosPathologieMvcm[i][0]+'\').style.display=\'block\'" shape="rect" coords="130, 49, 151, 80" title="'+infosPathologieMvcm[i][1]+'" />';
+                        				
+                        				scriptTextMap +=  ''+
+                    						    		  '<div id="fleche_'+infosPathologieMvcm[i][0]+'" style="display:none; position:absolute; left:-63px; top:345px; width:80px; border-top-style:solid; border-top-color:black; border-top-width:1.5px;"></div>'+
+                    									  '<div id="box_'+infosPathologieMvcm[i][0]+'" style="display:none; position:absolute; background-color:#FFFFBB; left:15px; top:325px; border-style:solid; border-color:black; border-width:1px; width: 330px; border-radius: 10px;">'+
+                    									    '<div onClick="hide_all()" style="float: right; border-right-style:none; border-top-style:none; border-bottom-style:solid; border-left-style:solid; border-color:black; border-width:1px; cursor:pointer;"> <b>&nbsp;X&nbsp;</b> </div>'+
+                    									    '<div style="margin:8px;">'+
+                    									      '<b> '+infosPathologieMvcm[i][1]+' </b>&nbsp;&nbsp;&nbsp;&nbsp;<br/> * '+infosPathologieMvcm[i][2]+' <span style="color: red; cursor: pointer; font-weight: bold;" onClick="ouvrirPopupResultat('+infosPathologieMvcm[i][3]+')"> &#128065; </span>'+  
+                        									'</div>'+
+                    				  					  '</div>';
+                        				
+                        				scriptTextMap +=  '<script>'+
+                    										'hideables.push("fleche_'+infosPathologieMvcm[i][0]+'");'+
+                    										'hideables.push("box_'+infosPathologieMvcm[i][0]+'");'+
+                    									  '</script>';	
+                        			
+                        			}else
+                        				if(infosPathologieMvcm[i][0] == 22){ //60, 110, 81, 141 : coords de l'icone rein
+                            				
+                            				scriptImageMap += '<area onClick="hide_all();document.getElementById(\'fleche_'+infosPathologieMvcm[i][0]+'\').style.display=\'block\';document.getElementById(\'box_'+infosPathologieMvcm[i][0]+'\').style.display=\'block\'" shape="rect" coords="60, 110, 81, 141" title="'+infosPathologieMvcm[i][1]+'" />';
+                            				
+                            				scriptTextMap +=  ''+
+                        						    		  '<div id="fleche_'+infosPathologieMvcm[i][0]+'" style="display:none; position:absolute; left:-135px; top:400px; width:160px; border-top-style:solid; border-top-color:black; border-top-width:1.5px;"></div>'+
+                        									  '<div id="box_'+infosPathologieMvcm[i][0]+'" style="display:none; position:absolute; background-color:#FFFFBB; left:15px; top:385px; border-style:solid; border-color:black; border-width:1px; width: 330px; border-radius: 10px;">'+
+                        									    '<div onClick="hide_all()" style="float: right; border-right-style:none; border-top-style:none; border-bottom-style:solid; border-left-style:solid; border-color:black; border-width:1px; cursor:pointer;"> <b>&nbsp;X&nbsp;</b> </div>'+
+                        									    '<div style="margin:8px;">'+
+                        									      '<b> '+infosPathologieMvcm[i][1]+' </b>&nbsp;&nbsp;&nbsp;&nbsp;<br/> * '+infosPathologieMvcm[i][2]+' <span style="color: red; cursor: pointer; font-weight: bold;" onClick="ouvrirPopupResultat('+infosPathologieMvcm[i][3]+')"> &#128065; </span>'+  
+                            									'</div>'+
+                        				  					  '</div>';
+                            				
+                            				scriptTextMap +=  '<script>'+
+                        										'hideables.push("fleche_'+infosPathologieMvcm[i][0]+'");'+
+                        										'hideables.push("box_'+infosPathologieMvcm[i][0]+'");'+
+                        									  '</script>';	
+                            			
+                            			}else
+                            				if(infosPathologieMvcm[i][0] == 51){ //14, 62, 38, 86 : coords de l'icone beta hcg (Grossesse)
+                                				
+                                				scriptImageMap += '<area onClick="hide_all();document.getElementById(\'fleche_'+infosPathologieMvcm[i][0]+'\').style.display=\'block\';document.getElementById(\'box_'+infosPathologieMvcm[i][0]+'\').style.display=\'block\'" shape="rect" coords="14, 62, 38, 86" title="'+infosPathologieMvcm[i][1]+'" />';
+                                				
+                                				scriptTextMap +=  ''+
+                            						    		  '<div id="fleche_'+infosPathologieMvcm[i][0]+'" style="display:none; position:absolute; left:-176px; top:353px; width:200px; border-top-style:solid; border-top-color:black; border-top-width:1.5px;"></div>'+
+                            									  '<div id="box_'+infosPathologieMvcm[i][0]+'" style="display:none; position:absolute; background-color:#FFFFBB; left:15px; top:338px; border-style:solid; border-color:black; border-width:1px; width: 330px; border-radius: 10px;">'+
+                            									    '<div onClick="hide_all()" style="float: right; border-right-style:none; border-top-style:none; border-bottom-style:solid; border-left-style:solid; border-color:black; border-width:1px; cursor:pointer;"> <b>&nbsp;X&nbsp;</b> </div>'+
+                            									    '<div style="margin:8px;">'+
+                            									      '<b> '+infosPathologieMvcm[i][1]+' </b>&nbsp;&nbsp;&nbsp;&nbsp;<br/> * '+infosPathologieMvcm[i][2]+' <span style="color: red; cursor: pointer; font-weight: bold;" onClick="ouvrirPopupResultat('+infosPathologieMvcm[i][3]+')"> &#128065; </span>'+  
+                                									'</div>'+
+                            				  					  '</div>';
+                                				
+                                				scriptTextMap +=  '<script>'+
+                            										'hideables.push("fleche_'+infosPathologieMvcm[i][0]+'");'+
+                            										'hideables.push("box_'+infosPathologieMvcm[i][0]+'");'+
+                            									  '</script>';	
+                                			
+                                			}else
+                                				if(infosPathologieMvcm[i][0] == 52){ //37, 131, 58, 152 : coords de l'icone PSA (Prostate)
+                                    				
+                                    				scriptImageMap += '<area onClick="hide_all();document.getElementById(\'fleche_'+infosPathologieMvcm[i][0]+'\').style.display=\'block\';document.getElementById(\'box_'+infosPathologieMvcm[i][0]+'\').style.display=\'block\'" shape="rect" coords="37, 131, 58, 152" title="'+infosPathologieMvcm[i][1]+'" />';
+                                    				
+                                    				scriptTextMap +=  ''+
+                                						    		  '<div id="fleche_'+infosPathologieMvcm[i][0]+'" style="display:none; position:absolute; left:-157px; top:422px; width:200px; border-top-style:solid; border-top-color:black; border-top-width:1.5px;"></div>'+
+                                									  '<div id="box_'+infosPathologieMvcm[i][0]+'" style="display:none; position:absolute; background-color:#FFFFBB; left:15px; top:407px; border-style:solid; border-color:black; border-width:1px; width: 330px; border-radius: 10px;">'+
+                                									    '<div onClick="hide_all()" style="float: right; border-right-style:none; border-top-style:none; border-bottom-style:solid; border-left-style:solid; border-color:black; border-width:1px; cursor:pointer;"> <b>&nbsp;X&nbsp;</b> </div>'+
+                                									    '<div style="margin:8px;">'+
+                                									      '<b> '+infosPathologieMvcm[i][1]+' </b>&nbsp;&nbsp;&nbsp;&nbsp;<br/> * '+infosPathologieMvcm[i][2]+' <span style="color: red; cursor: pointer; font-weight: bold;" onClick="ouvrirPopupResultat('+infosPathologieMvcm[i][3]+')"> &#128065; </span>'+  
+                                    									'</div>'+
+                                				  					  '</div>';
+                                    				
+                                    				scriptTextMap +=  '<script>'+
+                                										'hideables.push("fleche_'+infosPathologieMvcm[i][0]+'");'+
+                                										'hideables.push("box_'+infosPathologieMvcm[i][0]+'");'+
+                                									  '</script>';	
+                                				}
+    				
+
+				             
+    	}
+    	
+    	scriptImageMap += '</map>';
+    	
+    	
+    	scriptTextMap += '<script>'+
+							'function hide_all() {'+
+							  'for(i = 0; i < hideables.length; i++) {'+
+							    'document.getElementById(hideables[i]).style.display="none";'+
+							  '}'+
+							'}'+
+					
+							'function ouvrirPopupResultat(idDemande) {'+
+								'hide_all(); resultatAnalyse(idDemande); '+
+							'}'+
+					     '</script>';
+    	
+    	scriptImageMap += scriptTextMap;
+    	
+    	return scriptImageMap;
+    }
+    
+    
+    
+    
+  
+    /**
+     * TIMELINE DIAGRAMME --- TIMELINE DIAGRAMME --- TIMELINE DIAGRAMME
+     * TIMELINE DIAGRAMME --- TIMELINE DIAGRAMME --- TIMELINE DIAGRAMME
+     */
+    var ouverturePopUpTimeLine = 0; 
+    function getTimeLineDigramme(){
+    	$( "#affichageFriseChronologique" ).dialog({
+    		resizable: false,
+    		height:580,
+    		width:1100,
+    		autoOpen: false,
+    		modal: true,
+    		buttons: {
+    			"Terminer": function() {
+    				$(this).dialog( "close" );
+    			}
+    		}
+    	});
+    	$("#affichageFriseChronologique").dialog('open');
+    	
+    	if(ouverturePopUpTimeLine == 0){ 
+    		ouverturePopUpTimeLine = 1; 
+    		getScriptTimeline();
+    		
+    		setTimeout(function(){
+                $('.ui-widget-content').css({'text-align':'left'});
+            });
+    	}
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    function listeDemandesAnalyses(){
         var oTable2 = $('#listeDemandesFiltre').dataTable
         ( {
         	"bDestroy":true,

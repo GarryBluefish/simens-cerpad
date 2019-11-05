@@ -2230,4 +2230,93 @@ class PatientTable {
 	}
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/* Requete utilisée pour Monsieur VCM -- Requete utilisée pour Monsieur VCM */
+	/* Requete utilisée pour Monsieur VCM -- Requete utilisée pour Monsieur VCM */
+	/* Requete utilisée pour Monsieur VCM -- Requete utilisée pour Monsieur VCM */
+	
+	/**
+	 * C'est l'ensemble des demandes ayant des résultats pour lesquelles le biologiste a déjà validé
+	 * pour le patient $idpatient 
+	 * @param $idpatient
+	 */ 
+	public function getListeDemandesAnalysesAvecResultatsValides($idpatient){
+	
+		$adapter = $this->tableGateway->getAdapter ();
+	
+		$sql2 = new Sql ($adapter);
+		$subselect = $sql2->select ();
+		$subselect->from ( array ( 'rda' => 'resultat_demande_analyse' ) );
+		$subselect->where( array ( 'rda.valide' => 1 ) );
+		$subselect->columns (array ( 'iddemande_analyse' ) );
+	
+		$sql = new Sql($adapter);
+		$select = $sql->select();
+		$select->from(array('d'=>'demande_analyse'))->columns(array('*'));
+		$select->join(array('tp' => 'tri_prelevement'), 'tp.iddemande = d.iddemande', array('*') );
+		$select->where( array ('d.idpatient' => $idpatient, 'd.idanalyse != ?' => 1, new In ( 'd.iddemande', $subselect ) ) );
+		$select->order('date DESC');
+		//$select->group('d.idanalyse');
+		return $sql->prepareStatementForSqlObject($select)->execute();
+	
+	}
+	
 }

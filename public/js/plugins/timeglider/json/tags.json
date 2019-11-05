@@ -1,0 +1,143 @@
+[
+{ "id": "us_general",
+	"title" : "",
+	"description" : "",
+	"focus_date" : "today",
+	"initial_zoom" : "40",
+	
+	"events" : [
+        
+        {
+	        "id": "bsu-1",
+	        "title": "Anémie",
+	        "startdate": "2018-04-30 20:00:00",
+	        "date_limit": "da",
+	        "description": "Maladie des globules rouges",
+	        "link": "",
+	        "icon": "vcm_en_cours-hypo-globule_rouge__scale__100.png",
+	        "low_threshold": "1",
+	        "high_threshold": "100",
+	        "importance": "55",
+	        "ypix": "0",
+	        "tags": ""
+	    },
+	    
+        {
+			"id" :           "tg_line_befecbb76b6beef453ae53345a44315e816472",
+	        "title" :        "Rate",
+			"startdate" :    "2016-09-22 17:00",
+			"enddate" :      "",
+			"date_display" :   "da",
+			"description" :  "Maladie de la rate",
+			"link" :         "",
+			"icon" :         "vcm_en_cours-patho-rate__scale__100.png",
+			"low_threshold" :"0",
+			"high_threshold":"60",
+			"importance" :   "55",
+			"y_position" :         "0",
+			"tags": "reconstruction, civil war"
+		},
+		
+        {
+			"id" :           "tg_line_befecbb76b6beef453ae53345a44315e816473",
+	        "title" :        "Prostate",
+			"startdate" :    "2017-07-08 17:00",
+			"date_limit" :   "da",
+			"description" :  "Maladie de la prostate",
+			"link" :         "",
+			"icon" :         "vcm_en_cours-patho-prostate__scale__500.png",
+			"low_threshold" :"0",
+			"high_threshold":"60",
+			"importance" :   "55",
+			"y_position" :         "0",
+			"tags": "technology, ohio"
+		},
+
+	    {
+	        "id": "bsu-2",
+	        "title": "Bouche",
+	        "startdate": "2019-01-25 20:00:00",
+	        "date_limit": "da",
+	        "description": "Maladie orale",
+	        "link": "",
+	        "icon": "vcm_en_cours-patho-bouche__scale__100.png",
+	        "low_threshold": "1",
+	        "high_threshold": "100",
+	        "importance": "55",
+	        "ypix": "0",
+	        "tags": "sports, idaho, football"
+	    },
+	    
+	    {
+	        "id": "bsu-3",
+	        "title": "Myocarde",
+	        "startdate": "2019-08-30 20:00:00",
+	        "date_limit": "da",
+	        "description": "Maladie du coeur ou du péricarde",
+	        "link": "",
+	        "icon": "vcm_en_cours-patho-coeur__scale__100.png",
+	        "low_threshold": "1",
+	        "high_threshold": "100",
+	        "importance": "55",
+	        "ypix": "0",
+	        "tags": "sports, idaho, football"
+	    },
+	    
+	    {
+	        "id": "bsu-4",
+	        "title": "Myocarde",
+	        "startdate": "2019-05-11",
+	        "date_limit": "da",
+	        "description": "Risque de maladie du coeur ou du péricarde",
+	        "link": "",
+	        "icon": "vcm_risque-patho-coeur__scale__100.png",
+	        "low_threshold": "1",
+	        "high_threshold": "100",
+	        "importance": "50",
+	        "ypix": "0",
+	        "tags": "sports, idaho, football"
+	    },
+	    
+	    {
+	        "id": "bsu-5",
+	        "title": "Poumons",
+	        "startdate": "2016-01-01",
+	        "date_limit": "da",
+	        "description": "Risque de maladie du système respiratoire",
+	        "link": "",
+	        "icon": "vcm_risque-patho-poumon__scale__100.png",
+	        "low_threshold": "1",
+	        "high_threshold": "100",
+	        "importance": "50",
+	        "ypix": "0",
+	        "tags": "sports, idaho, football"
+	    },
+	    
+	    {
+	        "id": "bsu-6",
+	        "title": "Poumons",
+	        "startdate": "2017-04-11",
+	        "date_limit": "da",
+	        "description": "Maladie du système respiratoire",
+	        "link": "",
+	        "icon": "vcm_en_cours-hyper-poumon__scale__100.png",
+	        "low_threshold": "1",
+	        "high_threshold": "100",
+	        "importance": "55",
+	        "ypix": "0",
+	        "tags": "sports, idaho, football"
+	    }
+	    
+    ],
+
+	"legend": [
+	   {"title":"Coeur", "icon":"vcm_en_cours-patho-coeur__scale__100.png"},
+	   {"title":"Cardiaque", "icon":"vcm_risque-patho-coeur__scale__100.png"},
+	   {"title":"Maladie pulmonaire", "icon":"vcm_risque-patho-poumon__scale__100.png"},
+	   {"title":"Poumons", "icon":"vcm_en_cours-hyper-poumon__scale__100.png"}
+	]
+    
+}
+
+
+]

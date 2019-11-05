@@ -514,5 +514,107 @@ class DepistageTable {
  	}
  	
  	
+ 	/**
+ 	 * Répartition des differentes analyses par patients Externes ou Internes
+ 	 */
+ 	public function getRepartitionAnalysesParPatient($typepatient=0){
+ 	    $adapter = $this->tableGateway->getAdapter();
+ 	    $sql = new Sql($adapter);
+ 	    $select = $sql->select();
+ 	    $select->from(array('p' => 'patient'));
+ 	    $select->join(array('pers' => 'personne') ,'pers.idpersonne = p.idpersonne');
+ 	    $select->join(array('d' => 'depistage') ,'d.idpatient = p.idpersonne');
+ 	    $select->join(array('da' => 'demande_analyse') ,'da.idpatient = p.idpersonne');
+ 	    $select->join(array('a' => 'analyse') ,'a.idanalyse = da.idanalyse', array('designation'));
+ 	    
+ 	    $select->where(array('typepatient' => $typepatient));
+ 	    
+ 	    $resultat = $sql->prepareStatementForSqlObject($select)->execute();
+ 	
+ 	    $listeAnalysesPatientsExternes = array();
+ 	    $diffAnalysesPatientsExternes = array();
+ 	    foreach ($resultat as $result){
+ 	        $designation = $result['designation'];
+ 	
+ 	        ($designation) ? $listeAnalysesPatientsExternes [] = $designation: null;
+ 	
+ 	        if(!in_array($designation, $diffAnalysesPatientsExternes)){
+ 	            ($designation) ? $diffAnalysesPatientsExternes[] = $designation: null;
+ 	        }
+ 	    }
+ 	    $effectifAnalysesPatientsExternes = array_count_values($listeAnalysesPatientsExternes);
+ 	
+ 	    return array($diffAnalysesPatientsExternes, $effectifAnalysesPatientsExternes);
+ 	}
+ 	
+ 	
+ 	/**
+ 	 * Répartition des differentes analyses par patients Externes et Internes
+ 	 */
+ 	public function getRepartitionAnalysesParPatientsDepistes(){
+ 	    $adapter = $this->tableGateway->getAdapter();
+ 	    $sql = new Sql($adapter);
+ 	    $select = $sql->select();
+ 	    $select->from(array('p' => 'patient'));
+ 	    $select->join(array('pers' => 'personne') ,'pers.idpersonne = p.idpersonne');
+ 	    $select->join(array('d' => 'depistage') ,'d.idpatient = p.idpersonne');
+ 	    $select->join(array('da' => 'demande_analyse') ,'da.idpatient = p.idpersonne');
+ 	    $select->join(array('a' => 'analyse') ,'a.idanalyse = da.idanalyse', array('designation'));
+ 	
+ 	    $resultat = $sql->prepareStatementForSqlObject($select)->execute();
+ 	
+ 	    $listeAnalysesPatientsExternes = array();
+ 	    $diffAnalysesPatientsExternes = array();
+ 	    foreach ($resultat as $result){
+ 	        $designation = $result['designation'];
+ 	
+ 	        ($designation) ? $listeAnalysesPatientsExternes [] = $designation: null;
+ 	
+ 	        if(!in_array($designation, $diffAnalysesPatientsExternes)){
+ 	            ($designation) ? $diffAnalysesPatientsExternes[] = $designation: null;
+ 	        }
+ 	    }
+ 	    $effectifAnalysesPatientsExternes = array_count_values($listeAnalysesPatientsExternes);
+ 	
+ 	    return array($diffAnalysesPatientsExternes, $effectifAnalysesPatientsExternes);
+ 	}
+ 	
+ 	
+ 	
+ 	/**
+ 	 * Répartition des differentes analyses par parent de patients Internes
+ 	 */
+ 	public function getRepartitionAnalysesParParentsPatients(){
+ 	    $adapter = $this->tableGateway->getAdapter();
+ 	    $sql = new Sql($adapter);
+ 	    $select = $sql->select();
+ 	    $select->from(array('pa' => 'parent'));
+ 	    $select->join(array('p' => 'patient'), 'p.idpersonne = pa.idpatient');
+ 	    $select->join(array('pers' => 'personne') ,'pers.idpersonne = p.idpersonne');
+ 	    $select->join(array('d' => 'depistage') ,'d.idpatient = p.idpersonne');
+ 	    $select->join(array('da' => 'demande_analyse') ,'da.idpatient = p.idpersonne');
+ 	    $select->join(array('a' => 'analyse') ,'a.idanalyse = da.idanalyse', array('designation'));
+ 	
+ 	    $select->where(array('typepatient' => 1));
+ 	
+ 	    $resultat = $sql->prepareStatementForSqlObject($select)->execute();
+ 	
+ 	    $listeAnalysesPatientsExternes = array();
+ 	    $diffAnalysesPatientsExternes = array();
+ 	    foreach ($resultat as $result){
+ 	        $designation = $result['designation'];
+ 	
+ 	        ($designation) ? $listeAnalysesPatientsExternes [] = $designation: null;
+ 	
+ 	        if(!in_array($designation, $diffAnalysesPatientsExternes)){
+ 	            ($designation) ? $diffAnalysesPatientsExternes[] = $designation: null;
+ 	        }
+ 	    }
+ 	    $effectifAnalysesPatientsExternes = array_count_values($listeAnalysesPatientsExternes);
+ 	
+ 	    return array($diffAnalysesPatientsExternes, $effectifAnalysesPatientsExternes);
+ 	}
  	
 }
+
+

@@ -2641,7 +2641,7 @@ function ajouterComplicationAigue(){
 	
 	$("#nbDiagnosticComplicationsAigues").val(i);
 	
-    $('a,img,div,span').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });
+    $('a,img,span').tooltip({ animation: true, html: true, placement: 'bottom', show: { effect: 'slideDown', } });
 
 }
 

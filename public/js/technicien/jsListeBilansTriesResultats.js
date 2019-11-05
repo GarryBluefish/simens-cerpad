@@ -1059,7 +1059,7 @@
             	     var result = jQuery.parseJSON(data); 
             	     var idanalyse = result[0];
             	     resultatsAnalyses(idanalyse, iddemande);
-            	     alert(idanalyse);
+            	     //alert(idanalyse);
             	     $('#contenuResultatsAnalysesParType div').empty();
             	     $('#contenuResultatsAnalysesDuneDemande div').empty();
             	     $('#contenuResultatsAnalyses div').empty();
