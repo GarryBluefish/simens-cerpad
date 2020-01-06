@@ -185,4 +185,29 @@ $(document).ready(function() {
     });
 
 });
+
+
+/**
+ * SCRIPT POUR LANCER LES REQUETES -- SIMENS-BLOC 
+ */
+
+function scriptAutoEnvoieAnalysesNonValidees(){
+
+    $.ajax({
+        type: 'POST',
+        url: tabUrl[0]+'public/consultation/auto-appel-main-fonction' ,
+        data:{},
+        success: function(data) {
+
+            var result = jQuery.parseJSON(data);  
+            // alert(result);
+        }
+    });
+
+	setTimeout(function(){
+		scriptAutoEnvoieAnalysesNonValidees();
+	},7000);
+}
+scriptAutoEnvoieAnalysesNonValidees();
 </script>
+
