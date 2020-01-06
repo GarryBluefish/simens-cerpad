@@ -19,10 +19,14 @@ $(window).load(function () {
 <ul id="sideBareMenuGaucheinfirmerie">
 	
 	<!-- MENU *** CONSULTATIONS*** medecin -->
+	
+	<?php $user = $this->layout()->user; ?>
+    <?php if($user['role'] == 'medecin'){ ?>
 	<li id="menu_consultations"><a href="">
 	    <span style="margin-left:0px; color: #48ce77; font-weight:bold; font-size:20px; font-family:Times New Roman;"> <img id="image" style="display: inline;" src='<?php echo $this->basePath().'/images_icons/plus-green1.png'?>' alt='Liste' /> Consultations</span></a> 
 	</li>
 
+    
 	<li id="plus_menu_consultations" style="background: #4a5765; " >
 
 	   <div id="menuDesConsultations" style="margin-left:30px; height:35px; padding-top:10px; background: yello; border-bottom: solid gray 1px;"><a href="<?php echo $this->basePath()."/consultation/liste-consultations";?>" >
@@ -36,7 +40,7 @@ $(window).load(function () {
 	   </div>
 	   
 	</li>
-	
+	<?php } ?>
 	
 	
 	<!-- MENU *** STATISTIQUES*** medecin -->

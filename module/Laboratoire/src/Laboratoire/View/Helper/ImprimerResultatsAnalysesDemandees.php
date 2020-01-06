@@ -483,7 +483,7 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 	protected $anterioriteNfs;
 	protected $resultatsAntiBioGrammePVDemande;
 	protected $resultatsAntiBioGrammeECBUDemande;
-	
+	protected $commentaireBilan;
 	
 	public function getNomService()
 	{
@@ -575,6 +575,15 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		$this->anterioriteNfs = $anterioriteNfs;
 	}
 	
+	public function getCommentaireBilan()
+	{
+	    return $this->commentaireBilan;
+	}
+	
+	public function setCommentaireBilan($commentaireBilan)
+	{
+	    $this->commentaireBilan = $commentaireBilan;
+	}
 	
 	
 	protected $analysesImmunoHemato;
@@ -761,17 +770,8 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		
 	}
 	
-	//Autres pages des autres analyses demandées
-	//Autres pages des autres analyses demandées
-	function affichageResultatsAnalysesDemandees()
-	{
-		$this->AddPage();
-		$this->EnTetePage();
-		$this->AfficherAutreResultatAnalyse();
-	}
-
-	//Dernière page Sérologie HIV
-	//Dernière page Sérologie HIV
+	//Page Sérologie HIV
+	//Page Sérologie HIV
 	function affichageResultatsSerologieHIV()
 	{
 		$this->AddPage();
@@ -815,15 +815,34 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 		$this->AfficherResultatsAntibiogrammeECBU($resultatsABGPV);
 	}
 	
-	
-	//Dernière page Typage hémoglobine (Profil du patient au dépistage)
-	//Dernière page Typage hémoglobine (Profil du patient au dépistage)
+	//Page Typage hémoglobine (Profil du patient au dépistage)
+	//Page Typage hémoglobine (Profil du patient au dépistage)
 	function affichageResultatsTypageHemoglobine()
 	{
 		$this->AddPage();
 		$this->EnTetePage();
 		$this->AfficherResultatsTypageHemoglobine();
 	}
+	
+	//Autres pages des autres analyses demandées
+	//Autres pages des autres analyses demandées
+	function affichageResultatsAnalysesDemandees()
+	{
+	    $this->AddPage();
+	    $this->EnTetePage();
+	    $this->AfficherAutreResultatAnalyse();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -4702,6 +4721,40 @@ class ImprimerResultatsAnalysesDemandees extends fpdf
 			
 			
 			
+		}
+		
+		
+		
+		
+		
+		
+		/**
+		 * COMMENTAIRE DU BILAN --- COMMENTAIRE DU BILAN --- COMMENTAIRE DU BILAN
+ 		 * COMMENTAIRE DU BILAN --- COMMENTAIRE DU BILAN --- COMMENTAIRE DU BILAN
+		 */
+		
+		$commentaireBilan = $this->getCommentaireBilan();
+		if($commentaireBilan){
+		    
+		    /** Espace vide --- Espace vide --- Espace vide **/
+		    /** Espace vide --- Espace vide --- Espace vide **/
+		    
+		    $this->Ln(8);
+
+		    /** Conclusion --- Conclusion --- Conclusion**/
+		    /** Conclusion --- Conclusion --- Conclusion**/
+		    
+		    if(str_replace(' ','', $commentaireBilan)){
+		        $this->SetFillColor(249,249,249);
+		        
+		        $this->SetFont('zap','',11.3);
+		        $this->Cell(4,6,' a','LT',0,'C',1);
+		        $this->SetFont('timesb','U',10);
+		        $this->Cell(181,6,'COMMENTAIRE DU BILAN','RT',1,'L',1);
+		        	
+		        $this->SetFont('times','',11);
+		        $this->MultiCell(185,6,iconv ('UTF-8' , 'windows-1252', $commentaireBilan['conclusion_bilan']),'LRB','J',1);
+		    }
 		}
 		
 		

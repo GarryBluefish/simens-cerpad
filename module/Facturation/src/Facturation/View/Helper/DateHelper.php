@@ -183,4 +183,16 @@ class DateHelper extends AbstractHelper{
 		}
 		return $nomTableauJS;
 	}
+	
+	
+	function pourcentage_element_tab($tableau, $total){
+	    $resultat = array();
+	
+	    foreach ($tableau as $tab){
+	        $resultat [] = $this->item_percentage($tab, $total);
+	    }
+	
+	    return $resultat;
+	}
+	
 }

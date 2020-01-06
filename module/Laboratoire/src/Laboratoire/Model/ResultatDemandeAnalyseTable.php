@@ -124,7 +124,7 @@ class ResultatDemandeAnalyseTable {
 	            if($tab[$i]){ $donnees['champ'.$i] = $tab[$i]; $donneesExiste = 1; }else{ $donnees['champ'.$i] = null; }
 	        }
 	        $donnees['type_materiel'] = $tab[$i];
-	        //$donnees['commentaire'] = $tab[$i+1];
+	        $donnees['commentaire'] = $tab[$i+1];
 	        
 	        if($donneesExiste == 0){
 	            $this->tableGateway->delete ( array ( 'iddemande_analyse' => $iddemande ) );
@@ -141,7 +141,7 @@ class ResultatDemandeAnalyseTable {
 	            if($tab[$i]){ $donnees['champ'.$i] = $tab[$i]; $donneesExiste = 1; }else{ $donnees['champ'.$i] = null; }
 	        }
 	        $donnees['type_materiel'] = $tab[$i];
-	        //$donnees['commentaire'] = $tab[$i+1];
+	        $donnees['commentaire'] = $tab[$i+1];
 	        
 	        if($donneesExiste == 0){
 	            $this->tableGateway->delete ( array ( 'iddemande_analyse' => $iddemande ) );
@@ -4864,10 +4864,49 @@ class ResultatDemandeAnalyseTable {
 		return $donneesExiste;
 	}
 	
+	public function getCommentaireDuBilan($iddemande){
+	    
+	    $iddemande = $this->getiddemandeResultatsAnalysesDemandees($iddemande);
+	    
+	    $sql = new Sql($this->tableGateway->getAdapter ());
+	    $select = $sql->select();
+	    $select->from(array('cb'=>'commentaire_bilan'))->columns(array('*'));
+	    $select->where(array('iddemande' => $iddemande));
+	    return $sql->prepareStatementForSqlObject($select)->execute()->current();
+	}
 	
+	public function addCommentaireDuBilan($commentaireBilan, $iddemande){
+	    $sql = new Sql($this->tableGateway->getAdapter());
+	    
+	    $iddemande = $this->getiddemandeResultatsAnalysesDemandees($iddemande);
+	    
+	    $bilan = $this->getCommentaireDuBilan($iddemande);
+	    if($bilan){
+	        $sQuery = $sql->update() ->table('commentaire_bilan') ->set( array('conclusion_bilan' => $commentaireBilan) )
+	        ->where(array('iddemande' => $iddemande ));
+	        $sql->prepareStatementForSqlObject($sQuery)->execute();
+	    }else{
+	        $sQuery = $sql->insert() ->into('commentaire_bilan') ->values( array('iddemande' => $iddemande, 'conclusion_bilan' => $commentaireBilan) );
+	        $sql->prepareStatementForSqlObject($sQuery)->execute();
+	    }
+	}
 	
+	//Recuperer le premier 'iddemande' servant de référence pour le commentaire du bilan
+	public function getiddemandeResultatsAnalysesDemandees($iddemande){
+	    $dateDemande = $this->getDemandeAnalysesAvecIddemande($iddemande);
 	
-	
+	    $adapter = $this->tableGateway->getAdapter ();
+	    $sql = new Sql($adapter);
+	    $select = $sql->select();
+	    $select->from(array('d'=>'demande_analyse'));
+	    $select->columns(array('*'));
+	    $select->join(array('a'=>'analyse') ,'d.idanalyse = a.idanalyse', array('Designation'=>'designation', 'Tarif'=>'tarif'));
+	    $select->where(array('d.date' => $dateDemande['date'], 'd.idpatient' => $dateDemande['idpatient']));
+	    $select->order(array('d.iddemande' => 'ASC'));
+	    $result = $sql->prepareStatementForSqlObject($select)->execute()->current();
+	     
+	    return $result['iddemande'];
+	}
 	
 	
 	

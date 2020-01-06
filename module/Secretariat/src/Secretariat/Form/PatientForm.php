@@ -181,6 +181,7 @@ class PatientForm extends Form {
 		) );
 		
 		//Les deux suivants c est l'un ou l'autre qui est affiché
+		/*
 		$this->add ( array (
 		    'name' => 'situation_matrimoniale',
 		    'type' => 'Select',
@@ -197,7 +198,7 @@ class PatientForm extends Form {
 		        'tabindex' => 11,
 		    )
 		) );
-		
+		*/
 		//Pour le dépistage -------- pour le dépistage
 		$this->add ( array (
 		    'name' => 'depistage',

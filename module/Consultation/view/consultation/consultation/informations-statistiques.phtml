@@ -815,7 +815,7 @@ $(window).load(function () {
 	                <table style="height: 36px; border: 1px solid #cccccc;">
 	                  <tr style="height: 18px; border: 1px solid #cccccc;">
 	                    <?php for( $i = 0 ; $i < count($this->differentsTypesProfils[0]) ; $i++){ ?>
-    	                  <td style="min-width: 90px; border: 2px solid #cccccc; padding-left: 10px; padding-right: 5px; font-weight: bold; text-align: center;"> <?php echo $this->differentsTypesProfils[0][$i]; ?> </td>
+    	                  <td style="min-width: 105px; border: 2px solid #cccccc; padding-left: 10px; padding-right: 5px; font-weight: bold; text-align: center;"> <?php echo $this->differentsTypesProfils[0][$i]; ?> </td>
 	                    <?php } ?>
 	                  </tr>
 	                  
@@ -861,7 +861,7 @@ $(window).load(function () {
 	                <table style="height: 36px; border: 1px solid #cccccc;">
 	                  <tr style="height: 18px; border: 1px solid #cccccc;">
 	                    <?php for( $i = 0 ; $i < count($this->peresNouveauNesSelonEthnies[0]) ; $i++){ ?>
-    	                  <td style="min-width: 90px; border: 2px solid #cccccc; padding-left: 10px; padding-right: 5px; font-weight: bold; text-align: center;"> <?php echo $this->peresNouveauNesSelonEthnies[0][$i]; ?> </td>
+    	                  <td style="min-width: 105px; border: 2px solid #cccccc; padding-left: 10px; padding-right: 5px; font-weight: bold; text-align: center;"> <?php echo $this->peresNouveauNesSelonEthnies[0][$i]; ?> </td>
 	                    <?php } ?>
 	                  </tr>
 	                  
@@ -1112,7 +1112,7 @@ $(window).load(function () {
 	                <table style="height: 36px; border: 1px solid #cccccc;">
 	                  <tr style="height: 18px; border: 1px solid #cccccc;">
 	                    <?php for( $i = 0 ; $i < count($this->effectifPatientDepistesAges[3]) ; $i++){ ?>
-    	                  <td style="min-width: 90px; border: 2px solid #cccccc; padding-left: 10px; padding-right: 5px; font-weight: bold; text-align: center;"> j<?php echo $this->effectifPatientDepistesAges[3][$i]; ?> </td>
+    	                  <td style="min-width: 105px; border: 2px solid #cccccc; padding-left: 10px; padding-right: 5px; font-weight: bold; text-align: center;"> j<?php echo $this->effectifPatientDepistesAges[3][$i]; ?> </td>
 	                    <?php } ?>
 	                  </tr>
 	                  
@@ -1139,6 +1139,46 @@ $(window).load(function () {
 	            <!-- PREMIERE COLONNE -->
 	            <!-- PREMIERE COLONNE -->
 	            <td colspan="2" style="width: 100%; height: 150px; background: indig; text-align: center;  vertical-align: top; border-top: 2px solid #cccccc;">
+	            
+	              <!-- Répartition des analyses par patient Interne -->
+	              <!-- Répartition des analyses par patient Interne -->
+	              
+	              <div style="width: 100%; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; margin-top: 10px;"> 
+	                <span style="font-size: 16px; color: green; font-weight: bold;">&#9883;</span> R&eacute;partition des analyses concernant les parents des patients internes  <i style="font-weight: bold; color: red;"> ( suivis par le centre )</i>
+	              </div>
+	            
+	              <div style="width: 100%;" align="center">
+	               <div style="width: 100%; margin-top: 5px; max-width: 1090px; overflow: auto; margin-bottom: 15px; font-family: Goudy Old Style;" >
+	                <table style="height: 36px; border: 1px solid #cccccc;">
+	                  <tr style="height: 18px; border: 1px solid #cccccc;">
+	                    <?php for( $i = 0 ; $i < count($this->repartitionAnalysesParParentPatient[0]) ; $i++){ ?>
+    	                  <td style="min-width: 90px; border: 2px solid #cccccc; padding-left: 10px; padding-right: 5px; font-weight: bold; text-align: center;"> <?php echo $this->repartitionAnalysesParParentPatient[0][$i]; ?> </td>
+	                    <?php } ?>
+	                  </tr>
+	                  
+	                  <tr style="height: 18px; border: 1px solid #cccccc;">
+	                    <?php for( $i = 0 ; $i < count($this->repartitionAnalysesParParentPatient[0]) ; $i++){ ?>
+    	                  <td style="border: 2px solid #cccccc; padding-left: 10px; text-align: center;"> 
+    	                    <span style="font-weight: bold;"><?php echo $this->repartitionAnalysesParParentPatient[1][$this->repartitionAnalysesParParentPatient[0][$i]].' '; ?> </span>
+    	                    <?php echo ' - ('.$this->pourcentageAnalysesParParentPatient[$i].'%)'; ?>
+    	                  </td>
+	                    <?php } ?>
+	                  </tr>
+	                  
+	                </table>
+	               </div>
+	              </div>
+	            
+	            </td>
+	          
+	          </tr>
+	          
+	          
+	          <tr style="width: 100%;"> 
+	          
+	            <!-- PREMIERE COLONNE -->
+	            <!-- PREMIERE COLONNE -->
+	            <td colspan="2" style="width: 100%; height: 150px; background: indig; text-align: center;  vertical-align: top; ">
 	            
 	              <!-- Répartition des analyses par patient Externe -->
 	              <!-- Répartition des analyses par patient Externe -->
@@ -1224,7 +1264,7 @@ $(window).load(function () {
 	              <!-- Répartition des analyses par patient Depistes -->
 	              
 	              <div style="width: 100%; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; margin-top: 10px;"> 
-	                <span style="font-size: 16px; color: green; font-weight: bold;">&#9883;</span> R&eacute;partition des analyses concernant tous les patients depist&eacute;s  
+	                <span style="font-size: 16px; color: green; font-weight: bold;">&#9883;</span> R&eacute;partition des analyses concernant uniquement <span style="font-weight: bold; color: red;">les patients d&eacute;pist&eacute;s (Total : <?php echo count($this->tableauPourcentageDepistes); ?>)</span>  
 	              </div>
 	            
 	              <div style="width: 100%;" align="center">
@@ -1240,7 +1280,9 @@ $(window).load(function () {
 	                    <?php for( $i = 0 ; $i < count($this->repartitionAnalysesParPatientsDepistes[0]) ; $i++){ ?>
     	                  <td style="border: 2px solid #cccccc; padding-left: 10px; text-align: center;"> 
     	                    <span style="font-weight: bold;"><?php echo $this->repartitionAnalysesParPatientsDepistes[1][$this->repartitionAnalysesParPatientsDepistes[0][$i]].' '; ?> </span>
-    	                    <?php echo ' - ('.$this->pourcentageAnalysesParPatientsDepistes[$i].'%)'; ?>
+    	                    <?php //echo ' - ('.$this->pourcentageAnalysesParPatientsDepistes[$i].'%)'; ?>
+    	                    
+    	                    <?php echo ' - ('.$this->tableauPourcentageDepistes[$this->repartitionAnalysesParPatientsDepistes[0][$i]].'%)'; ?>
     	                  </td>
 	                    <?php } ?>
 	                  </tr>
@@ -1252,6 +1294,7 @@ $(window).load(function () {
 	            </td>
 	          
 	          </tr>
+	          
 	          
 	          
 	          <tr style="width: 100%;"> 
@@ -1264,23 +1307,25 @@ $(window).load(function () {
 	              <!-- Répartition des analyses par patient Interne -->
 	              
 	              <div style="width: 100%; font-family: Goudy Old Style; font-size: 21px; font-weight: normal; margin-top: 10px;"> 
-	                <span style="font-size: 16px; color: green; font-weight: bold;">&#9883;</span> R&eacute;partition des analyses concernant les parents des patients internes  
+	                <span style="font-size: 16px; color: green; font-weight: bold;">&#9883;</span> R&eacute;partition des analyses concernant les <span style="font-weight: bold; color: red;"> patients ne faisant pas parti du programme de d&eacute;pistage (Total : <?php echo count($this->tableauPourcentageNonDepistes); ?>) </span>
 	              </div>
 	            
 	              <div style="width: 100%;" align="center">
 	               <div style="width: 100%; margin-top: 5px; max-width: 1090px; overflow: auto; margin-bottom: 15px; font-family: Goudy Old Style;" >
 	                <table style="height: 36px; border: 1px solid #cccccc;">
 	                  <tr style="height: 18px; border: 1px solid #cccccc;">
-	                    <?php for( $i = 0 ; $i < count($this->repartitionAnalysesParParentPatient[0]) ; $i++){ ?>
-    	                  <td style="min-width: 90px; border: 2px solid #cccccc; padding-left: 10px; padding-right: 5px; font-weight: bold; text-align: center;"> <?php echo $this->repartitionAnalysesParParentPatient[0][$i]; ?> </td>
+	                    <?php for( $i = 0 ; $i < count($this->repartitionAnalysesParPatientsNonDepistes[0]) ; $i++){ ?>
+    	                  <td style="min-width: 90px; border: 2px solid #cccccc; padding-left: 10px; padding-right: 5px; font-weight: bold; text-align: center;"> <?php echo $this->repartitionAnalysesParPatientsNonDepistes[0][$i]; ?> </td>
 	                    <?php } ?>
 	                  </tr>
 	                  
 	                  <tr style="height: 18px; border: 1px solid #cccccc;">
-	                    <?php for( $i = 0 ; $i < count($this->repartitionAnalysesParParentPatient[0]) ; $i++){ ?>
+	                    <?php for( $i = 0 ; $i < count($this->repartitionAnalysesParPatientsNonDepistes[0]) ; $i++){ ?>
     	                  <td style="border: 2px solid #cccccc; padding-left: 10px; text-align: center;"> 
-    	                    <span style="font-weight: bold;"><?php echo $this->repartitionAnalysesParParentPatient[1][$this->repartitionAnalysesParParentPatient[0][$i]].' '; ?> </span>
-    	                    <?php echo ' - ('.$this->pourcentageAnalysesParParentPatient[$i].'%)'; ?>
+    	                    <span style="font-weight: bold;"><?php echo $this->repartitionAnalysesParPatientsNonDepistes[1][$this->repartitionAnalysesParPatientsNonDepistes[0][$i]].' '; ?> </span>
+    	                    <?php //echo ' - ('.$this->pourcentageAnalysesPatientNonDepistes[$i].'%)'; ?>
+    	                    
+    	                    <?php echo ' - ('.$this->tableauPourcentageNonDepistes[$this->repartitionAnalysesParPatientsNonDepistes[0][$i]].'%)'; ?>
     	                  </td>
 	                    <?php } ?>
 	                  </tr>
@@ -1292,6 +1337,26 @@ $(window).load(function () {
 	            </td>
 	          
 	          </tr>
+	          
+	          
+	          
+	          
+	          
+	          
+	          
+	          
+	          
+	          
+	          
+	          
+	          
+	          
+	          
+	          
+	          
+	          
+	          
+	          
 	          
 	          
 	          

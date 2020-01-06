@@ -2597,13 +2597,14 @@
   	    	
   	    		}
   	    		
+  	    		var commentaireBilan = $('#commentaireBilan').val();
   	    		
   	        	$( this ).dialog( "close" );
   	            
   	            $.ajax({
   	                type: 'POST',
   	                url: tabUrl[0]+'public/biologiste/enregistrer-resultats-demande',
-  	                data:{'tabAnalyses':tabAnalyses, 'tabDemandes':tabDemandes, 'tab':tab},
+  	                data:{'tabAnalyses':tabAnalyses, 'tabDemandes':tabDemandes, 'tab':tab, 'iddemande':iddemande, 'commentaireBilan':commentaireBilan},
   	                success: function(data) {
   	                	     //var iddemande = jQuery.parseJSON(data);
   	                	     //$('.visualiser'+iddemande+' img').trigger('click');

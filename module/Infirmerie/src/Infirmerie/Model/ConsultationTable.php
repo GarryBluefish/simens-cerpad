@@ -1350,4 +1350,363 @@ class ConsultationTable {
  	}
  	
  	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	/** POUR LES BESOINS DE L'API SIMENS-MOBILE */
+ 	/** POUR LES BESOINS DE L'API SIMENS-MOBILE */
+ 	/** POUR LES BESOINS DE L'API SIMENS-MOBILE */
+ 	/** POUR LES BESOINS DE L'API SIMENS-MOBILE */ 
+ 	/** POUR LES BESOINS DE L'API SIMENS-MOBILE */
+ 	/** POUR LES BESOINS DE L'API SIMENS-MOBILE */
+ 	
+ 	/*
+ 	public function getListePatientsPourValidation($nb=null){
+ 	
+ 	    if(!$nb){$nb = 10;}
+ 	    
+ 	    $db = $this->tableGateway->getAdapter();
+ 	   
+ 	    $sql = new Sql($db);
+ 	    $sQuery = $sql->select()
+ 	    ->from(array('pat' => 'patient'))->columns(array('*'))
+ 	    ->order(array('idpersonne'))
+ 	    ->limit($nb);
+ 	
+ 	    $resultat = $sql->prepareStatementForSqlObject($sQuery)->execute();
+ 	    
+ 	    $data = array();
+ 	    foreach ($resultat as $result){
+ 	        $data [] = $result;
+ 	    }
+ 	    
+ 	    return $data;
+ 	}
+ 	*/
+ 	
+ 	/**
+ 	 * Recuperer la liste des patients ayant des resultats non encore valides
+ 	 */
+ 	public function listePatientsAvecResultatsPasEncoreValides($nb=null){
+ 	    
+ 	    if(!$nb){$nb = 10;}
+ 	    
+ 	    $sql = new Sql($this->tableGateway->getAdapter());
+ 	    $sQuery = $sql->select()
+ 	    ->from(array('pat' => 'patient'))->columns(array('*'))
+ 	    ->join(array('pers' => 'personne'), 'pers.idpersonne = pat.idpersonne' , array('Nom'=>'nom','Prenom'=>'prenom','Datenaissance'=>'date_naissance','Age'=>'age','Adresse'=>'adresse','Sexe'=>'sexe','Nationalite'=>'nationalite_actuelle', 'idpatient'=>'idpersonne'))
+ 	    ->join(array('fact' => 'facturation'), 'fact.idpatient = pat.idpersonne', array('Idfacturation' => 'idfacturation', 'Date' => 'date', 'Heure' => 'heure') )
+ 	    ->join(array('bp' => 'bilan_prelevement'), 'bp.idfacturation = fact.idfacturation', array('Idbilan' => 'idbilan', 'DateEnregistrementBp' => 'date_enregistrement') )
+ 	    ->join(array( 'tp' => 'tri_prelevement' ), 'tp.idbilan = bp.idbilan', array('IdbilanTri' => 'idbilan', 'DateEnregistrementTri' => 'date_enregistrement') )
+ 	    ->join(array( 'rda' => 'resultat_demande_analyse' ), 'rda.iddemande_analyse = tp.iddemande', array('DateEnregistrementRda' => 'Date', 'iddemande' => 'iddemande_analyse') )
+ 	    ->join(array( 'da' => 'demande_analyse' ), 'da.iddemande = rda.iddemande_analyse', array('date_demande'=>'date', 'time') )
+ 	    
+ 	    ->where( array ( 'rda.valide' => 0 ) )
+ 	    ->order(array('iddemande DESC', 'date_demande DESC'))
+ 	    ->group('pat.idpersonne')
+ 	    ->limit($nb);
+ 	    
+ 	    /* Data set length after filtering */
+ 	    $resultat = $sql->prepareStatementForSqlObject($sQuery)->execute();
+ 	    
+ 	    $dataPatient = array();
+ 	    $dataAnalyseParPatient = array();
+ 	    
+ 	    foreach ($resultat as $result){
+ 	        $data = array();
+ 	        $data ['idpatient'] = $result['idpatient'];
+ 	        $data ['iddemande'] = $result['iddemande'];
+ 	        $data ['nom']       = $result['Nom'];
+ 	        $data ['prenom'] = $result['Prenom'];
+ 	        $data ['date_naissance'] = $result['Datenaissance'];
+ 	        $data ['age'] = $result['Age'];
+ 	        $data ['adresse'] = $result['Adresse'];
+ 	        $data ['sexe'] = $result['Sexe'];
+ 	        $data ['numero_dossier'] = $result['numero_dossier'];
+ 	        
+ 	        //Recuperer les informations des analyses du patient
+ 	        $listeAnalyses =  $this->listeAnalysesAvecResultatsPasEncoreValides($result['idpatient'], $result['date_demande']);
+ 	        
+ 	        $dataPatient [] = array($data, $listeAnalyses);
+ 	        
+ 	    }
+
+ 	    return $dataPatient;
+ 	}
+ 	
+ 	/**
+ 	 * Recuperer la liste des analyses ayant des resultats non encore valides pour chaque patient
+ 	 */
+ 	public function listeAnalysesAvecResultatsPasEncoreValides($idpatient, $date_demande){
+ 	
+ 	    $sql = new Sql($this->tableGateway->getAdapter());
+ 	    $sQuery = $sql->select()
+ 	    ->from(array('pat' => 'patient'))->columns(array('*'))
+ 	    ->join(array('pers' => 'personne'), 'pers.idpersonne = pat.idpersonne' , array('Nom'=>'nom','Prenom'=>'prenom','Datenaissance'=>'date_naissance','Age'=>'age','Adresse'=>'adresse','Sexe'=>'sexe','Nationalite'=>'nationalite_actuelle', 'idpatient'=>'idpersonne'))
+ 	    ->join(array('fact' => 'facturation'), 'fact.idpatient = pat.idpersonne', array('Idfacturation' => 'idfacturation', 'Date' => 'date', 'Heure' => 'heure') )
+ 	    ->join(array('bp' => 'bilan_prelevement'), 'bp.idfacturation = fact.idfacturation', array('Idbilan' => 'idbilan', 'DateEnregistrementBp' => 'date_enregistrement') )
+ 	    ->join(array( 'tp' => 'tri_prelevement' ), 'tp.idbilan = bp.idbilan', array('IdbilanTri' => 'idbilan', 'DateEnregistrementTri' => 'date_enregistrement') )
+ 	    ->join(array( 'rda' => 'resultat_demande_analyse' ), 'rda.iddemande_analyse = tp.iddemande', array('DateEnregistrementRda' => 'Date', 'iddemande' => 'iddemande_analyse') )
+ 	    ->join(array( 'da' => 'demande_analyse' ), 'da.iddemande = rda.iddemande_analyse', array('date', 'time') )
+ 	    
+ 	    ->join(array( 'a' => 'analyse' ), 'a.idanalyse = tp.idanalyse', array('idanalyse', 'designation') )
+ 	     	    
+ 	    ->where( array ( 'rda.valide' => 0, 'pat.idpersonne' => $idpatient, 'da.date' => $date_demande ) )
+ 	    ->order(array('iddemande DESC', 'DateEnregistrementRda DESC'));
+ 	
+ 	    /* Data set length after filtering */
+ 	    $resultat = $sql->prepareStatementForSqlObject($sQuery)->execute();
+ 	
+ 	    $dataAnalyse = array();
+ 	    foreach ($resultat as $result){
+ 	        $data = array();
+ 	        $data ['idpatient'] = $result['idpatient'];
+ 	        $data ['iddemande'] = $result['iddemande'];
+ 	        $data ['idanalyse'] = $result['idanalyse'];
+ 	        $data ['designation'] = $result['designation'];
+ 	
+ 	        $dataAnalyse [] = $data;
+ 	    }
+ 	
+ 	    return $dataAnalyse;
+ 	}
+ 	
+ 	
+ 	/**
+ 	 * Récuprerer les résultats des analyses non encore validées
+ 	 */
+ 	
+ 	function getResultatsAnalysesNonEncoreValidees($data){
+ 	    
+ 	    $db = $this->tableGateway->getAdapter();
+ 	    $sql = new Sql($db);
+ 	    $tableDonnees = [];
+ 	    
+ 	    //Parcourir le nombre patient
+ 	    for($i = 0 ; $i<count($data) ; $i++){
+ 	        //Parcourir les analyses pour chaque patient
+ 	        $tabAnalyse = $data[$i][1];
+ 	        for($j = 0 ; $j<count($tabAnalyse) ; $j++){
+ 	            $iddemande = $tabAnalyse[$j]['iddemande'];
+ 	            $idanayse  = $tabAnalyse[$j]['idanalyse'];
+ 	            $idpatient = $tabAnalyse[$j]['idpatient'];
+ 	            $designation = $tabAnalyse[$j]['designation'];
+ 	            
+ 	            
+ 	            if($idanayse==1){
+ 	                
+ 	                $table='valeurs_nfs';
+ 	                $sQuery = $sql->select()->from(array('tab'=>$table))->columns(array('*'))
+ 	                              ->where(array('idresultat_demande_analyse'=>$iddemande));
+ 	                $resultat = $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
+ 	                
+ 	                $resultNFS  = $resultat['date_modification'].'<@>';
+ 	                $resultNFS .= $resultat['type_materiel'].'<@>';
+ 	                for($k=1 ; $k<=25 ; $k++){ $resultNFS .= $resultat['champ'.$k].'<@>'; }
+ 	                $resultNFS .= $resultat['commentaire'];
+ 	                
+ 	                $tableDonnees [] = array($iddemande, openssl_encrypt($resultNFS, 'BF-ECB', 'passwordHASSIM'),
+ 	                    $idanayse, $idpatient, $designation
+ 	                );
+ 	                
+ 	                
+ 	            }elseif($idanayse==2){
+ 	                
+ 	                $table='valeurs_gsrh_groupage';
+ 	                $sQuery = $sql->select()->from($table)->columns(array('*'))
+ 	                ->where(array('idresultat_demande_analyse'=>$iddemande));
+ 	                $resultat = $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
+ 	                
+ 	                $resultGsRh  = $resultat['date_modification'].'<@>';
+ 	                $resultGsRh .= $resultat['type_materiel'].'<@>';
+ 	                $resultGsRh .= $resultat['groupe'].'<@>'.$resultat['rhesus'];
+ 	                
+ 	                $tableDonnees [] = array($iddemande, openssl_encrypt($resultGsRh, 'BF-ECB', 'passwordHASSIM'),
+ 	                    $idanayse, $idpatient, $designation
+ 	                );
+ 	            
+ 	            }elseif($idanayse==10){
+ 	                
+ 	                $table='valeurs_goutte_epaisse';
+ 	                $sQuery = $sql->select()->from($table)->columns(array('*'))
+ 	                ->where(array('idresultat_demande_analyse'=>$iddemande));
+ 	                $resultat = $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
+ 	                
+ 	                $resultGoutteEpaisse  = $resultat['date_modification'].'<@>';
+ 	                $resultGoutteEpaisse .= $resultat['type_materiel'].'<@>';
+ 	                $resultGoutteEpaisse .= $resultat['goutte_epaisse'].'<@>'.$resultat['densite_parasitaire'].'<@>'.$resultat['commentaire_goutte_epaisse'];
+ 	                
+ 	                $tableDonnees [] = array($iddemande, openssl_encrypt($resultGoutteEpaisse, 'BF-ECB', 'passwordHASSIM'),
+ 	                    $idanayse, $idpatient, $designation
+ 	                );
+ 	            
+ 	            }elseif($idanayse==22){
+ 	                
+ 	                $table='valeurs_creatininemie';
+ 	                $sQuery = $sql->select()->from($table)->columns(array('*'))
+ 	                ->where(array('idresultat_demande_analyse'=>$iddemande));
+ 	                $resultat = $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
+ 	                
+ 	                $resultCrea  = $resultat['date_modification'].'<@>';
+ 	                $resultCrea .= $resultat['type_materiel'].'<@>';
+ 	                $resultCrea .= $resultat['creatininemie'];
+ 	                //var_dump($resultCrea); exit();
+ 	                $tableDonnees [] = array($iddemande, openssl_encrypt($resultCrea, 'BF-ECB', 'passwordHASSIM'),
+ 	                    $idanayse, $idpatient, $designation
+ 	                );
+ 	            
+ 	            }elseif($idanayse==68){
+ 	                
+ 	                $table='valeurs_typage_hemoglobine';
+ 	                $sQuery = $sql->select()->from($table)->columns(array('*'))
+ 	                ->join(array('t'=>'typage_hemoglobine'), 't.idtypage='.$table.'.valeur', 'designation')
+ 	                ->where(array('idresultat_demande_analyse'=>$iddemande));
+ 	                $resultat = $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
+ 	                
+ 	                $resultTypage  = $resultat['date_modification'].'<@>';
+ 	                $resultTypage .= $resultat['type_materiel'].'<@>';
+ 	                $resultTypage .= $resultat['designation'].'<@>'.$resultat['valeur_Hbarts'];
+ 	                
+ 	                $tableDonnees [] = array($iddemande, openssl_encrypt($resultTypage, 'BF-ECB', 'passwordHASSIM'),
+ 	                    $idanayse, $idpatient, $designation
+ 	                );
+ 	            }
+ 	            
+ 	        }
+ 	    }
+ 	    
+ 	    
+ 	    return $tableDonnees;
+ 	}
+ 	
+ 	/**
+ 	 * Enregistrer dans la base de données les vaidations
+ 	 */
+ 	public function validationResultatAnalyse($data){
+ 	    $db = $this->tableGateway->getAdapter();
+ 	    $sql = new Sql($db);
+ 	    
+ 	    for ($i=0 ; $i<count($data) ; $i++){
+ 	        $sQuery = $sql->update()->table('resultat_demande_analyse')
+ 	                      ->set( array('valide'=>1 ,'valider_par'=>1) )
+                          ->where(array('iddemande_analyse' => $data[$i]));
+ 	        $sql->prepareStatementForSqlObject($sQuery)->execute();
+ 	    }
+ 	}
+ 	
+ 	
+ 	/**
+ 	 * Recuperer le nombre de patients ayant des resultats non encore valides
+ 	 */
+ 	public function nbPatientsAvecResultatsPasEncoreValides(){
+ 	
+ 	    $sql = new Sql($this->tableGateway->getAdapter());
+ 	    $sQuery = $sql->select()
+ 	    ->from(array('pat' => 'patient'))->columns(array('*'))
+ 	    ->join(array('pers' => 'personne'), 'pers.idpersonne = pat.idpersonne' , array('Nom'=>'nom','Prenom'=>'prenom','Datenaissance'=>'date_naissance','Age'=>'age','Adresse'=>'adresse','Sexe'=>'sexe','Nationalite'=>'nationalite_actuelle', 'idpatient'=>'idpersonne'))
+ 	    ->join(array('fact' => 'facturation'), 'fact.idpatient = pat.idpersonne', array('Idfacturation' => 'idfacturation', 'Date' => 'date', 'Heure' => 'heure') )
+ 	    ->join(array('bp' => 'bilan_prelevement'), 'bp.idfacturation = fact.idfacturation', array('Idbilan' => 'idbilan', 'DateEnregistrementBp' => 'date_enregistrement') )
+ 	    ->join(array( 'tp' => 'tri_prelevement' ), 'tp.idbilan = bp.idbilan', array('IdbilanTri' => 'idbilan', 'DateEnregistrementTri' => 'date_enregistrement') )
+ 	    ->join(array( 'rda' => 'resultat_demande_analyse' ), 'rda.iddemande_analyse = tp.iddemande', array('DateEnregistrementRda' => 'Date', 'iddemande' => 'iddemande_analyse') )
+ 	    ->where( array ( 'rda.valide' => 0 ) );
+ 	
+ 	    /* Data set length after filtering */
+ 	    $nbPatients = $sql->prepareStatementForSqlObject($sQuery)->execute()->count();
+ 	
+ 	    return $nbPatients;
+ 	}
+ 	
+ 	
+ 	/**
+ 	 * Recuperer les analyses validees déjà en local pour les valider au serveur hébergé
+ 	 */
+ 	public function analysesValideesEnLocal($data){
+ 	
+ 	    $analyseValidee = array();
+ 	    $analyseResultatsSupprimes = array();
+ 	    
+ 	    for($i=0 ; $i<count($data) ; $i++){
+ 	        $iddemande = $data[$i]->iddemande;
+ 	        
+ 	        /*Analyses validees en local*/
+ 	        $sql = new Sql($this->tableGateway->getAdapter());
+ 	        $sQuery = $sql->select()->from(array('rda' => 'resultat_demande_analyse'))
+ 	                      ->columns(array('*'))->where(array('iddemande_analyse'=>$iddemande, 'valide'=>1));
+ 	                      
+ 	        $resultat = $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
+ 	        
+ 	        if($resultat){ $analyseValidee[] = $iddemande; }
+ 	        
+ 	        
+ 	        /*Analyses avec resultats supprimer*/
+ 	        $sql = new Sql($this->tableGateway->getAdapter());
+ 	        $sQuery = $sql->select()->from(array('rda' => 'resultat_demande_analyse'))
+ 	        ->columns(array('*'))->where(array('iddemande_analyse'=>$iddemande));
+ 	        
+ 	        $resultat2 = $sql->prepareStatementForSqlObject($sQuery)->execute()->current();
+ 	        
+ 	        if(!$resultat2){ $analyseResultatsSupprimes[] = $iddemande; }
+ 	        
+ 	    }
+ 	    
+ 	    return array($analyseValidee,$analyseResultatsSupprimes);
+ 	}
+ 	
+ 	
 }

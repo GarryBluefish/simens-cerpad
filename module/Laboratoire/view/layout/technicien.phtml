@@ -86,7 +86,13 @@ if($sexe == 'Masculin'){$civilite = 'M';}
 
     <li style="width: 15%;">
       
-      <div style='width: 30%; padding-top: 10px; float:left;'>
+       <div style='width: 14%; padding-top: 10px; float:left; background: yello;'>
+          <a style="padding-right: 6px;" href="<?php echo $this->url('consultation', array('action' => 'informations-statistiques'));?>">
+            <img style="width: 15px; height: 11px;" src="<?php echo $this->basePath().'/images_icons/chart.png';?>" title="Infos statistiques" />
+          </a>
+       </div>
+        
+       <div style='width: 26%; padding-top: 10px; float:left; background: re;'>
         <?php if($user['role'] == 'biologiste' || $user['role'] == 'superAdmin'){ ?>
           <a style="padding-right: 6px;" href="<?php echo $this->url('biologiste');?>">
             <img src="<?php echo $this->basePath().'/img/light/arrow_up_left.png';?>" title="Valider des analyses" />
@@ -94,7 +100,7 @@ if($sexe == 'Masculin'){$civilite = 'M';}
         <?php } ?>
       </div>
       
-      <div style='width: 70%; padding-top: 10px; float:right;'>
+      <div style='width: 60%; padding-top: 10px; float:right;'>
         <a title="" style="" href="<?php echo $this->url('admin', array('action'=>'logout'));?>">
         <i><img src="<?php echo $this->basePath().'/img/light/bended_arrow_right.png';?>"/> <span style="color: white; font-size: 12px;">D&eacute;connexion</span></i></a>
       </div>

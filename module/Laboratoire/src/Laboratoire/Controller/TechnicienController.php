@@ -4787,6 +4787,17 @@ class TechnicienController extends AbstractActionController {
 		
         return $html;
 	}
+	
+	protected function getCommentaireBilan($iddemande){
+	    $resultat = $this->getResultatDemandeAnalyseTable()->getCommentaireDuBilan($iddemande);
+	    $html ="";
+	    if($resultat){
+	        $html .="<script>";
+	        $html .= ($resultat['conclusion_bilan']) ? '$("#commentaireBilan").val("'.preg_replace("/(\r\n|\n|\r)/", "\\n", str_replace( '"', '\"',$resultat['conclusion_bilan'])).'");' : '';
+	        $html .='</script>';
+	    }
+	    return $html;
+	}
 	        
 	//***************** ========== RECUPERER UNE ANALYSE ========== ***************
 	//***************** ========== RECUPERER UNE ANALYSE ========== ***************
@@ -5397,9 +5408,19 @@ class TechnicienController extends AbstractActionController {
 			$tabAnalyses[] = $liste['Idanalyse'];
 			$tabDemandes[] = $liste['iddemande'];
 			
-			$html .="</table>
-				      <div style='width: 100%; height: 20px;'> </div>";
+			$html .="</table>";
 		}
+		
+		$html .="<div id='champCommentaireDuBilanTextArea' class='designEnTeteAnalyse' style='width: 100%; height: 170px; background: gray; padding-top: 20px; margin-top: 20px; border-radius: 10px;' align='left'> 
+		           <table style='width: 95%; margin-top: 0px;'>
+    			     <tr class='ligneAnanlyse' style='width: 100%;'>
+    			     	<td style='width: 100%;'><label style='height: 140px;' ><span style='font-size: 17px; float: left; margin-left: 30px; font-weight: bold;'> Conclusion du bilan  </span> <textarea id='commentaireBilan' style='max-height: 100px; min-height: 100px; max-width: 560px; min-width: 560px; margin-left: 30px; text-align: justify; padding: 5px;'> </textarea> </label></td>
+    			     </tr>
+	               </table>
+		         </div>";
+		
+		$html .= $this->getCommentaireBilan($iddemande);
+		
 		
 		//Récupération de la liste des demandes, pour connaitre les demandes
 		$html .="<script> var listeDesDemandesSelect = []; </script>";
@@ -5421,6 +5442,18 @@ class TechnicienController extends AbstractActionController {
 	    $tabDemandes = $this->params ()->fromPost ( 'tabDemandes' );
 	    $tableau = $this->params ()->fromPost ( 'tab' );
 	    $idemploye = $this->layout()->user['idemploye'];
+	    
+	    
+	    /*
+	     * Nouveau code ajouté 11/12/19
+	     */
+	    $iddemande = (int) $this->params ()->fromPost ( 'iddemande' );
+	    $commentaireBilan = $this->params ()->fromPost ( 'commentaireBilan' );
+	    /** enregistrement du bilan de l'analyse */
+	    $this->getResultatDemandeAnalyseTable()->addCommentaireDuBilan($commentaireBilan, $iddemande);
+	    
+	    /*Fin nouveau code*/
+	    
 	    
 	    for ($i = 0 ; $i<count($tabAnalyses) ; $i++){
 	        $idanalyse = $tabAnalyses[$i];

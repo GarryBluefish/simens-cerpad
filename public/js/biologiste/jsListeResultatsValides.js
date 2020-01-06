@@ -320,7 +320,7 @@
 								    '<div style="margin:8px;">'+
 								      '<b> '+infosPathologieMvcm[i][1]+' </b>&nbsp;&nbsp;&nbsp;&nbsp;<br/> * '+infosPathologieMvcm[i][2]+' <span style="color: red; cursor: pointer; font-weight: bold;" onClick="ouvrirPopupResultat('+infosPathologieMvcm[i][3]+')"> &#128065; </span>';  
 				
-        		//Lorsqu'il y a aussi un cas de paludisme (Goutte épaisse)
+        		//Lorsqu'il y a aussi un cas de paludisme (Goutte ï¿½paisse)
         		if(compInfoResutat != -1){
 					scriptTextMap += '<b> <br/> '+compInfos2+' </b>&nbsp;&nbsp;&nbsp;&nbsp;<br/> * '+tabInfosAnalyse[2]+' <span style="color: red; cursor: pointer; font-weight: bold;" onClick="ouvrirPopupResultat('+compInfoResutat+')"> &#128065; </span>';
 				}				    
@@ -328,7 +328,7 @@
 		        scriptTextMap +=	'</div>'+
 								  '</div>';
 								  
-			    //Lorsqu'il y a aussi un cas de paludisme (Goutte épaisse)
+			    //Lorsqu'il y a aussi un cas de paludisme (Goutte ï¿½paisse)
         		if(listeIdAnalyse.indexOf(10) != -1){
         			scriptImageMap += '<area onClick="hide_all();document.getElementById(\'fleche_'+tabInfosAnalyse[1]+'\').style.display=\'block\';document.getElementById(\'box_'+tabInfosAnalyse[1]+'\').style.display=\'block\'" shape="rect" coords="103,113,133,134" title="Paludisme (infection parasitaire des globules rouges)" />';
 					scriptTextMap  += ''+
@@ -447,7 +447,7 @@
                 									  '</script>';	
                     			
                     			}else
-                    				if(infosPathologieMvcm[i][0] == 21 && listeIdAnalyse.indexOf(71) == -1){ //130, 49, 151, 80 : coords de l'icone glycémie
+                    				if(infosPathologieMvcm[i][0] == 21 && listeIdAnalyse.indexOf(71) == -1){ //130, 49, 151, 80 : coords de l'icone glycï¿½mie
                         				
                         				scriptImageMap += '<area onClick="hide_all();document.getElementById(\'fleche_'+infosPathologieMvcm[i][0]+'\').style.display=\'block\';document.getElementById(\'box_'+infosPathologieMvcm[i][0]+'\').style.display=\'block\'" shape="rect" coords="130, 49, 151, 80" title="'+infosPathologieMvcm[i][1]+'" />';
                         				
@@ -1321,7 +1321,7 @@
     	if($("#flore_cocci_pos_Choix1_ecbu").get(0).checked){ tab[10] = 1; }else{ tab[10] = -1; } 
     	if($("#flore_cocci_pos_Choix2_ecbu").get(0).checked){ tab[11] = 1; }else{ tab[11] = -1; } 
     	tab[12] = $('#culot_ecbu').val();
-    	//Pour la liste des culots selectionnés
+    	//Pour la liste des culots selectionnï¿½s
     	if( tab[12] == 1 ){ tab[13] = getListeCulotPositif(); }
     	//-------------------------------------
     	tab[14] = $('#culture_ecbu').val();
@@ -3047,7 +3047,7 @@
                  	 //Bloquer la saisie sur tous les champs de commentaires
                   	 //Bloquer la saisie sur tous les champs de commentaires
                      $('#commentaire_hemogramme, #commentaire_pv, #conclusion_pv_ABG, #conclusion_ecbu_ABG, #autres_precisions_commentaire_pv, #autres_precisions_commentaire_ecbu').attr('readonly', true);
-                  	 $('.commentaire_protect textarea').attr('readonly', true);
+                  	 $('.commentaire_protect textarea, #commentaireBilan').attr('readonly', true);
                   	 $('#idCommentaireChoiceCheckPV').toggle(false);
                  	
             }

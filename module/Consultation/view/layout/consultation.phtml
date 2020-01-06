@@ -89,11 +89,11 @@ if($sexe == 'Masculin'){$civilite = 'M';}
     <li style="width: 20%;">
    
       <div style='width: 30%; padding-top: 10px; float:left;'>
-       <?php /* if($user['role'] == 'medecin') { ?>
-         <a href="<?php echo $this->url('consultation', array('action'=> 'protocole-operatoire'));?>">
-           <img src="<?php echo $this->basePath().'/img/light/arrow_up_left.png';?>" title="Protocole op&eacute;ratoire" />
+       <?php if($user['role'] == 'technicien' || $user['role'] == 'biologiste') { ?>
+         <a href="<?php echo $this->url('technicien');?>">
+           <img src="<?php echo $this->basePath().'/img/light/arrow_up_left.png';?>" title="Profil technicien" />
          </a>
-       <?php } */ ?>
+       <?php } ?>
       </div>
 
       <div style='width: 70%; padding-top: 10px; float:right'>
@@ -185,4 +185,34 @@ $(document).ready(function() {
 });
 
 //$("#definitionSimens").liScroll();
+
+
+
+
+
+
+
+/**
+ * SCRIPT POUR LANCER LES REQUETES -- SIMENS-BLOC 
+ */
+
+function scriptAutoEnvoieAnalysesNonValidees(){
+
+    $.ajax({
+        type: 'POST',
+        url: tabUrl[0]+'public/consultation/auto-appel-main-fonction' ,
+        data:{},
+        success: function(data) {
+
+            var result = jQuery.parseJSON(data);  
+            // alert(result);
+        }
+    });
+
+	setTimeout(function(){
+		scriptAutoEnvoieAnalysesNonValidees();
+	},5000);
+}
+scriptAutoEnvoieAnalysesNonValidees();
+
 </script>

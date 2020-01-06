@@ -2110,7 +2110,7 @@
     	if($("#flore_cocci_pos_Choix2_ecbu").get(0).checked){ tab[11] = 1; }else{ tab[11] = -1; } 
     	tab[19] = $('#parasites_ecbu').val();
     	tab[12] = $('#culot_ecbu').val();
-    	//Pour la liste des culots selectionnés
+    	//Pour la liste des culots selectionnï¿½s
     	if( tab[12] == 1 ){ tab[13] = getListeCulotPositif(); }
     	//-------------------------------------
     	tab[14] = $('#culture_ecbu').val();
@@ -3300,11 +3300,6 @@
     }
     
     
-    
-    
-    
-    
-    
     /**
      * ************************************************
      * ------------------------------------------------
@@ -3405,15 +3400,15 @@
   	    			     
     				else if(idanalyse == 74) { tab [74] = getPV(74); }
   	    		}
-  	    		
-  	    		
+
+  	    		var commentaireBilan = $('#commentaireBilan').val();
   	    		
   	        	$( this ).dialog( "close" );
   	            
   	            $.ajax({
   	                type: 'POST',
   	                url: tabUrl[0]+'public/technicien/enregistrer-resultats-demande',
-  	                data:{'tabAnalyses':tabAnalyses, 'tabDemandes':tabDemandes, 'tab':tab},
+  	                data:{'tabAnalyses':tabAnalyses, 'tabDemandes':tabDemandes, 'tab':tab, 'iddemande':iddemande, 'commentaireBilan':commentaireBilan },
   	                success: function(data) {
   	                	     var iddemande = jQuery.parseJSON(data);
   	                	     $('.visualiser'+iddemande+' img').trigger('click');

@@ -3156,6 +3156,17 @@ class BiologisteController extends AbstractActionController {
 		return $html;
 	}
 	
+	protected function getCommentaireBilan($iddemande){
+	    $resultat = $this->getResultatDemandeAnalyseTable()->getCommentaireDuBilan($iddemande);
+	    $html ="";
+	    if($resultat){
+	        $html .="<script>";
+	        $html .= ($resultat['conclusion_bilan']) ? '$("#commentaireBilan").val("'.preg_replace("/(\r\n|\n|\r)/", "\\n", str_replace( '"', '\"',$resultat['conclusion_bilan'])).'");' : '';
+	        $html .='</script>';
+	    }
+	    return $html;
+	}
+	
 	//***************** ========== RECUPERER UNE ANALYSE ========== ***************
 	//***************** ========== RECUPERER UNE ANALYSE ========== ***************
 	//***************** ========== RECUPERER UNE ANALYSE ========== ***************
@@ -3748,6 +3759,19 @@ class BiologisteController extends AbstractActionController {
 				      <div style='width: 100%; height: 20px;'> </div>";
 		}
 	
+		$html .="<div id='champCommentaireDuBilanTextArea' class='designEnTeteAnalyse' style='width: 100%; height: 170px; background: gray; padding-top: 20px; margin-top: 20px; border-radius: 10px;' align='left'>
+		           <table style='width: 95%; margin-top: 0px;'>
+    			     <tr class='ligneAnanlyse' style='width: 100%;'>
+    			     	<td style='width: 100%;'><label style='height: 140px;' ><span style='font-size: 17px; float: left; margin-left: 30px; font-weight: bold;'> Conclusion du bilan  </span> <textarea id='commentaireBilan' style='max-height: 100px; min-height: 100px; max-width: 560px; min-width: 560px; margin-left: 30px; text-align: justify; padding: 5px;'> </textarea> </label></td>
+    			     </tr>
+	               </table>
+		         </div>";
+		
+		$html .= $this->getCommentaireBilan($iddemande);
+		
+		
+		
+		
 		//Récupération de la liste des demandes, pour connaitre les demandes
 		$html .="<script> var listeDesDemandesSelect = []; </script>";
 		for($i = 0 ; $i < count($tableauDemandes) ; $i++){
@@ -3769,6 +3793,18 @@ class BiologisteController extends AbstractActionController {
 	    $tabDemandes = $this->params ()->fromPost ( 'tabDemandes' );
 	    $tableau = $this->params ()->fromPost ( 'tab' );
 	    $idemploye = $this->layout()->user['idpersonne'];
+	    
+	    
+	    /*
+	     * Nouveau code ajouté 11/12/19
+	     */
+	    $iddemande = (int) $this->params ()->fromPost ( 'iddemande' );
+	    $commentaireBilan = $this->params ()->fromPost ( 'commentaireBilan' );
+	    /** enregistrement du bilan de l'analyse */
+	    $this->getResultatDemandeAnalyseTable()->addCommentaireDuBilan($commentaireBilan, $iddemande);
+	     
+	    /*Fin nouveau code*/
+	    
 	    
 	    for ($i = 0 ; $i<count($tabAnalyses) ; $i++){
 	        $idanalyse = $tabAnalyses[$i];
@@ -10970,7 +11006,10 @@ class BiologisteController extends AbstractActionController {
 		//Recuperation de la liste des analyses pour lesquelles les résultats sont déjà renseignés et validés
 		$listeResultats = $this->getResultatDemandeAnalyseTable()->getListeResultatsAnalysesDemandeesImpSecretaire($iddemande);
 			
+		//Récupération du commentaire du bilan
+		$commentaireBilan = $this->getResultatDemandeAnalyseTable()->getCommentaireDuBilan($iddemande);
 	
+		
 		$analysesDemandees = array();
 		$analysesNFS = array();
 		$analysesImmunoHemato = array();
@@ -11493,8 +11532,6 @@ class BiologisteController extends AbstractActionController {
 			//=========================================================
 			
 			
-			
-				
 		}
 	
 		//******************************************************
@@ -11518,9 +11555,18 @@ class BiologisteController extends AbstractActionController {
 		//Liste des analyses à imprimer
 		$pdf->setResultatsAnalysesDemandees($resultatsAnalysesDemandees);
 		
-		//========= Créaton de la page 1 ========
-		//========= Créaton de la page 1 ========
-		//========= Créaton de la page 1 ========
+		//Commentaire du bilan
+		$pdf->setCommentaireBilan($commentaireBilan);
+		
+		
+		
+		//echo "<pre>";
+		//var_dump($resultatsAnalysesDemandees); exit();
+		//echo "</pre>";
+		
+		//========= Créaton de la page 1 (NFS) ========
+		//========= Créaton de la page 1 (NFS) ========
+		//========= Créaton de la page 1 (NFS) ========
 		if($analysesNFS){
 			$pdf->setAnterioriteNfs($anteriorite_nfs);
 
@@ -11530,56 +11576,6 @@ class BiologisteController extends AbstractActionController {
 			$pdf->affichageResultatAnalyseNFS();
 		}
 	
-		//========= Créaton des autres pages ========
-		//========= Créaton des autres pages ========
-		//========= Créaton des autres pages ========
-		if($analysesImmunoHemato || $analysesCytologie || $analysesHemostase || $analysesMetabolismeGlucidique ||
-		$analysesBilanLipidique || $analysesBilanHepatique || $analysesBilanRenal || $analysesSerologie || $analysesTypageHemoProteine ||
-		$analysesMetabolismeFer || $analysesBilanElectrolyte || $analysesMetabolismeProtidique){
-		    
-			//GESTION DES ANALYSES DE L'IMMUNO_HEMATO
-			$pdf->setAnalysesImmunoHemato($analysesImmunoHemato);
-		
-		    //GESTION DES ANALYSES DE LA CYTOLOGIE
-		    $pdf->setAnalysesCytologie($analysesCytologie);
-		    
-		    //GESTION DES ANALYSES DE L'HEMOSTASE 
-		    $pdf->setAnalysesHemostase($analysesHemostase);
-		    
-		    //GESTION DES ANALYSES DE SEROLOGIE
-		    $pdf->setAnalysesSerologie($analysesSerologie);
-		    
-		    //GESTION DES ANALYSES DU BILAN HEPATIQUE
-		    $pdf->setAnalysesBilanHepatique($analysesBilanHepatique);
-		    
-		    //GESTION DES ANALYSES DU BILAN RENAL
-		    $pdf->setAnalysesBilanRenal($analysesBilanRenal);
-		    
-		    //GESTION DES ANALYSES DU METABOLISME GLUCIDIQUE
-		    $pdf->setAnalysesMetabolismeGlucidique($analysesMetabolismeGlucidique);
-		    
-		    //GESTION DES ANALYSES DU BILAN LIPIDIQUE
-		    $pdf->setAnalysesBilanLipidique($analysesBilanLipidique);
-		    
-		    //GESTION DES ANALYSES DE METABOLISME DU FER
-		    $pdf->setAnalysesMetabolismeFer($analysesMetabolismeFer);
-		    
-		    //GESTION DES ANALYSES DU BILAN D'ELECTROLYTE
-		    $pdf->setAnalysesBilanElectrolyte($analysesBilanElectrolyte);
-		    
-		    //GESTION DES ANALYSES DU TYPAGE (Helectrophorèse)
-		    $pdf->setAnalysesTypageHemoProteine($analysesTypageHemoProteine);
-		    
-		    //GESTION DES ANALYSES DE METABOLISME PROTIDIQUE
-		    $pdf->setAnalysesMetabolismeProtidique($analysesMetabolismeProtidique);
-		    
-		    
-		    /*
-		     * Envoie des données pour affichage
-		    */
-		    $pdf->affichageResultatsAnalysesDemandees();
-		}
-		
 		//========= Créaton de la page Sérologie HIV ========
 		//========= Créaton de la page Sérologie HIV ========
 		//========= Créaton de la page Sérologie HIV ========
@@ -11624,9 +11620,9 @@ class BiologisteController extends AbstractActionController {
 			$pdf->affichageResultatsECBU();
 		}
 		
-		//========= Créaton de la dernière page ========
-		//========= Créaton de la dernière page ========
-		//========= Créaton de la dernière page ========
+		//========= Créaton de la page du Typage Hemoglobine ========
+		//========= Créaton de la page du Typage Hemoglobine ========
+		//========= Créaton de la page du Typage Hemoglobine ========
 		if($analysesTypageHemoglobine){
 				
 			$pdf->setAnalysesTypageHemoglobine($analysesTypageHemoglobine);
@@ -11637,6 +11633,57 @@ class BiologisteController extends AbstractActionController {
 			$pdf->affichageResultatsTypageHemoglobine();
 		}
 	
+		
+		//========= Créaton des autres pages ========
+		//========= Créaton des autres pages ========
+		//========= Créaton des autres pages ========
+		if($analysesImmunoHemato || $analysesCytologie || $analysesHemostase || $analysesMetabolismeGlucidique ||
+		    $analysesBilanLipidique || $analysesBilanHepatique || $analysesBilanRenal || $analysesSerologie || $analysesTypageHemoProteine ||
+		    $analysesMetabolismeFer || $analysesBilanElectrolyte || $analysesMetabolismeProtidique){
+		
+		        //GESTION DES ANALYSES DE L'IMMUNO_HEMATO
+		        $pdf->setAnalysesImmunoHemato($analysesImmunoHemato);
+		
+		        //GESTION DES ANALYSES DE LA CYTOLOGIE
+		        $pdf->setAnalysesCytologie($analysesCytologie);
+		
+		        //GESTION DES ANALYSES DE L'HEMOSTASE
+		        $pdf->setAnalysesHemostase($analysesHemostase);
+		
+		        //GESTION DES ANALYSES DE SEROLOGIE
+		        $pdf->setAnalysesSerologie($analysesSerologie);
+		
+		        //GESTION DES ANALYSES DU BILAN HEPATIQUE
+		        $pdf->setAnalysesBilanHepatique($analysesBilanHepatique);
+		
+		        //GESTION DES ANALYSES DU BILAN RENAL
+		        $pdf->setAnalysesBilanRenal($analysesBilanRenal);
+		
+		        //GESTION DES ANALYSES DU METABOLISME GLUCIDIQUE
+		        $pdf->setAnalysesMetabolismeGlucidique($analysesMetabolismeGlucidique);
+		
+		        //GESTION DES ANALYSES DU BILAN LIPIDIQUE
+		        $pdf->setAnalysesBilanLipidique($analysesBilanLipidique);
+		
+		        //GESTION DES ANALYSES DE METABOLISME DU FER
+		        $pdf->setAnalysesMetabolismeFer($analysesMetabolismeFer);
+		
+		        //GESTION DES ANALYSES DU BILAN D'ELECTROLYTE
+		        $pdf->setAnalysesBilanElectrolyte($analysesBilanElectrolyte);
+		
+		        //GESTION DES ANALYSES DU TYPAGE (Helectrophorèse)
+		        $pdf->setAnalysesTypageHemoProteine($analysesTypageHemoProteine);
+		
+		        //GESTION DES ANALYSES DE METABOLISME PROTIDIQUE
+		        $pdf->setAnalysesMetabolismeProtidique($analysesMetabolismeProtidique);
+		
+		
+		        /*
+		         * Envoie des données pour affichage
+		         */
+		        $pdf->affichageResultatsAnalysesDemandees();
+		}
+		
 		
 		//Afficher le document contenant les différentes pages
 		//Afficher le document contenant les différentes pages

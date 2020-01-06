@@ -358,8 +358,9 @@ return array(
             		'historiques-des-consultations-du-patient-ajax' => 'medecin',
             		'visualisation-historique-consultation' => 'medecin', 	
             			
-            		'informations-statistiques' => 'medecin',
+            		'informations-statistiques' => array('medecin','technicien'),
             				
+            	    'auto-appel-main-fonction' => 'guest',
             	)
                 
             		

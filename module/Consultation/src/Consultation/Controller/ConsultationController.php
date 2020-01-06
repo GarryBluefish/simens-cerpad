@@ -16,6 +16,8 @@ use Consultation\View\Helper\ImprimerExamensRadioDemandes;
 use Consultation\View\Helper\ImprimerExamensBioDemandes;
 use Zend\Server\Method\Prototype;
 use Consultation\View\Helper\OsmsMaster\src\Osms;
+use Zend\Http\Client;
+use Zend\Http\Request;
 
 class ConsultationController extends AbstractActionController {
 	
@@ -523,6 +525,17 @@ class ConsultationController extends AbstractActionController {
 	//GESTION DES CONSULTATIONS --- GESTION DES CONSULTATIONS --- GESTION DES CONSULTATIONS
 	//GESTION DES CONSULTATIONS --- GESTION DES CONSULTATIONS --- GESTION DES CONSULTATIONS
 	//GESTION DES CONSULTATIONS --- GESTION DES CONSULTATIONS --- GESTION DES CONSULTATIONS
+	/* Fonction renvoyant l'adresse de la page actuelle */
+	
+	function getURI(){
+	    $adresse = $_SERVER['PHP_SELF'];
+	    $i = 0;
+	    foreach($_GET as $cle => $valeur){
+	        //$adresse .= ($i == 0 ? '?' : '&').$cle.($valeur ? '='.$valeur : '');
+	        $i++;
+	    }
+	    return $adresse;
+	}
 	
 	public function listeConsultationsAjaxAction() {
 		$output = $this->getConsultationTable ()->getListeConsultations();
@@ -533,6 +546,166 @@ class ConsultationController extends AbstractActionController {
 	public function listeConsultationsAction() {
 		$this->layout ()->setTemplate ( 'layout/consultation' );
 
+		
+		/**
+		 * LES FONCTIONS A APPELER
+		 */
+// 		echo "<pre>";
+// 		$this->addResultatsAnalysesPasEncoreValides();
+// 		echo "</pre>";
+		
+// 		echo "<pre>";
+//  		$resultat = $this->getConsultationTable ()->listePatientsAvecResultatsPasEncoreValides();
+//  		var_dump($resultat); exit();
+//  		echo "</pre>";
+
+// 		$resultat = $this->addListePatientsAvecResultatsPasEncoreValides();
+//         var_dump($resultat); exit();
+		
+		
+		//$this->addListePatientsAvecResultatsPasEncoreValides();
+		//$this->addResultatsAnalysesPasEncoreValides();
+
+		
+		
+
+		/**
+		 * AJOUTER LES RESULTATS DES ANALYSES ENREGISTREES AU SERVEUR HEBERGE
+		 */
+		//* Recupération des résultats des analyses */
+// 		$listeInfosPatients = $this->getConsultationTable ()->listePatientsAvecResultatsPasEncoreValides();
+		
+		
+		//* Envoie pour maj dans la base de données */
+		//* Recupération des résultats des analyses */
+// 		$data = $this->getConsultationTable ()->getResultatsAnalysesNonEncoreValidees($listeInfosPatients);
+		
+// 		echo "<pre>";
+// 		var_dump($data); exit();
+// 		echo "</pre>";
+		
+// 		echo "<pre>";
+// 		var_dump($_SERVER); exit();
+// 		echo "</pre>";
+		
+//  		$request = new Request();
+		
+// 		/**
+// 		 * Pour Recuperer les données provenant du serveur hebergé
+// 		 * Du serveur hebergé ----> au serveur local
+// 		 */
+		
+// 		$request->setUri('http://www.simens.sn/admin?action=testParams');
+		
+// 		$request->setMethod('GET');
+		
+// 		$client = new Client();
+// 		$response = $client->dispatch($request);
+		
+// 		if ($response->isSuccess()) {
+// 		    //  the POST was successful
+// 		    $donnees = json_decode($response->getBody());
+		    
+// 		    echo "<pre>";
+// 		    var_dump($donnees); exit();
+// 		    echo "</pre>";
+// 		}
+		
+		
+		// $methode de crytage '' & 'BF-ECB'
+		
+		
+		//$resultCrypt = openssl_encrypt('AlhAssim', 'BF-ECB', 'khassim'); 
+		//$resultDecrypt = openssl_decrypt($resultCrypt, 'BF-ECB', 'khassim');
+		
+		//var_dump($resultDecrypt); exit();
+	
+		
+		
+		/**
+		 * Pour envoyer les données au serveur héberger
+		 * Du serveur local ----> au serveur heberger
+		 */
+// 		/*Recuperer la liste des patients ayant des resultats non valides*/
+// 		$data = $this->getConsultationTable ()->listePatientsAvecResultatsPasEncoreValides();
+
+		
+// 		$request->setUri('http://www.simens.sn/admin?action=setinfos');
+// 		$request->setMethod('GET');
+		
+// 		$request->getQuery()->data=  $data;
+		
+// 		//var_dump($request->getQuery()->offsetGet('data')); exit();
+		
+		
+// 		$client = new Client();
+// 		$response = $client->dispatch($request);
+		
+		
+// 		echo "<pre>";
+// 		var_dump($response->getBody()); exit();
+// 		echo "</pre>";
+		
+// 		if ($response->isSuccess()) {
+// 		    //the POST was successful
+// 		    $donnees = json_decode($response->getBody());
+		
+// 		    echo "<pre>";
+// 		    var_dump($donnees->data); exit();
+// 		    echo "</pre>";
+// 		}
+		
+	
+	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		/**
 		 * Test envoie sms
 		 */
@@ -568,7 +741,226 @@ class ConsultationController extends AbstractActionController {
 		exit();
 		*/
 		
+		
 	}
+	
+	
+	
+	
+	/**
+	 * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	 * LA PARTIE POUR LA GESTION DES DONNEES POUR L'APPLICATION MOBILE
+	 * LA PARTIE POUR LA GESTION DES DONNEES POUR L'APPLICATION MOBILE
+	 * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	 */
+	
+	
+	private $url = 'http://www.simens.sn/admin?action=';
+	
+	public function autoAppelMainFonctionAction(){
+	    $this->getResultatsValidationsMainFunction();
+	    $this->validerDansServerHebergerAnalyseValideesLocal();
+	    
+	    $this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );
+	    return $this->getResponse ()->setContent ( Json::encode ( 1 ) );
+	}
+	
+	/**
+	 * Pour récupérer les données provenant du serveur hébergé
+	 * Du serveur hébergé ----> au serveur local
+	 */
+	/*Nota Bene : Fonction à declencher chaque 30 secondes*/
+	public function getResultatsValidationsMainFunction(){
+	    $request = new Request();
+	    
+	    $request->setUri($this->url.'getinfos');
+	    
+		$request->setMethod('GET');
+
+		$client = new Client();
+		$response = $client->dispatch($request);
+
+		if ($response->isSuccess()) {
+		    // the POST was successful
+		    $donnees = json_decode($response->getBody());
+
+		    // Données récupérées
+		    $data = $donnees->data;
+		    
+		    if($data){
+		        // A enregistrer dans la base de donnée
+		        $this->getConsultationTable()->validationResultatAnalyse($data);
+		        
+		        //Nombre de resultats à ajouter
+		        $nb = 10; //count($data);
+		        
+		        // Envoyer les suivants dans le serveur hebergé
+		        $this->addListePatientsAvecResultatsPasEncoreValides($nb);
+		        $this->addResultatsAnalysesPasEncoreValides();
+		        
+  		        return 1;
+		    }
+		    
+		    // Mettre à jour les résultats
+		    // $this->addResultatsAnalysesPasEncoreValides();
+		    
+
+		}
+	}
+	
+	/**
+	 * Pour envoyer les données au serveur héberger
+	 * Du serveur local ----> au serveur heberger
+	 */
+	/*Nota Bene : Fonction à declencher chaque 30 secondes*/
+	public function addListePatientsAvecResultatsPasEncoreValides($nb=null) {
+	    
+	    /*Recuperer la liste des patients ayant des resultats non valides*/
+	    $data = $this->getConsultationTable ()->listePatientsAvecResultatsPasEncoreValides($nb);
+	    
+	    /*$nombre de patients avec des resultats non encore validés */
+	    $nbPatients = $this->getConsultationTable ()->nbPatientsAvecResultatsPasEncoreValides();
+	    
+// 	    echo "<pre>";
+// 	    var_dump(array($nbPatients, $data)); exit();
+// 	    echo "</pre>";
+	    
+	    $request = new Request();
+	    $request->setUri($this->url.'setinfos');
+	    $request->setMethod('GET');
+	    $request->getQuery()->data = array($nbPatients, $data);
+	    
+	    $client = new Client();
+	    $response = $client->dispatch($request);
+	    
+	    if ($response->isSuccess()) { return 1; }else{ return 0; }
+	    
+	}
+	
+	
+	/**
+	 * AJOUTER LES RESULTATS DES ANALYSES ENREGISTREES AU SERVEUR HEBERGE
+	 * Du serveur local ----> au serveur heberger
+	 */
+	/*Nota Bene : Fonction à declencher chaque 30 secondes*/
+	public function addResultatsAnalysesPasEncoreValides($nb=null) {
+	     
+	    $listeInfosPatients = $this->getConsultationTable ()->listePatientsAvecResultatsPasEncoreValides($nb);
+	    
+	    //* Recupération des résultats des analyses */
+	    $data = $this->getConsultationTable ()->getResultatsAnalysesNonEncoreValidees($listeInfosPatients);
+	    
+	    $request = new Request();
+	    $request->setUri($this->url.'setResultatsAnalyses');
+	    $request->setMethod('GET');
+	    $request->getQuery()->data = $data;
+	     
+	    $client = new Client();
+	    $response = $client->dispatch($request);
+	     
+	    //echo "<pre>";
+	    //       var_dump($response->getBody()); exit();
+	    //echo "</pre>";
+	    
+	    if ($response->isSuccess()) { return 1; }else{ return 0; }
+	     
+	}
+	
+	/**
+	 * Valider dans le serveur hebergé les analyses validées dans le local
+	 */
+	public function validerDansServerHebergerAnalyseValideesLocal(){
+	    
+	    $request = new Request();
+	     
+	    $request->setUri($this->url.'listResultatsAnalyses');
+	     
+	    $request->setMethod('GET');
+	
+	    $client = new Client();
+	    $response = $client->dispatch($request);
+	
+	    if ($response->isSuccess()) {
+	        //  the POST was successful
+	        $donnees = json_decode($response->getBody());
+	
+	        // Données récpérées
+	        $data = $donnees->data;
+	
+	        // Recupération analyses validéees en locale
+	        $analyseValidees = $this->getConsultationTable ()->analysesValideesEnLocal($data);
+	        
+	        //var_dump($analyseValidees); exit();
+	        
+	        if($analyseValidees[0] || $analyseValidees[1]){
+	            // Retourne dans le serveur distant pour des maises à jour
+	            $request->setUri($this->url.'validerResultatsProvenantServeurLocal');
+	            $request->setMethod('GET');
+	            $request->getQuery()->data = $analyseValidees;
+	             
+	            $client = new Client();
+	            $response = $client->dispatch($request);
+	            
+	            return 1;
+	        }
+	    }
+	 
+	    return 0;
+	}
+	
+	
+	/**
+	 * ===============================================================
+	 * ---------------------------------------------------------------
+	 * _______________________________________________________________
+	 */
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	public function consulterAction() {
@@ -2810,7 +3202,7 @@ class ConsultationController extends AbstractActionController {
 	function item_percentage($item, $total){
 	
 		if($total){
-			return number_format(($item * 100 / $total), 1,',', ' ');
+			return number_format(($item * 100 / $total), 2,',', ' ');
 		}else{
 			return 0;
 		}
@@ -2955,28 +3347,6 @@ class ConsultationController extends AbstractActionController {
 		 * Répartition des analyses par patient Externe - Interne - Parents de patients Interne
 		 * Répartition des analyses par patient Externe - Interne - Parents de patients Interne
 		 */
-		/** Répartition des analyses par patient Externe */
-		$repartitionAnalysesParPatientExterne = $this->getDepistageTable()->getRepartitionAnalysesParPatient(0);
-		$totalAnalysesParPatientExterne = array_sum($repartitionAnalysesParPatientExterne[1]);
-		$tableauAnalysesParPatientExterne = array_values($repartitionAnalysesParPatientExterne[1]);
-		
-		$pourcentageAnalysesParPatientExterne = $this->pourcentage_element_tab($tableauAnalysesParPatientExterne, $totalAnalysesParPatientExterne);
-		
-		/** Répartition des analyses par patient Interne */
-		$repartitionAnalysesParPatientInterne = $this->getDepistageTable()->getRepartitionAnalysesParPatient(1);
-		$totalAnalysesParPatientInterne = array_sum($repartitionAnalysesParPatientInterne[1]);
-		$tableauAnalysesParPatientInterne = array_values($repartitionAnalysesParPatientInterne[1]);
-		
-		$pourcentageAnalysesParPatientInterne = $this->pourcentage_element_tab($tableauAnalysesParPatientInterne, $totalAnalysesParPatientInterne);
-		
-		/** Répartition des analyses par patient Dépistés */
-		$repartitionAnalysesParPatientsDepistes = $this->getDepistageTable()->getRepartitionAnalysesParPatientsDepistes();
-		$totalAnalysesParPatientsDepistes = array_sum($repartitionAnalysesParPatientsDepistes[1]);
-		$tableauAnalysesParPatientsDepistes = array_values($repartitionAnalysesParPatientsDepistes[1]);
-		
-		$pourcentageAnalysesParPatientsDepistes = $this->pourcentage_element_tab($tableauAnalysesParPatientsDepistes, $totalAnalysesParPatientsDepistes);
-		
-		
 		/** Répartition des analyses par patient Interne */
 		$repartitionAnalysesParParentPatient = $this->getDepistageTable()->getRepartitionAnalysesParParentsPatients();
 		$totalAnalysesParParentPatient = array_sum($repartitionAnalysesParParentPatient[1]);
@@ -2984,9 +3354,77 @@ class ConsultationController extends AbstractActionController {
 		
 		$pourcentageAnalysesParParentPatient = $this->pourcentage_element_tab($tableauAnalysesParParentPatient, $totalAnalysesParParentPatient);
 		
+		/** Répartition des analyses par patient Externe (Dépistés) */
+		$repartitionAnalysesParPatientExterne = $this->getDepistageTable()->getRepartitionAnalysesParPatient(0);
+		$totalAnalysesParPatientExterne = array_sum($repartitionAnalysesParPatientExterne[1]);
+		$tableauAnalysesParPatientExterne = array_values($repartitionAnalysesParPatientExterne[1]);
+		
+		$pourcentageAnalysesParPatientExterne = $this->pourcentage_element_tab($tableauAnalysesParPatientExterne, $totalAnalysesParPatientExterne);
+		
+		/** Répartition des analyses par patient Interne (Dépistés) */
+		$repartitionAnalysesParPatientInterne = $this->getDepistageTable()->getRepartitionAnalysesParPatient(1);
+		$totalAnalysesParPatientInterne = array_sum($repartitionAnalysesParPatientInterne[1]);
+		$tableauAnalysesParPatientInterne = array_values($repartitionAnalysesParPatientInterne[1]);
+		
+		$pourcentageAnalysesParPatientInterne = $this->pourcentage_element_tab($tableauAnalysesParPatientInterne, $totalAnalysesParPatientInterne);
+		
+		/** Répartition des analyses pour tous les patients Dépistés */
+		$repartitionAnalysesParPatientsDepistes = $this->getDepistageTable()->getRepartitionAnalysesParPatientsDepistes();
+		$totalAnalysesParPatientsDepistes = array_sum($repartitionAnalysesParPatientsDepistes[1]);
+		$tableauAnalysesParPatientsDepistes = array_values($repartitionAnalysesParPatientsDepistes[1]);
+		
+		$pourcentageAnalysesParPatientsDepistes = $this->pourcentage_element_tab($tableauAnalysesParPatientsDepistes, $totalAnalysesParPatientsDepistes);
+		
+		
+		/** Répartition des analyses pour tous les patients Non Depistes */
+		$repartitionAnalysesParPatientsNonDepistes = $this->getDepistageTable()->getRepartitionAnalysesParPatientsExternesNonDepistes();
+		$totalAnalysesParPatientNonDepistes = array_sum($repartitionAnalysesParPatientsNonDepistes[1]);
+		$tableauAnalysesPatientNonDepistes = array_values($repartitionAnalysesParPatientsNonDepistes[1]);
+		
+		$pourcentageAnalysesPatientNonDepistes = $this->pourcentage_element_tab($tableauAnalysesPatientNonDepistes, $totalAnalysesParPatientNonDepistes);
+		
+		
+		/** Répartition des analyses en pourcentage pour tous les patients */
+		$tableauPourcentageDepistes = array();
+		$tableauPourcentageNonDepistes = array();
+		$tabLibPatientDepistes = $repartitionAnalysesParPatientsDepistes[0];
+		$tabEffPatientDepistes = $repartitionAnalysesParPatientsDepistes[1];
+		$tabLibPatientNonDepistes = $repartitionAnalysesParPatientsNonDepistes[0];
+		$tabEffPatientNonDepistes = $repartitionAnalysesParPatientsNonDepistes[1];
+		
+		for($i = 0 ; $i < count($tabLibPatientDepistes) ; $i++){
+		    $libAnalyse = $tabLibPatientDepistes[$i];
+		    
+		    if(in_array($libAnalyse, $tabLibPatientNonDepistes)){
+		        $effPatDep = $tabEffPatientDepistes[$libAnalyse];
+		        $effPatNonDep = $tabEffPatientNonDepistes[$libAnalyse];
+		        $total = (int)($effPatDep+$effPatNonDep);
+		        $pourcentages = $this->pourcentage_element_tab(array($effPatDep, $effPatNonDep), $total);
+		        $tableauPourcentageDepistes[$libAnalyse] = $pourcentages[0];
+		    }else{
+		        $tableauPourcentageDepistes[$libAnalyse] = '100,0';
+		    }
+		}
+		
+		for($i = 0 ; $i < count($tabLibPatientNonDepistes) ; $i++){
+		    $libAnalyse = $tabLibPatientNonDepistes[$i];
+		
+		    if(in_array($libAnalyse, $tabLibPatientDepistes)){
+		        $effPatNonDep = $tabEffPatientNonDepistes[$libAnalyse];
+		        $effPatDep = $tabEffPatientDepistes[$libAnalyse];
+		        $total = (int)($effPatDep+$effPatNonDep);
+		        $pourcentages = $this->pourcentage_element_tab(array($effPatDep, $effPatNonDep), $total);
+		        $tableauPourcentageNonDepistes[$libAnalyse] = $pourcentages[1];
+		    }else{
+		        $tableauPourcentageNonDepistes[$libAnalyse] = '100,0';
+		    }
+		}
+		
+		
 		
 		//echo  "<pre>";
-		//var_dump($tableauAnalysesParParentPatient); exit();
+		//var_dump($tableauPourcentageNonDepistes); exit();
+		//var_dump($repartitionAnalysesParPatientsDepistes); exit();
 		//echo  "</pre>";
 		
 		
@@ -3025,17 +3463,23 @@ class ConsultationController extends AbstractActionController {
 				'repartitionPatientDepistesParAdresses' => $repartitionPatientDepistesParAdresses,
 				'pourcentagePatientDepistesParAdresses' => $pourcentagePatientDepistesParAdresses,
 		    
+		        'repartitionAnalysesParParentPatient' => $repartitionAnalysesParParentPatient,
+		        'pourcentageAnalysesParParentPatient' => $pourcentageAnalysesParParentPatient,
+		    
     		    'repartitionAnalysesParPatientExterne' => $repartitionAnalysesParPatientExterne,
     		    'pourcentageAnalysesParPatientExterne' => $pourcentageAnalysesParPatientExterne,
 		    
     		    'repartitionAnalysesParPatientInterne' => $repartitionAnalysesParPatientInterne,
     		    'pourcentageAnalysesParPatientInterne' => $pourcentageAnalysesParPatientInterne,
 		    
-    		    'repartitionAnalysesParPatientsDepistes' => $repartitionAnalysesParPatientsDepistes,
-    		    'pourcentageAnalysesParPatientsDepistes' => $pourcentageAnalysesParPatientsDepistes,
+		        'repartitionAnalysesParPatientsDepistes' => $repartitionAnalysesParPatientsDepistes,
+		        'pourcentageAnalysesParPatientsDepistes' => $pourcentageAnalysesParPatientsDepistes,
 		    
-    		    'repartitionAnalysesParParentPatient' => $repartitionAnalysesParParentPatient,
-    		    'pourcentageAnalysesParParentPatient' => $pourcentageAnalysesParParentPatient,
+    		    'repartitionAnalysesParPatientsNonDepistes' => $repartitionAnalysesParPatientsNonDepistes,
+	       	    'pourcentageAnalysesPatientNonDepistes' => $pourcentageAnalysesPatientNonDepistes,
+		    
+		        'tableauPourcentageDepistes' => $tableauPourcentageDepistes,
+	       	    'tableauPourcentageNonDepistes' => $tableauPourcentageNonDepistes,
 		);
 		
 	}

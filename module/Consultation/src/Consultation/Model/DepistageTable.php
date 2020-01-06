@@ -4,6 +4,7 @@ namespace Consultation\Model;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Where;
+use Zend\Db\Sql\Predicate\NotIn;
 
 class DepistageTable {
 
@@ -614,6 +615,44 @@ class DepistageTable {
  	
  	    return array($diffAnalysesPatientsExternes, $effectifAnalysesPatientsExternes);
  	}
+ 	
+ 	
+ 	/**
+ 	 * Répartition des differentes analyses par patients Externes et Non-Dépistés
+ 	 */
+ 	public function getRepartitionAnalysesParPatientsExternesNonDepistes(){
+ 	    $adapter = $this->tableGateway->getAdapter();
+ 	    
+ 	    $subselect1 = (new Sql ($adapter ))->select ()->from ( array ( 'd' => 'depistage' ) );
+ 	    $subselect1->columns (array ('idpatient') );
+ 	    
+ 	    $sql = new Sql($adapter);
+ 	    $select = $sql->select();
+ 	    $select->from(array('p' => 'patient'));
+ 	    $select->join(array('pers' => 'personne') ,'pers.idpersonne = p.idpersonne');
+ 	    $select->join(array('da' => 'demande_analyse') ,'da.idpatient = p.idpersonne');
+ 	    $select->join(array('a' => 'analyse') ,'a.idanalyse = da.idanalyse', array('designation'));
+ 	
+ 	    $select->where(array(new NotIn( 'p.idpersonne', $subselect1 ),));
+ 	
+ 	    $resultat = $sql->prepareStatementForSqlObject($select)->execute();
+ 	
+ 	    $listeAnalysesPatientsExternes = array();
+ 	    $diffAnalysesPatientsExternes = array();
+ 	    foreach ($resultat as $result){
+ 	        $designation = $result['designation'];
+ 	
+ 	        ($designation) ? $listeAnalysesPatientsExternes [] = $designation: null;
+ 	
+ 	        if(!in_array($designation, $diffAnalysesPatientsExternes)){
+ 	            ($designation) ? $diffAnalysesPatientsExternes[] = $designation: null;
+ 	        }
+ 	    }
+ 	    $effectifAnalysesPatientsExternes = array_count_values($listeAnalysesPatientsExternes);
+ 	
+ 	    return array($diffAnalysesPatientsExternes, $effectifAnalysesPatientsExternes);
+ 	}
+ 	
  	
 }
 
