@@ -233,15 +233,21 @@ echo $this->form()->openTag($form); ?>
              <img  src='<?php echo $this->basePath().'/images_icons/fleur1.jpg'?>'  alt="fleur1" />
            </div>
 
-	       <table id="numero" style=" padding-top:5px; width: 550px;">
-           <tr style="width: 550px;">
-             <td style="padding-top:5px; width: 70px; font-size: 12px;"> Consultation: </td>
-             <td style="font-weight: bold;"> <?php echo $this->idcons;?></td>
-             <td style="font-weight: bold; width:10px;">|</td>
-             <td style="padding-top:5px; width: 80px; font-size: 12px; "> Date & Heure: </td>
-             <td style="font-weight: bold;"> <?php echo $Control->convertDate($this->date);?>  -  <?php echo $Control->decouperTimeHm($this->heure);?></td>
-           </tr>
-          </table>
+	       <table id="numero" style=" padding-top:5px; width: 750px;">
+               <tr style="width: 750px;">
+                 <td style="padding-top:5px; width: 70px; font-size: 12px;"> Consultation: </td>
+                 <td style="font-weight: bold;"> <?php echo $this->idcons;?></td>
+                 <td style="font-weight: bold; width:10px;">|</td>
+                 <td style="padding-top:5px; width: 80px; font-size: 12px; "> Date & Heure: </td>
+                 <td style="font-weight: bold;"> 
+                    <?php echo $Control->convertDate($this->date);?>  -  <?php echo $Control->decouperTimeHm($this->heure);?>
+                 </td>
+                 <td style="width: 240px; background: re;">
+                 <input type="datetime-local" name="modifierDateCons" id="modifierDateCons" placeholder="Modifier la date" style="margin-top: 5px; border: solid 1px #f1f1f1; background: #f1f1f1; width: 200px;">
+                 </td>
+               </tr>
+           </table>
+           
 
       </div>
 
@@ -2079,9 +2085,11 @@ echo $this->form()->openTag($form); ?>
                       <thead style="width: 100%;">
 		                <tr style="width: 100%; height: 40px; font-family: police2;">
 		                  <th style="width: 4%;  font-weight: bold; font-size: 15px; ">N&ordm;</th>
-		                  <th style="width: 29%; font-weight: bold; font-size: 15px; text-align: left;">M&eacute;dicaments</th>
-		                  <th style="width: 29%; font-weight: bold; font-size: 15px; text-align: left;">Forme</th>
-		                  <th style="width: 29%; font-weight: bold; font-size: 15px; text-align: left;">Quantit&eacute;</th>
+		                  <th style="width: 26%; font-weight: bold; font-size: 15px; text-align: left;">M&eacute;dicaments</th>
+		                  <th style="width: 23%; font-weight: bold; font-size: 15px; text-align: left;">Forme</th>
+		                  <th style="width: 20%; font-weight: bold; font-size: 15px; text-align: left;">Quantit&eacute;</th>
+		                  
+		                  <th style="width: 18%; font-weight: bold; font-size: 15px; text-align: left;">Posologie</th>
 		                  <th style="width: 9%;  font-weight: bold; font-size: 15px; ">Options</th>
 		                </tr>
 		              </thead>
@@ -2149,6 +2157,7 @@ echo $this->form()->openTag($form); ?>
                       $('#forme_'+i).val('<?php echo $Medicaments['FORME'];?>');
                       $('#nb_medicament_'+i).val('<?php echo substr($Medicaments['QUANTITE'], 0, strpos($Medicaments['QUANTITE'], ' '));?>');
                       $('#quantite_'+i).val('<?php echo substr($Medicaments['QUANTITE'], strpos($Medicaments['QUANTITE'], ' ')+1);?>');
+                      $('#posologie_'+i).val('<?php echo $Medicaments['POSOLOGIE'];?>');
 	                      i++;
                     <?php endforeach; 
                   }

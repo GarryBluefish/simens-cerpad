@@ -1709,4 +1709,58 @@ class ConsultationTable {
  	}
  	
  	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	public function modifierDateConsultation($newDate, $idcons, $idmedecin){
+ 	    $date = explode('T',$newDate);
+ 	    $donnees = array(
+ 	        'date' => $date[0],
+ 	        'heure' => $date[1].':00',
+ 	        'idmedecin' => $idmedecin,
+ 	        'idemploye' => $idmedecin,
+ 	    );
+ 	    
+ 	    $this->tableGateway->update($donnees, array('idcons'=> $idcons));
+ 	    
+ 	    $consultation = $this->getConsultation($idcons);
+ 	    
+ 	    $this->modifierDateFacturation($newDate, $consultation->idfacturation, $idmedecin);
+ 	}
+ 	
+ 	public function modifierDateFacturation($newDate, $idfacturation, $idmedecin){
+ 	    $db = $this->tableGateway->getAdapter();
+ 	    $sql = new Sql($db);
+ 	
+ 	    $date = explode('T',$newDate);
+ 	    $donnees = array(
+ 	        'date' => $date[0],
+ 	        'heure' => $date[1].':00',
+ 	        'idemploye' => $idmedecin,
+ 	    );
+ 	    
+        $sQuery = $sql->update()->table('facturation_cons')
+        ->set( $donnees )->where(array('idfacturation' => $idfacturation));
+        $sql->prepareStatementForSqlObject($sQuery)->execute();
+ 	}
+ 	
+ 	
 }

@@ -25,7 +25,7 @@ class Consultation implements InputFilterAwareInterface{
 	public $date_enreg_infirm;
 	public $date_enreg_medecin;
 	public $idemploye;
-// 	public $idservice;
+ 	public $idfacturation;
 	
 	
 	protected $inputFilter;
@@ -49,7 +49,7 @@ class Consultation implements InputFilterAwareInterface{
 		$this->date_enreg_infirm = (! empty ( $data ['date_enreg_infirm'] )) ? $data ['date_enreg_infirm'] : null;
 		$this->date_enreg_medecin = (! empty ( $data ['date_enreg_medecin'] )) ? $data ['date_enreg_medecin'] : null;
 		$this->idemploye = (! empty ( $data ['idemploye'] )) ? $data ['idemploye'] : null;
-// 		$this->idservice = (! empty ( $data ['idservice'] )) ? $data ['idservice'] : null;
+ 		$this->idfacturation = (! empty ( $data ['idfacturation'] )) ? $data ['idfacturation'] : null;
 	}
 
 	public function getArrayCopy() {

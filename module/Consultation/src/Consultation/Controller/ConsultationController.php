@@ -711,20 +711,30 @@ class ConsultationController extends AbstractActionController {
 		 */
 		/*
 		$credential = array(
-		    'clientId' => 'ianIQwqkI27VVUXajC9aDfB2qZG2FleL',
-		    'clientSecret' => 'pxMekLkQx5MRZ6cO'
+		    'clientId' => 'D4euAUicBrPwIu7grZfR5PxSAMSyqxxZ',
+		    'clientSecret' => 'VO0eopPh76M5ewdd'
 		);
+		
+		
+		$infos = "Nouveau profil : SS ; ---- ".
+				 "Patients dÃ©pistÃ©s : 9127 ; ".
+		         "Patients internes : 27";
 		
 		$osms = new Osms($credential);
 		$token = $osms->getTokenFromConsumerKey();
+		$osms->sendSMS('tel:+221773139352',
+            		   'tel:+221784236633',
+            		   $infos,
+            		   'SIMENS'
+            		   );
 		var_dump($osms->sendSMS('tel:+221773139352',
 				                'tel:+221773139352',
-		                        'Bonjour c est SIMENS','SIMENS-INFOS'
+		                         $infos,
+		                        'SIMENS'
 		              )); exit();
 		
-		var_dump('ee'); exit();
+		var_dump('stop'); exit();
 		*/
-		
 		
 		/**
 		 * Test excuter un fichier python
@@ -757,6 +767,7 @@ class ConsultationController extends AbstractActionController {
 	
 	private $url = 'http://www.simens.sn/admin?action=';
 	
+	/*
 	public function autoAppelMainFonctionAction(){
 	    $this->getResultatsValidationsMainFunction();
 	    $this->validerDansServerHebergerAnalyseValideesLocal();
@@ -764,6 +775,7 @@ class ConsultationController extends AbstractActionController {
 	    $this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );
 	    return $this->getResponse ()->setContent ( Json::encode ( 1 ) );
 	}
+	*/
 	
 	/**
 	 * Pour récupérer les données provenant du serveur hébergé
@@ -779,6 +791,7 @@ class ConsultationController extends AbstractActionController {
 
 		$client = new Client();
 		$response = $client->dispatch($request);
+		$entree = 0;
 
 		if ($response->isSuccess()) {
 		    // the POST was successful
@@ -796,14 +809,19 @@ class ConsultationController extends AbstractActionController {
 		        
 		        // Envoyer les suivants dans le serveur hebergé
 		        $this->addListePatientsAvecResultatsPasEncoreValides($nb);
-		        $this->addResultatsAnalysesPasEncoreValides();
+		        //$this->addResultatsAnalysesPasEncoreValides();
+		        $entree = 1;
 		        
-  		        return 1;
+		    }else{
+		        if(count($data) == 0){
+		            // Envoyer les suivants dans le serveur hebergé
+		            $this->addListePatientsAvecResultatsPasEncoreValides($nb);
+		        }
 		    }
 		    
 		    // Mettre à jour les résultats
-		    // $this->addResultatsAnalysesPasEncoreValides();
-		    
+		    //if($entree == 0){ $this->addResultatsAnalysesPasEncoreValides(); }
+		    $this->addResultatsAnalysesPasEncoreValides();
 
 		}
 	}
@@ -1614,6 +1632,7 @@ class ConsultationController extends AbstractActionController {
 				$nomMedicament = $this->params()->fromPost("medicament_0".$i);
 				$formeMedicament = $this->params()->fromPost("forme_".$i);
 				$quantiteMedicament = $this->params()->fromPost("quantite_".$i);
+				$posologie = $this->params()->fromPost("posologie_".$i);
 		
 				if($this->params()->fromPost("medicament_0".$i)){
 		
@@ -1624,12 +1643,14 @@ class ConsultationController extends AbstractActionController {
 						$tab[$j++] = $formeMedicament; $Consommable->addFormes($formeMedicament);
 						$tab[$j++] = $this->params()->fromPost("nb_medicament_".$i);
 						$tab[$j++] = $quantiteMedicament; $Consommable->addQuantites($quantiteMedicament);
+						$tab[$j++] = $posologie;
 					} else {
 						$idMedicaments = $Consommable->addMedicaments($nomMedicament);
 						$tab[$j++] = $idMedicaments;
 						$tab[$j++] = $formeMedicament; $Consommable->addFormes($formeMedicament);
 						$tab[$j++] = $this->params()->fromPost("nb_medicament_".$i);
 						$tab[$j++] = $quantiteMedicament; $Consommable->addQuantites($quantiteMedicament);
+						$tab[$j++] = $posologie;
 					}
 				}
 		
@@ -2218,6 +2239,16 @@ class ConsultationController extends AbstractActionController {
 		$idmedecin = $this->layout()->user['idemploye'];
 
 		$tabDonnees = $this->params ()->fromPost();
+		
+		
+		/**
+		 * MODIFICATION DE LA DATE DE LA CONSULTATION
+		 */
+		if(array_key_exists('modifierDateCons', $tabDonnees) && $tabDonnees['modifierDateCons']){
+		    $this->getConsultationTable ()->modifierDateConsultation($tabDonnees['modifierDateCons'], $tabDonnees['idcons'], $idmedecin);
+		    // var_dump($tabDonnees); exit();
+		}
+		
 		
 		/**
 		 * ANTECEDENT PERSONNELS --- ANTECEDENTS PERSONNELS
@@ -3041,18 +3072,21 @@ class ConsultationController extends AbstractActionController {
 		$formeMedicament = explode( "," , $this->params()->fromPost( 'formeMedicament' ));
 		$nbMedicament = explode( "," , $this->params()->fromPost( 'nbMedicament' ));
 		$quantiteMedicament = explode( "," , $this->params()->fromPost( 'quantiteMedicament' ));
+		$posologie = explode( "," , $this->params()->fromPost( 'posologie' ));
 		
-		//var_dump($medicamentLibelle); exit();
+		//var_dump($posologie); exit();
 		
 		$pdf = new imprimerOrdonnance();
 		$pdf->SetMargins(13.5,13.5,13.5);
 		$pdf->setNomService($nomService);
 		$pdf->setInfosPatients($personne);
+		$pdf->setPatientInfos($patient);
 		
 		$pdf->setMedicamentLibelle($medicamentLibelle);
 		$pdf->setFormeMedicament($formeMedicament);
 		$pdf->setNbMedicament($nbMedicament);
 		$pdf->setQuantiteMedicament($quantiteMedicament);
+		$pdf->setPosologie($posologie);
 		
 		$pdf->impressionOrdonnance();
 		$pdf->Output('I');

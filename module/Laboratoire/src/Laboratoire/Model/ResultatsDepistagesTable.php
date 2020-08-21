@@ -247,12 +247,13 @@ class ResultatsDepistagesTable {
  	
  			$select->join('facturation_demande_analyse' , 'facturation_demande_analyse.iddemande_analyse = demande_analyse.iddemande' , array('*'));
  			$select->join('bilan_prelevement' , 'bilan_prelevement.idfacturation = facturation_demande_analyse.idfacturation' , array('date_heure'));
- 			$select->where(array(
+ 			$data = array(
  					'date_prelevement >= ?' => $date_debut,
  					'date_prelevement <= ?' => $date_fin,
- 					'designation' => $profil,
  					'demande_analyse.idanalyse' => 68
- 			));
+ 			);
+ 			if($profil){ $data['designation'] = $profil;}
+ 			$select->where($data);
  			$select->order('demande_analyse.idpatient asc');
  	
  		})->toArray();
@@ -277,13 +278,22 @@ class ResultatsDepistagesTable {
  	
  			$select->join('facturation_demande_analyse' , 'facturation_demande_analyse.iddemande_analyse = demande_analyse.iddemande' , array('*'));
  			$select->join('bilan_prelevement' , 'bilan_prelevement.idfacturation = facturation_demande_analyse.idfacturation' , array('date_heure'));
- 			$select->where(array(
- 					'valide' => 1,
- 					'date_prelevement >= ?' => $date_debut,
- 					'date_prelevement <= ?' => $date_fin,
- 					'designation' => $profil,
- 					'demande_analyse.idanalyse' => 68
- 			));
+//  			$select->where(array(
+//  					'valide' => 1,
+//  					'date_prelevement >= ?' => $date_debut,
+//  					'date_prelevement <= ?' => $date_fin,
+//  					'designation' => $profil,
+//  					'demande_analyse.idanalyse' => 68
+//  			));
+ 			$data = array(
+ 			    'valide' => 1,
+ 			    'date_prelevement >= ?' => $date_debut,
+ 			    'date_prelevement <= ?' => $date_fin,
+ 			    'demande_analyse.idanalyse' => 68
+ 			);
+ 			if($profil){ $data['designation'] = $profil;}
+ 			$select->where($data);
+ 			
  			$select->order('demande_analyse.idpatient asc');
  	
  		})->toArray();
@@ -308,13 +318,21 @@ class ResultatsDepistagesTable {
  	
  			$select->join('facturation_demande_analyse' , 'facturation_demande_analyse.iddemande_analyse = demande_analyse.iddemande' , array('*'));
  			$select->join('bilan_prelevement' , 'bilan_prelevement.idfacturation = facturation_demande_analyse.idfacturation' , array('date_heure'));
- 			$select->where(array(
- 					'valide' => 0,
- 					'date_prelevement >= ?' => $date_debut,
- 					'date_prelevement <= ?' => $date_fin,
- 					'designation' => $profil,
- 					'demande_analyse.idanalyse' => 68
- 			));
+//  			$select->where(array(
+//  					'valide' => 0,
+//  					'date_prelevement >= ?' => $date_debut,
+//  					'date_prelevement <= ?' => $date_fin,
+//  					'designation' => $profil,
+//  					'demande_analyse.idanalyse' => 68
+//  			));
+ 			$data = array(
+ 			    'valide' => 0,
+ 			    'date_prelevement >= ?' => $date_debut,
+ 			    'date_prelevement <= ?' => $date_fin,
+ 			    'demande_analyse.idanalyse' => 68
+ 			);
+ 			if($profil){ $data['designation'] = $profil;}
+ 			$select->where($data);
  			$select->order('demande_analyse.idpatient asc');
  	
  		})->toArray();

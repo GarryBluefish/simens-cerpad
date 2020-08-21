@@ -58,7 +58,8 @@ class OrdonConsommableTable{
 						'id_document'=>$idOrdonnance,
 						'id_materiel'=>$tab[$i++],
 						'forme'=>$tab[$i++],
-						'quantite'=>$tab[$i++].' '.$tab[$i],
+						'quantite'=>$tab[$i++].' '.$tab[$i++],
+				        'posologie'=>$tab[$i],
 				);
 				$this->tableGateway->insert($data);
 			}

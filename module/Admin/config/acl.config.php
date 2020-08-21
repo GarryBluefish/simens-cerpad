@@ -227,6 +227,7 @@ return array(
             			
             		'infos-statistiques-depistages-nayant-pas-resultat' => 'technicien',
             		'infos-statistiques-voir-plus-numero-dossier' => 'technicien',	
+            	    'infos-statistiques-voir-plus-numero-dossier-toute-periode' => 'technicien',
             			
             			
             		'get-liste-des-souches' => 'technicien',

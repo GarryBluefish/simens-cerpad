@@ -235,7 +235,7 @@ class PatientTable {
 		$subselect->from ( array ( 'fact_cons' => 'facturation_cons' ) );
 		$subselect->columns (array ( 'idpatient' ) );
 		$subselect->where( array( 'date' => $dateDuJour) );
-		 
+		
 		/*
 		 * SQL queries
 		* Liste des demandes d'analyses sauf celles ayant déjà des résultats
@@ -319,6 +319,88 @@ class PatientTable {
 			}
 			$output['aaData'][] = $row;
 		}
+		
+		
+		/*
+		 * SQL queries
+		 * Liste des patients indeterminés sauf celles ayant déjà des résultats
+		 */
+		$sql = new Sql($db);
+		$sQuery = $sql->select()
+		->from(array('pat' => 'patient')) ->columns(array('*'))
+		->join(array('pers' => 'personne'), 'pers.idpersonne = pat.idpersonne', array('Nom'=>'nom','Prenom'=>'prenom','Datenaissance'=>'date_naissance','Sexe'=>'sexe','Adresse'=>'adresse','Nationalite'=>'nationalite_actuelle', 'id'=>'idpersonne','Idpatient'=>'idpersonne'))
+		->join(array('dep' => 'depistage'), 'dep.idpatient = pat.idpersonne', array('*'))
+		->where( array ('typage' => 20, 'valide' => 1, new NotIn ( 'pat.idpersonne', $subselect ) ) )
+		->order('nom ASC');
+			
+		/* Data set length after filtering */
+		$stat = $sql->prepareStatementForSqlObject($sQuery);
+		$rResultFt = $stat->execute();
+		$iFilteredTotal = count($rResultFt);
+			
+		$rResult = $rResultFt;
+			
+		/*
+		 * $Control pour convertir la date en franï¿½ais
+		 */
+		$Control = new DateHelper();
+			
+		/*
+		 * ADRESSE URL RELATIF
+		 */
+		$baseUrl = $_SERVER['REQUEST_URI'];
+		$tabURI  = explode('public', $baseUrl);
+			
+		/*
+		 * Prï¿½parer la liste
+		 */
+		foreach ( $rResult as $aRow )
+		{
+		    $row = array();
+		    for ( $i=0 ; $i<count($aColumns) ; $i++ )
+		    {
+		        if ( $aColumns[$i] != ' ' )
+		        {
+		            /* General output */
+		            if ($aColumns[$i] == 'Nom'){
+		                $row[] = "<div id='nomMaj'>".$aRow[ $aColumns[$i]]."</div>";
+		            }
+		
+		            else if ($aColumns[$i] == 'Prenom'){
+		                $row[] = "<div>".$aRow[ $aColumns[$i]]."</div>";
+		            }
+		
+		            else if ($aColumns[$i] == 'Datenaissance') {
+		                $date_naissance = $aRow[ $aColumns[$i] ];
+		                if($date_naissance){ $row[] = $Control->convertDate($aRow[ $aColumns[$i] ]); }else{ $row[] = null;}
+		            }
+		
+		            else if ($aColumns[$i] == 'Adresse') {
+		                $row[] = "<div class='adresseText' >".$aRow[ $aColumns[$i] ]."</div>";
+		            }
+		
+		            else if ($aColumns[$i] == 'id') {
+		                $html  = "<infoBulleVue> <a href='javascript:visualiser(".$aRow[ $aColumns[$i] ].")' >";
+		                $html .= "<img style='margin-left: 5%; margin-right: 15%;' src='".$tabURI[0]."public/images_icons/voir2.png' title='d&eacute;tails'></a> </infoBulleVue>";
+		                	
+		                $html .= "<infoBulleVue> <a href='javascript:admettreConsultation(".$aRow[ $aColumns[$i] ].")' >";
+		                $html .= "<img style='display: inline; margin-right: 5%;' src='".$tabURI[0]."public/images_icons/transfert_droite.png' title='suivant'></a> </infoBulleVue>";
+		                	
+		                $row[] = $html;
+		            }
+		
+		            else {
+		                $row[] = $aRow[ $aColumns[$i] ];
+		            }
+		
+		        }
+		    }
+		    $output['aaData'][] = $row;
+		}
+		
+		
+		
+		
 		return $output;
 		 
 	}

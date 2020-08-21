@@ -54,10 +54,9 @@ class OrdonnanceTable{
 		$select->join( array( 'o' => 'ordonnance'
 		), 'oc.ID_DOCUMENT = o.ID_DOCUMENT' , array ('DureeTraitementOrdonnance' =>'DUREE_TRAITEMENT') );
 		
-		$select->join( array( 'c' => 'medicament'
-		), 'c.ID_MATERIEL = oc.ID_MATERIEL' , array ('Intitule' =>'INTITULE') );
+		$select->join( array( 'c' => 'medicament' ), 'c.ID_MATERIEL = oc.ID_MATERIEL' , array ('Intitule' =>'INTITULE') );
 		
-		$select->where ( array( 'o.ID_DOCUMENT' => $idOrdonnance));
+		$select->where ( array( 'o.ID_DOCUMENT' => $idOrdonnance ));
 		
 		$stat = $sql->prepareStatementForSqlObject ( $select );
 		$result = $stat->execute ();

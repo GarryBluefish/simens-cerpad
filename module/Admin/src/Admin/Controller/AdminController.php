@@ -92,6 +92,9 @@ class AdminController extends AbstractActionController
      */
     public function loginAction()
     {
+        //$passeCode = $this->getUtilisateurTable()->encryptPassword('redact12340000');
+        //var_dump($passeCode); exit();
+        
     	$erreur_message = $this->params()->fromRoute('id', 0);
     	$uAuth = $this->getServiceLocator()->get('Admin\Controller\Plugin\UserAuthentication'); //@todo - We must use PluginLoader $this->userAuthentication()!!
     	if ($uAuth->getAuthService()->hasIdentity()) {

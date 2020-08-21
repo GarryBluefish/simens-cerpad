@@ -267,3 +267,14 @@
 	opacity: 1;
 	font-size: 14px;
 }
+
+
+.tableauInfosTotalDepistage td .voirPlusNumDossierSTAT{
+	opacity: 0.01;
+	font-size: 12px;
+}
+
+.tableauInfosTotalDepistage td:hover > .voirPlusNumDossierSTAT{
+	opacity: 1;
+	font-size: 12px;
+}

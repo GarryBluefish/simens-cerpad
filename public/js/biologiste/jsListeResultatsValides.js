@@ -245,8 +245,12 @@
 
     			
     			if(entreResultat == 0){
+    				
+    				var monsieurVcm = getMonsieurVCM(lienInfosPathologie);
+    				
         			$("#iconeMonsieurVCM").toggle(true);
-        			$("#iconeInfosPathologiesMonsieurVCM").html("");
+        			$("#iconeInfosPathologiesMonsieurVCM").html(monsieurVcm);
+        			
     			}else{
     				var monsieurVcm = getMonsieurVCM(lienInfosPathologie);
     				var scriptVcmFinal = getPathologiesMonsieurVcm(infosPathologieMvcm, listeIdAnalyse, listeInfosIdAnalyse);
@@ -265,7 +269,9 @@
     	
     	var scritpMVCM = ''+
 				         '<div style="position: absolute; width: 200px; left: -215px; top: 280px; background: white; border: 1.5px solid #dcdcdc; box-shadow: 0 1px 2px rgba(0,0,0,0.3); border-radius: 10px;">'+
-				           '<img style="border-radius: 10px;" src="http://localhost:5000/appliweb/vcm/mvcm/VCM:'+lienInfosPathologie+'.svg?width=200" usemap="#imagemap" />'+
+				           //'<img style="border-radius: 10px;" src="http://localhost:5000/appliweb/vcm/mvcm/VCM:'+lienInfosPathologie+'.svg?width=200" usemap="#imagemap" />'+ //Lien en local
+				         
+				           '<img style="border-radius: 10px;" src="http://www.lesfleursdunormal.fr/appliweb/vcm/mvcm/VCM:'+lienInfosPathologie+'.svg?width=200" usemap="#imagemap" alt="Monsieur VCM déconnecté !"/>'+ //Lien en ligne
 				         '</div>';
         
     	return scritpMVCM;

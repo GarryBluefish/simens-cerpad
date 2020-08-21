@@ -12329,7 +12329,7 @@ class TechnicienController extends AbstractActionController {
 				
 				if($ij==0){
 					$html .='<tr style="width: 100%; " class="couleurLigne_'.$kligne.'">
-				             <td class="infosPath periodeInfosLigne" style="width: 16%; height: 40px; padding-left: 15px; font-family: police2; font-size: 20px;">'. $this->moisEnLettre($mois).' '.$annee.' </td>';
+				             <td class="infosPath periodeInfosLigne" style="width: 16%; height: 40px; padding-left: 15px; font-family: police2; font-size: 20px; font-weight: bold;">'. $this->moisEnLettre($mois).' '.$annee.' <span style="color: red;">*</span></td>';
 					
 					
 					for($iProf=0 ; $iProf<count($tabProfils) ;$iProf++){
@@ -12357,7 +12357,7 @@ class TechnicienController extends AbstractActionController {
 
 					}
 				           
-				    $html .='<td class="infosPath DepPourcentageTotalEnLigne_'.$kligne.'" style="width: 12%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 22px; font-weight: bold; border-left: 2.5px solid #cccccc;"><span class="valAbsolue">'.$tabDonneesAnnee[$mois].'</span><span class="valPourcentage" style="font-size: 13px;"></span></td>
+				    $html .='<td class="infosPath DepPourcentageTotalEnLigne_'.$kligne.'" style="width: 12%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 22px; font-weight: bold; border-left: 2.5px solid #cccccc;"><span class="valAbsolue">'.$tabDonneesAnnee[$mois].'</span><span class="valPourcentage" style="font-size: 13px;"></span><span class="voirPlusNumDossierSTAT voirPlusNumDossierColSTAT_'.$i.''.$ij.'" onclick="voirPlusNumeroDossierStatInfoCol('.$i.','.$ij.','.$mois.','.$annee.',\''.$intervalleDate[0].'\',\''.$intervalleDate[1].'\');" style="position: relative; margin-right: -15px; cursor: pointer; color: red;">&#11206;</span></td>
 				             </tr>';
 				    
 				    $tabTotalColonneDesLignes[] = $tabDonneesAnnee[$mois];
@@ -12393,7 +12393,7 @@ class TechnicienController extends AbstractActionController {
 					
 					}
 				           
-				    $html .='<td class="infosPath DepPourcentageTotalEnLigne_'.$kligne.'" style="width: 12%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 22px; font-weight: bold; border-left: 2.5px solid #cccccc;"><span class="valAbsolue">'.$tabDonneesAnnee[$mois].'</span><span class="valPourcentage" style="font-size: 13px;"></span></td>
+				    $html .='<td class="infosPath DepPourcentageTotalEnLigne_'.$kligne.'" style="width: 12%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 22px; font-weight: bold; border-left: 2.5px solid #cccccc;"><span class="valAbsolue">'.$tabDonneesAnnee[$mois].'</span><span class="valPourcentage" style="font-size: 13px;"></span><span class="voirPlusNumDossierSTAT voirPlusNumDossierColSTAT_'.$i.''.$ij.'" onclick="voirPlusNumeroDossierStatInfoCol('.$i.','.$ij.','.$mois.','.$annee.',\''.$intervalleDate[0].'\',\''.$intervalleDate[1].'\');" style="position: relative; margin-right: -15px; cursor: pointer; color: red;">&#11206;</span></td>
 				         </tr>';
 	
 				    $tabTotalColonneDesLignes[] = $tabDonneesAnnee[$mois];
@@ -12419,7 +12419,8 @@ class TechnicienController extends AbstractActionController {
 		$grandTotal = 0;
 		$piedTotal ='<td class="infosPath infosPathTotalDepiste" style="width: 16%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: bold;">Total <span></span></td>';
 		for($i=0 ; $i<count($totalCol) ; $i++){
-			$piedTotal .= '<td class="infosPath DepPourcentageTotalEnColonne_'.$i.'" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: bold;">'.$totalCol[$i].'<span class="valPourcentage" style="font-size: 13px;"></span></td>';
+		    $prof = "$tabProfils[$i]";
+			$piedTotal .= '<td class="infosPath DepPourcentageTotalEnColonne_'.$i.'" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: bold;">'.$totalCol[$i].' <span class="valPourcentage" style="font-size: 13px;"></span><span class="voirPlusNumDossierSTAT voirPlusNumDossierLineSTAT_'.$i.'" onclick=voirPlusNumeroDossierStatInfoLine('.$i.',"'.$prof.'","'.$intervalleDate[0].'","'.$intervalleDate[1].'"); style="cursor: pointer; color: red; margin-right: -15px;">&#11206;</span></td>';
 			$grandTotal += $totalCol[$i];
 			
 			//Gestion des statistiques pour les profils
@@ -12587,7 +12588,7 @@ class TechnicienController extends AbstractActionController {
 				
 				if($ij==0){
 					$html .='<tr style="width: 100%; " class="couleurLigne_'.$kligne.'">
-				             <td class="infosPath periodeInfosLigne" style="width: 16%; height: 40px; padding-left: 15px; font-family: police2; font-size: 20px;">'. $this->moisEnLettre($mois).' '.$annee.' </td>';
+				             <td class="infosPath periodeInfosLigne" style="width: 16%; height: 40px; padding-left: 15px; font-family: police2; font-size: 20px; font-weight: bold;">'. $this->moisEnLettre($mois).' '.$annee.' *</td>';
 						
 					for($iProf=0 ; $iProf<count($tabProfils) ;$iProf++){
 	
@@ -12615,7 +12616,7 @@ class TechnicienController extends AbstractActionController {
 	
 					}
 
-					$html .='<td class="infosPath DepPourcentageTotalEnLigne_'.$kligne.'" style="width: 12%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 22px; font-weight: bold; border-left: 2.5px solid #cccccc;"><span class="valAbsolue">'.$tabDonneesAnnee[$mois].'</span><span class="valPourcentage" style="font-size: 13px;"></span></td>
+					$html .='<td class="infosPath DepPourcentageTotalEnLigne_'.$kligne.'" style="width: 12%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 22px; font-weight: bold; border-left: 2.5px solid #cccccc;"><span class="valAbsolue">'.$tabDonneesAnnee[$mois].'</span><span class="valPourcentage" style="font-size: 13px;"></span><span class="voirPlusNumDossierSTAT voirPlusNumDossierColSTAT_'.$i.''.$ij.'" onclick="voirPlusNumeroDossierStatInfoCol('.$i.','.$ij.','.$mois.','.$annee.',\''.$date_debut.'\',\''.$date_fin.'\');" style="position: relative; margin-right: -15px; cursor: pointer; color: red;">&#11206;</span></td>
 				             </tr>';
 					
 					$tabTotalColonneDesLignes[] = $tabDonneesAnnee[$mois];
@@ -12650,7 +12651,7 @@ class TechnicienController extends AbstractActionController {
 							
 					}
 					 
-					$html .='<td class="infosPath DepPourcentageTotalEnLigne_'.$kligne.'" style="width: 12%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 22px; font-weight: bold; border-left: 2.5px solid #cccccc;"><span class="valAbsolue">'.$tabDonneesAnnee[$mois].'</span><span class="valPourcentage" style="font-size: 13px;"></span></td>
+					$html .='<td class="infosPath DepPourcentageTotalEnLigne_'.$kligne.'" style="width: 12%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 22px; font-weight: bold; border-left: 2.5px solid #cccccc;"><span class="valAbsolue">'.$tabDonneesAnnee[$mois].'</span><span class="valPourcentage" style="font-size: 13px;"></span></span><span class="voirPlusNumDossierSTAT voirPlusNumDossierColSTAT_'.$i.''.$ij.'" onclick="voirPlusNumeroDossierStatInfoCol('.$i.','.$ij.','.$mois.','.$annee.',\''.$date_debut.'\',\''.$date_fin.'\');" style="position: relative; margin-right: -15px; cursor: pointer; color: red;">&#11206;</span></td>
 				         </tr>';
 					
 					$tabTotalColonneDesLignes[] = $tabDonneesAnnee[$mois];
@@ -12678,8 +12679,8 @@ class TechnicienController extends AbstractActionController {
 		$grandTotal = 0;
 		$piedTotal ='<td class="infosPath infosPathTotalDepiste" style="width: 16%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: bold;">Total <span></span></td>';
 		for($i=0 ; $i<count($totalCol) ; $i++){
-			//$piedTotal .= '<td class="infosPath " style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: bold;">'.$totalCol[$i].'</td>';
-			$piedTotal .= '<td class="infosPath DepPourcentageTotalEnColonne_'.$i.'" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: bold;">'.$totalCol[$i].'<span class="valPourcentage" style="font-size: 13px;"></span></td>';
+			$prof = $tabProfils[$i];
+			$piedTotal .= '<td class="infosPath DepPourcentageTotalEnColonne_'.$i.'" style="width: '.$largeur.'%; height: 40px; text-align: right; padding-right: 15px; font-family: Goudy Old Style; font-size: 21px; font-weight: bold;">'.$totalCol[$i].'<span class="valPourcentage" style="font-size: 13px;"></span><span class="voirPlusNumDossierSTAT voirPlusNumDossierLineSTAT_'.$i.'" onclick=voirPlusNumeroDossierStatInfoLine('.$i.',"'.$prof.'","'.$date_debut.'","'.$date_fin.'"); style="cursor: pointer; color: red; margin-right: -15px;">&#11206;</span></td>';
 			$grandTotal += $totalCol[$i];
 			
 			//Gestion des statistiques pour les profils
@@ -13036,7 +13037,7 @@ class TechnicienController extends AbstractActionController {
 		$typeInfos = $this->params ()->fromPost ( 'typeInfos' );
 		$date_debut = $this->params ()->fromPost ( 'date_debut' );
 		$date_fin = $this->params ()->fromPost ( 'date_fin' );
-		$profil = $this->params ()->fromPost ( 'profil' );
+		$profil = $this->params ()->fromPost ( 'profil', null );
 		$annee = $this->params ()->fromPost ( 'annee' );
 		$mois = $this->params ()->fromPost ( 'mois' );
 		
@@ -13058,11 +13059,23 @@ class TechnicienController extends AbstractActionController {
 			$dateFin = $annee.'-'.$mois.'-'.$jourDateFinChamp;
 		}
 		
-		
 		$listeNumeroDossier = $this->getResultatsDepistagesTable()->getListeNumeroDossierPatientsDepistagesAvecResultat($profil, $dateDebut, $dateFin, $typeInfos);
 		
 		$this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );
 		return $this->getResponse ()->setContent ( Json::encode ( $listeNumeroDossier ) );
+	}
+	
+	public function infosStatistiquesVoirPlusNumeroDossierToutePeriodeAction(){
+	    $typeInfos = $this->params ()->fromPost ( 'typeInfos' );
+	    $dateDebut = $this->params ()->fromPost ( 'date_debut' );
+	    $dateFin = $this->params ()->fromPost ( 'date_fin' );
+	    $profil = $this->params ()->fromPost ( 'profil', null );
+	
+	
+	    $listeNumeroDossier = $this->getResultatsDepistagesTable()->getListeNumeroDossierPatientsDepistagesAvecResultat($profil, $dateDebut, $dateFin, $typeInfos);
+	
+	    $this->getResponse ()->getHeaders ()->addHeaderLine ( 'Content-Type', 'application/html; charset=utf-8' );
+	    return $this->getResponse ()->setContent ( Json::encode ( $listeNumeroDossier ) );
 	}
 
 

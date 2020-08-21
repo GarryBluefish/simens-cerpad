@@ -1025,6 +1025,21 @@ class BiologisteController extends AbstractActionController {
 						//$this->envoiSmsAlert($infoDepistage);
 					}
 					
+					/**
+					 * Ajouter le type XX = indeterminé
+					 */
+					if($depistage->current()['typage'] == 20){
+					    $infoPatient = $this->getPatientTable()->getPatient($demande['idpatient']);
+					    $codePatient = str_replace('E', 'X', $infoPatient->numero_dossier);
+					
+					    if($codePatient){
+					        $this->getPatientTable()->updatePatientCodePatient($demande['idpatient'], $codePatient);
+					    }else{
+					        $this->getPatientTable()->updatePatientCodePatient($demande['idpatient'], null);
+					    }
+					
+					}
+					
 				}
 					
 			}

@@ -168,7 +168,18 @@ class imprimerOrdonnance extends fpdf
 	protected $formeMedicament;
 	protected $nbMedicament;
 	protected $quantiteMedicament;
+	protected $posologie;
+	protected $patientInfos;
 	
+	public function getPatientInfos()
+	{
+	    return $this->patientInfos;
+	}
+	
+	public function setPatientInfos($patientInfos)
+	{
+	    $this->patientInfos = $patientInfos;
+	}
 	
 	public function getInfosPatients()
 	{
@@ -220,6 +231,16 @@ class imprimerOrdonnance extends fpdf
 		$this->quantiteMedicament = $quantiteMedicament;
 	}
 	
+	public function getPosologie()
+	{
+	    return $this->posologie;
+	}
+	
+	public function setPosologie($posologie)
+	{
+	    $this->posologie = $posologie;
+	}
+	
 	protected function nbJours($debut, $fin) {
 		//60 secondes X 60 minutes X 24 heures dans une journee
 		$nbSecondes = 60*60*24;
@@ -232,23 +253,30 @@ class imprimerOrdonnance extends fpdf
 	
 	function EnTetePage()
 	{
-		$this->SetFont('Times','',10.3);
-		$this->SetTextColor(0,0,0);
-		$this->Cell(0,4,"République du Sénégal");
-		$this->SetFont('Times','',8.5);
-		$this->Cell(0,4,"",0,0,'R');
-		$this->SetFont('Times','',10.3);
-		$this->Ln(5.4);
-		$this->Cell(100,4,"Ministère de la santé et de l'action sociale");
+	    $this->SetFont('Times','',10.3);
+	    $this->SetTextColor(0,0,0);
+	    $this->Cell(0,4,"République du Sénégal");
+	    $this->SetFont('Times','',8.5);
+	    $this->Cell(0,4,"",0,0,'R');
+	    $this->SetFont('Times','',10.3);
+	    $this->Ln(5.4);
+	    $this->Cell(100,4,"Université Gaston Berger de Saint-Louis / UFR-2S");
+	    
+	    $this->AddFont('timesbi','','timesbi.php');
+	    $this->Ln(5.4);
+	    $this->Cell(100,4,"Centre de Recherche et de Prise en Charge -");
+	    $this->Ln(5.4);
+	    $this->SetFont('times','',10.3);
+	    $this->Cell(86,4,"Ambulatoire de la Drépanocytose (CERPAD) ",0,0,'L');
+	    $this->SetFont('Times','',10.3);
+	    $this->Cell(14,4,'',0,0,'L');
+	    
+	    $this->Ln(5.4);
+	    $this->SetFont('timesbi','',10.3);
+	    $this->Cell(27,4,"Service médical ",0,0,'L');
+	    $this->SetFont('Times','',10.3);
+	    // $this->Cell(73,4,': Consultation',0,0,'L');
 		
-		$this->AddFont('timesbi','','timesbi.php');
-		$this->Ln(5.4);
-		$this->Cell(100,4,"C.H.R de Saint-louis");
-		$this->Ln(5.4);
-		$this->SetFont('timesbi','',10.3);
-		$this->Cell(14,4,"Service : ",0,0,'L');
-		$this->SetFont('Times','',10.3);
-		$this->Cell(86,4,$this->getNomService(),0,0,'L');
 		
 		$this->Ln(8);
 		$this->SetFont('Times','',14.3);
@@ -268,10 +296,16 @@ class imprimerOrdonnance extends fpdf
 		// EMPLACEMENT DES INFORMATIONS SUR LE PATIENT
 		// EMPLACEMENT DES INFORMATIONS SUR LE PATIENT
 		$infoPatients = $this->getInfosPatients();
+		$patientInfos = $this->getPatientInfos();
+
 		$this->SetFont('Times','B',8.5);
 		$this->SetTextColor(0,0,0);
 		$this->Ln(1);
-		$this->Cell(90,4,"PRENOM ET NOM :",0,0,'R',false);
+		$this->SetFont('Times','',9.5);
+		$this->Cell(40,4,$patientInfos->numero_dossier,0,0,'L',0);
+		
+		$this->SetFont('Times','B',8.5);
+		$this->Cell(50,4,"PRENOM ET NOM :",0,0,'R',0);
 		$this->SetFont('Times','',11);
 		if($infoPatients){ $this->Cell(92,4,iconv ('UTF-8' , 'windows-1252', $infoPatients->prenom).' '.iconv ('UTF-8' , 'windows-1252', $infoPatients->nom),0,0,'L'); }
 		
@@ -312,7 +346,7 @@ class imprimerOrdonnance extends fpdf
 		$this->SetFont('Times','B',8.5);
 		$this->SetTextColor(0,0,0);
 		$this->Ln(5);
-		$this->Cell(90,4,"AGE :",0,0,'R',false);
+		$this->Cell(90,4,"DATE DE NAISSANCE (AGE) :",0,0,'R',false);
 		$this->SetFont('Times','',11);
 		if($infoPatients){ $this->Cell(92,4,$convertDate->convertDate($infoPatients->date_naissance).' ('.$age.')',0,0,'L'); }
 		
@@ -350,36 +384,50 @@ class imprimerOrdonnance extends fpdf
 		$formeMedicament = $this->getFormeMedicament();
 		$nbMedicament = $this->getNbMedicament();
 		$quantiteMedicament = $this->getQuantiteMedicament();
+		$posologie = $this->getPosologie();
 		
-		$this->Ln(2);
+		$this->Ln(5);
 		
 		for($i = 1 ; $i < count($medicamentLibelle) ; $i++){
 			
 			$this->SetFillColor(249,249,249);
 			$this->SetDrawColor(220,220,220);
 			$this->SetFont('timesi','',11.3);
-			$this->Cell(10,7,$i.')','BT',0,'C');
+			$this->Cell(10,7,$i.')','T',0,'C');
 
 			//Medicament
 			$this->SetFont('times','',12);
-			$this->Cell(59,7, iconv ('UTF-8' , 'windows-1252', ' '.$medicamentLibelle[$i]),'BRT',0,'L',1);
+			$this->Cell(59,7, iconv ('UTF-8' , 'windows-1252', ' '.$medicamentLibelle[$i]),'T',0,'L',1);
 			
 			//Forme
 			$this->SetFont('times','',12);
-			$this->Cell(57,7, iconv ('UTF-8' , 'windows-1252', ' '.$formeMedicament[$i]),'BT',0,'L',1);
+			$this->Cell(57,7, iconv ('UTF-8' , 'windows-1252', ' '.$formeMedicament[$i]),'T',0,'L',1);
 			
 			//Nombre de médicament
 			$this->SetFont('times','',12);
-			$this->Cell(7,7,' '.$nbMedicament[$i],'BT',0,'L',1);
+			$this->Cell(7,7,' '.$nbMedicament[$i],'T',0,'R',1);
 			
 			//Quantité
 			$this->SetFont('times','',12);
-			$this->Cell(50,7, iconv ('UTF-8' , 'windows-1252',' '.$quantiteMedicament[$i]),'BT',0,'L',1);
+			$this->Cell(50,7, iconv ('UTF-8' , 'windows-1252',' '.$quantiteMedicament[$i]),'T',1,'L',1);
+			
+			/*LIGNE SUIVANTE --- LIGNE SUIVANTE --- LIGNE SUIVANTE*/
+			/*LIGNE SUIVANTE --- LIGNE SUIVANTE --- LIGNE SUIVANTE*/
+			//Posologie
+			$this->SetFont('timesi','',12);
+			$this->Cell(13,5,'','',0,'C');
+			$this->Cell(170,5, iconv ('UTF-8' , 'windows-1252',' '.$posologie[$i]),'',0,'L',1);
 			
 			$this->Ln(8);
 			
 		}
 		
+		/*SIGNATURE --- SIGNATURE --- SIGNATURE*/
+		/*SIGNATURE --- SIGNATURE --- SIGNATURE*/
+		$this->Ln(5);
+		$this->SetFont('Timesi','U',12);
+		$this->Cell(173,5, iconv ('UTF-8' , 'windows-1252','Cachet et signature'),'',0,'R',0);
+		$this->Cell(10,5, '','',0,'R',0);
 		
 	}
 	

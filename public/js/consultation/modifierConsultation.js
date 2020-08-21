@@ -2225,12 +2225,14 @@ function imprimerTraitementMedicamenteux(){
 	var formeMedicament = [];
 	var nbMedicament = [];
 	var quantiteMedicament = [];
+	var posologie = [];
 	for(var i = 1, j = 1; i <= nbListeMedicaments(); i++ ){
 		if($('#medicament_0'+i).val()) {
 			medicamentLibelle[j] = $('#medicament_0'+i).val();
 			formeMedicament[j] = $('#noteMedicament_'+i+' input').val();
 			nbMedicament[j] = $('#nb_medicament_'+i).val();
 			quantiteMedicament[j] = $('#quantite_'+i).val();
+			posologie[j] = $('#posologie_'+i).val();
 			j++;
 		}
 	}
@@ -2278,6 +2280,12 @@ function imprimerTraitementMedicamenteux(){
 	champ6.setAttribute("name", 'quantiteMedicament');
 	champ6.setAttribute("value", quantiteMedicament);
 	formulaireImprimerDemandesAnalyses.appendChild(champ6);
+	
+	var champ7 = document.createElement("input");
+	champ7.setAttribute("type", "hidden");
+	champ7.setAttribute("name", 'posologie');
+	champ7.setAttribute("value", posologie);
+	formulaireImprimerDemandesAnalyses.appendChild(champ7);
 	
 	$("#imprimerOrdonnance").trigger('click');
 }

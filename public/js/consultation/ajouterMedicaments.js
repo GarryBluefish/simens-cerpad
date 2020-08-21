@@ -25,21 +25,21 @@ function creerLalisteMedicament ($listeDesElements, $ListeForme, $ListeQuantite)
                              "<label style='width: 100%; margin-top: 10px; margin-left: 5px; font-weight: bold; font-family: police2; font-size: 14px;' >"+(index+1)+"</label>" +
                              "</th >"+
                              
-                             "<th id='SelectMedicament_"+(index+1)+"' style='width: 29%;'>";
+                             "<th id='SelectMedicament_"+(index+1)+"' style='width: 26%;'>";
 			        $liste +="<khass> <input style='width: 100%; margin-top: 3px; margin-bottom: 0px; font-size: 13px; height: 30px; font-size: 15px; padding-left: 10px;' id='medicament_0"+(index+1)+"' name='medicament_0"+(index+1)+"' type='text' > </khass>";
                     $liste +="</th>"+
                              
-                             "<th id='noteMedicament_"+(index+1)+"' style='width: 29%;'  >"+
+                             "<th id='noteMedicament_"+(index+1)+"' style='width: 23%;'  >"+
                              "<khassForme><input type='text' id='forme_"+(index+1)+"' name='forme_"+(index+1)+"' style='width: 100%; margin-top: 3px; height: 30px; margin-bottom: 0px; font-size: 15px; padding-left: 10px;' > </khassForme>" +
                              "</th >"+
                              
-                             "<th id='noteMedicament2_"+(index+1)+"' style='width: 29%;'  >"+
-                             "<input type='text' id='nb_medicament_"+(index+1)+"' name='nb_medicament_"+(index+1)+"' style=' float: left; width: 13%; margin-top: 3px; height: 30px; margin-bottom: 0px; font-size: 15px; padding-left: 5px;' >"+
-                             "<div id='increm_decrem' style='float: left; height: 30px; width: 7%;'> " +
-                             "<img id='incrementer_"+(index+1)+"' style='cursor:pointer; position:absolute; height: 16px; width: 16px; margin-top: 1px; margin-bottom: 0px; font-size: 15px;' src='../images_icons/increment2.png'/> " +
-                             "<img id='decrementer_"+(index+1)+"' style='cursor:pointer; position:absolute; height: 16px; width: 16px; margin-top: 19px; margin-bottom: 0px; font-size: 15px; padding-left: 1px;' src='../images_icons/decrement2.png'/> " +
-                             "</div>"+
-                             "<khassQuantite><input type='text' id='quantite_"+(index+1)+"' name='quantite_"+(index+1)+"' style='float: left; width: 80%; margin-top: 3px; height: 30px; margin-bottom: 0px; font-size: 15px; padding-left: 10px;' > </khassQuantite>" +
+                             "<th id='noteMedicament2_"+(index+1)+"' style='width: 20%;'  >"+
+                             "<input type='number' id='nb_medicament_"+(index+1)+"' name='nb_medicament_"+(index+1)+"' style='text-align: right; float: left; width: 25%; margin-top: 3px; height: 30px; margin-bottom: 0px; font-size: 19px; padding-left: 5px;' >"+
+                             "<khassQuantite><input type='text' id='quantite_"+(index+1)+"' name='quantite_"+(index+1)+"' style='float: left; width: 75%; margin-top: 3px; height: 30px; margin-bottom: 0px; font-size: 15px; padding-left: 10px;' > </khassQuantite>" +
+                             "</th >"+
+                             
+                             "<th style='width: 18%;'  >"+
+                             "<input type='text' id='posologie_"+(index+1)+"' name='posologie_"+(index+1)+"' style='width: 100%; margin-top: 3px; height: 30px; margin-bottom: 0px; font-size: 15px; padding-left: 10px;' >" +
                              "</th >"+
                              
                              "<th id='iconeMedicament_supp_vider' style='width: 9%;'  >"+
